@@ -399,10 +399,10 @@ export class Prop implements IPropParent {
       let items: Prop[] | null = null;
       if (this._type === 'list') {
         const data = this._value;
-        for (const item of data) {
+        data.forEach((item: any, idx: number) => {
           items = items || [];
-          items.push(new Prop(this, item));
-        }
+          items.push(new Prop(this, item, idx));
+        });
         this._maps = null;
       } else if (this._type === 'map') {
         const data = this._value;

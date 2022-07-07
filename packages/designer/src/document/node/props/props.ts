@@ -31,7 +31,7 @@ export class Props implements IPropParent {
   @computed private get maps(): Map<string, Prop> {
     const maps = new Map();
     if (this.items.length > 0) {
-      this.items.forEach(prop => {
+      this.items.forEach((prop) => {
         if (prop.key) {
           maps.set(prop.key, prop);
         }
@@ -62,12 +62,14 @@ export class Props implements IPropParent {
     this.owner = owner;
     if (Array.isArray(value)) {
       this.type = 'list';
-      this.items = value.map(item => new Prop(this, item.value, item.name, item.spread));
+      this.items = value.map(
+        (item, idx) => new Prop(this, item.value, item.name || idx, item.spread),
+      );
     } else if (value != null) {
-      this.items = Object.keys(value).map(key => new Prop(this, value[key], key, false));
+      this.items = Object.keys(value).map((key) => new Prop(this, value[key], key, false));
     }
     if (extras) {
-      Object.keys(extras).forEach(key => {
+      Object.keys(extras).forEach((key) => {
         this.items.push(new Prop(this, (extras as any)[key], getConvertedExtraKey(key)));
       });
     }
@@ -78,37 +80,42 @@ export class Props implements IPropParent {
     const originItems = this.items;
     if (Array.isArray(value)) {
       this.type = 'list';
-      this.items = value.map(item => new Prop(this, item.value, item.name, item.spread));
+      this.items = value.map(
+        (item, idx) => new Prop(this, item.value, item.name || idx, item.spread),
+      );
     } else if (value != null) {
       this.type = 'map';
-      this.items = Object.keys(value).map(key => new Prop(this, value[key], key));
+      this.items = Object.keys(value).map((key) => new Prop(this, value[key], key));
     } else {
       this.type = 'map';
       this.items = [];
     }
     if (extras) {
-      Object.keys(extras).forEach(key => {
+      Object.keys(extras).forEach((key) => {
         this.items.push(new Prop(this, (extras as any)[key], getConvertedExtraKey(key)));
       });
     }
-    originItems.forEach(item => item.purge());
+    originItems.forEach((item) => item.purge());
   }
 
   @action
   merge(value: PropsMap, extras?: PropsMap) {
-    Object.keys(value).forEach(key => {
+    Object.keys(value).forEach((key) => {
       this.query(key, true)!.setValue(value[key]);
       this.query(key, true)!.setupItems();
     });
     if (extras) {
-      Object.keys(extras).forEach(key => {
+      Object.keys(extras).forEach((key) => {
         this.query(getConvertedExtraKey(key), true)!.setValue(extras[key]);
         this.query(getConvertedExtraKey(key), true)!.setupItems();
       });
     }
   }
 
-  export(stage: TransformStage = TransformStage.Save): { props?: PropsMap | PropsList; extras?: ExtrasObject } {
+  export(stage: TransformStage = TransformStage.Save): {
+    props?: PropsMap | PropsList;
+    extras?: ExtrasObject;
+  } {
     stage = compatStage(stage);
     if (this.items.length < 1) {
       return {};
@@ -118,7 +125,7 @@ export class Props implements IPropParent {
     const extras: any = {};
     if (this.type === 'list') {
       props = [];
-      this.items.forEach(item => {
+      this.items.forEach((item) => {
         let value = item.export(stage);
         let name = item.key as string;
         if (name && typeof name === 'string' && name.startsWith(EXTRA_KEY_PREFIX)) {
@@ -133,7 +140,7 @@ export class Props implements IPropParent {
         }
       });
     } else {
-      this.items.forEach(item => {
+      this.items.forEach((item) => {
         let name = item.key as string;
         if (name == null || item.isUnset() || item.isVirtual()) return;
         let value = item.export(stage);
@@ -248,7 +255,12 @@ export class Props implements IPropParent {
    * 添加值
    */
   @action
-  add(value: CompositeValue | null, key?: string | number, spread = false, options: any = {}): Prop {
+  add(
+    value: CompositeValue | null,
+    key?: string | number,
+    spread = false,
+    options: any = {},
+  ): Prop {
     const prop = new Prop(this, value, key, spread, options);
     this.items.push(prop);
     return prop;
@@ -289,7 +301,7 @@ export class Props implements IPropParent {
    */
   @action
   forEach(fn: (item: Prop, key: number | string | undefined) => void): void {
-    this.items.forEach(item => {
+    this.items.forEach((item) => {
       return fn(item, item.key);
     });
   }
@@ -299,14 +311,14 @@ export class Props implements IPropParent {
    */
   @action
   map<T>(fn: (item: Prop, key: number | string | undefined) => T): T[] | null {
-    return this.items.map(item => {
+    return this.items.map((item) => {
       return fn(item, item.key);
     });
   }
 
   @action
   filter(fn: (item: Prop, key: number | string | undefined) => boolean) {
-    return this.items.filter(item => {
+    return this.items.filter((item) => {
       return fn(item, item.key);
     });
   }
@@ -322,7 +334,7 @@ export class Props implements IPropParent {
       return;
     }
     this.purged = true;
-    this.items.forEach(item => item.purge());
+    this.items.forEach((item) => item.purge());
   }
 
   /**
