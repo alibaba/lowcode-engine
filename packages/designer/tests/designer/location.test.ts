@@ -128,7 +128,7 @@ it('isRowContainer', () => {
     .fn(() => {
       return {
         getPropertyValue: (pName) => {
-          return pName === 'display' ? 'flex' : 'row';
+          return pName === 'display' ? 'flex' : '';
         },
       };
     })
@@ -138,8 +138,16 @@ it('isRowContainer', () => {
           return pName === 'display' ? 'flex' : 'column';
         },
       };
+    })
+    .mockImplementationOnce(() => {
+      return {
+        getPropertyValue: (pName) => {
+          return pName === 'display' ? 'grid' : 'column';
+        },
+      };
     });
   expect(isRowContainer(getMockElement('div'))).toBeFalsy();
+  expect(isRowContainer(getMockElement('div'))).toBeTruthy();
   expect(isRowContainer(getMockElement('div'))).toBeTruthy();
 });
 
@@ -179,6 +187,10 @@ it('isVerticalContainer', () => {
 it('isVertical', () => {
   expect(isVertical({ elements: [] })).toBeFalsy();
   expect(isVertical({ elements: [getMockElement('div')] })).toBeFalsy();
+  const e1 = getMockElement('div');
+  const e2 = getMockElement('div');
+  e2.appendChild(e1);
+  expect(isVertical({ elements: [e1] })).toBeTruthy();
   window.getComputedStyle = jest
     .fn(() => {
       return {
@@ -193,4 +205,5 @@ it('isVertical', () => {
 it('getWindow', () => {
   const mockElem = getMockElement('div');
   expect(getWindow(mockElem)).toBe(window);
+  expect(getWindow(document)).toBe(window);
 });
