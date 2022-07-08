@@ -20,3 +20,4 @@ jobs:
           exempt-issue-labels: 'bug,enhancement,good first issue,help wanted,WIP,discussion,documentation,later,material'
           stale-issue-label: 'stale'
           stale-pr-label: 'stale'
+          exempt-all-assignee: true
