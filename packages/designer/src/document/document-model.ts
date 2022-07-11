@@ -1,5 +1,5 @@
 import { computed, makeObservable, obx, action, runWithGlobalEventOff, wrapWithEventSwitch } from '@alilc/lowcode-editor-core';
-import { NodeData, isJSExpression, isDOMText, NodeSchema, isNodeSchema, RootSchema, PageSchema } from '@alilc/lowcode-types';
+import { NodeData, isJSExpression, isDOMText, NodeSchema, isNodeSchema, RootSchema, PageSchema, ComponentsMap } from '@alilc/lowcode-types';
 import { EventEmitter } from 'events';
 import { Project } from '../project';
 import { ISimulatorHost } from '../simulator';
@@ -18,16 +18,6 @@ export type GetDataType<T, NodeType> = T extends undefined
     ? R
     : any
   : T;
-
-export interface ComponentMap {
-  componentName: string;
-  package?: string;
-  version?: string;
-  destructuring?: boolean;
-  exportName?: string;
-  subName?: string;
-  devMode?: 'lowCode' | 'proCode';
-}
 
 export class DocumentModel {
   /**
@@ -652,7 +642,7 @@ export class DocumentModel {
   }
 
   getComponentsMap(extraComps?: string[]) {
-    const componentsMap: ComponentMap[] = [];
+    const componentsMap: ComponentsMap = [];
     // 组件去重
     const exsitingMap: { [componentName: string]: boolean } = {};
     for (const node of this._nodesMap.values()) {
