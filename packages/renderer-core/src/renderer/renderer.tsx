@@ -60,6 +60,7 @@ export default function rendererFactory(): IRenderComponent {
       schema: {} as RootSchema,
       onCompGetRef: () => { },
       onCompGetCtx: () => { },
+      thisRequiredInJSE: true,
     };
 
     static findDOMNode = findDOMNode;
@@ -106,6 +107,9 @@ export default function rendererFactory(): IRenderComponent {
         return;
       }
       if (SetComponent.patchedCatch) {
+        return;
+      }
+      if (!SetComponent.prototype) {
         return;
       }
       SetComponent.patchedCatch = true;

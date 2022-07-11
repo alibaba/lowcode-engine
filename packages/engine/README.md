@@ -12,7 +12,7 @@ An enterprise-class low-code technology stack with scale-out design
 
 [![NPM version][npm-image]][npm-url] [![NPM downloads][download-image]][download-url]
 
-[![Discussions][discussions-image]][discussions-url] [![][issues-helper-image]][issues-helper-url] [![Issues need help][help-wanted-image]][help-wanted-url]
+[![][issues-helper-image]][issues-helper-url] [![Issues need help][help-wanted-image]][help-wanted-url]
 
 [npm-image]: https://img.shields.io/npm/v/@alilc/lowcode-engine.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/@alilc/lowcode-engine
@@ -21,8 +21,6 @@ An enterprise-class low-code technology stack with scale-out design
 [download-url]: https://npmjs.org/package/@alilc/lowcode-engine
 [help-wanted-image]: https://flat.badgen.net/github/label-issues/alibaba/lowcode-engine/help%20wanted/open
 [help-wanted-url]: https://github.com/alibaba/lowcode-engine/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22
-[discussions-image]: https://img.shields.io/badge/discussions-on%20github-blue?style=flat-square
-[discussions-url]: https://github.com/alibaba/lowcode-engine/discussions
 
 [issues-helper-image]: https://img.shields.io/badge/using-issues--helper-orange?style=flat-square
 [issues-helper-url]: https://github.com/actions-cool/issues-helper
@@ -127,6 +125,8 @@ Pass the files under packages/engine/dist and packages/(react|rax)-simulator-ren
 - [User Documentation](http://lowcode-engine.cn/docV2)
 - [API](http://lowcode-engine.cn/docV2/vlmeme)
 
+This [awesome-lowcode-engine](https://github.com/lowcode-workspace/awesome-lowcode-engine) page links to a repository which records all of the tools\materials\solutions that use or built for the lowcode-engine, PR is welcomed.
+
 ## 💻 Local debugging
 
 ```bash
@@ -138,8 +138,6 @@ $ npm start
 ```
 
 > 📢 npm access speed is slow, Alibaba employees can use tnpm, other students recommend using cnpm or specifying a mirror registry.
->
-> 📢 node version limited to 14
 >
 > 📢 Windows environment must use [WSL](https://docs.microsoft.com/en-us/windows/wsl/install), other terminals are not guaranteed to work normally
 
@@ -156,3 +154,11 @@ Please read first:
 
 About Pull Request:
 - set the target branch to **develop** other than **main**
+
+## ❤️ Contributors
+
+Special thanks to everyone who contributed to this project.
+
+<p>
+<a href="https://github.com/alibaba/lowcode-engine/graphs/contributors"><img src="https://contrib.rocks/image?repo=alibaba/lowcode-engine" /></a>
+</p>

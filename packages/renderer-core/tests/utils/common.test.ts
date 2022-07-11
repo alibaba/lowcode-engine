@@ -1,10 +1,10 @@
 // @ts-nocheck
-import { 
-  isSchema, 
-  isFileSchema, 
-  inSameDomain, 
-  getFileCssName, 
-  isJSSlot, 
+import {
+  isSchema,
+  isFileSchema,
+  inSameDomain,
+  getFileCssName,
+  isJSSlot,
   getValue,
   getI18n,
   transformArrayToMap,
@@ -15,9 +15,11 @@ import {
   isString,
   serializeParams,
   parseExpression,
+  parseThisRequiredExpression,
   parseI18n,
   parseData,
 } from '../../src/utils/common';
+import logger from '../../src/utils/logger';
 
 describe('test isSchema', () => {
   it('should be false when empty value is passed', () => {
@@ -335,19 +337,55 @@ describe('test parseExpression ', () => {
     const result = parseExpression(mockExpression, { scopeValue: 1 });
     expect(result({ param1: 2 })).toBe((1 + 2 + 5));
   });
+
+  it('[success] JSExpression handle without this use scopeValue', () => {
+    const mockExpression = {
+      "type": "JSExpression",
+      "value": "state"
+    };
+    const result = parseExpression(mockExpression, { state: 1 });
+    expect(result).toBe((1));
+  });
+
+  it('[success] JSExpression handle without this use scopeValue', () => {
+    const mockExpression = {
+      "type": "JSExpression",
+      "value": "this.state"
+    };
+    const result = parseExpression(mockExpression, { state: 1 });
+    expect(result).toBe((1));
+  });
 });
 
-describe('test parseExpression ', () => {
+describe('test parseThisRequiredExpression', () => {
   it('can handle JSExpression', () => {
     const mockExpression = {
       "type": "JSExpression",
       "value": "function (params) { return this.scopeValue + params.param1 + 5;}"
     };
-    const result = parseExpression(mockExpression, { scopeValue: 1 });
+    const result = parseThisRequiredExpression(mockExpression, { scopeValue: 1 });
     expect(result({ param1: 2 })).toBe((1 + 2 + 5));
   });
-});
 
+  it('[error] JSExpression handle without this use scopeValue', () => {
+    const mockExpression = {
+      "type": "JSExpression",
+      "value": "state.text"
+    };
+    const fn = logger.error = jest.fn();
+    parseThisRequiredExpression(mockExpression, { state: { text: 'text' } });
+    expect(fn).toBeCalledWith('parseExpression.error', new ReferenceError('state is not defined'), {"type": "JSExpression", "value": "state.text"}, {"state": {"text": "text"}});
+  });
+
+  it('[success] JSExpression handle without this use scopeValue', () => {
+    const mockExpression = {
+      "type": "JSExpression",
+      "value": "this.state"
+    };
+    const result = parseThisRequiredExpression(mockExpression, { state: 1 });
+    expect(result).toBe((1));
+  });
+})
 
 describe('test parseI18n ', () => {
   it('can handle normal parseI18n', () => {

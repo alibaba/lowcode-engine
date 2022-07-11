@@ -26,7 +26,7 @@ export interface NodeSchema {
    * 组件属性对象
    */
   props?: {
-    children?: NodeData[];
+    children?: NodeData | NodeData[];
   } & PropsMap;// | PropsList;
   /**
    * 组件属性对象
@@ -136,7 +136,7 @@ export interface ContainerSchema extends NodeSchema {
 
 /**
  * 页面容器
- * @see https://yuque.antfin-inc.com/mo/spec/spec-low-code-building-schema#XMeF5
+ * @see https://lowcode-engine.cn/lowcode
  */
 export interface PageSchema extends ContainerSchema {
   componentName: 'Page';
@@ -144,7 +144,7 @@ export interface PageSchema extends ContainerSchema {
 
 /**
  * 低代码业务组件容器
- * @see https://yuque.antfin-inc.com/mo/spec/spec-low-code-building-schema#XMeF5
+ * @see https://lowcode-engine.cn/lowcode
  */
 export interface ComponentSchema extends ContainerSchema {
   componentName: 'Component';
@@ -152,7 +152,7 @@ export interface ComponentSchema extends ContainerSchema {
 
 /**
  * 区块容器
- * @see https://yuque.antfin-inc.com/mo/spec/spec-low-code-building-schema#XMeF5
+ * @see https://lowcode-engine.cn/lowcode
  */
 export interface BlockSchema extends ContainerSchema {
   componentName: 'Block';

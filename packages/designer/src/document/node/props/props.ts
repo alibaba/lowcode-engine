@@ -5,6 +5,10 @@ import { Prop, IPropParent, UNSET } from './prop';
 import { Node } from '../node';
 import { TransformStage } from '../transform-stage';
 
+interface ExtrasObject {
+  [key: string]: any;
+}
+
 export const EXTRA_KEY_PREFIX = '___';
 export function getConvertedExtraKey(key: string): string {
   if (!key) {
@@ -53,7 +57,7 @@ export class Props implements IPropParent {
 
   @obx type: 'map' | 'list' = 'map';
 
-  constructor(owner: Node, value?: PropsMap | PropsList | null, extras?: object) {
+  constructor(owner: Node, value?: PropsMap | PropsList | null, extras?: ExtrasObject) {
     makeObservable(this);
     this.owner = owner;
     if (Array.isArray(value)) {
@@ -70,7 +74,7 @@ export class Props implements IPropParent {
   }
 
   @action
-  import(value?: PropsMap | PropsList | null, extras?: object) {
+  import(value?: PropsMap | PropsList | null, extras?: ExtrasObject) {
     const originItems = this.items;
     if (Array.isArray(value)) {
       this.type = 'list';
@@ -104,7 +108,7 @@ export class Props implements IPropParent {
     }
   }
 
-  export(stage: TransformStage = TransformStage.Save): { props?: PropsMap | PropsList; extras?: object } {
+  export(stage: TransformStage = TransformStage.Save): { props?: PropsMap | PropsList; extras?: ExtrasObject } {
     stage = compatStage(stage);
     if (this.items.length < 1) {
       return {};

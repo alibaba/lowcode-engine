@@ -25,6 +25,7 @@ import { createMemoryHistory, MemoryHistory } from 'history';
 import Slot from './builtin-components/slot';
 import Leaf from './builtin-components/leaf';
 import { withQueryParams, parseQuery } from './utils/url';
+import { merge } from 'lodash';
 
 const loader = new AssetLoader();
 configure({ enforceActions: 'never' });
@@ -308,6 +309,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         ...this._appContext,
       };
       newCtx.utils.i18n.messages = data.i18n || {};
+      merge(newCtx, data.appHelper || {});
       this._appContext = newCtx;
     });
   }
@@ -428,8 +430,6 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     const _schema: any = {
       ...compatibleLegaoSchema(schema),
     };
-    _schema.methods = {};
-    _schema.lifeCycles = {};
 
     if (schema.componentName === 'Component' && (schema as ComponentSchema).css) {
       const doc = window.document;
@@ -450,10 +450,11 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
           // 使用 _schema 为了使低代码组件在页面设计中使用变量，同 react 组件使用效果一致
           schema: _schema,
           components: renderer.components,
-          designMode: renderer.designMode,
+          designMode: '',
           device: renderer.device,
           appHelper: renderer.context,
           rendererName: 'LowCodeRenderer',
+          thisRequiredInJSE: host.thisRequiredInJSE,
           customCreateElement: (Comp: any, props: any, children: any) => {
             const componentMeta = host.currentDocument?.getComponentMeta(Comp.displayName);
             if (componentMeta?.isModal) {

@@ -32,6 +32,13 @@ export default class TreeNodeView extends Component<{
       highlight: treeNode.isFocusingNode(),
     });
 
+    const { filterWorking, matchChild, matchSelf } = treeNode.filterReult;
+
+    // 条件过滤生效时，如果未命中本节点或子节点，则不展示该节点
+    if (filterWorking && !matchChild && !matchSelf) {
+      return null;
+    }
+
     return (
       <div className={className} data-id={treeNode.id}>
         <TreeTitle treeNode={treeNode} isModal={isModal} />

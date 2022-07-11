@@ -96,6 +96,7 @@ export default class TreeTitle extends Component<{
         marginLeft: -indent,
       };
     }
+    const { filterWorking, matchSelf, keywords } = treeNode.filterReult;
 
     return (
       <div
@@ -106,7 +107,11 @@ export default class TreeTitle extends Component<{
         data-id={treeNode.id}
         onClick={() => {
           if (isModal) {
-            node.document.modalNodesManager.setVisible(node);
+            if (node.getVisible()) {
+              node.document.modalNodesManager.setInvisible(node);
+            } else {
+              node.document.modalNodesManager.setVisible(node);
+            }
             return;
           }
           if (node.conditionGroup) {
@@ -143,7 +148,11 @@ export default class TreeTitle extends Component<{
             />
           ) : (
             <Fragment>
-              <Title title={treeNode.title} />
+              <Title
+                title={treeNode.title}
+                match={filterWorking && matchSelf}
+                keywords={keywords}
+              />
               {node.slotFor && (
                 <a className="tree-node-tag slot">
                   {/* todo: click redirect to prop */}

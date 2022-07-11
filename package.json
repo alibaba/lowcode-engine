@@ -6,14 +6,16 @@
     ],
     "nohoist": [
       "**/css-modules-typescript-loader",
-      "**/@alife/theme-lowcode-*"
+      "**/@alifc/theme-lowcode-*",
+      "**/jest"
     ]
   },
   "scripts": {
     "build": "./scripts/build.sh",
     "build:npm": "lerna run build --stream",
     "build:umd": "lerna run build:umd --stream",
-    "clean": "rm -rf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
+    "clean": "rimraf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
+    "clean:lib": "rimraf ./node_modules",
     "lint": "f2elint scan -q -i ./packages/*/src",
     "lint:fix": "f2elint fix -i ./packages/*/src",
     "lint:modules": "f2elint scan -q -i ./modules/*/src",
@@ -22,13 +24,14 @@
     "pub:premajor": "npm run watchdog:build && lerna publish premajor --force-publish --exact --dist-tag beta --preid beta --no-changelog",
     "pub:prepatch": "npm run watchdog:build && lerna publish prepatch --force-publish --exact --dist-tag beta --preid beta --no-changelog",
     "pub:prerelease": "npm run watchdog:build && lerna publish prerelease --force-publish --exact --dist-tag beta --preid beta --no-changelog",
-    "setup": "./scripts/setup.sh",
+    "setup": "node ./scripts/setup.js",
     "setup:test": "./scripts/setup-for-test.sh",
     "setup:skip-build": "./scripts/setup-skip-build.sh",
-    "start": "./scripts/start.sh",
+    "start": "node ./scripts/start.js",
     "test": "lerna run test --stream",
     "test:snapshot": "lerna run test:snapshot",
-    "watchdog:build": "node ./scripts/watchdog.js"
+    "watchdog:build": "node ./scripts/watchdog.js",
+    "sync": "./scripts/sync.sh"
   },
   "husky": {
     "hooks": {
@@ -37,11 +40,15 @@
     }
   },
   "devDependencies": {
+    "del": "^6.1.1",
+    "execa": "^5.1.1",
     "f2elint": "^2.0.1",
+    "gulp": "^4.0.2",
     "husky": "^7.0.4",
     "lerna": "^4.0.0",
     "typescript": "^4.5.5",
-    "yarn": "^1.22.17"
+    "yarn": "^1.22.17",
+    "rimraf": "^3.0.2"
   },
   "engines": {
     "node": ">=14.17.0 <16"

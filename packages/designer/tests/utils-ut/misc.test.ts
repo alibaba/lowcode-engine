@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { isElementNode, isDOMNodeVisible } from '../../src/utils/misc';
+import { isElementNode, isDOMNodeVisible, normalizeTriggers } from '../../src/utils/misc';
 
 it('isElementNode', () => {
   expect(isElementNode(document.createElement('div'))).toBeTruthy();
@@ -147,4 +147,8 @@ describe('isDOMNodeVisible', () => {
       ),
     ).toBeFalsy();
   });
+});
+
+it('normalizeTriggers', () => {
+  expect(normalizeTriggers(['n', 'w'])).toEqual(['N', 'W']);
 });

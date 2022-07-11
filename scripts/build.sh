@@ -23,3 +23,9 @@ lerna run build:umd \
   --scope @alilc/lowcode-react-simulator-renderer \
   --scope @alilc/lowcode-react-renderer \
   --stream
+
+cp ./packages/react-simulator-renderer/dist/js/* ./packages/engine/dist/js/
+cp ./packages/react-simulator-renderer/dist/css/* ./packages/engine/dist/css/
+
+cp ./packages/rax-simulator-renderer/dist/js/* ./packages/engine/dist/js/
+cp ./packages/rax-simulator-renderer/dist/css/* ./packages/engine/dist/css/

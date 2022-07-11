@@ -1,8 +1,8 @@
 // all this file for polyfill vision logic
-
 import { isValidElement } from 'react';
-import { isSetterConfig, isDynamicSetter } from '@alilc/lowcode-types';
+import { isSetterConfig, isDynamicSetter, FieldConfig, SetterConfig } from '@alilc/lowcode-types';
 import { getSetter } from '@alilc/lowcode-editor-core';
+import { SettingField } from './setting-field';
 
 function getHotterFromSetter(setter) {
   return setter && (setter.Hotter || (setter.type && setter.type.Hotter)) || []; // eslint-disable-line
@@ -35,7 +35,7 @@ export class Transducer {
 
   context: any;
 
-  constructor(context, config) {
+  constructor(context: SettingField, config: { setter: FieldConfig['setter'] }) {
     let { setter } = config;
 
     // 1. validElement
@@ -46,17 +46,32 @@ export class Transducer {
     } else if (isValidElement(setter) && setter.type.displayName === 'MixedSetter') {
       setter = setter.props?.setters?.[0];
     } else if (typeof setter === 'object' && setter.componentName === 'MixedSetter') {
-      setter = setter && setter.props && setter.props.setters && Array.isArray(setter.props.setters) && setter.props.setters[0];
+      setter = Array.isArray(setter?.props?.setters) && setter.props.setters[0];
     }
 
+    /**
+     * 两种方式标识是 FC 而不是动态 setter
+     * 1. 物料描述里面 setter 的配置，显式设置为 false
+     * 2. registerSetter 注册 setter 时显式设置为 false
+     */
+
+    let isDynamic = true;
+
     if (isSetterConfig(setter)) {
-      setter = setter.componentName;
+      const { componentName, isDynamic: dynamicFlag } = setter as SetterConfig;
+      setter = componentName;
+      isDynamic = dynamicFlag !== false;
     }
     if (typeof setter === 'string') {
-      setter = getSetter(setter)?.component;
+      const { component, isDynamic: dynamicFlag } = getSetter(setter) || {};
+      setter = component;
+      // 如果在物料配置中声明了，在 registerSetter 没有声明，取物料配置中的声明
+      isDynamic = dynamicFlag === undefined ? isDynamic : dynamicFlag !== false;
     }
-    if (isDynamicSetter(setter)) {
-      setter = setter.call(context, context);
+    if (isDynamicSetter(setter) && isDynamic) {
+      try {
+        setter = setter.call(context, context);
+      } catch (e) { console.error(e); }
     }
 
     this.setterTransducer = combineTransducer(getTransducerFromSetter(setter), getHotterFromSetter(setter), context);

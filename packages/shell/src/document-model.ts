@@ -6,7 +6,13 @@ import {
   IOnChangeOptions as InnerIOnChangeOptions,
   PropChangeOptions as InnerPropChangeOptions,
 } from '@alilc/lowcode-designer';
-import { TransformStage, RootSchema, NodeSchema, NodeData, GlobalEvent } from '@alilc/lowcode-types';
+import {
+  TransformStage,
+  RootSchema,
+  NodeSchema,
+  NodeData,
+  GlobalEvent,
+} from '@alilc/lowcode-types';
 import Node from './node';
 import Selection from './selection';
 import Detecting from './detecting';
@@ -33,6 +39,7 @@ type PropChangeOptions = {
 export default class DocumentModel {
   private readonly [documentSymbol]: InnerDocumentModel;
   private readonly [editorSymbol]: Editor;
+  private _focusNode: Node;
   public selection: Selection;
   public detecting: Detecting;
   public history: History;
@@ -45,11 +52,24 @@ export default class DocumentModel {
     this.detecting = new Detecting(document);
     this.history = new History(document.getHistory());
     this.canvas = new Canvas(document.designer);
+
+    this._focusNode = Node.create(this[documentSymbol].focusNode);
   }
 
   static create(document: InnerDocumentModel | undefined | null) {
     if (document == undefined) return null;
     return new DocumentModel(document);
+  }
+
+  /**
+   * id
+   */
+  get id() {
+    return this[documentSymbol].id;
+  }
+
+  set id(id) {
+    this[documentSymbol].id = id;
   }
 
   /**
@@ -66,6 +86,14 @@ export default class DocumentModel {
    */
   get root(): Node | null {
     return Node.create(this[documentSymbol].getRoot());
+  }
+
+  get focusNode(): Node {
+    return this._focusNode || this.root;
+  }
+
+  set focusNode(node: Node) {
+    this._focusNode = node;
   }
 
   /**
@@ -85,6 +113,11 @@ export default class DocumentModel {
    */
   get modalNodesManager() {
     return ModalNodesManager.create(this[documentSymbol].modalNodesManager);
+  }
+
+  // @TODO: 不能直接暴露
+  get dropLocation() {
+    return this[documentSymbol].dropLocation;
   }
 
   /**
@@ -128,8 +161,8 @@ export default class DocumentModel {
     copy?: boolean | undefined,
   ) {
     const node = this[documentSymbol].insertNode(
-      parent[nodeSymbol] as any,
-      thing?.[nodeSymbol],
+      parent[nodeSymbol] ? parent[nodeSymbol] : parent,
+      thing?.[nodeSymbol] ? thing[nodeSymbol] : thing,
       at,
       copy,
     );
@@ -154,19 +187,38 @@ export default class DocumentModel {
   }
 
   /**
+   * componentsMap of documentModel
+   * @param extraComps
+   * @returns
+   */
+  getComponentsMap(extraComps?: string[]) {
+    return this[documentSymbol].getComponentsMap(extraComps);
+  }
+
+  /**
    * 当前 document 新增节点事件
    */
   onAddNode(fn: (node: Node) => void) {
-    this[documentSymbol].onNodeCreate((node: InnerNode) => {
+    return this[documentSymbol].onNodeCreate((node: InnerNode) => {
       fn(Node.create(node)!);
     });
+  }
+
+  /**
+   * 当前 document 新增节点事件，此时节点已经挂载到 document 上
+   */
+  onMountNode(fn: (node: Node) => void) {
+    this[editorSymbol].on('node.add', fn as any);
+    return () => {
+      this[editorSymbol].off('node.add', fn as any);
+    };
   }
 
   /**
    * 当前 document 删除节点事件
    */
   onRemoveNode(fn: (node: Node) => void) {
-    this[documentSymbol].onNodeDestroy((node: InnerNode) => {
+    return this[documentSymbol].onNodeDestroy((node: InnerNode) => {
       fn(Node.create(node)!);
     });
   }
@@ -175,7 +227,7 @@ export default class DocumentModel {
    * 当前 document 的 hover 变更事件
    */
   onChangeDetecting(fn: (node: Node) => void) {
-    this[documentSymbol].designer.detecting.onDetectingChange((node: InnerNode) => {
+    return this[documentSymbol].designer.detecting.onDetectingChange((node: InnerNode) => {
       fn(Node.create(node)!);
     });
   }
@@ -184,7 +236,7 @@ export default class DocumentModel {
    * 当前 document 的选中变更事件
    */
   onChangeSelection(fn: (ids: string[]) => void) {
-    this[documentSymbol].selection.onSelectionChange((ids: string[]) => {
+    return this[documentSymbol].selection.onSelectionChange((ids: string[]) => {
       fn(ids);
     });
   }

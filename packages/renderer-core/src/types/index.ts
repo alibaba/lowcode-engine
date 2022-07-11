@@ -128,6 +128,11 @@ export interface IRendererProps {
   faultComponent?: IGeneralComponent;
   /** 设备信息 */
   device?: string;
+  /**
+   * @default true
+   * JSExpression 是否只支持使用 this 来访问上下文变量
+   */
+  thisRequiredInJSE?: boolean;
 }
 
 export interface IRendererState {
@@ -148,15 +153,13 @@ export interface IBaseRendererProps {
   __host?: BuiltinSimulatorHost;
   __container?: any;
   config?: Record<string, any>;
-  /**
-   * @see https://yuque.antfin.com/ali-lowcode/docs/hk2ogo#designMode
-   */
-  designMode?: 'live' | 'design';
+  designMode?: 'design';
   className?: string;
   style?: CSSProperties;
   id?: string | number;
   getSchemaChangedSymbol?: () => boolean;
   setSchemaChangedSymbol?: (symbol: boolean) => void;
+  thisRequiredInJSE?: boolean;
   documentId?: string;
   getNode?: any;
   /**
@@ -237,7 +240,7 @@ export type IBaseRendererInstance = IGeneralComponent<
     __beforeInit(props: IBaseRendererProps): void;
     __init(props: IBaseRendererProps): void;
     __afterInit(props: IBaseRendererProps): void;
-    __setLifeCycleMethods(method: string, args?: any[]): void;
+    __excuteLifeCycleMethod(method: string, args?: any[]): void;
     __bindCustomMethods(props: IBaseRendererProps): void;
     __generateCtx(ctx: Record<string, any>): void;
     __parseData(data: any, ctx?: any): any;

@@ -87,7 +87,7 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
     });
   }
   //  通用设置
-  let propsGroup = props || [];
+  let propsGroup = props ? [...props] : [];
   const basicInfo: any = {};
   if (componentName === 'Slot') {
     if (!configure.component) {
@@ -266,6 +266,7 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
                 componentName: 'JsonSetter',
                 props: {
                   label: { type: 'i18n', 'zh-CN': '编辑数据', 'en-US': 'Edit Data' },
+                  defaultValue: '[]',
                 },
               },
               {

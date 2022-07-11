@@ -12,7 +12,7 @@
 
 [![NPM version][npm-image]][npm-url] [![NPM downloads][download-image]][download-url]
 
-[![Discussions][discussions-image]][discussions-url] [![][issues-helper-image]][issues-helper-url] [![Issues need help][help-wanted-image]][help-wanted-url]
+ [![][issues-helper-image]][issues-helper-url] [![Issues need help][help-wanted-image]][help-wanted-url]
 
 [npm-image]: https://img.shields.io/npm/v/@alilc/lowcode-engine.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/@alilc/lowcode-engine
@@ -21,8 +21,6 @@
 [download-url]: https://npmjs.org/package/@alilc/lowcode-engine
 [help-wanted-image]: https://flat.badgen.net/github/label-issues/alibaba/lowcode-engine/help%20wanted/open
 [help-wanted-url]: https://github.com/alibaba/lowcode-engine/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22
-[discussions-image]: https://img.shields.io/badge/discussions-on%20github-blue?style=flat-square
-[discussions-url]: https://github.com/alibaba/lowcode-engine/discussions
 
 [issues-helper-image]: https://img.shields.io/badge/using-issues--helper-orange?style=flat-square
 [issues-helper-url]: https://github.com/actions-cool/issues-helper
@@ -127,6 +125,8 @@ https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.0/dist/
 - [用户文档](https://lowcode-engine.cn/docV2)
 - [API](https://lowcode-engine.cn/docV2/vlmeme)
 
+[awesome-lowcode-engine](https://github.com/lowcode-workspace/awesome-lowcode-engine) 中包含了一系列围绕引擎建设的工具、解决方案等，如果你有类似的解决方案或者工具，欢迎提 PR 到该仓库，让更多人了解到
+
 ## 💻 本地调试
 
 ```bash
@@ -138,8 +138,6 @@ $ npm start
 ```
 
 > 📢 npm 访问速度较慢，阿里员工可以使用 tnpm，其他同学建议使用 cnpm 或者指定镜像 registry。
->
-> 📢 node 版本限定在 14
 >
 > 📢 windows 环境必须使用 [WSL](https://docs.microsoft.com/zh-cn/windows/wsl/install)，其他终端不保证能正常运行
 
@@ -156,3 +154,11 @@ lowcode-engine 启动后，提供了几个 umd 文件，可以结合 [lowcode-de
 
 关于提交 PR：
 请将目标合并分支设置为 **develop**，不要指定 **main** 分支，在发布正式版本后，develop 分支将会合入 main 分支。
+
+## ❤️ 致谢
+
+感谢所有为引擎项目贡献力量的同学们~
+
+<p>
+<a href="https://github.com/alibaba/lowcode-engine/graphs/contributors"><img src="https://contrib.rocks/image?repo=alibaba/lowcode-engine" /></a>
+</p>

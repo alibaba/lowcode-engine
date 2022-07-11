@@ -29,6 +29,10 @@ export default class SimulatorHost {
     return this[simulatorHostSymbol].contentDocument;
   }
 
+  get renderer() {
+    return this[simulatorHostSymbol].renderer;
+  }
+
   /**
    * 设置 host 配置值
    * @param key

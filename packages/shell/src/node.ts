@@ -9,6 +9,7 @@ import Props from './props';
 import DocumentModel from './document-model';
 import NodeChildren from './node-children';
 import ComponentMeta from './component-meta';
+import SettingTopEntry from './setting-top-entry';
 import { documentSymbol, nodeSymbol } from './symbols';
 
 const shellNodeSymbol = Symbol('shellNodeSymbol');
@@ -17,9 +18,13 @@ export default class Node {
   private readonly [documentSymbol]: InnerDocumentModel;
   private readonly [nodeSymbol]: InnerNode;
 
+  private _id: string;
+
   constructor(node: InnerNode) {
     this[nodeSymbol] = node;
     this[documentSymbol] = node.document;
+
+    this._id = this[nodeSymbol].id;
   }
 
   static create(node: InnerNode | null | undefined) {
@@ -36,7 +41,14 @@ export default class Node {
    * 节点 id
    */
   get id() {
-    return this[nodeSymbol].id;
+    return this._id;
+  }
+
+  /**
+   * set id
+   */
+  set id(id: string) {
+    this._id = id;
   }
 
   /**
@@ -107,6 +119,13 @@ export default class Node {
    */
   get isLeaf() {
     return this[nodeSymbol].isLeaf();
+  }
+
+  /**
+   * judge if it is a node or not
+   */
+  get isNode() {
+    return true;
   }
 
   /**
@@ -213,6 +232,17 @@ export default class Node {
   }
 
   /**
+   * 获取符合搭建协议-节点 schema 结构
+   */
+  get schema(): any {
+    return this[nodeSymbol].schema;
+  }
+
+  get settingEntry(): any {
+    return SettingTopEntry.create(this[nodeSymbol].settingEntry as any);
+  }
+
+  /**
    * @deprecated use .children instead
    */
   getChildren() {
@@ -272,6 +302,18 @@ export default class Node {
     return this[nodeSymbol].hasLoop();
   }
 
+  getVisible() {
+    return this[nodeSymbol].getVisible();
+  }
+
+  setVisible(flag: boolean) {
+    this[nodeSymbol].setVisible(flag);
+  }
+
+  isConditionalVisible() {
+    return this[nodeSymbol].isConditionalVisible();
+  }
+
   /**
    * @deprecated use .props instead
    */
@@ -279,13 +321,17 @@ export default class Node {
     return this.props;
   }
 
+  contains(node: Node) {
+    return this[nodeSymbol].contains(node[nodeSymbol]);
+  }
+
   /**
    * 获取指定 path 的属性模型实例
    * @param path 属性路径，支持 a / a.b / a.0 等格式
    * @returns
    */
-  getProp(path: string): Prop | null {
-    return Prop.create(this[nodeSymbol].getProp(path));
+  getProp(path: string, createIfNone = true): Prop | null {
+    return Prop.create(this[nodeSymbol].getProp(path, createIfNone));
   }
 
   /**
@@ -294,7 +340,7 @@ export default class Node {
    * @returns
    */
   getPropValue(path: string) {
-    return this.getProp(path)?.getValue();
+    return this.getProp(path, false)?.getValue();
   }
 
   /**

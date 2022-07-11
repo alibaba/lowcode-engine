@@ -94,4 +94,23 @@ export default class Props {
   setExtraPropValue(path: string, value: CompositeValue) {
     return this.getExtraProp(path)?.setValue(value);
   }
+
+  /**
+   * test if the specified key is existing or not.
+   * @param key
+   * @returns
+   */
+  has(key: string) {
+    return this[propsSymbol].has(key);
+  }
+
+  /**
+   * add a key with given value
+   * @param value
+   * @param key
+   * @returns
+   */
+  add(value: CompositeValue, key?: string | number | undefined) {
+    return this[propsSymbol].add(value, key);
+  }
 }

@@ -3,12 +3,11 @@ export {
   Tip,
   shallowIntl,
   createIntl,
+  intl,
   createSetterContent,
-  // TODO: To be deleted
   obx,
+  untracked,
   computed,
   observer,
-  getSetter,
-  getSettersMap,
   globalLocale,
 } from '@alilc/lowcode-editor-core';

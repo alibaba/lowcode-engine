@@ -26,7 +26,7 @@ export interface ComponentMap {
   destructuring?: boolean;
   exportName?: string;
   subName?: string;
-  devMode?: 'lowcode' | 'procode';
+  devMode?: 'lowCode' | 'proCode';
 }
 
 export class DocumentModel {
@@ -93,7 +93,7 @@ export class DocumentModel {
     this.rootNode?.getExtraProp('fileName', true)?.setValue(fileName);
   }
 
-  @computed get focusNode() {
+  get focusNode() {
     if (this._drillDownNode) {
       return this._drillDownNode;
     }
@@ -642,6 +642,7 @@ export class DocumentModel {
       this.rootNodeVisitorMap[visitorName] = visitorResult;
     } catch (e) {
       console.error('RootNodeVisitor is not valid.');
+      console.error(e);
     }
     return visitorResult;
   }
@@ -666,7 +667,7 @@ export class DocumentModel {
           });
         } else {
           componentsMap.push({
-            devMode: 'lowcode',
+            devMode: 'lowCode',
             componentName,
           });
         }

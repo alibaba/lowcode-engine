@@ -13,3 +13,6 @@ export type ILowCodePluginConfig = designerCabin.ILowCodePluginConfig;
 export type ILowCodePluginManager = designerCabin.ILowCodePluginManager;
 export type ILowCodePluginContext = designerCabin.ILowCodePluginContext;
 export type PluginPreference = designerCabin.PluginPreference;
+export type PropsReducerContext = designerCabin.PropsReducerContext;
+export type DragObjectType = designerCabin.DragObjectType;
+export type DragNodeDataObject = designerCabin.DragNodeDataObject;

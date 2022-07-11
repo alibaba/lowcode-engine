@@ -13,10 +13,10 @@ import {
   LiveTextEditingConfig,
   FieldConfig,
 } from '@alilc/lowcode-types';
-import { deprecate } from '@alilc/lowcode-utils';
+import { deprecate, isRegExp } from '@alilc/lowcode-utils';
 import { computed, engineConfig } from '@alilc/lowcode-editor-core';
 import EventEmitter from 'events';
-
+import { componentDefaults, legacyIssues } from './transducers';
 import { isNode, Node, ParentalNode } from './document';
 import { Designer } from './designer';
 import { intlNode } from './locale';
@@ -31,7 +31,7 @@ import {
   IconHidden,
 } from './icons';
 
-function ensureAList(list?: string | string[]): string[] | null {
+export function ensureAList(list?: string | string[]): string[] | null {
   if (!list) {
     return null;
   }
@@ -47,11 +47,7 @@ function ensureAList(list?: string | string[]): string[] | null {
   return list;
 }
 
-function isRegExp(obj: any): obj is RegExp {
-  return obj && obj.test && obj.exec && obj.compile;
-}
-
-function buildFilter(rule?: string | string[] | RegExp | NestingFilter) {
+export function buildFilter(rule?: string | string[] | RegExp | NestingFilter) {
   if (!rule) {
     return null;
   }
@@ -145,9 +141,8 @@ export class ComponentMeta {
   private _isMinimalRenderUnit?: boolean;
 
   get title(): string | I18nData | ReactElement {
-    // TODO: 标记下。这块需要康师傅加一下API，页面正常渲染。
     // string | i18nData | ReactElement
-    // TitleConfig  title.label
+    // TitleConfig title.label
     if (isTitleConfig(this._title)) {
       return (this._title.label as any) || this.componentName;
     }
@@ -220,10 +215,10 @@ export class ComponentMeta {
     collectLiveTextEditing(this.configure);
     this._liveTextEditing = liveTextEditing.length > 0 ? liveTextEditing : undefined;
 
-    const isTopFiexd = this._transformedMetadata.configure.advanced?.isTopFixed;
+    const isTopFixed = this._transformedMetadata.configure.advanced?.isTopFixed;
 
-    if (isTopFiexd) {
-      this._isTopFixed = isTopFiexd;
+    if (isTopFixed) {
+      this._isTopFixed = isTopFixed;
     }
 
     const { configure = {} } = this._transformedMetadata;
@@ -397,53 +392,13 @@ export function getRegisteredMetadataTransducers(): MetadataTransducer[] {
   return metadataTransducers;
 }
 
-registerMetadataTransducer((metadata) => {
-  const { configure, componentName } = metadata;
-  const { component = {} } = configure;
-  if (!component.nestingRule) {
-    let m;
-    // uri match xx.Group set subcontrolling: true, childWhiteList
-    // eslint-disable-next-line no-cond-assign
-    if ((m = /^(.+)\.Group$/.exec(componentName))) {
-      // component.subControlling = true;
-      if (!component.nestingRule) {
-        component.nestingRule = {
-          childWhitelist: [`${m[1]}`],
-        };
-      }
-      // eslint-disable-next-line no-cond-assign
-    } else if ((m = /^(.+)\.Node$/.exec(componentName))) {
-      // uri match xx.Node set selfControlled: false, parentWhiteList
-      // component.selfControlled = false;
-      component.nestingRule = {
-        parentWhitelist: [`${m[1]}`, componentName],
-      };
-      // eslint-disable-next-line no-cond-assign
-    } else if ((m = /^(.+)\.(Item|Node|Option)$/.exec(componentName))) {
-      // uri match .Item .Node .Option set parentWhiteList
-      component.nestingRule = {
-        parentWhitelist: [`${m[1]}`],
-      };
-    }
-  }
-  // if (component.isModal == null && /Dialog/.test(componentName)) {
-  //   component.isModal = true;
-  // }
-  return {
-    ...metadata,
-    configure: {
-      ...configure,
-      component,
-    },
-  };
-});
-
 const builtinComponentActions: ComponentAction[] = [
   {
     name: 'remove',
     content: {
       icon: IconRemove,
       title: intlNode('remove'),
+      /* istanbul ignore next */
       action(node: Node) {
         node.remove();
       },
@@ -455,10 +410,12 @@ const builtinComponentActions: ComponentAction[] = [
     content: {
       icon: IconHidden,
       title: intlNode('hide'),
+      /* istanbul ignore next */
       action(node: Node) {
         node.setVisible(false);
       },
     },
+    /* istanbul ignore next */
     condition: (node: Node) => {
       return node.componentMeta.isModal;
     },
@@ -469,6 +426,7 @@ const builtinComponentActions: ComponentAction[] = [
     content: {
       icon: IconClone,
       title: intlNode('copy'),
+      /* istanbul ignore next */
       action(node: Node) {
         // node.remove();
         const { document: doc, parent, index } = node;
@@ -500,10 +458,12 @@ const builtinComponentActions: ComponentAction[] = [
     content: {
       icon: IconLock, // 锁定 icon
       title: intlNode('lock'),
+      /* istanbul ignore next */
       action(node: Node) {
         node.lock();
       },
     },
+    /* istanbul ignore next */
     condition: (node: Node) => {
       return engineConfig.get('enableCanvasLock', false) && node.isContainer() && !node.isLocked;
     },
@@ -514,10 +474,12 @@ const builtinComponentActions: ComponentAction[] = [
     content: {
       icon: IconUnlock, // 解锁 icon
       title: intlNode('unlock'),
+      /* istanbul ignore next */
       action(node: Node) {
         node.lock(false);
       },
     },
+    /* istanbul ignore next */
     condition: (node: Node) => {
       return engineConfig.get('enableCanvasLock', false) && node.isContainer() && node.isLocked;
     },
@@ -544,3 +506,6 @@ export function modifyBuiltinComponentAction(
     handle(builtinAction);
   }
 }
+
+registerMetadataTransducer(legacyIssues, 2, 'legacy-issues'); // should use a high level priority, eg: 2
+registerMetadataTransducer(componentDefaults, 100, 'component-defaults');

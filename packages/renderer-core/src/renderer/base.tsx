@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable max-len */
 /* eslint-disable react/prop-types */
 import classnames from 'classnames';
 import { create as createDataSourceEngine } from '@alilc/lowcode-datasource-engine/interpret';
@@ -11,6 +13,7 @@ import {
   getValue,
   parseData,
   parseExpression,
+  parseThisRequiredExpression,
   parseI18n,
   isEmpty,
   isSchema,
@@ -45,7 +48,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     Record<string, any>,
     any
   >;
-  const createElement = runtime.createElement;
+  const { createElement } = runtime;
   const Div = divFactory();
   const VisualDom = visualDomFactory();
   const AppContext = contextFactory();
@@ -82,17 +85,20 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     getLocale: any;
     setLocale: any;
     styleElement: any;
+    parseExpression: any;
     [key: string]: any;
 
     constructor(props: IBaseRendererProps, context: IBaseRendererContext) {
       super(props, context);
       this.context = context;
+      this.parseExpression = props?.thisRequiredInJSE ? parseThisRequiredExpression : parseExpression;
       this.__beforeInit(props);
       this.__init(props);
       this.__afterInit(props);
       this.__debug(`constructor - ${props?.__schema?.fileName}`);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     __beforeInit(_props: IBaseRendererProps) { }
 
     __init(props: IBaseRendererProps) {
@@ -103,6 +109,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       this.__initI18nAPIs();
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     __afterInit(_props: IBaseRendererProps) { }
 
     static getDerivedStateFromProps(props: IBaseRendererProps, state: any) {
@@ -111,41 +118,42 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
       if (func) {
         if (isJSExpression(func) || isJSFunction(func)) {
-          const fn = parseExpression(func, this);
-          return fn(props, state);
+          const fn = props.thisRequiredInJSE ? parseThisRequiredExpression(func, this) : parseExpression(func, this);
+          return fn?.(props, state);
         }
 
         if (typeof func === 'function') {
+          // eslint-disable-next-line @typescript-eslint/ban-types
           return (func as Function)(props, state);
         }
       }
       return null;
     }
 
-    async getSnapshotBeforeUpdate() {
-      this.__setLifeCycleMethods('getSnapshotBeforeUpdate', arguments);
+    async getSnapshotBeforeUpdate(...args: any[]) {
+      this.__excuteLifeCycleMethod('getSnapshotBeforeUpdate', args);
       this.__debug(`getSnapshotBeforeUpdate - ${this.props?.__schema?.fileName}`);
     }
 
-    async componentDidMount() {
+    async componentDidMount(...args: any[]) {
       this.reloadDataSource();
-      this.__setLifeCycleMethods('componentDidMount', arguments);
+      this.__excuteLifeCycleMethod('componentDidMount', args);
       this.__debug(`componentDidMount - ${this.props?.__schema?.fileName}`);
     }
 
-    async componentDidUpdate(...args: any) {
-      this.__setLifeCycleMethods('componentDidUpdate', args);
+    async componentDidUpdate(...args: any[]) {
+      this.__excuteLifeCycleMethod('componentDidUpdate', args);
       this.__debug(`componentDidUpdate - ${this.props.__schema.fileName}`);
     }
 
-    async componentWillUnmount(...args: any) {
-      this.__setLifeCycleMethods('componentWillUnmount', args);
+    async componentWillUnmount(...args: any[]) {
+      this.__excuteLifeCycleMethod('componentWillUnmount', args);
       this.__debug(`componentWillUnmount - ${this.props?.__schema?.fileName}`);
     }
 
-    async componentDidCatch(e: any) {
-      this.__setLifeCycleMethods('componentDidCatch', arguments);
-      console.warn(e);
+    async componentDidCatch(...args: any[]) {
+      this.__excuteLifeCycleMethod('componentDidCatch', args);
+      console.warn(args);
     }
 
     reloadDataSource = () => new Promise((resolve, reject) => {
@@ -154,15 +162,14 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         this.__showPlaceholder = false;
         return resolve({});
       }
-      this.__dataHelper
-        .getInitData()
+      this.__dataHelper.getInitData()
         .then((res: any) => {
           this.__showPlaceholder = false;
           if (isEmpty(res)) {
             this.forceUpdate();
             return resolve({});
           }
-          this.setState(res, resolve);
+          this.setState(res, resolve as () => void);
         })
         .catch((err: Error) => {
           if (this.__showPlaceholder) {
@@ -187,13 +194,13 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       }
     }
 
-    __setLifeCycleMethods = (method: string, args?: any) => {
+    __excuteLifeCycleMethod = (method: string, args?: any) => {
       const lifeCycleMethods = getValue(this.props.__schema, 'lifeCycles', {});
       let fn = lifeCycleMethods[method];
       if (fn) {
         // TODO, cache
         if (isJSExpression(fn) || isJSFunction(fn)) {
-          fn = parseExpression(fn, this);
+          fn = this.parseExpression(fn, this);
         }
         if (typeof fn !== 'function') {
           console.error(`生命周期${method}类型不符`, fn);
@@ -207,6 +214,14 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       }
     };
 
+    _getComponentView = (componentName: string) => {
+      const { __components } = this.props;
+      if (!__components) {
+        return;
+      }
+      return __components[componentName];
+    };
+
     __bindCustomMethods = (props = this.props) => {
       const { __schema } = props;
       const customMethodsList = Object.keys(__schema.methods || {}) || [];
@@ -218,14 +233,15 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         });
       this.__customMethodsList = customMethodsList;
       forEach(__schema.methods, (val: any, key: string) => {
-        if (isJSExpression(val) || isJSFunction(val)) {
-          val = parseExpression(val, this);
+        let value = val;
+        if (isJSExpression(value) || isJSFunction(value)) {
+          value = this.parseExpression(value, this);
         }
-        if (typeof val !== 'function') {
-          console.error(`自定义函数${key}类型不符`, val);
+        if (typeof value !== 'function') {
+          console.error(`自定义函数${key}类型不符`, value);
           return;
         }
-        this[key] = val.bind(this);
+        this[key] = value.bind(this);
       });
     };
 
@@ -242,8 +258,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     };
 
     __parseData = (data: any, ctx?: Record<string, any>) => {
-      const { __ctx } = this.props;
-      return parseData(data, ctx || __ctx || this);
+      const { __ctx, thisRequiredInJSE } = this.props;
+      return parseData(data, ctx || __ctx || this, { thisRequiredInJSE });
     };
 
     __initDataSource = (props = this.props) => {
@@ -257,7 +273,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         this.__dataHelper = {
           updateConfig: (updateDataSource: any) => {
             const { dataSourceMap, reloadDataSource } = createDataSourceEngine(
-              updateDataSource,
+              updateDataSource ?? {},
               this,
               props.__appHelper.requestHandlersMap ? { requestHandlersMap: props.__appHelper.requestHandlersMap } : undefined,
             );
@@ -286,15 +302,14 @@ export default function baseRendererFactory(): IBaseRenderComponent {
             // this.__showPlaceholder = false;
             return resolve({});
           }
-          this.__dataHelper
-            .getInitData()
+          this.__dataHelper.getInitData()
             .then((res: any) => {
               // this.__showPlaceholder = false;
               if (isEmpty(res)) {
                 this.forceUpdate();
                 return resolve({});
               }
-              this.setState(res, resolve);
+              this.setState(res, resolve as () => void);
             })
             .catch((err: Error) => {
               if (this.__showPlaceholder) {
@@ -345,7 +360,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
     __render = () => {
       const schema = this.props.__schema;
-      this.__setLifeCycleMethods('render');
+      this.__excuteLifeCycleMethod('render');
       this.__writeCss();
 
       const { engine } = this.context;
@@ -407,7 +422,9 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     // self 为每个渲染组件构造的上下文，self是自上而下继承的
     // parentInfo 父组件的信息，包含schema和Comp
     // idx 若为循环渲染的循环Index
-    __createVirtualDom = (schema: NodeData | NodeData[] | undefined, scope: any, parentInfo: IInfo, idx: string | number = ''): any => {
+    __createVirtualDom = (originalSchema: NodeData | NodeData[] | undefined, originalScope: any, parentInfo: IInfo, idx: string | number = ''): any => {
+      let scope = originalScope;
+      let schema = originalSchema;
       const { engine } = this.context || {};
       try {
         if (!schema) return null;
@@ -415,7 +432,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         const { __appHelper: appHelper, __components: components = {} } = this.props || {};
 
         if (isJSExpression(schema)) {
-          return parseExpression(schema, scope);
+          return this.parseExpression(schema, scope);
         }
         if (isI18nData(schema)) {
           return parseI18n(schema, scope);
@@ -435,7 +452,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         const _children = this.getSchemaChildren(schema);
         // 解析占位组件
         if (schema?.componentName === 'Fragment' && _children) {
-          const tarChildren = isJSExpression(_children) ? parseExpression(_children, scope) : _children;
+          const tarChildren = isJSExpression(_children) ? this.parseExpression(_children, scope) : _children;
           return this.__createVirtualDom(tarChildren, scope, parentInfo);
         }
 
@@ -476,12 +493,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         // DesignMode 为 design 情况下，需要进入 leaf Hoc，进行相关事件注册
         const displayInHook = engine?.props?.designMode === 'design';
 
-        if (schema.hidden && !displayInHook) {
-          return null;
-        }
-
         if (schema.loop != null) {
-          const loop = parseData(schema.loop, scope);
+          const loop = this.__parseData(schema.loop, scope);
           const useLoop = isUseLoop(loop, this._designModeIsDesign);
           if (useLoop) {
             return this.__createLoopVirtualDom(
@@ -495,13 +508,13 @@ export default function baseRendererFactory(): IBaseRenderComponent {
             );
           }
         }
-        const condition = schema.condition == null ? true : parseData(schema.condition, scope);
+        const condition = schema.condition == null ? true : this.__parseData(schema.condition, scope);
         if (!condition && !displayInHook) return null;
 
         let scopeKey = '';
         // 判断组件是否需要生成scope，且只生成一次，挂在this.__compScopes上
         if (Comp.generateScope) {
-          const key = parseExpression(schema.props?.key, scope);
+          const key = this.parseExpression(schema.props?.key, scope);
           if (key) {
             // 如果组件自己设置key则使用组件自己的key
             scopeKey = key;
@@ -582,7 +595,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         }
 
         let child = this.__getSchemaChildrenVirtualDom(schema, scope, Comp);
-        const renderComp = (props: any) => engine.createElement(Comp, props, child);
+        const renderComp = (innerProps: any) => engine.createElement(Comp, innerProps, child);
         // 设计模式下的特殊处理
         if (engine && [DESIGN_MODE.EXTEND, DESIGN_MODE.BORDER].includes(engine.props.designMode)) {
           // 对于overlay,dialog等组件为了使其在设计模式下显示，外层需要增加一个div容器
@@ -652,7 +665,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
         _children.forEach((_child: any) => {
           const _childVirtualDom = this.__createVirtualDom(
-            isJSExpression(_child) ? parseExpression(_child, scope) : _child,
+            isJSExpression(_child) ? this.parseExpression(_child, scope) : _child,
             scope,
             {
               schema,
@@ -692,7 +705,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       if (!Array.isArray(schema.loop)) return null;
       const itemArg = (schema.loopArgs && schema.loopArgs[0]) || 'item';
       const indexArg = (schema.loopArgs && schema.loopArgs[1]) || 'index';
-      const loop: (JSONValue| CompositeValue)[] = schema.loop;
+      const { loop } = schema;
       return loop.map((item: JSONValue | CompositeValue, i: number) => {
         const loopSelf: any = {
           [itemArg]: item,
@@ -716,7 +729,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       return engine?.props?.designMode === 'design';
     }
 
-    __parseProps = (props: any, scope: any, path: string, info: IInfo): any => {
+    __parseProps = (originalProps: any, scope: any, path: string, info: IInfo): any => {
+      let props = originalProps;
       const { schema, Comp, componentInfo = {} } = info;
       const propInfo = getValue(componentInfo.props, path);
       // FIXME! 将这行逻辑外置，解耦，线上环境不要验证参数，调试环境可以有，通过传参自定义
@@ -731,14 +745,14 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         if (isEmpty(params)) {
           return checkProps(this.__createVirtualDom(data, scope, ({ schema, Comp } as IInfo)));
         }
-        return checkProps(function () {
+        return checkProps((...argValues: any[]) => {
           const args: any = {};
           if (Array.isArray(params) && params.length) {
             params.forEach((item, idx) => {
               if (typeof item === 'string') {
-                args[item] = arguments[idx];
+                args[item] = argValues[idx];
               } else if (item && typeof item === 'object') {
-                args[item.name] = arguments[idx];
+                args[item.name] = argValues[idx];
               }
             });
           }
@@ -759,12 +773,12 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         return checkProps(props);
       }
       if (isJSExpression(props)) {
-        props = parseExpression(props, scope);
+        props = this.parseExpression(props, scope);
         // 只有当变量解析出来为模型结构的时候才会继续解析
         if (!isSchema(props) && !isJSSlot(props)) return checkProps(props);
       }
 
-      const handleLegaoI18n = (props: any) => props[props.use || 'zh_CN'];
+      const handleLegaoI18n = (innerProps: any) => innerProps[innerProps.use || 'zh_CN'];
 
       // 兼容乐高设计态 i18n 数据
       if (isI18nData(props)) {
@@ -804,13 +818,16 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           && propInfo?.props?.types?.indexOf('ReactNode') > -1
           && propInfo?.props?.reactNodeProps?.type === 'function'
         );
+
+        let params = null;
+        if (isReactNodeFunction) {
+          params = propInfo?.props?.params;
+        } else if (isMixinReactNodeFunction) {
+          params = propInfo?.props?.reactNodeProps?.params;
+        }
         return parseReactNode(
           props,
-          isReactNodeFunction
-            ? propInfo.props.params
-            : isMixinReactNodeFunction
-              ? propInfo.props.reactNodeProps.params
-              : null,
+          params,
         );
       }
       if (Array.isArray(props)) {
@@ -851,15 +868,13 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     __debug = logger.log;
 
     __renderContextProvider = (customProps?: object, children?: any) => {
-      customProps = customProps || {};
-      children = children || this.__createDom();
       return createElement(AppContext.Provider, {
         value: {
           ...this.context,
           blockContext: this,
-          ...customProps,
+          ...(customProps || {}),
         },
-        children,
+        children: children || this.__createDom(),
       });
     };
 
@@ -867,7 +882,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       return createElement(AppContext.Consumer, {}, children);
     };
 
-    __getHocComp(Comp: any, schema: any, scope: any) {
+    __getHocComp(OriginalComp: any, schema: any, scope: any) {
+      let Comp = OriginalComp;
       this.componentHoc.forEach((ComponentConstruct: IComponentConstruct) => {
         Comp = ComponentConstruct(Comp || Div, {
           schema,
@@ -880,7 +896,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       return Comp;
     }
 
-    __renderComp(Comp: any, ctxProps: object) {
+    __renderComp(OriginalComp: any, ctxProps: object) {
+      let Comp = OriginalComp;
       const { __schema } = this.props;
       const { __ctx } = this.props;
       const scope: any = {};
@@ -929,7 +946,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       }, children);
     }
 
-    __checkSchema = (schema: NodeSchema | undefined, extraComponents: string | string[] = []) => {
+    __checkSchema = (schema: NodeSchema | undefined, originalExtraComponents: string | string[] = []) => {
+      let extraComponents = originalExtraComponents;
       if (typeof extraComponents === 'string') {
         extraComponents = [extraComponents];
       }

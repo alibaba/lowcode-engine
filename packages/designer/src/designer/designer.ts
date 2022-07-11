@@ -521,7 +521,7 @@ export class Designer {
     const designer = this;
     designer._componentMetasMap.forEach((config, key) => {
       const metaData = config.getMetadata();
-      if (metaData.devMode === 'lowcode') {
+      if (metaData.devMode === 'lowCode') {
         maps[key] = metaData.schema;
       } else {
         const view = metaData.configure.advanced?.view;
@@ -550,7 +550,7 @@ export class Designer {
 
     return reducers.reduce((xprops, reducer) => {
       try {
-        return reducer(xprops, node, { stage });
+        return reducer(xprops, node.internalToShellNode() as any, { stage });
       } catch (e) {
         // todo: add log
         console.warn(e);

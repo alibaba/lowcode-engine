@@ -21,3 +21,11 @@ export function isDOMNodeVisible(domNode: Element, viewport: Viewport) {
     right <= width + nodeWidth
   );
 }
+
+/**
+ * normalize triggers
+ * @param triggers
+ */
+export function normalizeTriggers(triggers: string[]) {
+  return triggers.map((trigger: string) => trigger?.toUpperCase());
+}

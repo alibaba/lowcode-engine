@@ -29,8 +29,10 @@ export function load(url: string) {
     // node = null;
   }
 
-  // node.async = true;
   node.src = url;
+
+  // `async=false` is required to make sure all js resources execute sequentially.
+  node.async = false;
 
   document.head.appendChild(node);
 

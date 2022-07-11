@@ -1,3 +1,4 @@
+import { ComponentMetadata } from "@alilc/lowcode-types";
 export default {
   componentName: 'Div',
   npm: {
@@ -6,7 +7,7 @@ export default {
   },
   title: '容器',
   docUrl: 'https://github.com/alibaba/lowcode-materials/tree/main/docs',
-  devMode: 'procode',
+  devMode: 'proCode',
   tags: ['布局'],
   configure: {
     props: [
@@ -228,55 +229,55 @@ export default {
       },
     },
     supports: {},
-  },
-  experimental: {
-    callbacks: {
-      onNodeAdd: (dragment, self) => { console.log(dragment); },
-      onNodeRemove: (dragment, self) => { console.log(dragment); }
+    advanced: {
+      callbacks: {
+        onNodeAdd: (dragment, self) => { console.log(dragment); },
+        onNodeRemove: (dragment, self) => { console.log(dragment); }
+      },
+      initials: [
+        {
+          name: 'behavior',
+        },
+        {
+          name: '__style__',
+        },
+        {
+          name: 'fieldId',
+        },
+        {
+          name: 'useFieldIdAsDomId',
+        },
+        {
+          name: 'customClassName',
+        },
+        {
+          name: 'events',
+        },
+        {
+          name: 'onClick',
+        },
+        {
+          name: 'onMouseEnter',
+        },
+        {
+          name: 'onMouseLeave',
+        },
+      ],
+      filters: [
+        {
+          name: 'events',
+        },
+        {
+          name: 'onClick',
+        },
+        {
+          name: 'onMouseEnter',
+        },
+        {
+          name: 'onMouseLeave',
+        },
+      ],
+      autoruns: [],
     },
-    initials: [
-      {
-        name: 'behavior',
-      },
-      {
-        name: '__style__',
-      },
-      {
-        name: 'fieldId',
-      },
-      {
-        name: 'useFieldIdAsDomId',
-      },
-      {
-        name: 'customClassName',
-      },
-      {
-        name: 'events',
-      },
-      {
-        name: 'onClick',
-      },
-      {
-        name: 'onMouseEnter',
-      },
-      {
-        name: 'onMouseLeave',
-      },
-    ],
-    filters: [
-      {
-        name: 'events',
-      },
-      {
-        name: 'onClick',
-      },
-      {
-        name: 'onMouseEnter',
-      },
-      {
-        name: 'onMouseLeave',
-      },
-    ],
-    autoruns: [],
   },
-};
+} as ComponentMetadata;
