@@ -236,7 +236,7 @@ export type IBaseRendererInstance = IGeneralComponent<
 >
   & {
     reloadDataSource(): Promise<any>;
-    getSchemaChildren(schema: NodeSchema | undefined): NodeData | NodeData[] | undefined;
+    __getSchemaChildren(schema: NodeSchema | undefined): NodeData | NodeData[] | undefined;
     __beforeInit(props: IBaseRendererProps): void;
     __init(props: IBaseRendererProps): void;
     __afterInit(props: IBaseRendererProps): void;

@@ -72,7 +72,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
     __namespace = 'base';
 
-    _self: any = null;
     appHelper?: IRendererAppHelper;
     __compScopes: Record<string, any> = {};
     __instanceMap: Record<string, any> = {};
@@ -83,6 +82,12 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     i18n: any;
     getLocale: any;
     setLocale: any;
+
+    /**
+     * reference of style element contains schema.css
+     *
+     * @type {any}
+     */
     styleElement: any;
     parseExpression: any;
     [key: string]: any;
@@ -222,7 +227,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       return __components[componentName];
     };
 
-    __bindCustomMethods = (props = this.props) => {
+    __bindCustomMethods = (props: IBaseRendererProps) => {
       const { __schema } = props;
       const customMethodsList = Object.keys(__schema.methods || {}) || [];
       this.__customMethodsList
@@ -336,19 +341,24 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       };
     };
 
-    __writeCss = () => {
-      const css = getValue(this.props.__schema, 'css', '');
+    /**
+     * write props.__schema.css to document as a style element,
+     * which will be added once and only once.
+     * @PRIVATE
+     */
+    __writeCss = (props: IBaseRendererProps) => {
+      const css = getValue(props.__schema, 'css', '');
+      this.__debug('create this.styleElement with css', css);
       let style = this.styleElement;
       if (!this.styleElement) {
         style = document.createElement('style');
         style.type = 'text/css';
         style.setAttribute('from', 'style-sheet');
-        if (style.firstChild) {
-          style.removeChild(style.firstChild);
-        }
+
         const head = document.head || document.getElementsByTagName('head')[0];
         head.appendChild(style);
         this.styleElement = style;
+        this.__debug('this.styleElement is created', this.styleElement);
       }
 
       if (style.innerHTML === css) {
@@ -361,15 +371,15 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     __render = () => {
       const schema = this.props.__schema;
       this.__excuteLifeCycleMethod('render');
-      this.__writeCss();
+      this.__writeCss(this.props);
 
       const { engine } = this.context;
       if (engine) {
         engine.props.onCompGetCtx(schema, this);
         // 画布场景才需要每次渲染bind自定义方法
-        if (engine.props.designMode) {
-          this.__bindCustomMethods();
-          this.dataSourceMap = this.__dataHelper && this.__dataHelper.updateConfig(schema.dataSource);
+        if (engine.props.designMode === 'design') {
+          this.__bindCustomMethods(this.props);
+          this.dataSourceMap = this.__dataHelper?.updateConfig(schema.dataSource);
         }
       }
     };
@@ -381,12 +391,23 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       this.__ref = ref;
     };
 
-    getSchemaChildren = (schema: NodeSchema | undefined) => {
-      if (!schema || !schema.props) {
-        return schema?.children;
+    __getSchemaChildren = (schema: NodeSchema | undefined) => {
+      if (!schema) {
+        return;
       }
-      if (!schema.children) return schema.props.children;
-      if (!schema.props.children) return schema.children;
+
+      if (!schema.props) {
+        return schema.children;
+      }
+
+      if (!schema.children) {
+        return schema.props.children;
+      }
+
+      if (!schema.props.children) {
+        return schema.children;
+      }
+
       let _children = ([] as NodeData[]).concat(schema.children);
       if (Array.isArray(schema.props.children)) {
         _children = _children.concat(schema.props.children);
@@ -400,10 +421,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       const { __schema, __ctx, __components = {} } = this.props;
       const scope: any = {};
       scope.__proto__ = __ctx || this;
-      if (!this._self) {
-        this._self = scope;
-      }
-      const _children = this.getSchemaChildren(__schema);
+
+      const _children = this.__getSchemaChildren(__schema);
       let Comp = __components[__schema.componentName];
 
       if (!Comp) {
@@ -416,19 +435,25 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       } as IInfo));
     };
 
-
-    // 将模型结构转换成react Element
-    // schema 模型结构
-    // self 为每个渲染组件构造的上下文，self是自上而下继承的
-    // parentInfo 父组件的信息，包含schema和Comp
-    // idx 若为循环渲染的循环Index
+    /**
+     * 将模型结构转换成react Element
+     * @param originalSchema schema
+     * @param originalScope scope
+     * @param parentInfo 父组件的信息，包含schema和Comp
+     * @param idx 为循环渲染的循环Index
+     */
     __createVirtualDom = (originalSchema: NodeData | NodeData[] | undefined, originalScope: any, parentInfo: IInfo, idx: string | number = ''): any => {
+      if (!originalSchema) {
+        return null;
+      }
       let scope = originalScope;
       let schema = originalSchema;
       const { engine } = this.context || {};
+      if (!engine) {
+        this.__debug('this.context.engine is invalid!');
+        return null;
+      }
       try {
-        if (!schema) return null;
-
         const { __appHelper: appHelper, __components: components = {} } = this.props || {};
 
         if (isJSExpression(schema)) {
@@ -440,33 +465,43 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         if (isJSSlot(schema)) {
           return this.__createVirtualDom(schema.value, scope, parentInfo);
         }
-        if (typeof schema === 'string') return schema;
+
+        if (typeof schema === 'string') {
+          return schema;
+        }
+
         if (typeof schema === 'number' || typeof schema === 'boolean') {
           return String(schema);
         }
+
         if (Array.isArray(schema)) {
-          if (schema.length === 1) return this.__createVirtualDom(schema[0], scope, parentInfo);
+          if (schema.length === 1) {
+            return this.__createVirtualDom(schema[0], scope, parentInfo);
+          }
           return schema.map((item, idy) => this.__createVirtualDom(item, scope, parentInfo, (item as NodeSchema)?.__ctx?.lceKey ? '' : String(idy)));
         }
-        // FIXME
-        const _children = this.getSchemaChildren(schema);
+
+        const _children = this.__getSchemaChildren(schema);
         // 解析占位组件
-        if (schema?.componentName === 'Fragment' && _children) {
+        if (schema.componentName === 'Fragment' && _children) {
           const tarChildren = isJSExpression(_children) ? this.parseExpression(_children, scope) : _children;
           return this.__createVirtualDom(tarChildren, scope, parentInfo);
         }
 
-        if (schema?.componentName === 'Text' && typeof schema?.props?.text === 'string') {
-          const text: string = schema?.props?.text;
+        if (schema.componentName === 'Text' && typeof schema.props?.text === 'string') {
+          const text: string = schema.props?.text;
           schema = { ...schema };
           schema.children = [text];
         }
 
         // @ts-expect-error 如果直接转换好了，可以返回
-        if (schema?.$$typeof) {
+        if (schema.$$typeof) {
           return schema;
         }
-        if (!isSchema(schema)) return null;
+
+        if (!isSchema(schema)) {
+          return null;
+        }
         let Comp = components[schema.componentName] || this.props.__container?.components?.[schema.componentName];
 
         // 容器类组件的上下文通过props传递，避免context传递带来的嵌套问题
@@ -490,9 +525,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           );
         }
 
-        // DesignMode 为 design 情况下，需要进入 leaf Hoc，进行相关事件注册
-        const displayInHook = engine?.props?.designMode === 'design';
-
         if (schema.loop != null) {
           const loop = this.__parseData(schema.loop, scope);
           const useLoop = isUseLoop(loop, this._designModeIsDesign);
@@ -509,7 +541,12 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           }
         }
         const condition = schema.condition == null ? true : this.__parseData(schema.condition, scope);
-        if (!condition && !displayInHook) return null;
+
+        // DesignMode 为 design 情况下，需要进入 leaf Hoc，进行相关事件注册
+        const displayInHook = engine.props?.designMode === 'design';
+        if (!condition && !displayInHook) {
+          return null;
+        }
 
         let scopeKey = '';
         // 判断组件是否需要生成scope，且只生成一次，挂在this.__compScopes上
@@ -539,7 +576,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           scope = compSelf;
         }
 
-        if (engine?.props?.designMode) {
+        if (engine.props?.designMode) {
           otherProps.__designMode = engine.props.designMode;
         }
         if (this._designModeIsDesign) {
@@ -572,7 +609,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           if (refProps && typeof refProps === 'string') {
             this[refProps] = ref;
           }
-          ref && engine?.props?.onCompGetRef(schema, ref);
+          ref && engine.props?.onCompGetRef(schema, ref);
         };
 
         // scope需要传入到组件上
@@ -581,7 +618,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         }
         if (schema?.__ctx?.lceKey) {
           if (!isFileSchema(schema)) {
-            engine?.props?.onCompGetCtx(schema, scope);
+            engine.props?.onCompGetCtx(schema, scope);
           }
           props.key = props.key || `${schema.__ctx.lceKey}_${schema.__ctx.idx || 0}_${idx !== undefined ? idx : ''}`;
         } else if ((typeof idx === 'number' || typeof idx === 'string') && !props.key) {
@@ -654,7 +691,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     }
 
     __getSchemaChildrenVirtualDom = (schema: NodeSchema | undefined, scope: any, Comp: any) => {
-      let _children = this.getSchemaChildren(schema);
+      let _children = this.__getSchemaChildren(schema);
 
       // @todo 补完这里的 Element 定义 @承虎
       let children: any = [];
