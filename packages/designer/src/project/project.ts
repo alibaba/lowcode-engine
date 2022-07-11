@@ -2,7 +2,14 @@ import { EventEmitter } from 'events';
 import { obx, computed, makeObservable, action } from '@alilc/lowcode-editor-core';
 import { Designer } from '../designer';
 import { DocumentModel, isDocumentModel, isPageSchema } from '../document';
-import { ProjectSchema, RootSchema, TransformStage } from '@alilc/lowcode-types';
+import {
+  ProjectSchema,
+  RootSchema,
+  ComponentsMap,
+  TransformStage,
+  isLowCodeComponentType,
+  isProCodeComponentType,
+} from '@alilc/lowcode-types';
 import { ISimulatorHost } from '../simulator';
 
 export class Project {
@@ -10,7 +17,12 @@ export class Project {
 
   @obx.shallow readonly documents: DocumentModel[] = [];
 
-  private data: ProjectSchema = { version: '1.0.0', componentsMap: [], componentsTree: [], i18n: {} };
+  private data: ProjectSchema = {
+    version: '1.0.0',
+    componentsMap: [],
+    componentsTree: [],
+    i18n: {},
+  };
 
   private _simulator?: ISimulatorHost;
 
@@ -49,15 +61,45 @@ export class Project {
     this._i18n = value || {};
   }
 
+  private getComponentsMap(): ComponentsMap {
+    return this.documents.reduce((compomentsMap: ComponentsMap, curDoc: DocumentModel) => {
+      const curComponentsMap = curDoc.getComponentsMap();
+      if (Array.isArray(curComponentsMap)) {
+        curComponentsMap.forEach((item) => {
+          const found = compomentsMap.find((eItem) => {
+            if (
+              isProCodeComponentType(eItem) &&
+              isProCodeComponentType(item) &&
+              eItem.package === item.package &&
+              eItem.componentName === item.componentName
+            ) {
+              return true;
+            } else if (
+              isLowCodeComponentType(eItem) &&
+              eItem.componentName === item.componentName
+            ) {
+              return true;
+            }
+            return false;
+          });
+          if (found) return;
+          compomentsMap.push(item);
+        });
+      }
+      return compomentsMap;
+    }, [] as ComponentsMap);
+  }
+
   /**
    * 获取项目整体 schema
    */
   getSchema(stage: TransformStage = TransformStage.Save): ProjectSchema {
     return {
       ...this.data,
-      // TODO: future change this filter
-      componentsMap: this.currentDocument?.getComponentsMap(),
-      componentsTree: this.documents.filter((doc) => !doc.isBlank()).map((doc) => doc.export(stage)),
+      componentsMap: this.getComponentsMap(),
+      componentsTree: this.documents
+        .filter((doc) => !doc.isBlank())
+        .map((doc) => doc.export(stage)),
       i18n: this.i18n,
     };
   }
@@ -100,7 +142,9 @@ export class Project {
         // TODO: 暂时先读 config tabBar 里的值，后面看整个 layout 结构是否能作为引擎规范
         if (this.config?.layout?.props?.tabBar?.items?.length > 0) {
           // slice(1)这个贼不雅，默认任务fileName 是类'/fileName'的形式
-          documentInstances.find((i) => i.fileName === this.config.layout.props.tabBar.items[0].path?.slice(1))?.open();
+          documentInstances
+            .find((i) => i.fileName === this.config.layout.props.tabBar.items[0].path?.slice(1))
+            ?.open();
         } else {
           documentInstances[0].open();
         }
@@ -138,15 +182,15 @@ export class Project {
   set(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     key:
-    | 'version'
-    | 'componentsTree'
-    | 'componentsMap'
-    | 'utils'
-    | 'constants'
-    | 'i18n'
-    | 'css'
-    | 'dataSource'
-    | string,
+      | 'version'
+      | 'componentsTree'
+      | 'componentsMap'
+      | 'utils'
+      | 'constants'
+      | 'i18n'
+      | 'css'
+      | 'dataSource'
+      | string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     value: any,
   ): void {
@@ -165,16 +209,16 @@ export class Project {
   get(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     key:
-    | 'version'
-    | 'componentsTree'
-    | 'componentsMap'
-    | 'utils'
-    | 'constants'
-    | 'i18n'
-    | 'css'
-    | 'dataSource'
-    | 'config'
-    | string,
+      | 'version'
+      | 'componentsTree'
+      | 'componentsMap'
+      | 'utils'
+      | 'constants'
+      | 'i18n'
+      | 'css'
+      | 'dataSource'
+      | 'config'
+      | string,
   ): any {
     if (key === 'config') {
       return this.config;
@@ -189,11 +233,11 @@ export class Project {
 
   getDocument(id: string): DocumentModel | null {
     // 此处不能使用 this.documentsMap.get(id)，因为在乐高 rollback 场景，document.id 会被改成其他值
-    return this.documents.find(doc => doc.id === id) || null;
+    return this.documents.find((doc) => doc.id === id) || null;
   }
 
   getDocumentByFileName(fileName: string): DocumentModel | null {
-    return this.documents.find(doc => doc.fileName === fileName) || null;
+    return this.documents.find((doc) => doc.fileName === fileName) || null;
   }
 
   @action
@@ -230,11 +274,11 @@ export class Project {
       return doc.open();
     }
     //  else if (isPageSchema(doc)) {
-      // 暂时注释掉，影响了 diff 功能
-      // const foundDoc = this.documents.find(curDoc => curDoc?.rootNode?.id && curDoc?.rootNode?.id === doc?.id);
-      // if (foundDoc) {
-      //   foundDoc.remove();
-      // }
+    // 暂时注释掉，影响了 diff 功能
+    // const foundDoc = this.documents.find(curDoc => curDoc?.rootNode?.id && curDoc?.rootNode?.id === doc?.id);
+    // if (foundDoc) {
+    //   foundDoc.remove();
+    // }
     // }
 
     doc = this.createDocument(doc);
