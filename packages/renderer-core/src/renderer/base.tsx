@@ -29,7 +29,7 @@ import {
   isVariable,
   isJSSlot,
 } from '../utils';
-import { IBaseRendererProps, IInfo, IBaseRenderComponent, IBaseRendererContext, IGeneralConstructor, IRendererAppHelper, DataSource } from '../types';
+import { IBaseRendererProps, INodeInfo, IBaseRenderComponent, IBaseRendererContext, IGeneralConstructor, IRendererAppHelper, DataSource } from '../types';
 import { compWrapper } from '../hoc';
 import { IComponentConstruct, IComponentHoc, leafWrapper } from '../hoc/leaf';
 import logger from '../utils/logger';
@@ -59,6 +59,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     PREVIEW: 'preview',
   };
   const OVERLAY_LIST = ['Dialog', 'Overlay', 'Animate', 'ConfigProvider'];
+  const DEFAULT_LOOP_ARG_ITEM = 'item';
+  const DEFAULT_LOOP_ARG_INDEX = 'index';
   let scopeIdx = 0;
 
   return class BaseRenderer extends Component {
@@ -377,7 +379,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       if (engine) {
         engine.props.onCompGetCtx(schema, this);
         // 画布场景才需要每次渲染bind自定义方法
-        if (engine.props.designMode === 'design') {
+        if (this.__designModeIsDesign) {
           this.__bindCustomMethods(this.props);
           this.dataSourceMap = this.__dataHelper?.updateConfig(schema.dataSource);
         }
@@ -432,7 +434,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       return this.__createVirtualDom(_children, scope, ({
         schema: __schema,
         Comp: this.__getHocComp(Comp, __schema, scope),
-      } as IInfo));
+      } as INodeInfo));
     };
 
     /**
@@ -442,7 +444,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
      * @param parentInfo 父组件的信息，包含schema和Comp
      * @param idx 为循环渲染的循环Index
      */
-    __createVirtualDom = (originalSchema: NodeData | NodeData[] | undefined, originalScope: any, parentInfo: IInfo, idx: string | number = ''): any => {
+    __createVirtualDom = (originalSchema: NodeData | NodeData[] | undefined, originalScope: any, parentInfo: INodeInfo, idx: string | number = ''): any => {
       if (!originalSchema) {
         return null;
       }
@@ -527,7 +529,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
         if (schema.loop != null) {
           const loop = this.__parseData(schema.loop, scope);
-          const useLoop = isUseLoop(loop, this._designModeIsDesign);
+          const useLoop = isUseLoop(loop, this.__designModeIsDesign);
           if (useLoop) {
             return this.__createLoopVirtualDom(
               {
@@ -543,7 +545,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         const condition = schema.condition == null ? true : this.__parseData(schema.condition, scope);
 
         // DesignMode 为 design 情况下，需要进入 leaf Hoc，进行相关事件注册
-        const displayInHook = engine.props?.designMode === 'design';
+        const displayInHook = this.__designModeIsDesign;
         if (!condition && !displayInHook) {
           return null;
         }
@@ -579,7 +581,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         if (engine.props?.designMode) {
           otherProps.__designMode = engine.props.designMode;
         }
-        if (this._designModeIsDesign) {
+        if (this.__designModeIsDesign) {
           otherProps.__tag = Math.random();
         }
         const componentInfo: any = {};
@@ -588,7 +590,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           props: transformArrayToMap(componentInfo.props, 'name'),
         }) || {};
 
-        this.componentHoc.forEach((ComponentConstruct: IComponentConstruct) => {
+        this.__componentHoc.forEach((ComponentConstruct: IComponentConstruct) => {
           Comp = ComponentConstruct(Comp, {
             schema,
             componentInfo,
@@ -671,7 +673,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       }
     };
 
-    get componentHoc(): IComponentConstruct[] {
+    get __componentHoc(): IComponentConstruct[] {
       const componentHoc: IComponentHoc[] = [
         {
           designMode: 'design',
@@ -691,18 +693,18 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     }
 
     __getSchemaChildrenVirtualDom = (schema: NodeSchema | undefined, scope: any, Comp: any) => {
-      let _children = this.__getSchemaChildren(schema);
+      let children = this.__getSchemaChildren(schema);
 
       // @todo 补完这里的 Element 定义 @承虎
-      let children: any = [];
-      if (/*! isFileSchema(schema) && */_children) {
-        if (!Array.isArray(_children)) {
-          _children = [_children];
+      let result: any = [];
+      if (children) {
+        if (!Array.isArray(children)) {
+          children = [children];
         }
 
-        _children.forEach((_child: any) => {
-          const _childVirtualDom = this.__createVirtualDom(
-            isJSExpression(_child) ? this.parseExpression(_child, scope) : _child,
+        children.forEach((child: any) => {
+          const childVirtualDom = this.__createVirtualDom(
+            isJSExpression(child) ? this.parseExpression(child, scope) : child,
             scope,
             {
               schema,
@@ -710,12 +712,12 @@ export default function baseRendererFactory(): IBaseRenderComponent {
             },
           );
 
-          children.push(_childVirtualDom);
+          result.push(childVirtualDom);
         });
       }
 
-      if (children && children.length) {
-        return children;
+      if (result && result.length > 0) {
+        return result;
       }
       return null;
     };
@@ -734,14 +736,16 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       }) || {};
     };
 
-    __createLoopVirtualDom = (schema: NodeSchema, scope: any, parentInfo: IInfo, idx: number | string) => {
+    __createLoopVirtualDom = (schema: NodeSchema, scope: any, parentInfo: INodeInfo, idx: number | string) => {
       if (isFileSchema(schema)) {
         console.warn('file type not support Loop');
         return null;
       }
-      if (!Array.isArray(schema.loop)) return null;
-      const itemArg = (schema.loopArgs && schema.loopArgs[0]) || 'item';
-      const indexArg = (schema.loopArgs && schema.loopArgs[1]) || 'index';
+      if (!Array.isArray(schema.loop)) {
+        return null;
+      }
+      const itemArg = (schema.loopArgs && schema.loopArgs[0]) || DEFAULT_LOOP_ARG_ITEM;
+      const indexArg = (schema.loopArgs && schema.loopArgs[1]) || DEFAULT_LOOP_ARG_INDEX;
       const { loop } = schema;
       return loop.map((item: JSONValue | CompositeValue, i: number) => {
         const loopSelf: any = {
@@ -761,26 +765,29 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       });
     };
 
-    get _designModeIsDesign() {
+    get __designModeIsDesign() {
       const { engine } = this.context || {};
       return engine?.props?.designMode === 'design';
     }
 
-    __parseProps = (originalProps: any, scope: any, path: string, info: IInfo): any => {
+    __parseProps = (originalProps: any, scope: any, path: string, info: INodeInfo): any => {
       let props = originalProps;
       const { schema, Comp, componentInfo = {} } = info;
       const propInfo = getValue(componentInfo.props, path);
-      // FIXME! 将这行逻辑外置，解耦，线上环境不要验证参数，调试环境可以有，通过传参自定义
+      // FIXME: 将这行逻辑外置，解耦，线上环境不要验证参数，调试环境可以有，通过传参自定义
       const propType = propInfo?.extra?.propType;
-      const ignoreParse = schema?.__ignoreParse || [];
+
       const checkProps = (value: any) => {
-        if (!propType) return value;
+        if (!propType) {
+          return value;
+        }
         return checkPropTypes(value, path, propType, componentInfo.name) ? value : undefined;
       };
 
       const parseReactNode = (data: any, params: any) => {
         if (isEmpty(params)) {
-          return checkProps(this.__createVirtualDom(data, scope, ({ schema, Comp } as IInfo)));
+          const virtualDom = this.__createVirtualDom(data, scope, ({ schema, Comp } as INodeInfo));
+          return checkProps(virtualDom);
         }
         return checkProps((...argValues: any[]) => {
           const args: any = {};
@@ -794,32 +801,23 @@ export default function baseRendererFactory(): IBaseRenderComponent {
             });
           }
           args.__proto__ = scope;
-          return scope.__createVirtualDom(data, args, { schema, Comp });
+          return scope.__createVirtualDom(data, args, ({ schema, Comp } as INodeInfo));
         });
       };
 
-      // 判断是否需要解析变量
-      if (
-        ignoreParse.some((item: any) => {
-          if (item instanceof RegExp) {
-            return item.test(path);
-          }
-          return item === path;
-        })
-      ) {
-        return checkProps(props);
-      }
       if (isJSExpression(props)) {
         props = this.parseExpression(props, scope);
         // 只有当变量解析出来为模型结构的时候才会继续解析
-        if (!isSchema(props) && !isJSSlot(props)) return checkProps(props);
+        if (!isSchema(props) && !isJSSlot(props)) {
+          return checkProps(props);
+        }
       }
 
-      const handleLegaoI18n = (innerProps: any) => innerProps[innerProps.use || 'zh_CN'];
+      const handleI18nData = (innerProps: any) => innerProps[innerProps.use || 'zh_CN'];
 
-      // 兼容乐高设计态 i18n 数据
+      // @LEGACY 兼容老平台设计态 i18n 数据
       if (isI18nData(props)) {
-        const i18nProp = handleLegaoI18n(props);
+        const i18nProp = handleI18nData(props);
         if (i18nProp) {
           props = i18nProp;
         } else {
@@ -827,11 +825,11 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         }
       }
 
-      // 兼容乐高设计态的变量绑定
+      // @LEGACY 兼容老平台设计态的变量绑定
       if (isVariable(props)) {
         props = props.value;
         if (isI18nData(props)) {
-          props = handleLegaoI18n(props);
+          props = handleI18nData(props);
         }
       }
 
@@ -840,15 +838,15 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       }
       if (isJSSlot(props)) {
         const { params, value } = props;
-        if (!isSchema(value) || isEmpty(value)) return undefined;
+        if (!isSchema(value) || isEmpty(value)) {
+          return undefined;
+        }
         return parseReactNode(value, params);
       }
+
       // 兼容通过componentInfo判断的情况
       if (isSchema(props)) {
-        const isReactNodeFunction = !!(
-          propInfo?.type === 'ReactNode'
-          && propInfo?.props?.type === 'function'
-        );
+        const isReactNodeFunction = !!(propInfo?.type === 'ReactNode' && propInfo?.props?.type === 'function');
 
         const isMixinReactNodeFunction = !!(
           propInfo?.type === 'Mixin'
@@ -874,7 +872,9 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         return checkProps(props.bind(scope));
       }
       if (props && typeof props === 'object') {
-        if (props.$$typeof) return checkProps(props);
+        if (props.$$typeof) {
+          return checkProps(props);
+        }
         const res: any = {};
         forEach(props, (val: any, key: string) => {
           if (key.startsWith('__')) {
@@ -921,7 +921,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
     __getHocComp(OriginalComp: any, schema: any, scope: any) {
       let Comp = OriginalComp;
-      this.componentHoc.forEach((ComponentConstruct: IComponentConstruct) => {
+      this.__componentHoc.forEach((ComponentConstruct: IComponentConstruct) => {
         Comp = ComponentConstruct(Comp || Div, {
           schema,
           componentInfo: {},
@@ -935,8 +935,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
     __renderComp(OriginalComp: any, ctxProps: object) {
       let Comp = OriginalComp;
-      const { __schema } = this.props;
-      const { __ctx } = this.props;
+      const { __schema, __ctx } = this.props;
       const scope: any = {};
       scope.__proto__ = __ctx || this;
       Comp = this.__getHocComp(Comp, __schema, scope);
@@ -952,7 +951,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         return null;
       }
 
-      if (this._designModeIsDesign) {
+      if (this.__designModeIsDesign) {
         otherProps.__tag = Math.random();
       }
 
@@ -973,13 +972,15 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
     __renderContent(children: any) {
       const { __schema } = this.props;
-      const props = this.__parseData(__schema.props);
-      const { id, className, style = {} } = props;
+      const parsedProps = this.__parseData(__schema.props);
+      const className = classnames(`lce-${this.__namespace}`, getFileCssName(__schema.fileName), parsedProps.className, this.props.className);
+      const style = { ...(parsedProps.style || {}), ...(typeof this.props.style === 'object' ? this.props.style : {}) };
+      const id = this.props.id || parsedProps.id;
       return createElement('div', {
         ref: this.__getRef,
-        className: classnames(`lce-${this.__namespace}`, getFileCssName(__schema.fileName), className, this.props.className),
-        id: this.props.id || id,
-        style: { ...style, ...(typeof this.props.style === 'object' ? this.props.style : {}) },
+        className,
+        id,
+        style,
       }, children);
     }
 
@@ -989,8 +990,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         extraComponents = [extraComponents];
       }
 
-      const buitin = capitalizeFirstLetter(this.__namespace);
-      const componentNames = [buitin, ...extraComponents];
+      const builtin = capitalizeFirstLetter(this.__namespace);
+      const componentNames = [builtin, ...extraComponents];
       return !isSchema(schema) || !componentNames.includes(schema?.componentName ?? '');
     };
 
