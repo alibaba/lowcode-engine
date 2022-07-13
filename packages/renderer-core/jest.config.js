@@ -10,7 +10,7 @@ const jestConfig = {
   //   // '^.+\\.(js|jsx)$': 'babel-jest',
   // },
   // testMatch: ['(/tests?/.*(test))\\.[jt]s$'],
-  // testMatch: ['**/*/common.test.ts'],
+  // testMatch: ['**/*/base.test.tsx'],
   transformIgnorePatterns: [
     `/node_modules/(?!${esModules})/`,
   ],

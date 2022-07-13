@@ -35,6 +35,38 @@ import { IComponentConstruct, IComponentHoc, leafWrapper } from '../hoc/leaf';
 import logger from '../utils/logger';
 import isUseLoop from '../utils/is-use-loop';
 
+/**
+ * execute method in schema.lifeCycles with context
+ * @PRIVATE
+ */
+export function excuteLifeCycleMethod(context: any, schema: NodeSchema, method: string, args: any, thisRequiredInJSE: boolean | undefined): any {
+  if (!context || !isSchema(schema) || !method) {
+    return;
+  }
+  const lifeCycleMethods = getValue(schema, 'lifeCycles', {});
+  let fn = lifeCycleMethods[method];
+
+  if (!fn) {
+    return;
+  }
+
+  // TODO: cache
+  if (isJSExpression(fn) || isJSFunction(fn)) {
+    fn = thisRequiredInJSE ? parseThisRequiredExpression(fn, context) : parseExpression(fn, context);
+  }
+
+  if (typeof fn !== 'function') {
+    console.error(`生命周期${method}类型不符`, fn);
+    return;
+  }
+
+  try {
+    return fn.apply(context, args);
+  } catch (e) {
+    console.error(`[${schema.componentName}]生命周期${method}出错`, e);
+  }
+}
+
 export default function baseRendererFactory(): IBaseRenderComponent {
   const { BaseRenderer: customBaseRenderer } = adapter.getRenderers();
 
@@ -72,32 +104,33 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
     static contextType = AppContext;
 
-    __namespace = 'base';
-
     appHelper?: IRendererAppHelper;
+    i18n: any;
+    getLocale: any;
+    setLocale: any;
+    dataSourceMap: Record<string, any> = {};
+
+    __namespace = 'base';
     __compScopes: Record<string, any> = {};
     __instanceMap: Record<string, any> = {};
     __dataHelper: any;
     __customMethodsList: any[] = [];
-    dataSourceMap: Record<string, any> = {};
+    __parseExpression: any;
     __ref: any;
-    i18n: any;
-    getLocale: any;
-    setLocale: any;
 
     /**
      * reference of style element contains schema.css
      *
      * @type {any}
      */
-    styleElement: any;
-    parseExpression: any;
+    __styleElement: any;
+
     [key: string]: any;
 
     constructor(props: IBaseRendererProps, context: IBaseRendererContext) {
       super(props, context);
       this.context = context;
-      this.parseExpression = props?.thisRequiredInJSE ? parseThisRequiredExpression : parseExpression;
+      this.__parseExpression = props?.thisRequiredInJSE ? parseThisRequiredExpression : parseExpression;
       this.__beforeInit(props);
       this.__init(props);
       this.__afterInit(props);
@@ -119,21 +152,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     __afterInit(_props: IBaseRendererProps) { }
 
     static getDerivedStateFromProps(props: IBaseRendererProps, state: any) {
-      logger.log('getDerivedStateFromProps');
-      const func = props?.__schema?.lifeCycles?.getDerivedStateFromProps;
-
-      if (func) {
-        if (isJSExpression(func) || isJSFunction(func)) {
-          const fn = props.thisRequiredInJSE ? parseThisRequiredExpression(func, this) : parseExpression(func, this);
-          return fn?.(props, state);
-        }
-
-        if (typeof func === 'function') {
-          // eslint-disable-next-line @typescript-eslint/ban-types
-          return (func as Function)(props, state);
-        }
-      }
-      return null;
+      return excuteLifeCycleMethod(this, props?.__schema, 'getDerivedStateFromProps', [props, state], props.thisRequiredInJSE);
     }
 
     async getSnapshotBeforeUpdate(...args: any[]) {
@@ -198,23 +217,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
      * @PRIVATE
      */
     __excuteLifeCycleMethod = (method: string, args?: any) => {
-      const lifeCycleMethods = getValue(this.props.__schema, 'lifeCycles', {});
-      let fn = lifeCycleMethods[method];
-      if (fn) {
-        // TODO: cache
-        if (isJSExpression(fn) || isJSFunction(fn)) {
-          fn = this.parseExpression(fn, this);
-        }
-        if (typeof fn !== 'function') {
-          console.error(`生命周期${method}类型不符`, fn);
-          return;
-        }
-        try {
-          return fn.apply(this, args);
-        } catch (e) {
-          console.error(`[${this.props.__schema.componentName}]生命周期${method}出错`, e);
-        }
-      }
+      excuteLifeCycleMethod(this, this.props.__schema, method, args, this.props.thisRequiredInJSE);
     };
 
     /**
@@ -242,7 +245,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       forEach(__schema.methods, (val: any, key: string) => {
         let value = val;
         if (isJSExpression(value) || isJSFunction(value)) {
-          value = this.parseExpression(value, this);
+          value = this.__parseExpression(value, this);
         }
         if (typeof value !== 'function') {
           console.error(`自定义函数${key}类型不符`, value);
@@ -351,16 +354,16 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     __writeCss = (props: IBaseRendererProps) => {
       const css = getValue(props.__schema, 'css', '');
       this.__debug('create this.styleElement with css', css);
-      let style = this.styleElement;
-      if (!this.styleElement) {
+      let style = this.__styleElement;
+      if (!this.__styleElement) {
         style = document.createElement('style');
         style.type = 'text/css';
         style.setAttribute('from', 'style-sheet');
 
         const head = document.head || document.getElementsByTagName('head')[0];
         head.appendChild(style);
-        this.styleElement = style;
-        this.__debug('this.styleElement is created', this.styleElement);
+        this.__styleElement = style;
+        this.__debug('this.styleElement is created', this.__styleElement);
       }
 
       if (style.innerHTML === css) {
@@ -459,7 +462,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         const { __appHelper: appHelper, __components: components = {} } = this.props || {};
 
         if (isJSExpression(schema)) {
-          return this.parseExpression(schema, scope);
+          return this.__parseExpression(schema, scope);
         }
         if (isI18nData(schema)) {
           return parseI18n(schema, scope);
@@ -486,7 +489,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         const _children = this.__getSchemaChildren(schema);
         // 解析占位组件
         if (schema.componentName === 'Fragment' && _children) {
-          const tarChildren = isJSExpression(_children) ? this.parseExpression(_children, scope) : _children;
+          const tarChildren = isJSExpression(_children) ? this.__parseExpression(_children, scope) : _children;
           return this.__createVirtualDom(tarChildren, scope, parentInfo);
         }
 
@@ -553,7 +556,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         let scopeKey = '';
         // 判断组件是否需要生成scope，且只生成一次，挂在this.__compScopes上
         if (Comp.generateScope) {
-          const key = this.parseExpression(schema.props?.key, scope);
+          const key = this.__parseExpression(schema.props?.key, scope);
           if (key) {
             // 如果组件自己设置key则使用组件自己的key
             scopeKey = key;
@@ -704,7 +707,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
         children.forEach((child: any) => {
           const childVirtualDom = this.__createVirtualDom(
-            isJSExpression(child) ? this.parseExpression(child, scope) : child,
+            isJSExpression(child) ? this.__parseExpression(child, scope) : child,
             scope,
             {
               schema,
@@ -806,7 +809,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       };
 
       if (isJSExpression(props)) {
-        props = this.parseExpression(props, scope);
+        props = this.__parseExpression(props, scope);
         // 只有当变量解析出来为模型结构的时候才会继续解析
         if (!isSchema(props) && !isJSSlot(props)) {
           return checkProps(props);

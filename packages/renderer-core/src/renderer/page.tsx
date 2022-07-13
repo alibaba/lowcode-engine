@@ -40,8 +40,6 @@ export default function pageRendererFactory(): IBaseRenderComponent {
       this.__bindCustomMethods(this.props);
       this.__initDataSource(this.props);
 
-      // this.__excuteLifeCycleMethod('constructor', arguments);
-
       this.__generateCtx({
         page: this,
       });
