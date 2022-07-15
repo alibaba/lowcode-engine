@@ -154,7 +154,7 @@ describe('Base Render methods', () => {
   // it('__render should work', () => {
   // });
 
-  // it('__getSchemaChildren should work', () => {
+  // it('getSchemaChildren should work', () => {
   // });
 
   // it('__createDom should work', () => {
@@ -163,7 +163,7 @@ describe('Base Render methods', () => {
   // it('__createVirtualDom should work', () => {
   // });
 
-  // it('__componentHoc should work', () => {
+  // it('__componentHOCs should work', () => {
   // });
 
   // it('__getSchemaChildrenVirtualDom should work', () => {
@@ -190,7 +190,7 @@ describe('Base Render methods', () => {
   // it('__renderContextConsumer should work', () => {
   // });
 
-  // it('__getHocComp should work', () => {
+  // it('__getHOCWrappedComponent should work', () => {
   // });
 
   // it('__renderComp should work', () => {

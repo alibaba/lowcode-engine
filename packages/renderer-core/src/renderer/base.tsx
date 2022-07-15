@@ -31,7 +31,7 @@ import {
 } from '../utils';
 import { IBaseRendererProps, INodeInfo, IBaseRenderComponent, IBaseRendererContext, IGeneralConstructor, IRendererAppHelper, DataSource } from '../types';
 import { compWrapper } from '../hoc';
-import { IComponentConstruct, IComponentHoc, leafWrapper } from '../hoc/leaf';
+import { IComponentConstruct, leafWrapper } from '../hoc/leaf';
 import logger from '../utils/logger';
 import isUseLoop from '../utils/is-use-loop';
 
@@ -65,6 +65,36 @@ export function excuteLifeCycleMethod(context: any, schema: NodeSchema, method: 
   } catch (e) {
     console.error(`[${schema.componentName}]生命周期${method}出错`, e);
   }
+}
+
+/**
+ * get children from a node schema
+ * @PRIVATE
+ */
+export function getSchemaChildren(schema: NodeSchema | undefined) {
+  if (!schema) {
+    return;
+  }
+
+  if (!schema.props) {
+    return schema.children;
+  }
+
+  if (!schema.children) {
+    return schema.props.children;
+  }
+
+  if (!schema.props.children) {
+    return schema.children;
+  }
+
+  let result = ([] as NodeData[]).concat(schema.children);
+  if (Array.isArray(schema.props.children)) {
+    result = result.concat(schema.props.children);
+  } else {
+    result.push(schema.props.children);
+  }
+  return result;
 }
 
 export default function baseRendererFactory(): IBaseRenderComponent {
@@ -114,6 +144,11 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     __compScopes: Record<string, any> = {};
     __instanceMap: Record<string, any> = {};
     __dataHelper: any;
+    /**
+     * keep track of customMethods added to this context
+     *
+     * @type {any}
+     */
     __customMethodsList: any[] = [];
     __parseExpression: any;
     __ref: any;
@@ -235,12 +270,11 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     __bindCustomMethods = (props: IBaseRendererProps) => {
       const { __schema } = props;
       const customMethodsList = Object.keys(__schema.methods || {}) || [];
-      this.__customMethodsList
-        && this.__customMethodsList.forEach((item: any) => {
-          if (!customMethodsList.includes(item)) {
-            delete this[item];
-          }
-        });
+      (this.__customMethodsList || []).forEach((item: any) => {
+        if (!customMethodsList.includes(item)) {
+          delete this[item];
+        }
+      });
       this.__customMethodsList = customMethodsList;
       forEach(__schema.methods, (val: any, key: string) => {
         let value = val;
@@ -248,7 +282,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           value = this.__parseExpression(value, this);
         }
         if (typeof value !== 'function') {
-          console.error(`自定义函数${key}类型不符`, value);
+          console.error(`custom method ${key} can not be parsed to a valid function`, value);
           return;
         }
         this[key] = value.bind(this);
@@ -282,6 +316,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       };
       const dataSource = schema.dataSource || defaultDataSource;
       // requestHandlersMap 存在才走数据源引擎方案
+      // TODO: 下面if else 抽成独立函数
       const useDataSourceEngine = !!(props.__appHelper?.requestHandlersMap);
       if (useDataSourceEngine) {
         this.__dataHelper = {
@@ -396,48 +431,22 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       this.__ref = ref;
     };
 
-    __getSchemaChildren = (schema: NodeSchema | undefined) => {
-      if (!schema) {
-        return;
-      }
-
-      if (!schema.props) {
-        return schema.children;
-      }
-
-      if (!schema.children) {
-        return schema.props.children;
-      }
-
-      if (!schema.props.children) {
-        return schema.children;
-      }
-
-      let _children = ([] as NodeData[]).concat(schema.children);
-      if (Array.isArray(schema.props.children)) {
-        _children = _children.concat(schema.props.children);
-      } else {
-        _children.push(schema.props.children);
-      }
-      return _children;
-    };
-
     __createDom = () => {
       const { __schema, __ctx, __components = {} } = this.props;
       const scope: any = {};
       scope.__proto__ = __ctx || this;
 
-      const _children = this.__getSchemaChildren(__schema);
+      const _children = getSchemaChildren(__schema);
       let Comp = __components[__schema.componentName];
 
       if (!Comp) {
         this.__debug(`${__schema.componentName} is invalid!`);
       }
-
-      return this.__createVirtualDom(_children, scope, ({
+      const parentNodeInfo = ({
         schema: __schema,
-        Comp: this.__getHocComp(Comp, __schema, scope),
-      } as INodeInfo));
+        Comp: this.__getHOCWrappedComponent(Comp, __schema, scope),
+      } as INodeInfo);
+      return this.__createVirtualDom(_children, scope, parentNodeInfo);
     };
 
     /**
@@ -486,7 +495,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           return schema.map((item, idy) => this.__createVirtualDom(item, scope, parentInfo, (item as NodeSchema)?.__ctx?.lceKey ? '' : String(idy)));
         }
 
-        const _children = this.__getSchemaChildren(schema);
+        const _children = getSchemaChildren(schema);
         // 解析占位组件
         if (schema.componentName === 'Fragment' && _children) {
           const tarChildren = isJSExpression(_children) ? this.__parseExpression(_children, scope) : _children;
@@ -593,7 +602,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           props: transformArrayToMap(componentInfo.props, 'name'),
         }) || {};
 
-        this.__componentHoc.forEach((ComponentConstruct: IComponentConstruct) => {
+        this.__componentHOCs.forEach((ComponentConstruct: IComponentConstruct) => {
           Comp = ComponentConstruct(Comp, {
             schema,
             componentInfo,
@@ -676,27 +685,21 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       }
     };
 
-    get __componentHoc(): IComponentConstruct[] {
-      const componentHoc: IComponentHoc[] = [
-        {
-          designMode: 'design',
-          hoc: leafWrapper,
-        },
-      ];
-
-      return componentHoc
-        .filter((d: IComponentHoc) => {
-          if (Array.isArray(d.designMode)) {
-            return d.designMode.includes(this.props.designMode);
-          }
-
-          return d.designMode === this.props.designMode;
-        })
-        .map((d: IComponentHoc) => d.hoc);
+    /**
+     * get Component HOCs
+     *
+     * @readonly
+     * @type {IComponentConstruct[]}
+     */
+    get __componentHOCs(): IComponentConstruct[] {
+      if (this.__designModeIsDesign) {
+        return [leafWrapper];
+      }
+      return [];
     }
 
     __getSchemaChildrenVirtualDom = (schema: NodeSchema | undefined, scope: any, Comp: any) => {
-      let children = this.__getSchemaChildren(schema);
+      let children = getSchemaChildren(schema);
 
       // @todo 补完这里的 Element 定义 @承虎
       let result: any = [];
@@ -922,9 +925,9 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       return createElement(AppContext.Consumer, {}, children);
     };
 
-    __getHocComp(OriginalComp: any, schema: any, scope: any) {
+    __getHOCWrappedComponent(OriginalComp: any, schema: any, scope: any) {
       let Comp = OriginalComp;
-      this.__componentHoc.forEach((ComponentConstruct: IComponentConstruct) => {
+      this.__componentHOCs.forEach((ComponentConstruct: IComponentConstruct) => {
         Comp = ComponentConstruct(Comp || Div, {
           schema,
           componentInfo: {},
@@ -941,7 +944,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       const { __schema, __ctx } = this.props;
       const scope: any = {};
       scope.__proto__ = __ctx || this;
-      Comp = this.__getHocComp(Comp, __schema, scope);
+      Comp = this.__getHOCWrappedComponent(Comp, __schema, scope);
       const data = this.__parseProps(__schema?.props, scope, '', {
         schema: __schema,
         Comp,
