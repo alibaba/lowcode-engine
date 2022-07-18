@@ -196,6 +196,20 @@ export default class SettingPropEntry {
   }
 
   /**
+   * 获取顶层附属属性值
+   */
+  getExtraPropValue(propName: string) {
+    return this[settingPropEntrySymbol].getExtraPropValue(propName);
+  }
+
+  /**
+   * 设置顶层附属属性值
+   */
+  setExtraPropValue(propName: string, value: any) {
+    this[settingPropEntrySymbol].setExtraPropValue(propName, value);
+  }
+
+  /**
    * 获取设置属性集
    * @returns
    */
