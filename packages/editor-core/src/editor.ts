@@ -76,10 +76,9 @@ export class Editor extends (EventEmitter as any) implements IEditor {
     return this.context.has(keyOrType);
   }
 
-  set(key: KeyType, data: any): void {
+  set(key: KeyType, data: any): void | Promise<void>  {
     if (key === 'assets') {
-      this.setAssets(data);
-      return;
+      return this.setAssets(data);
     }
     // store the data to engineConfig while invoking editor.set()
     if (!keyBlacklist.includes(key as string)) {
