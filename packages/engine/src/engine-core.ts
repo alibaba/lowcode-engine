@@ -89,6 +89,7 @@ export const __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = {
   symbols,
   classes,
 };
+engineConfig.set('isOpenSource', isOpenSource);
 
 // 注册一批内置插件
 (async function registerPlugins() {
