@@ -399,15 +399,15 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       assetBundle(this.get('extraEnvironment'), AssetLevel.Environment),
 
       // required & use once
-      assetBundle(libraryAsset, AssetLevel.Library),
-      // required & TODO: think of update
-      assetBundle(this.theme, AssetLevel.Theme),
-      // required & use once
       assetBundle(
         this.get('simulatorUrl') ||
           (this.renderEnv === 'rax' ? defaultRaxSimulatorUrl : defaultSimulatorUrl),
         AssetLevel.Runtime,
       ),
+      // required & use once
+      assetBundle(libraryAsset, AssetLevel.Library),
+      // required & TODO: think of update
+      assetBundle(this.theme, AssetLevel.Theme),
     ];
 
     // wait 准备 iframe 内容、依赖库注入
