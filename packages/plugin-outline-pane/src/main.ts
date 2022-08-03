@@ -152,7 +152,8 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
       return canMove;
     });
 
-    if (!operationalNodes || operationalNodes.length === 0) {
+    // 如果拖拽的是 Node 才需要后面的判断，拖拽 data 不需要
+    if (isDragNodeObject(dragObject) && (!operationalNodes || operationalNodes.length === 0)) {
       return;
     }
 
