@@ -1,11 +1,10 @@
-import { AssetType, AssetLevels, AssetLevel } from '@alilc/lowcode-types';
-import type { AssetItem, Asset, AssetList, AssetBundle, AssetsJson } from '@alilc/lowcode-types';
+import { AssetItem, AssetType, AssetLevels, Asset, AssetList, AssetBundle, AssetLevel, AssetsJson } from '@alilc/lowcode-types';
 import { isCSSUrl } from './is-css-url';
 import { createDefer } from './create-defer';
 import { load, evaluate } from './script';
 
 // API 向下兼容
-export { AssetType, AssetLevels, AssetLevel } from '@alilc/lowcode-types';
+export { AssetItem, AssetType, AssetLevels, Asset, AssetList, AssetBundle, AssetLevel, AssetsJson } from '@alilc/lowcode-types';
 
 export function isAssetItem(obj: any): obj is AssetItem {
   return obj && obj.type;
