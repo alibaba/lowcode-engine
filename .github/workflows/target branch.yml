@@ -1,0 +1,19 @@
+name: target branch
+
+on:
+  pull_request_target:
+    branches-ignore:
+      - 'develop'
+
+jobs:
+  reply-helper:
+    runs-on: ubuntu-latest
+    steps:
+      - name: target branch error
+        uses: actions-cool/issues-helper@v2
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            你好 @${{ github.event.issue.user.login }}，低代码引擎 PR 目标分支需要指定为 develop。
