@@ -20,10 +20,9 @@ export default function pageRendererFactory(): IBaseRenderComponent {
 
     async componentDidUpdate(prevProps: IBaseRendererProps, _prevState: {}, snapshot: unknown) {
       const { __ctx } = this.props;
-      const prevState = this.__parseData(prevProps.__schema.state, __ctx);
-      const newState = this.__parseData(this.props.__schema.state, __ctx);
-      // 当编排的时候修改schema.state值，需要将最新schema.state值setState
-      if (JSON.stringify(newState) != JSON.stringify(prevState)) {
+      // 当编排的时候修改schema.state值，需要将最新 schema.state 值 setState
+      if (JSON.stringify(prevProps.__schema.state) != JSON.stringify(this.props.__schema.state)) {
+        const newState = this.__parseData(this.props.__schema.state, __ctx);
         this.setState(newState);
       }
 
