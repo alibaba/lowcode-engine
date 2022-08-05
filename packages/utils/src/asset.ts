@@ -6,6 +6,7 @@ import { load, evaluate } from './script';
 
 // API 向下兼容
 export { AssetType, AssetLevels, AssetLevel } from '@alilc/lowcode-types';
+export type { AssetItem, Asset, AssetList, AssetBundle, AssetsJson } from '@alilc/lowcode-types';
 
 export function isAssetItem(obj: any): obj is AssetItem {
   return obj && obj.type;
