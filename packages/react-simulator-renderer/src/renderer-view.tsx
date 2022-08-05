@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { Node } from '@alilc/lowcode-designer';
 import LowCodeRenderer from '@alilc/lowcode-react-renderer';
 import { observer } from 'mobx-react';
-import { getClosestNode, isFromVC } from '@alilc/lowcode-utils';
+import { getClosestNode, isFromVC, isReactComponent } from '@alilc/lowcode-utils';
 import { GlobalEvent } from '@alilc/lowcode-types';
 import { SimulatorRendererContainer, DocumentInstance } from './renderer';
 import { host } from './host';
@@ -239,6 +239,11 @@ class Renderer extends Component<{
               selectMode: false,
               triggerType: 'click',
             });
+          }
+
+          if (!isReactComponent(Component)) {
+            console.error(`${viewProps._componentName} is not a react component!`);
+            return null;
           }
 
           return createElement(
