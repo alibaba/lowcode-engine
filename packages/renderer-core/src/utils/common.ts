@@ -8,16 +8,15 @@ import 'moment/locale/zh-cn';
 import { isEmpty } from 'lodash';
 import IntlMessageFormat from 'intl-messageformat';
 import pkg from '../../package.json';
+import * as ReactIs from 'react-is';
+import { default as ReactPropTypesSecret } from 'prop-types/lib/ReactPropTypesSecret';
+import { default as factoryWithTypeCheckers } from 'prop-types/factoryWithTypeCheckers';
 
 export const moment = _moment;
 moment.locale('zh-cn');
 (window as any).sdkVersion = pkg.version;
 
 export { pick, isEqualWith as deepEqual, cloneDeep as clone, isEmpty, throttle, debounce } from 'lodash';
-
-const ReactIs = require('react-is');
-const ReactPropTypesSecret = require('prop-types/lib/ReactPropTypesSecret');
-const factoryWithTypeCheckers = require('prop-types/factoryWithTypeCheckers');
 
 const PropTypes2 = factoryWithTypeCheckers(ReactIs.isElement, true);
 
