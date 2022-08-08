@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { isElementNode, isDOMNodeVisible, normalizeTriggers } from '../../src/utils/misc';
+import { isElementNode, isDOMNodeVisible, normalizeTriggers, makeEventsHandler } from '../../src/utils/misc';
 
 it('isElementNode', () => {
   expect(isElementNode(document.createElement('div'))).toBeTruthy();
@@ -151,4 +151,14 @@ describe('isDOMNodeVisible', () => {
 
 it('normalizeTriggers', () => {
   expect(normalizeTriggers(['n', 'w'])).toEqual(['N', 'W']);
+});
+
+it('makeEventsHandler', () => {
+  const sensor = { contentDocument: document };
+  // no contentDocument
+  const sensor2 = {};
+  const bind = makeEventsHandler({ view: { document } } as any, [sensor, sensor2]);
+  const fn = jest.fn();
+  bind((doc) => fn(doc));
+  expect(fn).toHaveBeenCalledTimes(1);
 });

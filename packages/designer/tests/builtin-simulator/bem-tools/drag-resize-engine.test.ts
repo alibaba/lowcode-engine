@@ -57,7 +57,8 @@ describe('DragResizeEngine 测试', () => {
       });
 
     // do nothing
-    resizeEngine.from();
+    const noop = resizeEngine.from();
+    noop();
 
     const offFrom = resizeEngine.from(document, 'e', mockedBoostFn);
 
