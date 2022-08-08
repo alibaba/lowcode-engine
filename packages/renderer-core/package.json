@@ -43,6 +43,7 @@
     "@types/lodash": "^4.14.167",
     "@types/node": "^13.7.1",
     "@types/prop-types": "^15.7.3",
+    "@types/react-is": "^17.0.3",
     "@types/react-test-renderer": "^17.0.1",
     "babel-jest": "^26.5.2",
     "build-plugin-component": "^0.2.11",
