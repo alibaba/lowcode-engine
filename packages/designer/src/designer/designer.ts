@@ -420,7 +420,7 @@ export class Designer {
   }
 
   get(key: string): any {
-    return this.props ? this.props[key] : null;
+    return this.props?.[key];
   }
 
   @obx.ref private _simulatorComponent?: ComponentType<any>;

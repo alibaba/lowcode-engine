@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import { Node } from './node';
 import { DocumentModel } from '../document-model';
 
-function getModalNodes(node: Node) {
+export function getModalNodes(node: Node) {
   if (!node) return [];
   let nodes: any = [];
   if (node.componentMeta.isModal) {
@@ -40,44 +40,37 @@ export class ModalNodesManager {
     ];
   }
 
-  public getModalNodes() {
+  getModalNodes() {
     return this.modalNodes;
   }
 
-  public getVisibleModalNode() {
-    const visibleNode = this.modalNodes
-      ? this.modalNodes.find((node: Node) => {
-        return node.getVisible();
-      })
-      : null;
-    return visibleNode;
+  getVisibleModalNode() {
+    return this.getModalNodes().find((node: Node) => node.getVisible());
   }
 
-  public hideModalNodes() {
-    if (this.modalNodes) {
-      this.modalNodes.forEach((node: Node) => {
-        node.setVisible(false);
-      });
-    }
+  hideModalNodes() {
+    this.modalNodes.forEach((node: Node) => {
+      node.setVisible(false);
+    });
   }
 
-  public setVisible(node: Node) {
+  setVisible(node: Node) {
     this.hideModalNodes();
     node.setVisible(true);
   }
 
-  public setInvisible(node: Node) {
+  setInvisible(node: Node) {
     node.setVisible(false);
   }
 
-  public onVisibleChange(func: () => any) {
+  onVisibleChange(func: () => any) {
     this.emitter.on('visibleChange', func);
     return () => {
       this.emitter.removeListener('visibleChange', func);
     };
   }
 
-  public onModalNodesChange(func: () => any) {
+  onModalNodesChange(func: () => any) {
     this.emitter.on('modalNodesChange', func);
     return () => {
       this.emitter.removeListener('modalNodesChange', func);
@@ -122,7 +115,7 @@ export class ModalNodesManager {
     }
   }
 
-  public setNodes() {
+  setNodes() {
     const nodes = getModalNodes(this.page.getRoot()!);
     this.modalNodes = nodes;
     this.modalNodes.forEach((node: Node) => {

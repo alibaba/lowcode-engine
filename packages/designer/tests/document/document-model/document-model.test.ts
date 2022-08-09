@@ -23,7 +23,7 @@ describe('document-model 测试', () => {
     project = designer.project;
   });
 
-  test('empty schema', () => {
+  it('empty schema', () => {
     const doc = new DocumentModel(project);
     expect(doc.rootNode.id).toBe('root');
     expect(doc.currentRoot).toBe(doc.rootNode);
@@ -44,7 +44,7 @@ describe('document-model 测试', () => {
     });
   });
 
-  test('各种方法测试', () => {
+  it('各种方法测试', () => {
     const doc = new DocumentModel(project, formSchema);
     const mockNode = { id: 1 };
     doc.addWillPurge(mockNode);
@@ -115,8 +115,89 @@ describe('document-model 测试', () => {
     expect(doc.history).toBe(doc.getHistory());
   });
 
+  it('focusNode - using drillDown', () => {
+    const doc = new DocumentModel(project, formSchema);
+    expect(doc.focusNode.id).toBe('page');
+
+    doc.drillDown(doc.getNode('node_k1ow3cbb'));
+    expect(doc.focusNode.id).toBe('node_k1ow3cbb');
+  });
+
+  it('focusNode - using drillDown & import', () => {
+    const doc = new DocumentModel(project, formSchema);
+    expect(doc.focusNode.id).toBe('page');
+
+    doc.drillDown(doc.getNode('node_k1ow3cbb'));
+    doc.import(formSchema);
+    expect(doc.focusNode.id).toBe('node_k1ow3cbb');
+  });
+
+  it('focusNode - using focusNodeSelector', () => {
+    const doc = new DocumentModel(project, formSchema);
+    editor.set('focusNodeSelector', (rootNode) => {
+      return rootNode.children.get(1);
+    });
+    expect(doc.focusNode.id).toBe('node_k1ow3cbb');
+  });
+
+  it('getNodeCount', () => {
+    const doc = new DocumentModel(project);
+    // using default schema, only one node
+    expect(doc.getNodeCount()).toBe(1);
+  });
+
+  it('getNodeSchema', () => {
+    const doc = new DocumentModel(project, formSchema);
+    expect(doc.getNodeSchema('page').id).toBe('page');
+  });
+
+  it('export - with __isTopFixed__', () => {
+    formSchema.children[1].props.__isTopFixed__ = true;
+    const doc = new DocumentModel(project, formSchema);
+
+    const schema = doc.export();
+    expect(schema.children).toHaveLength(3);
+    expect(schema.children[0].componentName).toBe('RootContent');
+    expect(schema.children[1].componentName).toBe('RootHeader');
+    expect(schema.children[2].componentName).toBe('RootFooter');
+  });
+
+  describe('createNode', () => {
+    it('same id && componentName', () => {
+      const doc = new DocumentModel(project, formSchema);
+      const node = doc.createNode({
+        componentName: 'RootFooter',
+        id: 'node_k1ow3cbc',
+        props: {},
+        condition: true,
+      });
+      expect(node.parent).toBeNull();
+    });
+
+    it('same id && different componentName', () => {
+      const doc = new DocumentModel(project, formSchema);
+      const originalNode = doc.getNode('node_k1ow3cbc');
+      const node = doc.createNode({
+        componentName: 'RootFooter2',
+        id: 'node_k1ow3cbc',
+        props: {},
+        condition: true,
+      });
+      // expect(originalNode.parent).toBeNull();
+      expect(node.id).not.toBe('node_k1ow3cbc');
+    });
+  });
+
+  it('setSuspense', () => {
+    const doc = new DocumentModel(project, formSchema);
+    expect(doc.opened).toBeFalsy();
+    doc.setSuspense(false);
+  });
+
   it('registerAddon / getAddonData / exportAddonData', () => {
     const doc = new DocumentModel(project);
+    expect(doc.getAddonData('a')).toBeUndefined();
+
     doc.registerAddon('a', () => 'addon a');
     doc.registerAddon('a', () => 'modified addon a');
     doc.registerAddon('b', () => 'addon b');
@@ -177,6 +258,8 @@ describe('document-model 测试', () => {
     expect(comps.find(comp => comp.componentName === 'Page')).toEqual(
       { componentName: 'Page', devMode: 'lowCode' }
     );
+
+    const comps2 = doc.getComponentsMap(['Div']);
   });
 
   it('acceptRootNodeVisitor / getRootNodeVisitor', () => {
