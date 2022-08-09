@@ -150,8 +150,6 @@ export class Selection {
         } else if (n === PositionNO.ContainedBy) {
           // node contains nodes[i], delete nodes[i]
           nodes.splice(i, 1);
-        } else {
-          isTop = false;
         }
       }
       // node is top item, push to nodes

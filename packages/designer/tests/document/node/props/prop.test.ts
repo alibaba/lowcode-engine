@@ -95,6 +95,7 @@ describe('Prop 类测试', () => {
     it('getValue / getAsString / setValue', () => {
       expect(strProp.getValue()).toBe('haha');
       strProp.setValue('heihei');
+      strProp.setValue('heihei');
       expect(strProp.getValue()).toBe('heihei');
       expect(strProp.getAsString()).toBe('heihei');
 
@@ -177,6 +178,7 @@ describe('Prop 类测试', () => {
 
     it('compare', () => {
       const newProp = new Prop(mockedPropsInst, 'haha');
+      const newProp2 = new Prop(mockedPropsInst, { a: 1 });
       expect(strProp.compare(newProp)).toBe(0);
       expect(strProp.compare(expProp)).toBe(2);
 
@@ -184,6 +186,7 @@ describe('Prop 类测试', () => {
       expect(strProp.compare(newProp)).toBe(2);
       strProp.unset();
       expect(strProp.compare(newProp)).toBe(0);
+      expect(strProp.compare(newProp2)).toBe(2);
     });
 
     it('isVirtual', () => {
@@ -434,6 +437,28 @@ describe('Prop 类测试', () => {
       it('should return undefined when all items are undefined', () => {
         prop = new Prop(mockedPropsInst, [undefined, undefined], '___loopArgs___');
         expect(prop.getValue()).toBeUndefined();
+      });
+
+      it('迭代器 / map / forEach', () => {
+        const listProp = new Prop(mockedPropsInst, [1, 2]);
+        const mockedFn = jest.fn();
+        for (const item of listProp) {
+          mockedFn();
+        }
+        expect(mockedFn).toHaveBeenCalledTimes(2);
+        mockedFn.mockClear();
+
+        listProp.forEach((item) => {
+          mockedFn();
+        });
+        expect(mockedFn).toHaveBeenCalledTimes(2);
+        mockedFn.mockClear();
+
+        listProp.map((item) => {
+          return mockedFn();
+        });
+        expect(mockedFn).toHaveBeenCalledTimes(2);
+        mockedFn.mockClear();
       });
     });
   });

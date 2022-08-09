@@ -54,17 +54,17 @@ export function createSimulator(
       const id = asset.id ? ` data-id="${asset.id}"` : '';
       const lv = asset.level || level || AssetLevel.Environment;
       if (asset.type === AssetType.JSUrl) {
-        (scripts[lv] || scripts[AssetLevel.App]).push(
+        scripts[lv].push(
           `<script src="${asset.content}"${id}></script>`,
         );
       } else if (asset.type === AssetType.JSText) {
-        (scripts[lv] || scripts[AssetLevel.App]).push(`<script${id}>${asset.content}</script>`);
+        scripts[lv].push(`<script${id}>${asset.content}</script>`);
       } else if (asset.type === AssetType.CSSUrl) {
-        (styles[lv] || styles[AssetLevel.App]).push(
+        styles[lv].push(
           `<link rel="stylesheet" href="${asset.content}"${id} />`,
         );
       } else if (asset.type === AssetType.CSSText) {
-        (styles[lv] || styles[AssetLevel.App]).push(
+        styles[lv].push(
           `<style type="text/css"${id}>${asset.content}</style>`,
         );
       }
@@ -98,8 +98,9 @@ export function createSimulator(
   doc.close();
 
   return new Promise((resolve) => {
-    if (win.SimulatorRenderer || host.renderer) {
-      return resolve(win.SimulatorRenderer || host.renderer);
+    const renderer = win.SimulatorRenderer || host.renderer;
+    if (renderer) {
+      return resolve(renderer);
     }
     const loaded = () => {
       resolve(win.SimulatorRenderer || host.renderer);
