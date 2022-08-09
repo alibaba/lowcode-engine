@@ -48,6 +48,42 @@ describe('NodeChildren 方法测试', () => {
     expect(children.export().length).toBe(2);
   });
 
+  it('export - Leaf', () => {
+    const firstBtn = doc.getNode('node_k1ow3cbn')!;
+    firstBtn.parent!.insertAfter({ componentName: 'Leaf', children: 'haha' });
+    const { children } = firstBtn.parent!;
+
+    expect(children.export().length).toBe(3);
+    expect(children.export()[2]).toBe('haha');
+  });
+
+  it('import', () => {
+    const firstBtn = doc.getNode('node_k1ow3cbn')!;
+    const { children } = firstBtn.parent!;
+
+    children.import(children.export());
+
+    expect(children.export().length).toBe(2);
+  });
+
+  it('delete', () => {
+    const firstBtn = doc.getNode('node_k1ow3cbn')!;
+    const leafNode = doc.createNode({ componentName: 'Leaf', children: 'haha' });
+    firstBtn.parent!.insertAfter(leafNode);
+    const { children } = firstBtn.parent!;
+
+    children.delete(leafNode);
+    expect(children.export().length).toBe(2);
+  });
+
+  it('delete - 插入已有的节点', () => {
+    const firstBtn = doc.getNode('node_k1ow3cbn')!;
+    firstBtn.parent!.insertBefore(firstBtn, firstBtn);
+    const { children } = firstBtn.parent!;
+
+    expect(children.export().length).toBe(2);
+  });
+
   it('purge / for of', () => {
     const firstBtn = doc.getNode('node_k1ow3cbn')!;
     const { children } = firstBtn.parent!;

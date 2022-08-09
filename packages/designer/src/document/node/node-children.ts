@@ -161,6 +161,7 @@ export class NodeChildren {
       }
     }
     const { document } = node;
+    /* istanbul ignore next */
     if (globalContext.has('editor')) {
       globalContext.get('editor').emit('node.remove', { node, index: i });
     }
@@ -197,6 +198,7 @@ export class NodeChildren {
     const i = children.indexOf(node);
 
     if (node.parent) {
+      /* istanbul ignore next */
       globalContext.has('editor') &&
         globalContext.get('editor').emit('node.remove.topLevel', {
           node,
@@ -229,6 +231,7 @@ export class NodeChildren {
       node,
     });
     this.emitter.emit('insert', node);
+    /* istanbul ignore next */
     if (globalContext.has('editor')) {
       globalContext.get('editor').emit('node.add', { node });
     }
