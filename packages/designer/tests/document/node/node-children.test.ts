@@ -1,29 +1,13 @@
 import '../../fixtures/window';
-import { set, delayObxTick, delay } from '../../utils';
 import { Editor } from '@alilc/lowcode-editor-core';
 import { Project } from '../../../src/project/project';
 import { DocumentModel } from '../../../src/document/document-model';
 import {
-  isRootNode,
   Node,
-  isNode,
-  comparePosition,
-  contains,
-  insertChild,
-  insertChildren,
-  PositionNO,
 } from '../../../src/document/node/node';
 import { Designer } from '../../../src/designer/designer';
 import formSchema from '../../fixtures/schema/form';
 import divMetadata from '../../fixtures/component-metadata/div';
-import buttonMetadata from '../../fixtures/component-metadata/button';
-import formMetadata from '../../fixtures/component-metadata/form';
-import otherMeta from '../../fixtures/component-metadata/other';
-import pageMetadata from '../../fixtures/component-metadata/page';
-import rootHeaderMetadata from '../../fixtures/component-metadata/root-header';
-import rootContentMetadata from '../../fixtures/component-metadata/root-content';
-import rootFooterMetadata from '../../fixtures/component-metadata/root-footer';
-
 
 describe('NodeChildren 方法测试', () => {
   let editor: Editor;
@@ -57,6 +41,13 @@ describe('NodeChildren 方法测试', () => {
     expect(firstBtn.children.isEmpty()).toBeTruthy();
   });
 
+  it('export', () => {
+    const firstBtn = doc.getNode('node_k1ow3cbn')!;
+    const { children } = firstBtn.parent!;
+
+    expect(children.export().length).toBe(2);
+  });
+
   it('purge / for of', () => {
     const firstBtn = doc.getNode('node_k1ow3cbn')!;
     const { children } = firstBtn.parent!;
@@ -65,6 +56,9 @@ describe('NodeChildren 方法测试', () => {
     for (const child of children) {
       expect(child.isPurged).toBeTruthy();
     }
+
+    // purge when children is purged
+    children.purge();
   });
 
   it('splice', () => {
@@ -138,6 +132,28 @@ describe('NodeChildren 方法测试', () => {
     expect(found?.componentName).toBe('Button');
   });
 
+  it('concat', () => {
+    const firstBtn = doc.getNode('node_k1ow3cbn')!;
+    const { children } = firstBtn.parent!;
+
+    const ret = children.concat([doc.createNode({ componentName: 'Button' })]);
+
+    expect(ret.length).toBe(3);
+  });
+
+  it('reduce', () => {
+    const firstBtn = doc.getNode('node_k1ow3cbn')!;
+    const { children } = firstBtn.parent!;
+
+    let ret = 0;
+    ret = children.reduce((count, node) => {
+      count = count + 1;
+      return count;
+    }, 0);
+
+    expect(ret).toBe(2);
+  });
+
   it('mergeChildren', () => {
     const firstBtn = doc.getNode('node_k1ow3cbn')!;
     const { children } = firstBtn.parent!;
@@ -159,6 +175,9 @@ describe('NodeChildren 方法测试', () => {
     expect(children.size).toBe(3);
     expect(changeMockFn).toHaveBeenCalled();
     offChange();
+
+    // no remover && adder && sorter
+    children.mergeChildren();
   });
 
   it('insert / onInsert', () => {
