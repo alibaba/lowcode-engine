@@ -16,7 +16,7 @@ import { globalLocale } from './intl';
 import * as utils from './utils';
 import Preference from './utils/preference';
 import { obx } from './utils';
-import { AssetsJson, AssetLoader } from '@alilc/lowcode-utils';
+import { AssetsJson, AssetLoader } from '@alilc/lowcode-common-utils';
 
 EventEmitter.defaultMaxListeners = 100;
 
@@ -76,7 +76,7 @@ export class Editor extends (EventEmitter as any) implements IEditor {
     return this.context.has(keyOrType);
   }
 
-  set(key: KeyType, data: any): void | Promise<void>  {
+  set(key: KeyType, data: any): void | Promise<void> {
     if (key === 'assets') {
       return this.setAssets(data);
     }

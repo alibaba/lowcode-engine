@@ -1,0 +1,1 @@
+`@alilc/lowcode-utils` will be deprecated, please use `@alilc/lowcode-common-utils` or `@alilc/lowcode-react-utils`.

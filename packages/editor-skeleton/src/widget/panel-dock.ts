@@ -1,5 +1,5 @@
 import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
-import { uniqueId } from '@alilc/lowcode-utils';
+import { uniqueId } from '@alilc/lowcode-common-utils';
 import { createElement, ReactNode, ReactInstance } from 'react';
 import { Skeleton } from '../skeleton';
 import { PanelDockConfig } from '../types';

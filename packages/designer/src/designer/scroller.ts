@@ -1,4 +1,4 @@
-import { isElement } from '@alilc/lowcode-utils';
+import { isElement } from '@alilc/lowcode-common-utils';
 
 export class ScrollTarget {
   get left() {

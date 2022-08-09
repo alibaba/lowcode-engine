@@ -9,7 +9,7 @@ import {
   AssetType,
   assetItem,
   isCSSUrl,
-} from '@alilc/lowcode-utils';
+} from '@alilc/lowcode-common-utils';
 
 import { BuiltinSimulatorRenderer } from './renderer';
 

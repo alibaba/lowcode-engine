@@ -3,6 +3,7 @@
 # sync all packages to alibaba intranet registry
 tnpm sync @alilc/lowcode-types
 tnpm sync @alilc/lowcode-utils
+tnpm sync @alilc/lowcode-common-utils
 tnpm sync @alilc/lowcode-shell
 tnpm sync @alilc/lowcode-editor-core
 tnpm sync @alilc/lowcode-editor-skeleton
@@ -15,3 +16,4 @@ tnpm sync @alilc/lowcode-rax-simulator-renderer
 tnpm sync @alilc/lowcode-react-renderer
 tnpm sync @alilc/lowcode-react-simulator-renderer
 tnpm sync @alilc/lowcode-engine
+tnpm sync @alilc/lowcode-react-utils

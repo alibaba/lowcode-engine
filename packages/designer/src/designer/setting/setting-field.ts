@@ -3,7 +3,7 @@ import { Transducer } from './utils';
 import { SettingPropEntry } from './setting-prop-entry';
 import { SettingEntry } from './setting-entry';
 import { computed, obx, makeObservable, action } from '@alilc/lowcode-editor-core';
-import { cloneDeep } from '@alilc/lowcode-utils';
+import { cloneDeep } from '@alilc/lowcode-common-utils';
 import type { ISetValueOptions } from '../../types';
 
 function getSettingFieldCollectorKey(parent: SettingEntry, config: FieldConfig) {

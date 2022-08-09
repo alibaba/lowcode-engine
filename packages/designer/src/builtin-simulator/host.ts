@@ -36,7 +36,7 @@ import {
   hasOwnProperty,
   UtilsMetadata,
   getClosestNode,
-} from '@alilc/lowcode-utils';
+} from '@alilc/lowcode-common-utils';
 import {
   DragObjectType,
   DragNodeObject,

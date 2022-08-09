@@ -1,5 +1,5 @@
 import { getSetter, registerSetter, getSettersMap } from '@alilc/lowcode-editor-core';
-import { isFormEvent, compatibleLegaoSchema, getNodeSchemaById } from '@alilc/lowcode-utils';
+import { isFormEvent, compatibleLegaoSchema, getNodeSchemaById } from '@alilc/lowcode-common-utils';
 import { isNodeSchema } from '@alilc/lowcode-types';
 
 export type Setters = {

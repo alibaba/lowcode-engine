@@ -1,5 +1,5 @@
 import { Editor as InnerEditor, globalContext } from '@alilc/lowcode-editor-core';
-import { getLogger } from '@alilc/lowcode-utils';
+import { getLogger } from '@alilc/lowcode-common-utils';
 import { editorSymbol } from './symbols';
 
 const logger = getLogger({ level: 'warn', bizName: 'shell:event' });

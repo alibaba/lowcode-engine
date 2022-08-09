@@ -1,5 +1,5 @@
 import { hotkey, Editor, globalContext } from '@alilc/lowcode-editor-core';
-import { isFormEvent } from '@alilc/lowcode-utils';
+import { isFormEvent } from '@alilc/lowcode-common-utils';
 import { focusing } from './focusing';
 import { insertChildren, TransformStage } from '../document';
 import clipboard from './clipboard';

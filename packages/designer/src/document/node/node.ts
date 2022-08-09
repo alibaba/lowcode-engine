@@ -17,7 +17,7 @@ import {
   GlobalEvent,
   ComponentAction,
 } from '@alilc/lowcode-types';
-import { compatStage } from '@alilc/lowcode-utils';
+import { compatStage } from '@alilc/lowcode-common-utils';
 import { SettingTopEntry } from '@alilc/lowcode-designer';
 import { Node as ShellNode } from '@alilc/lowcode-shell';
 import { Props, getConvertedExtraKey } from './props/props';

@@ -1,6 +1,7 @@
 import { ReactNode, createElement } from 'react';
 import { makeObservable, obx } from '@alilc/lowcode-editor-core';
-import { uniqueId, createContent } from '@alilc/lowcode-utils';
+import { uniqueId } from '@alilc/lowcode-common-utils';
+import { createContent } from '@alilc/lowcode-react-utils';
 import { getEvent } from '@alilc/lowcode-shell';
 import { DockConfig } from '../types';
 import { Skeleton } from '../skeleton';

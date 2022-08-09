@@ -1,6 +1,6 @@
 import { ComponentType } from 'react';
 import { get as lodashGet } from 'lodash';
-import { isPlainObject } from '@alilc/lowcode-utils';
+import { isPlainObject } from '@alilc/lowcode-common-utils';
 
 import { RequestHandlersMap } from '@alilc/lowcode-datasource-types';
 

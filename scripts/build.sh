@@ -3,6 +3,7 @@
 lerna run build \
   --scope @alilc/lowcode-types \
   --scope @alilc/lowcode-utils \
+  --scope @alilc/lowcode-common-utils \
   --scope @alilc/lowcode-shell \
   --scope @alilc/lowcode-editor-core \
   --scope @alilc/lowcode-editor-skeleton \
@@ -15,6 +16,7 @@ lerna run build \
   --scope @alilc/lowcode-react-simulator-renderer \
   --scope @alilc/lowcode-renderer-core \
   --scope @alilc/lowcode-engine \
+  --scope @alilc/lowcode-react-utils
   --stream
 
 lerna run build:umd \

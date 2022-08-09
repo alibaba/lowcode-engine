@@ -13,10 +13,11 @@
   },
   "dependencies": {
     "@alifd/next": "^1.19.16",
+    "@alilc/lowcode-common-utils": "^1.0.13",
     "@alilc/lowcode-designer": "1.0.13",
     "@alilc/lowcode-editor-core": "1.0.13",
+    "@alilc/lowcode-react-utils": "1.0.13",
     "@alilc/lowcode-types": "1.0.13",
-    "@alilc/lowcode-utils": "1.0.13",
     "classnames": "^2.2.6",
     "react": "^16",
     "react-dom": "^16.7.0"

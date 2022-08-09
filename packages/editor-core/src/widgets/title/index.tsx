@@ -1,6 +1,6 @@
 import { Component, isValidElement, ReactNode } from 'react';
 import classNames from 'classnames';
-import { createIcon } from '@alilc/lowcode-utils';
+import { createIcon } from '@alilc/lowcode-react-utils';
 import { TitleContent, isI18nData, I18nData } from '@alilc/lowcode-types';
 import { intl } from '../../intl';
 import { Tip } from '../tip';

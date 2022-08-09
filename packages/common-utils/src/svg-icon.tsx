@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 const SizePresets: any = {
   xsmall: 8,
   small: 12,
@@ -12,7 +10,7 @@ export interface IconProps {
   className?: string;
   fill?: string;
   size?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' | number;
-  children?: ReactNode;
+  children?: any;
   style?: Record<string, unknown>;
 }
 

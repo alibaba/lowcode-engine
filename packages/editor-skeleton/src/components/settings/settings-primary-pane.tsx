@@ -7,7 +7,7 @@ import { SettingsMain } from './main';
 import { SettingsPane } from './settings-pane';
 import { StageBox } from '../stage-box';
 import { SkeletonContext } from '../../context';
-import { createIcon } from '@alilc/lowcode-utils';
+import { createIcon } from '@alilc/lowcode-react-utils';
 
 @observer
 export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any }, { shouldIgnoreRoot: boolean }> {

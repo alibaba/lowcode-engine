@@ -2,7 +2,7 @@ import { obx, computed, globalContext, makeObservable } from '@alilc/lowcode-edi
 import { Node, ParentalNode } from './node';
 import { TransformStage } from './transform-stage';
 import { NodeData, isNodeSchema } from '@alilc/lowcode-types';
-import { shallowEqual, compatStage } from '@alilc/lowcode-utils';
+import { shallowEqual, compatStage } from '@alilc/lowcode-common-utils';
 import { EventEmitter } from 'events';
 import { foreachReverse } from '../../utils/tree';
 import { NodeRemoveOptions } from '../../types';

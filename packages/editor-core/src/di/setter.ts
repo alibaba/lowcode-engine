@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { CustomView, isCustomView, TitleContent } from '@alilc/lowcode-types';
-import { createContent } from '@alilc/lowcode-utils';
+import { createContent } from '@alilc/lowcode-common-utils';
 
 export type RegisteredSetter = {
   component: CustomView;

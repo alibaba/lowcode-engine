@@ -11,7 +11,7 @@ import {
   isNodeSchema,
   NodeSchema,
 } from '@alilc/lowcode-types';
-import { megreAssets, AssetsJson } from '@alilc/lowcode-utils';
+import { megreAssets, AssetsJson } from '@alilc/lowcode-common-utils';
 import { Project } from '../project';
 import { Node, DocumentModel, insertChildren, ParentalNode, TransformStage } from '../document';
 import { ComponentMeta } from '../component-meta';

@@ -1,6 +1,6 @@
 import { computed, makeObservable, obx, action } from '@alilc/lowcode-editor-core';
 import { PropsMap, PropsList, CompositeValue } from '@alilc/lowcode-types';
-import { uniqueId, compatStage } from '@alilc/lowcode-utils';
+import { uniqueId, compatStage } from '@alilc/lowcode-common-utils';
 import { Prop, IPropParent, UNSET } from './prop';
 import { Node } from '../node';
 import { TransformStage } from '../transform-stage';

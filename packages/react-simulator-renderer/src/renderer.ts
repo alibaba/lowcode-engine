@@ -10,13 +10,15 @@ import {
   isElement,
   cursor,
   setNativeSelection,
-  buildComponents,
   getSubComponent,
-  compatibleLegaoSchema,
   isPlainObject,
   AssetLoader,
-  getProjectUtils,
-} from '@alilc/lowcode-utils';
+  compatibleLegaoSchema,
+} from '@alilc/lowcode-common-utils';
+import {
+  buildReactComponents,
+  getReactProjectUtils,
+} from '@alilc/lowcode-react-utils';
 import { ComponentSchema, TransformStage, NodeSchema } from '@alilc/lowcode-types';
 // just use types
 import { BuiltinSimulatorRenderer, NodeInstance, Component, DocumentModel, Node } from '@alilc/lowcode-designer';
@@ -298,7 +300,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
           currentLocale: this.locale,
           messages: {},
         },
-        ...getProjectUtils(this._libraryMap, host.get('utilsMetadata')),
+        ...getReactProjectUtils(this._libraryMap, host.get('utilsMetadata')),
       },
       constants: {},
       requestHandlersMap: this._requestHandlersMap,
@@ -328,7 +330,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   private _libraryMap: { [key: string]: string } = {};
 
   private buildComponents() {
-    this._components = buildComponents(this._libraryMap, this._componentsMap, this.createComponent.bind(this));
+    this._components = buildReactComponents(this._libraryMap, this._componentsMap, this.createComponent.bind(this));
     this._components = {
       ...builtinComponents,
       ...this._components,

@@ -1,4 +1,4 @@
-import { getLogger, Logger } from '@alilc/lowcode-utils';
+import { getLogger, Logger } from '@alilc/lowcode-common-utils';
 import {
   ILowCodePlugin,
   ILowCodePluginConfig,

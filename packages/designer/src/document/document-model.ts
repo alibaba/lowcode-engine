@@ -9,7 +9,7 @@ import { Node, insertChildren, insertChild, isNode, RootNode, ParentalNode } fro
 import { Selection } from './selection';
 import { History } from './history';
 import { TransformStage, ModalNodesManager } from './node';
-import { uniqueId, isPlainObject, compatStage } from '@alilc/lowcode-utils';
+import { uniqueId, isPlainObject, compatStage } from '@alilc/lowcode-common-utils';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {

@@ -1,4 +1,4 @@
-import { cloneEnumerableProperty } from '@alilc/lowcode-utils';
+import { cloneEnumerableProperty } from '@alilc/lowcode-common-utils';
 import adapter from '../adapter';
 
 export function compWrapper(Comp: any) {

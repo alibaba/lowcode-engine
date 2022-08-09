@@ -1,8 +1,7 @@
 import { Component, KeyboardEvent, FocusEvent, Fragment } from 'react';
 import classNames from 'classnames';
 import { observer, Title, Tip, globalContext, Editor, engineConfig } from '@alilc/lowcode-editor-core';
-import { createIcon } from '@alilc/lowcode-utils';
-
+import { createIcon } from '@alilc/lowcode-react-utils';
 import { IconArrowRight } from '../icons/arrow-right';
 import { IconEyeClose } from '../icons/eye-close';
 import { intl, intlNode } from '../locale';

@@ -1,11 +1,10 @@
 import { BuiltinSimulatorHost, Node, PropChangeOptions } from '@alilc/lowcode-designer';
 import { GlobalEvent, TransformStage, NodeSchema } from '@alilc/lowcode-types';
-import { isReactComponent, cloneEnumerableProperty } from '@alilc/lowcode-utils';
+import { cloneEnumerableProperty } from '@alilc/lowcode-common-utils';
 import { EngineOptions } from '@alilc/lowcode-editor-core';
 import { debounce } from '../utils/common';
 import adapter from '../adapter';
 import * as types from '../types/index';
-import { parseData } from '../utils';
 
 export interface IComponentHocInfo {
   schema: any;
@@ -164,10 +163,6 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
       event.dispose?.forEach((disposeFn: any) => disposeFn && disposeFn());
     });
     cache = new LeafCache(curDocumentId, curDevice);
-  }
-
-  if (!isReactComponent(Comp)) {
-    console.error(`${schema.componentName} component may be has errors: `, Comp);
   }
 
   initRerenderEvent({

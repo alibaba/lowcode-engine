@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import { obx, makeObservable } from '@alilc/lowcode-editor-core';
 import { NodeSchema } from '@alilc/lowcode-types';
-import { setNativeSelection, cursor } from '@alilc/lowcode-utils';
+import { setNativeSelection, cursor } from '@alilc/lowcode-common-utils';
 import { DropLocation } from './location';
 import { Node, DocumentModel } from '../document';
 import { ISimulatorHost, isSimulatorHost, NodeInstance, ComponentInstance } from '../simulator';

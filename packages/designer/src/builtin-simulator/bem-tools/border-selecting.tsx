@@ -9,8 +9,8 @@ import {
   ComponentType,
 } from 'react';
 import classNames from 'classnames';
-import { observer, computed, Tip, globalContext, makeObservable } from '@alilc/lowcode-editor-core';
-import { createIcon, isReactComponent } from '@alilc/lowcode-utils';
+import { observer, computed, Tip, globalContext } from '@alilc/lowcode-editor-core';
+import { createIcon, isReactComponent } from '@alilc/lowcode-react-utils';
 import { ActionContentObject, isActionContentObject } from '@alilc/lowcode-types';
 import { BuiltinSimulatorHost } from '../host';
 import { OffsetObserver } from '../../designer';

@@ -1,4 +1,4 @@
-import { SVGIcon, IconProps } from '@alilc/lowcode-utils';
+import { SVGIcon, IconProps } from '@alilc/lowcode-common-utils';
 
 export function IconPage(props: IconProps) {
   return (

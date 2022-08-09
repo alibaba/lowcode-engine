@@ -1,4 +1,4 @@
-import { SVGIcon, IconProps } from '@alilc/lowcode-utils';
+import { SVGIcon, IconProps } from '@alilc/lowcode-common-utils';
 
 export function IconClear(props: IconProps) {
   return (

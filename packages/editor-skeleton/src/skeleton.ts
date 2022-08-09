@@ -21,7 +21,7 @@ import PanelDock from './widget/panel-dock';
 import Dock from './widget/dock';
 import { Stage, StageConfig } from './widget/stage';
 import { isValidElement } from 'react';
-import { isPlainObject, uniqueId } from '@alilc/lowcode-utils';
+import { isPlainObject, uniqueId } from '@alilc/lowcode-common-utils';
 import { Divider } from '@alifd/next';
 import { EditorConfig, PluginClassSet } from '@alilc/lowcode-types';
 

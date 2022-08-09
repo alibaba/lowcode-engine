@@ -2,7 +2,7 @@ import { isValidElement, ReactNode, createElement, cloneElement } from 'react';
 import { Icon } from '@alifd/next';
 import { IconType } from '@alilc/lowcode-types';
 import { isReactComponent } from './is-react';
-import { isESModule } from './is-es-module';
+import { isESModule } from '@alilc/lowcode-common-utils';
 
 const URL_RE = /^(https?:)\/\//i;
 

@@ -4,7 +4,7 @@ import { Component, createElement, Fragment } from 'rax';
 import { useRouter } from './rax-use-router';
 import { DocumentInstance, SimulatorRendererContainer } from './renderer';
 import './renderer.less';
-import { uniqueId } from '@alilc/lowcode-utils';
+import { uniqueId } from '@alilc/lowcode-common-utils';
 import { GlobalEvent } from '@alilc/lowcode-types';
 import { host } from './host';
 

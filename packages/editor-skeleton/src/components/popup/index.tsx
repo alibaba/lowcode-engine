@@ -1,7 +1,7 @@
 import { createContext, ReactNode, Component, PureComponent } from 'react';
 import { EventEmitter } from 'events';
 import { Drawer, ConfigProvider } from '@alifd/next';
-import { uniqueId } from '@alilc/lowcode-utils';
+import { uniqueId } from '@alilc/lowcode-common-utils';
 import './style.less';
 
 export const PopupContext = createContext<PopupPipe>({} as any);

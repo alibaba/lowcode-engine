@@ -1,5 +1,5 @@
 import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
-import { uniqueId } from '@alilc/lowcode-utils';
+import { uniqueId } from '@alilc/lowcode-common-utils';
 import { TitleContent } from '@alilc/lowcode-types';
 import { Node } from './node';
 import { intl } from '../../locale';

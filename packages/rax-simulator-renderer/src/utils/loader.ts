@@ -11,7 +11,7 @@ import {
   assetItem,
   AssetItem,
   isCSSUrl,
-} from '@alilc/lowcode-utils';
+} from '@alilc/lowcode-common-utils';
 
 function parseAssetList(scripts: any, styles: any, assets: AssetList, level?: AssetLevel) {
   for (const asset of assets) {

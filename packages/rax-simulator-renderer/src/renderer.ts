@@ -1,8 +1,9 @@
 import { BuiltinSimulatorRenderer, Component, DocumentModel, Node, NodeInstance } from '@alilc/lowcode-designer';
-import { ComponentSchema, NodeSchema, NpmInfo, RootSchema, TransformStage } from '@alilc/lowcode-types';
-import { Asset, compatibleLegaoSchema, cursor, isElement, isESModule, isPlainObject, isReactComponent, setNativeSelection } from '@alilc/lowcode-utils';
+import { ComponentSchema, NodeSchema, NpmInfo, TransformStage } from '@alilc/lowcode-types';
+import { Asset, compatibleLegaoSchema, cursor, findComponent, isElement, isPlainObject, LibraryMap, setNativeSelection } from '@alilc/lowcode-common-utils';
+import { isReactComponent } from '@alilc/lowcode-react-utils';
 import LowCodeRenderer from '@alilc/lowcode-rax-renderer';
-import { computed, observable as obx, untracked, makeObservable, configure } from 'mobx';
+import { computed, observable as obx, makeObservable, configure } from 'mobx';
 import DriverUniversal from 'driver-universal';
 import { EventEmitter } from 'events';
 import { createMemoryHistory, MemoryHistory } from 'history';
@@ -20,22 +21,10 @@ import { parseQuery, withQueryParams } from './utils/url';
 configure({ enforceActions: 'never' });
 const { Instance } = shared;
 
-export interface LibraryMap {
-  [key: string]: string;
-}
-
 const SYMBOL_VNID = Symbol('_LCNodeId');
 const SYMBOL_VDID = Symbol('_LCDocId');
 
 const INTERNAL = '_internal';
-
-function accessLibrary(library: string | object) {
-  if (typeof library !== 'string') {
-    return library;
-  }
-
-  return (window as any)[library];
-}
 
 // Slot/Leaf and Fragment|FunctionComponent polyfill(ref)
 
@@ -604,28 +593,6 @@ function getSubComponent(library: any, paths: string[]) {
     i++;
   }
   return component;
-}
-
-function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmInfo) {
-  if (!npm) {
-    return accessLibrary(componentName);
-  }
-  // libraryName the key access to global
-  // export { exportName } from xxx exportName === global.libraryName.exportName
-  // export exportName from xxx   exportName === global.libraryName.default || global.libraryName
-  // export { exportName as componentName } from package
-  // if exportName == null exportName === componentName;
-  // const componentName = exportName.subName, if exportName empty subName donot use
-  const exportName = npm.exportName || npm.componentName || componentName;
-  const libraryName = libraryMap[npm.package] || exportName;
-  const library = accessLibrary(libraryName);
-  const paths = npm.exportName && npm.subName ? npm.subName.split('.') : [];
-  if (npm.destructuring) {
-    paths.unshift(exportName);
-  } else if (isESModule(library)) {
-    paths.unshift('default');
-  }
-  return getSubComponent(library, paths);
 }
 
 function getLowCodeComponentProps(props: any) {

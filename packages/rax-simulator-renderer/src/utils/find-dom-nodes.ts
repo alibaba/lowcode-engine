@@ -1,4 +1,4 @@
-import { isElement } from '@alilc/lowcode-utils';
+import { isElement } from '@alilc/lowcode-common-utils';
 import findDOMNode from 'rax-find-dom-node';
 // import { isDOMNode } from './is-dom-node';
 

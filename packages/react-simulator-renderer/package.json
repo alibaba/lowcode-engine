@@ -16,10 +16,11 @@
     "build:umd": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --config build.umd.json"
   },
   "dependencies": {
+    "@alilc/lowcode-common-utils": "^1.0.13",
     "@alilc/lowcode-designer": "1.0.13",
     "@alilc/lowcode-react-renderer": "1.0.13",
+    "@alilc/lowcode-react-utils": "1.0.13",
     "@alilc/lowcode-types": "1.0.13",
-    "@alilc/lowcode-utils": "1.0.13",
     "classnames": "^2.2.6",
     "mobx": "^6.3.0",
     "mobx-react": "^7.2.0",

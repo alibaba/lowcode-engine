@@ -1,6 +1,6 @@
 import { obx, computed, makeObservable, runInAction } from '@alilc/lowcode-editor-core';
 import { GlobalEvent, IEditor, isJSExpression } from '@alilc/lowcode-types';
-import { uniqueId } from '@alilc/lowcode-utils';
+import { uniqueId } from '@alilc/lowcode-common-utils';
 import { SettingPropEntry as ShellSettingPropEntry } from '@alilc/lowcode-shell';
 import { SettingEntry } from './setting-entry';
 import { Node } from '../../document';

@@ -1,28 +1,13 @@
-import { ComponentType, forwardRef, createElement, FunctionComponent } from 'react';
 import { NpmInfo, ComponentSchema } from '@alilc/lowcode-types';
 import { Component } from '@alilc/lowcode-designer';
 import { isESModule } from './is-es-module';
-import { isReactComponent, acceptsRef, wrapReactClass } from './is-react';
-import { isObject } from './is-object';
 
-interface LibraryMap {
-  [key: string]: string;
-}
-
-export function accessLibrary(library: string | Record<string, unknown>) {
+export function accessCommonLibrary(library: string | Record<string, unknown>) {
   if (typeof library !== 'string') {
     return library;
   }
 
-  return (window as any)[library] || generateHtmlComp(library);
-}
-
-export function generateHtmlComp(library: string) {
-  if (['a', 'img', 'div', 'span', 'svg'].includes(library)) {
-    return forwardRef((props, ref) => {
-      return createElement(library, { ref, ...props }, props.children);
-    });
-  }
+  return (window as any)[library];
 }
 
 export function getSubComponent(library: any, paths: string[]) {
@@ -55,9 +40,9 @@ export function getSubComponent(library: any, paths: string[]) {
   return component;
 }
 
-function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmInfo) {
+export function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmInfo) {
   if (!npm) {
-    return accessLibrary(componentName);
+    return accessCommonLibrary(componentName);
   }
   // libraryName the key access to global
   // export { exportName } from xxx exportName === global.libraryName.exportName
@@ -67,7 +52,7 @@ function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmI
   // const componentName = exportName.subName, if exportName empty subName donot use
   const exportName = npm.exportName || npm.componentName || componentName;
   const libraryName = libraryMap[npm.package] || exportName;
-  const library = accessLibrary(libraryName);
+  const library = accessCommonLibrary(libraryName);
   const paths = npm.exportName && npm.subName ? npm.subName.split('.') : [];
   if (npm.destructuring) {
     paths.unshift(exportName);
@@ -77,43 +62,17 @@ function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmI
   return getSubComponent(library, paths);
 }
 
-/**
- * 判断是否是一个混合组件，即 components 是一个对象，对象值是 React 组件
- * 示例：
- * {
- *    Button: ReactNode,
- *    Text: ReactNode,
- * }
- */
-function isMixinComponent(components: any) {
-  if (!isObject(components)) {
-    return false;
-  }
-
-  return Object.keys(components).some(componentName => isReactComponent(components[componentName]));
-}
-
-export function buildComponents(libraryMap: LibraryMap,
-  componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> | ComponentSchema },
+export function buildCommonComponents(libraryMap: LibraryMap,
+  componentsMap: { [componentName: string]: NpmInfo | ComponentSchema },
   createComponent: (schema: ComponentSchema) => Component | null) {
   const components: any = {};
   Object.keys(componentsMap).forEach((componentName) => {
     let component = componentsMap[componentName];
     if (component && (component as ComponentSchema).componentName === 'Component') {
       components[componentName] = createComponent(component as ComponentSchema);
-    } else if (isReactComponent(component)) {
-      if (!acceptsRef(component)) {
-        component = wrapReactClass(component as FunctionComponent);
-      }
-      components[componentName] = component;
-    } else if (isMixinComponent(component)) {
-      components[componentName] = component;
     } else {
-      component = findComponent(libraryMap, componentName, component);
+      component = findComponent(libraryMap, componentName, component as NpmInfo);
       if (component) {
-        if (!acceptsRef(component)) {
-          component = wrapReactClass(component as FunctionComponent);
-        }
         components[componentName] = component;
       }
     }
@@ -133,19 +92,20 @@ export interface UtilsMetadata {
   };
 }
 
-interface LibrayMap {
+export interface LibraryMap {
   [key: string]: string;
 }
 
-interface ProjectUtils {
+export interface ProjectUtils {
   [packageName: string]: any;
 }
-export function getProjectUtils(librayMap: LibrayMap, utilsMetadata: UtilsMetadata[]): ProjectUtils {
+
+export function getCommonProjectUtils(libraryMap: LibraryMap, utilsMetadata: UtilsMetadata[]): ProjectUtils {
   const projectUtils: ProjectUtils = {};
   if (utilsMetadata) {
     utilsMetadata.forEach(meta => {
-      if (librayMap[meta?.npm?.package]) {
-        const lib = accessLibrary(librayMap[meta?.npm.package]);
+      if (libraryMap[meta?.npm?.package]) {
+        const lib = accessCommonLibrary(libraryMap[meta?.npm.package]);
         if (lib?.destructuring) {
           Object.keys(lib).forEach(name => {
             if (name === 'destructuring') return;

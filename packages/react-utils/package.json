@@ -1,0 +1,35 @@
+{
+  "name": "@alilc/lowcode-react-utils",
+  "version": "1.0.13",
+  "description": "React Utils for Ali lowCode engine",
+  "files": [
+    "lib",
+    "es"
+  ],
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "test": "build-scripts test --config build.test.json",
+    "build": "build-scripts build --skip-demo"
+  },
+  "dependencies": {
+    "@alifd/next": "^1.25.49",
+    "@alilc/lowcode-common-utils": "^1.0.13",
+    "@alilc/lowcode-designer": "1.0.13",
+    "@alilc/lowcode-types": "1.0.13",
+    "react": "^16"
+  },
+  "devDependencies": {
+    "@types/react": "^16",
+    "build-plugin-component": "^1.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "http",
+    "url": "https://github.com/alibaba/lowcode-engine/tree/main/packages/react-utils"
+  },
+  "gitHead": "2669f179e6f899d395ce1942d0fe04f9c5ed48a6"
+}

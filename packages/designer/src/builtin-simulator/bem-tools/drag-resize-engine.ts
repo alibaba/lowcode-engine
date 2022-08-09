@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import { ISimulatorHost } from '../../simulator';
 import { Designer, Point } from '../../designer';
-import { cursor } from '@alilc/lowcode-utils';
+import { cursor } from '@alilc/lowcode-common-utils';
 import { makeEventsHandler } from '../../utils/misc';
 
 // 拖动缩放

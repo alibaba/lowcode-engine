@@ -17,7 +17,7 @@ import {
   contains,
   Node,
 } from '@alilc/lowcode-designer';
-import { uniqueId } from '@alilc/lowcode-utils';
+import { uniqueId } from '@alilc/lowcode-common-utils';
 import { IEditor } from '@alilc/lowcode-types';
 import TreeNode from './tree-node';
 import { IndentTrack } from './helper/indent-track';

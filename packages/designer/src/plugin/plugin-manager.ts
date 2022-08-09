@@ -1,5 +1,5 @@
 import { Editor, engineConfig } from '@alilc/lowcode-editor-core';
-import { getLogger } from '@alilc/lowcode-utils';
+import { getLogger } from '@alilc/lowcode-common-utils';
 import {
   ILowCodePlugin,
   ILowCodePluginConfig,

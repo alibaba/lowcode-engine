@@ -13,7 +13,7 @@ import {
   designerSymbol,
   skeletonSymbol,
 } from '@alilc/lowcode-shell';
-import { getLogger, Logger } from '@alilc/lowcode-utils';
+import { getLogger, Logger } from '@alilc/lowcode-common-utils';
 import {
   ILowCodePluginContext,
   IPluginContextOptions,

@@ -17,7 +17,7 @@ import {
 import Outline, { OutlineBackupPane, getTreeMaster } from '@alilc/lowcode-plugin-outline-pane';
 import DesignerPlugin from '@alilc/lowcode-plugin-designer';
 import { Hotkey, Project, Skeleton, Setters, Material, Event } from '@alilc/lowcode-shell';
-import { getLogger, isPlainObject } from '@alilc/lowcode-utils';
+import { getLogger, isPlainObject } from '@alilc/lowcode-common-utils';
 import './modules/live-editing';
 import utils from './modules/utils';
 import * as editorCabin from './modules/editor-cabin';

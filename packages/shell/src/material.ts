@@ -9,7 +9,7 @@ import {
   modifyBuiltinComponentAction,
   isComponentMeta,
 } from '@alilc/lowcode-designer';
-import { AssetsJson } from '@alilc/lowcode-utils';
+import { AssetsJson } from '@alilc/lowcode-common-utils';
 import { ComponentAction, ComponentMetadata } from '@alilc/lowcode-types';
 import { editorSymbol, designerSymbol } from './symbols';
 import ComponentMeta from './component-meta';

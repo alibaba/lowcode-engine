@@ -13,7 +13,7 @@ import {
   LiveTextEditingConfig,
   FieldConfig,
 } from '@alilc/lowcode-types';
-import { deprecate, isRegExp } from '@alilc/lowcode-utils';
+import { deprecate, isRegExp } from '@alilc/lowcode-common-utils';
 import { computed, engineConfig } from '@alilc/lowcode-editor-core';
 import EventEmitter from 'events';
 import { componentDefaults, legacyIssues } from './transducers';

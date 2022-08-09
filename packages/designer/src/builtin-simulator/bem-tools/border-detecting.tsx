@@ -2,7 +2,7 @@ import { Component, Fragment, PureComponent } from 'react';
 import classNames from 'classnames';
 import { computed, observer, Title } from '@alilc/lowcode-editor-core';
 import { TitleContent } from '@alilc/lowcode-types';
-import { getClosestNode } from '@alilc/lowcode-utils';
+import { getClosestNode } from '@alilc/lowcode-common-utils';
 
 import { BuiltinSimulatorHost } from '../host';
 
