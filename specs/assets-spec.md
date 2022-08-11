@@ -178,8 +178,8 @@
                         "showTitle": false,
                         "behavior": "NORMAL",
                         "content": {
-                          "en-US": "Title",
-                          "zh-CN": "页面标题",
+                          "en_US": "Title",
+                          "zh_CN": "页面标题",
                           "type": "i18n"
                         },
                         "__style__": {},
@@ -213,9 +213,9 @@
                     "variable": "props.content",
                     "type": "variable",
                     "value": {
-                      "use": "zh-CN",
-                      "en-US": "Tips content",
-                      "zh-CN": "这是一个低代码组件",
+                      "use": "zh_CN",
+                      "en_US": "Tips content",
+                      "zh_CN": "这是一个低代码组件",
                       "type": "i18n"
                     }
                   },

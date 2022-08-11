@@ -103,7 +103,7 @@ npm install @alifd/ice-layout -S
 
 
 
-- README.en-US.md（文件命名采取 [bcp47 规范](http://www.rfc-editor.org/rfc/bcp/bcp47.txt)）多语言的情况，可选
+- README.en_US.md（文件命名采取 [bcp47 规范](http://www.rfc-editor.org/rfc/bcp/bcp47.txt)）多语言的情况，可选
 
 ```
 # Button
@@ -202,7 +202,7 @@ order: {文档的排序，数字，0 最小，从小到大排序}
 
 按钮有三种视觉层次：主按钮、次按钮、普通按钮。不同的类型可以用来区别按钮的重要程度。
 
-:::lang=en-US
+:::lang=en_US
 ---
 title: Container
 order: 3
@@ -358,22 +358,22 @@ $ iceworks sync
 |- BizHello
 |-- src
 |---- locale
-|------ zh-CN.js
-|------ en-US.js
+|------ zh_CN.js
+|------ en_US.js
 |------ ja-JP.js
 ```
 
 #### 定义不同的语言
 
 ```javascript
-// zh-CN.js
+// zh_CN.js
 export default {
   hello: '你好，世界'
 };
 ```
 
 ```javascript
-// en-US.js
+// en_US.js
 export default {
   hello: 'hello world'
 };
@@ -392,7 +392,7 @@ export default {
 // index.jsx
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import zh_CN from './locale/zh-CN.js';            // 引入默认语言
+import zh_CN from './locale/zh_CN.js';            // 引入默认语言
 export default class BizHello extends Component {
   static componentName = 'BizHello';
 
@@ -421,7 +421,7 @@ export default class BizHello extends Component {
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ConfigProvider } from '@alifd/next';
-import zh_CN from './locale/zh-CN.js';            // 引入默认语言
+import zh_CN from './locale/zh_CN.js';            // 引入默认语言
 class BizHello extends Component {
   static propTypes = {
     locale: PropTypes.object,                     // 增加 locale，用于配置文案
@@ -1525,8 +1525,8 @@ block/
 │   ├── stores/                    # [可选]全局状态管理
 │   │   └── user.js
 │   ├── locales/                   # [可选]国际化资源
-│   │   ├── en-US
-│   │   └── zh-CN
+│   │   ├── en_US
+│   │   └── zh_CN
 │   ├── global.scss                # 全局样式
 │   └── index.jsx                  # 应用入口脚本, 依赖 config/routes.js 的路由配置动态生成路由；
 ├── webpack.config.js              # 项目工程配置，包含插件配置及自定义 `webpack` 配置等
@@ -1808,11 +1808,11 @@ a {
     ...
   },
   "i18n": {
-    "zh-CN": {
+    "zh_CN": {
       "i18n-jwg27yo4": "你好",
       "i18n-jwg27yo3": "中国"
     },
-    "en-US": {
+    "en_US": {
       "i18n-jwg27yo4": "Hello",
       "i18n-jwg27yo3": "China"
     }

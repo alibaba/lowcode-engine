@@ -199,11 +199,11 @@
     }]
   }],
   "i18n": {
-    "zh-CN": {
+    "zh_CN": {
       "i18n-jwg27yo4": "你好",
       "i18n-jwg27yo3": "中国"
     },
-    "en-US": {
+    "en_US": {
       "i18n-jwg27yo4": "Hello",
       "i18n-jwg27yo3": "China"
     }
@@ -934,11 +934,11 @@ type Ti18n = {
 ```json
 {
   "i18n": {
-    "zh-CN": {
+    "zh_CN": {
       "i18n-jwg27yo4": "你好",
       "i18n-jwg27yo3": "${name}博士"
     },
-    "en-US": {
+    "en_US": {
       "i18n-jwg27yo4": "Hello",
       "i18n-jwg27yo3": "Doctor ${name}"
     }
@@ -1145,11 +1145,11 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
 ```json
 {
   "i18n": {
-    "zh-CN": {
+    "zh_CN": {
       "i18n-jwg27yo4": "你好",
       "i18n-jwg27yo3": "中国"
     },
-    "en-US": {
+    "en_US": {
       "i18n-jwg27yo4": "Hello",
       "i18n-jwg27yo3": "China"
     }
@@ -1338,11 +1338,11 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
     ...
   },
   "i18n": {
-    "zh-CN": {
+    "zh_CN": {
       "i18n-jwg27yo4": "你好",
       "i18n-jwg27yo3": "中国"
     },
-    "en-US": {
+    "en_US": {
       "i18n-jwg27yo4": "Hello",
       "i18n-jwg27yo3": "China"
     }
@@ -1383,8 +1383,8 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
 │   ├── utils/                     # 工具库
 │   │   └── index.js               # 应用第三方扩展函数
 │   ├── locales/                   # [可选]国际化资源
-│   │   ├── en-US
-│   │   └── zh-CN
+│   │   ├── en_US
+│   │   └── zh_CN
 │   ├── global.scss                # 全局样式
 │   └── index.jsx                  # 应用入口脚本, 依赖 config/routes.js 的路由配置动态生成路由；
 ├── webpack.config.js              # 项目工程配置，包含插件配置及自定义 webpack 配置等
@@ -1434,7 +1434,7 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
           },
           "onClick": {
             "type": "JSFunction",
-            "value": "function () { this.setLocale('en-US'); }"
+            "value": "function () { this.setLocale('en_US'); }"
           }
         },
       }, {
@@ -1449,11 +1449,11 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
     }],
   }],
   "i18n": {
-    "zh-CN": {
+    "zh_CN": {
       "i18n-hello": "你好",
       "i18n-chicken": "我有${count}只鸡"
     },
-    "en-US": {
+    "en_US": {
       "i18n-hello": "Hello",
       "i18n-chicken": "I have ${count} chicken"
     }
