@@ -3,16 +3,6 @@ import { set } from '../utils';
 import { Editor, globalContext } from '@alilc/lowcode-editor-core';
 import { Project } from '../../src/project/project';
 import { DocumentModel } from '../../src/document/document-model';
-import {
-  isRootNode,
-  Node,
-  isNode,
-  comparePosition,
-  contains,
-  insertChild,
-  insertChildren,
-  PositionNO,
-} from '../../src/document/node/node';
 import { Designer } from '../../src/designer/designer';
 import {
   Dragon,
@@ -23,12 +13,10 @@ import {
   DragObjectType,
   isShaken,
   setShaken,
+  isInvalidPoint,
+  isSameAs,
 } from '../../src/designer/dragon';
 import formSchema from '../fixtures/schema/form';
-import divMetadata from '../fixtures/component-metadata/div';
-import formMetadata from '../fixtures/component-metadata/form';
-import otherMeta from '../fixtures/component-metadata/other';
-import pageMetadata from '../fixtures/component-metadata/page';
 import { fireEvent } from '@testing-library/react';
 
 describe('Dragon 测试', () => {
@@ -273,8 +261,31 @@ describe('Dragon 测试', () => {
   });
 
   it('addSensor / removeSensor', () => {
-    const sensor = {};
+    const sensor = {
+      locate: () => {},
+      sensorAvailable: true,
+      isEnter: () => true,
+      fixEvent: () => {},
+      deactiveSensor: () => {},
+    };
+    const sensor2 = {};
     dragon.addSensor(sensor);
+    expect(dragon.sensors.length).toBe(1);
+    expect(dragon.activeSensor).toBeUndefined();
+    dragon.boost(
+      {
+        type: DragObjectType.NodeData,
+        data: [{ componentName: 'Button' }],
+      },
+      new MouseEvent('mousedown', { clientX: 100, clientY: 100 }),
+    );
+
+    fireEvent.mouseMove(document, { clientX: 108, clientY: 108 });
+    fireEvent.mouseMove(document, { clientX: 110, clientY: 110 });
+    fireEvent.mouseUp(document, { clientX: 118, clientY: 118 });
+    expect(dragon.activeSensor).toBe(sensor);
+    // remove a non-existing sensor
+    dragon.removeSensor(sensor2);
     expect(dragon.sensors.length).toBe(1);
     dragon.removeSensor(sensor);
     expect(dragon.sensors.length).toBe(0);
@@ -342,5 +353,17 @@ describe('导出的其他函数', () => {
     const e = {};
     setShaken(e);
     expect(isShaken(e)).toBeTruthy();
+  });
+
+  it('isInvalidPoint', () => {
+    expect(isInvalidPoint({ clientX: 0, clientY: 0 }, { clientX: 6, clientY: 1 })).toBeTruthy();
+    expect(isInvalidPoint({ clientX: 0, clientY: 0 }, { clientX: 1, clientY: 6 })).toBeTruthy();
+    expect(isInvalidPoint({ clientX: 0, clientY: 0 }, { clientX: 6, clientY: 6 })).toBeTruthy();
+    expect(isInvalidPoint({ clientX: 1, clientY: 1 }, { clientX: 2, clientY: 1 })).toBeFalsy();
+  });
+
+  it('isSameAs', () => {
+    expect(isSameAs({ clientX: 1, clientY: 1 }, { clientX: 1, clientY: 1 })).toBeTruthy();
+    expect(isSameAs({ clientX: 1, clientY: 1 }, { clientX: 2, clientY: 1 })).toBeFalsy();
   });
 });
