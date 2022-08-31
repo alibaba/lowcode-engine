@@ -24,7 +24,6 @@
     "intl-messageformat": "^9.3.1",
     "jsonuri": "^2.1.2",
     "lodash": "^4.17.11",
-    "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react-is": "^16.10.1",
     "socket.io-client": "^2.2.0",
