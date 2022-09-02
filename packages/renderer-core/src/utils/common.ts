@@ -2,9 +2,6 @@
 /* eslint-disable no-new-func */
 import logger from './logger';
 import { isI18nData, RootSchema, NodeSchema, isJSExpression, JSSlot } from '@alilc/lowcode-types';
-// moment对象配置
-import _moment from 'moment';
-import 'moment/locale/zh-cn';
 import { isEmpty } from 'lodash';
 import IntlMessageFormat from 'intl-messageformat';
 import pkg from '../../package.json';
@@ -12,8 +9,6 @@ import * as ReactIs from 'react-is';
 import { default as ReactPropTypesSecret } from 'prop-types/lib/ReactPropTypesSecret';
 import { default as factoryWithTypeCheckers } from 'prop-types/factoryWithTypeCheckers';
 
-export const moment = _moment;
-moment.locale('zh-cn');
 (window as any).sdkVersion = pkg.version;
 
 export { pick, isEqualWith as deepEqual, cloneDeep as clone, isEmpty, throttle, debounce } from 'lodash';
