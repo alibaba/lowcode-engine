@@ -2,6 +2,8 @@
   "name": "@alilc/lowcode-engine",
   "version": "1.0.14",
   "description": "An enterprise-class low-code technology stack with scale-out design / 一套面向扩展设计的企业级低代码技术体系",
+  "unpkg": "dist/js/engine-core.js",
+  "browser": "dist/js/engine-core.js",
   "main": "lib/engine-core.js",
   "module": "es/engine-core.js",
   "files": [
