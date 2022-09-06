@@ -361,6 +361,26 @@ export class Dragon {
         });
       }
 
+      const currentDocument = designer.currentDocument;
+      if (isDragNodeDataObject(dragObject) && currentDocument) {
+        let nodes = [];
+        if (Array.isArray(dragObject.data)) {
+          nodes = dragObject.data.map((item: NodeSchema) => new Node(currentDocument, item));
+        } else {
+          nodes = [new Node(currentDocument, dragObject.data)];
+        }
+
+        this.emitter.emit('dragstart', {
+          ...locateEvent,
+          dragObject: {
+            type: DragObjectType.Node,
+            nodes,
+          },
+        });
+
+        return;
+      }
+
       this.emitter.emit('dragstart', locateEvent);
     };
 
