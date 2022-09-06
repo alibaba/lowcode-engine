@@ -16,10 +16,12 @@ Array [
     },
     "props": Array [
       Object {
+        "defaultValue": "red",
         "name": "color",
         "propType": "string",
       },
       Object {
+        "defaultValue": "transparent",
         "name": "background",
         "propType": "string",
       },
@@ -39,6 +41,7 @@ Array [
         "propType": "number",
       },
       Object {
+        "defaultValue": "hello world",
         "name": "children",
         "propType": "node",
       },
@@ -5316,6 +5319,7 @@ Array [
         },
       },
       Object {
+        "defaultValue": "top",
         "name": "triangle",
         "propType": Object {
           "type": "oneOf",
@@ -5522,6 +5526,7 @@ Array [
         },
       },
       Object {
+        "defaultValue": "top-left",
         "name": "triangle",
         "propType": Object {
           "type": "oneOf",
@@ -5579,6 +5584,7 @@ Array [
     },
     "props": Array [
       Object {
+        "defaultValue": "Color Picker",
         "name": "header",
         "propType": "string",
       },
@@ -5720,6 +5726,7 @@ Array [
         },
       },
       Object {
+        "defaultValue": "top-left",
         "name": "triangle",
         "propType": Object {
           "type": "oneOf",
@@ -5769,6 +5776,7 @@ Array [
         "propType": "object",
       },
       Object {
+        "defaultValue": "Color picker",
         "name": "header",
         "propType": "string",
       },
