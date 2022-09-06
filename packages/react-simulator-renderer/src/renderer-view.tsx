@@ -257,6 +257,7 @@ class Renderer extends Component<{
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {
           documentInstance.mountInstance(schema.id, ref);
         }}
+        enableStrictNotFoundMode={host.enableStrictNotFoundMode}
       />
     );
   }

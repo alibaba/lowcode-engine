@@ -176,12 +176,29 @@ export class ComponentMeta {
   }
 
   private parseMetadata(metadata: ComponentMetadata) {
-    const { componentName, npm } = metadata;
+    const { componentName, npm, ...others } = metadata;
+    let _metadata = metadata;
+    if (!npm && !Object.keys(others).length) {
+      // 没有注册的组件，只能删除，不支持复制、移动等操作
+      _metadata = {
+        componentName,
+        configure: {
+          component: {
+            disableBehaviors: ['copy', 'move', 'lock', 'unlock'],
+          },
+          advanced: {
+            callbacks: {
+              onMoveHook: () => false,
+            },
+          },
+        },
+      };
+    }
     this._npm = npm || this._npm;
     this._componentName = componentName;
 
     // 额外转换逻辑
-    this._transformedMetadata = this.transformMetadata(metadata);
+    this._transformedMetadata = this.transformMetadata(_metadata);
 
     const { title } = this._transformedMetadata;
     if (title) {
