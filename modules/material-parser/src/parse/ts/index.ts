@@ -294,6 +294,10 @@ function getDocgenTypeHelper(
     return makeResult({
       name: 'any',
     });
+  } else if (type.flags & TypeFlags.Undefined) {
+    return makeResult({
+      name: 'undefined',
+    });
   } else if (type.flags & TypeFlags.Union && !isComplexType(type)) {
     return makeResult({
       name: 'union',

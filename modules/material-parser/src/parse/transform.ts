@@ -1,4 +1,4 @@
-import { omit, pick, isNil, uniq } from 'lodash';
+import { omit, pick, isNil, uniq, pull } from 'lodash';
 import { safeEval, isEvaluable } from '../utils';
 import { debug } from '../core';
 
@@ -38,6 +38,7 @@ export function transformType(itemType: any) {
     case 'element':
     case 'node':
     case 'void':
+    case 'undefined':
       break;
     case 'func':
       if (params) {
@@ -205,6 +206,7 @@ function combineOneOfValues(propType) {
   const newValue = [];
   let oneOfItem = null;
   let firstBooleanIndex = -1;
+
   propType.value.forEach((item) => {
     if (item?.type === 'oneOf') {
       if (!oneOfItem) {
@@ -228,7 +230,14 @@ function combineOneOfValues(propType) {
       newValue.push(item);
     }
   });
+
   let result = propType;
+
+  if (!result.isRequired && result.value.includes('undefined')) {
+    pull(result.value, 'undefined');
+    pull(newValue, 'undefined');
+  }
+
   const oneOfItemLength = oneOfItem?.value?.length;
   if (oneOfItemLength) {
     newValue.push(oneOfItem);
@@ -247,6 +256,11 @@ function combineOneOfValues(propType) {
     };
   }
   result.value = uniq(result.value);
+
+  if (result.type === 'oneOfType' && result.value.length === 1) {
+    result = result.value[0];
+  }
+
   return result;
 }
 

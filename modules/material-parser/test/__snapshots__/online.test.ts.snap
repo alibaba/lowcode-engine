@@ -150,83 +150,48 @@ Array [
       Object {
         "name": "picker",
         "propType": Object {
-          "type": "oneOfType",
+          "type": "oneOf",
           "value": Array [
-            "object",
-            Object {
-              "type": "oneOf",
-              "value": Array [
-                "time",
-                "date",
-                "week",
-                "month",
-                "quarter",
-                "year",
-              ],
-            },
+            "time",
+            "date",
+            "week",
+            "month",
+            "quarter",
+            "year",
           ],
         },
       },
       Object {
         "name": "prefixCls",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
+        "propType": "string",
       },
       Object {
         "name": "className",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
+        "propType": "string",
       },
       Object {
         "name": "style",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-          ],
-        },
+        "propType": "object",
       },
       Object {
         "description": "@deprecated Will be removed in next big version. Please use \`mode\` instead",
         "name": "mode",
         "propType": Object {
-          "type": "oneOfType",
+          "type": "oneOf",
           "value": Array [
-            "object",
-            Object {
-              "type": "oneOf",
-              "value": Array [
-                "time",
-                "date",
-                "week",
-                "month",
-                "quarter",
-                "year",
-                "decade",
-              ],
-            },
+            "time",
+            "date",
+            "week",
+            "month",
+            "quarter",
+            "year",
+            "decade",
           ],
         },
       },
       Object {
         "name": "tabIndex",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "number",
-          ],
-        },
+        "propType": "number",
       },
       Object {
         "name": "locale",
@@ -243,13 +208,7 @@ Array [
             },
             Object {
               "name": "monthBeforeYear",
-              "propType": Object {
-                "type": "oneOfType",
-                "value": Array [
-                  "object",
-                  "bool",
-                ],
-              },
+              "propType": "bool",
             },
             Object {
               "name": "yearFormat",
@@ -260,23 +219,11 @@ Array [
             },
             Object {
               "name": "monthFormat",
-              "propType": Object {
-                "type": "oneOfType",
-                "value": Array [
-                  "object",
-                  "string",
-                ],
-              },
+              "propType": "string",
             },
             Object {
               "name": "quarterFormat",
-              "propType": Object {
-                "type": "oneOfType",
-                "value": Array [
-                  "object",
-                  "string",
-                ],
-              },
+              "propType": "string",
             },
             Object {
               "name": "today",
@@ -322,13 +269,7 @@ Array [
             },
             Object {
               "name": "weekSelect",
-              "propType": Object {
-                "type": "oneOfType",
-                "value": Array [
-                  "object",
-                  "string",
-                ],
-              },
+              "propType": "string",
             },
             Object {
               "name": "clear",
@@ -452,27 +393,15 @@ Array [
             Object {
               "name": "shortWeekDays",
               "propType": Object {
-                "type": "oneOfType",
-                "value": Array [
-                  "object",
-                  Object {
-                    "type": "arrayOf",
-                    "value": "string",
-                  },
-                ],
+                "type": "arrayOf",
+                "value": "string",
               },
             },
             Object {
               "name": "shortMonths",
               "propType": Object {
-                "type": "oneOfType",
-                "value": Array [
-                  "object",
-                  Object {
-                    "type": "arrayOf",
-                    "value": "string",
-                  },
-                ],
+                "type": "arrayOf",
+                "value": "string",
               },
             },
           ],
@@ -924,39 +853,27 @@ Array [
                   Object {
                     "name": "getShortWeekDays",
                     "propType": Object {
-                      "type": "oneOfType",
-                      "value": Array [
-                        "object",
+                      "params": Array [
                         Object {
-                          "params": Array [
-                            Object {
-                              "name": "locale",
-                              "propType": "string",
-                            },
-                          ],
-                          "raw": "(locale: string) => string[]",
-                          "type": "func",
+                          "name": "locale",
+                          "propType": "string",
                         },
                       ],
+                      "raw": "(locale: string) => string[]",
+                      "type": "func",
                     },
                   },
                   Object {
                     "name": "getShortMonths",
                     "propType": Object {
-                      "type": "oneOfType",
-                      "value": Array [
-                        "object",
+                      "params": Array [
                         Object {
-                          "params": Array [
-                            Object {
-                              "name": "locale",
-                              "propType": "string",
-                            },
-                          ],
-                          "raw": "(locale: string) => string[]",
-                          "type": "func",
+                          "name": "locale",
+                          "propType": "string",
                         },
                       ],
+                      "raw": "(locale: string) => string[]",
+                      "type": "func",
                     },
                   },
                 ],
@@ -970,261 +887,155 @@ Array [
         "propType": Object {
           "type": "oneOfType",
           "value": Array [
-            "object",
             "null",
+            "object",
           ],
         },
       },
       Object {
         "name": "defaultValue",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-          ],
-        },
+        "propType": "object",
       },
       Object {
         "description": "[Legacy] Set default display picker view date",
         "name": "pickerValue",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-          ],
-        },
+        "propType": "object",
       },
       Object {
         "description": "[Legacy] Set default display picker view date",
         "name": "defaultPickerValue",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-          ],
-        },
+        "propType": "object",
       },
       Object {
         "name": "disabledDate",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "dateRender",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "monthCellRender",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "renderExtraFooter",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "mode",
-                  "propType": Object {
-                    "type": "oneOf",
-                    "value": Array [
-                      "time",
-                      "date",
-                      "week",
-                      "month",
-                      "quarter",
-                      "year",
-                      "decade",
-                    ],
-                  },
-                },
-              ],
-              "raw": "(mode: PanelMode) => ReactNode",
-              "type": "func",
+              "name": "mode",
+              "propType": Object {
+                "type": "oneOf",
+                "value": Array [
+                  "time",
+                  "date",
+                  "week",
+                  "month",
+                  "quarter",
+                  "year",
+                  "decade",
+                ],
+              },
             },
           ],
+          "raw": "(mode: PanelMode) => ReactNode",
+          "type": "func",
         },
       },
       Object {
         "name": "onSelect",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "onChange",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "onPanelChange",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "onMouseDown",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "event",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
-              "returns": Object {
-                "propType": "number",
-              },
-              "type": "func",
+              "name": "event",
+              "propType": "object",
             },
           ],
+          "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
         },
       },
       Object {
         "name": "onOk",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "direction",
         "propType": Object {
-          "type": "oneOfType",
+          "type": "oneOf",
           "value": Array [
-            "object",
-            Object {
-              "type": "oneOf",
-              "value": Array [
-                "ltr",
-                "rtl",
-              ],
-            },
+            "ltr",
+            "rtl",
           ],
         },
       },
       Object {
         "description": "@private This is internal usage. Do not use in your production env",
         "name": "hideHeader",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "description": "@private This is internal usage. Do not use in your production env",
         "name": "onPickerValueChange",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "description": "@private Internal usage. Do not use in your production env",
         "name": "components",
         "propType": Object {
-          "type": "oneOfType",
+          "type": "shape",
           "value": Array [
-            "object",
             Object {
-              "type": "shape",
-              "value": Array [
-                Object {
-                  "name": "button",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "string",
-                    ],
-                  },
-                },
-                Object {
-                  "name": "rangeItem",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "string",
-                    ],
-                  },
-                },
-              ],
+              "name": "button",
+              "propType": Object {
+                "type": "oneOfType",
+                "value": Array [
+                  "string",
+                  "object",
+                ],
+              },
+            },
+            Object {
+              "name": "rangeItem",
+              "propType": Object {
+                "type": "oneOfType",
+                "value": Array [
+                  "string",
+                  "object",
+                ],
+              },
             },
           ],
         },
       },
       Object {
         "name": "showToday",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "showNow",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "showTime",
         "propType": Object {
           "type": "oneOfType",
           "value": Array [
-            "object",
             "bool",
             Object {
               "type": "shape",
@@ -1238,112 +1049,47 @@ Array [
                 },
                 Object {
                   "name": "format",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "string",
-                    ],
-                  },
+                  "propType": "string",
                 },
                 Object {
                   "name": "showNow",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
+                  "propType": "bool",
                 },
                 Object {
                   "name": "showHour",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
+                  "propType": "bool",
                 },
                 Object {
                   "name": "showMinute",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
+                  "propType": "bool",
                 },
                 Object {
                   "name": "showSecond",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
+                  "propType": "bool",
                 },
                 Object {
                   "name": "use12Hours",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
+                  "propType": "bool",
                 },
                 Object {
                   "name": "hourStep",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "number",
-                    ],
-                  },
+                  "propType": "number",
                 },
                 Object {
                   "name": "minuteStep",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "number",
-                    ],
-                  },
+                  "propType": "number",
                 },
                 Object {
                   "name": "secondStep",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "number",
-                    ],
-                  },
+                  "propType": "number",
                 },
                 Object {
                   "name": "hideDisabledOptions",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
+                  "propType": "bool",
                 },
                 Object {
                   "name": "defaultValue",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                    ],
-                  },
+                  "propType": "object",
                 },
               ],
             },
@@ -1352,154 +1098,76 @@ Array [
       },
       Object {
         "name": "disabledTime",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "format",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
+        "propType": "string",
       },
       Object {
         "name": "showHour",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "showMinute",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "showSecond",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "use12Hours",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "hourStep",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "number",
-          ],
-        },
+        "propType": "number",
       },
       Object {
         "name": "minuteStep",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "number",
-          ],
-        },
+        "propType": "number",
       },
       Object {
         "name": "secondStep",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "number",
-          ],
-        },
+        "propType": "number",
       },
       Object {
         "name": "hideDisabledOptions",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "disabledHours",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "disabledMinutes",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "hour",
-                  "propType": "number",
-                },
-              ],
-              "raw": "(hour: number) => number[]",
-              "type": "func",
+              "name": "hour",
+              "propType": "number",
             },
           ],
+          "raw": "(hour: number) => number[]",
+          "type": "func",
         },
       },
       Object {
         "name": "disabledSeconds",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "hour",
-                  "propType": "number",
-                },
-                Object {
-                  "name": "minute",
-                  "propType": "number",
-                },
-              ],
-              "raw": "(hour: number, minute: number) => number[]",
-              "type": "func",
+              "name": "hour",
+              "propType": "number",
+            },
+            Object {
+              "name": "minute",
+              "propType": "number",
             },
           ],
+          "raw": "(hour: number, minute: number) => number[]",
+          "type": "func",
         },
       },
     ],
@@ -1521,20 +1189,13 @@ Array [
     "props": Array [
       Object {
         "name": "id",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
+        "propType": "string",
       },
       Object {
         "name": "value",
         "propType": Object {
           "type": "oneOfType",
           "value": Array [
-            "object",
             "null",
             Object {
               "type": "tuple",
@@ -1565,7 +1226,6 @@ Array [
         "propType": Object {
           "type": "oneOfType",
           "value": Array [
-            "object",
             "null",
             Object {
               "type": "tuple",
@@ -1594,21 +1254,15 @@ Array [
       Object {
         "name": "defaultPickerValue",
         "propType": Object {
-          "type": "oneOfType",
+          "type": "tuple",
           "value": Array [
-            "object",
             Object {
-              "type": "tuple",
-              "value": Array [
-                Object {
-                  "isRequired": true,
-                  "type": "object",
-                },
-                Object {
-                  "isRequired": true,
-                  "type": "object",
-                },
-              ],
+              "isRequired": true,
+              "type": "object",
+            },
+            Object {
+              "isRequired": true,
+              "type": "object",
             },
           ],
         },
@@ -1616,21 +1270,15 @@ Array [
       Object {
         "name": "placeholder",
         "propType": Object {
-          "type": "oneOfType",
+          "type": "tuple",
           "value": Array [
-            "object",
             Object {
-              "type": "tuple",
-              "value": Array [
-                Object {
-                  "isRequired": true,
-                  "type": "string",
-                },
-                Object {
-                  "isRequired": true,
-                  "type": "string",
-                },
-              ],
+              "isRequired": true,
+              "type": "string",
+            },
+            Object {
+              "isRequired": true,
+              "type": "string",
             },
           ],
         },
@@ -1640,7 +1288,6 @@ Array [
         "propType": Object {
           "type": "oneOfType",
           "value": Array [
-            "object",
             "bool",
             Object {
               "type": "tuple",
@@ -1660,25 +1307,13 @@ Array [
       },
       Object {
         "name": "disabledTime",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "ranges",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            Object {
-              "type": "objectOf",
-              "value": "oneOfType",
-            },
-          ],
+          "type": "objectOf",
+          "value": "oneOfType",
         },
       },
       Object {
@@ -1688,21 +1323,15 @@ Array [
       Object {
         "name": "allowEmpty",
         "propType": Object {
-          "type": "oneOfType",
+          "type": "tuple",
           "value": Array [
-            "object",
             Object {
-              "type": "tuple",
-              "value": Array [
-                Object {
-                  "isRequired": true,
-                  "type": "bool",
-                },
-                Object {
-                  "isRequired": true,
-                  "type": "bool",
-                },
-              ],
+              "isRequired": true,
+              "type": "bool",
+            },
+            Object {
+              "isRequired": true,
+              "type": "bool",
             },
           ],
         },
@@ -1710,206 +1339,10 @@ Array [
       Object {
         "name": "mode",
         "propType": Object {
-          "type": "oneOfType",
+          "type": "tuple",
           "value": Array [
-            "object",
             Object {
-              "type": "tuple",
-              "value": Array [
-                Object {
-                  "isRequired": true,
-                  "type": "oneOf",
-                  "value": Array [
-                    "time",
-                    "date",
-                    "week",
-                    "month",
-                    "quarter",
-                    "year",
-                    "decade",
-                  ],
-                },
-                Object {
-                  "isRequired": true,
-                  "type": "oneOf",
-                  "value": Array [
-                    "time",
-                    "date",
-                    "week",
-                    "month",
-                    "quarter",
-                    "year",
-                    "decade",
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      },
-      Object {
-        "name": "onChange",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
-      },
-      Object {
-        "name": "onCalendarChange",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
-      },
-      Object {
-        "name": "onPanelChange",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
-      },
-      Object {
-        "name": "onFocus",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            Object {
-              "params": Array [
-                Object {
-                  "name": "event",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(event: FocusEvent<HTMLInputElement, Element>) => void",
-              "returns": Object {
-                "propType": "number",
-              },
-              "type": "func",
-            },
-          ],
-        },
-      },
-      Object {
-        "name": "onBlur",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            Object {
-              "params": Array [
-                Object {
-                  "name": "event",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(event: FocusEvent<HTMLInputElement, Element>) => void",
-              "returns": Object {
-                "propType": "number",
-              },
-              "type": "func",
-            },
-          ],
-        },
-      },
-      Object {
-        "name": "onOk",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
-      },
-      Object {
-        "name": "direction",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            Object {
-              "type": "oneOf",
-              "value": Array [
-                "ltr",
-                "rtl",
-              ],
-            },
-          ],
-        },
-      },
-      Object {
-        "name": "autoComplete",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
-      },
-      Object {
-        "description": "@private Internal control of active picker. Do not use since it's private usage",
-        "name": "activePickerIndex",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            Object {
-              "type": "oneOf",
-              "value": Array [
-                0,
-                1,
-              ],
-            },
-          ],
-        },
-      },
-      Object {
-        "name": "dateRender",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
-      },
-      Object {
-        "name": "panelRender",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            Object {
-              "params": Array [
-                Object {
-                  "name": "originPanel",
-                  "propType": "node",
-                },
-              ],
-              "raw": "(originPanel: ReactNode) => ReactNode",
-              "type": "func",
-            },
-          ],
-        },
-      },
-      Object {
-        "name": "picker",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            Object {
+              "isRequired": true,
               "type": "oneOf",
               "value": Array [
                 "time",
@@ -1918,49 +1351,144 @@ Array [
                 "month",
                 "quarter",
                 "year",
+                "decade",
+              ],
+            },
+            Object {
+              "isRequired": true,
+              "type": "oneOf",
+              "value": Array [
+                "time",
+                "date",
+                "week",
+                "month",
+                "quarter",
+                "year",
+                "decade",
               ],
             },
           ],
         },
       },
       Object {
-        "name": "prefixCls",
+        "name": "onChange",
+        "propType": "func",
+      },
+      Object {
+        "name": "onCalendarChange",
+        "propType": "func",
+      },
+      Object {
+        "name": "onPanelChange",
+        "propType": "func",
+      },
+      Object {
+        "name": "onFocus",
         "propType": Object {
-          "type": "oneOfType",
+          "params": Array [
+            Object {
+              "name": "event",
+              "propType": "object",
+            },
+          ],
+          "raw": "(event: FocusEvent<HTMLInputElement, Element>) => void",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
+        },
+      },
+      Object {
+        "name": "onBlur",
+        "propType": Object {
+          "params": Array [
+            Object {
+              "name": "event",
+              "propType": "object",
+            },
+          ],
+          "raw": "(event: FocusEvent<HTMLInputElement, Element>) => void",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
+        },
+      },
+      Object {
+        "name": "onOk",
+        "propType": "func",
+      },
+      Object {
+        "name": "direction",
+        "propType": Object {
+          "type": "oneOf",
           "value": Array [
-            "object",
-            "string",
+            "ltr",
+            "rtl",
           ],
         },
+      },
+      Object {
+        "name": "autoComplete",
+        "propType": "string",
+      },
+      Object {
+        "description": "@private Internal control of active picker. Do not use since it's private usage",
+        "name": "activePickerIndex",
+        "propType": Object {
+          "type": "oneOf",
+          "value": Array [
+            0,
+            1,
+          ],
+        },
+      },
+      Object {
+        "name": "dateRender",
+        "propType": "func",
+      },
+      Object {
+        "name": "panelRender",
+        "propType": Object {
+          "params": Array [
+            Object {
+              "name": "originPanel",
+              "propType": "node",
+            },
+          ],
+          "raw": "(originPanel: ReactNode) => ReactNode",
+          "type": "func",
+        },
+      },
+      Object {
+        "name": "picker",
+        "propType": Object {
+          "type": "oneOf",
+          "value": Array [
+            "time",
+            "date",
+            "week",
+            "month",
+            "quarter",
+            "year",
+          ],
+        },
+      },
+      Object {
+        "name": "prefixCls",
+        "propType": "string",
       },
       Object {
         "name": "className",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
+        "propType": "string",
       },
       Object {
         "name": "style",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-          ],
-        },
+        "propType": "object",
       },
       Object {
         "name": "tabIndex",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "number",
-          ],
-        },
+        "propType": "number",
       },
       Object {
         "name": "locale",
@@ -1977,13 +1505,7 @@ Array [
             },
             Object {
               "name": "monthBeforeYear",
-              "propType": Object {
-                "type": "oneOfType",
-                "value": Array [
-                  "object",
-                  "bool",
-                ],
-              },
+              "propType": "bool",
             },
             Object {
               "name": "yearFormat",
@@ -1994,23 +1516,11 @@ Array [
             },
             Object {
               "name": "monthFormat",
-              "propType": Object {
-                "type": "oneOfType",
-                "value": Array [
-                  "object",
-                  "string",
-                ],
-              },
+              "propType": "string",
             },
             Object {
               "name": "quarterFormat",
-              "propType": Object {
-                "type": "oneOfType",
-                "value": Array [
-                  "object",
-                  "string",
-                ],
-              },
+              "propType": "string",
             },
             Object {
               "name": "today",
@@ -2056,13 +1566,7 @@ Array [
             },
             Object {
               "name": "weekSelect",
-              "propType": Object {
-                "type": "oneOfType",
-                "value": Array [
-                  "object",
-                  "string",
-                ],
-              },
+              "propType": "string",
             },
             Object {
               "name": "clear",
@@ -2186,27 +1690,15 @@ Array [
             Object {
               "name": "shortWeekDays",
               "propType": Object {
-                "type": "oneOfType",
-                "value": Array [
-                  "object",
-                  Object {
-                    "type": "arrayOf",
-                    "value": "string",
-                  },
-                ],
+                "type": "arrayOf",
+                "value": "string",
               },
             },
             Object {
               "name": "shortMonths",
               "propType": Object {
-                "type": "oneOfType",
-                "value": Array [
-                  "object",
-                  Object {
-                    "type": "arrayOf",
-                    "value": "string",
-                  },
-                ],
+                "type": "arrayOf",
+                "value": "string",
               },
             },
           ],
@@ -2658,39 +2150,27 @@ Array [
                   Object {
                     "name": "getShortWeekDays",
                     "propType": Object {
-                      "type": "oneOfType",
-                      "value": Array [
-                        "object",
+                      "params": Array [
                         Object {
-                          "params": Array [
-                            Object {
-                              "name": "locale",
-                              "propType": "string",
-                            },
-                          ],
-                          "raw": "(locale: string) => string[]",
-                          "type": "func",
+                          "name": "locale",
+                          "propType": "string",
                         },
                       ],
+                      "raw": "(locale: string) => string[]",
+                      "type": "func",
                     },
                   },
                   Object {
                     "name": "getShortMonths",
                     "propType": Object {
-                      "type": "oneOfType",
-                      "value": Array [
-                        "object",
+                      "params": Array [
                         Object {
-                          "params": Array [
-                            Object {
-                              "name": "locale",
-                              "propType": "string",
-                            },
-                          ],
-                          "raw": "(locale: string) => string[]",
-                          "type": "func",
+                          "name": "locale",
+                          "propType": "string",
                         },
                       ],
+                      "raw": "(locale: string) => string[]",
+                      "type": "func",
                     },
                   },
                 ],
@@ -2701,326 +2181,192 @@ Array [
       },
       Object {
         "name": "disabledDate",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "monthCellRender",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "renderExtraFooter",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "mode",
-                  "propType": Object {
-                    "type": "oneOf",
-                    "value": Array [
-                      "time",
-                      "date",
-                      "week",
-                      "month",
-                      "quarter",
-                      "year",
-                      "decade",
-                    ],
-                  },
-                },
-              ],
-              "raw": "(mode: PanelMode) => ReactNode",
-              "type": "func",
+              "name": "mode",
+              "propType": Object {
+                "type": "oneOf",
+                "value": Array [
+                  "time",
+                  "date",
+                  "week",
+                  "month",
+                  "quarter",
+                  "year",
+                  "decade",
+                ],
+              },
             },
           ],
+          "raw": "(mode: PanelMode) => ReactNode",
+          "type": "func",
         },
       },
       Object {
         "name": "onMouseDown",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "event",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
-              "returns": Object {
-                "propType": "number",
-              },
-              "type": "func",
+              "name": "event",
+              "propType": "object",
             },
           ],
+          "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
         },
       },
       Object {
         "description": "@private Internal usage. Do not use in your production env",
         "name": "components",
         "propType": Object {
-          "type": "oneOfType",
+          "type": "shape",
           "value": Array [
-            "object",
             Object {
-              "type": "shape",
-              "value": Array [
-                Object {
-                  "name": "button",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "string",
-                    ],
-                  },
-                },
-                Object {
-                  "name": "rangeItem",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "string",
-                    ],
-                  },
-                },
-              ],
+              "name": "button",
+              "propType": Object {
+                "type": "oneOfType",
+                "value": Array [
+                  "string",
+                  "object",
+                ],
+              },
+            },
+            Object {
+              "name": "rangeItem",
+              "propType": Object {
+                "type": "oneOfType",
+                "value": Array [
+                  "string",
+                  "object",
+                ],
+              },
             },
           ],
         },
       },
       Object {
         "name": "dropdownClassName",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
+        "propType": "string",
       },
       Object {
         "name": "dropdownAlign",
         "propType": Object {
-          "type": "oneOfType",
+          "type": "shape",
           "value": Array [
-            "object",
             Object {
-              "type": "shape",
-              "value": Array [
-                Object {
-                  "name": "points",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      Object {
-                        "type": "arrayOf",
-                        "value": "string",
-                      },
-                    ],
+              "name": "points",
+              "propType": Object {
+                "type": "arrayOf",
+                "value": "string",
+              },
+            },
+            Object {
+              "name": "offset",
+              "propType": Object {
+                "type": "arrayOf",
+                "value": "number",
+              },
+            },
+            Object {
+              "name": "targetOffset",
+              "propType": Object {
+                "type": "arrayOf",
+                "value": "number",
+              },
+            },
+            Object {
+              "name": "overflow",
+              "propType": Object {
+                "type": "shape",
+                "value": Array [
+                  Object {
+                    "name": "adjustX",
+                    "propType": Object {
+                      "type": "oneOfType",
+                      "value": Array [
+                        "number",
+                        "bool",
+                      ],
+                    },
                   },
-                },
-                Object {
-                  "name": "offset",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      Object {
-                        "type": "arrayOf",
-                        "value": "number",
-                      },
-                    ],
+                  Object {
+                    "name": "adjustY",
+                    "propType": Object {
+                      "type": "oneOfType",
+                      "value": Array [
+                        "number",
+                        "bool",
+                      ],
+                    },
                   },
-                },
-                Object {
-                  "name": "targetOffset",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      Object {
-                        "type": "arrayOf",
-                        "value": "number",
-                      },
-                    ],
-                  },
-                },
-                Object {
-                  "name": "overflow",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      Object {
-                        "type": "shape",
-                        "value": Array [
-                          Object {
-                            "name": "adjustX",
-                            "propType": Object {
-                              "type": "oneOfType",
-                              "value": Array [
-                                "object",
-                                "number",
-                                "bool",
-                              ],
-                            },
-                          },
-                          Object {
-                            "name": "adjustY",
-                            "propType": Object {
-                              "type": "oneOfType",
-                              "value": Array [
-                                "object",
-                                "number",
-                                "bool",
-                              ],
-                            },
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                },
-                Object {
-                  "name": "useCssRight",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
-                },
-                Object {
-                  "name": "useCssBottom",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
-                },
-                Object {
-                  "name": "useCssTransform",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
-                },
-                Object {
-                  "name": "ignoreShake",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
-                },
-              ],
+                ],
+              },
+            },
+            Object {
+              "name": "useCssRight",
+              "propType": "bool",
+            },
+            Object {
+              "name": "useCssBottom",
+              "propType": "bool",
+            },
+            Object {
+              "name": "useCssTransform",
+              "propType": "bool",
+            },
+            Object {
+              "name": "ignoreShake",
+              "propType": "bool",
             },
           ],
         },
       },
       Object {
         "name": "popupStyle",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-          ],
-        },
+        "propType": "object",
       },
       Object {
         "name": "transitionName",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
+        "propType": "string",
       },
       Object {
         "name": "allowClear",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "autoFocus",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "open",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "defaultOpen",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "description": "Make input readOnly to avoid popup keyboard in mobile",
         "name": "inputReadOnly",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "format",
         "propType": Object {
           "type": "oneOfType",
           "value": Array [
-            "object",
             "string",
             "func",
             Object {
@@ -3063,352 +2409,210 @@ Array [
       Object {
         "name": "getPopupContainer",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "node",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(node: HTMLElement) => HTMLElement",
-              "type": "func",
+              "name": "node",
+              "propType": "object",
             },
           ],
+          "raw": "(node: HTMLElement) => HTMLElement",
+          "type": "func",
         },
       },
       Object {
         "name": "onOpenChange",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "open",
-                  "propType": "bool",
-                },
-              ],
-              "raw": "(open: boolean) => void",
-              "type": "func",
+              "name": "open",
+              "propType": "bool",
             },
           ],
+          "raw": "(open: boolean) => void",
+          "type": "func",
         },
       },
       Object {
         "name": "onMouseUp",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "event",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
-              "returns": Object {
-                "propType": "number",
-              },
-              "type": "func",
+              "name": "event",
+              "propType": "object",
             },
           ],
+          "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
         },
       },
       Object {
         "name": "onMouseEnter",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "event",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
-              "returns": Object {
-                "propType": "number",
-              },
-              "type": "func",
+              "name": "event",
+              "propType": "object",
             },
           ],
+          "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
         },
       },
       Object {
         "name": "onMouseLeave",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "event",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
-              "returns": Object {
-                "propType": "number",
-              },
-              "type": "func",
+              "name": "event",
+              "propType": "object",
             },
           ],
+          "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
         },
       },
       Object {
         "name": "onClick",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "event",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
-              "returns": Object {
-                "propType": "number",
-              },
-              "type": "func",
+              "name": "event",
+              "propType": "object",
             },
           ],
+          "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
         },
       },
       Object {
         "name": "onContextMenu",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "event",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
-              "returns": Object {
-                "propType": "number",
-              },
-              "type": "func",
+              "name": "event",
+              "propType": "object",
             },
           ],
+          "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
         },
       },
       Object {
         "description": "@private Internal usage, do not use in production mode!!!",
         "name": "pickerRef",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-          ],
-        },
+        "propType": "object",
       },
       Object {
         "name": "role",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
+        "propType": "string",
       },
       Object {
         "name": "name",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
+        "propType": "string",
       },
       Object {
         "name": "showTime",
         "propType": Object {
           "type": "oneOfType",
           "value": Array [
-            "object",
             "bool",
+            "object",
           ],
         },
       },
       Object {
         "name": "showNow",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "order",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "showHour",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "showMinute",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "showSecond",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "use12Hours",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "hourStep",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "number",
-          ],
-        },
+        "propType": "number",
       },
       Object {
         "name": "minuteStep",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "number",
-          ],
-        },
+        "propType": "number",
       },
       Object {
         "name": "secondStep",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "number",
-          ],
-        },
+        "propType": "number",
       },
       Object {
         "name": "hideDisabledOptions",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "disabledHours",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "disabledMinutes",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "hour",
-                  "propType": "number",
-                },
-              ],
-              "raw": "(hour: number) => number[]",
-              "type": "func",
+              "name": "hour",
+              "propType": "number",
             },
           ],
+          "raw": "(hour: number) => number[]",
+          "type": "func",
         },
       },
       Object {
         "name": "disabledSeconds",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "hour",
-                  "propType": "number",
-                },
-                Object {
-                  "name": "minute",
-                  "propType": "number",
-                },
-              ],
-              "raw": "(hour: number, minute: number) => number[]",
-              "type": "func",
+              "name": "hour",
+              "propType": "number",
+            },
+            Object {
+              "name": "minute",
+              "propType": "number",
             },
           ],
+          "raw": "(hour: number, minute: number) => number[]",
+          "type": "func",
         },
       },
       Object {
         "description": "@deprecated Please use \`defaultValue\` directly instead",
         "name": "defaultOpenValue",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-          ],
-        },
+        "propType": "object",
       },
     ],
     "screenshot": "",
@@ -3429,259 +2633,131 @@ Array [
     "props": Array [
       Object {
         "name": "dropdownClassName",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
+        "propType": "string",
       },
       Object {
         "name": "dropdownAlign",
         "propType": Object {
-          "type": "oneOfType",
+          "type": "shape",
           "value": Array [
-            "object",
             Object {
-              "type": "shape",
-              "value": Array [
-                Object {
-                  "name": "points",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      Object {
-                        "type": "arrayOf",
-                        "value": "string",
-                      },
-                    ],
+              "name": "points",
+              "propType": Object {
+                "type": "arrayOf",
+                "value": "string",
+              },
+            },
+            Object {
+              "name": "offset",
+              "propType": Object {
+                "type": "arrayOf",
+                "value": "number",
+              },
+            },
+            Object {
+              "name": "targetOffset",
+              "propType": Object {
+                "type": "arrayOf",
+                "value": "number",
+              },
+            },
+            Object {
+              "name": "overflow",
+              "propType": Object {
+                "type": "shape",
+                "value": Array [
+                  Object {
+                    "name": "adjustX",
+                    "propType": Object {
+                      "type": "oneOfType",
+                      "value": Array [
+                        "number",
+                        "bool",
+                      ],
+                    },
                   },
-                },
-                Object {
-                  "name": "offset",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      Object {
-                        "type": "arrayOf",
-                        "value": "number",
-                      },
-                    ],
+                  Object {
+                    "name": "adjustY",
+                    "propType": Object {
+                      "type": "oneOfType",
+                      "value": Array [
+                        "number",
+                        "bool",
+                      ],
+                    },
                   },
-                },
-                Object {
-                  "name": "targetOffset",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      Object {
-                        "type": "arrayOf",
-                        "value": "number",
-                      },
-                    ],
-                  },
-                },
-                Object {
-                  "name": "overflow",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      Object {
-                        "type": "shape",
-                        "value": Array [
-                          Object {
-                            "name": "adjustX",
-                            "propType": Object {
-                              "type": "oneOfType",
-                              "value": Array [
-                                "object",
-                                "number",
-                                "bool",
-                              ],
-                            },
-                          },
-                          Object {
-                            "name": "adjustY",
-                            "propType": Object {
-                              "type": "oneOfType",
-                              "value": Array [
-                                "object",
-                                "number",
-                                "bool",
-                              ],
-                            },
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                },
-                Object {
-                  "name": "useCssRight",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
-                },
-                Object {
-                  "name": "useCssBottom",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
-                },
-                Object {
-                  "name": "useCssTransform",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
-                },
-                Object {
-                  "name": "ignoreShake",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
-                },
-              ],
+                ],
+              },
+            },
+            Object {
+              "name": "useCssRight",
+              "propType": "bool",
+            },
+            Object {
+              "name": "useCssBottom",
+              "propType": "bool",
+            },
+            Object {
+              "name": "useCssTransform",
+              "propType": "bool",
+            },
+            Object {
+              "name": "ignoreShake",
+              "propType": "bool",
             },
           ],
         },
       },
       Object {
         "name": "popupStyle",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-          ],
-        },
+        "propType": "object",
       },
       Object {
         "name": "transitionName",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
+        "propType": "string",
       },
       Object {
         "name": "placeholder",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
+        "propType": "string",
       },
       Object {
         "name": "allowClear",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "autoFocus",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "disabled",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "tabIndex",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "number",
-          ],
-        },
+        "propType": "number",
       },
       Object {
         "name": "open",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "defaultOpen",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "description": "Make input readOnly to avoid popup keyboard in mobile",
         "name": "inputReadOnly",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "id",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
+        "propType": "string",
       },
       Object {
         "name": "format",
         "propType": Object {
           "type": "oneOfType",
           "value": Array [
-            "object",
             "string",
             "func",
             Object {
@@ -3724,299 +2800,198 @@ Array [
       Object {
         "name": "getPopupContainer",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "node",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(node: HTMLElement) => HTMLElement",
-              "type": "func",
+              "name": "node",
+              "propType": "object",
             },
           ],
+          "raw": "(node: HTMLElement) => HTMLElement",
+          "type": "func",
         },
       },
       Object {
         "name": "panelRender",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "originPanel",
-                  "propType": "node",
-                },
-              ],
-              "raw": "(originPanel: ReactNode) => ReactNode",
-              "type": "func",
+              "name": "originPanel",
+              "propType": "node",
             },
           ],
+          "raw": "(originPanel: ReactNode) => ReactNode",
+          "type": "func",
         },
       },
       Object {
         "name": "onChange",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "onOpenChange",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "open",
-                  "propType": "bool",
-                },
-              ],
-              "raw": "(open: boolean) => void",
-              "type": "func",
+              "name": "open",
+              "propType": "bool",
             },
           ],
+          "raw": "(open: boolean) => void",
+          "type": "func",
         },
       },
       Object {
         "name": "onFocus",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "event",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(event: FocusEvent<HTMLInputElement, Element>) => void",
-              "returns": Object {
-                "propType": "number",
-              },
-              "type": "func",
+              "name": "event",
+              "propType": "object",
             },
           ],
+          "raw": "(event: FocusEvent<HTMLInputElement, Element>) => void",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
         },
       },
       Object {
         "name": "onBlur",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "event",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(event: FocusEvent<HTMLInputElement, Element>) => void",
-              "returns": Object {
-                "propType": "number",
-              },
-              "type": "func",
+              "name": "event",
+              "propType": "object",
             },
           ],
+          "raw": "(event: FocusEvent<HTMLInputElement, Element>) => void",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
         },
       },
       Object {
         "name": "onMouseDown",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "event",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
-              "returns": Object {
-                "propType": "number",
-              },
-              "type": "func",
+              "name": "event",
+              "propType": "object",
             },
           ],
+          "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
         },
       },
       Object {
         "name": "onMouseUp",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "event",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
-              "returns": Object {
-                "propType": "number",
-              },
-              "type": "func",
+              "name": "event",
+              "propType": "object",
             },
           ],
+          "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
         },
       },
       Object {
         "name": "onMouseEnter",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "event",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
-              "returns": Object {
-                "propType": "number",
-              },
-              "type": "func",
+              "name": "event",
+              "propType": "object",
             },
           ],
+          "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
         },
       },
       Object {
         "name": "onMouseLeave",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "event",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
-              "returns": Object {
-                "propType": "number",
-              },
-              "type": "func",
+              "name": "event",
+              "propType": "object",
             },
           ],
+          "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
         },
       },
       Object {
         "name": "onClick",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "event",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
-              "returns": Object {
-                "propType": "number",
-              },
-              "type": "func",
+              "name": "event",
+              "propType": "object",
             },
           ],
+          "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
         },
       },
       Object {
         "name": "onContextMenu",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "event",
-                  "propType": "object",
-                },
-              ],
-              "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
-              "returns": Object {
-                "propType": "number",
-              },
-              "type": "func",
+              "name": "event",
+              "propType": "object",
             },
           ],
+          "raw": "(event: MouseEvent<HTMLDivElement, MouseEvent>) => void",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
         },
       },
       Object {
         "description": "@private Internal usage, do not use in production mode!!!",
         "name": "pickerRef",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-          ],
-        },
+        "propType": "object",
       },
       Object {
         "name": "role",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
+        "propType": "string",
       },
       Object {
         "name": "name",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
+        "propType": "string",
       },
       Object {
         "name": "autoComplete",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
+        "propType": "string",
       },
       Object {
         "name": "direction",
         "propType": Object {
-          "type": "oneOfType",
+          "type": "oneOf",
           "value": Array [
-            "object",
-            Object {
-              "type": "oneOf",
-              "value": Array [
-                "ltr",
-                "rtl",
-              ],
-            },
+            "ltr",
+            "rtl",
           ],
         },
       },
@@ -4025,140 +3000,77 @@ Array [
         "propType": Object {
           "type": "oneOfType",
           "value": Array [
-            "object",
             "null",
+            "object",
           ],
         },
       },
       Object {
         "name": "defaultValue",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-          ],
-        },
+        "propType": "object",
       },
       Object {
         "description": "[Legacy] Set default display picker view date",
         "name": "defaultPickerValue",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-          ],
-        },
+        "propType": "object",
       },
       Object {
         "description": "@deprecated Will be removed in next big version. Please use \`mode\` instead",
         "name": "mode",
         "propType": Object {
-          "type": "oneOfType",
+          "type": "oneOf",
           "value": Array [
-            "object",
-            Object {
-              "type": "oneOf",
-              "value": Array [
-                "time",
-                "date",
-                "week",
-                "month",
-                "quarter",
-                "year",
-                "decade",
-              ],
-            },
+            "time",
+            "date",
+            "week",
+            "month",
+            "quarter",
+            "year",
+            "decade",
           ],
         },
       },
       Object {
         "name": "onSelect",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "onPanelChange",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "onOk",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "dateRender",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "picker",
         "propType": Object {
-          "type": "oneOfType",
+          "type": "oneOf",
           "value": Array [
-            "object",
-            Object {
-              "type": "oneOf",
-              "value": Array [
-                "time",
-                "date",
-                "week",
-                "month",
-                "quarter",
-                "year",
-              ],
-            },
+            "time",
+            "date",
+            "week",
+            "month",
+            "quarter",
+            "year",
           ],
         },
       },
       Object {
         "name": "prefixCls",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
+        "propType": "string",
       },
       Object {
         "name": "className",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "string",
-          ],
-        },
+        "propType": "string",
       },
       Object {
         "name": "style",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-          ],
-        },
+        "propType": "object",
       },
       Object {
         "name": "locale",
@@ -4175,13 +3087,7 @@ Array [
             },
             Object {
               "name": "monthBeforeYear",
-              "propType": Object {
-                "type": "oneOfType",
-                "value": Array [
-                  "object",
-                  "bool",
-                ],
-              },
+              "propType": "bool",
             },
             Object {
               "name": "yearFormat",
@@ -4192,23 +3098,11 @@ Array [
             },
             Object {
               "name": "monthFormat",
-              "propType": Object {
-                "type": "oneOfType",
-                "value": Array [
-                  "object",
-                  "string",
-                ],
-              },
+              "propType": "string",
             },
             Object {
               "name": "quarterFormat",
-              "propType": Object {
-                "type": "oneOfType",
-                "value": Array [
-                  "object",
-                  "string",
-                ],
-              },
+              "propType": "string",
             },
             Object {
               "name": "today",
@@ -4254,13 +3148,7 @@ Array [
             },
             Object {
               "name": "weekSelect",
-              "propType": Object {
-                "type": "oneOfType",
-                "value": Array [
-                  "object",
-                  "string",
-                ],
-              },
+              "propType": "string",
             },
             Object {
               "name": "clear",
@@ -4384,27 +3272,15 @@ Array [
             Object {
               "name": "shortWeekDays",
               "propType": Object {
-                "type": "oneOfType",
-                "value": Array [
-                  "object",
-                  Object {
-                    "type": "arrayOf",
-                    "value": "string",
-                  },
-                ],
+                "type": "arrayOf",
+                "value": "string",
               },
             },
             Object {
               "name": "shortMonths",
               "propType": Object {
-                "type": "oneOfType",
-                "value": Array [
-                  "object",
-                  Object {
-                    "type": "arrayOf",
-                    "value": "string",
-                  },
-                ],
+                "type": "arrayOf",
+                "value": "string",
               },
             },
           ],
@@ -4856,39 +3732,27 @@ Array [
                   Object {
                     "name": "getShortWeekDays",
                     "propType": Object {
-                      "type": "oneOfType",
-                      "value": Array [
-                        "object",
+                      "params": Array [
                         Object {
-                          "params": Array [
-                            Object {
-                              "name": "locale",
-                              "propType": "string",
-                            },
-                          ],
-                          "raw": "(locale: string) => string[]",
-                          "type": "func",
+                          "name": "locale",
+                          "propType": "string",
                         },
                       ],
+                      "raw": "(locale: string) => string[]",
+                      "type": "func",
                     },
                   },
                   Object {
                     "name": "getShortMonths",
                     "propType": Object {
-                      "type": "oneOfType",
-                      "value": Array [
-                        "object",
+                      "params": Array [
                         Object {
-                          "params": Array [
-                            Object {
-                              "name": "locale",
-                              "propType": "string",
-                            },
-                          ],
-                          "raw": "(locale: string) => string[]",
-                          "type": "func",
+                          "name": "locale",
+                          "propType": "string",
                         },
                       ],
+                      "raw": "(locale: string) => string[]",
+                      "type": "func",
                     },
                   },
                 ],
@@ -4899,115 +3763,78 @@ Array [
       },
       Object {
         "name": "disabledDate",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "monthCellRender",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "renderExtraFooter",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "mode",
-                  "propType": Object {
-                    "type": "oneOf",
-                    "value": Array [
-                      "time",
-                      "date",
-                      "week",
-                      "month",
-                      "quarter",
-                      "year",
-                      "decade",
-                    ],
-                  },
-                },
-              ],
-              "raw": "(mode: PanelMode) => ReactNode",
-              "type": "func",
+              "name": "mode",
+              "propType": Object {
+                "type": "oneOf",
+                "value": Array [
+                  "time",
+                  "date",
+                  "week",
+                  "month",
+                  "quarter",
+                  "year",
+                  "decade",
+                ],
+              },
             },
           ],
+          "raw": "(mode: PanelMode) => ReactNode",
+          "type": "func",
         },
       },
       Object {
         "description": "@private Internal usage. Do not use in your production env",
         "name": "components",
         "propType": Object {
-          "type": "oneOfType",
+          "type": "shape",
           "value": Array [
-            "object",
             Object {
-              "type": "shape",
-              "value": Array [
-                Object {
-                  "name": "button",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "string",
-                    ],
-                  },
-                },
-                Object {
-                  "name": "rangeItem",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "string",
-                    ],
-                  },
-                },
-              ],
+              "name": "button",
+              "propType": Object {
+                "type": "oneOfType",
+                "value": Array [
+                  "string",
+                  "object",
+                ],
+              },
+            },
+            Object {
+              "name": "rangeItem",
+              "propType": Object {
+                "type": "oneOfType",
+                "value": Array [
+                  "string",
+                  "object",
+                ],
+              },
             },
           ],
         },
       },
       Object {
         "name": "disabledTime",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "showToday",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "showTime",
         "propType": Object {
           "type": "oneOfType",
           "value": Array [
-            "object",
             "bool",
             Object {
               "type": "shape",
@@ -5021,112 +3848,47 @@ Array [
                 },
                 Object {
                   "name": "format",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "string",
-                    ],
-                  },
+                  "propType": "string",
                 },
                 Object {
                   "name": "showNow",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
+                  "propType": "bool",
                 },
                 Object {
                   "name": "showHour",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
+                  "propType": "bool",
                 },
                 Object {
                   "name": "showMinute",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
+                  "propType": "bool",
                 },
                 Object {
                   "name": "showSecond",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
+                  "propType": "bool",
                 },
                 Object {
                   "name": "use12Hours",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
+                  "propType": "bool",
                 },
                 Object {
                   "name": "hourStep",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "number",
-                    ],
-                  },
+                  "propType": "number",
                 },
                 Object {
                   "name": "minuteStep",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "number",
-                    ],
-                  },
+                  "propType": "number",
                 },
                 Object {
                   "name": "secondStep",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "number",
-                    ],
-                  },
+                  "propType": "number",
                 },
                 Object {
                   "name": "hideDisabledOptions",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                      "bool",
-                    ],
-                  },
+                  "propType": "bool",
                 },
                 Object {
                   "name": "defaultValue",
-                  "propType": Object {
-                    "type": "oneOfType",
-                    "value": Array [
-                      "object",
-                    ],
-                  },
+                  "propType": "object",
                 },
               ],
             },
@@ -5135,154 +3897,77 @@ Array [
       },
       Object {
         "name": "showNow",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "description": "@deprecated Please use \`defaultValue\` directly instead",
         "name": "defaultOpenValue",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-          ],
-        },
+        "propType": "object",
       },
       Object {
         "name": "showHour",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "showMinute",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "showSecond",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "use12Hours",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "hourStep",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "number",
-          ],
-        },
+        "propType": "number",
       },
       Object {
         "name": "minuteStep",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "number",
-          ],
-        },
+        "propType": "number",
       },
       Object {
         "name": "secondStep",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "number",
-          ],
-        },
+        "propType": "number",
       },
       Object {
         "name": "hideDisabledOptions",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "bool",
-          ],
-        },
+        "propType": "bool",
       },
       Object {
         "name": "disabledHours",
-        "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
-            "func",
-          ],
-        },
+        "propType": "func",
       },
       Object {
         "name": "disabledMinutes",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "hour",
-                  "propType": "number",
-                },
-              ],
-              "raw": "(hour: number) => number[]",
-              "type": "func",
+              "name": "hour",
+              "propType": "number",
             },
           ],
+          "raw": "(hour: number) => number[]",
+          "type": "func",
         },
       },
       Object {
         "name": "disabledSeconds",
         "propType": Object {
-          "type": "oneOfType",
-          "value": Array [
-            "object",
+          "params": Array [
             Object {
-              "params": Array [
-                Object {
-                  "name": "hour",
-                  "propType": "number",
-                },
-                Object {
-                  "name": "minute",
-                  "propType": "number",
-                },
-              ],
-              "raw": "(hour: number, minute: number) => number[]",
-              "type": "func",
+              "name": "hour",
+              "propType": "number",
+            },
+            Object {
+              "name": "minute",
+              "propType": "number",
             },
           ],
+          "raw": "(hour: number, minute: number) => number[]",
+          "type": "func",
         },
       },
     ],
