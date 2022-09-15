@@ -17,7 +17,7 @@ export default function compFactory(schema, components = {}, componentsMap = {},
   const AppContext = contextFactory();
 
   class LNCompView extends Component {
-    static dislayName = 'lce-comp-factory';
+    static displayName = 'lce-comp-factory';
 
     static version = config.version || '0.0.0';
 

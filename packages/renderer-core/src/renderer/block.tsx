@@ -4,7 +4,7 @@ import { IBaseRendererProps, IBaseRenderComponent } from '../types';
 export default function blockRendererFactory(): IBaseRenderComponent {
   const BaseRenderer = baseRendererFactory();
   return class BlockRenderer extends BaseRenderer {
-    static dislayName = 'block-renderer';
+    static displayName = 'block-renderer';
 
     __namespace = 'block';
 
@@ -23,7 +23,7 @@ export default function blockRendererFactory(): IBaseRenderComponent {
         return '区块 schema 结构异常！';
       }
 
-      this.__debug(`${BlockRenderer.dislayName} render - ${__schema?.fileName}`);
+      this.__debug(`${BlockRenderer.displayName} render - ${__schema?.fileName}`);
       this.__generateCtx({});
       this.__render();
 

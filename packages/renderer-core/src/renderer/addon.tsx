@@ -6,7 +6,7 @@ import { IRendererAppHelper, IBaseRendererProps, IBaseRenderComponent } from '..
 export default function addonRendererFactory(): IBaseRenderComponent {
   const BaseRenderer = baseRendererFactory();
   return class AddonRenderer extends BaseRenderer {
-    static dislayName = 'addon-renderer';
+    static displayName = 'addon-renderer';
 
     __namespace = 'addon';
 
@@ -69,7 +69,7 @@ export default function addonRendererFactory(): IBaseRenderComponent {
         return '插件 schema 结构异常！';
       }
 
-      this.__debug(`${AddonRenderer.dislayName} render - ${__schema.fileName}`);
+      this.__debug(`${AddonRenderer.displayName} render - ${__schema.fileName}`);
       this.__generateCtx({
         component: this,
       });
