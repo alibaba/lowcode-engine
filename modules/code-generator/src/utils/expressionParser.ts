@@ -181,7 +181,7 @@ export function parseExpressionGetKeywords(expr: string | null | undefined): str
             const fieldValue = node[fieldName as keyof typeof node];
             if (typeof fieldValue === 'object') {
               if (Array.isArray(fieldValue)) {
-                fieldValue.forEach((item) => {
+                fieldValue.forEach((item: any) => {
                   addIdentifierIfNeeded(item);
                 });
               } else {
@@ -233,7 +233,7 @@ export function parseExpressionGetGlobalVariables(
             const fieldValue = node[fieldName as keyof typeof node];
             if (typeof fieldValue === 'object') {
               if (Array.isArray(fieldValue)) {
-                fieldValue.forEach((item) => {
+                fieldValue.forEach((item: any) => {
                   addUndeclaredIdentifierIfNeeded(item, path);
                 });
               } else {

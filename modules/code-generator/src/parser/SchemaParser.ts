@@ -123,7 +123,7 @@ export class SchemaParser implements ISchemaParser {
     const schema = this.decodeSchema(schemaSrc);
 
     // 解析三方组件依赖
-    schema.componentsMap.forEach((info) => {
+    schema.componentsMap.forEach((info: any) => {
       if (info.componentName) {
         compDeps[info.componentName] = {
           ...info,
