@@ -1,0 +1,116 @@
+name: Node CI
+
+on:
+ push:
+    branches:
+      - main
+ pull_request:
+    branches:
+      - main
+
+jobs:
+  upload-designer-codecov:
+    runs-on: ubuntu-latest
+    # if: ${{ github.event.pull_request.head.repo.full_name == 'alibaba/lowcode-engine' }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: install
+        run: npm i && npm run setup:skip-build
+
+      - name: test designer
+        run: cd packages/designer && npm run test:cov && cd ../..
+
+      - name: Upload designer coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          # working-directory: packages/designer
+          directory: ./packages/designer/coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
+          name: designer
+          fail_ci_if_error: true
+          verbose: true
+
+  upload-renderer-core:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: install
+        run: npm i && npm run setup:skip-build
+
+      - name: test renderer-core
+        run: cd packages/renderer-core && npm run test:cov && cd ../..
+
+      - name: Upload renderer-core coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          # working-directory: packages/designer
+          directory: ./packages/renderer-core/coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
+          name: renderer-core
+          fail_ci_if_error: true
+          verbose: true
+
+  upload-react-simulator-renderer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: install
+        run: npm i && npm run setup:skip-build
+
+      - name: test react-simulator-renderer
+        run: cd packages/react-simulator-renderer && npm run test:cov && cd ../..
+
+      - name: Upload react-simulator-renderer coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          # working-directory: packages/designer
+          directory: ./packages/react-simulator-renderer/coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
+          name: react-simulator-renderer
+          fail_ci_if_error: true
+          verbose: true
+
+  upload-code-generator:
+    runs-on: ubuntu-latest
+    # if: ${{ github.event.pull_request.head.repo.full_name == 'alibaba/lowcode-engine' }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: install
+        run: npm i && npm run setup:skip-build
+
+      - name: test code-generator
+        run: cd modules/code-generator && npm i && npm run build && npm run test:cov && cd ../..
+
+      - name: Upload code-generator coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          # working-directory: packages/designer
+          directory: ./modules/code-generator/coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
+          name: code-generator
+          fail_ci_if_error: true
+          verbose: true
