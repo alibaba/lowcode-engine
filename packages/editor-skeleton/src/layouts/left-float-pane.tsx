@@ -40,8 +40,7 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
           return true;
         }
         // 点击了 iframe 内容，算失焦
-        if (document.querySelector('.lc-simulator-content-frame')
-          .contentWindow.document.documentElement.contains(target)) {
+        if ((document.querySelector('.lc-simulator-content-frame') as HTMLIFrameElement)?.contentWindow?.document.documentElement.contains(target)) {
           return false;
         }
         // 点击设置区
