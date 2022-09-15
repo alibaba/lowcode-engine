@@ -195,7 +195,7 @@ class Renderer extends Component<{
           viewProps.componentId = __id;
           const leaf = documentInstance.getNode(__id) as Node;
           if (isFromVC(leaf?.componentMeta)) {
-            viewProps._leaf = leaf;
+            viewProps._leaf = leaf.internalToShellNode();
           }
           viewProps._componentName = leaf?.componentName;
           // 如果是容器 && 无children && 高宽为空 增加一个占位容器，方便拖动
