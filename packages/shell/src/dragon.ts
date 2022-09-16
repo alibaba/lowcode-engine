@@ -1,8 +1,12 @@
 import {
   Dragon as InnerDragon,
+  DragObject as InnerDragObject,
   DragNodeDataObject,
+  LocateEvent as InnerLocateEvent,
 } from '@alilc/lowcode-designer';
 import { dragonSymbol } from './symbols';
+import LocateEvent from './locate-event';
+import DragObject from './drag-object';
 
 export default class Dragon {
   private readonly [dragonSymbol]: InnerDragon;
@@ -28,9 +32,8 @@ export default class Dragon {
    * @param func
    * @returns
    */
-  onDragstart(func: (/* e: LocateEvent */) => any) {
-    // TODO: 补充必要参数
-    return this[dragonSymbol].onDragstart(() => func());
+  onDragstart(func: (e: LocateEvent) => any) {
+    return this[dragonSymbol].onDragstart((e: InnerLocateEvent) => func(LocateEvent.create(e)!));
   }
 
   /**
@@ -38,9 +41,8 @@ export default class Dragon {
    * @param func
    * @returns
    */
-  onDrag(func: (/* e: LocateEvent */) => any) {
-    // TODO: 补充必要参数
-    return this[dragonSymbol].onDrag(() => func());
+  onDrag(func: (e: LocateEvent) => any) {
+    return this[dragonSymbol].onDrag((e: InnerLocateEvent) => func(LocateEvent.create(e)!));
   }
 
   /**
@@ -48,9 +50,13 @@ export default class Dragon {
    * @param func
    * @returns
    */
-  onDragend(func: (/* e: LocateEvent */) => any) {
-    // TODO: 补充必要参数
-    return this[dragonSymbol].onDragend(() => func());
+  onDragend(func: (o: { dragObject: DragObject; copy?: boolean }) => any) {
+    return this[dragonSymbol].onDragend(
+      (o: { dragObject: InnerDragObject; copy?: boolean }) => func({
+        dragObject: DragObject.create(o.dragObject)!,
+        copy: o.copy,
+      }),
+    );
   }
 
   /**
