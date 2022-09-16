@@ -2,8 +2,8 @@
 import { BuiltinSimulatorHost } from './host';
 import {
   AssetLevel,
-  AssetLevels,
   AssetList,
+  AssetItem,
   isAssetBundle,
   isAssetItem,
   AssetType,
@@ -23,89 +23,124 @@ export function createSimulator(
 
   win.LCSimulatorHost = host;
 
-  const styles: any = {};
-  const scripts: any = {};
-  AssetLevels.forEach((lv) => {
-    styles[lv] = [];
-    scripts[lv] = [];
-  });
+  const loadJsCss: (asset: AssetItem) => Promise<void> = (asset: AssetItem) => {
+    return new Promise<void>((resolve) => {
+      switch (asset.type) {
+        case AssetType.JSUrl:
+        case AssetType.JSText: {
+          const script = doc.createElement('script');
+          script.type = 'text/javascript';
+          const isUrl = asset.type === AssetType.JSUrl;
+          if (asset.id) {
+            script.setAttribute('data-id', asset.id);
+          }
+          if (asset.level) {
+            script.setAttribute('data-level', asset.level.toString());
+          }
+          script.async = false;
+          if (isUrl) {
+            script.src = asset.content as string;
+            const loadFinish = () => {
+              script.onload = null;
+              script.onerror = null;
+              resolve();
+            };
+            script.onload = loadFinish;
+            script.onerror = loadFinish;
+            doc.body.appendChild(script);
+            if (!script.src) {
+              resolve();
+            }
+          } else {
+            try {
+              win.eval(asset.content);
+            } catch (e) {
+              console.error(e);
+            }
+            resolve();
+          }
+          break;
+        }
+        case AssetType.CSSUrl:
+        case AssetType.CSSText: {
+          const link = doc.createElement('link');
+          link.rel = 'stylesheet';
+          const isUrl = asset.type === AssetType.CSSUrl;
+          if (asset.id) {
+            link.setAttribute('data-id', asset.id);
+          }
+          if (asset.level) {
+            link.setAttribute('data-level', asset.level.toString());
+          }
+          if (isUrl) {
+            link.href = asset.content as string;
+            const loadFinish = () => {
+              link.onload = null;
+              link.onerror = null;
+              resolve();
+            };
+            link.onload = loadFinish;
+            link.onerror = loadFinish;
+            doc.head.appendChild(link);
+            if (!link.href) {
+              resolve();
+            }
+          } else {
+            link.appendChild(doc.createTextNode(asset.content as string));
+            doc.head.appendChild(link);
+            resolve();
+          }
+          break;
+        }
+        default: {
+          resolve();
+        }
+      }
+    });
+  };
 
-  function parseAssetList(assets: AssetList, level?: AssetLevel) {
+  const parseAssetList: (assets: AssetList, level?: AssetLevel) => AssetItem[] = (
+    assets,
+    level,
+  ) => {
+    const assetItemList: AssetItem[] = [];
     for (let asset of assets) {
       if (!asset) {
         continue;
       }
       if (isAssetBundle(asset)) {
         if (asset.assets) {
-          parseAssetList(
-            Array.isArray(asset.assets) ? asset.assets : [asset.assets],
-            asset.level || level,
+          assetItemList.push(
+            ...parseAssetList(
+              Array.isArray(asset.assets) ? asset.assets : [asset.assets],
+              asset.level || level,
+            ),
           );
         }
         continue;
       }
       if (Array.isArray(asset)) {
-        parseAssetList(asset, level);
+        assetItemList.push(...parseAssetList(asset, level));
         continue;
       }
       if (!isAssetItem(asset)) {
         asset = assetItem(isCSSUrl(asset) ? AssetType.CSSUrl : AssetType.JSUrl, asset, level)!;
       }
-      const id = asset.id ? ` data-id="${asset.id}"` : '';
-      const lv = asset.level || level || AssetLevel.Environment;
-      if (asset.type === AssetType.JSUrl) {
-        scripts[lv].push(
-          `<script src="${asset.content}"${id}></script>`,
-        );
-      } else if (asset.type === AssetType.JSText) {
-        scripts[lv].push(`<script${id}>${asset.content}</script>`);
-      } else if (asset.type === AssetType.CSSUrl) {
-        styles[lv].push(
-          `<link rel="stylesheet" href="${asset.content}"${id} />`,
-        );
-      } else if (asset.type === AssetType.CSSText) {
-        styles[lv].push(
-          `<style type="text/css"${id}>${asset.content}</style>`,
-        );
-      }
+      assetItemList.push(asset);
     }
-  }
-
-  parseAssetList(vendors);
-
-  const styleFrags = Object.keys(styles)
-    .map((key) => {
-      return `${styles[key].join('\n')}<meta level="${key}" />`;
-    })
-    .join('');
-  const scriptFrags = Object.keys(scripts)
-    .map((key) => {
-      return scripts[key].join('\n');
-    })
-    .join('');
-
-  doc.open();
-  doc.write(`
-<!doctype html>
-<html class="engine-design-mode">
-  <head><meta charset="utf-8"/>
-    ${styleFrags}
-  </head>
-  <body>
-    ${scriptFrags}
-  </body>
-</html>`);
-  doc.close();
+    return assetItemList;
+  };
 
   return new Promise((resolve) => {
-    const renderer = win.SimulatorRenderer || host.renderer;
-    if (renderer) {
-      return resolve(renderer);
-    }
-    const loaded = () => {
-      resolve(win.SimulatorRenderer || host.renderer);
-      win.removeEventListener('load', loaded);
-    };
-    win.addEventListener('load', loaded);
+    const assetList = parseAssetList(vendors);
+    assetList.sort(
+      (m, n) => (m.level === undefined ? -1 : m.level) - (n.level === undefined ? -1 : n.level),
+    );
+    Promise.all(assetList.map(loadJsCss)).then(() => {
+      const renderer = win.SimulatorRenderer || host.renderer;
+      if (renderer) {
+        return resolve(renderer);
+      }
+    });
   });
 }
