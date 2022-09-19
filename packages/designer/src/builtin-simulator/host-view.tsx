@@ -113,7 +113,14 @@ class Content extends Component<{ host: BuiltinSimulatorHost }> {
           name="SimulatorRenderer"
           className="lc-simulator-content-frame"
           style={frameStyle}
-          ref={(frame) => sim.mountContentFrame(frame)}
+          ref={(frame) => {
+            if (frame) {
+              frame.onload = () => {
+                return sim.mountContentFrame(frame);
+              };
+              frame.srcdoc = '<!DOCTYPE html>';
+            }
+          }}
         />
       </div>
     );
