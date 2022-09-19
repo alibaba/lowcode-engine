@@ -8,7 +8,7 @@ import { getClosestNode, isFromVC, isReactComponent } from '@alilc/lowcode-utils
 import { GlobalEvent } from '@alilc/lowcode-types';
 import { SimulatorRendererContainer, DocumentInstance } from './renderer';
 import { host } from './host';
-
+import { isRendererDetached } from './utils/misc';
 import './renderer.less';
 
 // patch cloneElement avoid lost keyProps
@@ -170,14 +170,12 @@ class Renderer extends Component<{
     this.startTime = Date.now();
     this.schemaChangedSymbol = false;
 
-    if (!container.autoRender) return null;
+    if (!container.autoRender || isRendererDetached()) return null;
     return (
       <LowCodeRenderer
         locale={locale}
         messages={messages}
         schema={documentInstance.schema}
-        deltaData={documentInstance.deltaData}
-        deltaMode={documentInstance.deltaMode}
         components={container.components}
         appHelper={container.context}
         designMode={designMode}
