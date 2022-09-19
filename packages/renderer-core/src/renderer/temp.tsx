@@ -5,7 +5,7 @@ export default function tempRendererFactory(): IBaseRenderComponent {
   const BaseRenderer = baseRendererFactory();
 
   return class TempRenderer extends BaseRenderer {
-    static displayName = 'temp-renderer';
+    static displayName = 'TempRenderer';
 
     __namespace = 'temp';
 
