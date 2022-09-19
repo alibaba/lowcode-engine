@@ -850,7 +850,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     // filter with context
     return instances.filter((instance) => {
-      return this.getClosestNodeInstance(instance, context.nodeId)?.instance === context.instance;
+      return this.getClosestNodeInstance(instance, context?.nodeId)?.instance === context.instance;
     });
   }
 
