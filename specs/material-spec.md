@@ -618,7 +618,7 @@ component
 | icon              | 组件的小图标          | String (URL)              | 是     |
 | tags              | 组件标签              | String                    | 是     |
 | keywards          | 组件关键词，用于搜索联想 | String                    | 是     |
-| devMode           | 组件研发模式          | String  (procode,lowcode) | 是     |
+| devMode           | 组件研发模式          | String  (proCode,lowCode) | 是     |
 | npm               | npm 源引入完整描述对象 | Object                    | 否     |
 | npm.package       | 源码组件库名          | String                    | 否     |
 | npm.exportName    | 源码组件名称          | String                    | 否     |
