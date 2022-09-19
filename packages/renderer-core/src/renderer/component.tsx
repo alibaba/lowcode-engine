@@ -4,7 +4,7 @@ import { IBaseRendererProps, IBaseRenderComponent } from '../types';
 export default function componentRendererFactory(): IBaseRenderComponent {
   const BaseRenderer = baseRendererFactory();
   return class CompRenderer extends BaseRenderer {
-    static displayName = 'comp-renderer';
+    static displayName = 'CompRenderer';
 
     __namespace = 'component';
 

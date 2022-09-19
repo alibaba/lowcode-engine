@@ -6,7 +6,7 @@ import { IRendererAppHelper, IBaseRendererProps, IBaseRenderComponent } from '..
 export default function addonRendererFactory(): IBaseRenderComponent {
   const BaseRenderer = baseRendererFactory();
   return class AddonRenderer extends BaseRenderer {
-    static displayName = 'addon-renderer';
+    static displayName = 'AddonRenderer';
 
     __namespace = 'addon';
 

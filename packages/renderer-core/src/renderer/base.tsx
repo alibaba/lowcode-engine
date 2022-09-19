@@ -126,7 +126,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
   let scopeIdx = 0;
 
   return class BaseRenderer extends Component {
-    static displayName = 'base-renderer';
+    static displayName = 'BaseRenderer';
 
     static defaultProps = {
       __schema: {},

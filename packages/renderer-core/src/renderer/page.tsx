@@ -4,7 +4,7 @@ import { IBaseRendererProps, IBaseRenderComponent } from '../types';
 export default function pageRendererFactory(): IBaseRenderComponent {
   const BaseRenderer = baseRendererFactory();
   return class PageRenderer extends BaseRenderer {
-    static displayName = 'page-renderer';
+    static displayName = 'PageRenderer';
 
     __namespace = 'page';
 

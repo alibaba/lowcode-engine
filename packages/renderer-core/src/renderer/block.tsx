@@ -4,7 +4,7 @@ import { IBaseRendererProps, IBaseRenderComponent } from '../types';
 export default function blockRendererFactory(): IBaseRenderComponent {
   const BaseRenderer = baseRendererFactory();
   return class BlockRenderer extends BaseRenderer {
-    static displayName = 'block-renderer';
+    static displayName = 'BlockRenderer';
 
     __namespace = 'block';
 
