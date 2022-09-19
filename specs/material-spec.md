@@ -632,6 +632,7 @@ component
 | priority          | 用于描述组件在同一 category 中的排序       | String                    | 否     |
 
 
+
 #### 2.2.2.3 组件属性信息 props (A)
 
 描述组件属性信息，通常包含名称、类型、描述、默认值 4 项内容。
