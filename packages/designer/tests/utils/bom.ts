@@ -14,6 +14,8 @@ interface MockDocument extends Document {
 
 
 const eventsMap : Map<string, Set<Function>> = new Map<string, Set<Function>>();
+const mockSetAttribute = jest.fn();
+const mockEval = jest.fn();
 const mockRemoveAttribute = jest.fn();
 const mockAddEventListener = jest.fn((eventName: string, cb) => {
   if (!eventsMap.has(eventName)) {
@@ -39,14 +41,25 @@ const mockTriggerEventListener = jest.fn((eventName: string, data: any, context:
   }
 });
 
+const mockAppendChild = jest.fn((element: HTMLElement) => {
+  if (element && typeof element.onload === 'function') {
+    setTimeout(() => {
+      // @ts-ignore
+      element.onload();
+    }, 0);
+  }
+  return element;
+});
+
 const mockCreateElement = jest.fn((tagName) => {
   return {
     style: {},
-    appendChild() {},
+    appendChild: mockAppendChild,
     addEventListener: mockAddEventListener,
     removeEventListener: mockRemoveEventListener,
     triggerEventListener: mockTriggerEventListener,
     removeAttribute: mockRemoveAttribute,
+    setAttribute: mockSetAttribute,
   };
 });
 
@@ -60,7 +73,8 @@ export function getMockDocument(): MockDocument {
     triggerEventListener: mockTriggerEventListener,
     createElement: mockCreateElement,
     removeChild() {},
-    body: { appendChild() {}, removeChild() {} },
+    head: { appendChild: mockAppendChild, removeChild() {} },
+    body: { appendChild: mockAppendChild, removeChild() {} },
   };
 }
 
@@ -71,6 +85,7 @@ export function getMockWindow(doc?: MockDocument) {
     removeEventListener: mockRemoveEventListener,
     triggerEventListener: mockTriggerEventListener,
     document: doc || getMockDocument(),
+    eval: mockEval,
   };
 }
 
