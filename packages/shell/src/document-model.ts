@@ -207,7 +207,7 @@ export default class DocumentModel {
   /**
    * 当前 document 新增节点事件，此时节点已经挂载到 document 上
    */
-  onMountNode(fn: (node: Node) => void) {
+  onMountNode(fn: (payload: { node: Node }) => void) {
     this[editorSymbol].on('node.add', fn as any);
     return () => {
       this[editorSymbol].off('node.add', fn as any);

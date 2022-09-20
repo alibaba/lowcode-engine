@@ -51,7 +51,7 @@ class Slot extends Component {
 
   render() {
     const { children } = this.props;
-    return <div className="lc-container">{children}</div>;
+    return <>{children}</>;
   }
 }
 
