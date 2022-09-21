@@ -514,7 +514,12 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
     }
 
     get leaf(): Node | undefined {
-      return this.props._leaf || getNode?.(componentCacheId);
+      if (this.props._leaf?.isMock) {
+        // 低代码组件作为一个整体更新，其内部的组件不需要监听相关事件
+        return undefined;
+      }
+
+      return getNode?.(componentCacheId);
     }
 
     render() {
