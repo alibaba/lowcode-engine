@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
+    "@alifd/next": "^1.26.0",
     "@alilc/lowcode-designer": "1.0.14",
     "@alilc/lowcode-test-mate": "^1.0.1",
     "@babel/plugin-transform-typescript": "^7.16.8",
