@@ -5,7 +5,6 @@ import { EngineOptions } from '@alilc/lowcode-editor-core';
 import { debounce } from '../utils/common';
 import adapter from '../adapter';
 import * as types from '../types/index';
-import { parseData } from '../utils';
 
 export interface IComponentHocInfo {
   schema: any;
@@ -363,12 +362,12 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
     };
 
     componentWillReceiveProps(nextProps: any) {
-      let { _leaf, componentId } = nextProps;
+      let { componentId } = nextProps;
       if (nextProps.__tag === this.props.__tag) {
         return null;
       }
 
-      _leaf = _leaf || getNode?.(componentId);
+      const _leaf = getNode?.(componentId);
       if (_leaf && this.curEventLeaf && _leaf !== this.curEventLeaf) {
         this.disposeFunctions.forEach((fn) => fn());
         this.disposeFunctions = [];

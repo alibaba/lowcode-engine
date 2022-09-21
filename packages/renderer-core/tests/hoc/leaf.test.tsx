@@ -193,9 +193,10 @@ describe('lifecycle', () => {
 
   it('leaf change and make componentWillReceiveProps', () => {
     const newTextNodeLeaf = new Node(textSchema);
+    nodeMap.set(textSchema.id, newTextNodeLeaf);
     component.update((
       <Div _leaf={DivNode}>
-        <Text _leaf={newTextNodeLeaf} __tag="222" content="content 123"></Text>
+        <Text componentId={textSchema.id} __tag="222" content="content 123"></Text>
       </Div>
     ));
 
