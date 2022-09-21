@@ -259,7 +259,7 @@ export class Prop implements IPropParent {
       } else {
         this._type = 'map';
       }
-    } /* istanbul ignore next */ else {
+    } else /* istanbul ignore next */ {
       this._type = 'expression';
       this._value = {
         type: 'JSExpression',
@@ -502,6 +502,7 @@ export class Prop implements IPropParent {
    */
   @action
   delete(prop: Prop): void {
+    /* istanbul ignore else */
     if (this._items) {
       const i = this._items.indexOf(prop);
       if (i > -1) {
@@ -519,6 +520,7 @@ export class Prop implements IPropParent {
    */
   @action
   deleteKey(key: string): void {
+    /* istanbul ignore else */
     if (this.maps) {
       const prop = this.maps.get(key);
       if (prop) {

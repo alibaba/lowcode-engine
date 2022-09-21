@@ -1,53 +1,35 @@
 import '../../fixtures/window';
-import { set, delayObxTick, delay } from '../../utils';
 import { Editor } from '@alilc/lowcode-editor-core';
 import { Project } from '../../../src/project/project';
 import { DocumentModel } from '../../../src/document/document-model';
-import {
-  isRootNode,
-  Node,
-  isNode,
-  comparePosition,
-  contains,
-  insertChild,
-  insertChildren,
-  PositionNO,
-} from '../../../src/document/node/node';
+import { Node } from '../../../src/document/node/node';
 import { Designer } from '../../../src/designer/designer';
 import formSchema from '../../fixtures/schema/form-with-modal';
-import divMetadata from '../../fixtures/component-metadata/div';
 import dlgMetadata from '../../fixtures/component-metadata/dialog';
-import buttonMetadata from '../../fixtures/component-metadata/button';
-import formMetadata from '../../fixtures/component-metadata/form';
-import otherMeta from '../../fixtures/component-metadata/other';
-import pageMetadata from '../../fixtures/component-metadata/page';
-import rootHeaderMetadata from '../../fixtures/component-metadata/root-header';
-import rootContentMetadata from '../../fixtures/component-metadata/root-content';
-import rootFooterMetadata from '../../fixtures/component-metadata/root-footer';
+import { getModalNodes } from '../../../src/document/node/modal-nodes-manager';
 
+let editor: Editor;
+let designer: Designer;
+let project: Project;
+let doc: DocumentModel;
+
+beforeEach(() => {
+  editor = new Editor();
+  designer = new Designer({ editor });
+  designer.createComponentMeta(dlgMetadata);
+  project = designer.project;
+  doc = new DocumentModel(project, formSchema);
+});
+
+afterEach(() => {
+  project.unload();
+  designer.purge();
+  editor = null;
+  designer = null;
+  project = null;
+});
 
 describe('ModalNodesManager 方法测试', () => {
-  let editor: Editor;
-  let designer: Designer;
-  let project: Project;
-  let doc: DocumentModel;
-
-  beforeEach(() => {
-    editor = new Editor();
-    designer = new Designer({ editor });
-    designer.createComponentMeta(dlgMetadata);
-    project = designer.project;
-    doc = new DocumentModel(project, formSchema);
-  });
-
-  afterEach(() => {
-    project.unload();
-    designer.purge();
-    editor = null;
-    designer = null;
-    project = null;
-  });
-
   it('getModalNodes / getVisibleModalNode', () => {
     const mgr = doc.modalNodesManager;
     const nodes = mgr.getModalNodes();
@@ -100,5 +82,30 @@ describe('ModalNodesManager 方法测试', () => {
     mgr.addNode(newNode);
     expect(visibleMockFn).not.toHaveBeenCalled();
     expect(nodesMockFn).not.toHaveBeenCalled();
+
+    const newNode2 = new Node(doc, { componentName: 'Dialog' });
+    mgr.addNode(newNode2);
+    mgr.setInvisible(newNode2);
+    mgr.removeNode(newNode2);
+
+    const newNode3 = new Node(doc, { componentName: 'Dialog' });
+    mgr.removeNode(newNode3);
+
+    const newNode4 = new Node(doc, { componentName: 'Non-Modal' });
+    mgr.removeNode(newNode4);
+
+    const newNode5 = doc.createNode({ componentName: 'Non-Modal' });
+    newNode5.remove(); // trigger node destroy
+  });
+});
+
+describe('其他方法', () => {
+  it('getModalNodes - null', () => {
+    expect(getModalNodes()).toEqual([]);
+  });
+
+  it('getModalNodes - no children', () => {
+    const node = doc.createNode({ componentName: 'Leaf', children: 'haha' });
+    expect(getModalNodes(node)).toEqual([]);
   });
 });

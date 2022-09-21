@@ -88,7 +88,11 @@ export default class Filter extends Component<IProps, IState> {
             onChange={this.handleOptionChange}
           >
             {FILTER_OPTIONS.map((op) => (
-              <Checkbox id={op.value} value={op.value}>
+              <Checkbox
+                id={op.value}
+                value={op.value}
+                key={op.value}
+              >
                 {op.label}
               </Checkbox>
             ))}

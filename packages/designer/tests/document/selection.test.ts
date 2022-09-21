@@ -257,6 +257,20 @@ describe('选择区测试', () => {
     expect(selection.getNodes()).toHaveLength(2);
   });
 
+  it('getTopNodes - BeforeOrAfter', () => {
+    const project = new Project(designer, {
+      componentsTree: [
+        formSchema,
+      ],
+    });
+    project.open();
+    const { currentDocument } = project;
+    const { selection } = currentDocument!;
+
+    selection.selectAll(['node_k1ow3cbj', 'node_k1ow3cbo']);
+
+    expect(selection.getTopNodes()).toHaveLength(2);
+  });
   it('getTopNodes', () => {
     const project = new Project(designer, {
       componentsTree: [
