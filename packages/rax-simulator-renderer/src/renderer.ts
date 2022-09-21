@@ -538,6 +538,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
             // mock _leaf，减少性能开销
             const _leaf = {
               isEmpty: () => false,
+              isMock: true,
             };
             viewProps._leaf = _leaf;
             return createElement(Comp, viewProps, children);

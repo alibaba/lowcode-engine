@@ -232,6 +232,9 @@ describe('mini unit render', () => {
       parent: MiniRenderDivNode,
     });
 
+    nodeMap.set(miniRenderSchema.id, MiniRenderDivNode);
+    nodeMap.set(textSchema.id, TextNode);
+
     component = renderer.create(
       // @ts-ignore
       <MiniRenderDiv _leaf={MiniRenderDivNode}>
@@ -277,6 +280,8 @@ describe('mini unit render', () => {
       }),
     });
 
+    nodeMap.set(textSchema.id, TextNode);
+
     renderer.create(
       // @ts-ignore
       <div>
@@ -319,6 +324,8 @@ describe('mini unit render', () => {
       isRoot: true,
     });
 
+    nodeMap.set(textSchema.id, TextNode);
+
     const component = renderer.create(
       <Text _leaf={TextNode} content="content"></Text>
     );
@@ -351,6 +358,8 @@ describe('mini unit render', () => {
       })
     });
 
+    nodeMap.set(textSchema.id, TextNode);
+
     const component = renderer.create(
       <Text _leaf={TextNode} content="content"></Text>
     );
@@ -370,7 +379,9 @@ describe('mini unit render', () => {
   });
 
   it('parent is a mock leaf', () => {
-    const MiniRenderDivNode = {};
+    const MiniRenderDivNode = {
+      isMock: true,
+    };
 
     const component = renderer.create(
       // @ts-ignore
@@ -408,6 +419,9 @@ describe('mini unit render', () => {
       parent: MiniRenderDivNode,
       hasLoop: true,
     });
+
+    nodeMap.set(textSchema.id, TextNode);
+    nodeMap.set(miniRenderSchema.id, MiniRenderDivNode);
 
     component = renderer.create(
       // @ts-ignore
