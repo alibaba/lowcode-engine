@@ -857,7 +857,7 @@ props 数组下对象字段描述：
       // 支持条件设置
       "condition": true,
       // 支持样式设置
-      "styles": true,
+      "style": true,
     }
   }
 }
