@@ -13,7 +13,8 @@
   "scripts": {
     "test": "build-scripts test --config build.test.json",
     "build": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --skip-demo",
-    "build:umd": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --config build.umd.json"
+    "build:umd": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --config build.umd.json",
+    "test:cov": "build-scripts test --config build.test.json --jest-coverage"
   },
   "dependencies": {
     "@alilc/lowcode-designer": "1.0.15-beta.0",

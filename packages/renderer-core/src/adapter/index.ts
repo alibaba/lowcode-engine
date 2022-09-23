@@ -21,21 +21,21 @@ class Adapter {
   }
 
   initRuntime() {
-    const Component: IGeneralConstructor = class {
+    const Component: IGeneralConstructor = class <T = any, S = any> {
       setState() {}
       forceUpdate() {}
       render() {}
-      state: Record<string, unknown>;
-      props: Record<string, unknown>;
+      state: Readonly<S>;
+      props: Readonly<T> & Readonly<{ children?: any | undefined }>;
       refs: Record<string, unknown>;
       context: Record<string, unknown>;
     };
-    const PureComponent: IGeneralConstructor = class {
+    const PureComponent = class <T = any, S = any> {
       setState() {}
       forceUpdate() {}
       render() {}
-      state: Record<string, unknown>;
-      props: Record<string, unknown>;
+      state: Readonly<S>;
+      props: Readonly<T> & Readonly<{ children?: any | undefined }>;
       refs: Record<string, unknown>;
       context: Record<string, unknown>;
     };

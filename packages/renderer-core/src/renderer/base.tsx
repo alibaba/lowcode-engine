@@ -104,13 +104,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     return customBaseRenderer;
   }
 
-  const runtime = adapter.getRuntime();
-  const Component = runtime.Component as IGeneralConstructor<
-    IBaseRendererProps,
-    Record<string, any>,
-    any
-  >;
-  const { createElement } = runtime;
+  const { Component, createElement } = adapter.getRuntime();
   const Div = divFactory();
   const VisualDom = visualDomFactory();
   const AppContext = contextFactory();
@@ -125,8 +119,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
   const DEFAULT_LOOP_ARG_INDEX = 'index';
   let scopeIdx = 0;
 
-  return class BaseRenderer extends Component {
-    static displayName = 'base-renderer';
+  return class BaseRenderer extends Component<IBaseRendererProps, Record<string, any>> {
+    static displayName = 'BaseRenderer';
 
     static defaultProps = {
       __schema: {},
@@ -533,6 +527,10 @@ export default function baseRendererFactory(): IBaseRenderComponent {
             {
               componentName: schema.componentName,
               componentId: schema.id,
+              enableStrictNotFoundMode: engine.props.enableStrictNotFoundMode,
+              ref: (ref: any) => {
+                ref && engine.props?.onCompGetRef(schema, ref);
+              },
             },
             this.__getSchemaChildrenVirtualDom(schema, scope, Comp),
           );

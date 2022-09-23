@@ -4,7 +4,7 @@ import { IBaseRendererProps, IBaseRenderComponent } from '../types';
 export default function componentRendererFactory(): IBaseRenderComponent {
   const BaseRenderer = baseRendererFactory();
   return class CompRenderer extends BaseRenderer {
-    static dislayName = 'comp-renderer';
+    static displayName = 'CompRenderer';
 
     __namespace = 'component';
 
@@ -23,7 +23,7 @@ export default function componentRendererFactory(): IBaseRenderComponent {
       if (this.__checkSchema(__schema)) {
         return '自定义组件 schema 结构异常！';
       }
-      this.__debug(`${CompRenderer.dislayName} render - ${__schema.fileName}`);
+      this.__debug(`${CompRenderer.displayName} render - ${__schema.fileName}`);
 
       this.__generateCtx({
         component: this,

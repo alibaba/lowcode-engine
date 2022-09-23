@@ -51,24 +51,6 @@ export class DocumentInstance {
     return this._components;
   }
 
-  /**
-   * 本次的变更数据
-   */
-  @obx.ref private _deltaData: any = {};
-
-  @computed get deltaData(): any {
-    return this._deltaData;
-  }
-
-  /**
-   * 是否使用增量模式
-   */
-  @obx.ref private _deltaMode: boolean = false;
-
-  @computed get deltaMode(): boolean {
-    return this._deltaMode;
-  }
-
   // context from: utils、constants、history、location、match
   @obx.ref private _appContext = {};
 
@@ -116,7 +98,7 @@ export class DocumentInstance {
     return this.document.id;
   }
 
-  private unmountIntance(id: string, instance: ReactInstance) {
+  private unmountInstance(id: string, instance: ReactInstance) {
     const instances = this.instancesMap.get(id);
     if (instances) {
       const i = instances.indexOf(instance);
@@ -144,11 +126,11 @@ export class DocumentInstance {
       }
       return;
     }
-    const unmountIntance = this.unmountIntance.bind(this);
+    const unmountInstance = this.unmountInstance.bind(this);
     const origId = (instance as any)[SYMBOL_VNID];
     if (origId && origId !== id) {
       // 另外一个节点的 instance 在此被复用了，需要从原来地方卸载
-      unmountIntance(origId, instance);
+      unmountInstance(origId, instance);
     }
     if (isElement(instance)) {
       cacheReactKey(instance);
@@ -160,7 +142,7 @@ export class DocumentInstance {
       }
       // hack! delete instance from map
       const newUnmount = function (this: any) {
-        unmountIntance(id, instance);
+        unmountInstance(id, instance);
         origUnmount && origUnmount.call(this);
       };
       (newUnmount as any).origUnmount = origUnmount;
@@ -465,6 +447,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
             // mock _leaf，减少性能开销
             const _leaf = {
               isEmpty: () => false,
+              isMock: true,
             };
             viewProps._leaf = _leaf;
             return createElement(Comp, viewProps, children);

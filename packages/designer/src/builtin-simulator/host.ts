@@ -232,6 +232,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return engineConfig.get('thisRequiredInJSE') ?? true;
   }
 
+  get enableStrictNotFoundMode(): any {
+    return engineConfig.get('enableStrictNotFoundMode') ?? false;
+  }
+
   @computed get componentsAsset(): Asset | undefined {
     return this.get('componentsAsset');
   }
@@ -850,7 +854,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     // filter with context
     return instances.filter((instance) => {
-      return this.getClosestNodeInstance(instance, context.nodeId)?.instance === context.instance;
+      return this.getClosestNodeInstance(instance, context?.nodeId)?.instance === context.instance;
     });
   }
 

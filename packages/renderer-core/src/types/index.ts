@@ -21,12 +21,12 @@ interface IGeneralComponent<P = {}, S = {}, SS = any> extends ComponentLifecycle
 }
 
 export type IGeneralConstructor<
-  P = {
+  T = {
     [key: string]: any;
   }, S = {
     [key: string]: any;
-  }, SS = any
-> = new (props: any, context: any) => IGeneralComponent<P, S, SS>;
+  }, D = any
+> = new <TT = T, SS = S, DD = D>(props: TT, context: any) => IGeneralComponent<TT, SS, DD>;
 
 /**
  * duck-typed History
@@ -133,6 +133,11 @@ export interface IRendererProps {
    * JSExpression 是否只支持使用 this 来访问上下文变量
    */
   thisRequiredInJSE?: boolean;
+  /**
+   * @default false
+   * 当开启组件未找到严格模式时，渲染模块不会默认给一个容器组件
+   */
+  enableStrictNotFoundMode?: boolean;
 }
 
 export interface IRendererState {
@@ -288,7 +293,7 @@ export interface IRenderComponent {
     getNotFoundComponent(): any;
     getFaultComponent(): any;
   };
-  dislayName: string;
+  displayName: string;
   defaultProps: IRendererProps;
   findDOMNode: (...args: any) => any;
 }
