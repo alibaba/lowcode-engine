@@ -4,7 +4,7 @@ import { IBaseRendererProps, IBaseRenderComponent } from '../types';
 export default function pageRendererFactory(): IBaseRenderComponent {
   const BaseRenderer = baseRendererFactory();
   return class PageRenderer extends BaseRenderer {
-    static dislayName = 'page-renderer';
+    static displayName = 'PageRenderer';
 
     __namespace = 'page';
 
@@ -34,7 +34,7 @@ export default function pageRendererFactory(): IBaseRenderComponent {
       if (this.__checkSchema(__schema)) {
         return '页面schema结构异常！';
       }
-      this.__debug(`${PageRenderer.dislayName} render - ${__schema.fileName}`);
+      this.__debug(`${PageRenderer.displayName} render - ${__schema.fileName}`);
 
       this.__bindCustomMethods(this.props);
       this.__initDataSource(this.props);

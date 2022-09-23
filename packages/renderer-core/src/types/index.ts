@@ -293,7 +293,7 @@ export interface IRenderComponent {
     getNotFoundComponent(): any;
     getFaultComponent(): any;
   };
-  dislayName: string;
+  displayName: string;
   defaultProps: IRendererProps;
   findDOMNode: (...args: any) => any;
 }

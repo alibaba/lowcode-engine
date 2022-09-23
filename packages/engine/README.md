@@ -14,6 +14,8 @@ An enterprise-class low-code technology stack with scale-out design
 
 [![][issues-helper-image]][issues-helper-url] [![Issues need help][help-wanted-image]][help-wanted-url]
 
+[![codecov][codecov-image-url]][codecov-url]
+
 [npm-image]: https://img.shields.io/npm/v/@alilc/lowcode-engine.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/@alilc/lowcode-engine
 
@@ -24,6 +26,9 @@ An enterprise-class low-code technology stack with scale-out design
 
 [issues-helper-image]: https://img.shields.io/badge/using-issues--helper-orange?style=flat-square
 [issues-helper-url]: https://github.com/actions-cool/issues-helper
+
+[codecov-image-url]: https://codecov.io/gh/alibaba/lowcode-engine/branch/main/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/alibaba/lowcode-engine
 
 </div>
 

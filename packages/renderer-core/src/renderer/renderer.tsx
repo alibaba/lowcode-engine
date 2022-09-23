@@ -48,7 +48,7 @@ export default function rendererFactory(): IRenderComponent {
   }
 
   return class Renderer extends Component<IRendererProps> {
-    static dislayName = 'renderer';
+    static displayName = 'Renderer';
 
     state: Partial<IRendererState> = {};
 
