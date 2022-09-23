@@ -4,14 +4,11 @@ import contextFactory from '../context';
 import { isFileSchema, isEmpty } from '../utils';
 import baseRendererFactory from './base';
 import divFactory from '../components/Div';
-import { IGeneralConstructor, IRenderComponent, IRendererProps, IRendererState } from '../types';
-import { RootSchema } from '@alilc/lowcode-types';
+import { IRenderComponent, IRendererProps, IRendererState } from '../types';
+import { NodeSchema, RootSchema } from '@alilc/lowcode-types';
 
 export default function rendererFactory(): IRenderComponent {
-  const runtime = adapter.getRuntime();
-  const Component = runtime.Component as IGeneralConstructor<IRendererProps, Record<string, any>>;
-  const PureComponent = runtime.PureComponent as IGeneralConstructor<IRendererProps, Record<string, any>>;
-  const { createElement, findDOMNode } = runtime;
+  const { PureComponent, Component, createElement, findDOMNode } = adapter.getRuntime();
   const RENDERER_COMPS: any = adapter.getRenderers();
   const BaseRenderer = baseRendererFactory();
   const AppContext = contextFactory();
@@ -21,7 +18,7 @@ export default function rendererFactory(): IRenderComponent {
 
   const debug = Debug('renderer:entry');
 
-  class FaultComponent extends PureComponent {
+  class FaultComponent extends PureComponent<NodeSchema> {
     render() {
       // FIXME: errorlog
       console.error('render error', this.props);
@@ -35,17 +32,22 @@ export default function rendererFactory(): IRenderComponent {
           color: '#ff0000',
           border: '2px solid #ff0000',
         },
-      }, '组件渲染异常，请查看控制台日志');
+      }, `${this.props.componentName || ''} 组件渲染异常，请查看控制台日志`);
     }
   }
 
-  class NotFoundComponent extends PureComponent {
+  class NotFoundComponent extends PureComponent<{
+    componentName: string;
+  } & IRendererProps> {
     render() {
-      return createElement(Div, this.props, this.props.children || 'Component Not Found');
+      if (this.props.enableStrictNotFoundMode) {
+        return `${this.props.componentName || ''} Component Not Found`;
+      }
+      return createElement(Div, this.props, this.props.children || `${this.props.componentName || ''} Component Not Found`);
     }
   }
 
-  return class Renderer extends Component {
+  return class Renderer extends Component<IRendererProps> {
     static displayName = 'Renderer';
 
     state: Partial<IRendererState> = {};

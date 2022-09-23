@@ -23,6 +23,7 @@ import {
   setShaken,
 } from '../../src/designer/dragon';
 import { Project } from '../../src/project/project';
+import pageMetadata from '../fixtures/component-metadata/page';
 import { Node } from '../../src/document/node/node';
 import { Designer } from '../../src/designer/designer';
 import { DocumentModel } from '../../src/document/document-model';
@@ -46,6 +47,7 @@ describe('Host 测试', () => {
   beforeEach(() => {
     designer = new Designer({ editor });
     project = designer.project;
+    designer.createComponentMeta(pageMetadata);
     doc = project.createDocument(formSchema);
     host = new BuiltinSimulatorHost(designer.project);
   });
@@ -373,6 +375,14 @@ describe('Host 测试', () => {
         },
       })).toBeNull();
     });
+    it('notFoundComponent', () => {
+      expect(host.locate({
+        dragObject: {
+          type: DragObjectType.Node,
+          nodes: [doc.getNode('form')],
+        },
+      })).toBeUndefined();
+    })
     it('locate', () => {
       host.locate({
         dragObject: {
