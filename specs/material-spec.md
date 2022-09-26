@@ -882,7 +882,7 @@ props 数组下对象字段描述：
 | isNullNode(AAA)                 | 是否存在渲染的根节点                                                                                | Boolean |
 | isLayout(AAA)                   | 是否是layout布局组件                                                                                | Boolean |
 | rootSelector(AAA)                   | 组件选中框的 cssSelector                                                                                | String |
-| disableBehaviors(AAA)                   | 用于屏蔽在设计器中选中组件时提供的操作项，默认操作项有 copy、move、remove                                                                                | String[] |
+| disableBehaviors(AAA)                   | 用于屏蔽在设计器中选中组件时提供的操作项，默认操作项有 copy、hide、remove                                                                                | String[] |
 | actions(AAA)                   | 用于详细配置上述操作项的内容                                                                                | Object |
 | isMinimalRenderUnit                   | 是否是最小渲染单元，最小渲染单元下的组件渲染和更新都从单元的根节点开始渲染和更新。如果嵌套了多层最小渲染单元，渲染会从最外层的最小渲染单元开始渲染。                                                                                | Boolean |
 
@@ -890,26 +890,26 @@ props 数组下对象字段描述：
 
 ```js
 {
-  "configure": {
-    "component": {
-      "isContainer": true,
-      "isModal": false,
-      "descriptor": "title",
-      "nestingRule": {
-        "childWhitelist": [ "SelectOption" ],
-        "parentWhitelist": [ "Select", "Table" ]
+  configure: {
+    component: {
+      isContainer: true,
+      isModal: false,
+      descriptor: 'title',
+      nestingRule: {
+        childWhitelist: ['SelectOption'],
+        parentWhitelist: ['Select', 'Table'],
       },
       rootSelector: '.next-dialog',
-      disableBehaviors: [ 'copy', 'remove' ],
+      disableBehaviors: ['copy', 'remove'],
       actions: {
-        name: 'copy',        // string;
-        content: '＋',       // string | ReactNode | ActionContentObject;
-        items: [],           // ComponentAction[];
+        name: 'copy', // string;
+        content: '＋', // string | ReactNode | ActionContentObject;
+        items: [], // ComponentAction[];
         condition: 'always', // boolean | ((currentNode: any) => boolean) | 'always';
-        important: true,     // boolean;
-      }
-    }
-  }
+        important: true, // boolean;
+      },
+    },
+  },
 }
 ```
 
@@ -941,7 +941,7 @@ props 数组下对象字段描述：
 
 ```js
 {
-  "configure": {
+  configure: {
     advanced: {
       callbacks: {
         onNodeAdd: (dragment, currentNode) => {
@@ -949,7 +949,7 @@ props 数组下对象字段描述：
         }
       },
       getResizingHandlers: () => {
-        return ["E"];
+        return [ 'E' ];
       },
       initials: [
         {

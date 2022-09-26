@@ -36,6 +36,10 @@ type PropChangeOptions = {
   oldValue: any;
 };
 
+const Events = {
+  IMPORT_SCHEMA: 'shell.document.importSchema',
+};
+
 export default class DocumentModel {
   private readonly [documentSymbol]: InnerDocumentModel;
   private readonly [editorSymbol]: Editor;
@@ -135,6 +139,7 @@ export default class DocumentModel {
    */
   importSchema(schema: RootSchema) {
     this[documentSymbol].import(schema);
+    this[editorSymbol].emit(Events.IMPORT_SCHEMA, schema);
   }
 
   /**
@@ -289,5 +294,13 @@ export default class DocumentModel {
         });
       },
     );
+  }
+
+  /**
+   * import schema event
+   * @param fn
+   */
+  onImportSchema(fn: (schema: RootSchema) => void) {
+    this[editorSymbol].on(Events.IMPORT_SCHEMA, fn as any);
   }
 }
