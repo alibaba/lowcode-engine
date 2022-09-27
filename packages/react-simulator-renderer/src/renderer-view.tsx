@@ -202,7 +202,8 @@ class Renderer extends Component<{
           if (
             !viewProps.dataSource &&
             leaf?.isContainer() &&
-            (children == null || (Array.isArray(children) && !children.length)) &&
+            (
+              = null || (Array.isArray(children) && !children.length)) &&
             (!viewProps.style || Object.keys(viewProps.style).length === 0)
           ) {
             let defaultPlaceholder = '拖拽组件或模板到这里';
@@ -213,7 +214,7 @@ class Renderer extends Component<{
               defaultPlaceholder = '锁定元素及子元素无法编辑';
             }
             children = (
-              <div className={cn('lc-container-placeholder', { 'lc-container-locked': !!lockedNode })} style={viewProps.placeholderStyle}>
+              <div  key={`${__id}_placeholder`} className={cn('lc-container-placeholder', { 'lc-container-locked': !!lockedNode })} style={viewProps.placeholderStyle}>
                 {viewProps.placeholder || defaultPlaceholder}
               </div>
             );
