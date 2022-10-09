@@ -88,7 +88,7 @@ const stageList = [
  */
 export function compatStage(stage: TransformStage | number): TransformStage {
   if (typeof stage === 'number') {
-    console.warn('stage 直接指定为数字的使用方式已经过时，将在下一版本移除，请直接使用 TransformStage.Render|Serilize|Save|Clone|Init|Upgrade');
+    deprecate(true, 'stage 直接指定为数字的使用方式已经过时，将在下一版本移除，请直接使用 TransformStage.Render|Serilize|Save|Clone|Init|Upgrade');
     return stageList[stage - 1] as TransformStage;
   }
   return stage as TransformStage;

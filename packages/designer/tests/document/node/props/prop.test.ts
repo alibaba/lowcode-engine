@@ -43,6 +43,7 @@ describe('Prop 类测试', () => {
     let nullProp: Prop;
     let expProp: Prop;
     let slotProp: Prop;
+    let atomObjectProp: Prop;
     beforeEach(() => {
       boolProp = new Prop(mockedPropsInst, true, 'boolProp');
       strProp = new Prop(mockedPropsInst, 'haha', 'strProp');
@@ -62,6 +63,14 @@ describe('Prop 类测试', () => {
       );
       slotNodeImportMockFn.mockClear();
       slotNodeRemoveMockFn.mockClear();
+      atomObjectProp = new Prop(mockedPropsInst, {
+        type: 'AtomObject',
+        value: {
+          x: {
+            y: 1,
+          },
+        },
+      });
     });
     afterEach(() => {
       boolProp.purge();
@@ -70,6 +79,7 @@ describe('Prop 类测试', () => {
       nullProp.purge();
       expProp.purge();
       slotProp.purge();
+      atomObjectProp.purge();
     });
 
     it('consturctor / getProps / getNode', () => {
@@ -174,6 +184,34 @@ describe('Prop 类测试', () => {
         title: '测试 slot',
         name: 'testSlot',
       });
+
+      expect(atomObjectProp.export(TransformStage.Save)).toEqual({
+        type: 'AtomObject',
+        value: {
+          x: {
+            y: 1,
+          },
+        },
+      });
+      expect(atomObjectProp.export(TransformStage.Render)).toEqual({
+        type: 'AtomObject',
+        value: {
+          x: {
+            y: 1,
+          },
+        },
+      });
+      expect(atomObjectProp.export(TransformStage.Serilize)).toEqual({
+        x: {
+          y: 1,
+        },
+      });
+      expect(atomObjectProp.export(TransformStage.Clone)).toEqual({
+        x: {
+          y: 1,
+        },
+      });
+      expect(atomObjectProp.items).toBeNull();
     });
 
     it('compare', () => {
@@ -408,7 +446,7 @@ describe('Prop 类测试', () => {
         expect(prop.get(0).getValue()).toBeTruthy();
 
         // map / list 级联测试
-        prop.get('loopArgs.0', true).setValue('newItem');;
+        prop.get('loopArgs.0', true).setValue('newItem');
         expect(prop.get('loopArgs.0').getValue()).toBe('newItem');
       });
 

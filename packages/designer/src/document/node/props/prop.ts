@@ -1,5 +1,22 @@
-import { untracked, computed, obx, engineConfig, action, makeObservable, mobx, runInAction } from '@alilc/lowcode-editor-core';
-import { CompositeValue, GlobalEvent, isJSExpression, isJSSlot, JSSlot, SlotSchema } from '@alilc/lowcode-types';
+import {
+  untracked,
+  computed,
+  obx,
+  engineConfig,
+  action,
+  makeObservable,
+  mobx,
+  runInAction,
+} from '@alilc/lowcode-editor-core';
+import {
+  CompositeValue,
+  GlobalEvent,
+  isJSExpression,
+  isJSSlot,
+  isAtomObject,
+  JSSlot,
+  SlotSchema,
+} from '@alilc/lowcode-types';
 import { uniqueId, isPlainObject, hasOwnProperty, compatStage } from '@alilc/lowcode-utils';
 import { valueToSource } from './value-to-source';
 import { Props } from './props';
@@ -18,7 +35,23 @@ export interface IPropParent {
   readonly path: string[];
 }
 
-export type ValueTypes = 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot';
+export type ValueTypes = 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot' | 'atomObject';
+export enum PropTypes {
+  // not set yet
+  UNSET = 'unset',
+  // primitive types, such as string / number / boolean / null / undefined
+  LITERAL = 'literal',
+  // array
+  LIST = 'list',
+  // JSExpression structure, see: https://github.com/alibaba/lowcode-engine/blob/16a88578634b9da2f04698df5ca5a5e69151bb97/packages/types/src/value-type.ts#L131
+  EXPRESSION = 'expression',
+  // JSSLOT structure, see: https://github.com/alibaba/lowcode-engine/blob/16a88578634b9da2f04698df5ca5a5e69151bb97/packages/types/src/value-type.ts#L139
+  SLOT = 'slot',
+  // ATOM Object structure, see: https://github.com/alibaba/lowcode-engine/issues/1086
+  ATOM_OBJECT = 'atomObject',
+  // plain object, excludes expression / slot / atomObject
+  MAP = 'map',
+}
 
 export class Prop implements IPropParent {
   readonly isProp = true;
@@ -90,7 +123,7 @@ export class Prop implements IPropParent {
 
   readonly id = uniqueId('prop$');
 
-  @obx.ref private _type: ValueTypes = 'unset';
+  @obx.ref private _type: ValueTypes = PropTypes.UNSET;
 
   /**
    * 属性类型
@@ -119,20 +152,20 @@ export class Prop implements IPropParent {
       return this._value;
     }
 
-    if (type === 'unset') {
+    if (type === PropTypes.UNSET) {
       return undefined;
     }
 
-    if (type === 'literal' || type === 'expression') {
-      // TODO 后端改造之后删除此逻辑
+    if (type === PropTypes.LITERAL || type === PropTypes.EXPRESSION) {
+      // TODO: 后端改造之后删除此逻辑
       if (this._value === null && stage === TransformStage.Save) {
         return '';
       }
       return this._value;
     }
 
-    if (type === 'slot') {
-      const schema = this._slotNode?.export(stage) || {} as any;
+    if (type === PropTypes.SLOT) {
+      const schema = this._slotNode?.export(stage) || ({} as any);
       if (stage === TransformStage.Render) {
         return {
           type: 'JSSlot',
@@ -149,7 +182,7 @@ export class Prop implements IPropParent {
       };
     }
 
-    if (type === 'map') {
+    if (type === PropTypes.MAP) {
       if (!this._items) {
         return this._value;
       }
@@ -166,17 +199,25 @@ export class Prop implements IPropParent {
       return maps;
     }
 
-    if (type === 'list') {
+    if (type === PropTypes.LIST) {
       if (!this._items) {
         return this._value;
       }
       const values = this.items!.map((prop) => {
         return prop.export(stage);
       });
-      if (values.every(val => val === undefined)) {
+      if (values.every((val) => val === undefined)) {
         return undefined;
       }
       return values;
+    }
+
+    if (type === PropTypes.ATOM_OBJECT) {
+      // 「Render」和「Save」按照原始值导出，其他如：「Serialize」/「Clone」保持一致性，导出整个结构
+      if (stage === TransformStage.Render || stage === TransformStage.Save) {
+        return this._value.value;
+      }
+      return this._value;
     }
   }
 
@@ -189,8 +230,7 @@ export class Prop implements IPropParent {
     if (isJSExpression(this.value)) {
       return this.value.value;
     }
-    // todo: JSFunction ...
-    if (this.type === 'slot') {
+    if (this.type === PropTypes.SLOT) {
       return JSON.stringify(this._slotNode!.export(TransformStage.Save));
     }
     return this._code != null ? this._code : JSON.stringify(this.value);
@@ -227,7 +267,7 @@ export class Prop implements IPropParent {
   }
 
   getAsString(): string {
-    if (this.type === 'literal') {
+    if (this.type === PropTypes.LITERAL) {
       return this._value ? String(this._value) : '';
     }
     return '';
@@ -246,21 +286,23 @@ export class Prop implements IPropParent {
     const t = typeof val;
     if (val == null) {
       // this._value = undefined;
-      this._type = 'literal';
+      this._type = PropTypes.LITERAL;
     } else if (t === 'string' || t === 'number' || t === 'boolean') {
-      this._type = 'literal';
+      this._type = PropTypes.LITERAL;
     } else if (Array.isArray(val)) {
-      this._type = 'list';
+      this._type = PropTypes.LIST;
     } else if (isPlainObject(val)) {
       if (isJSSlot(val)) {
         this.setAsSlot(val);
       } else if (isJSExpression(val)) {
-        this._type = 'expression';
+        this._type = PropTypes.EXPRESSION;
+      } else if (isAtomObject(val)) {
+        this._type = PropTypes.ATOM_OBJECT;
       } else {
-        this._type = 'map';
+        this._type = PropTypes.MAP;
       }
-    } else /* istanbul ignore next */ {
-      this._type = 'expression';
+    } /* istanbul ignore next */ else {
+      this._type = PropTypes.EXPRESSION;
       this._value = {
         type: 'JSExpression',
         value: valueToSource(val),
@@ -299,7 +341,7 @@ export class Prop implements IPropParent {
     this._items = null;
     this._prevMaps = this._maps;
     this._maps = null;
-    if (this._type !== 'slot' && this._slotNode) {
+    if (this._type !== PropTypes.SLOT && this._slotNode) {
       this._slotNode.remove();
       this._slotNode = undefined;
     }
@@ -313,7 +355,7 @@ export class Prop implements IPropParent {
 
   @action
   setAsSlot(data: JSSlot) {
-    this._type = 'slot';
+    this._type = PropTypes.SLOT;
     const slotSchema: SlotSchema = {
       componentName: 'Slot',
       title: data.title,
@@ -337,7 +379,7 @@ export class Prop implements IPropParent {
    */
   @action
   unset() {
-    this._type = 'unset';
+    this._type = PropTypes.UNSET;
   }
 
   /**
@@ -345,7 +387,7 @@ export class Prop implements IPropParent {
    */
   @action
   isUnset() {
-    return this._type === 'unset';
+    return this._type === PropTypes.UNSET;
   }
 
   isVirtual() {
@@ -363,10 +405,10 @@ export class Prop implements IPropParent {
       return 2;
     }
     // list
-    if (this.type === 'list') {
+    if (this.type === PropTypes.LIST) {
       return this.size === other.size ? 1 : 2;
     }
-    if (this.type === 'map') {
+    if (this.type === PropTypes.MAP) {
       return 1;
     }
 
@@ -394,17 +436,18 @@ export class Prop implements IPropParent {
    * 构造 items 属性，同时构造 maps 属性
    */
   private get items(): Prop[] | null {
+    if (this.type === PropTypes.ATOM_OBJECT) return null;
     if (this._items) return this._items;
     return runInAction(() => {
       let items: Prop[] | null = null;
-      if (this._type === 'list') {
+      if (this._type === PropTypes.LIST) {
         const data = this._value;
         data.forEach((item: any, idx: number) => {
           items = items || [];
           items.push(new Prop(this, item, idx));
         });
         this._maps = null;
-      } else if (this._type === 'map') {
+      } else if (this._type === PropTypes.MAP) {
         const data = this._value;
         const maps = new Map<string, Prop>();
         const keys = Object.keys(data);
@@ -444,12 +487,17 @@ export class Prop implements IPropParent {
   @action
   get(path: string | number, createIfNone = true): Prop | null {
     const type = this._type;
-    if (type !== 'map' && type !== 'list' && type !== 'unset' && !createIfNone) {
+    if (
+      type !== PropTypes.MAP &&
+      type !== PropTypes.LIST &&
+      type !== PropTypes.UNSET &&
+      !createIfNone
+    ) {
       return null;
     }
 
-    const maps = type === 'map' ? this.maps : null;
-    const items = type === 'list' ? this.items : null;
+    const maps = type === PropTypes.MAP ? this.maps : null;
+    const items = type === PropTypes.LIST ? this.items : null;
 
     let entry = path;
     let nest = '';
@@ -464,11 +512,11 @@ export class Prop implements IPropParent {
     }
 
     let prop: any;
-    if (type === 'list') {
+    if (type === PropTypes.LIST) {
       if (isValidArrayIndex(entry, this.size)) {
         prop = items![entry];
       }
-    } else if (type === 'map') {
+    } else if (type === PropTypes.MAP) {
       prop = maps?.get(entry);
     }
 
@@ -544,10 +592,10 @@ export class Prop implements IPropParent {
   @action
   add(value: CompositeValue, force = false): Prop | null {
     const type = this._type;
-    if (type !== 'list' && type !== 'unset' && !force) {
+    if (type !== PropTypes.LIST && type !== PropTypes.UNSET && !force) {
       return null;
     }
-    if (type === 'unset' || (force && type !== 'list')) {
+    if (type === PropTypes.UNSET || (force && type !== PropTypes.LIST)) {
       this.setValue([]);
     }
     const prop = new Prop(this, value);
@@ -564,12 +612,12 @@ export class Prop implements IPropParent {
   @action
   set(key: string | number, value: CompositeValue | Prop, force = false) {
     const type = this._type;
-    if (type !== 'map' && type !== 'list' && type !== 'unset' && !force) {
+    if (type !== PropTypes.MAP && type !== PropTypes.LIST && type !== PropTypes.UNSET && !force) {
       return null;
     }
-    if (type === 'unset' || (force && type !== 'map')) {
+    if (type === PropTypes.UNSET || (force && type !== PropTypes.MAP)) {
       if (isValidArrayIndex(key)) {
-        if (type !== 'list') {
+        if (type !== PropTypes.LIST) {
           this.setValue([]);
         }
       } else {
@@ -578,7 +626,7 @@ export class Prop implements IPropParent {
     }
     const prop = isProp(value) ? value : new Prop(this, value, key);
     let items = this._items! || [];
-    if (this.type === 'list') {
+    if (this.type === PropTypes.LIST) {
       if (!isValidArrayIndex(key)) {
         return null;
       }
@@ -588,7 +636,7 @@ export class Prop implements IPropParent {
         items[key] = prop;
       }
       this._items = items;
-    } else if (this.type === 'map') {
+    } else if (this.type === PropTypes.MAP) {
       const maps = this._maps || new Map<string, Prop>();
       const orig = maps?.get(key);
       if (orig) {
@@ -616,7 +664,7 @@ export class Prop implements IPropParent {
    * 是否存在 key
    */
   has(key: string): boolean {
-    if (this._type !== 'map') {
+    if (this._type !== PropTypes.MAP) {
       return false;
     }
     if (this._maps) {
@@ -679,7 +727,7 @@ export class Prop implements IPropParent {
     if (!items) {
       return;
     }
-    const isMap = this._type === 'map';
+    const isMap = this._type === PropTypes.MAP;
     items.forEach((item, index) => {
       return isMap ? fn(item, item.key) : fn(item, index);
     });
@@ -694,7 +742,7 @@ export class Prop implements IPropParent {
     if (!items) {
       return null;
     }
-    const isMap = this._type === 'map';
+    const isMap = this._type === PropTypes.MAP;
     return items.map((item, index) => {
       return isMap ? fn(item, item.key) : fn(item, index);
     });

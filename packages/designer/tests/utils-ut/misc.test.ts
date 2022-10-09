@@ -1,5 +1,10 @@
 // @ts-nocheck
-import { isElementNode, isDOMNodeVisible, normalizeTriggers, makeEventsHandler } from '../../src/utils/misc';
+import {
+  isElementNode,
+  isDOMNodeVisible,
+  normalizeTriggers,
+  makeEventsHandler,
+} from '../../src/utils/misc';
 
 it('isElementNode', () => {
   expect(isElementNode(document.createElement('div'))).toBeTruthy();
@@ -19,37 +24,46 @@ it('isElementNode', () => {
  */
 
 const genMockNode = ({ left, right, top, bottom, width, height }) => {
-  return { getBoundingClientRect: () => {
-    if (width === undefined || height === undefined) throw new Error('width and height is required.');
-    const base = { width, height };
-    let coordinate = {};
-    if (left !== undefined) {
-      coordinate = top !== undefined ? {
-        left,
-        right: left + width,
-        top,
-        bottom: top + height,
-      } : {
-        left,
-        right: left + width,
-        bottom,
-        top: bottom - height,
+  return {
+    getBoundingClientRect: () => {
+      if (width === undefined || height === undefined)
+        throw new Error('width and height is required.');
+      const base = { width, height };
+      let coordinate = {};
+      if (left !== undefined) {
+        coordinate =
+          top !== undefined
+            ? {
+                left,
+                right: left + width,
+                top,
+                bottom: top + height,
+              }
+            : {
+                left,
+                right: left + width,
+                bottom,
+                top: bottom - height,
+              };
+      } else if (right !== undefined) {
+        coordinate =
+          top !== undefined
+            ? {
+                left: right - width,
+                right,
+                top,
+                bottom: top + height,
+              }
+            : {
+                left: right - width,
+                right,
+                bottom,
+                top: bottom - height,
+              };
       }
-    } else if (right !== undefined) {
-      coordinate = top !== undefined ? {
-        left: right - width,
-        right,
-        top,
-        bottom: top + height,
-      } : {
-        left: right - width,
-        right,
-        bottom,
-        top: bottom - height,
-      }
-    }
-    return { ...base, ...coordinate };
-  } };
+      return { ...base, ...coordinate };
+    },
+  };
 };
 const mockViewport = {
   contentBounds: {

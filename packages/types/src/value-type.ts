@@ -25,6 +25,11 @@ export interface JSExpression {
   compiled?: string;
 }
 
+export interface AtomObject {
+  type: 'AtomObject';
+  value: object;
+}
+
 /**
  * 事件函数类型
  * @see https://lowcode-engine.cn/lowcode
@@ -130,6 +135,10 @@ export interface CompositeObject {
 
 export function isJSExpression(data: any): data is JSExpression {
   return data && data.type === 'JSExpression';
+}
+
+export function isAtomObject(data: any): data is AtomObject {
+  return data && data.type === 'AtomObject';
 }
 
 export function isJSFunction(x: any): x is JSFunction {
