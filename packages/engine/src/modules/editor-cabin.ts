@@ -6,6 +6,8 @@ export {
   intl,
   createSetterContent,
   obx,
+  observable,
+  makeObservable,
   untracked,
   computed,
   observer,

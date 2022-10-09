@@ -78,9 +78,6 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
       console.error('exception when condition (hidden) is excuted', error);
     }
 
-    if (!visible) {
-      return null;
-    }
     const { setter } = field;
 
     let setterProps: any = {};
@@ -107,27 +104,6 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
       setterType = setter;
     }
 
-    // 根据是否支持变量配置做相应的更改
-    const supportVariable = field.extraProps?.supportVariable;
-    // supportVariableGlobally 只对标准组件生效，vc 需要单独配置
-    const supportVariableGlobally = engineConfig.get('supportVariableGlobally', false) && isStandardComponent(componentMeta);
-    if (supportVariable || supportVariableGlobally) {
-      if (setterType === 'MixedSetter') {
-        // VariableSetter 不单独使用
-        if (Array.isArray(setterProps.setters) && !setterProps.setters.includes('VariableSetter')) {
-          setterProps.setters.push('VariableSetter');
-        }
-      } else {
-        setterType = 'MixedSetter';
-        setterProps = {
-          setters: [
-            setter,
-            'VariableSetter',
-          ],
-        };
-      }
-    }
-
     let value = null;
     if (defaultValue != null && !('defaultValue' in setterProps)) {
       setterProps.defaultValue = defaultValue;
@@ -150,6 +126,31 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
       const _initialValue = typeof initialValue === 'function' ? initialValue(field.internalToShellPropEntry()) : initialValue;
       field.setValue(_initialValue);
       value = _initialValue;
+    }
+
+    if (!visible) {
+      return null;
+    }
+
+    // 根据是否支持变量配置做相应的更改
+    const supportVariable = field.extraProps?.supportVariable;
+    // supportVariableGlobally 只对标准组件生效，vc 需要单独配置
+    const supportVariableGlobally = engineConfig.get('supportVariableGlobally', false) && isStandardComponent(componentMeta);
+    if (supportVariable || supportVariableGlobally) {
+      if (setterType === 'MixedSetter') {
+        // VariableSetter 不单独使用
+        if (Array.isArray(setterProps.setters) && !setterProps.setters.includes('VariableSetter')) {
+          setterProps.setters.push('VariableSetter');
+        }
+      } else {
+        setterType = 'MixedSetter';
+        setterProps = {
+          setters: [
+            setter,
+            'VariableSetter',
+          ],
+        };
+      }
     }
 
     let _onChange = extraProps?.onChange;
