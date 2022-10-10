@@ -199,11 +199,11 @@ describe('Dragon 测试', () => {
       new MouseEvent('mousedown', { clientX: 100, clientY: 100 }),
     );
 
-    const mockedFn1 = jest.fn();
-    project.mountSimulator({ setCopyState: mockedFn1 });
+    const mockFn1 = jest.fn();
+    project.mountSimulator({ setCopyState: mockFn1 });
     expect(dragon.getSimulators().size).toBe(1);
     fireEvent.keyDown(document, { ctrlKey: true });
-    expect(mockedFn1).toHaveBeenCalled();
+    expect(mockFn1).toHaveBeenCalled();
   });
 
   it('from', () => {
@@ -214,7 +214,7 @@ describe('Dragon 测试', () => {
     const offDragStart = dragon.onDragstart(dragStartMockFn);
     const offDrag = dragon.onDrag(dragMockFn);
     const offDragEnd = dragon.onDragend(dragEndMockFn);
-    const mockedBoostFn = jest
+    const mockBoostFn = jest
       .fn((e) => {
         return {
           type: DragObjectType.Node,
@@ -223,7 +223,7 @@ describe('Dragon 测试', () => {
       })
       .mockImplementationOnce(() => null);
 
-    const offFrom = dragon.from(document, mockedBoostFn);
+    const offFrom = dragon.from(document, mockBoostFn);
 
     // 无用 mouseDown，无效的按钮
     fireEvent.mouseDown(document, { button: 2 });
@@ -292,21 +292,21 @@ describe('Dragon 测试', () => {
   });
 
   it('has sensor', () => {
-    const mockedFn1 = jest.fn();
-    const mockedDoc = document.createElement('iframe').contentWindow?.document;
+    const mockFn1 = jest.fn();
+    const mockDoc = document.createElement('iframe').contentWindow?.document;
     dragon.addSensor({
       fixEvent: () => {},
       locate: () => {},
-      contentDocument: mockedDoc,
+      contentDocument: mockDoc,
     });
     project.mountSimulator({
-      setCopyState: mockedFn1,
+      setCopyState: mockFn1,
       setNativeSelection: () => {},
       clearState: () => {},
       setDraggingState: () => {},
     });
 
-    const mockedBoostFn = jest
+    const mockBoostFn = jest
       .fn((e) => {
         return {
           type: DragObjectType.Node,
@@ -315,7 +315,7 @@ describe('Dragon 测试', () => {
       })
       .mockImplementationOnce(() => null);
 
-    const offFrom = dragon.from(document, mockedBoostFn);
+    const offFrom = dragon.from(document, mockBoostFn);
 
     // TODO: 想办法 mock 一个 iframe.currentDocument
     fireEvent.mouseDown(document, { clientX: 100, clientY: 100 });
