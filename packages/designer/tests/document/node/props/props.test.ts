@@ -16,13 +16,13 @@ import { DocumentModel } from '../../../../src/document/document-model';
 
 import { TransformStage } from '@alilc/lowcode-types';
 
-const mockedOwner = { componentName: 'Page' };
+const mockOwner = { componentName: 'Page' };
 
 describe('Props 类测试', () => {
   let props: Props;
   beforeEach(() => {
     props = new Props(
-      mockedOwner,
+      mockOwner,
       {
         a: 1,
         b: 'str',
@@ -44,7 +44,7 @@ describe('Props 类测试', () => {
   });
 
   it('getNode', () => {
-    expect(props.getNode()).toBe(mockedOwner);
+    expect(props.getNode()).toBe(mockOwner);
   });
 
   it('items / get', async () => {
@@ -235,30 +235,30 @@ describe('Props 类测试', () => {
   });
 
   it('迭代器 / map / forEach', () => {
-    const mockedFn = jest.fn();
+    const mockFn = jest.fn();
     for (const item of props) {
-      mockedFn();
+      mockFn();
     }
-    expect(mockedFn).toHaveBeenCalledTimes(6);
-    mockedFn.mockClear();
+    expect(mockFn).toHaveBeenCalledTimes(6);
+    mockFn.mockClear();
 
     props.forEach((item) => {
-      mockedFn();
+      mockFn();
     });
-    expect(mockedFn).toHaveBeenCalledTimes(6);
-    mockedFn.mockClear();
+    expect(mockFn).toHaveBeenCalledTimes(6);
+    mockFn.mockClear();
 
     props.map((item) => {
-      return mockedFn();
+      return mockFn();
     });
-    expect(mockedFn).toHaveBeenCalledTimes(6);
-    mockedFn.mockClear();
+    expect(mockFn).toHaveBeenCalledTimes(6);
+    mockFn.mockClear();
 
     props.filter((item) => {
-      return mockedFn();
+      return mockFn();
     });
-    expect(mockedFn).toHaveBeenCalledTimes(6);
-    mockedFn.mockClear();
+    expect(mockFn).toHaveBeenCalledTimes(6);
+    mockFn.mockClear();
   });
 
   it('purge', () => {
@@ -268,13 +268,13 @@ describe('Props 类测试', () => {
   });
 
   it('empty items', () => {
-    expect(new Props(mockedOwner).export()).toEqual({});
+    expect(new Props(mockOwner).export()).toEqual({});
   });
 
   describe('list 类型', () => {
     let props: Props;
     beforeEach(() => {
-      props = new Props(mockedOwner, [1, true, 'haha'], { condition: true });
+      props = new Props(mockOwner, [1, true, 'haha'], { condition: true });
     });
     it('constructor', () => {
       props.purge();
