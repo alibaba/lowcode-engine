@@ -1,4 +1,4 @@
-import { computed, makeObservable, obx, action, runWithGlobalEventOff, wrapWithEventSwitch } from '@alilc/lowcode-editor-core';
+import { makeObservable, obx, engineConfig, action, runWithGlobalEventOff, wrapWithEventSwitch } from '@alilc/lowcode-editor-core';
 import { NodeData, isJSExpression, isDOMText, NodeSchema, isNodeSchema, RootSchema, PageSchema, ComponentsMap } from '@alilc/lowcode-types';
 import { EventEmitter } from 'events';
 import { Project } from '../project';
@@ -87,7 +87,7 @@ export class DocumentModel {
     if (this._drillDownNode) {
       return this._drillDownNode;
     }
-    const selector = this.designer.editor?.get<((rootNode: RootNode) => Node) | null>('focusNodeSelector');
+    const selector = engineConfig.get('focusNodeSelector');
     if (selector && typeof selector === 'function') {
       return selector(this.rootNode!);
     }

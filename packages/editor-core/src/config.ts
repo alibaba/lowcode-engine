@@ -141,6 +141,10 @@ const VALID_ENGINE_OPTIONS = {
     type: 'boolean',
     description: '当开启组件未找到严格模式时，渲染模块不会默认给一个容器组件',
   },
+  focusNodeSelector: {
+    type: 'function',
+    description: '配置指定节点为根组件',
+  },
 };
 export interface EngineOptions {
   /**
@@ -268,6 +272,11 @@ export interface EngineOptions {
    * 当开启组件未找到严格模式时，渲染模块不会默认给一个容器组件
    */
   enableStrictNotFoundMode?: boolean;
+
+  /**
+   * 配置指定节点为根组件
+   */
+  focusNodeSelector?: (rootNode: Node) => Node;
 }
 
 const getStrictModeValue = (engineOptions: EngineOptions, defaultValue: boolean): boolean => {
