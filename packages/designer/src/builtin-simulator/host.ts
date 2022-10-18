@@ -1167,12 +1167,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       return null;
     }
     const dropContainer = this.getDropContainer(e);
-    const childWhitelist = dropContainer?.container?.componentMeta?.childWhitelist;
     const lockedNode = getClosestNode(dropContainer?.container as Node, (node) => node.isLocked);
     if (lockedNode) return null;
     if (
-      !dropContainer ||
-      (nodes && typeof childWhitelist === 'function' && !childWhitelist(operationalNodes[0]))
+      !dropContainer
     ) {
       return null;
     }
