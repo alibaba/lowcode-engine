@@ -219,6 +219,7 @@ class Renderer extends Component<{
         onCompGetRef={(schema: any, ref: any) => {
           documentInstance.mountInstance(schema.id, ref);
         }}
+        thisRequiredInJSE={host.thisRequiredInJSE}
         documentId={document.id}
         getNode={(id: string) => documentInstance.getNode(id) as any}
         rendererName="PageRenderer"

@@ -1,7 +1,8 @@
 import {
   BuiltinSimulatorHost,
 } from '@alilc/lowcode-designer';
-import { simulatorHostSymbol } from './symbols';
+import { simulatorHostSymbol, nodeSymbol } from './symbols';
+import type Node from './node';
 
 export default class SimulatorHost {
   private readonly [simulatorHostSymbol]: BuiltinSimulatorHost;
@@ -29,6 +30,10 @@ export default class SimulatorHost {
     return this[simulatorHostSymbol].contentDocument;
   }
 
+  get renderer() {
+    return this[simulatorHostSymbol].renderer;
+  }
+
   /**
    * 设置 host 配置值
    * @param key
@@ -45,6 +50,14 @@ export default class SimulatorHost {
    */
   get(key: string) {
     return this[simulatorHostSymbol].get(key);
+  }
+
+  /**
+   * scroll to specific node
+   * @param node
+   */
+  scrollToNode(node: Node) {
+    this[simulatorHostSymbol].scrollToNode(node[nodeSymbol]);
   }
 
   /**

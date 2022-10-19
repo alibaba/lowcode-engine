@@ -4,7 +4,7 @@ import { IBaseRendererProps, IBaseRenderComponent } from '../types';
 export default function componentRendererFactory(): IBaseRenderComponent {
   const BaseRenderer = baseRendererFactory();
   return class CompRenderer extends BaseRenderer {
-    static dislayName = 'comp-renderer';
+    static displayName = 'CompRenderer';
 
     __namespace = 'component';
 
@@ -15,7 +15,7 @@ export default function componentRendererFactory(): IBaseRenderComponent {
       const schema = props.__schema || {};
       this.state = this.__parseData(schema.state || {});
       this.__initDataSource(props);
-      this.__setLifeCycleMethods('constructor', arguments as any);
+      this.__excuteLifeCycleMethod('constructor', arguments as any);
     }
 
     render() {
@@ -23,7 +23,7 @@ export default function componentRendererFactory(): IBaseRenderComponent {
       if (this.__checkSchema(__schema)) {
         return '自定义组件 schema 结构异常！';
       }
-      this.__debug(`${CompRenderer.dislayName} render - ${__schema.fileName}`);
+      this.__debug(`${CompRenderer.displayName} render - ${__schema.fileName}`);
 
       this.__generateCtx({
         component: this,
@@ -31,6 +31,8 @@ export default function componentRendererFactory(): IBaseRenderComponent {
       this.__render();
 
       const noContainer = this.__parseData(__schema.props?.noContainer);
+
+      this.__bindCustomMethods(this.props);
 
       if (noContainer) {
         return this.__renderContextProvider({ compContext: this });
@@ -44,5 +46,12 @@ export default function componentRendererFactory(): IBaseRenderComponent {
 
       return this.__renderComp(Component, this.__renderContextProvider({ compContext: this }));
     }
+
+    /** 需要重载下面几个方法，如果在低代码组件中绑定了对应的生命周期时会出现死循环 */
+    componentDidMount() {}
+    getSnapshotBeforeUpdate() {}
+    componentDidUpdate() {}
+    componentWillUnmount() {}
+    componentDidCatch() {}
   };
 }

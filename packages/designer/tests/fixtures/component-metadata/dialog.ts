@@ -1,3 +1,4 @@
+import { ComponentMetadata } from "@alilc/lowcode-types";
 export default {
   componentName: 'Dialog',
   npm: {
@@ -6,7 +7,7 @@ export default {
   },
   title: '容器',
   docUrl: 'https://github.com/alibaba/lowcode-materials/tree/main/docs',
-  devMode: 'procode',
+  devMode: 'proCode',
   tags: ['布局'],
   configure: {
     props: [
@@ -273,4 +274,4 @@ export default {
     ],
     autoruns: [],
   },
-};
+} as ComponentMetadata;

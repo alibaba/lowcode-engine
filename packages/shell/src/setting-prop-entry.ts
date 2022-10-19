@@ -1,8 +1,9 @@
 import { SettingField, ISetValueOptions } from '@alilc/lowcode-designer';
-import { CompositeValue, FieldConfig } from '@alilc/lowcode-types';
+import { CompositeValue, FieldConfig, CustomView, isCustomView } from '@alilc/lowcode-types';
 import { settingPropEntrySymbol } from './symbols';
 import Node from './node';
 import SettingTopEntry from './setting-top-entry';
+import ComponentMeta from './component-meta';
 
 export default class SettingPropEntry {
   private readonly [settingPropEntrySymbol]: SettingField;
@@ -13,6 +14,13 @@ export default class SettingPropEntry {
 
   static create(prop: SettingField) {
     return new SettingPropEntry(prop);
+  }
+
+  /**
+   * 获取设置属性的 isGroup
+   */
+  get isGroup() {
+    return this[settingPropEntrySymbol].isGroup;
   }
 
   /**
@@ -58,10 +66,21 @@ export default class SettingPropEntry {
   }
 
   /**
+   * 获取设置属性的 expanded
+   */
+  get expanded() {
+    return this[settingPropEntrySymbol].expanded;
+  }
+
+  /**
    * 获取设置属性的 extraProps
    */
   get extraProps() {
     return this[settingPropEntrySymbol].extraProps;
+  }
+
+  get props() {
+    return SettingTopEntry.create(this[settingPropEntrySymbol].props);
   }
 
   /**
@@ -83,6 +102,25 @@ export default class SettingPropEntry {
    */
   get isSettingField(): boolean {
     return this[settingPropEntrySymbol].isSettingField;
+  }
+
+  /**
+   * componentMeta
+   */
+  get componentMeta(): ComponentMeta | null {
+    return ComponentMeta.create(this[settingPropEntrySymbol].componentMeta);
+  }
+
+  /**
+   * 获取设置属性的 items
+   */
+  get items(): Array<SettingPropEntry | CustomView> {
+    return this[settingPropEntrySymbol].items?.map((item) => {
+      if (isCustomView(item)) {
+        return item;
+      }
+      return item.internalToShellPropEntry();
+    });
   }
 
   /**
@@ -155,6 +193,20 @@ export default class SettingPropEntry {
    */
   getPropValue(propName: string | number) {
     return this[settingPropEntrySymbol].getPropValue(propName);
+  }
+
+  /**
+   * 获取顶层附属属性值
+   */
+  getExtraPropValue(propName: string) {
+    return this[settingPropEntrySymbol].getExtraPropValue(propName);
+  }
+
+  /**
+   * 设置顶层附属属性值
+   */
+  setExtraPropValue(propName: string, value: any) {
+    this[settingPropEntrySymbol].setExtraPropValue(propName, value);
   }
 
   /**

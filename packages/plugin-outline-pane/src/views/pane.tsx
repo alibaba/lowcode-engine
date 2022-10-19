@@ -5,6 +5,7 @@ import { OutlineMain } from '../main';
 import TreeView from './tree';
 import './style.less';
 import { IEditor } from '@alilc/lowcode-types';
+import Filter from './filter';
 
 @observer
 export class OutlinePane extends Component<{ config: any; editor: IEditor }> {
@@ -27,6 +28,7 @@ export class OutlinePane extends Component<{ config: any; editor: IEditor }> {
 
     return (
       <div className="lc-outline-pane">
+        <Filter tree={tree} />
         <div ref={(shell) => this.main.mount(shell)} className="lc-outline-tree-container">
           <TreeView key={tree.id} tree={tree} />
         </div>

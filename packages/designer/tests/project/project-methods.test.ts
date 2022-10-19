@@ -31,18 +31,18 @@ describe.only('Project 方法测试', () => {
   });
 
   it('simulator', () => {
-    const mockedSimulator = { isSimulator: true, a: 1 };
-    project.mountSimulator(mockedSimulator);
-    expect(project.simulator).toEqual(mockedSimulator);
+    const mockSimulator = { isSimulator: true, a: 1 };
+    project.mountSimulator(mockSimulator);
+    expect(project.simulator).toEqual(mockSimulator);
   });
 
   it('config / get / set', () => {
-    const mockedConfig = { version: '1.0.0', componentsTree: [] };
-    project.config = mockedConfig;
-    expect(project.config).toEqual(mockedConfig);
-    const mockedConfig2 = { version: '2.0.0', componentsTree: [] };
-    project.set('config', mockedConfig2);
-    expect(project.get('config')).toEqual(mockedConfig2);
+    const mockConfig = { version: '1.0.0', componentsTree: [] };
+    project.config = mockConfig;
+    expect(project.config).toEqual(mockConfig);
+    const mockConfig2 = { version: '2.0.0', componentsTree: [] };
+    project.set('config', mockConfig2);
+    expect(project.get('config')).toEqual(mockConfig2);
 
     project.set('version', '2.0.0');
     expect(project.get('version')).toBe('2.0.0');
@@ -113,6 +113,8 @@ describe.only('Project 方法测试', () => {
     expect(project.documents.length).toBe(4);
 
     expect(project.getDocument(project.currentDocument?.id)).toBe(doc3);
+    expect(project.getDocumentByFileName(project.currentDocument?.fileName)).toBe(doc3);
+    expect(project.getDocumentByFileName('unknown')).toBeNull();
     expect(project.checkExclusive(project.currentDocument));
 
     expect(project.documents[0].opened).toBeTruthy();
@@ -152,31 +154,31 @@ describe.only('Project 方法测试', () => {
   });
 
   it('onCurrentDocumentChange', () => {
-    const mockedFn = jest.fn();
-    const off = project.onCurrentDocumentChange(mockedFn);
+    const mockFn = jest.fn();
+    const off = project.onCurrentDocumentChange(mockFn);
 
     project.open({
       componentName: 'Page',
     });
 
-    expect(mockedFn).toHaveBeenCalled();
+    expect(mockFn).toHaveBeenCalled();
 
     off();
-    mockedFn.mockClear();
+    mockFn.mockClear();
     project.open({
       componentName: 'Page',
     });
-    expect(mockedFn).not.toHaveBeenCalled();
+    expect(mockFn).not.toHaveBeenCalled();
   });
 
   it('setRendererReady / onRendererReady', () => {
-    const mockedFn = jest.fn();
-    const off = project.onRendererReady(mockedFn);
+    const mockFn = jest.fn();
+    const off = project.onRendererReady(mockFn);
     project.setRendererReady({ a: 1 });
-    expect(mockedFn).toHaveBeenCalledWith({ a: 1 });
+    expect(mockFn).toHaveBeenCalledWith({ a: 1 });
     off();
-    mockedFn.mockClear();
+    mockFn.mockClear();
     project.setRendererReady({ a: 1 });
-    expect(mockedFn).not.toHaveBeenCalled();
+    expect(mockFn).not.toHaveBeenCalled();
   });
 });

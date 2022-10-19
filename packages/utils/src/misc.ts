@@ -102,6 +102,10 @@ export function invariant(check: any, message: string, thing?: any) {
 
 export function deprecate(fail: any, message: string, alterative?: string) {
   if (fail) {
-    console.warn(`Deprecation: ${message}` + (alterative ? `, use ${alterative} instead.'` : ''));
+    console.warn(`Deprecation: ${message}` + (alterative ? `, use ${alterative} instead.` : ''));
   }
+}
+
+export function isRegExp(obj: any): obj is RegExp {
+  return obj && obj.test && obj.exec && obj.compile;
 }

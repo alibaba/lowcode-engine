@@ -12,6 +12,12 @@ import divMetadata from '../fixtures/component-metadata/div';
 import { delayObxTick } from '../utils';
 import { fireEvent } from '@testing-library/react';
 
+const mockNode = {
+  internalToShellNode() {
+    return 'mockNode';
+  },
+};
+
 describe('Designer 测试', () => {
   let editor: Editor;
   let designer: Designer;
@@ -178,9 +184,9 @@ describe('Designer 测试', () => {
 
   it('addPropsReducer / transformProps', () => {
     // 没有相应的 reducer
-    expect(designer.transformProps({ num: 1 }, TransformStage.Init)).toEqual({ num: 1 });
+    expect(designer.transformProps({ num: 1 }, mockNode, TransformStage.Init)).toEqual({ num: 1 });
     // props 是数组
-    expect(designer.transformProps([{ num: 1 }], TransformStage.Init)).toEqual([{ num: 1 }]);
+    expect(designer.transformProps([{ num: 1 }], mockNode, TransformStage.Init)).toEqual([{ num: 1 }]);
 
     designer.addPropsReducer((props, node) => {
       props.num += 1;
@@ -217,17 +223,17 @@ describe('Designer 测试', () => {
       return props;
     }, TransformStage.Upgrade);
 
-    expect(designer.transformProps({ num: 1 }, {}, TransformStage.Init)).toEqual({ num: 3 });
-    expect(designer.transformProps({ num: 1 }, {}, TransformStage.Clone)).toEqual({ num: 2 });
-    expect(designer.transformProps({ num: 1 }, {}, TransformStage.Serilize)).toEqual({ num: 2 });
-    expect(designer.transformProps({ num: 1 }, {}, TransformStage.Render)).toEqual({ num: 2 });
-    expect(designer.transformProps({ num: 1 }, {}, TransformStage.Save)).toEqual({ num: 2 });
-    expect(designer.transformProps({ num: 1 }, {}, TransformStage.Upgrade)).toEqual({ num: 2 });
+    expect(designer.transformProps({ num: 1 }, mockNode, TransformStage.Init)).toEqual({ num: 3 });
+    expect(designer.transformProps({ num: 1 }, mockNode, TransformStage.Clone)).toEqual({ num: 2 });
+    expect(designer.transformProps({ num: 1 }, mockNode, TransformStage.Serilize)).toEqual({ num: 2 });
+    expect(designer.transformProps({ num: 1 }, mockNode, TransformStage.Render)).toEqual({ num: 2 });
+    expect(designer.transformProps({ num: 1 }, mockNode, TransformStage.Save)).toEqual({ num: 2 });
+    expect(designer.transformProps({ num: 1 }, mockNode, TransformStage.Upgrade)).toEqual({ num: 2 });
 
     designer.addPropsReducer((props, node) => {
       throw new Error('calculate error');
     }, TransformStage.Upgrade);
-    expect(designer.transformProps({ num: 1 }, {}, TransformStage.Upgrade)).toEqual({ num: 2 });
+    expect(designer.transformProps({ num: 1 }, mockNode, TransformStage.Upgrade)).toEqual({ num: 2 });
   });
 
   it('setProps', () => {
@@ -267,6 +273,18 @@ describe('Designer 测试', () => {
     expect(designer._componentMetasMap.has('Div')).toBeTruthy();
     const { editor: editorFromDesigner2, ...others2 } = designer.props;
     expect(others2).toEqual(updatedProps);
+
+    // 第三次设置 props，跟第二次值一样，for 覆盖率测试
+    const updatedProps2 = updatedProps;
+    designer.setProps(updatedProps2);
+
+    expect(designer.simulatorComponent).toEqual({ isSimulatorComp2: true });
+    expect(designer.simulatorProps).toEqual({ designMode: 'live' });
+    expect(designer.suspensed).toBeFalsy();
+    expect(designer._componentMetasMap.has('Button')).toBeTruthy();
+    expect(designer._componentMetasMap.has('Div')).toBeTruthy();
+    const { editor: editorFromDesigner3, ...others3 } = designer.props;
+    expect(others3).toEqual(updatedProps);
   });
 
   describe('getSuitableInsertion', () => {
@@ -304,6 +322,70 @@ describe('Designer 测试', () => {
       );
       expect(target).toBe(doc.getNode('page'));
       expect(index).toBeUndefined();
+    });
+  });
+
+  it('getComponentMetasMap', () => {
+    designer.createComponentMeta({
+      componentName: 'Div',
+      title: '容器',
+      docUrl: 'http://gitlab.alibaba-inc.com/vision-components/vc-block/blob/master/README.md',
+      devMode: 'procode',
+      tags: ['布局'],
+    });
+
+    expect(designer.getComponentMetasMap().get('Div')).not.toBeUndefined();
+  });
+
+  it('refreshComponentMetasMap', () => {
+    designer.createComponentMeta({
+      componentName: 'Div',
+      title: '容器',
+      docUrl: 'http://gitlab.alibaba-inc.com/vision-components/vc-block/blob/master/README.md',
+      devMode: 'procode',
+      tags: ['布局'],
+    });
+
+    const originalMetasMap = designer.getComponentMetasMap();
+    designer.refreshComponentMetasMap();
+
+    expect(originalMetasMap).not.toBe(designer.getComponentMetasMap());
+  });
+
+  describe('loadIncrementalAssets', () => {
+    it('components && packages', async () => {
+      editor.set('assets', { components: [], packages: [] });
+      const fn = jest.fn();
+
+      project.mountSimulator({
+        setupComponents: fn,
+      });
+      await designer.loadIncrementalAssets({
+        components: [{
+          componentName: 'Div2',
+          title: '容器',
+          docUrl: 'http://gitlab.alibaba-inc.com/vision-components/vc-block/blob/master/README.md',
+          devMode: 'proCode',
+          tags: ['布局'],
+        }],
+        packages: [],
+      });
+
+      const comps = editor.get('assets').components;
+      expect(comps).toHaveLength(1);
+      expect(fn).toHaveBeenCalled();
+    });
+
+    it('no components && packages', async () => {
+      editor.set('assets', { components: [], packages: [] });
+      const fn = jest.fn();
+
+      project.mountSimulator({
+        setupComponents: fn,
+      });
+      await designer.loadIncrementalAssets({});
+
+      expect(fn).not.toHaveBeenCalled();
     });
   });
 

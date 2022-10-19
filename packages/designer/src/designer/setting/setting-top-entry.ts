@@ -226,13 +226,11 @@ export class SettingTopEntry implements SettingEntry {
   }
 
 
-  // ==== compatibles for vision =====
   getProp(propName: string | number) {
     return this.get(propName);
   }
 
   // ==== copy some Node api =====
-  // `VE.Node.getProps`
   getStatus() {
 
   }

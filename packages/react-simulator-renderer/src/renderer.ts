@@ -25,6 +25,7 @@ import { createMemoryHistory, MemoryHistory } from 'history';
 import Slot from './builtin-components/slot';
 import Leaf from './builtin-components/leaf';
 import { withQueryParams, parseQuery } from './utils/url';
+import { merge } from 'lodash';
 
 const loader = new AssetLoader();
 configure({ enforceActions: 'never' });
@@ -48,24 +49,6 @@ export class DocumentInstance {
     // 根据 device 选择不同组件，进行响应式
     // 更好的做法是，根据 device 选择加载不同的组件资源，甚至是 simulatorUrl
     return this._components;
-  }
-
-  /**
-   * 本次的变更数据
-   */
-  @obx.ref private _deltaData: any = {};
-
-  @computed get deltaData(): any {
-    return this._deltaData;
-  }
-
-  /**
-   * 是否使用增量模式
-   */
-  @obx.ref private _deltaMode: boolean = false;
-
-  @computed get deltaMode(): boolean {
-    return this._deltaMode;
   }
 
   // context from: utils、constants、history、location、match
@@ -115,7 +98,7 @@ export class DocumentInstance {
     return this.document.id;
   }
 
-  private unmountIntance(id: string, instance: ReactInstance) {
+  private unmountInstance(id: string, instance: ReactInstance) {
     const instances = this.instancesMap.get(id);
     if (instances) {
       const i = instances.indexOf(instance);
@@ -143,11 +126,11 @@ export class DocumentInstance {
       }
       return;
     }
-    const unmountIntance = this.unmountIntance.bind(this);
+    const unmountInstance = this.unmountInstance.bind(this);
     const origId = (instance as any)[SYMBOL_VNID];
     if (origId && origId !== id) {
       // 另外一个节点的 instance 在此被复用了，需要从原来地方卸载
-      unmountIntance(origId, instance);
+      unmountInstance(origId, instance);
     }
     if (isElement(instance)) {
       cacheReactKey(instance);
@@ -159,7 +142,7 @@ export class DocumentInstance {
       }
       // hack! delete instance from map
       const newUnmount = function (this: any) {
-        unmountIntance(id, instance);
+        unmountInstance(id, instance);
         origUnmount && origUnmount.call(this);
       };
       (newUnmount as any).origUnmount = origUnmount;
@@ -308,6 +291,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         ...this._appContext,
       };
       newCtx.utils.i18n.messages = data.i18n || {};
+      merge(newCtx, data.appHelper || {});
       this._appContext = newCtx;
     });
   }
@@ -428,8 +412,6 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     const _schema: any = {
       ...compatibleLegaoSchema(schema),
     };
-    _schema.methods = {};
-    _schema.lifeCycles = {};
 
     if (schema.componentName === 'Component' && (schema as ComponentSchema).css) {
       const doc = window.document;
@@ -450,10 +432,11 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
           // 使用 _schema 为了使低代码组件在页面设计中使用变量，同 react 组件使用效果一致
           schema: _schema,
           components: renderer.components,
-          designMode: renderer.designMode,
+          designMode: '',
           device: renderer.device,
           appHelper: renderer.context,
           rendererName: 'LowCodeRenderer',
+          thisRequiredInJSE: host.thisRequiredInJSE,
           customCreateElement: (Comp: any, props: any, children: any) => {
             const componentMeta = host.currentDocument?.getComponentMeta(Comp.displayName);
             if (componentMeta?.isModal) {
@@ -464,6 +447,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
             // mock _leaf，减少性能开销
             const _leaf = {
               isEmpty: () => false,
+              isMock: true,
             };
             viewProps._leaf = _leaf;
             return createElement(Comp, viewProps, children);

@@ -87,7 +87,7 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
     });
   }
   //  通用设置
-  let propsGroup = props || [];
+  let propsGroup = props ? [...props] : [];
   const basicInfo: any = {};
   if (componentName === 'Slot') {
     if (!configure.component) {
@@ -141,13 +141,13 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
   });
   */
   const stylesGroup: FieldConfig[] = [];
-  const advanceGroup: FieldConfig[] = [];
+  const advancedGroup: FieldConfig[] = [];
   if (propsGroup) {
     let l = propsGroup.length;
     while (l-- > 0) {
       const item = propsGroup[l];
       // if (item.type === 'group' && (item.title === '高级' || item.title?.label === '高级')) {
-      //   advanceGroup = item.items || [];
+      //   advancedGroup = item.items || [];
       //   propsGroup.splice(l, 1);
       // }
       if (
@@ -236,7 +236,7 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
 
   if (!isRoot) {
     if (supports.condition !== false) {
-      advanceGroup.push({
+      advancedGroup.push({
         name: getConvertedExtraKey('condition'),
         title: { type: 'i18n', 'zh-CN': '是否渲染', 'en-US': 'Condition' },
         defaultValue: true,
@@ -254,7 +254,7 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
       });
     }
     if (supports.loop !== false) {
-      advanceGroup.push({
+      advancedGroup.push({
         name: '#loop',
         title: { type: 'i18n', 'zh-CN': '循环', 'en-US': 'Loop' },
         items: [
@@ -266,6 +266,7 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
                 componentName: 'JsonSetter',
                 props: {
                   label: { type: 'i18n', 'zh-CN': '编辑数据', 'en-US': 'Edit Data' },
+                  defaultValue: '[]',
                 },
               },
               {
@@ -313,12 +314,12 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
     }
 
     if (supports.condition !== false || supports.loop !== false) {
-      advanceGroup.push({
+      advancedGroup.push({
         name: 'key',
         title: {
           label: '渲染唯一标识（key）',
           tip: '搭配「条件渲染」或「循环渲染」时使用，和 react 组件中的 key 原理相同，点击查看帮助',
-          docUrl: 'https://yuque.antfin-inc.com/legao/help3.0/ca5in7',
+          docUrl: 'https://lowcode-engine.cn/docV2/qm75w3',
         },
         setter: [
           {
@@ -334,11 +335,11 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
       });
     }
   }
-  if (advanceGroup.length > 0) {
+  if (advancedGroup.length > 0) {
     combined.push({
       name: '#advanced',
       title: { type: 'i18n', 'zh-CN': '高级', 'en-US': 'Advanced' },
-      items: advanceGroup,
+      items: advancedGroup,
     });
   }
 

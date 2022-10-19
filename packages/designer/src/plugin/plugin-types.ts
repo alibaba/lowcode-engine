@@ -48,6 +48,7 @@ export interface ILowCodePluginPreferenceDeclaration {
 export type PluginPreference = Map<string, Record<string, PreferenceValueType>>;
 
 export interface ILowCodePluginConfig {
+  dep?: string | string[];
   init?(): void;
   destroy?(): void;
   exports?(): any;
@@ -129,6 +130,10 @@ export interface ILowCodePluginManagerCore {
 }
 
 export type ILowCodePluginManager = ILowCodePluginManagerCore & ILowCodePluginManagerPluginAccessor;
+
+export function isLowCodeRegisterOptions(opts: any): opts is ILowCodeRegisterOptions {
+  return opts && ('autoInit' in opts || 'override' in opts);
+}
 
 export interface ILowCodeRegisterOptions {
   autoInit?: boolean;

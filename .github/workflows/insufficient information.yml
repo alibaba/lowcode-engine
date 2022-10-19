@@ -16,4 +16,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
           body: |
-            你好 @${{ github.event.issue.user.login }}，由于缺乏必要的信息（如 bug 重现步骤、引擎版本信息 等），无法定位问题，请按照 [issue bug 模板](https://github.com/alibaba/lowcode-engine/blob/main/.github/ISSUE_TEMPLATE/bug-report.md) 补全信息。
+            你好 @${{ github.event.issue.user.login }}，由于缺乏必要的信息（如 bug 重现步骤、引擎版本信息 等），无法定位问题，请按照 [issue bug 模板](https://github.com/alibaba/lowcode-engine/blob/main/.github/ISSUE_TEMPLATE/bug-report.md) 补全信息，也可以通过阅读[引擎的 issue 说明](https://www.yuque.com/lce/doc/yvlxhs) 了解什么类型的 issue 可以获得更好、更快的支持。

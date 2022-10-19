@@ -1,9 +1,10 @@
-import { Component } from 'react';
+import { Component, ReactElement } from 'react';
 import { observer, obx, Title, makeObservable } from '@alilc/lowcode-editor-core';
 import { Designer } from '../designer';
-import { DragObject, isDragNodeObject, isDragNodeDataObject } from '../dragon';
+import { DragObject, isDragNodeObject } from '../dragon';
 import { isSimulatorHost } from '../../simulator';
 import './ghost.less';
+import { I18nData, NodeSchema } from '@alilc/lowcode-types';
 
 type offBinding = () => any;
 
@@ -11,7 +12,7 @@ type offBinding = () => any;
 export default class DragGhost extends Component<{ designer: Designer }> {
   private dispose: offBinding[] = [];
 
-  @obx.ref private dragObject: DragObject | null = null;
+  @obx.ref private titles: (string | I18nData | ReactElement)[] | null = null;
 
   @obx.ref private x = 0;
 
@@ -29,7 +30,7 @@ export default class DragGhost extends Component<{ designer: Designer }> {
         if (e.originalEvent.type.slice(0, 4) === 'drag') {
           return;
         }
-        this.dragObject = e.dragObject;
+        this.titles = this.getTitles(e.dragObject);
         this.x = e.globalX;
         this.y = e.globalY;
       }),
@@ -46,11 +47,21 @@ export default class DragGhost extends Component<{ designer: Designer }> {
         this.isAbsoluteLayoutContainer = false;
       }),
       this.dragon.onDragend(() => {
-        this.dragObject = null;
+        this.titles = null;
         this.x = 0;
         this.y = 0;
       }),
     ];
+  }
+
+  getTitles(dragObject: DragObject) {
+    if (isDragNodeObject(dragObject)) {
+      return dragObject.nodes.map((node) => node.title);
+    }
+
+    const dataList = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
+
+    return dataList.map((item: NodeSchema, i) => (this.props.designer.getComponentMeta(item.componentName).title));
   }
 
   componentWillUnmount() {
@@ -60,35 +71,18 @@ export default class DragGhost extends Component<{ designer: Designer }> {
   }
 
   renderGhostGroup() {
-    const { dragObject } = this;
-    if (isDragNodeObject(dragObject)) {
-      return dragObject.nodes.map(node => {
-        const ghost = (
-          <div className="lc-ghost" key={node.id}>
-            <Title title={node.title} />
-          </div>
-        );
-        return ghost;
-      });
-    } else if (isDragNodeDataObject(dragObject)) {
-      return Array.isArray(dragObject.data) ? (
-        dragObject.data.map((item, index) => {
-          return (
-            <div className="lc-ghost" key={`ghost-${index}`}>
-              <div className="lc-ghost-title">{item.componentName}</div>
-            </div>
-          );
-        })
-      ) : (
-        <div className="lc-ghost">
-          <div className="lc-ghost-title">{dragObject.data.componentName}</div>
+    return this.titles?.map((title, i) => {
+      const ghost = (
+        <div className="lc-ghost" key={i}>
+          <Title title={title} />
         </div>
       );
-    }
+      return ghost;
+    });
   }
 
   render() {
-    if (!this.dragObject) {
+    if (!this.titles || !this.titles.length) {
       return null;
     }
 

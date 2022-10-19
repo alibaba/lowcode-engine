@@ -15,6 +15,8 @@ export type RegisteredSetter = {
    */
   initialValue?: any | ((field: any) => any);
   recommend?: boolean;
+  // 标识是否为动态setter，默认为true
+  isDynamic?: boolean;
 };
 const settersMap = new Map<string, RegisteredSetter & {
   type: string;

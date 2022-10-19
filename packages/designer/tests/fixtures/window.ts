@@ -19,4 +19,10 @@ Object.defineProperty(window, 'React', {
 
 window.scrollTo = () => {};
 window.console.warn = () => {};
+const originalLog = window.console.log;
+window.console.log = (...args) => {
+  // suppress boring warnings
+  if (args[0].includes('@babel/plugin-proposal-private-property-in-object')) return;
+  originalLog.apply(window.console, args);
+};
 window.React = window.React || {};

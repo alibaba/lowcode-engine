@@ -7,9 +7,10 @@ import {
   addBuiltinComponentAction,
   removeBuiltinComponentAction,
   modifyBuiltinComponentAction,
+  isComponentMeta,
 } from '@alilc/lowcode-designer';
 import { AssetsJson } from '@alilc/lowcode-utils';
-import { ComponentAction } from '@alilc/lowcode-types';
+import { ComponentAction, ComponentMetadata } from '@alilc/lowcode-types';
 import { editorSymbol, designerSymbol } from './symbols';
 import ComponentMeta from './component-meta';
 
@@ -87,13 +88,31 @@ export default class Material {
   }
 
   /**
+   * create an instance of ComponentMeta by given metadata
+   * @param metadata
+   * @returns
+   */
+  createComponentMeta(metadata: ComponentMetadata) {
+    return ComponentMeta.create(this[designerSymbol].createComponentMeta(metadata));
+  }
+
+  /**
+   * test if the given object is a ComponentMeta instance or not
+   * @param obj
+   * @returns
+   */
+  isComponentMeta(obj: any) {
+    return isComponentMeta(obj);
+  }
+
+  /**
    * 获取所有已注册的物料元数据
    * @returns
    */
   getComponentMetasMap() {
     const map = new Map<string, ComponentMeta>();
     const originalMap = this[designerSymbol].getComponentMetasMap();
-    for (let componentName in originalMap.keys()) {
+    for (let componentName of originalMap.keys()) {
       map.set(componentName, this.getComponentMeta(componentName)!);
     }
     return map;

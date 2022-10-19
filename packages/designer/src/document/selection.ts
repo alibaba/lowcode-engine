@@ -117,7 +117,7 @@ export class Selection {
   /**
    * 获取选中的节点
    */
-  getNodes() {
+  getNodes(): Node[] {
     const nodes = [];
     for (const id of this._selected) {
       const node = this.doc.getNode(id);
@@ -147,9 +147,8 @@ export class Selection {
         if (n === PositionNO.Contains || n === PositionNO.TheSame) {
           isTop = false;
           break;
-        }
-        // node contains nodes[i], delete nodes[i]
-        if (n === PositionNO.ContainedBy) {
+        } else if (n === PositionNO.ContainedBy) {
+          // node contains nodes[i], delete nodes[i]
           nodes.splice(i, 1);
         }
       }

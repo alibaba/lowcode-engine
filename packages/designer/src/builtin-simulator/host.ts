@@ -190,6 +190,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.componentsConsumer = new ResourceConsumer<Asset | undefined>(() => this.componentsAsset);
     this.injectionConsumer = new ResourceConsumer(() => {
       return {
+        appHelper: engineConfig.get('appHelper'),
         i18n: this.project.i18n,
       };
     });
@@ -225,6 +226,14 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     // renderer 依赖
     // TODO: 需要根据 design mode 不同切换鼠标响应情况
     return this.get('requestHandlersMap') || null;
+  }
+
+  get thisRequiredInJSE(): any {
+    return engineConfig.get('thisRequiredInJSE') ?? true;
+  }
+
+  get enableStrictNotFoundMode(): any {
+    return engineConfig.get('enableStrictNotFoundMode') ?? false;
   }
 
   @computed get componentsAsset(): Asset | undefined {
@@ -613,7 +622,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           '.next-calendar-table',
           '.editor-container', // 富文本组件
         ];
-        const ignoreSelectors = customizeIgnoreSelectors?.(defaultIgnoreSelectors) || defaultIgnoreSelectors;
+        const ignoreSelectors = customizeIgnoreSelectors?.(defaultIgnoreSelectors, e) || defaultIgnoreSelectors;
         const ignoreSelectorsString = ignoreSelectors.join(',');
         // 提供了 customizeIgnoreSelectors 的情况下，忽略 isFormEvent() 判断
         if ((!customizeIgnoreSelectors && isFormEvent(e)) || target?.closest(ignoreSelectorsString)) {
@@ -845,7 +854,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     // filter with context
     return instances.filter((instance) => {
-      return this.getClosestNodeInstance(instance, context.nodeId)?.instance === context.instance;
+      return this.getClosestNodeInstance(instance, context?.nodeId)?.instance === context.instance;
     });
   }
 
@@ -1098,7 +1107,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     // fix target : 浏览器事件响应目标
     if (!e.target || notMyEvent) {
-      e.target = this.contentDocument?.elementFromPoint(e.canvasX!, e.canvasY!);
+      if (!isNaN(e.canvasX!) && !isNaN(e.canvasY!)) {
+        e.target = this.contentDocument?.elementFromPoint(e.canvasX!, e.canvasY!);
+      }
     }
 
     // 事件已订正
@@ -1156,14 +1167,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       return null;
     }
     const dropContainer = this.getDropContainer(e);
-    const canDropIn = dropContainer?.container?.componentMeta?.prototype?.options?.canDropIn;
     const lockedNode = getClosestNode(dropContainer?.container as Node, (node) => node.isLocked);
     if (lockedNode) return null;
     if (
-      !dropContainer ||
-      canDropIn === false ||
-      // too dirty
-      (nodes && typeof canDropIn === 'function' && !canDropIn(operationalNodes[0]))
+      !dropContainer
     ) {
       return null;
     }

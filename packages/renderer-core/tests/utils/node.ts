@@ -6,22 +6,57 @@ export default class Node {
   schema: any = {
     props: {},
   };
-  hasLoop = false;
 
-  constructor(schema: any) {
+  componentMeta = {};
+
+  parent;
+
+  hasLoop = () => this._hasLoop;
+
+  id;
+
+  _isRoot: false;
+
+  _hasLoop: false;
+
+  constructor(schema: any, info: any = {}) {
     this.emitter = new EventEmitter();
-    this.schema = schema;
+    const {
+      componentMeta,
+      parent,
+      isRoot,
+      hasLoop,
+    } = info;
+    this.schema = {
+      props: {},
+      ...schema,
+    };
+    this.componentMeta = componentMeta || {};
+    this.parent = parent;
+    this.id = schema.id;
+    this._isRoot = isRoot;
+    this._hasLoop = hasLoop;
   }
 
-  mockLoop() {
-    this.hasLoop = true;
-  }
+  isRoot = () => this._isRoot;
+
+  // componentMeta() {
+  //   return this.componentMeta;
+  // }
+
+  // mockLoop() {
+  //   // this.hasLoop = true;
+  // }
 
   onChildrenChange(fn: any) {
     this.emitter.on('onChildrenChange', fn);
     return () => {
       this.emitter.off('onChildrenChange', fn);
     }
+  }
+
+  emitChildrenChange() {
+    this.emitter?.emit('onChildrenChange', {});
   }
 
   onPropChange(fn: any) {
@@ -31,11 +66,14 @@ export default class Node {
     }
   }
 
-  emitPropChange(val: PropChangeOptions) {
-    this.schema.props = {
-      ...this.schema.props,
-      [val.key + '']: val.newValue,
+  emitPropChange(val: PropChangeOptions, skip?: boolean) {
+    if (!skip) {
+      this.schema.props = {
+        ...this.schema.props,
+        [val.key + '']: val.newValue,
+      }
     }
+
     this.emitter?.emit('onPropChange', val);
   }
 

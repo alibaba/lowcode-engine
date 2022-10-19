@@ -1,6 +1,6 @@
 import { createContext, ReactNode, Component, PureComponent } from 'react';
 import { EventEmitter } from 'events';
-import { Drawer } from '@alifd/next';
+import { Drawer, ConfigProvider } from '@alifd/next';
 import { uniqueId } from '@alilc/lowcode-utils';
 import './style.less';
 
@@ -11,7 +11,10 @@ export class PopupPipe {
 
   private currentId?: string;
 
-  create(props?: object): { send: (content: ReactNode, title: ReactNode) => void; show: (target: Element) => void } {
+  create(props?: object): {
+    send: (content: ReactNode, title: ReactNode) => void;
+    show: (target: Element) => void;
+  } {
     let sendContent: ReactNode = null;
     let sendTitle: ReactNode = null;
     const id = uniqueId('popup');
@@ -60,27 +63,33 @@ export class PopupPipe {
   }
 }
 
-export default class PopupService extends Component<{ popupPipe?: PopupPipe; actionKey?: string; safeId?: string }> {
+export default class PopupService extends Component<{
+  popupPipe?: PopupPipe;
+  actionKey?: string;
+  safeId?: string;
+  popupContainer?: string;
+}> {
   private popupPipe = this.props.popupPipe || new PopupPipe();
 
   componentWillUnmount() {
     this.popupPipe.purge();
   }
 
-
   render() {
-    const { children, actionKey, safeId } = this.props;
+    const { children, actionKey, safeId, popupContainer } = this.props;
     return (
       <PopupContext.Provider value={this.popupPipe}>
         {children}
-        <PopupContent key={`pop${ actionKey}`} safeId={safeId} />
+        <PopupContent key={`pop${actionKey}`} safeId={safeId} popupContainer={popupContainer} />
       </PopupContext.Provider>
     );
   }
 }
 
-export class PopupContent extends PureComponent<{ safeId?: string }> {
+export class PopupContent extends PureComponent<{ safeId?: string; popupContainer?: string }> {
   static contextType = PopupContext;
+
+  popupContainerId = uniqueId('popupContainer');
 
   state: any = {
     visible: false,
@@ -141,29 +150,35 @@ export class PopupContent extends PureComponent<{ safeId?: string }> {
         visible={visible}
         offset={[offsetX, 0]}
         hasMask={false}
-        onVisibleChange={(visible, type) => {
+        onVisibleChange={(_visible, type) => {
           if (avoidLaterHidden) {
             return;
           }
-          if (!visible && type === 'closeClick') {
+          if (!_visible && type === 'closeClick') {
             this.setState({ visible: false });
           }
         }}
         trigger={<div className="lc-popup-placeholder" style={pos} />}
         triggerType="click"
-        canCloseByOutSideClick={false}
+        canCloseByOutSideClick
         animation={false}
         onClose={this.onClose}
         id={this.props.safeId}
         safeNode={id}
         closeable
+        container={this.props.popupContainer}
       >
         <div className="lc-ballon-title">{title}</div>
         <div className="lc-ballon-content">
-          <PopupService actionKey={actionKey} safeId={id}>
-            {content}
+          <PopupService actionKey={actionKey} safeId={id} popupContainer={this.popupContainerId}>
+            <ConfigProvider popupContainer={this.popupContainerId}>
+              {content}
+            </ConfigProvider>
           </PopupService>
         </div>
+        <div id={this.popupContainerId} />
+        <div id="engine-variable-setter-dialog" />
+        <div id="engine-popup-container" />
       </Drawer>
     );
   }

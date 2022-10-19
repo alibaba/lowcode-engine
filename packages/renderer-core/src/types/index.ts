@@ -21,12 +21,12 @@ interface IGeneralComponent<P = {}, S = {}, SS = any> extends ComponentLifecycle
 }
 
 export type IGeneralConstructor<
-  P = {
+  T = {
     [key: string]: any;
   }, S = {
     [key: string]: any;
-  }, SS = any
-> = new (props: any, context: any) => IGeneralComponent<P, S, SS>;
+  }, D = any
+> = new <TT = T, SS = S, DD = D>(props: TT, context: any) => IGeneralComponent<TT, SS, DD>;
 
 /**
  * duck-typed History
@@ -128,6 +128,16 @@ export interface IRendererProps {
   faultComponent?: IGeneralComponent;
   /** 设备信息 */
   device?: string;
+  /**
+   * @default true
+   * JSExpression 是否只支持使用 this 来访问上下文变量
+   */
+  thisRequiredInJSE?: boolean;
+  /**
+   * @default false
+   * 当开启组件未找到严格模式时，渲染模块不会默认给一个容器组件
+   */
+  enableStrictNotFoundMode?: boolean;
 }
 
 export interface IRendererState {
@@ -148,15 +158,13 @@ export interface IBaseRendererProps {
   __host?: BuiltinSimulatorHost;
   __container?: any;
   config?: Record<string, any>;
-  /**
-   * @see https://yuque.antfin.com/ali-lowcode/docs/hk2ogo#designMode
-   */
-  designMode?: 'live' | 'design';
+  designMode?: 'design';
   className?: string;
   style?: CSSProperties;
   id?: string | number;
   getSchemaChangedSymbol?: () => boolean;
   setSchemaChangedSymbol?: (symbol: boolean) => void;
+  thisRequiredInJSE?: boolean;
   documentId?: string;
   getNode?: any;
   /**
@@ -165,7 +173,7 @@ export interface IBaseRendererProps {
   device?: 'default' | 'mobile' | string;
 }
 
-export interface IInfo {
+export interface INodeInfo {
   schema?: NodeSchema;
   Comp: any;
   componentInfo?: any;
@@ -233,11 +241,10 @@ export type IBaseRendererInstance = IGeneralComponent<
 >
   & {
     reloadDataSource(): Promise<any>;
-    getSchemaChildren(schema: NodeSchema | undefined): NodeData | NodeData[] | undefined;
     __beforeInit(props: IBaseRendererProps): void;
     __init(props: IBaseRendererProps): void;
     __afterInit(props: IBaseRendererProps): void;
-    __setLifeCycleMethods(method: string, args?: any[]): void;
+    __excuteLifeCycleMethod(method: string, args?: any[]): void;
     __bindCustomMethods(props: IBaseRendererProps): void;
     __generateCtx(ctx: Record<string, any>): void;
     __parseData(data: any, ctx?: any): any;
@@ -251,9 +258,9 @@ export type IBaseRendererInstance = IGeneralComponent<
     ): any;
     __getComponentProps(schema: NodeSchema | undefined, scope: any, Comp: any, componentInfo?: any): any;
     __createDom(): any;
-    __createVirtualDom(schema: any, self: any, parentInfo: IInfo, idx: string | number): any;
-    __createLoopVirtualDom(schema: any, self: any, parentInfo: IInfo, idx: number | string): any;
-    __parseProps(props: any, self: any, path: string, info: IInfo): any;
+    __createVirtualDom(schema: any, self: any, parentInfo: INodeInfo, idx: string | number): any;
+    __createLoopVirtualDom(schema: any, self: any, parentInfo: INodeInfo, idx: number | string): any;
+    __parseProps(props: any, self: any, path: string, info: INodeInfo): any;
     __initDebug?(): void;
     __debug(...args: any[]): void;
     __renderContextProvider(customProps?: object, children?: any): any;
@@ -286,7 +293,7 @@ export interface IRenderComponent {
     getNotFoundComponent(): any;
     getFaultComponent(): any;
   };
-  dislayName: string;
+  displayName: string;
   defaultProps: IRendererProps;
   findDOMNode: (...args: any) => any;
 }

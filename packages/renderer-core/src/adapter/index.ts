@@ -21,23 +21,23 @@ class Adapter {
   }
 
   initRuntime() {
-    const Component: IGeneralConstructor = class {
+    const Component: IGeneralConstructor = class <T = any, S = any> {
       setState() {}
       forceUpdate() {}
       render() {}
-      state: {};
-      props: {};
-      refs: {};
-      context: {};
+      state: Readonly<S>;
+      props: Readonly<T> & Readonly<{ children?: any | undefined }>;
+      refs: Record<string, unknown>;
+      context: Record<string, unknown>;
     };
-    const PureComponent: IGeneralConstructor = class {
+    const PureComponent = class <T = any, S = any> {
       setState() {}
       forceUpdate() {}
       render() {}
-      state: {};
-      props: {};
-      refs: {};
-      context: {};
+      state: Readonly<S>;
+      props: Readonly<T> & Readonly<{ children?: any | undefined }>;
+      refs: Record<string, unknown>;
+      context: Record<string, unknown>;
     };
     const createElement = () => {};
     const createContext = () => {};
@@ -64,10 +64,10 @@ class Adapter {
       return false;
     }
 
-    return this.builtinModules.every(m => {
-      const flag = !!this.runtime[m];
+    return this.builtinModules.every((m) => {
+      const flag = !!runtime[m];
       if (!flag) {
-        throw new Error(`runtime is inValid, module '${m}' is not existed`);
+        throw new Error(`runtime is invalid, module '${m}' does not exist`);
       }
       return flag;
     });

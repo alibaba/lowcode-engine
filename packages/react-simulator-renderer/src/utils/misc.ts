@@ -24,3 +24,12 @@ export function getProjectUtils(librayMap: LibrayMap, utilsMetadata: UtilsMetada
     });
   }
 }
+
+/**
+ * judges if current simulator renderer deteched or not
+ * @returns detached or not
+ */
+export function isRendererDetached() {
+  // if current iframe detached from host document, the `window.parent` will be undefined.
+  return !window.parent;
+}

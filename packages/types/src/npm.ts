@@ -32,4 +32,26 @@ export interface NpmInfo {
   main?: string;
 }
 
-export type ComponentsMap = NpmInfo[];
+export interface LowCodeComponentType {
+  /**
+   * 研发模式
+   */
+  devMode: 'lowCode';
+  /**
+   * 组件名称
+   */
+  componentName: string;
+}
+
+export type ProCodeComponentType = NpmInfo;
+export type ComponentMap = ProCodeComponentType | LowCodeComponentType;
+
+export function isProCodeComponentType(desc: ComponentMap): desc is ProCodeComponentType {
+  return 'package' in desc;
+}
+
+export function isLowCodeComponentType(desc: ComponentMap): desc is LowCodeComponentType {
+  return !isProCodeComponentType(desc);
+}
+
+export type ComponentsMap = ComponentMap[];

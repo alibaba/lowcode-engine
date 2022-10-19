@@ -1,30 +1,17 @@
 /* eslint-disable no-console */
 /* eslint-disable no-new-func */
-import Debug from 'debug';
+import logger from './logger';
 import { isI18nData, RootSchema, NodeSchema, isJSExpression, JSSlot } from '@alilc/lowcode-types';
-// moment对象配置
-import _moment from 'moment';
-import 'moment/locale/zh-cn';
-import pkg from '../../package.json';
-
 import { isEmpty } from 'lodash';
-
-import _serialize from 'serialize-javascript';
-import * as _jsonuri from 'jsonuri';
-
 import IntlMessageFormat from 'intl-messageformat';
+import pkg from '../../package.json';
+import * as ReactIs from 'react-is';
+import { default as ReactPropTypesSecret } from 'prop-types/lib/ReactPropTypesSecret';
+import { default as factoryWithTypeCheckers } from 'prop-types/factoryWithTypeCheckers';
 
-export const moment = _moment;
-moment.locale('zh-cn');
 (window as any).sdkVersion = pkg.version;
 
 export { pick, isEqualWith as deepEqual, cloneDeep as clone, isEmpty, throttle, debounce } from 'lodash';
-export const jsonuri = _jsonuri;
-export const serialize = _serialize;
-
-const ReactIs = require('react-is');
-const ReactPropTypesSecret = require('prop-types/lib/ReactPropTypesSecret');
-const factoryWithTypeCheckers = require('prop-types/factoryWithTypeCheckers');
 
 const PropTypes2 = factoryWithTypeCheckers(ReactIs.isElement, true);
 
@@ -35,8 +22,6 @@ const EXPRESSION_TYPE = {
   JSBLOCK: 'JSBlock',
   I18N: 'i18n',
 };
-
-const debug = Debug('utils:index');
 
 /**
  * check if schema passed in is a valid schema
@@ -120,7 +105,7 @@ export function isJSSlot(obj: any): obj is JSSlot {
   }
 
   // Compatible with the old protocol JSBlock
-  return ([EXPRESSION_TYPE.JSSLOT, EXPRESSION_TYPE.JSBLOCK].includes(obj.type));
+  return [EXPRESSION_TYPE.JSSLOT, EXPRESSION_TYPE.JSBLOCK].includes(obj.type);
 }
 
 /**
@@ -244,7 +229,7 @@ export function transformStringToFunction(str: string) {
  * @param self scope object
  * @returns funtion
  */
-export function parseExpression(str: any, self: any) {
+export function parseExpression(str: any, self: any, thisRequired = false) {
   try {
     const contextArr = ['"use strict";', 'var __self = arguments[0];'];
     contextArr.push('return ');
@@ -261,12 +246,16 @@ export function parseExpression(str: any, self: any) {
     if (inSameDomain() && (window.parent as any).__newFunc) {
       return (window.parent as any).__newFunc(tarStr)(self);
     }
-    const code = `with($scope || {}) { ${tarStr} }`;
+    const code = `with(${thisRequired ? '{}' : '$scope || {}'}) { ${tarStr} }`;
     return new Function('$scope', code)(self);
   } catch (err) {
-    debug('parseExpression.error', err, str, self);
+    logger.error('parseExpression.error', err, str, self?.__self ?? self);
     return undefined;
   }
+}
+
+export function parseThisRequiredExpression(str: any, self: any) {
+  return parseExpression(str, self, true);
 }
 
 /**
@@ -328,15 +317,19 @@ export function forEach(targetObj: any, fn: any, context?: any) {
   Object.keys(targetObj).forEach((key) => fn.call(context, targetObj[key], key));
 }
 
-export function parseData(schema: unknown, self: any): any {
+interface IParseOptions {
+  thisRequiredInJSE?: boolean;
+}
+
+export function parseData(schema: unknown, self: any, options: IParseOptions = {}): any {
   if (isJSExpression(schema)) {
-    return parseExpression(schema, self);
+    return parseExpression(schema, self, options.thisRequiredInJSE);
   } else if (isI18nData(schema)) {
     return parseI18n(schema, self);
   } else if (typeof schema === 'string') {
     return schema.trim();
   } else if (Array.isArray(schema)) {
-    return schema.map((item) => parseData(item, self));
+    return schema.map((item) => parseData(item, self, options));
   } else if (typeof schema === 'function') {
     return schema.bind(self);
   } else if (typeof schema === 'object') {
@@ -349,7 +342,7 @@ export function parseData(schema: unknown, self: any): any {
       if (key.startsWith('__')) {
         return;
       }
-      res[key] = parseData(val, self);
+      res[key] = parseData(val, self, options);
     });
     return res;
   }

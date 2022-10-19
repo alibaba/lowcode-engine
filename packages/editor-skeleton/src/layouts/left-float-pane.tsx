@@ -16,6 +16,8 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
     const { area } = this.props;
     const triggerClose = (e: any) => {
       if (!area.visible) return;
+      // 当 MouseEvent 的 target 为「插入占位符」时，不关闭当前 panel
+      if (e.originalEvent?.target?.classList.contains('insertion')) return;
       // 假如当前操作 target 祖先节点中有属性 data-keep-visible-while-dragging="true" 代表该 target 所属 panel
       // 不希望 target 在 panel 范围内拖拽时关闭 panel
       const panelElem = e.originalEvent?.target.closest('div[data-keep-visible-while-dragging="true"]');
@@ -38,8 +40,7 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
           return true;
         }
         // 点击了 iframe 内容，算失焦
-        if (document.querySelector('.lc-simulator-content-frame')
-          .contentWindow.document.documentElement.contains(target)) {
+        if ((document.querySelector('.lc-simulator-content-frame') as HTMLIFrameElement)?.contentWindow?.document.documentElement.contains(target)) {
           return false;
         }
         // 点击设置区

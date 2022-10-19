@@ -1,6 +1,9 @@
 import { ComponentType } from 'react';
 import { get as lodashGet } from 'lodash';
 import { isPlainObject } from '@alilc/lowcode-utils';
+
+import { RequestHandlersMap } from '@alilc/lowcode-datasource-types';
+
 import { getLogger } from './utils/logger';
 
 const logger = getLogger({ level: 'log', bizName: 'config' });
@@ -26,6 +29,11 @@ const VALID_ENGINE_OPTIONS = {
     enum: ['default', 'mobile', 'any string value'],
     default: 'default',
     description: '设备类型',
+  },
+  deviceClassName: {
+    type: 'string',
+    default: undefined,
+    description: '指定初始化的 deviceClassName，挂载到画布的顶层节点上',
   },
   locale: {
     type: 'string',
@@ -65,7 +73,7 @@ const VALID_ENGINE_OPTIONS = {
   customizeIgnoreSelectors: {
     type: 'function',
     default: undefined,
-    description: '定制画布中点击被忽略的 selectors, eg. (defaultIgnoreSelectors: string[]) => string[]',
+    description: '定制画布中点击被忽略的 selectors, eg. (defaultIgnoreSelectors: string[], e: MouseEvent) => string[]',
   },
   disableDefaultSettingPanel: {
     type: 'boolean',
@@ -92,6 +100,10 @@ const VALID_ENGINE_OPTIONS = {
     default: false,
     description: '当选中节点切换时，是否停留在相同的设置 tab 上',
   },
+  hideSettingsTabsWhenOnlyOneItem: {
+    type: 'boolean',
+    description: '是否在只有一个 item 的时候隐藏设置 tabs',
+  },
   loadingComponent: {
     type: 'ComponentType',
     default: undefined,
@@ -110,6 +122,29 @@ const VALID_ENGINE_OPTIONS = {
     type: 'array',
     description: '自定义 simulatorUrl 的地址',
   },
+  /**
+   * 与 react-renderer 的 appHelper 一致，  https://lowcode-engine.cn/docV2/nhilce#appHelper
+   */
+  appHelper: {
+    type: 'object',
+    description: '定义 utils 和 constants 等对象',
+  },
+  requestHandlersMap: {
+    type: 'object',
+    description: '数据源引擎的请求处理器映射',
+  },
+  thisRequiredInJSE: {
+    type: 'boolean',
+    description: 'JSExpression 是否只支持使用 this 来访问上下文变量',
+  },
+  enableStrictNotFoundMode: {
+    type: 'boolean',
+    description: '当开启组件未找到严格模式时，渲染模块不会默认给一个容器组件',
+  },
+  focusNodeSelector: {
+    type: 'function',
+    description: '配置指定节点为根组件',
+  },
 };
 export interface EngineOptions {
   /**
@@ -119,8 +154,6 @@ export interface EngineOptions {
   /**
    * @todo designMode 无法映射到文档渲染模块
    *
-   * @see https://yuque.antfin.com/ali-lowcode/docs/hk2ogo#designMode
-   *
    * 设计模式，live 模式将会实时展示变量值，默认值：'design'
    */
   designMode?: 'design' | 'live';
@@ -128,6 +161,10 @@ export interface EngineOptions {
    * 设备类型，默认值：'default'
    */
   device?: 'default' | 'mobile' | string;
+  /**
+   * 指定初始化的 deviceClassName，挂载到画布的顶层节点上
+   */
+  deviceClassName?: string;
   /**
    * 语言，默认值：'zh_CN'
    */
@@ -163,7 +200,7 @@ export interface EngineOptions {
   /**
    * 定制画布中点击被忽略的 selectors，默认值：undefined
    */
-  customizeIgnoreSelectors?: (defaultIgnoreSelectors: string[]) => string[];
+  customizeIgnoreSelectors?: (defaultIgnoreSelectors: string[], e: MouseEvent) => string[];
   /**
    * 禁止默认的设置面板，默认值：false
    */
@@ -185,6 +222,10 @@ export interface EngineOptions {
    */
   stayOnTheSameSettingTab?: boolean;
   /**
+   * 是否在只有一个 item 的时候隐藏设置 tabs，默认值：false
+   */
+  hideSettingsTabsWhenOnlyOneItem?: boolean;
+  /**
    * 自定义 loading 组件
    */
   loadingComponent?: ComponentType;
@@ -205,6 +246,37 @@ export interface EngineOptions {
     // 是否开启在 render 阶段开启 filter reducer，默认值：false
     enableFilterReducerInRenderStage?: boolean;
   };
+  /**
+   * 与 react-renderer 的 appHelper 一致，  https://lowcode-engine.cn/docV2/nhilce#appHelper
+   */
+  appHelper?: {
+    /** 全局公共函数 */
+    utils?: Record<string, any>;
+    /** 全局常量 */
+    constants?: Record<string, any>;
+  };
+
+  /**
+   * 数据源引擎的请求处理器映射
+   */
+  requestHandlersMap?: RequestHandlersMap;
+
+  /**
+   * @default true
+   * JSExpression 是否只支持使用 this 来访问上下文变量，假如需要兼容原来的 'state.xxx'，则设置为 false
+   */
+  thisRequiredInJSE?: boolean;
+
+  /**
+   * @default false
+   * 当开启组件未找到严格模式时，渲染模块不会默认给一个容器组件
+   */
+  enableStrictNotFoundMode?: boolean;
+
+  /**
+   * 配置指定节点为根组件
+   */
+  focusNodeSelector?: (rootNode: Node) => Node;
 }
 
 const getStrictModeValue = (engineOptions: EngineOptions, defaultValue: boolean): boolean => {
@@ -293,7 +365,7 @@ export class EngineConfig {
         if (isValidKey(key)) {
           this.set(key, engineOptions[key]);
         } else {
-          logger.warn(`failed to config ${key} to engineConfig, only predefined options can be set under strict mode, predefined options: ${VALID_ENGINE_OPTIONS}`);
+          logger.warn(`failed to config ${key} to engineConfig, only predefined options can be set under strict mode, predefined options: `, VALID_ENGINE_OPTIONS);
         }
       });
     } else {
