@@ -268,17 +268,24 @@ export class AssetLoader {
   async loadAsyncLibrary(asyncLibraryMap: Record<string, any>) {
     const promiseList: any[] = [];
     const libraryKeyList: any[] = [];
+    const pkgs: any[] = [];
     for (const key in asyncLibraryMap) {
       // 需要异步加载
       if (asyncLibraryMap[key].async) {
         promiseList.push(window[asyncLibraryMap[key].library]);
         libraryKeyList.push(asyncLibraryMap[key].library);
+        pkgs.push(asyncLibraryMap[key]);
       }
     }
     await Promise.all(promiseList).then((mods) => {
       if (mods.length > 0) {
         mods.map((item, index) => {
-          window[libraryKeyList[index]] = item;
+          const { exportMode, exportSourceLibrary, library } = pkgs[index];
+          window[libraryKeyList[index]] =
+            exportMode === 'functionCall' &&
+            (exportSourceLibrary == null || exportSourceLibrary === library)
+              ? item()
+              : item;
           return item;
         });
       }
