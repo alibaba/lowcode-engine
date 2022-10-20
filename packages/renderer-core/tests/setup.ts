@@ -16,8 +16,8 @@ jest.mock('lodash', () => {
 
   return {
     ...original,
-    debounce: (fn) => () => fn(),
-    throttle: (fn) => () => fn(),
+    debounce: (fn) => (...args: any[]) => fn.apply(this, args),
+    throttle: (fn) => (...args: any[]) => fn.apply(this, args),
   }
 })
 
