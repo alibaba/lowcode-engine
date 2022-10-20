@@ -83,11 +83,10 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     super(parent, config.name, config.type);
     makeObservable(this);
 
+    let { title, extraProps, ...rest } = config;
+    this._title = title;
     this.parent = parent;
     this._config = config;
-
-    let { title, extraProps, ...rest } = config;
-
     this.extraProps = {
       ...rest,
       ...extraProps,
