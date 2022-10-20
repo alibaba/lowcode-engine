@@ -98,6 +98,13 @@ export default class SettingPropEntry {
   }
 
   /**
+   * 获取顶级设置属性
+   */
+   get top(): SettingTopEntry {
+    return SettingTopEntry.create(this[settingPropEntrySymbol].top);
+  }
+
+  /**
    * 是否是 SettingField 实例
    */
   get isSettingField(): boolean {
