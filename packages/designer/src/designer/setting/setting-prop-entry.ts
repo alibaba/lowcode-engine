@@ -37,7 +37,7 @@ export class SettingPropEntry implements SettingEntry {
   readonly emitter = new EventEmitter();
 
   // ==== dynamic properties ====
-  @obx.ref private _name: string | number;
+  @obx.ref private _name: string | number | undefined;
 
   get name() {
     return this._name;
@@ -45,7 +45,7 @@ export class SettingPropEntry implements SettingEntry {
 
   @computed get path() {
     const path = this.parent.path.slice();
-    if (this.type === 'field') {
+    if (isSettingPropFieldEntry(this)) {
       path.push(this.name);
     }
     return path;
@@ -53,7 +53,7 @@ export class SettingPropEntry implements SettingEntry {
 
   extraProps: any = {};
 
-  constructor(readonly parent: SettingEntry, name: string | number, type?: 'field' | 'group') {
+  constructor(readonly parent: SettingEntry, name: string | number | undefined, type?: 'field' | 'group') {
     makeObservable(this);
     if (type == null) {
       const c = typeof name === 'string' ? name.slice(0, 1) : '';
@@ -160,7 +160,7 @@ export class SettingPropEntry implements SettingEntry {
    */
   getValue(): any {
     let val: any;
-    if (this.type === 'field') {
+    if (isSettingPropFieldEntry(this)) {
       val = this.parent.getPropValue(this.name);
     }
     const { getValue } = this.extraProps;
@@ -177,7 +177,7 @@ export class SettingPropEntry implements SettingEntry {
    */
   setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: ISetValueOptions) {
     const oldValue = this.getValue();
-    if (this.type === 'field') {
+    if (isSettingPropFieldEntry(this)) {
       this.parent.setPropValue(this.name, val);
     }
 
@@ -201,7 +201,7 @@ export class SettingPropEntry implements SettingEntry {
    * 清除已设置的值
    */
   clearValue() {
-    if (this.type === 'field') {
+    if (isSettingPropFieldEntry(this)) {
       this.parent.clearPropValue(this.name);
     }
     const { setValue } = this.extraProps;
@@ -366,4 +366,13 @@ export class SettingPropEntry implements SettingEntry {
   internalToShellPropEntry() {
     return ShellSettingPropEntry.create(this) as any;
   }
+}
+
+
+export interface SettingPropFieldEntry extends SettingPropEntry {
+  name: string | number;
+}
+
+export function isSettingPropFieldEntry(obj: any): obj is SettingPropFieldEntry {
+  return obj && obj.type === 'field';
 }

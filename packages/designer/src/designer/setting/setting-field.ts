@@ -1,6 +1,18 @@
-import { TitleContent, isDynamicSetter, SetterType, DynamicSetter, FieldExtraProps, FieldConfig, CustomView, isCustomView } from '@alilc/lowcode-types';
+import {
+  TitleContent,
+  isDynamicSetter,
+  SetterType,
+  DynamicSetter,
+  FieldExtraProps,
+  FieldConfig,
+  CustomView,
+  isCustomView,
+  isFieldConfig,
+  isGroupConifg,
+  SettingFieldConfig,
+} from '@alilc/lowcode-types';
 import { Transducer } from './utils';
-import { SettingPropEntry } from './setting-prop-entry';
+import { isSettingPropFieldEntry, SettingPropEntry } from './setting-prop-entry';
 import { SettingEntry } from './setting-entry';
 import { computed, obx, makeObservable, action } from '@alilc/lowcode-editor-core';
 import { cloneDeep } from '@alilc/lowcode-utils';
@@ -10,13 +22,14 @@ function getSettingFieldCollectorKey(parent: SettingEntry, config: FieldConfig) 
   let cur = parent;
   const path = [config.name];
   while (cur !== parent.top) {
-    if (cur instanceof SettingField && cur.type !== 'group') {
+    if (isSettingPropFieldEntry(cur)) {
       path.unshift(cur.name);
     }
     cur = cur.parent;
   }
   return path.join('.');
 }
+
 
 export class SettingField extends SettingPropEntry implements SettingEntry {
   readonly isSettingField = true;
@@ -25,7 +38,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   readonly transducer: Transducer;
 
-  private _config: FieldConfig;
+  private _config: SettingFieldConfig;
 
   extraProps: FieldExtraProps;
 
@@ -37,7 +50,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     return this._title || (typeof this.name === 'number' ? `项目 ${this.name}` : this.name);
   }
 
-  private _setter?: SetterType | DynamicSetter;
+  private _setter?: SetterType | DynamicSetter | undefined;
 
   @computed get setter(): SetterType | null {
     if (!this._setter) {
@@ -62,31 +75,42 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   parent: SettingEntry;
 
-  constructor(parent: SettingEntry, config: FieldConfig, settingFieldCollector?: (name: string | number, field: SettingField) => void) {
+  constructor(
+    parent: SettingEntry,
+    config: SettingFieldConfig,
+    settingFieldCollector?: (name: string | number, field: SettingField) => void,
+  ) {
     super(parent, config.name, config.type);
     makeObservable(this);
-    const { title, items, setter, extraProps, ...rest } = config;
+
     this.parent = parent;
     this._config = config;
-    this._title = title;
-    this._setter = setter;
+
+    let { title, extraProps, ...rest } = config;
+
     this.extraProps = {
       ...rest,
       ...extraProps,
     };
-    this.isRequired = config.isRequired || (setter as any)?.isRequired;
+
+    if (isFieldConfig(config)) {
+      this._setter = config.setter;
+    }
+
+
+    this.isRequired = config.isRequired || (this._setter as any)?.isRequired;
     this._expanded = !extraProps?.defaultCollapsed;
 
     // initial items
-    if (items && items.length > 0) {
-      this.initItems(items, settingFieldCollector);
+    if (isGroupConifg(config) && config.items.length > 0) {
+      this.initItems(config.items, settingFieldCollector);
     }
-    if (this.type !== 'group' && settingFieldCollector && config.name) {
+    if (isFieldConfig(config) && settingFieldCollector && config.name) {
       settingFieldCollector(getSettingFieldCollectorKey(parent, config), this);
     }
 
     // compatiable old config
-    this.transducer = new Transducer(this, { setter });
+    if (this._setter) { this.transducer = new Transducer(this, { setter: this._setter }); }
   }
 
   private _items: Array<SettingField | CustomView> = [];
@@ -95,11 +119,17 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     return this._items;
   }
 
-  get config(): FieldConfig {
+  get config(): SettingFieldConfig {
     return this._config;
   }
 
-  private initItems(items: Array<FieldConfig | CustomView>, settingFieldCollector?: { (name: string | number, field: SettingField): void; (name: string, field: SettingField): void }) {
+  private initItems(
+    items: Array<FieldConfig | CustomView>,
+    settingFieldCollector?: {
+      (name: string | number, field: SettingField): void;
+      (name: string, field: SettingField): void;
+    },
+  ) {
     this._items = items.map((item) => {
       if (isCustomView(item)) {
         return item;
@@ -109,7 +139,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
   }
 
   private disposeItems() {
-    this._items.forEach(item => isSettingField(item) && item.purge());
+    this._items.forEach((item) => isSettingField(item) && item.purge());
     this._items = [];
   }
 
@@ -122,17 +152,20 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     this.disposeItems();
   }
 
+
   // ======= compatibles for vision ======
 
-  getConfig<K extends keyof FieldConfig>(configName?: K): FieldConfig[K] | FieldConfig {
+  getConfig<K extends keyof SettingFieldConfig >(configName?: K): SettingFieldConfig[K] | SettingFieldConfig {
     if (configName) {
-      return this.config[configName];
+      return (this.config as FieldConfig)[configName];
     }
     return this._config;
   }
 
-  getItems(filter?: (item: SettingField | CustomView) => boolean): Array<SettingField | CustomView> {
-    return this._items.filter(item => {
+  getItems(
+    filter?: (item: SettingField | CustomView) => boolean,
+  ): Array<SettingField | CustomView> {
+    return this._items.filter((item) => {
       if (filter) {
         return filter(item);
       }
@@ -188,11 +221,16 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     }
     if (this.isUseVariable()) {
       const oldValue = this.getValue();
-      this.setValue({
-        type: 'JSExpression',
-        value: oldValue.value,
-        mock: value,
-      }, false, false, options);
+      this.setValue(
+        {
+          type: 'JSExpression',
+          value: oldValue.value,
+          mock: value,
+        },
+        false,
+        false,
+        options,
+      );
     } else {
       this.setValue(value, false, false, options);
     }

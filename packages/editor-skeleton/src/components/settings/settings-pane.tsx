@@ -31,8 +31,8 @@ function isInitialValueNotEmpty(initialValue: any) {
   return (initialValue !== undefined && initialValue !== null);
 }
 
-type SettingFieldViewProps = { field: SettingField };
-type SettingFieldViewState = { fromOnChange: boolean; value: any };
+interface SettingFieldViewProps { field: SettingField }
+interface SettingFieldViewState { fromOnChange: boolean; value: any }
 @observer
 class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldViewState> {
   static contextType = SkeletonContext;
@@ -51,7 +51,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
     let stageName;
     if (display === 'entry') {
       runInAction(() => {
-        stageName = `${field.getNode().id}_${field.name.toString()}`;
+        stageName = `${field.getNode().id}_${field.name?.toString()}`;
         // 清除原 stage，不然 content 引用的一直是老的 field，导致数据无法得到更新
         stages.container.remove(stageName);
         const stage = stages.add({
@@ -154,7 +154,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
     }
 
     let _onChange = extraProps?.onChange;
-    let stageName = this.stageName;
+    let { stageName } = this;
 
     return createField(
       {
@@ -204,7 +204,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
         },
 
         removeProp: () => {
-          field.parent.clearPropValue(field.name);
+          if (field.name) { field.parent.clearPropValue(field.name); }
         },
       }),
       extraProps.forceInline ? 'plain' : extraProps.display,
@@ -231,7 +231,7 @@ class SettingGroupView extends Component<SettingGroupViewProps> {
     let stageName;
     if (display === 'entry') {
       runInAction(() => {
-        stageName = `${field.getNode().id}_${field.name.toString()}`;
+        stageName = `${field.getNode().id}_${field.name?.toString()}`;
         // 清除原 stage，不然 content 引用的一直是老的 field，导致数据无法得到更新
         stages.container.remove(stageName);
         stages.add({
@@ -287,10 +287,10 @@ export function createSettingFieldView(item: SettingField | CustomView, field: S
   }
 }
 
-export type SettingsPaneProps = {
+export interface SettingsPaneProps {
   target: SettingTopEntry | SettingField;
   usePopup?: boolean;
-};
+}
 
 @observer
 export class SettingsPane extends Component<SettingsPaneProps> {
