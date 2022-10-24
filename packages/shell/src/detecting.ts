@@ -1,3 +1,4 @@
+import Node from './node';
 import {
   Detecting as InnerDetecting,
   DocumentModel as InnerDocumentModel,
@@ -11,6 +12,21 @@ export default class Detecting {
   constructor(document: InnerDocumentModel) {
     this[documentSymbol] = document;
     this[detectingSymbol] = document.designer.detecting;
+  }
+
+  /**
+   * get node which is being hovered
+   */
+  get current() {
+    return Node.create(this[detectingSymbol].current);
+  }
+
+  get enable() {
+    return this[detectingSymbol].enable;
+  }
+
+  set enable(flag: boolean) {
+    this[detectingSymbol].enable = flag;
   }
 
   /**

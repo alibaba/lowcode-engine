@@ -84,4 +84,15 @@ export default class Selection {
   getNodes(): Node[] {
     return this[selectionSymbol].getNodes().map((node: InnerNode) => Node.create(node));
   }
+
+  /**
+   * get nodes which have been selected, this method will remove those
+   * underlying nodes, for example:
+   *  getNodes() returns [A, subA, B], then
+   *  getTopNodes() will return [A, B], subA will be removed
+   * @returns
+   */
+  getTopNodes(): Node[] {
+    return this[selectionSymbol].getTopNodes().map((node: InnerNode) => Node.create(node));
+  }
 }

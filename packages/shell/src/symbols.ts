@@ -24,3 +24,4 @@ export const simulatorHostSymbol = Symbol('simulatorHost');
 export const simulatorRendererSymbol = Symbol('simulatorRenderer');
 export const dragObjectSymbol = Symbol('dragObject');
 export const locateEventSymbol = Symbol('locateEvent');
+export const activeTrackerSymbol = Symbol('activeTracker');

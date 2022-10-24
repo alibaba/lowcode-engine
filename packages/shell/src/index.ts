@@ -13,6 +13,8 @@ import Setters from './setters';
 import Hotkey from './hotkey';
 import Skeleton from './skeleton';
 import Dragon from './dragon';
+import ActiveTracker from './active-tracker';
+import DropLocation from './drop-location';
 import SettingPropEntry from './setting-prop-entry';
 import SettingTopEntry from './setting-top-entry';
 export * from './symbols';
@@ -42,5 +44,10 @@ export {
   SettingPropEntry,
   SettingTopEntry,
   Dragon,
+  ActiveTracker,
+  DropLocation,
   getEvent,
 };
+
+export * from './functions/create-location';
+export * from './functions/scroller';

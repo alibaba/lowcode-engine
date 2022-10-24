@@ -12,4 +12,5 @@ export {
   computed,
   observer,
   globalLocale,
+  action,
 } from '@alilc/lowcode-editor-core';

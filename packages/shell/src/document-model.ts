@@ -5,6 +5,10 @@ import {
   ParentalNode,
   IOnChangeOptions as InnerIOnChangeOptions,
   PropChangeOptions as InnerPropChangeOptions,
+  DragObject as InnerDragObject,
+  DragNodeObject,
+  DragNodeDataObject,
+  isDragNodeObject,
 } from '@alilc/lowcode-designer';
 import {
   TransformStage,
@@ -20,6 +24,7 @@ import History from './history';
 import Project from './project';
 import Prop from './prop';
 import Canvas from './canvas';
+import DragObject from './drag-object';
 import ModalNodesManager from './modal-nodes-manager';
 import { documentSymbol, editorSymbol, nodeSymbol } from './symbols';
 
@@ -39,6 +44,8 @@ type PropChangeOptions = {
 const Events = {
   IMPORT_SCHEMA: 'shell.document.importSchema',
 };
+
+const shellDocSymbol = Symbol('shellDocSymbol');
 
 export default class DocumentModel {
   private readonly [documentSymbol]: InnerDocumentModel;
@@ -61,8 +68,13 @@ export default class DocumentModel {
   }
 
   static create(document: InnerDocumentModel | undefined | null) {
-    if (document == undefined) return null;
-    return new DocumentModel(document);
+    if (!document) return null;
+    // @ts-ignore 直接返回已挂载的 shell doc 实例
+    if (document[shellDocSymbol]) return document[shellDocSymbol];
+    const shellDoc = new DocumentModel(document);
+    // @ts-ignore 直接返回已挂载的 shell doc 实例
+    document[shellDocSymbol] = shellDoc;
+    return shellDoc;
   }
 
   /**
@@ -198,6 +210,17 @@ export default class DocumentModel {
    */
   getComponentsMap(extraComps?: string[]) {
     return this[documentSymbol].getComponentsMap(extraComps);
+  }
+
+  checkNesting(dropTarget: Node, dragObject: DragNodeObject | DragNodeDataObject) {
+    let innerDragObject: InnerDragObject = dragObject;
+    if (isDragNodeObject(dragObject)) {
+      innerDragObject.nodes = innerDragObject.nodes.map((node: Node) => (node[nodeSymbol] || node));
+    }
+    return this[documentSymbol].checkNesting(
+      (dropTarget[nodeSymbol] || dropTarget) as any,
+      innerDragObject as any,
+    );
   }
 
   /**

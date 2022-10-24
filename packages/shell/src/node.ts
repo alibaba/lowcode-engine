@@ -128,6 +128,17 @@ export default class Node {
     return true;
   }
 
+  get conditionGroup() {
+    return this[nodeSymbol].conditionGroup;
+  }
+
+  /**
+   * judge if current node is locked or not
+   */
+  get isLocked() {
+    return this[nodeSymbol].isLocked;
+  }
+
   /**
    * 下标
    */
@@ -315,6 +326,14 @@ export default class Node {
   }
 
   /**
+   * lock/unlock current node
+   * @param flag
+   */
+  lock(flag?: boolean) {
+    this[nodeSymbol].lock(flag);
+  }
+
+  /**
    * @deprecated use .props instead
    */
   getProps() {
@@ -347,10 +366,11 @@ export default class Node {
    * 获取指定 path 的属性模型实例，
    *  注：导出时，不同于普通属性，该属性并不挂载在 props 之下，而是与 props 同级
    * @param path 属性路径，支持 a / a.b / a.0 等格式
+   * @param createIfNone create a new one if absent
    * @returns
    */
-  getExtraProp(path: string): Prop | null {
-    return Prop.create(this[nodeSymbol].getProp(getConvertedExtraKey(path)));
+  getExtraProp(path: string, createIfNone?: boolean): Prop | null {
+    return Prop.create(this[nodeSymbol].getExtraProp(path, createIfNone));
   }
 
   /**
@@ -459,5 +479,9 @@ export default class Node {
    */
   remove() {
     this[nodeSymbol].remove();
+  }
+
+  internalToShellNode() {
+    return this;
   }
 }

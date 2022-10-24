@@ -3,8 +3,10 @@ import {
   DragObject as InnerDragObject,
   DragNodeDataObject,
   LocateEvent as InnerLocateEvent,
+  isDragNodeObject,
 } from '@alilc/lowcode-designer';
-import { dragonSymbol } from './symbols';
+import Node from './node';
+import { dragonSymbol, nodeSymbol } from './symbols';
 import LocateEvent from './locate-event';
 import DragObject from './drag-object';
 
@@ -66,5 +68,27 @@ export default class Dragon {
    */
   from(shell: Element, boost: (e: MouseEvent) => DragNodeDataObject | null) {
     return this[dragonSymbol].from(shell, boost);
+  }
+
+  /**
+   * boost a drag event
+   * @param dragObject
+   * @param boostEvent
+   * @returns
+   */
+  boost(dragObject: DragObject, boostEvent: MouseEvent | DragEvent) {
+    let innerDragObject: InnerDragObject = dragObject;
+    if (isDragNodeObject(dragObject)) {
+      innerDragObject.nodes = innerDragObject.nodes.map((node: Node) => (node[nodeSymbol] || node));
+    }
+    return this[dragonSymbol].boost(dragObject, boostEvent);
+  }
+
+  addSensor(sensor: any) {
+    this[dragonSymbol].addSensor(sensor);
+  }
+
+  removeSensor(sensor: any) {
+    this[dragonSymbol].removeSensor(sensor);
   }
 }
