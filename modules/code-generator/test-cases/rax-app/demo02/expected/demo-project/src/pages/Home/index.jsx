@@ -253,7 +253,6 @@ class Home$$Page extends Component {
             if (!response.success) {
               throw new Error(response.message);
             }
-
             return response.data;
           },
           isInit: true,
@@ -280,7 +279,6 @@ class Home$$Page extends Component {
             if (!response.success) {
               throw new Error(response.message);
             }
-
             return response.data.result;
           },
           isInit: true,
