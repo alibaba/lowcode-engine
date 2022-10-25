@@ -145,6 +145,7 @@ class Test$$Page extends React.Component {
 
   onOkModifyDialogThird() {
     //第三步 修改 对话框 确定
+
     this.setState({
       currentStep: 0,
       isModifyDialogVisible: false,
@@ -153,6 +154,7 @@ class Test$$Page extends React.Component {
 
   onCancelModifyDialogThird() {
     //第三步 修改 对话框 取消
+
     this.setState({
       isModifyDialogVisible: false,
     });
@@ -184,7 +186,10 @@ class Test$$Page extends React.Component {
 
   onValuesChange(_, values) {
     this.setState({
-      customerProjectInfo: { ...this.state.customerProjectInfo, ...values },
+      customerProjectInfo: {
+        ...this.state.customerProjectInfo,
+        ...values,
+      },
     });
   }
 

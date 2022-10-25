@@ -61,7 +61,6 @@ class Test$$Page extends React.Component {
     };
 
     this.__jp__init();
-
     this.statusDesc = {
       0: "失败",
       1: "成功",
@@ -196,12 +195,10 @@ class Test$$Page extends React.Component {
 
   componentDidMount() {
     this.$ds.resolve("PROJECTS");
-
     if (this.userTimeout) {
       clearTimeout(this.userTimeout);
       this.userTimeout = null;
     }
-
     if (this.projectTimeout) {
       clearTimeout(this.projectTimeout);
       this.projectTimeout = null;
