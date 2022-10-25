@@ -1,3 +1,4 @@
+import requestIdleCallback from 'ric-shim';
 import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
 import { uniqueId } from '@alilc/lowcode-utils';
 import { INodeSelector, IViewport } from '../simulator';
@@ -136,7 +137,7 @@ export class OffsetObserver {
         this._bottom = rect.bottom;
         this.hasOffset = true;
       }
-      this.pid = (window as any).requestIdleCallback(compute);
+      this.pid = requestIdleCallback(compute);
       pid = this.pid;
     };
 
@@ -145,7 +146,7 @@ export class OffsetObserver {
     // try first
     compute();
     // try second, ensure the dom mounted
-    this.pid = (window as any).requestIdleCallback(compute);
+    this.pid = requestIdleCallback(compute);
     pid = this.pid;
   }
 

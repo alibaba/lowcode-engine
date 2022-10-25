@@ -1,3 +1,4 @@
+import requestIdleCallback from 'ric-shim';
 import { computed, makeObservable, obx } from '@alilc/lowcode-editor-core';
 import {
   Designer,
@@ -512,7 +513,7 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
 
     if (!rect) {
       if (tryTimes < 3) {
-        this.tryScrollAgain = (window as any).requestIdleCallback(() => this.scrollToNode(treeNode, detail, tryTimes + 1));
+        this.tryScrollAgain = requestIdleCallback(() => this.scrollToNode(treeNode, detail, tryTimes + 1));
       }
       return;
     }
@@ -528,7 +529,7 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
     }
     // make tail scroll be sure
     if (tryTimes < 4) {
-      this.tryScrollAgain = (window as any).requestIdleCallback(() => this.scrollToNode(treeNode, detail, 4));
+      this.tryScrollAgain = requestIdleCallback(() => this.scrollToNode(treeNode, detail, 4));
     }
   }
 

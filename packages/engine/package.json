@@ -28,8 +28,7 @@
     "@alilc/lowcode-shell": "1.0.15",
     "@alilc/lowcode-utils": "1.0.15",
     "react": "^16.8.1",
-    "react-dom": "^16.8.1",
-    "requestidlecallback-polyfill": "^1.0.2"
+    "react-dom": "^16.8.1"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
