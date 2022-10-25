@@ -121,7 +121,7 @@ export interface GroupConfig extends BaseConfig {
 
 export type SettingFieldConfig = FieldConfig | GroupConfig;
 
-export function isGroupConifg(obj: GroupConfig | FieldConfig): obj is GroupConfig {
+export function isGroupConfig(obj: GroupConfig | FieldConfig): obj is GroupConfig {
   return obj && obj.type === 'group';
 }
 

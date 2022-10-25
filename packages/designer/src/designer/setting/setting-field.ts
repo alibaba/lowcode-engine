@@ -8,7 +8,7 @@ import {
   CustomView,
   isCustomView,
   isFieldConfig,
-  isGroupConifg,
+  isGroupConfig,
   SettingFieldConfig,
 } from '@alilc/lowcode-types';
 import { Transducer } from './utils';
@@ -101,7 +101,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     this._expanded = !extraProps?.defaultCollapsed;
 
     // initial items
-    if (isGroupConifg(config) && config.items.length > 0) {
+    if (isGroupConfig(config) && config.items.length > 0) {
       this.initItems(config.items, settingFieldCollector);
     }
     if (isFieldConfig(config) && settingFieldCollector && config.name) {
@@ -156,7 +156,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   getConfig<K extends keyof SettingFieldConfig >(configName?: K): SettingFieldConfig[K] | SettingFieldConfig {
     if (configName) {
-      return (this.config as FieldConfig)[configName];
+      return (this.config as SettingFieldConfig)[configName];
     }
     return this._config;
   }
