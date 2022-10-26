@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.7-beta.1](https://github.com/alibaba/lowcode-engine/compare/@alilc/lowcode-code-generator@1.0.7-beta.0...@alilc/lowcode-code-generator@1.0.7-beta.1) (2022-10-26)
+
+
+### Bug Fixes
+
+* fix empty string lost when  generate variable ([2cf74cd](https://github.com/alibaba/lowcode-engine/commit/2cf74cd04b4f48a3501d37329d39784f6964366a))
+
 ### [1.0.7-beta.0](https://github.com/alibaba/lowcode-engine/compare/@alilc/lowcode-code-generator@1.0.6-beta.0...@alilc/lowcode-code-generator@1.0.7-beta.0) (2022-10-25)
 
 ### [1.0.6-beta.0](https://github.com/alibaba/lowcode-engine/compare/@alilc/lowcode-code-generator@1.0.3...@alilc/lowcode-code-generator@1.0.6-beta.0) (2022-10-25)
