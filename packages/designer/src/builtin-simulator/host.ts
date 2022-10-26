@@ -512,6 +512,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         if (!node) {
           return;
         }
+        // 触发 onMouseDownHook 钩子
+        const onMouseDownHook = node.componentMeta?.getMetadata()?.configure.advanced?.callbacks?.onMouseDownHook;
+        if (onMouseDownHook) {
+          onMouseDownHook(downEvent, node.internalToShellNode());
+        }
         const rglNode = node?.getParent();
         const isRGLNode = rglNode?.isRGLContainer;
         if (isRGLNode) {
@@ -1170,7 +1175,23 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       const onMoveHook = node.componentMeta?.getMetadata()?.configure.advanced?.callbacks?.onMoveHook;
       const canMove = onMoveHook && typeof onMoveHook === 'function' ? onMoveHook(node.internalToShellNode()) : true;
 
-      return canMove;
+      let parentContainerNode: Node | null = null;
+      let parentNode = node.parent;
+
+      while (parentNode) {
+        if (parentNode.isContainer()) {
+          parentContainerNode = parentNode;
+          break;
+        }
+
+        parentNode = parentNode.parent;
+      }
+
+      const onChildMoveHook = parentContainerNode?.componentMeta?.getMetadata()?.configure.advanced?.callbacks?.onChildMoveHook;
+
+      const childrenCanMove = onChildMoveHook && parentContainerNode && typeof onChildMoveHook === 'function' ? onChildMoveHook(node.internalToShellNode(), parentContainerNode.internalToShellNode()) : true;
+
+      return canMove && childrenCanMove;
     });
 
     if (nodes && (!operationalNodes || operationalNodes.length === 0)) {
