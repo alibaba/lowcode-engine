@@ -1,3 +1,4 @@
+import Node from './node';
 import {
   Detecting as InnerDetecting,
   DocumentModel as InnerDocumentModel,
@@ -11,6 +12,13 @@ export default class Detecting {
   constructor(document: InnerDocumentModel) {
     this[documentSymbol] = document;
     this[detectingSymbol] = document.designer.detecting;
+  }
+
+  /**
+   * 当前 hover 的节点
+   */
+  get current() {
+    return Node.create(this[detectingSymbol].current);
   }
 
   /**
