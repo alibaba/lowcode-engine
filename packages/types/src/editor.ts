@@ -156,7 +156,7 @@ export interface Utils {
 }
 
 export interface PluginProps {
-  editor: IEditor;
+  editor?: IEditor;
   config: PluginConfig;
   [key: string]: any;
 }

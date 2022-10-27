@@ -1,6 +1,6 @@
 import { Component, MouseEvent as ReactMouseEvent } from 'react';
 import { observer, Editor, globalContext } from '@alilc/lowcode-editor-core';
-import { isRootNode, Node, DragObjectType, isShaken } from '@alilc/lowcode-designer';
+import { Node, DragObjectType, isShaken } from '@alilc/lowcode-designer';
 import { isFormEvent, canClickNode } from '@alilc/lowcode-utils';
 import { Tree } from '../tree';
 import RootTreeNodeView from './root-tree-node';
