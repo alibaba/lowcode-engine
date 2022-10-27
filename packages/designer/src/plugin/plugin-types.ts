@@ -1,11 +1,6 @@
 import { CompositeObject, ComponentAction } from '@alilc/lowcode-types';
 import Logger from 'zen-logger';
-import {
-  Hotkey,
-  Skeleton,
-  Project,
-  Event, Material,
-} from '@alilc/lowcode-shell';
+import { Hotkey, Skeleton, Project, Event, Material } from '@alilc/lowcode-shell';
 import { EngineConfig } from '@alilc/lowcode-editor-core';
 import { MetadataTransducer } from '@alilc/lowcode-designer';
 import { Setters } from '../types';
@@ -94,7 +89,10 @@ export interface IDesignerCabin {
 
 export interface IPluginPreferenceMananger {
   // eslint-disable-next-line max-len
-  getPreferenceValue: (key: string, defaultValue?: PreferenceValueType) => PreferenceValueType | undefined ;
+  getPreferenceValue: (
+    key: string,
+    defaultValue?: PreferenceValueType,
+  ) => PreferenceValueType | undefined;
 }
 
 export interface ILowCodePluginContext {
@@ -136,11 +134,34 @@ export function isLowCodeRegisterOptions(opts: any): opts is ILowCodeRegisterOpt
 }
 
 export interface ILowCodeRegisterOptions {
+  /** Will enable plugin registered with auto-initialization immediately
+   * other than plugin-manager init all plugins at certain time.
+   * It is helpful when plugin register is later than plugin-manager initialization. */
   autoInit?: boolean;
-  // allow overriding existing plugin with same name when override === true
+  /** allow overriding existing plugin with same name when override === true */
   override?: boolean;
 }
 
 export interface IPluginContextOptions {
   pluginName: string;
 }
+
+export interface IPluginMetaDefinition {
+  /** define dependencies which the plugin depends on */
+  dependencies?: string[];
+  /** specify which engine version is compatible with the plugin */
+  engines?: {
+    /** e.g. '^1.0.0' */
+    lowcodeEngine?: string;
+  };
+}
+
+interface IPluginConfigCreatorFn<T extends Record<string, any> = Record<string, any>> {
+  (ctx: ILowCodePluginContext, pluginOptions?: T): ILowCodePluginConfig;
+}
+
+export type IPluginConfigCreator<T extends Record<string, any> = Record<string, any>> =
+  IPluginConfigCreatorFn<T> & {
+    pluginName: string;
+    meta?: IPluginMetaDefinition;
+  };
