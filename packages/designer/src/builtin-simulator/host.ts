@@ -1473,7 +1473,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     const document = this.currentDocument!;
     const focusNode = document.focusNode;
     if (isRootNode(container) || container.contains(focusNode)) {
-      return document.checkDropTarget(focusNode, dragObject as any);
+      return document.checkNesting(focusNode, dragObject as any);
     }
 
     const meta = (container as Node).componentMeta;

@@ -134,13 +134,14 @@ function generateUnknownType(
     };
 
     if (options.handlers?.expression) {
-      return executeFunctionStack(
+      const expression = executeFunctionStack(
         transValue,
         scope,
         options.handlers.expression,
         generateExpression,
         options,
       );
+      return expression || 'undefined';
     }
     return generateExpression(transValue, scope);
   }
