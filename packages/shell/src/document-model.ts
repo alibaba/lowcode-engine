@@ -56,7 +56,7 @@ export default class DocumentModel {
     this[editorSymbol] = document.designer.editor as Editor;
     this.selection = new Selection(document);
     this.detecting = new Detecting(document);
-    this.history = new History(document.getHistory());
+    this.history = new History(document);
     this.canvas = new Canvas(document.designer);
 
     this._focusNode = Node.create(this[documentSymbol].focusNode);
