@@ -460,4 +460,11 @@ export default class Node {
   remove() {
     this[nodeSymbol].remove();
   }
+
+  /**
+   * 设置为磁贴布局节点
+   */
+  setRGLContainer(flag: boolean) {
+    this[nodeSymbol].isRGLContainer = flag;
+  }
 }
