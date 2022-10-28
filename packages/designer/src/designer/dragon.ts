@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import { obx, makeObservable } from '@alilc/lowcode-editor-core';
 import { NodeSchema } from '@alilc/lowcode-types';
+import { Node as ShellNode } from '@alilc/lowcode-shell';
 import { setNativeSelection, cursor } from '@alilc/lowcode-utils';
 import { DropLocation } from './location';
 import { Node, DocumentModel } from '../document';
@@ -89,7 +90,7 @@ export enum DragObjectType {
 
 export interface DragNodeObject {
   type: DragObjectType.Node;
-  nodes: Node[];
+  nodes: (Node | ShellNode)[];
 }
 export interface DragNodeDataObject {
   type: DragObjectType.NodeData;
@@ -225,13 +226,13 @@ export class Dragon {
    * @param dragObject 拖拽对象
    * @param boostEvent 拖拽初始时事件
    */
-  boost(dragObject: DragObject, boostEvent: MouseEvent | DragEvent, fromRglNode?: Node) {
+  boost(dragObject: DragObject, boostEvent: MouseEvent | DragEvent, fromRglNode?: Node | ShellNode) {
     const { designer } = this;
     const masterSensors = this.getMasterSensors();
     const handleEvents = makeEventsHandler(boostEvent, masterSensors);
     const newBie = !isDragNodeObject(dragObject);
     const forceCopyState =
-      isDragNodeObject(dragObject) && dragObject.nodes.some((node) => node.isSlot());
+      isDragNodeObject(dragObject) && dragObject.nodes.some((node: Node | ShellNode) => (typeof node.isSlot === 'function' ? node.isSlot() : node.isSlot));
     const isBoostFromDragAPI = isDragEvent(boostEvent);
     let lastSensor: ISensor | undefined;
 
