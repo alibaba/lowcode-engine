@@ -35,7 +35,8 @@ const baseRenderer: any = {
     __container: {
       rerender: () => {
         rerenderCount = 1 + rerenderCount;
-      }
+      },
+      autoRepaintNode: true,
     },
     documentId: '01'
   },
