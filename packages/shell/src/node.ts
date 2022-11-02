@@ -461,14 +461,14 @@ export default class Node {
   /**
    * 设置为磁贴布局节点
    */
-  setIsRGLContainer(flag: boolean) {
+  set setIsRGLContainer(flag: boolean) {
     this[nodeSymbol].isRGLContainer = flag;
   }
   /**
    * 获取磁贴布局节点设置状态
    * @returns Boolean
    */
-  getIsRGLContainer() {
+  get getIsRGLContainer() {
     return this[nodeSymbol].isRGLContainer;
   }
 }
