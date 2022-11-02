@@ -36,7 +36,7 @@ import {
   hasOwnProperty,
   UtilsMetadata,
   getClosestNode,
-  startTransaction,
+  transactionManage,
 } from '@alilc/lowcode-utils';
 import {
   DragObjectType,
@@ -202,8 +202,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         i18n: this.project.i18n,
       };
     });
-    startTransaction.onStartTransaction(this.stopAutoRepaintNode, TransitionType.repaint);
-    startTransaction.onEndTransaction(() => {
+    transactionManage.onStartTransaction(this.stopAutoRepaintNode, TransitionType.repaint);
+    transactionManage.onEndTransaction(() => {
       this.rerender();
       this.enableAutoRepaintNode();
     }, TransitionType.repaint);

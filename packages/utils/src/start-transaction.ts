@@ -1,7 +1,7 @@
 import { TransitionType } from '@alilc/lowcode-types';
 import EventEmitter from 'events';
 
-class StartTransaction {
+class TransactionManage {
   emitter = new EventEmitter();
 
   startTransaction(fn: () => void, type: TransitionType = TransitionType.repaint): void {
@@ -25,6 +25,6 @@ class StartTransaction {
   }
 }
 
-export const startTransaction = new StartTransaction();
+export const transactionManage = new TransactionManage();
 
-export default startTransaction;
+export default transactionManage;

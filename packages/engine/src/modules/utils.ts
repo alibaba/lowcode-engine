@@ -1,4 +1,4 @@
-import { isFormEvent, compatibleLegaoSchema, getNodeSchemaById, startTransaction } from '@alilc/lowcode-utils';
+import { isFormEvent, compatibleLegaoSchema, getNodeSchemaById, transactionManage } from '@alilc/lowcode-utils';
 import { isNodeSchema } from '@alilc/lowcode-types';
 import { getConvertedExtraKey, getOriginalExtraKey } from '@alilc/lowcode-designer';
 
@@ -9,7 +9,7 @@ const utils = {
   getNodeSchemaById,
   getConvertedExtraKey,
   getOriginalExtraKey,
-  startTransaction: startTransaction.startTransaction,
+  startTransaction: transactionManage.startTransaction,
 };
 
 export default utils;
