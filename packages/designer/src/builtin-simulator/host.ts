@@ -36,6 +36,7 @@ import {
   hasOwnProperty,
   UtilsMetadata,
   getClosestNode,
+  startTransaction,
 } from '@alilc/lowcode-utils';
 import {
   DragObjectType,
@@ -59,9 +60,8 @@ import { getClosestClickableNode } from './utils/clickable';
 import {
   ComponentMetadata,
   ComponentSchema,
-  TransformStage,
-  ActivityData,
   Package,
+  TransitionType,
 } from '@alilc/lowcode-types';
 import { BuiltinSimulatorRenderer } from './renderer';
 import clipboard from '../designer/clipboard';
@@ -181,6 +181,14 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    */
   autoRender = true;
 
+  stopAutoRepaintNode() {
+    this.renderer?.stopAutoRepaintNode();
+  }
+
+  enableAutoRepaintNode() {
+    this.renderer?.enableAutoRepaintNode();
+  }
+
   constructor(project: Project) {
     makeObservable(this);
     this.project = project;
@@ -194,6 +202,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         i18n: this.project.i18n,
       };
     });
+    startTransaction.onStartTransaction(this.stopAutoRepaintNode, TransitionType.repaint);
+    startTransaction.onEndTransaction(() => {
+      this.rerender();
+      this.enableAutoRepaintNode();
+    }, TransitionType.repaint);
   }
 
   get currentDocument() {
