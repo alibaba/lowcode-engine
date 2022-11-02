@@ -124,9 +124,7 @@ export default class Node {
   /**
    * judge if it is a node or not
    */
-  get isNode() {
-    return true;
-  }
+  readonly isNode = true;
 
   /**
    * 获取当前节点的锁定状态
@@ -475,6 +473,19 @@ export default class Node {
    */
   remove() {
     this[nodeSymbol].remove();
+  }
+  /**
+   * 设置为磁贴布局节点
+   */
+  set isRGLContainer(flag: boolean) {
+    this[nodeSymbol].isRGLContainer = flag;
+  }
+  /**
+   * 获取磁贴布局节点设置状态
+   * @returns Boolean
+   */
+  get isRGLContainer() {
+    return this[nodeSymbol].isRGLContainer;
   }
 
   internalToShellNode() {
