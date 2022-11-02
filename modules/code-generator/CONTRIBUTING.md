@@ -1,10 +1,11 @@
 # 如何共建
 
 1. 拉取最新代码，切换到 develop 分支，基于 develop 分支切出一个 feature 或 hotfix 分支
-2. 安装依赖(`npm`)，然后先跑一遍 `npm test` 看看是否所有用例都能通过 (如果网络条件不太好，建议使用 [cnpm - 淘宝提供的中国 NPM 镜像](https://npmmirror.com/))
-3. 在 tests 目录下编写您的需求/问题的测试用例
-4. 修改 src 下的一些代码，然后运行 `npm test` 或 `npm start` 启动 jest 进行调测
-5. 确保所有的测试用例都能通过时，提 MR 给 @牧毅 -- MR 将在 1 个工作日内给您回复意见。
+2. 到 `lowcode-engine` 项目根目录下，执行 `lerna bootstrap && lerna run build --scope "@alilc/lowcode-types"` 来安装依赖并构建
+3. 到 `lowcode-engine/modules/code-generator`下，安装依赖(`npm i`)，然后先跑一遍 `npm test` 看看是否所有用例都能通过 (如果网络条件不太好，建议使用 [cnpm - 淘宝提供的中国 NPM 镜像](https://npmmirror.com/))
+4. 在 tests 目录下编写您的需求/问题的测试用例
+5. 修改 src 下的一些代码，然后运行 `npm test` 或 `npm start` 启动 jest 进行调测
+6. 确保所有的测试用例都能通过时，提 MR 给 @牧毅 -- MR 将在 1 个工作日内给您回复意见。
 
 当然，欢迎提前私聊沟通 @牧毅，或加入 低代码渲染/出码服务金牌用户群 讨论沟通。
 

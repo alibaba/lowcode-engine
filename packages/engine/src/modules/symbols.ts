@@ -8,6 +8,7 @@ import {
   editorSymbol,
   settingPropEntrySymbol,
   settingTopEntrySymbol,
+  designerCabinSymbol,
 } from '@alilc/lowcode-shell';
 
 export default {
@@ -20,4 +21,5 @@ export default {
   designerSymbol,
   settingPropEntrySymbol,
   settingTopEntrySymbol,
+  designerCabinSymbol,
 };

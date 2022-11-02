@@ -84,7 +84,6 @@ class Test$$Page extends React.Component {
             if (!response.data.success) {
               throw new Error(response.data.message);
             }
-
             return response.data.data;
           },
           isInit: function () {
@@ -105,7 +104,6 @@ class Test$$Page extends React.Component {
             if (!response.data.success) {
               throw new Error(response.data.message);
             }
-
             return response.data.data.result;
           },
           isInit: function () {

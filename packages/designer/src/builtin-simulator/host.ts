@@ -352,9 +352,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     const _library = library || (this.get('library') as LibraryItem[]);
     const libraryAsset: AssetList = [];
     const libraryExportList: string[] = [];
+    const functionCallLibraryExportList: string[] = [];
 
     if (_library && _library.length) {
       _library.forEach((item) => {
+        const { exportMode, exportSourceLibrary } = item;
         this.libraryMap[item.package] = item.library;
         if (item.async) {
           this.asyncLibraryMap[item.package] = item;
@@ -362,6 +364,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         if (item.exportName && item.library) {
           libraryExportList.push(
             `Object.defineProperty(window,'${item.exportName}',{get:()=>window.${item.library}});`,
+          );
+        }
+        if (exportMode === 'functionCall' && exportSourceLibrary) {
+          functionCallLibraryExportList.push(
+            `window["${item.library}"] = window["${exportSourceLibrary}"]("${item.library}", "${item.package}");`,
           );
         }
         if (item.editUrls) {
@@ -372,7 +379,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       });
     }
     libraryAsset.unshift(assetItem(AssetType.JSText, libraryExportList.join('')));
-
+    libraryAsset.push(assetItem(AssetType.JSText, functionCallLibraryExportList.join('')));
     return libraryAsset;
   }
 
@@ -428,6 +435,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     if (Object.keys(this.asyncLibraryMap).length > 0) {
       // 加载异步Library
       await renderer.loadAsyncLibrary(this.asyncLibraryMap);
+      Object.keys(this.asyncLibraryMap).forEach(key => {
+        delete this.asyncLibraryMap[key];
+      });
     }
 
     // step 5 ready & render
@@ -447,7 +457,14 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   async setupComponents(library) {
     const libraryAsset: AssetList = this.buildLibrary(library);
-    await this.renderer.load(libraryAsset);
+    await this.renderer?.load(libraryAsset);
+    if (Object.keys(this.asyncLibraryMap).length > 0) {
+      // 加载异步Library
+      await this.renderer?.loadAsyncLibrary(this.asyncLibraryMap);
+      Object.keys(this.asyncLibraryMap).forEach(key => {
+        delete this.asyncLibraryMap[key];
+      });
+    }
   }
 
   setupEvents() {
@@ -1167,12 +1184,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       return null;
     }
     const dropContainer = this.getDropContainer(e);
-    const childWhitelist = dropContainer?.container?.componentMeta?.childWhitelist;
     const lockedNode = getClosestNode(dropContainer?.container as Node, (node) => node.isLocked);
     if (lockedNode) return null;
     if (
-      !dropContainer ||
-      (nodes && typeof childWhitelist === 'function' && !childWhitelist(operationalNodes[0]))
+      !dropContainer
     ) {
       return null;
     }
@@ -1458,7 +1473,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     const document = this.currentDocument!;
     const focusNode = document.focusNode;
     if (isRootNode(container) || container.contains(focusNode)) {
-      return document.checkDropTarget(focusNode, dragObject as any);
+      return document.checkNesting(focusNode, dragObject as any);
     }
 
     const meta = (container as Node).componentMeta;

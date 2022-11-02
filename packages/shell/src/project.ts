@@ -4,18 +4,20 @@ import {
   PropsReducer as PropsTransducer,
   TransformStage,
 } from '@alilc/lowcode-designer';
-import { RootSchema, ProjectSchema } from '@alilc/lowcode-types';
+import { RootSchema, ProjectSchema, IEditor } from '@alilc/lowcode-types';
 import DocumentModel from './document-model';
 import SimulatorHost from './simulator-host';
-import { projectSymbol, simulatorHostSymbol, simulatorRendererSymbol, documentSymbol } from './symbols';
+import { editorSymbol, projectSymbol, simulatorHostSymbol, simulatorRendererSymbol, documentSymbol } from './symbols';
 
 export default class Project {
   private readonly [projectSymbol]: InnerProject;
+  private readonly [editorSymbol]: IEditor;
   private [simulatorHostSymbol]: BuiltinSimulatorHost;
   private [simulatorRendererSymbol]: any;
 
   constructor(project: InnerProject) {
     this[projectSymbol] = project;
+    this[editorSymbol] = project?.designer.editor;
   }
 
   static create(project: InnerProject) {
@@ -130,6 +132,15 @@ export default class Project {
    */
   addPropsTransducer(transducer: PropsTransducer, stage: TransformStage) {
     this[projectSymbol].designer.addPropsReducer(transducer, stage);
+  }
+
+  /**
+   * 绑定删除文档事件
+   * @param fn
+   * @returns
+   */
+  onRemoveDocument(fn: (data: { id: string}) => void) {
+    return this[editorSymbol].on('designer.document.remove', (data: { id: string }) => fn(data));
   }
 
   /**

@@ -72,6 +72,13 @@ export default class Prop {
   }
 
   /**
+   * 移除值
+   */
+  remove() {
+    this[propSymbol].remove();
+  }
+
+  /**
    * 导出值
    * @param stage
    * @returns
