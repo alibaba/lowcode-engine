@@ -222,6 +222,10 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
     }
 
     componentDidMount() {
+      const _leaf = this.leaf;
+      this.initOnPropsChangeEvent(_leaf);
+      this.initOnChildrenChangeEvent(_leaf);
+      this.initOnVisibleChangeEvent(_leaf);
       this.recordTime();
     }
 
@@ -245,11 +249,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
       // 监听以下事件，当变化时更新自己
       __debug(`${schema.componentName}[${this.props.componentId}] leaf render in SimulatorRendererView`);
       clearRerenderEvent(componentCacheId);
-      const _leaf = this.leaf;
-      this.initOnPropsChangeEvent(_leaf);
-      this.initOnChildrenChangeEvent(_leaf);
-      this.initOnVisibleChangeEvent(_leaf);
-      this.curEventLeaf = _leaf;
+      this.curEventLeaf = this.leaf;
 
       cache.ref.set(componentCacheId, {
         makeUnitRender: this.makeUnitRender,
@@ -399,7 +399,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
 
     /** 监听参数变化 */
     initOnPropsChangeEvent(leaf = this.leaf): void {
-      const dispose = leaf?.onPropChange?.(debounce((propChangeInfo: PropChangeOptions) => {
+      const dispose = leaf?.onPropChange?.((propChangeInfo: PropChangeOptions) => {
         if (!this.autoRepaintNode) {
           return;
         }
@@ -449,7 +449,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
         });
 
         this.judgeMiniUnitRender();
-      }, 30));
+      });
 
       dispose && this.disposeFunctions.push(dispose);
     }

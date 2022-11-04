@@ -32,11 +32,12 @@ export class History<T = NodeSchema> {
     this.currentSerialization = serialization;
   }
 
-  constructor(dataFn: () => T, private redoer: (data: T) => void, private timeGap: number = 1000) {
+  constructor(dataFn: () => T | null, private redoer: (data: T) => void, private timeGap: number = 1000) {
     this.session = new Session(0, null, this.timeGap);
     this.records = [this.session];
 
-    reaction(() => {
+    reaction((): any => {
+      if (this.asleep) return null;
       return dataFn();
     }, (data: T) => {
       if (this.asleep) return;
@@ -69,11 +70,11 @@ export class History<T = NodeSchema> {
     return this.point !== this.session.cursor;
   }
 
-  private sleep() {
+  sleep() {
     this.asleep = true;
   }
 
-  private wakeup() {
+  wakeup() {
     this.asleep = false;
   }
 
