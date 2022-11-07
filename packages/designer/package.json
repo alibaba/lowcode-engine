@@ -1,6 +1,7 @@
 {
   "name": "@alilc/lowcode-designer",
   "version": "1.0.15",
+  "private": true,
   "description": "Designer for Ali LowCode Engine",
   "main": "lib/index.js",
   "module": "es/index.js",

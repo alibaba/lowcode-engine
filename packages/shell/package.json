@@ -1,5 +1,6 @@
 {
   "name": "@alilc/lowcode-shell",
+  "private": true,
   "version": "1.0.15",
   "description": "Shell Layer for AliLowCodeEngine",
   "main": "lib/index.js",
