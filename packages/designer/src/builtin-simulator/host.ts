@@ -203,12 +203,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       };
     });
     transactionManager.onStartTransaction(() => {
-      this.project.currentDocument?.history?.sleep();
       this.stopAutoRepaintNode();
     }, TransitionType.REPAINT);
     transactionManager.onEndTransaction(() => {
-      this.project.currentDocument?.history?.wakeup();
-      this.project.currentDocument?.history?.savePoint();
       this.rerender();
       this.enableAutoRepaintNode();
     }, TransitionType.REPAINT);

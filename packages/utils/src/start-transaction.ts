@@ -1,4 +1,5 @@
 import { TransitionType } from '@alilc/lowcode-types';
+import { transaction } from 'mobx';
 import EventEmitter from 'events';
 
 class TransactionManager {
@@ -6,7 +7,7 @@ class TransactionManager {
 
   startTransaction = (fn: () => void, type: TransitionType = TransitionType.REPAINT): void => {
     this.emitter.emit(`[${type}]startTransaction`);
-    fn();
+    transaction(fn);
     this.emitter.emit(`[${type}]endTransaction`);
   };
 

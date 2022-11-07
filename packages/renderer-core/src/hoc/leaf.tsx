@@ -229,11 +229,11 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
       this.recordTime();
     }
 
-    get defaultState() {
+    getDefaultState(nextProps: any) {
       const {
         hidden = false,
         condition = true,
-      } = this.leaf?.export?.(TransformStage.Render) || {};
+      } = nextProps.__inner__ || {};
       return {
         nodeChildren: null,
         childrenInState: false,
@@ -257,7 +257,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
 
       let cacheState = cache.state.get(componentCacheId);
       if (!cacheState || cacheState.__tag !== props.__tag) {
-        cacheState = this.defaultState;
+        cacheState = this.getDefaultState(props);
       }
 
       this.state = cacheState;
@@ -393,7 +393,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
       const {
         visible,
         ...resetState
-      } = this.defaultState;
+      } = this.getDefaultState(nextProps);
       this.setState(resetState);
     }
 
@@ -561,6 +561,8 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
         __id: this.props.componentId,
         ref: forwardedRef,
       };
+
+      delete compProps.__inner__;
 
       return engine.createElement(Comp, compProps, this.hasChildren ? this.children : null);
     }
