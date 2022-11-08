@@ -399,11 +399,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
 
     /** 监听参数变化 */
     initOnPropsChangeEvent(leaf = this.leaf): void {
-<<<<<<< HEAD
-      const dispose = leaf?.onPropChange?.((propChangeInfo: PropChangeOptions) => {
-=======
       const dispose = leaf?.onPropChange?.(debounce((propChangeInfo: PropChangeOptions) => {
->>>>>>> feat/autoRepaintNode
         if (!this.autoRepaintNode) {
           return;
         }
@@ -453,11 +449,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
         });
 
         this.judgeMiniUnitRender();
-<<<<<<< HEAD
-      });
-=======
       }, 20));
->>>>>>> feat/autoRepaintNode
 
       dispose && this.disposeFunctions.push(dispose);
     }

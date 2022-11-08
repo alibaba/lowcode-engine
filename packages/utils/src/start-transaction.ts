@@ -27,8 +27,3 @@ class TransactionManager {
 }
 
 export const transactionManager = new TransactionManager();
-<<<<<<< HEAD
-
-export default transactionManager;
-=======
->>>>>>> feat/autoRepaintNode
