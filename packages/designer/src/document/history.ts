@@ -37,9 +37,9 @@ export class History<T = NodeSchema> {
     this.records = [this.session];
 
     reaction((): any => {
-      if (this.asleep) return null;
       return dataFn();
     }, (data: T) => {
+      if (this.asleep) return null;
       untracked(() => {
         const log = this.currentSerialization.serialize(data);
         if (this.session.isActive()) {

@@ -9,7 +9,7 @@ const utils = {
   getNodeSchemaById,
   getConvertedExtraKey,
   getOriginalExtraKey,
-  startTransaction: transactionManager.startTransaction,
+  executeTransaction: transactionManager.executeTransaction.bind(transactionManager),
 };
 
 export default utils;

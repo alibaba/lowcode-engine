@@ -1,13 +1,13 @@
 import { TransitionType } from '@alilc/lowcode-types';
-import { transaction } from 'mobx';
+import { runInAction } from 'mobx';
 import EventEmitter from 'events';
 
 class TransactionManager {
   emitter = new EventEmitter();
 
-  startTransaction = (fn: () => void, type: TransitionType = TransitionType.REPAINT): void => {
+  executeTransaction = (fn: () => void, type: TransitionType = TransitionType.REPAINT): void => {
     this.emitter.emit(`[${type}]startTransaction`);
-    transaction(fn);
+    runInAction(fn);
     this.emitter.emit(`[${type}]endTransaction`);
   };
 
@@ -27,5 +27,8 @@ class TransactionManager {
 }
 
 export const transactionManager = new TransactionManager();
+<<<<<<< HEAD
 
 export default transactionManager;
+=======
+>>>>>>> feat/autoRepaintNode
