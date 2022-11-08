@@ -349,6 +349,11 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
    * 是否为画布自动渲染
    */
   autoRender = true;
+
+  /**
+   * 画布是否自动监听事件来重绘节点
+   */
+  autoRepaintNode = true;
   /**
    * 加载资源
    */
@@ -489,6 +494,14 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     this.autoRender = true;
     // TODO: 不太优雅
     this._appContext = { ...this._appContext };
+  }
+
+  stopAutoRepaintNode() {
+    this.autoRepaintNode = false;
+  }
+
+  enableAutoRepaintNode() {
+    this.autoRepaintNode = true;
   }
 
   dispose() {

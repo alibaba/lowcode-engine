@@ -670,7 +670,14 @@ export default function baseRendererFactory(): IBaseRenderComponent {
             }
           }
         }
-        return renderComp({ ...props, ...otherProps });
+        return renderComp({
+          ...props,
+          ...otherProps,
+          __inner__: {
+            hidden: schema.hidden,
+            condition,
+          },
+        });
       } catch (e) {
         return engine.createElement(engine.getFaultComponent(), {
           error: e,
