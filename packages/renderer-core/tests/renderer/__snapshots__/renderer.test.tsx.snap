@@ -11,6 +11,12 @@ exports[`Base Render renderComp 1`] = `
 >
   <div
     __id="node_dockcy8n9xed"
+    __inner__={
+      Object {
+        "condition": true,
+        "hidden": undefined,
+      }
+    }
     className="next-box"
     style={
       Object {
@@ -25,6 +31,12 @@ exports[`Base Render renderComp 1`] = `
   >
     <div
       __id="node_dockcy8n9xee"
+      __inner__={
+        Object {
+          "condition": true,
+          "hidden": undefined,
+        }
+      }
       className="next-box"
       style={
         Object {
@@ -39,6 +51,12 @@ exports[`Base Render renderComp 1`] = `
     >
       <nav
         __id="node_dockcy8n9xef"
+        __inner__={
+          Object {
+            "condition": true,
+            "hidden": undefined,
+          }
+        }
         aria-label="Breadcrumb"
         style={
           Object {
@@ -55,6 +73,12 @@ exports[`Base Render renderComp 1`] = `
           >
             <span
               __id="node_dockcy8n9xeg"
+              __inner__={
+                Object {
+                  "condition": true,
+                  "hidden": undefined,
+                }
+              }
               className="next-breadcrumb-text"
             >
               首页
@@ -74,6 +98,12 @@ exports[`Base Render renderComp 1`] = `
           >
             <span
               __id="node_dockcy8n9xei"
+              __inner__={
+                Object {
+                  "condition": true,
+                  "hidden": undefined,
+                }
+              }
               className="next-breadcrumb-text"
             >
               品质中台
@@ -93,6 +123,12 @@ exports[`Base Render renderComp 1`] = `
           >
             <span
               __id="node_dockcy8n9xek"
+              __inner__={
+                Object {
+                  "condition": true,
+                  "hidden": undefined,
+                }
+              }
               className="next-breadcrumb-text"
             >
               商家品质页面管理
@@ -112,6 +148,12 @@ exports[`Base Render renderComp 1`] = `
           >
             <span
               __id="node_dockcy8n9xem"
+              __inner__={
+                Object {
+                  "condition": true,
+                  "hidden": undefined,
+                }
+              }
               aria-current="page"
               className="next-breadcrumb-text activated"
             >
@@ -123,6 +165,12 @@ exports[`Base Render renderComp 1`] = `
     </div>
     <div
       __id="node_dockcy8n9xeo"
+      __inner__={
+        Object {
+          "condition": true,
+          "hidden": undefined,
+        }
+      }
       className="next-box"
       style={
         Object {
@@ -138,6 +186,12 @@ exports[`Base Render renderComp 1`] = `
       <form
         __events={Array []}
         __id="node_dockcy8n9xep"
+        __inner__={
+          Object {
+            "condition": true,
+            "hidden": undefined,
+          }
+        }
         className="next-form next-inline next-medium"
         onSubmit={[Function]}
         role="grid"
@@ -151,6 +205,12 @@ exports[`Base Render renderComp 1`] = `
       >
         <div
           __id="node_dockcy8n9xeq"
+          __inner__={
+            Object {
+              "condition": true,
+              "hidden": undefined,
+            }
+          }
           className="next-form-item next-left next-medium"
           style={
             Object {
@@ -193,6 +253,12 @@ exports[`Base Render renderComp 1`] = `
                   >
                     <input
                       __id="node_dockcy8n9xer"
+                      __inner__={
+                        Object {
+                          "condition": true,
+                          "hidden": undefined,
+                        }
+                      }
                       autoComplete="off"
                       disabled={false}
                       height="100%"
@@ -258,6 +324,12 @@ exports[`Base Render renderComp 1`] = `
         </div>
         <div
           __id="node_dockcy8n9xes"
+          __inner__={
+            Object {
+              "condition": true,
+              "hidden": undefined,
+            }
+          }
           className="next-form-item next-left next-medium"
           style={
             Object {
@@ -300,6 +372,12 @@ exports[`Base Render renderComp 1`] = `
                   >
                     <input
                       __id="node_dockcy8n9xet"
+                      __inner__={
+                        Object {
+                          "condition": true,
+                          "hidden": undefined,
+                        }
+                      }
                       autoComplete="off"
                       disabled={false}
                       height="100%"
@@ -365,6 +443,12 @@ exports[`Base Render renderComp 1`] = `
         </div>
         <div
           __id="node_dockcy8n9xeu"
+          __inner__={
+            Object {
+              "condition": true,
+              "hidden": undefined,
+            }
+          }
           className="next-form-item next-left next-medium"
           style={
             Object {
@@ -392,6 +476,12 @@ exports[`Base Render renderComp 1`] = `
             >
               <input
                 __id="node_dockcy8n9xev"
+                __inner__={
+                  Object {
+                    "condition": true,
+                    "hidden": undefined,
+                  }
+                }
                 autoComplete="off"
                 disabled={false}
                 height="100%"
@@ -412,10 +502,22 @@ exports[`Base Render renderComp 1`] = `
         </div>
         <div
           __id="node_dockcy8n9xew"
+          __inner__={
+            Object {
+              "condition": true,
+              "hidden": undefined,
+            }
+          }
           className="next-btn-group"
         >
           <button
             __id="node_dockcy8n9xex"
+            __inner__={
+              Object {
+                "condition": true,
+                "hidden": undefined,
+              }
+            }
             className="next-btn next-medium next-btn-primary"
             disabled={false}
             onClick={[Function]}
@@ -435,6 +537,12 @@ exports[`Base Render renderComp 1`] = `
           </button>
           <button
             __id="node_dockcy8n9xe10"
+            __inner__={
+              Object {
+                "condition": true,
+                "hidden": undefined,
+              }
+            }
             className="next-btn next-medium next-btn-normal"
             disabled={false}
             onClick={[Function]}
@@ -457,6 +565,12 @@ exports[`Base Render renderComp 1`] = `
     </div>
     <div
       __id="node_dockcy8n9xe1f"
+      __inner__={
+        Object {
+          "condition": true,
+          "hidden": undefined,
+        }
+      }
       className="next-box"
       style={
         Object {
@@ -482,6 +596,12 @@ exports[`Base Render renderComp 1`] = `
           ]
         }
         __id="node_dockd5nrh9p4"
+        __inner__={
+          Object {
+            "condition": true,
+            "hidden": undefined,
+          }
+        }
         className="next-btn next-medium next-btn-primary"
         disabled={false}
         onClick={[Function]}
@@ -498,6 +618,12 @@ exports[`Base Render renderComp 1`] = `
     </div>
     <div
       __id="node_dockd5nrh9p5"
+      __inner__={
+        Object {
+          "condition": true,
+          "hidden": undefined,
+        }
+      }
       className="next-box"
       style={
         Object {
@@ -510,6 +636,12 @@ exports[`Base Render renderComp 1`] = `
     >
       <div
         __id="node_dockjielosj1"
+        __inner__={
+          Object {
+            "condition": true,
+            "hidden": undefined,
+          }
+        }
         actionBar={
           Array [
             Object {
@@ -688,6 +820,12 @@ exports[`Base Render renderComp 1`] = `
       </div>
       <div
         __id="node_dockd5nrh9pg"
+        __inner__={
+          Object {
+            "condition": true,
+            "hidden": undefined,
+          }
+        }
         className="next-box"
         style={
           Object {
@@ -702,6 +840,12 @@ exports[`Base Render renderComp 1`] = `
       >
         <div
           __id="node_dockd5nrh9pf"
+          __inner__={
+            Object {
+              "condition": true,
+              "hidden": undefined,
+            }
+          }
           className="next-pagination next-medium next-normal"
           style={Object {}}
         >
@@ -898,6 +1042,12 @@ exports[`Base Render renderComp 1`] = `
         >
           <input
             __id="node_dockd5nrh9pr"
+            __inner__={
+              Object {
+                "condition": true,
+                "hidden": undefined,
+              }
+            }
             autoComplete="off"
             disabled={false}
             height="100%"
@@ -967,6 +1117,12 @@ exports[`JSExpression JSExpression props 1`] = `
   style={Object {}}
 >
   <div
+    __inner__={
+      Object {
+        "condition": true,
+        "hidden": undefined,
+      }
+    }
     className="div-ut"
     forwardRef={[Function]}
     visible={true}
@@ -980,12 +1136,24 @@ exports[`JSExpression JSExpression props with loop 1`] = `
   style={Object {}}
 >
   <div
+    __inner__={
+      Object {
+        "condition": true,
+        "hidden": undefined,
+      }
+    }
     className="div-ut"
     forwardRef={[Function]}
     name1="1"
     name2="1"
   />
   <div
+    __inner__={
+      Object {
+        "condition": true,
+        "hidden": undefined,
+      }
+    }
     className="div-ut"
     forwardRef={[Function]}
     name1="2"
@@ -1000,11 +1168,23 @@ exports[`JSExpression JSExpression props with loop, and thisRequiredInJSE is tru
   style={Object {}}
 >
   <div
+    __inner__={
+      Object {
+        "condition": true,
+        "hidden": undefined,
+      }
+    }
     className="div-ut"
     forwardRef={[Function]}
     name1="1"
   />
   <div
+    __inner__={
+      Object {
+        "condition": true,
+        "hidden": undefined,
+      }
+    }
     className="div-ut"
     forwardRef={[Function]}
     name1="2"
@@ -1018,6 +1198,12 @@ exports[`JSExpression JSFunction props 1`] = `
   style={Object {}}
 >
   <div
+    __inner__={
+      Object {
+        "condition": true,
+        "hidden": undefined,
+      }
+    }
     className="div-ut"
     forwardRef={[Function]}
     onClick={[Function]}
@@ -1032,6 +1218,12 @@ exports[`JSExpression JSSlot has loop 1`] = `
 >
   <div
     __id="node_ocl1ao1o7w3"
+    __inner__={
+      Object {
+        "condition": true,
+        "hidden": false,
+      }
+    }
     __style__=":root {
  padding: 12px;
  background: #f2f2f2;
@@ -1046,6 +1238,12 @@ exports[`JSExpression JSSlot has loop 1`] = `
   >
     <div
       __id="node_ocl1ao1o7w4"
+      __inner__={
+        Object {
+          "condition": true,
+          "hidden": false,
+        }
+      }
       __style__=":root {
  font-size: 14px;
  color: #666;
@@ -1063,6 +1261,12 @@ exports[`JSExpression JSSlot has loop 1`] = `
   </div>
   <div
     __id="node_ocl1ao1o7w3"
+    __inner__={
+      Object {
+        "condition": true,
+        "hidden": false,
+      }
+    }
     __style__=":root {
  padding: 12px;
  background: #f2f2f2;
@@ -1077,6 +1281,12 @@ exports[`JSExpression JSSlot has loop 1`] = `
   >
     <div
       __id="node_ocl1ao1o7w4"
+      __inner__={
+        Object {
+          "condition": true,
+          "hidden": false,
+        }
+      }
       __style__=":root {
  font-size: 14px;
  color: #666;
@@ -1094,6 +1304,12 @@ exports[`JSExpression JSSlot has loop 1`] = `
   </div>
   <div
     __id="node_ocl1ao1o7w3"
+    __inner__={
+      Object {
+        "condition": true,
+        "hidden": false,
+      }
+    }
     __style__=":root {
  padding: 12px;
  background: #f2f2f2;
@@ -1108,6 +1324,12 @@ exports[`JSExpression JSSlot has loop 1`] = `
   >
     <div
       __id="node_ocl1ao1o7w4"
+      __inner__={
+        Object {
+          "condition": true,
+          "hidden": false,
+        }
+      }
       __style__=":root {
  font-size: 14px;
  color: #666;
@@ -1132,6 +1354,12 @@ exports[`JSExpression base props 1`] = `
   style={Object {}}
 >
   <div
+    __inner__={
+      Object {
+        "condition": true,
+        "hidden": undefined,
+      }
+    }
     className="div-ut"
     forwardRef={[Function]}
     text="123"
@@ -1146,10 +1374,22 @@ exports[`designMode designMode:default 1`] = `
   style={Object {}}
 >
   <div
+    __inner__={
+      Object {
+        "condition": true,
+        "hidden": undefined,
+      }
+    }
     className="div-ut"
     forwardRef={[Function]}
   >
     <div
+      __inner__={
+        Object {
+          "condition": true,
+          "hidden": undefined,
+        }
+      }
       className="div-ut-children"
       forwardRef={[Function]}
     />
