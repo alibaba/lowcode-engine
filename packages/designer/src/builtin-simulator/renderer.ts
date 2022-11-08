@@ -13,6 +13,8 @@ export interface BuiltinSimulatorRenderer {
   setCopyState(state: boolean): void;
   loadAsyncLibrary(asyncMap: { [index: string]: any }): void;
   clearState(): void;
+  stopAutoRepaintNode(): void;
+  enableAutoRepaintNode(): void;
   run(): void;
 }
 
