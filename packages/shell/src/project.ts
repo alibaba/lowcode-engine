@@ -184,7 +184,7 @@ export default class Project {
     return offFn;
   }
 
-  set i18n(value: string) {
+  setI18n(value: string) {
     this[projectSymbol].set('i18n', value);
   }
 }

@@ -360,7 +360,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
      */
     __initI18nAPIs = (props: IBaseRendererProps) => {
       this.i18n = (key: string, values = {}) => {
-        const { locale, messages } = props;
+        const { locale, messages } = this.props;
         return getI18n(key, values, locale, messages);
       };
       this.getLocale = () => props.locale;
