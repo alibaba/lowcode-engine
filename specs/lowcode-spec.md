@@ -936,11 +936,11 @@ type Ti18n = {
   "i18n": {
     "zh-CN": {
       "i18n-jwg27yo4": "你好",
-      "i18n-jwg27yo3": "${name}博士"
+      "i18n-jwg27yo3": "{name}博士"
     },
     "en-US": {
       "i18n-jwg27yo4": "Hello",
-      "i18n-jwg27yo3": "Doctor ${name}"
+      "i18n-jwg27yo3": "Doctor {name}"
     }
   }
 }

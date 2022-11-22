@@ -28,6 +28,10 @@ export default class ResourceConsumer<T = any> {
 
   private _consuming?: () => void;
 
+  private _firstConsumed = false;
+
+  private resolveFirst?: (resolve?: any) => void;
+
   constructor(provider: () => T, private consumer?: RendererConsumer<T>) {
     makeObservable(this);
     this._providing = autorun(() => {
@@ -47,30 +51,18 @@ export default class ResourceConsumer<T = any> {
       }
       const rendererConsumer = this.consumer!;
 
-      consumer = data => rendererConsumer(consumerOrRenderer, data);
+      consumer = (data) => rendererConsumer(consumerOrRenderer, data);
     } else {
       consumer = consumerOrRenderer;
     }
     this._consuming = autorun(async () => {
-      // debugger;
       if (this._data === UNSET) {
         return;
       }
-      // debugger;
       await consumer(this._data);
-      // if (this._data) {
-      //   consumer(this._data);
-      // }
-      // consumer(this._data);
-      // consumer({
-      //   appHelper: (this._data as any)?.appHelper,
-      //   i18n: {
-      //     ...((this._data as any)?.i18n || {}),
-      //   }
-      // } as any);
       // TODO: catch error and report
-      if (this.resovleFirst) {
-        this.resovleFirst();
+      if (this.resolveFirst) {
+        this.resolveFirst();
       } else {
         this._firstConsumed = true;
       }
@@ -87,16 +79,12 @@ export default class ResourceConsumer<T = any> {
     this.emitter.removeAllListeners();
   }
 
-  private _firstConsumed = false;
-
-  private resovleFirst?: () => void;
-
   waitFirstConsume(): Promise<any> {
     if (this._firstConsumed) {
       return Promise.resolve();
     }
-    return new Promise(resolve => {
-      this.resovleFirst = resolve;
+    return new Promise((resolve) => {
+      this.resolveFirst = resolve;
     });
   }
 }

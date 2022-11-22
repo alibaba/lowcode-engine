@@ -31,7 +31,7 @@ const loader = new AssetLoader();
 configure({ enforceActions: 'never' });
 
 export class DocumentInstance {
-  public instancesMap = new Map<string, ReactInstance[]>();
+  instancesMap = new Map<string, ReactInstance[]>();
 
   get schema(): any {
     return this.document.export(TransformStage.Render);
@@ -190,6 +190,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   readonly history: MemoryHistory;
 
   @obx.ref private _documentInstances: DocumentInstance[] = [];
+  private _requestHandlersMap: any;
   get documentInstances() {
     return this._documentInstances;
   }
@@ -203,7 +204,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       this._layout = host.project.get('config').layout;
 
       // todo: split with others, not all should recompute
-      if (this._libraryMap !== host.libraryMap || this._componentsMap !== host.designer.componentsMap) {
+      if (this._libraryMap !== host.libraryMap
+        || this._componentsMap !== host.designer.componentsMap) {
         this._libraryMap = host.libraryMap || {};
         this._componentsMap = host.designer.componentsMap;
         this.buildComponents();
@@ -246,7 +248,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       initialEntries: [initialEntry],
     });
     this.history = history;
-    history.listen((location, action) => {
+    history.listen((location) => {
       const docId = location.pathname.slice(1);
       docId && host.project.open(docId);
     });
@@ -285,14 +287,22 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       constants: {},
       requestHandlersMap: this._requestHandlersMap,
     };
+
     host.injectionConsumer.consume((data) => {
-      // debugger;
       // TODO: sync utils, i18n, contants,... config
       const newCtx = {
         ...this._appContext,
       };
       newCtx.utils.i18n.messages = data.i18n || {};
       merge(newCtx, data.appHelper || {});
+      this._appContext = newCtx;
+    });
+
+    host.i18nConsumer.consume((data) => {
+      const newCtx = {
+        ...this._appContext,
+      };
+      newCtx.utils.i18n.messages = data || {};
       this._appContext = newCtx;
     });
   }
@@ -311,7 +321,11 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   private _libraryMap: { [key: string]: string } = {};
 
   private buildComponents() {
-    this._components = buildComponents(this._libraryMap, this._componentsMap, this.createComponent.bind(this));
+    this._components = buildComponents(
+        this._libraryMap,
+        this._componentsMap,
+        this.createComponent.bind(this),
+      );
     this._components = {
       ...builtinComponents,
       ...this._components,
@@ -506,8 +520,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   }
 
   dispose() {
-    this.disposeFunctions.forEach(fn => fn());
-    this.documentInstances.forEach(docInst => docInst.dispose());
+    this.disposeFunctions.forEach((fn) => fn());
+    this.documentInstances.forEach((docInst) => docInst.dispose());
     untracked(() => {
       this._componentsMap = {};
       this._components = null;
@@ -541,7 +555,10 @@ function cacheReactKey(el: Element): Element {
 const SYMBOL_VNID = Symbol('_LCNodeId');
 const SYMBOL_VDID = Symbol('_LCDocId');
 
-function getClosestNodeInstance(from: ReactInstance, specId?: string): NodeInstance<ReactInstance> | null {
+function getClosestNodeInstance(
+  from: ReactInstance,
+  specId?: string,
+  ): NodeInstance<ReactInstance> | null {
   let el: any = from;
   if (el) {
     if (isElement(el)) {
@@ -600,7 +617,7 @@ function getLowCodeComponentProps(props: any) {
     return props;
   }
   const newProps: any = {};
-  Object.keys(props).forEach(k => {
+  Object.keys(props).forEach((k) => {
     if (['children', 'componentId', '__designMode', '_componentName', '_leaf'].includes(k)) {
       return;
     }
