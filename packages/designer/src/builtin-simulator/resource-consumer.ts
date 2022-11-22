@@ -22,7 +22,7 @@ export type RendererConsumer<T> = (renderer: BuiltinSimulatorRenderer, data: T) 
 export default class ResourceConsumer<T = any> {
   private emitter = new EventEmitter();
 
-  @obx.ref private _data: T | typeof UNSET = UNSET;
+  @obx private _data: T | typeof UNSET = UNSET;
 
   private _providing?: () => void;
 
@@ -51,10 +51,22 @@ export default class ResourceConsumer<T = any> {
       consumer = consumerOrRenderer;
     }
     this._consuming = autorun(async () => {
+      // debugger;
       if (this._data === UNSET) {
         return;
       }
+      // debugger;
       await consumer(this._data);
+      // if (this._data) {
+      //   consumer(this._data);
+      // }
+      // consumer(this._data);
+      // consumer({
+      //   appHelper: (this._data as any)?.appHelper,
+      //   i18n: {
+      //     ...((this._data as any)?.i18n || {}),
+      //   }
+      // } as any);
       // TODO: catch error and report
       if (this.resovleFirst) {
         this.resovleFirst();

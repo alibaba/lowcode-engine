@@ -53,8 +53,8 @@ export class Project {
     this._config = value;
   }
 
-  @obx.ref private _i18n: any = {};
-  get i18n(): any {
+  @obx private _i18n: any = {};
+  @computed get i18n(): any {
     return this._i18n;
   }
   set i18n(value: any) {

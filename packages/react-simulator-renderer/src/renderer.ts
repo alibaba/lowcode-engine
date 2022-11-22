@@ -286,6 +286,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       requestHandlersMap: this._requestHandlersMap,
     };
     host.injectionConsumer.consume((data) => {
+      // debugger;
       // TODO: sync utils, i18n, contants,... config
       const newCtx = {
         ...this._appContext,
