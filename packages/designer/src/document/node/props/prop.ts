@@ -173,7 +173,7 @@ export class Prop implements IPropParent {
       const values = this.items!.map((prop) => {
         return prop.export(stage);
       });
-      if (values.every(val => val === undefined)) {
+      if (values.every((val) => val === undefined)) {
         return undefined;
       }
       return values;
@@ -314,14 +314,21 @@ export class Prop implements IPropParent {
   @action
   setAsSlot(data: JSSlot) {
     this._type = 'slot';
-    const slotSchema: SlotSchema = {
-      componentName: 'Slot',
-      title: data.title,
-      id: data.id,
-      name: data.name,
-      params: data.params,
-      children: data.value,
-    };
+    let slotSchema: SlotSchema;
+    // 当 data.value 的结构为 { componentName: 'Slot' } 时，直接当成 slotSchema 使用
+    if ((isPlainObject(data.value) && data.value?.componentName === 'Slot')) {
+      slotSchema = data.value as SlotSchema;
+    } else {
+      slotSchema = {
+        componentName: 'Slot',
+        title: data.title,
+        id: data.id,
+        name: data.name,
+        params: data.params,
+        children: data.value,
+      };
+    }
+
     if (this._slotNode) {
       this._slotNode.import(slotSchema);
     } else {
