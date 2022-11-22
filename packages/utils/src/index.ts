@@ -26,4 +26,4 @@ export * from './node-helper';
 export * from './clone-enumerable-property';
 export * from './logger';
 export * as css from './css-helper';
-export { transactionManager } from './start-transaction';
+export { transactionManager } from './transaction-manager';
