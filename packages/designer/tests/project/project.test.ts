@@ -255,12 +255,12 @@ describe('schema 生成节点模型测试', () => {
       expect(project).toBeTruthy();
 
       project.i18n = formSchema.i18n;
-      expect(project.i18n).toBe(formSchema.i18n);
+      expect(project.i18n).toStrictEqual(formSchema.i18n);
       project.i18n = null;
       expect(project.i18n).toStrictEqual({});
 
       project.set('i18n', formSchema.i18n);
-      expect(project.get('i18n')).toBe(formSchema.i18n);
+      expect(project.get('i18n')).toStrictEqual(formSchema.i18n);
       project.set('i18n', null);
       expect(project.get('i18n')).toStrictEqual({});
     });
