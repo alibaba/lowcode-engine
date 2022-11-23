@@ -204,9 +204,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       };
     });
 
-    this.i18nConsumer = new ResourceConsumer(() => {
-      return this.project.i18n;
-    });
+    this.i18nConsumer = new ResourceConsumer(() => this.project.i18n);
 
     transactionManager.onStartTransaction(() => {
       this.stopAutoRepaintNode();

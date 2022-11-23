@@ -555,8 +555,8 @@ const SYMBOL_VNID = Symbol('_LCNodeId');
 const SYMBOL_VDID = Symbol('_LCDocId');
 
 function getClosestNodeInstance(
-  from: ReactInstance,
-  specId?: string,
+    from: ReactInstance,
+    specId?: string,
   ): NodeInstance<ReactInstance> | null {
   let el: any = from;
   if (el) {
