@@ -1,4 +1,4 @@
-import { autorun, obx } from '@alilc/lowcode-editor-core';
+import { autorun, makeObservable, obx } from '@alilc/lowcode-editor-core';
 import { BuiltinSimulatorHost } from './host';
 import { EventEmitter } from 'events';
 import { BuiltinSimulatorRenderer, isSimulatorRenderer } from './renderer';
@@ -28,7 +28,12 @@ export default class ResourceConsumer<T = any> {
 
   private _consuming?: () => void;
 
+  private _firstConsumed = false;
+
+  private resolveFirst?: (resolve?: any) => void;
+
   constructor(provider: () => T, private consumer?: RendererConsumer<T>) {
+    makeObservable(this);
     this._providing = autorun(() => {
       this._data = provider();
     });
@@ -46,7 +51,7 @@ export default class ResourceConsumer<T = any> {
       }
       const rendererConsumer = this.consumer!;
 
-      consumer = data => rendererConsumer(consumerOrRenderer, data);
+      consumer = (data) => rendererConsumer(consumerOrRenderer, data);
     } else {
       consumer = consumerOrRenderer;
     }
@@ -56,8 +61,8 @@ export default class ResourceConsumer<T = any> {
       }
       await consumer(this._data);
       // TODO: catch error and report
-      if (this.resovleFirst) {
-        this.resovleFirst();
+      if (this.resolveFirst) {
+        this.resolveFirst();
       } else {
         this._firstConsumed = true;
       }
@@ -74,16 +79,12 @@ export default class ResourceConsumer<T = any> {
     this.emitter.removeAllListeners();
   }
 
-  private _firstConsumed = false;
-
-  private resovleFirst?: () => void;
-
   waitFirstConsume(): Promise<any> {
     if (this._firstConsumed) {
       return Promise.resolve();
     }
-    return new Promise(resolve => {
-      this.resovleFirst = resolve;
+    return new Promise((resolve) => {
+      this.resolveFirst = resolve;
     });
   }
 }

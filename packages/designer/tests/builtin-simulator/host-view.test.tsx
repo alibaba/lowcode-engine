@@ -26,7 +26,7 @@ describe('host-view 测试', () => {
     designer = null;
   });
 
-  it('host-view', () => {
+  it.skip('host-view', () => {
     const hostView = render(<BuiltinSimulatorHostView project={designer.project} />);
   });
 });

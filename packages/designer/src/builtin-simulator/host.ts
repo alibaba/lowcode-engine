@@ -177,6 +177,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   readonly injectionConsumer: ResourceConsumer;
 
+  readonly i18nConsumer: ResourceConsumer;
+
   /**
    * 是否为画布自动渲染
    */
@@ -200,9 +202,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.injectionConsumer = new ResourceConsumer(() => {
       return {
         appHelper: engineConfig.get('appHelper'),
-        i18n: this.project.i18n,
       };
     });
+
+    this.i18nConsumer = new ResourceConsumer(() => this.project.i18n);
+
     transactionManager.onStartTransaction(() => {
       this.stopAutoRepaintNode();
     }, TransitionType.REPAINT);
