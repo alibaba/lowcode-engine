@@ -184,7 +184,13 @@ export default class Project {
     return offFn;
   }
 
-  setI18n(value: string) {
+  /**
+   * 设置多语言语料
+   * 数据格式参考 https://github.com/alibaba/lowcode-engine/blob/main/specs/lowcode-spec.md#2434%E5%9B%BD%E9%99%85%E5%8C%96%E5%A4%9A%E8%AF%AD%E8%A8%80%E7%B1%BB%E5%9E%8Baa
+   * @param value object
+   * @returns
+   */
+  setI18n(value: object): void {
     this[projectSymbol].set('i18n', value);
   }
 }
