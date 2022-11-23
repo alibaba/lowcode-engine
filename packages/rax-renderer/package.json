@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-rax-renderer",
-  "version": "1.0.17-beta.10",
+  "version": "1.0.17-beta.11",
   "description": "Rax renderer for Ali lowCode engine",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -30,8 +30,8 @@
     "build": "build-scripts build"
   },
   "dependencies": {
-    "@alilc/lowcode-renderer-core": "1.0.17-beta.10",
-    "@alilc/lowcode-utils": "1.0.17-beta.10",
+    "@alilc/lowcode-renderer-core": "1.0.17-beta.11",
+    "@alilc/lowcode-utils": "1.0.17-beta.11",
     "rax-find-dom-node": "^1.0.1"
   },
   "devDependencies": {
@@ -49,5 +49,5 @@
   },
   "license": "MIT",
   "homepage": "https://unpkg.alibaba-inc.com/@alilc/lowcode-rax-renderer@0.1.2/build/index.html",
-  "gitHead": "2139f9e2b8887ff077dce3527b53717c7d889316"
+  "gitHead": "f30ccf509a7c3341ef5cffc6b88aff0a0286787e"
 }
