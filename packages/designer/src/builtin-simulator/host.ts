@@ -205,7 +205,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     });
 
     this.i18nConsumer = new ResourceConsumer(() => {
-      return { ...this.project.i18n };
+      return this.project.i18n;
     });
 
     transactionManager.onStartTransaction(() => {

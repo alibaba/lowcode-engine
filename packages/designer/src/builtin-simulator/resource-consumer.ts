@@ -22,7 +22,7 @@ export type RendererConsumer<T> = (renderer: BuiltinSimulatorRenderer, data: T) 
 export default class ResourceConsumer<T = any> {
   private emitter = new EventEmitter();
 
-  @obx private _data: T | typeof UNSET = UNSET;
+  @obx.ref private _data: T | typeof UNSET = UNSET;
 
   private _providing?: () => void;
 

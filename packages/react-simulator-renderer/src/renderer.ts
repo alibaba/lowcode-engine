@@ -293,7 +293,6 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       const newCtx = {
         ...this._appContext,
       };
-      newCtx.utils.i18n.messages = data.i18n || {};
       merge(newCtx, data.appHelper || {});
       this._appContext = newCtx;
     });
