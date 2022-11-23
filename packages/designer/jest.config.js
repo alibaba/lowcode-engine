@@ -11,7 +11,7 @@ const jestConfig = {
   // },
   // testMatch: ['**/node-children.test.ts'],
   // testMatch: ['**/history/history.test.ts'],
-  // testMatch: ['**/plugin/plugin-manager.test.ts'],
+  // testMatch: ['**/host-view.test.tsx'],
   // testMatch: ['(/tests?/.*(test))\\.[jt]s$'],
   transformIgnorePatterns: [
     `/node_modules/(?!${esModules})/`,
