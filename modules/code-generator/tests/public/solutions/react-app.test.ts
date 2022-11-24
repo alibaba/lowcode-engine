@@ -16,7 +16,7 @@ import type { ProjectSchema } from '@alilc/lowcode-types';
 
 jest.setTimeout(15 * 1000);
 
-const TEST_CASES_DIR = path.join(__dirname, '../../../test-cases/react-app');
+const TEST_CASES_DIR = path.join(__dirname, '../../fixtures/test-cases/react-app');
 const SHOULD_UPDATE_EXPECTED = process.env.UPDATE_EXPECTED === 'true';
 
 getSubDirectoriesSync(TEST_CASES_DIR).forEach(defineTest);
