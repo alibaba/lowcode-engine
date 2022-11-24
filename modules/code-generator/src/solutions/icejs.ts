@@ -8,6 +8,7 @@ import containerInitState from '../plugins/component/react/containerInitState';
 import containerInjectContext from '../plugins/component/react/containerInjectContext';
 import containerInjectUtils from '../plugins/component/react/containerInjectUtils';
 import containerInjectDataSourceEngine from '../plugins/component/react/containerInjectDataSourceEngine';
+import containerInjectConstants from '../plugins/component/react/containerInjectConstants';
 import containerInjectI18n from '../plugins/component/react/containerInjectI18n';
 import containerLifeCycle from '../plugins/component/react/containerLifeCycle';
 import containerMethod from '../plugins/component/react/containerMethod';
@@ -22,7 +23,7 @@ import icejs from '../plugins/project/framework/icejs';
 
 import { prettier } from '../postprocessor';
 
-export interface IceJsProjectBuilderOptions extends IProjectBuilderOptions {}
+export type IceJsProjectBuilderOptions = IProjectBuilderOptions;
 
 export default function createIceJsProjectBuilder(
   options?: IceJsProjectBuilderOptions,
@@ -65,6 +66,7 @@ export default function createIceJsProjectBuilder(
         containerInjectUtils(),
         containerInjectDataSourceEngine(),
         containerInjectI18n(),
+        containerInjectConstants(),
         containerInitState(),
         containerLifeCycle(),
         containerMethod(),
