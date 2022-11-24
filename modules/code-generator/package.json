@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-code-generator",
-  "version": "1.0.7-beta.1",
+  "version": "1.0.7-beta.2",
   "description": "出码引擎 for LowCode Engine",
   "license": "MIT",
   "main": "lib/index.js",
@@ -46,6 +46,11 @@
     "release:minor": "standard-version -t @alilc/lowcode-code-generator\\@ -r minor && git push --follow-tags && npm publish",
     "prepublishOnly": "npm run build",
     "demo": "node bin/lowcode-code-generator.js -i example-schema.json -o demo -s icejs"
+  },
+  "standard-version": {
+    "skip": {
+      "changelog": true
+    }
   },
   "husky": {
     "hooks": {
