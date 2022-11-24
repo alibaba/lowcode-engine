@@ -2,12 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.7-beta.2](https://github.com/alibaba/lowcode-engine/compare/@alilc/lowcode-code-generator@1.0.3...@alilc/lowcode-code-generator@1.0.7-beta.2) (2022-11-24)
+
+### Bug Fixes
+
+* 🐛 解决 react 中 jsx 出码的时候对于循环数据漏包 __$evalArray 的问题 ([3b9b177](https://github.com/alibaba/lowcode-engine/commit/3b9b177b052169cd0c1078cf8b488f04cb374dac))
+* 🐛 解决出码缺乏对于 i18n 数据的 params 的处理的问题 ([2cf788c](https://github.com/alibaba/lowcode-engine/commit/2cf788c1716ae63fef20004348c59a5a65c6b3d2)), closes [#288](https://github.com/alibaba/lowcode-engine/issues/288)
+* 🐛 解决小程序环境没有 window, 而 rax 出码中却默认在 __$eval 中用到 window 的问题 ([ce531ae](https://github.com/alibaba/lowcode-engine/commit/ce531aeb457711fac92d828b431cfc3d643b3682))
+* add support for jsx expression ([453e069](https://github.com/alibaba/lowcode-engine/commit/453e0699ece06d98e59227e23248baf1de4082aa))
+* 修复生成的 icejs 项目不支持 constants 的问题, fixes [#1259](https://github.com/alibaba/lowcode-engine/issues/1259) ([a079fbc](https://github.com/alibaba/lowcode-engine/commit/a079fbc256f8275e8a69eb6d8abb6f6b08179578))
+* 修正 react 框架出码中在严格模式对 methods 和 context 的处理 ([b1a6100](https://github.com/alibaba/lowcode-engine/commit/b1a61006bba4292790899c7c49c9c611a9384472))
 ### [1.0.7-beta.1](https://github.com/alibaba/lowcode-engine/compare/@alilc/lowcode-code-generator@1.0.7-beta.0...@alilc/lowcode-code-generator@1.0.7-beta.1) (2022-10-26)
 
 
 ### Bug Fixes
 
-* fix empty string lost when  generate variable ([2cf74cd](https://github.com/alibaba/lowcode-engine/commit/2cf74cd04b4f48a3501d37329d39784f6964366a))
+* fix empty string lost when generate variable ([2cf74cd](https://github.com/alibaba/lowcode-engine/commit/2cf74cd04b4f48a3501d37329d39784f6964366a))
 
 ### [1.0.7-beta.0](https://github.com/alibaba/lowcode-engine/compare/@alilc/lowcode-code-generator@1.0.6-beta.0...@alilc/lowcode-code-generator@1.0.7-beta.0) (2022-10-25)
 
