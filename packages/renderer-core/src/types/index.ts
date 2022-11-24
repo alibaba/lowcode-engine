@@ -98,10 +98,16 @@ export interface IRendererProps {
   id?: string | number;
   /** 语言 */
   locale?: string;
+  /**
+   * 多语言语料
+   * 配置规范参见《低代码搭建组件描述协议》https://lowcode-engine.cn/lowcode 中 2.6 国际化多语言支持
+   * */
+  messages?: Record<string, any>;
   /** 主要用于设置渲染模块的全局上下文，里面定义的内容可以在低代码中通过 this 来访问，比如 this.utils */
   appHelper?: IRendererAppHelper;
   /**
-   * 配置规范参见《中后台搭建组件描述协议》，主要在搭建场景中使用，用于提升用户搭建体验。
+   * 配置规范参见《低代码搭建组件描述协议》https://lowcode-engine.cn/lowcode
+   * 主要在搭建场景中使用，用于提升用户搭建体验。
    *
    * > 在生产环境下不需要设置
    */
