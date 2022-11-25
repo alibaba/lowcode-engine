@@ -1,7 +1,5 @@
 # 《低代码引擎搭建协议规范》
 
-# 1 介绍
-
 ## 1.1 本协议规范涉及的问题域
 
 - 定义本协议版本号规范
@@ -801,7 +799,7 @@ try {
 
 ```
 
-#### 2.4.3.2 事件函数类型（A）
+#### 2.3.4.2 事件函数类型（A）
 
 协议内的事件描述，主要包含**容器结构**的**生命周期**和**自定义方法**，以及**组件结构**的**事件函数类属性**三类。所有事件函数的描述，均以 **JSFunction** 的方式进行描述，保留与原组件属性、生命周期（React / 小程序）一致的输入参数，并给所有事件函数 binding 统一一致的上下文（当前组件所在容器结构的 **this** 对象）。
 
@@ -863,7 +861,7 @@ try {
 }
 ```
 
-#### 2.4.3.3 变量类型（A）
+#### 2.3.4.3 变量类型（A）
 
 在上述**组件结构** 或**容器结构**中，有多个属性的值类型是支持变量类型的，通常会通过变量形式来绑定某个数据，所有的变量表达式均通过 JSExpression 表达式，上下文与事件函数描述一致，表达式内通过 **this** 对象获取上下文；
 
@@ -886,7 +884,7 @@ try {
     "value": "this.state.num - this.state.num2"
   }
   ```
-- return  "8万" 字符串类型
+- return "8万" 字符串类型
 
   ```json
   {
@@ -894,7 +892,7 @@ try {
     "value": "`${this.state.num}万`"
   }
   ```
-- return  "8万" 字符串类型
+- return "8万" 字符串类型
 
   ```json
   {
@@ -902,7 +900,7 @@ try {
     "value": "this.state.num + '万'"
   }
   ```
-- return  13 数字类型
+- return 13 数字类型
 
   ```json
   {
@@ -910,7 +908,7 @@ try {
     "value": "getNum(this.state.num, this.state.num2)"
   }
   ```
-- return  true 布尔类型
+- return true 布尔类型
 
   ```json
   {
@@ -943,7 +941,7 @@ try {
     "props": {
       "text": {
         "type": "JSExpression",
-        "value": "getNum(this.state.num, this.state.num2) + '万'"
+        "value": "this.getNum(this.state.num, this.state.num2) + '万'"
       }
     },
     "condition": {
@@ -954,7 +952,7 @@ try {
 }
 ```
 
-#### 2.4.3.4 国际化多语言类型（AA）
+#### 2.3.4.4 国际化多语言类型（AA）
 
 协议内的一些文本值内容，我们希望是和协议全局的国际化多语言语料是关联的，会按照全局国际化语言环境的不同使用对应的语料。所有国际化多语言值均以 **i18n** 结构描述。这样可以更为清晰且结构化得表达使用场景。
 
@@ -1314,17 +1312,17 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
 └── .stylelintrc.js
 ```
 
-## 3.3 应用级别 APIs
+## 3.2 应用级别 APIs
 > 下文中 `xxx` 代指任意 API
-### 3.3.1 路由 Router API
+### 3.2.1 路由 Router API
    - this.location.`xxx`
    - this.history.`xxx`
    - this.match.`xxx`
 
-### 3.3.2 应用级别的公共函数或第三方扩展
+### 3.2.2 应用级别的公共函数或第三方扩展
    - this.utils.`xxx`
 
-### 3.3.3 国际化相关 API
+### 3.2.3 国际化相关 API
 | API            | 函数签名                                                                | 说明                                                                |
 | -------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------ |
 | this.i18n      | (i18nKey: string, params?: { [paramName: string]: string; }) => string | i18nKey 是语料的标识符，params 可选，是用来做模版字符串替换的。返回语料字符串 |
