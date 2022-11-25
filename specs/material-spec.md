@@ -40,6 +40,7 @@
 | AA       | 推荐规范，推荐实现；遵守此类规范有助于业务未来的扩展性和跨团队合作研发效率的提升。 |
 | AAA      | 参考规范，根据业务场景实际诉求实现；是集团层面鼓励的技术实现引导。                 |
 
+
 ## 1.6 名词术语
 - **物料**：能够被沉淀下来直接使用的前端能力，一般表现为业务组件、区块、模板。
 - **业务组件（Business Component）**：业务领域内基于基础组件之上定义的组件，可能会包含特定业务域的交互或者是业务数据，对外仅暴露可配置的属性，且必须发布到公域（如阿里 NPM）；在同一个业务域内可以流通，但不需要确保可以跨业务域复用。
@@ -825,14 +826,14 @@ props 数组下对象字段描述：
 | 字段       | 字段描述                                                                               | 字段类型          | 备注                |
 | ---------- | -------------------------------------------------------------------------------------- | ----------------- | ------------------- |
 | type | 指定类型 | Enum | 可选值为 `'field' | 'group'` ,默认为  'field'|
-| display | 指定类型 | Enum | 可选值为 `'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry'` ,默认为  'inline'|
+| display | 指定类型 | Enum | 可选值为 `'accordion' \| 'inline' \| 'block' \| 'plain' \| 'popup' \| 'entry'` ，默认为  'inline'|
 | title      | 分类标题                                                                               | 属性标题          | String              |       |
 | items      | 分类下的属性列表                                                                       | Array\<Object\> | type = 'group' 生效 |
 | name       | 属性名                                                                                 | String            | type = 'field' 生效 |
 | defaultValue | 默认值 | Any(视字段类型而定) | type = 'field' 生效 |
 | supportVariable | 是否支持配置变量 | Boolean | type = 'field' 生效 |
 | condition | 配置当前 prop 是否展示 | (target: SettingTarget) => boolean; | - |
-| setter     | 单个控件(setter)描述，搭建基础协议组件的描述对象，支持 JSExpression / JSFunction / JSSlot | `String|Object|Function` | type = 'field' 生效 |
+| setter     | 单个控件(setter)描述，搭建基础协议组件的描述对象，支持 JSExpression / JSFunction / JSSlot | `String\|Object\|Function` | type = 'field' 生效 |
 | extraProps | 其他配置属性（不做流通要求）                                                           | Object            | 其他配置            |
 | extraProps.getValue | setter 渲染时被调用，setter 会根据该函数的返回值设置 setter 当前值 | Function            | (target: SettingTarget, value: any) => any;            |
 | extraProps.setValue | setter 内容修改时调用，开发者可在该函数内部修改节点 schema 或者进行其他操作 | Function            | (target: SettingTarget, value: any) => void;            |
@@ -875,10 +876,10 @@ props 数组下对象字段描述：
 | isModal(A)                      | 组件是否带浮层，浮层组件拖入设计器时会遮挡画布区域，此时应当辅助一些交互以防止阻挡                  | Boolean |
 | descriptor(A)                   | 组件树描述信息                                                                                      | String  |
 | nestingRule(A)                  | 嵌套控制：防止错误的节点嵌套，比如 a 嵌套 a, FormField 只能在 Form 容器下，Column 只能在 Table 下等 | Object  |
-| nestingRule.childWhitelist      | 子节点类型白名单                                                                                    | `String|Function`  |
-| nestingRule.parentWhitelist     | 父节点类型白名单                                                                                    | `String|Function`  |
-| nestingRule.descendantBlacklist | 后裔节点类型黑名单                                                                                  | `String|Function`  |
-| nestingRule.ancestorWhitelist   | 祖父节点类型白名单                                                                                  | `String|Function`  |
+| nestingRule.childWhitelist      | 子节点类型白名单                                                                                    | `String\|Function`  |
+| nestingRule.parentWhitelist     | 父节点类型白名单                                                                                    | `String\|Function`  |
+| nestingRule.descendantBlacklist | 后裔节点类型黑名单                                                                                  | `String\|Function`  |
+| nestingRule.ancestorWhitelist   | 祖父节点类型白名单                                                                                  | `String\|Function`  |
 | isNullNode(AAA)                 | 是否存在渲染的根节点                                                                                | Boolean |
 | isLayout(AAA)                   | 是否是layout布局组件                                                                                | Boolean |
 | rootSelector(AAA)                   | 组件选中框的 cssSelector                                                                                | String |
@@ -1224,8 +1225,8 @@ export interface ComponentDescription { // 组件描述协议，通过 npm 中�
 | packages[].package (A)     | npm 包名             | String      | 组件资源唯一标识                                                |
 | packages[].version(A)      | npm 包版本号             | String   | 组件资源版本号                                                  |
 | packages[].library(A)      | 作为全局变量引用时的名称，用来定义全局变量名             | String   | 低代码引擎通过该字段获取组件实例         |
-| packages[].editUrls (A)        | 组件编辑态视图打包后的 CDN url 列表，包含 js 和 css     | Array<String>   | 低代码引擎编辑器会加载这些 url   |
-| packages[].urls (AA) | 组件渲染态视图打包后的 CDN url 列表，包含 js 和 css     | Array<String>   | 低代码引擎渲染模块会加载这些 url |
+| packages[].editUrls (A)        | 组件编辑态视图打包后的 CDN url 列表，包含 js 和 css     | Array\<String\>   | 低代码引擎编辑器会加载这些 url   |
+| packages[].urls (AA) | 组件渲染态视图打包后的 CDN url 列表，包含 js 和 css     | Array\<String\>   | 低代码引擎渲染模块会加载这些 url |
 
 描述举例:
 
@@ -1663,159 +1664,6 @@ a {
       "screenshot": "build/views/page1.png",     // 【编译自动填充】视图截图，会在 build 时自动生成
       "html": "build/views/page1.html",          // 【编译自动填充】视图渲染后 html 结构，会在 build 时自动生成
     }]
-  }
-}
-```
-
-## 4.2 低代码规范
-
-### 4.2.1 结构描述
-
-- version { String } 当前应用协议版本号
-- componentsMap { Array } 当前应用所有组件映射关系
-- componentsTree { Array } 描述应用所有页面、低代码组件的组件树
-- utils { Array } 应用范围内的全局自定义函数或第三方工具类扩展
-- constants { Object } 应用范围内的全局常量
-- css { string } 应用范围内的全局样式
-- config: { Object } 当前应用配置信息
-- meta: { Object } 当前应用元数据信息
-- dataSource: { Array } 当前应用的公共数据源
-- i18n { Object } 国际化语料
-
-```json
-// 完整应用描述举例：
-{
-  "version": "1.0.0",                                 // 当前协议版本号
-  "componentsMap": [{                                 // 依赖 npm 组件描述
-    "componentName": "Button",
-    "package": "@alifd/next",
-    "version": "1.0.0",
-    "destructuring": true,
-    "exportName": "Select",
-    "subName": "Button"
-  }],
-  "componentsTree": [{                                // 应用内页面、低代码组件描述
-    "componentName": "Page",                          // 单个页面
-    "fileName": "page_index",
-    "props": {},
-    "css": "body {font-size: 12px;} .table { width: 100px;}",
-    "meta": {                                         // 页面元信息
-      "title": "首页",                                 // 页面标题描述
-      "router": "/",                                  // 页面路由
-      "spmb": "abef21",                               // spm B 位
-      "url": "https://fusion.design",  // 页面访问地址
-      "creator": "月飞",
-      "gmt_create": "2020-02-11 00:00:00",            // 创建时间
-      "gmt_modified": "2020-02-11 00:00:00",          // 修改时间
-      ...
-    },
-    "children": [{
-      "componentName": "Div",
-      "props": {
-        "className": "red",
-      },
-      "children": [{
-        "componentName": "Button",
-        "props": {
-          "type": "primary",
-          "valueBind": {                              // 变量绑定
-            "type": "JSExpression",
-            "value": "this.state.user.name"
-          },
-          "onClick": {                                // 动作绑定
-            "type": "JSExpression",
-            "value": "function(e) { console.log(e.target.innerText) }",
-          }
-        },
-      }]
-    }, {
-      "componentName": "Component",                    // 单个组件
-      "fileName": "BasicLayout",                       // 组件名称
-      "props": {},
-      "css": "body {font-size: 12px;} .table { width: 100px;}",
-      "meta": {                                        // 组件元信息
-        "title": "导航组件",                            // 组件中文标题
-        "description": "这是一个导航类组件...",           // 组件描述
-        "creator": "月飞",
-        "gmt_create": "2020-02-11 00:00:00",           // 创建时间
-        "gmt_modified": "2020-02-11 00:00:00",         // 修改时间
-        ...
-      },
-      "children": [{
-        "componentName": "Nav",
-        "props": {
-          "className": "red"
-        },
-        "children": [{
-          "componentName": "NavItem",
-          "props": {}
-        }]
-      }]
-    }]
-  }],
-  "utils": [{
-    "name": "clone",
-    "type": "npm",
-    "content": {
-      "package": "lodash",
-      "version": "0.0.1",
-      "exportName": "clone",
-      "subName": "",
-      "destructuring": false,
-      "main": "/lib/clone"
-    }
-  }, {
-    "name": "beforeRequestHandler",
-    "type": "function",
-    "content": {
-      "type": "JSFunction",
-      "value": "function(){\n ... \n}"
-    }
-  }],
-  "constants": {
-    "ENV": "prod",
-    "DOMAIN": "xxx.com"
-  },
-  "css": "body {font-size: 12px;} .table { width: 100px;}",
-  "config": {                                          // 当前应用配置信息
-    "sdkVersion": "1.0.3",                             // 渲染模块版本
-    "historyMode": "hash",                             // 浏览器路由：browser  哈希路由：hash
-    "targetRootID": "J_Container",
-    "layout": {
-      "componentName": "BasicLayout",
-      "props": {
-        "logo": "...",
-        "name": "测试网站"
-      },
-    },
-    "theme": {
-      // for Fusion use dpl defined
-      "package": "@alife/theme-fusion",
-      "version": "^0.1.0",
-      // for Antd use variable
-      "primary": "#ff9966"
-    }
-  },
-  "meta": {                                           // 应用元数据信息, key 为业务自定义
-    "name": "demo 应用",                               // 应用中文名称,
-    "git_group": "appGroup",                          // 应用对应 git 分组名
-    "project_name": "app_demo",                       // 应用对应 git 的 project 名称
-    "description": "这是一个测试应用",                   // 应用描述
-    "spma": "spa23d",                                 // 应用 spma A 位信息
-    "creator": "月飞",
-    "gmt_create": "2020-02-11 00:00:00",              // 创建时间
-    "gmt_modified": "2020-02-11 00:00:00",            // 修改时间
-    ...
-  },
-  "i18n": {
-    "zh-CN": {
-      "i18n-jwg27yo4": "你好",
-      "i18n-jwg27yo3": "中国"
-    },
-    "en-US": {
-      "i18n-jwg27yo4": "Hello",
-      "i18n-jwg27yo3": "China"
-    }
   }
 }
 ```
