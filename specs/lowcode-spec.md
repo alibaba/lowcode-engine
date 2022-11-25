@@ -109,13 +109,18 @@
 
 # 2 协议结构
 
-协议最顶层结构如下，包含5方面的描述内容：
+协议最顶层结构如下：
 
 - version { String } 当前协议版本号
 - componentsMap { Array } 组件映射关系
 - componentsTree { Array } 描述模版/页面/区块/低代码业务组件的组件树
 - utils { Array } 工具类扩展映射关系
 - i18n { Object } 国际化语料
+- constants { Object } 应用范围内的全局常量
+- css { string } 应用范围内的全局样式
+- config: { Object } 当前应用配置信息
+- meta: { Object } 当前应用元数据信息
+- dataSource: { Array } 当前应用的公共数据源
 
 
 描述举例：
@@ -198,6 +203,41 @@
       }]
     }]
   }],
+  "constants": {
+    "ENV": "prod",
+    "DOMAIN": "xxx.com"
+  },
+  "css": "body {font-size: 12px;} .table { width: 100px;}",
+  "config": {                                          // 当前应用配置信息
+    "sdkVersion": "1.0.3",                             // 渲染模块版本
+    "historyMode": "hash",                             // 浏览器路由：browser  哈希路由：hash
+    "targetRootID": "J_Container",
+    "layout": {
+      "componentName": "BasicLayout",
+      "props": {
+        "logo": "...",
+        "name": "测试网站"
+      },
+    },
+    "theme": {
+      // for Fusion use dpl defined
+      "package": "@alife/theme-fusion",
+      "version": "^0.1.0",
+      // for Antd use variable
+      "primary": "#ff9966"
+    }
+  },
+  "meta": {                                           // 应用元数据信息, key 为业务自定义
+    "name": "demo 应用",                               // 应用中文名称,
+    "git_group": "appGroup",                          // 应用对应 git 分组名
+    "project_name": "app_demo",                       // 应用对应 git 的 project 名称
+    "description": "这是一个测试应用",                   // 应用描述
+    "spma": "spa23d",                                 // 应用 spm A 位信息
+    "creator": "月飞",
+    "gmt_create": "2020-02-11 00:00:00",              // 创建时间
+    "gmt_modified": "2020-02-11 00:00:00",            // 修改时间
+    ...
+  },
   "i18n": {
     "zh-CN": {
       "i18n-jwg27yo4": "你好",
@@ -1055,7 +1095,7 @@ this.setState((prevState) => ({ count: prevState.count + 1 }));
 | this.item  | 获取当前 index 对应的循环体数据； | Any    | -      |
 | this.index | 当前物料在循环体中的 index        | Number | -      |
 
-## 2.5 工具类扩展描述（AA）
+## 2.4 工具类扩展描述（AA）
 
 用于描述物料开发过程中，自定义扩展或引入的第三方工具类（例如：lodash 及 moment），增强搭建基础协议的扩展性，提供通用的工具类方法的配置方案及调用 API。
 
@@ -1130,7 +1170,7 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
 }
 ```
 
-## 2.6 国际化多语言支持（AA）
+## 2.5 国际化多语言支持（AA）
 
 协议中用于描述国际化语料和组件引用国际化语料的规范，遵循集团国际化中台关于国际化语料规范定义。
 
@@ -1199,158 +1239,34 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
 }
 ```
 
+## 2.6 应用范围内的全局常量（AA）
+
+用于描述在整个应用内通用的全局常量，比如请求 API 的域名、环境等。
+
+## 2.7 应用范围内的全局样式（AA）
+
+用于描述在应用范围内的全局样式，比如 reset.css 等。
+
+## 2.8 当前应用配置信息（AA）
+
+用于描述当前应用的配置信息，比如当前应用的路由模式、Shell/Layout、主题等。
+
+> 注意：该字段为扩展字段，消费方式由各自场景自己决定，包括运行时和出码。
+
+## 2.9 当前应用元数据信息（AA）
+
+用于描述当前应用的元数据信息，比如当前应用的名称、Git 信息、版本号等等。
+
+> 注意：该字段为扩展字段，消费方式由各自场景自己决定，包括运行时和出码。
+
+## 2.10 当前应用的公共数据源（AA）
+
+用于描述当前应用的公共数据源，数据结构跟容器结构里的 ComponentDataSource 保持一致。
+在运行时 / 出码使用时，API 和应用级数据源 API 保持一致，都是 `this.dataSourceMap['globalDSName'].load()`
+
 # 3 应用描述
 
-面向开发者的，描述完整应用的 Schema 规范，用于规范化约束**低代码平台**对**完整应用**的**输出**，以及**出码模块**( Schema2Code) 或**运行时动态渲染框架**（预览）的**输入**。
-
-## 3.1 结构描述
-
-- version { String } 当前应用协议版本号
-- componentsMap { Array } 当前应用所有组件映射关系
-- componentsTree { Array } 描述应用所有页面、低代码组件的组件树
-- utils { Array } 应用范围内的全局自定义函数或第三方工具类扩展
-- css { string } 应用范围内的全局样式；
-- config: { Object } 当前应用配置信息
-- meta: { Object } 当前应用元数据信息
-- dataSource: { Array } 当前应用的公共数据源 （待定）
-- i18n { Object } 国际化语料
-
-
-完整应用描述举例：
-
-```json
-{
-  "version": "1.0.0",                                         // 当前协议版本号
-  "componentsMap": [{                                         // 依赖 npm 组件描述
-    "componentName": "Button",
-    "package": "alife/next",
-    "version": "1.0.0",
-    "destructuring": true,
-    "exportName": "Select",
-    "subName": "Button"
-  }],
-  "componentsTree": [{                                        // 应用内页面、低代码组件描述
-    "componentName": "Page",                                  // 单个页面
-    "fileName": "page_index",
-    "props": {},
-    "css": "body {font-size: 12px;} .table { width: 100px;}",
-    "meta": {                                                 // 页面元信息
-      "title": "首页",                                         // 页面标题描述
-      "router": "/",                                          // 页面路由
-      "spmb": "abef21",                                       // spm B 位
-      "url": "https://fusion.design",          // 页面访问地址
-      "creator": "xxx",
-      "gmt_create": "2020-02-11 00:00:00",                    // 创建时间
-      "gmt_modified": "2020-02-11 00:00:00",                  // 修改时间
-      ...
-    },
-    "children": [{
-      "componentName": "Div",
-      "props": {
-        "className": "red",
-      },
-      "children": [{
-        "componentName": "Button",
-        "props": {
-          "type": "primary",
-          "valueBind": {                                      // 变量绑定
-            "type": "JSExpression",
-            "value": "this.state.user.name"
-          },
-          "onClick": {                                        // 动作绑定
-            "type": "JSExpression",
-            "value": "function(e) { console.log(e.target.innerText) }",
-          }
-        },
-      }]
-    }, {
-      "componentName": "Component",                           // 单个组件
-      "fileName": "BasicLayout",                              // 组件名称
-      "props": {},
-      "css": "body {font-size: 12px;} .table { width: 100px;}",
-      "meta": {                                               // 组件元信息
-        "title": "导航组件",                                   // 组件中文标题
-        "description": "这是一个导航类组件...",                  // 组件描述
-        "creator": "xxx",
-        "gmt_create": "2020-02-11 00:00:00",                  // 创建时间
-        "gmt_modified": "2020-02-11 00:00:00",                // 修改时间
-        ...
-      },
-      "children": [{
-        "componentName": "Nav",
-        "props": {
-          "className": "red"
-        },
-        "children": [{
-          "componentName": "NavItem",
-          "props": {}
-        }]
-      }]
-    }]
-  }],
-  "utils": [{
-    "name": "clone",
-    "type": "npm",
-    "content": {
-      "package": "lodash",
-      "version": "0.0.1",
-      "exportName": "clone",
-      "subName": "",
-      "destructuring": false,
-      "main": "/lib/clone"
-    }
-  }, {
-    "name": "beforeRequestHandler",
-    "type": "function",
-    "content": {
-      "type": "JSFunction",
-      "value": "function(){\n ... \n}"
-    }
-  }],
-  "css": "body {font-size: 12px;} .table { width: 100px;}",
-  "config": {                                                 // 当前应用配置信息
-    "sdkVersion": "1.0.3",                                    // 渲染模块版本
-    "historyMode": "hash",                                    // 浏览器路由：browser  哈希路由：hash
-    "container": "J_Container",
-    "layout": {
-      "componentName": "BasicLayout",
-      "props": {
-        "logo": "...",
-        "name": "测试网站"
-      },
-    },
-    "theme": {
-      // for Fusion use dpl defined
-      "package": "@alife/theme-fusion",
-      "version": "^0.1.0",
-      // for Antd use variable
-      "primary": "#ff9966"
-    }
-  },
-  "meta": {                                                   // 应用元数据信息
-    "name": "demo 应用",                                        // 应用中文名称,
-    "git_group": "appGroup",                                  // 应用对应 git 分组名
-    "project_name": "app_demo",                               // 应用对应 git 的 project 名称
-    "description": "这是一个测试应用",                           // 应用描述
-    "spma": "spa23d",                                         // 应用 spma A 位信息
-    "gmt_create": "2020-02-11 00:00:00",                      // 创建时间
-    "gmt_modified": "2020-02-11 00:00:00",                    // 修改时间
-    ...
-  },
-  "i18n": {
-    "zh-CN": {
-      "i18n-jwg27yo4": "你好",
-      "i18n-jwg27yo3": "中国"
-    },
-    "en-US": {
-      "i18n-jwg27yo4": "Hello",
-      "i18n-jwg27yo3": "China"
-    }
-  }
-}
-```
-
-## 3.2 文件目录
+## 3.1 文件目录
 
 以下是推荐的应用目录结构，与标准源码 build-scripts 对齐，这里的目录结构是帮助理解应用级协议的设计，不做强约束
 
