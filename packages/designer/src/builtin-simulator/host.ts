@@ -258,6 +258,14 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return engineConfig.get('enableStrictNotFoundMode') ?? false;
   }
 
+  get notFoundComponent(): any {
+    return engineConfig.get('notFoundComponent') ?? null;
+  }
+
+  get faultComponent(): any {
+    return engineConfig.get('faultComponent') ?? null;
+  }
+
   @computed get componentsAsset(): Asset | undefined {
     return this.get('componentsAsset');
   }
