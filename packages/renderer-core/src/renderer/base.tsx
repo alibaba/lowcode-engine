@@ -823,7 +823,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         }
       }
 
-      const handleI18nData = (innerProps: any) => innerProps[innerProps.use || 'zh_CN'];
+      const handleI18nData = (innerProps: any) => innerProps[innerProps.use || 'zh-CN'];
 
       // @LEGACY 兼容老平台设计态 i18n 数据
       if (isI18nData(props)) {

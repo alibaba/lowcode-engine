@@ -393,7 +393,7 @@ export default {
 // index.jsx
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import zh_CN from './locale/zh-CN.js';            // 引入默认语言
+import zhCN from './locale/zh-CN.js';            // 引入默认语言
 export default class BizHello extends Component {
   static componentName = 'BizHello';
 
@@ -402,7 +402,7 @@ export default class BizHello extends Component {
   };
 
   static defaultProps = {
-    locale: zh_CN,
+    locale: zhCN,
   };
 
   render() {
@@ -422,14 +422,14 @@ export default class BizHello extends Component {
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ConfigProvider } from '@alifd/next';
-import zh_CN from './locale/zh-CN.js';            // 引入默认语言
+import zhCN from './locale/zh-CN.js';            // 引入默认语言
 class BizHello extends Component {
   static propTypes = {
     locale: PropTypes.object,                     // 增加 locale，用于配置文案
   };
 
   static defaultProps = {
-    locale: zh_CN,
+    locale: zhCN,
   };
 
   render() {
