@@ -6,7 +6,6 @@ import {
   LowCodePluginManager,
   ILowCodePluginContext,
   PluginPreference,
-  TransformStage,
 } from '@alilc/lowcode-designer';
 import {
   Skeleton as InnerSkeleton,
@@ -16,15 +15,21 @@ import {
 
 import Outline, { OutlineBackupPane, getTreeMaster } from '@alilc/lowcode-plugin-outline-pane';
 import DesignerPlugin from '@alilc/lowcode-plugin-designer';
-import { Hotkey, Project, Skeleton, Setters, Material, Event, DocumentModel } from '@alilc/lowcode-shell';
+import {
+  Hotkey,
+  Project,
+  Skeleton,
+  Setters,
+  Material,
+  Event,
+  DocumentModel,
+  Common,
+} from '@alilc/lowcode-shell';
 import { getLogger, isPlainObject } from '@alilc/lowcode-utils';
 import './modules/live-editing';
-import utils from './modules/utils';
-import * as editorCabin from './modules/editor-cabin';
-import getSkeletonCabin from './modules/skeleton-cabin';
-import getDesignerCabin from './modules/designer-cabin';
 import classes from './modules/classes';
 import symbols from './modules/symbols';
+
 export * from './modules/editor-types';
 export * from './modules/skeleton-types';
 export * from './modules/designer-types';
@@ -46,8 +51,6 @@ const plugins = new LowCodePluginManager(editor).toProxy();
 editor.set('plugins' as any, plugins);
 
 const { project: innerProject } = designer;
-const skeletonCabin = getSkeletonCabin(innerSkeleton);
-const { Workbench } = skeletonCabin;
 
 const hotkey = new Hotkey();
 const project = new Project(innerProject);
@@ -57,17 +60,7 @@ const material = new Material(editor);
 const config = engineConfig;
 const event = new Event(editor, { prefix: 'common' });
 const logger = getLogger({ level: 'warn', bizName: 'common' });
-const designerCabin = getDesignerCabin(editor);
-const objects = {
-  TransformStage,
-};
-const common = {
-  utils,
-  objects,
-  editorCabin,
-  designerCabin,
-  skeletonCabin,
-};
+const common = new Common(editor, innerSkeleton);
 
 export {
   skeleton,
@@ -189,6 +182,7 @@ let engineContainer: HTMLElement;
 // @ts-ignore webpack Define variable
 export const version = VERSION_PLACEHOLDER;
 engineConfig.set('ENGINE_VERSION', version);
+
 export async function init(
   container?: HTMLElement,
   options?: EngineOptions,
@@ -213,6 +207,8 @@ export async function init(
   engineConfig.setEngineOptions(engineOptions as any);
 
   await plugins.init(pluginPreference as any);
+
+  const { Workbench } = common.skeletonCabin;
   render(
     createElement(Workbench, {
       skeleton: innerSkeleton,
