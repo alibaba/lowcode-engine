@@ -1,10 +1,10 @@
 import { createIntl } from '@alilc/lowcode-editor-core';
-import en_US from './en-US.json';
-import zh_CN from './zh-CN.json';
+import enUS from './en-US.json';
+import zhCN from './zh-CN.json';
 
 const { intl, intlNode, getLocale, setLocale } = createIntl({
-  'en-US': en_US,
-  'zh-CN': zh_CN,
+  'en-US': enUS,
+  'zh-CN': zhCN,
 });
 
 export { intl, intlNode, getLocale, setLocale };

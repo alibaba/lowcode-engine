@@ -23,7 +23,7 @@ export function isUseI18NSetter(prototype: any, propName: string) {
   return false;
 }
 
-export function convertToI18NObject(v: string | any, locale: string = 'zh_CN') {
+export function convertToI18NObject(v: string | any, locale: string = 'zh-CN') {
   if (isI18NObject(v)) return v;
   return { type: 'i18n', use: locale, [locale]: v };
 }
