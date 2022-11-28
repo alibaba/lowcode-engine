@@ -48,10 +48,10 @@
     }
   ],
   "i18n": {
-    "zh_CN": {
+    "zh-CN": {
       "greetings.hello": "${name}, 你好！"
     },
-    "en_US": {
+    "en-US": {
       "greetings.hello": "Hello, ${name}!"
     }
   }

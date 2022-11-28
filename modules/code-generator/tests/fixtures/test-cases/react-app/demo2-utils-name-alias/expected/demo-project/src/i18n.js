@@ -61,7 +61,7 @@ const _inject2 = (target) => {
     }
 
     // 兜底用 use 指定的或默认语言的
-    return format(t[t.use || "zh_CN"] ?? t.en_US, t.params);
+    return format(t[t.use || "zh-CN"] ?? t.en_US, t.params);
   };
 
   // 注入到上下文中去
