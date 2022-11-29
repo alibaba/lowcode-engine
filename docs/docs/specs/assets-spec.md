@@ -1,8 +1,12 @@
+---
+title: 《低代码引擎资产包协议规范》
+sidebar_position: 2
+---
 # 《低代码引擎资产包协议规范》
 
-# 1 介绍
+## 1 介绍
 
-## 1.1 本协议规范涉及的问题域
+### 1.1 本协议规范涉及的问题域
 
 - 定义本协议版本号规范
 - 定义本协议中每个子规范需要被支持的 Level
@@ -12,16 +16,16 @@
 - 定义低代码资产包协议组件描述资源加载规范（A）
 - 定义低代码资产包协议组件在面板展示规范（AA）
 
-## 1.2 协议草案起草人
+### 1.2 协议草案起草人
 
 - 撰写：金禅、璿玑、彼洋
 - 审阅：力皓、絮黎、光弘、戊子、潕量、游鹿
 
-## 1.3 版本号
+### 1.3 版本号
 
 1.1.0
 
-## 1.4 协议版本号规范（A）
+### 1.4 协议版本号规范（A）
 
 本协议采用语义版本号，版本号格式为 `major.minor.patch` 的形式。
 
@@ -29,7 +33,7 @@
 - minor 是小版本号：用于发布向下兼容的协议功能新增
 - patch 是补丁号：用于发布向下兼容的协议问题修正
 
-## 1.5 协议中子规范 Level 定义
+### 1.5 协议中子规范 Level 定义
 
 | 规范等级 | 实现要求                                                     |
 | -------- | ------------------------------------------------------------ |
@@ -37,19 +41,19 @@
 | AA       | 推荐规范，由低代码引擎官方插件、setter 支持。                |
 | AAA      | 参考规范，需由基于引擎的上层搭建平台支持，实现可参考该规范。 |
 
-## 1.6 名词术语
+### 1.6 名词术语
 
 - **资产包**: 低代码引擎加载资源的动态数据集合，主要包含组件及其依赖的资源、组件低代码描述、动态插件/设置器资源等。
 
-## 1.7 背景
+### 1.7 背景
 
 根据低代码引擎的实现，一个组件要在引擎上渲染和配置，需要提供组件的 umd 资源以及组件的`低代码描述`，并且组件通常都是以集合的形式被引擎消费的；除了组件之外，还有组件的依赖资源、引擎的动态插件/设置器等资源也需要注册到引擎中；因此我们定义了“低代码资产包”这个数据结构，来描述引擎所需加载的动态资源的集合。
 
-## 1.8 受众
+### 1.8 受众
 
 本协议适用于使用“低代码引擎”构建搭建平台的开发者，通过本协议的定义来进行资源的分类和加载。阅读及使用本协议，需要对低代码搭建平台的交互和实现有一定的了解，对前端开发相关技术栈的熟悉也会有帮助，协议中对通用的前端相关术语不会做进一步的解释说明。
 
-# 2 协议结构
+## 2 协议结构
 
 协议最顶层结构如下，包含 7 方面的描述内容：
 
@@ -61,7 +65,7 @@
 - setters { Array } 设计器中设置器描述协议列表
 - extConfig { Object } 平台自定义扩展字段
 
-## 2.1 version（A）
+### 2.1 version（A）
 
 定义当前协议 schema 的版本号；
 
@@ -69,7 +73,7 @@
 | ---------- | ------ | ---------- | -------- | ------ |
 | version    | String | 协议版本号 | -        | 1.1.0  |
 
-## 2.2 packages（A）
+### 2.2 packages（A）
 
 定义低代码编辑器中加载的资源列表，包含公共库和组件(库) cdn 资源等；
 
@@ -81,18 +85,18 @@
 | packages[].version   | npm 包版本号                                                    | String        | A        | 组件资源版本号                                                                                           |
 | packages[].type      | 资源包类型                                                      | String        | AA       | 取值为: proCode（源码）、lowCode（低代码，默认为 proCode                                                 |
 | packages[].schema    | 低代码组件 schema 内容                                          | object        | AA       | 取值为: proCode（源码）、lowCode（低代码）                                                               |
-| packages[].deps      | 当前资源包的依赖资源的唯一标识列表                              | Array<String> | A        | 唯一标识为 id 或者 package 对应的值                                                                      |
+| packages[].deps      | 当前资源包的依赖资源的唯一标识列表                              | Array<String\> | A        | 唯一标识为 id 或者 package 对应的值                                                                      |
 | packages[].library   | 作为全局变量引用时的名称，用来定义全局变量名                    | String        | A        | 低代码引擎通过该字段获取组件实例                                                                         |
-| packages[].editUrls  | 组件编辑态视图打包后的 CDN url 列表，包含 js 和 css             | Array<String> | A        | 低代码引擎编辑器会加载这些 url                                                                           |
-| packages[].urls      | 组件渲染态视图打包后的 CDN url 列表，包含 js 和 css             | Array<String> | AA       | 低代码引擎渲染模块会加载这些 url                                                                         |
+| packages[].editUrls  | 组件编辑态视图打包后的 CDN url 列表，包含 js 和 css             | Array<String\> | A        | 低代码引擎编辑器会加载这些 url                                                                           |
+| packages[].urls      | 组件渲染态视图打包后的 CDN url 列表，包含 js 和 css             | Array<String\> | AA       | 低代码引擎渲染模块会加载这些 url                                                                         |
 | packages[].advancedEditUrls | 组件多个编辑态视图打包后的 CDN url 列表集合，包含 js 和 css     | Object        | AAA      | 上层平台根据特定标识提取某个编辑态的资源，低代码引擎编辑器会加载这些资源，优先级高于 packages[].editUrls |
 | packages[].advancedUrls     | 组件多个端的渲染态视图打包后的 CDN url 列表集合，包含 js 和 css | Object        | AAA      | 上层平台根据特定标识提取某个渲染态的资源， 低代码引擎渲染模块会加载这些资源，优先级高于 packages[].urls  |
 | packages[].external  | 当前资源在作为其他资源的依赖，在其他依赖打包时时是否被排除了(同 webpack 中 external 概念)                            | Boolean       | AAA      | 某些资源会被单独提取出来，是其他依赖的前置依赖，根据这个字段决定是否提前加载该资源                       |
-| packages[].loadEnv   | 指定当前资源加载的环境                                          | Array<String> | AAA      | 主要用于指定 external 资源加载的环境，取值为 design(设计态)、runtime(预览态)中的一个或多个               |
+| packages[].loadEnv   | 指定当前资源加载的环境                                          | Array<String\> | AAA      | 主要用于指定 external 资源加载的环境，取值为 design(设计态)、runtime(预览态)中的一个或多个               |
 | packages[].exportSourceId     | 标识当前 package 内容是从哪个 package 导出来的   | String | AAA       | 此时 urls 无效 |
 | packages[].exportSourceLibrary     | 标识当前 package 是从 window 上的哪个属性导出来的   | String | AAA       | exportSourceId 的优先级高于exportSourceLibrary ,此时 urls 无效 |
 | packages[].async     | 标识当前 package 资源加载在 window.library 上的是否是一个异步对象   | Boolean | A       | async 为 true 时，需要通过 await 才能拿到真正内容 |
-| packages[].exportMode     | 标识当前 package 从其他 package 的导出方式   | String | A       | 目前只支持 `"functionCall"`, exportMode等于 `"functionCall"` 时，当前package 的内容以函数的方式从其他 package 中导出，具体导出接口如: (library: string, packageName: string, isRuntime?: boolean) => any | Promise<any>, library 为当前 package 的 library, packageName 为当前的包名，返回值为当前 package 的导出内容  |
+| packages[].exportMode     | 标识当前 package 从其他 package 的导出方式   | String | A       | 目前只支持 `"functionCall"`, exportMode等于 `"functionCall"` 时，当前package 的内容以函数的方式从其他 package 中导出，具体导出接口如: (library: string, packageName: string, isRuntime?: boolean) => any | Promise<any\>, library 为当前 package 的 library, packageName 为当前的包名，返回值为当前 package 的导出内容  |
 
 描述举例:
 
@@ -294,14 +298,14 @@
 }
 ```
 
-## 2.3 components （A）
+### 2.3 components （A）
 
 定义资产包中包含的所有组件的低代码描述的集合，分为“ComponentDescription”和“RemoteComponentDescription”(详见 2.6 TypeScript 定义)：
 
 - ComponentDescription: 符合“组件描述协议”的数据，详见物料规范中`2.2.2 组件描述协议`部分；
 - RemoteComponentDescription 是将一个或多个 ComponentDescription 构建打包的 js 资源的描述，在浏览器中加载该资源后可获取到其中包含的每个组件的 ComponentDescription 的具体内容；
 
-## 2.4 sort （AA）
+### 2.4 sort （AA）
 
 定义组件列表分组
 
@@ -310,7 +314,7 @@
 | sort.groupList    | String[] | 组件分组，用于组件面板 tab 展示                                                              | -        | ['精选组件', '原子组件']                 |
 | sort.categoryList | String[] | 组件面板中同一个 tab 下的不同区间用 category 区分，category 的排序依照 categoryList 顺序排列 | -        | ['通用', '数据展示', '表格类', '表单类'] |
 
-## 2.5 plugins (AAA)
+### 2.5 plugins (AAA)
 
 自定义设计器插件列表
 
@@ -325,7 +329,7 @@
 | plugins[].keywords    | String[]  | 插件检索关键字       | -        | -      |
 | plugins[].reference   | Reference | 插件引用的资源包信息 | -        | -      |
 
-## 2.6 setters (AAA)
+### 2.6 setters (AAA)
 
 自定义设置器列表
 
@@ -340,11 +344,11 @@
 | setters[].keywords    | String[]  | 设置器检索关键字       | -        | -      |
 | setters[].reference   | Reference | 设置器引用的资源包信息 | -        | -      |
 
-## 2.7 extConfig (AAA)
+### 2.7 extConfig (AAA)
 
 定义平台相关的扩展内容，用于存放平台自身实现的一些私有协议, 以允许存量平台能够平滑地迁移至标准协议。 extConfig 是一个 key-value 结构的对象，协议不会规定 extConfig 中的字段名称以及类型, 完全自定义
 
-## 2.8 TypeScript 定义
+### 2.8 TypeScript 定义
 
 _组件低代码描述相关部分字段含义详见物料规范中`2.2.2 组件描述协议`部分；_
 
@@ -463,7 +467,7 @@ export interface Package {
    */
   exportName?: string;
   /**
-   * 标识当前 package 资源加载在 window.library 上的是否是一个异步对象 
+   * 标识当前 package 资源加载在 window.library 上的是否是一个异步对象
    */
   async?: boolean;
   /**
@@ -471,11 +475,11 @@ export interface Package {
    */
   exportMode?: string;
   /**
-   * 标识当前 package 内容是从哪个 package 导出来的 
+   * 标识当前 package 内容是从哪个 package 导出来的
    */
   exportSourceId?: string;
   /**
-   * 标识当前 package 是从 window 上的哪个属性导出来的 
+   * 标识当前 package 是从 window 上的哪个属性导出来的
    */
   exportSourceLibrary?: string;
 }
@@ -684,4 +688,4 @@ export interface ComponentSchema {
 
 ```
 
-`ComponentSchema` 的定义见[低代码业务组件描述](./1.material-spec.md#221-组件规范)
+`ComponentSchema` 的定义见[低代码业务组件描述](./material-spec.md#221-组件规范)
