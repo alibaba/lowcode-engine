@@ -1,10 +1,12 @@
 ---
-title: 如何配置引擎调试环境
+title: 调试环境配置
 sidebar_position: 1
 ---
 低代码引擎的核心仓库是不包含任何物料、插件、setter 的，它本身用于生成低代码引擎的主包。
+
 如果您需要对低代码的主包进行开发和调试，需要用到本文里介绍的知识。
-如果您需要对低代码编辑器进行定制，您可能只需要 clone [lowcode-demo 项目](https://github.com/alibaba/lowcode-demo)并进行修改，参考“[配置低代码扩展点](https://www.yuque.com/lce/doc/srdo3s#oPhoE)”章节。
+
+如果您需要对低代码编辑器进行定制，您可能只需要 clone [lowcode-demo 项目](https://github.com/alibaba/lowcode-demo)并进行修改，参考“[配置低代码扩展点](/site/docs/guide/expand/editor/summary)”章节。
 
 > 前置条件：
 > node >= 14
@@ -58,4 +60,5 @@ npm install && npm start
 ```
 
 ### 3. 本地调试物料/插件/设置器
-[详见](https://www.yuque.com/lce/doc/ulvlkz#Ioc87)
+
+详见[低代码生态脚手架 & 调试机制](/site/docs/guide/expand/editor/cli)

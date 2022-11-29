@@ -1,5 +1,5 @@
 ---
-title: 引擎的工程化配置
+title: 工程化配置
 sidebar_position: 3
 ---
 目前引擎体系共包含 3 个 js 文件，即：
