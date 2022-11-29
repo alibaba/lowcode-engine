@@ -65,45 +65,6 @@ const config = {
       navbar,
       footer: {
         // style: 'dark',
-        links: [
-          {},
-          {
-            title: '低代码引擎协议栈',
-            items: [
-              {
-                label: '《低代码引擎搭建协议规范》',
-                href: 'https://lowcode-engine.cn/lowcode',
-              },
-              {
-                label: '《低代码引擎物料协议规范》',
-                href: 'https://lowcode-engine.cn/material',
-              },
-              {
-                label: '《低代码引擎资产包协议规范》',
-                href: 'https://lowcode-engine.cn/assets',
-              },
-            ],
-          },
-          {},
-          {
-            title: '案例产品',
-            items: [
-              {
-                label: '钉钉宜搭',
-                href: 'https://www.aliwork.com/',
-              },
-              {
-                label: 'Parts 造物',
-                href: 'https://parts.lowcode-engine.cn/',
-              },
-              {
-                label: 'UIPaaS 低代码平台孵化器',
-                href: 'https://uipaas.net',
-              },
-            ],
-          },
-          {},
-        ],
         copyright: `Copyright © ${new Date().getFullYear()} 阿里巴巴集团, Inc. Built with Docusaurus.`,
       },
       // 主题切换

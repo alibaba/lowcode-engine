@@ -23,6 +23,12 @@ module.exports = {
     },
     {
       type: 'doc',
+      docId: 'specs/lowcode-spec',
+      position: 'left',
+      label: '协议',
+    },
+    {
+      type: 'doc',
       docId: 'faq/index',
       position: 'left',
       label: 'FAQ',

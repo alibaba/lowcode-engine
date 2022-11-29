@@ -42,6 +42,20 @@ common.utils.startTransaction(() => {
 }, TransitionType.repaint);
 ```
 
+### createIntl
+i18n相关工具
+*引擎版本 >= 1.0.17
+```typescript
+import { common } from '@alilc/lowcode-engine';
+import enUS from './en-US.json';
+import zhCN from './zh-CN.json';
+
+const { intl, getLocale, setLocale } = common.utils.createIntl({
+  'en-US': enUS,
+  'zh-CN': zhCN,
+});
+
+```
 ## designerCabin
 ### isSettingField
 是否是 SettingField 实例
