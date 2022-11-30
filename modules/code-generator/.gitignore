@@ -115,3 +115,8 @@ codealike.json
 # backup files
 *.bak
 
+# tests
+tests/fixtures/**/actual
+
+
+

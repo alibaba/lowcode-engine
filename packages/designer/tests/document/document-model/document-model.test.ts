@@ -219,6 +219,7 @@ describe('document-model 测试', () => {
   it('checkNesting / checkDropTarget / checkNestingUp / checkNestingDown', () => {
     designer.createComponentMeta(pageMeta);
     designer.createComponentMeta(formMeta);
+    designer.createComponentMeta(otherMeta);
     const doc = new DocumentModel(project, formSchema);
 
     expect(
@@ -239,6 +240,26 @@ describe('document-model 测试', () => {
         type: 'nodedata',
         data: { componentName: 'Form' },
       }),
+    ).toBeTruthy();
+    expect(
+      doc.checkNesting(doc.getNode('page'), doc.getNode('form'))
+    ).toBeTruthy();
+    expect(
+      doc.checkNesting(doc.getNode('page'), null)
+    ).toBeTruthy();
+    expect(
+      doc.checkNesting(doc.getNode('page'), {
+        type: 'nodedata',
+        data: { componentName: 'Other' },
+      })
+    ).toBeFalsy();
+
+    expect(
+      doc.checkNestingUp(doc.getNode('page'), { componentName: 'Other' })
+    ).toBeFalsy();
+
+    expect(
+      doc.checkNestingDown(doc.getNode('page'), { componentName: 'Other' })
     ).toBeTruthy();
 
     expect(doc.checkNestingUp(doc.getNode('page'), null)).toBeTruthy();

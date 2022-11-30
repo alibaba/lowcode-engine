@@ -7,6 +7,10 @@ const DETECTING_CHANGE_EVENT = 'detectingChange';
 export class Detecting {
   @obx.ref private _enable = true;
 
+  /**
+   * 控制大纲树 hover 时是否出现悬停效果
+   * TODO: 将该逻辑从设计器中抽离出来
+   */
   get enable() {
     return this._enable;
   }

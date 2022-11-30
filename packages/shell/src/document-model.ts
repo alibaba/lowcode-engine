@@ -2,15 +2,15 @@ import { Editor } from '@alilc/lowcode-editor-core';
 import {
   DocumentModel as InnerDocumentModel,
   Node as InnerNode,
-  ParentalNode,
   IOnChangeOptions as InnerIOnChangeOptions,
-  PropChangeOptions as InnerPropChangeOptions,
+  DragObject as InnerDragObject,
+  DragNodeObject,
+  DragNodeDataObject,
+  isDragNodeObject,
 } from '@alilc/lowcode-designer';
 import {
   TransformStage,
   RootSchema,
-  NodeSchema,
-  NodeData,
   GlobalEvent,
 } from '@alilc/lowcode-types';
 import Node from './node';
@@ -40,6 +40,8 @@ const Events = {
   IMPORT_SCHEMA: 'shell.document.importSchema',
 };
 
+const shellDocSymbol = Symbol('shellDocSymbol');
+
 export default class DocumentModel {
   private readonly [documentSymbol]: InnerDocumentModel;
   private readonly [editorSymbol]: Editor;
@@ -54,15 +56,20 @@ export default class DocumentModel {
     this[editorSymbol] = document.designer.editor as Editor;
     this.selection = new Selection(document);
     this.detecting = new Detecting(document);
-    this.history = new History(document.getHistory());
+    this.history = new History(document);
     this.canvas = new Canvas(document.designer);
 
     this._focusNode = Node.create(this[documentSymbol].focusNode);
   }
 
   static create(document: InnerDocumentModel | undefined | null) {
-    if (document == undefined) return null;
-    return new DocumentModel(document);
+    if (!document) return null;
+    // @ts-ignore 直接返回已挂载的 shell doc 实例
+    if (document[shellDocSymbol]) return document[shellDocSymbol];
+    const shellDoc = new DocumentModel(document);
+    // @ts-ignore 直接返回已挂载的 shell doc 实例
+    document[shellDocSymbol] = shellDoc;
+    return shellDoc;
   }
 
   /**
@@ -198,6 +205,23 @@ export default class DocumentModel {
    */
   getComponentsMap(extraComps?: string[]) {
     return this[documentSymbol].getComponentsMap(extraComps);
+  }
+
+  /**
+   * 检查拖拽放置的目标节点是否可以放置该拖拽对象
+   * @param dropTarget 拖拽放置的目标节点
+   * @param dragObject 拖拽的对象
+   * @returns boolean 是否可以放置
+   */
+  checkNesting(dropTarget: Node, dragObject: DragNodeObject | DragNodeDataObject): boolean {
+    let innerDragObject: InnerDragObject = dragObject;
+    if (isDragNodeObject(dragObject)) {
+      innerDragObject.nodes = innerDragObject.nodes.map((node: Node) => (node[nodeSymbol] || node));
+    }
+    return this[documentSymbol].checkNesting(
+      (dropTarget[nodeSymbol] || dropTarget) as any,
+      innerDragObject as any,
+    );
   }
 
   /**

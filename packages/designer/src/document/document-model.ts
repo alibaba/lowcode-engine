@@ -4,7 +4,7 @@ import { EventEmitter } from 'events';
 import { Project } from '../project';
 import { ISimulatorHost } from '../simulator';
 import { ComponentMeta } from '../component-meta';
-import { isDragNodeDataObject, DragNodeObject, DragNodeDataObject, DropLocation, Designer } from '../designer';
+import { isDragNodeDataObject, DragNodeObject, DragNodeDataObject, DropLocation, Designer, isDragNodeObject } from '../designer';
 import { Node, insertChildren, insertChild, isNode, RootNode, ParentalNode } from './node/node';
 import { Selection } from './selection';
 import { History } from './history';
@@ -505,16 +505,26 @@ export class DocumentModel {
     this.rootNode = null;
   }
 
-  checkNesting(dropTarget: ParentalNode, dragObject: DragNodeObject | DragNodeDataObject): boolean {
+  checkNesting(dropTarget: ParentalNode, dragObject: DragNodeObject | NodeSchema | Node | DragNodeDataObject): boolean {
     let items: Array<Node | NodeSchema>;
     if (isDragNodeDataObject(dragObject)) {
       items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
-    } else {
+    } else if (isDragNodeObject(dragObject)) {
       items = dragObject.nodes;
+    } else if (isNode(dragObject) || isNodeSchema(dragObject)) {
+      items = [dragObject];
+    } else {
+      console.warn('the dragObject is not in the correct type, dragObject:', dragObject);
+      return true;
     }
-    return items.every((item) => this.checkNestingDown(dropTarget, item));
+    return items.every((item) => this.checkNestingDown(dropTarget, item) && this.checkNestingUp(dropTarget, item));
   }
 
+  /**
+   * @deprecated since version 1.0.16.
+   * Will be deleted in version 2.0.0.
+   * Use checkNesting method instead.
+   */
   checkDropTarget(dropTarget: ParentalNode, dragObject: DragNodeObject | DragNodeDataObject): boolean {
     let items: Array<Node | NodeSchema>;
     if (isDragNodeDataObject(dragObject)) {
@@ -544,7 +554,7 @@ export class DocumentModel {
    */
   checkNestingDown(parent: ParentalNode, obj: NodeSchema | Node): boolean {
     const config = parent.componentMeta;
-    return config.checkNestingDown(parent, obj) && this.checkNestingUp(parent, obj);
+    return config.checkNestingDown(parent, obj);
   }
 
   // ======= compatibles for vision

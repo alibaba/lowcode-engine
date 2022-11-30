@@ -4,18 +4,20 @@ import {
   PropsReducer as PropsTransducer,
   TransformStage,
 } from '@alilc/lowcode-designer';
-import { RootSchema, ProjectSchema } from '@alilc/lowcode-types';
+import { RootSchema, ProjectSchema, IEditor } from '@alilc/lowcode-types';
 import DocumentModel from './document-model';
 import SimulatorHost from './simulator-host';
-import { projectSymbol, simulatorHostSymbol, simulatorRendererSymbol, documentSymbol } from './symbols';
+import { editorSymbol, projectSymbol, simulatorHostSymbol, simulatorRendererSymbol, documentSymbol } from './symbols';
 
 export default class Project {
   private readonly [projectSymbol]: InnerProject;
+  private readonly [editorSymbol]: IEditor;
   private [simulatorHostSymbol]: BuiltinSimulatorHost;
   private [simulatorRendererSymbol]: any;
 
   constructor(project: InnerProject) {
     this[projectSymbol] = project;
+    this[editorSymbol] = project?.designer.editor;
   }
 
   static create(project: InnerProject) {
@@ -133,6 +135,15 @@ export default class Project {
   }
 
   /**
+   * 绑定删除文档事件
+   * @param fn
+   * @returns
+   */
+  onRemoveDocument(fn: (data: { id: string}) => void) {
+    return this[editorSymbol].on('designer.document.remove', (data: { id: string }) => fn(data));
+  }
+
+  /**
    * 当前 project 内的 document 变更事件
    */
   onChangeDocument(fn: (doc: DocumentModel) => void) {
@@ -171,5 +182,15 @@ export default class Project {
       fn();
     }
     return offFn;
+  }
+
+  /**
+   * 设置多语言语料
+   * 数据格式参考 https://github.com/alibaba/lowcode-engine/blob/main/specs/lowcode-spec.md#2434%E5%9B%BD%E9%99%85%E5%8C%96%E5%A4%9A%E8%AF%AD%E8%A8%80%E7%B1%BB%E5%9E%8Baa
+   * @param value object
+   * @returns
+   */
+  setI18n(value: object): void {
+    this[projectSymbol].set('i18n', value);
   }
 }

@@ -34,13 +34,13 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
         };
 
         const isEmptyVariables = variables => (
-          Array.isArray(variables) && variables.length === 0 
+          Array.isArray(variables) && variables.length === 0
           || typeof variables === 'object' && (!variables || Object.keys(variables).length === 0)
         );
 
         // 按低代码规范里面的要求进行变量替换
         const format = (msg, variables) => (
-          typeof msg === 'string' 
+          typeof msg === 'string'
             ? msg.replace(/\\\$\\{(\\w+)\\}/g, (match, key) => variables?.[key] ?? '')
             : msg
         );
@@ -69,7 +69,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
           };
           target._i18nText = (t) => {
             // 优先取直接传过来的语料
-            const localMsg = t[locale] ?? t[String(locale).replace('-', '_')] 
+            const localMsg = t[locale] ?? t[String(locale).replace('-', '_')]
             if (localMsg != null) {
               return format(localMsg, t.params);
             }
@@ -81,7 +81,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
             }
 
             // 兜底用 use 指定的或默认语言的
-            return format(t[t.use || "zh_CN"] ?? t.en_US, t.params);
+            return format(t[t.use || "zh-CN"] ?? t.en_US, t.params);
           }
 
           // 注入到上下文中去

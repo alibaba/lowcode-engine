@@ -1,5 +1,4 @@
 import Detecting from './detecting';
-// import Dragon from './dragon';
 import DocumentModel from './document-model';
 import Event, { getEvent } from './event';
 import History from './history';
@@ -15,6 +14,8 @@ import Skeleton from './skeleton';
 import Dragon from './dragon';
 import SettingPropEntry from './setting-prop-entry';
 import SettingTopEntry from './setting-top-entry';
+import Common from './common';
+
 export * from './symbols';
 
 /**
@@ -27,7 +28,6 @@ export * from './symbols';
 export {
   DocumentModel,
   Detecting,
-  // Dragon,
   Event,
   History,
   Material,
@@ -42,5 +42,6 @@ export {
   SettingPropEntry,
   SettingTopEntry,
   Dragon,
+  Common,
   getEvent,
 };

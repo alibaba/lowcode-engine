@@ -124,8 +124,13 @@ export default class Node {
   /**
    * judge if it is a node or not
    */
-  get isNode() {
-    return true;
+  readonly isNode = true;
+
+  /**
+   * 获取当前节点的锁定状态
+   */
+  get isLocked() {
+    return this[nodeSymbol].isLocked;
   }
 
   /**
@@ -315,6 +320,14 @@ export default class Node {
   }
 
   /**
+   * 设置节点锁定状态
+   * @param flag
+   */
+  lock(flag?: boolean) {
+    this[nodeSymbol].lock(flag);
+  }
+
+  /**
    * @deprecated use .props instead
    */
   getProps() {
@@ -347,10 +360,11 @@ export default class Node {
    * 获取指定 path 的属性模型实例，
    *  注：导出时，不同于普通属性，该属性并不挂载在 props 之下，而是与 props 同级
    * @param path 属性路径，支持 a / a.b / a.0 等格式
+   * @param createIfNone 当没有属性的时候，是否创建一个属性
    * @returns
    */
-  getExtraProp(path: string): Prop | null {
-    return Prop.create(this[nodeSymbol].getProp(getConvertedExtraKey(path)));
+  getExtraProp(path: string, createIfNone?: boolean): Prop | null {
+    return Prop.create(this[nodeSymbol].getExtraProp(path, createIfNone));
   }
 
   /**
@@ -459,5 +473,22 @@ export default class Node {
    */
   remove() {
     this[nodeSymbol].remove();
+  }
+  /**
+   * 设置为磁贴布局节点
+   */
+  set isRGLContainer(flag: boolean) {
+    this[nodeSymbol].isRGLContainer = flag;
+  }
+  /**
+   * 获取磁贴布局节点设置状态
+   * @returns Boolean
+   */
+  get isRGLContainer() {
+    return this[nodeSymbol].isRGLContainer;
+  }
+
+  internalToShellNode() {
+    return this;
   }
 }

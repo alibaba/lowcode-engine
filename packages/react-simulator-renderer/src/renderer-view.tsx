@@ -188,6 +188,8 @@ class Renderer extends Component<{
         getNode={(id: string) => documentInstance.getNode(id) as Node}
         rendererName="PageRenderer"
         thisRequiredInJSE={host.thisRequiredInJSE}
+        notFoundComponent={host.notFoundComponent}
+        faultComponent={host.faultComponent}
         customCreateElement={(Component: any, props: any, children: any) => {
           const { __id, ...viewProps } = props;
           viewProps.componentId = __id;

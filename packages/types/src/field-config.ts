@@ -61,6 +61,11 @@ export interface FieldExtraProps {
    * @todo 待补充文档
    */
   liveTextEditing?: Omit<LiveTextEditingConfig, 'propTarget'>;
+
+  /**
+   * onChange 事件
+   */
+  onChange?: (value: any, field: any) => void;
 }
 
 /**

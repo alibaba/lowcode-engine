@@ -36,6 +36,7 @@ import {
   hasOwnProperty,
   UtilsMetadata,
   getClosestNode,
+  transactionManager,
 } from '@alilc/lowcode-utils';
 import {
   DragObjectType,
@@ -59,9 +60,8 @@ import { getClosestClickableNode } from './utils/clickable';
 import {
   ComponentMetadata,
   ComponentSchema,
-  TransformStage,
-  ActivityData,
   Package,
+  TransitionType,
 } from '@alilc/lowcode-types';
 import { BuiltinSimulatorRenderer } from './renderer';
 import clipboard from '../designer/clipboard';
@@ -69,6 +69,7 @@ import { LiveEditing } from './live-editing/live-editing';
 import { Project } from '../project';
 import { Scroller } from '../designer/scroller';
 import { isElementNode, isDOMNodeVisible } from '../utils/misc';
+import { debounce } from 'lodash';
 
 export interface LibraryItem extends Package{
   package: string;
@@ -176,10 +177,20 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   readonly injectionConsumer: ResourceConsumer;
 
+  readonly i18nConsumer: ResourceConsumer;
+
   /**
    * 是否为画布自动渲染
    */
   autoRender = true;
+
+  stopAutoRepaintNode() {
+    this.renderer?.stopAutoRepaintNode();
+  }
+
+  enableAutoRepaintNode() {
+    this.renderer?.enableAutoRepaintNode();
+  }
 
   constructor(project: Project) {
     makeObservable(this);
@@ -191,9 +202,20 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.injectionConsumer = new ResourceConsumer(() => {
       return {
         appHelper: engineConfig.get('appHelper'),
-        i18n: this.project.i18n,
       };
     });
+
+    this.i18nConsumer = new ResourceConsumer(() => this.project.i18n);
+
+    transactionManager.onStartTransaction(() => {
+      this.stopAutoRepaintNode();
+    }, TransitionType.REPAINT);
+    // 防止批量调用 transaction 时，执行多次 rerender
+    const rerender = debounce(this.rerender.bind(this), 28);
+    transactionManager.onEndTransaction(() => {
+      rerender();
+      this.enableAutoRepaintNode();
+    }, TransitionType.REPAINT);
   }
 
   get currentDocument() {
@@ -234,6 +256,14 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   get enableStrictNotFoundMode(): any {
     return engineConfig.get('enableStrictNotFoundMode') ?? false;
+  }
+
+  get notFoundComponent(): any {
+    return engineConfig.get('notFoundComponent') ?? null;
+  }
+
+  get faultComponent(): any {
+    return engineConfig.get('faultComponent') ?? null;
   }
 
   @computed get componentsAsset(): Asset | undefined {
@@ -352,9 +382,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     const _library = library || (this.get('library') as LibraryItem[]);
     const libraryAsset: AssetList = [];
     const libraryExportList: string[] = [];
+    const functionCallLibraryExportList: string[] = [];
 
     if (_library && _library.length) {
       _library.forEach((item) => {
+        const { exportMode, exportSourceLibrary } = item;
         this.libraryMap[item.package] = item.library;
         if (item.async) {
           this.asyncLibraryMap[item.package] = item;
@@ -362,6 +394,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         if (item.exportName && item.library) {
           libraryExportList.push(
             `Object.defineProperty(window,'${item.exportName}',{get:()=>window.${item.library}});`,
+          );
+        }
+        if (exportMode === 'functionCall' && exportSourceLibrary) {
+          functionCallLibraryExportList.push(
+            `window["${item.library}"] = window["${exportSourceLibrary}"]("${item.library}", "${item.package}");`,
           );
         }
         if (item.editUrls) {
@@ -372,7 +409,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       });
     }
     libraryAsset.unshift(assetItem(AssetType.JSText, libraryExportList.join('')));
-
+    libraryAsset.push(assetItem(AssetType.JSText, functionCallLibraryExportList.join('')));
     return libraryAsset;
   }
 
@@ -428,6 +465,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     if (Object.keys(this.asyncLibraryMap).length > 0) {
       // 加载异步Library
       await renderer.loadAsyncLibrary(this.asyncLibraryMap);
+      Object.keys(this.asyncLibraryMap).forEach(key => {
+        delete this.asyncLibraryMap[key];
+      });
     }
 
     // step 5 ready & render
@@ -447,7 +487,14 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   async setupComponents(library) {
     const libraryAsset: AssetList = this.buildLibrary(library);
-    await this.renderer.load(libraryAsset);
+    await this.renderer?.load(libraryAsset);
+    if (Object.keys(this.asyncLibraryMap).length > 0) {
+      // 加载异步Library
+      await this.renderer?.loadAsyncLibrary(this.asyncLibraryMap);
+      Object.keys(this.asyncLibraryMap).forEach(key => {
+        delete this.asyncLibraryMap[key];
+      });
+    }
   }
 
   setupEvents() {
@@ -1456,7 +1503,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     const document = this.currentDocument!;
     const focusNode = document.focusNode;
     if (isRootNode(container) || container.contains(focusNode)) {
-      return document.checkDropTarget(focusNode, dragObject as any);
+      return document.checkNesting(focusNode, dragObject as any);
     }
 
     const meta = (container as Node).componentMeta;

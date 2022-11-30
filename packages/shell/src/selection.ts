@@ -84,4 +84,15 @@ export default class Selection {
   getNodes(): Node[] {
     return this[selectionSymbol].getNodes().map((node: InnerNode) => Node.create(node));
   }
+
+  /**
+   * 获取选区的顶层节点
+   * for example:
+   *  getNodes() returns [A, subA, B], then
+   *  getTopNodes() will return [A, B], subA will be removed
+   * @returns
+   */
+  getTopNodes(): Node[] {
+    return this[selectionSymbol].getTopNodes().map((node: InnerNode) => Node.create(node));
+  }
 }

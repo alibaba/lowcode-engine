@@ -8,7 +8,12 @@ import { transformExpressionLocalRef, ParseError } from './expressionParser';
 
 function parseFunction(content: string): t.FunctionExpression | null {
   try {
-    const ast = parser.parse(`(${content});`);
+    const ast = parser.parse(`(${content});`, {
+      plugins: [
+        'jsx',
+      ],
+    });
+
     let resultNode: t.FunctionExpression | null = null;
     traverse(ast, {
       FunctionExpression(path) {

@@ -131,6 +131,14 @@ export interface Package {
    */
   async?: boolean;
   /**
+   * 标识当前 package 从其他 package 的导出方式
+   */
+  exportMode?: 'functionCall';
+  /**
+   * 标识当前 package 是从 window 上的哪个属性导出来的
+   */
+  exportSourceLibrary?: any;
+  /**
    * 组件描述导出名字，可以通过 window[exportName] 获取到组件描述的 Object 内容；
    */
   exportName?: string;
