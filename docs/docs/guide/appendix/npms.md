@@ -1,5 +1,5 @@
 ---
-title: NPM包对应源码位置汇总
+title: NPM 包对应源码位置汇总
 sidebar_position: 3
 ---
 | 包名 | 仓库 | 路径 |
