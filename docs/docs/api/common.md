@@ -43,7 +43,7 @@ common.utils.startTransaction(() => {
 ```
 
 ### createIntl
-i18n 相关工具
+i18n相关工具
 *引擎版本 >= 1.0.17
 ```typescript
 import { common } from '@alilc/lowcode-engine';

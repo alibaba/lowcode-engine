@@ -28,23 +28,23 @@ sidebar_position: 2
 | BoolSetter | 布尔型数据设置器， |
 | SelectSetter | 枚举型数据设置器，采用下拉的形式展现 |
 | VariableSetter | 变量型数据设置器， |
-| RadioGroupSetter | 枚举型数据设置器，采用 tab 选择的形式展现 |
+| RadioGroupSetter | 枚举型数据设置器，采用tab选择的形式展现 |
 | TextAreaSetter | 长文本型数据设置器，可换行 |
 | DateSetter | 日期型数据设置器 |
 | TimePicker | 时间型数据设置器 |
-| DateYearSetter | 日期型 - 年数据设置器 |
-| DateMonthSetter | 日期型 - 月数据设置器 |
+| DateYearSetter | 日期型-年数据设置器 |
+| DateMonthSetter | 日期型-月数据设置器 |
 | DateRangeSetter | 日期型数据设置器，可选择时间区间 |
 | EventsSetter | 事件绑定设置器 |
 | ColorSetter | 颜色设置器 |
-| JsonSetter | json 型数据设置器 |
+| JsonSetter | json型数据设置器 |
 | StyleSetter | 样式设置器 |
 | ClassNameSetter | 样式名设置器 |
 | FunctionSetter | 函数型数据设置器 |
 | MixedSetter | 混合型数据设置器 |
 | SlotSetter | 节点型数据设置器 |
 | ArraySetter | 列表数组行数据设置器 |
-| ObjectSetter | 对象数据设置器，一般内嵌在 ArraySetter 中 |
+| ObjectSetter | 对象数据设置器，一般内嵌在ArraySetter中 |
 
 
 # 设置器定制
@@ -60,7 +60,7 @@ interface AltStringSetterProps {
   value: string;
   // 默认值
   defaultValue: string;
-  // setter 唯一输出
+  // setter唯一输出
   onChange: (val: string) => void;
   // AltStringSetter 特殊配置
   placeholder: string;
@@ -73,7 +73,7 @@ export default class AltStringSetter extends React.PureComponent<AltStringSetter
     }
   }
 
-  // 声明 Setter 的 title
+  // 声明Setter的title
  	static displayName = 'AltStringSetter';
 
   render() {
@@ -95,7 +95,7 @@ export default class AltStringSetter extends React.PureComponent<AltStringSetter
 import { event } from '@ali/lowcode-engine';
 
 componentDidMount() {
-		// 这里由于面板上会有多个 setter，这里我用 field.id 来标记 setter 名
+		// 这里由于面板上会有多个setter，这里我用field.id来标记setter名
     this.emitEventName = `${SETTER_NAME}-${this.props.field.id}`;
     event.on(`${this.emitEventName}.bindEvent`, this.bindEvent)
 }
@@ -105,7 +105,7 @@ bindEvent = (eventName) => {
 }
 
 componentWillUnmount() {
-  // setter 是以实例为单位的，每个 setter 注销的时候需要把事件也注销掉，避免事件池过多
+  // setter是以实例为单位的，每个setter注销的时候需要把事件也注销掉，避免事件池过多
   event.off(`${this.emitEventName}.bindEvent`, this.bindEvent)
 }
 ```
@@ -115,7 +115,7 @@ import { event } from '@ali/lowcode-engine';
 
 bindFunction = () => {
   const { field, value } = this.props;
-  // 这里展示的和插件进行通信，事件规则是插件名 + 方法
+  // 这里展示的和插件进行通信,事件规则是插件名+方法
   event.emit('eventBindDialog.openDialog', field.name, this.emitEventName);
 }
 ```
@@ -125,9 +125,9 @@ setter 本身只影响其中一个 props 的值，如果需要影响其他组件
 bindFunction = () => {
     const { field, value } = this.props;
     const propsField = field.parent;
-		// 获取同级其他属性 showJump 的值
+		// 获取同级其他属性showJump的值
     const otherValue = propsField.getPropValue('showJump');
-    // set 同级其他属性 showJump 的值
+    // set同级其他属性showJump的值
     propsField.setPropValue('showJump', false);
 }
 ```

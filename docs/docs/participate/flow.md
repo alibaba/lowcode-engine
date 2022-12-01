@@ -44,7 +44,7 @@ sidebar_position: 2
 
 - 日常迭代 2 周，一般月中或月底
 - 特殊情况紧急迭代随时发
-- 大 Feature 迭代，每年 2 - 4 次
+- 大Feature迭代，每年 2 - 4 次
 
 
 ### 发布步骤
@@ -57,7 +57,7 @@ sidebar_position: 2
    ```bash
    git checkout develop
    ```
-2. 创建 release 分支
+2. 创建release分支
    ```bash
    git checkout -b release/1.0.0
    ```
@@ -65,7 +65,7 @@ sidebar_position: 2
    ```bash
    npm run build
    ```
-4. 发布到 npm
+4. 发布到npm
    ```bash
    npm run pub
    ```
@@ -77,9 +77,9 @@ sidebar_position: 2
 7. 合并 release/x.x.x 到 main 分支
 8. 合并 main 分支到 develop 分支
 
-如果是发布 beta 版本，步骤如下（以发布 1.0.1 版本为例）：
+如果是发布beta 版本，步骤如下（以发布 1.0.1 版本为例）：
 
-#### 发某版本首个 beta，如 1.0.1-beta.0
+#### 发某版本首个 beta ，如 1.0.1-beta.0
 1. 拉 develop 分支
    ```bash
    git checkout develop
@@ -105,7 +105,7 @@ sidebar_position: 2
    tnpm run sync
    ```
 
-#### 发某版本非首个 beta，如 1.0.1-beta.0 -> 1.0.1-beta.1
+#### 发某版本非首个 beta ，如 1.0.1-beta.0 -> 1.0.1-beta.1
 1. 切换到 release 分支
    ```bash
    git checkout release/1.0.1-beta
@@ -136,7 +136,7 @@ sidebar_position: 2
    ```bash
    npm run build
    ```
-3. publish（此步骤需要 npm 发包权限）
+3. publish （此步骤需要 npm 发包权限）
    ```bash
    npm run pub
    ```

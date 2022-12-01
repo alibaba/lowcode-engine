@@ -2,7 +2,7 @@
 title: 工程化配置
 sidebar_position: 3
 ---
-目前引擎体系共包含 2 个 js 文件，即：
+目前引擎体系共包含 3 个 js 文件，即：
 ```html
 <!-- engine-core 引擎的 core，负责引擎的基础模块 -->
 <script crossorigin="anonymous" src="//alifd.alicdn.com/npm/@alilc/lowcode-engine@1.0.0/dist/js/engine-core.js"></script>

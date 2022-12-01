@@ -74,7 +74,7 @@ import { event } from '@alilc/lowcode-engine';
 class SetterB extends React.Component {
   bindFunction = () => {
     const { field, value } = this.props;
-    // 这里展示的和插件进行通信，事件规则是插件名 + 方法
+    // 这里展示的和插件进行通信, 事件规则是插件名 + 方法
     event.emit('eventBindDialog.openDialog', field.name, this.emitEventName);
   }
 }

@@ -41,7 +41,7 @@ interface EngineOptions {
    */
   enableCanvasLock?: boolean;
   /**
-   * 容器锁定后，容器本身是否可以设置属性，仅当画布锁定特性开启时生效，默认值为：false
+   * 容器锁定后，容器本身是否可以设置属性，仅当画布锁定特性开启时生效， 默认值为：false
    */
   enableLockedNodeSetting?: boolean;
   /**

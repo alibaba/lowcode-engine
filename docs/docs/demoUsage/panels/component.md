@@ -3,8 +3,7 @@ title: 4. 组件面板详解
 sidebar_position: 0
 ---
 ## 概述
-组件面板顾名思义就是承载组件的面板，组件面板会获取并解析传入给低代码引擎的资产包数据 (数据结构[点此查看](https://lowcode-engine.cn/assets))，得到需要被展示的组件列表，并根据分类、排序规则对组件进行排列，同时也提供了搜索功能。
-
+组件面板顾名思义就是承载组件的面板，组件面板会获取并解析传入给低代码引擎的资产包数据(数据结构[点此查看](https://lowcode-engine.cn/assets))，得到需要被展示的组件列表，并根据分类、排序规则对组件进行排列，同时也提供了搜索功能。
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/231502/1647964501932-33676243-c42b-4e7c-8663-77c5898d3343.png#clientId=uf38e3cbf-9388-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=438&id=ubb9e4616&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1672&originWidth=3056&originalType=binary&ratio=1&rotation=0&showTitle=true&size=451947&status=done&style=stroke&taskId=u0fc240e1-a792-4bd1-b84d-5bbc8e8fc8b&title=%E7%BB%84%E4%BB%B6%E9%9D%A2%E6%9D%BF&width=800 "组件面板")
 ## 组件信息
 组件面板承载的组件信息有：

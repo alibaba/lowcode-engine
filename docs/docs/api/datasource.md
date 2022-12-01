@@ -4,7 +4,7 @@ sidebar_position: 12
 ---
 ### 请求数据源
 ```javascript
-// 请求 userList（userList 在数据源面板中定义）
+// 请求userList （userList在数据源面板中定义）
 
 this.dataSourceMap['userList'].load({
 	data: {}
@@ -22,7 +22,7 @@ const { userList } = this.state;
 // 获取数据源面板中定义的值
 const { user } = this.state;
 
-// 修改 state 值
+// 修改state值
 this.setState({
 	user: {}
 });

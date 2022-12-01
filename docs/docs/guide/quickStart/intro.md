@@ -18,7 +18,7 @@ sidebar_position: 0
 - **可视化页面搭建**，通过简单的拖拽完成应用页面开发，对前端技能没有要求或不需要特别专业的了解；
 - **可视化模型设计**，与业务相关的数据存储变得更容易理解，甚至大多数简单场景可以做到表单即模型，模型字段的类型更加业务化；
 - **可视化流程设计**，不管是业务流程还是审批流程，都可以通过简单的点线连接来进行配置；
-- **可视化报表及数据分析**，BI 数据分析能力成为标配，随时随地通过拖拽选择来定义自定义分析报表；
+- **可视化报表及数据分析**，BI数据分析能力成为标配，随时随地通过拖拽选择来定义自定义分析报表；
 - **可视化服务与数据开放、集成**，具备与其他系统互联互通的配置；
 - **权限、角色设置标准化和业务化**，通过策略规则配置来将数据、操作的权限进行精细化管理；
 - **无需关心服务器、数据库等底层运维、计算设施设备、网络等等复杂技术概念**，具备安全、性能的统一解决方案，开发者只需要专注于业务本身；
@@ -35,14 +35,14 @@ sidebar_position: 0
 
 **低代码设计器**
 现如今低代码平台越来越多，而每一个低代码平台中都会有的一个能力就是搭建和配置页面、模块的页面，这个页面我们称为设计器。例如，下图是中后台低代码平台的设计器。
-![image.png](https://img.alicdn.com/imgextra/i3/O1CN01sXuwkK1j8sg4S53Dx_!!6000000004504-2-tps-1682-969.png)
+![image.png](https://img.alicdn.com/imgextra/i4/O1CN01LunuQh23b5NtP8k86_!!6000000007273-2-tps-1682-969.png?originHeight=1914&originWidth=3838&originalType=binary&ratio=1&rotation=0&showTitle=false&size=538736&status=done&style=stroke&taskId=u9a19d4d1-4d87-4b4e-b7cc-3aedfb00aaa&title=&width=1080)
 设计器承载着低代码平台的核心功能，包括入料、编排、组件配置、画布渲染等等。由于其功能多，打磨精细难，也是低代码平台建设最耗时的地方。
 
 **定制扩展能力**
 
 什么是扩展能力呢，一方面我们可以快速拥有一份标准的低代码设计器，另外一方面如果有业务独特的功能需要，我们可以不用看它的源码、不用关心其实现，可以使用 API、插件等方式快速完成能力的开发。
 而低代码引擎对于设计器的扩展能力支持基本上覆盖了低代码设计器的所有功能点。下图是针对标准的设计器提供了扩展功能的区域。
-![](https://img.alicdn.com/imgextra/i1/O1CN01ZVgAE31wltQ4BVnCe_!!6000000006349-2-tps-3838-1914.png)
+![](https://cdn.nlark.com/yuque/0/2022/png/242652/1643446752531-8b1493d4-ea8a-463b-9631-6bb4fc681719.png#clientId=u2b839b63-1827-4&crop=0&crop=0&crop=1&crop=1&from=drop&height=539&id=ucff2881c&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1914&originWidth=3838&originalType=binary&ratio=1&rotation=0&showTitle=false&size=538736&status=done&style=stroke&taskId=u9a19d4d1-4d87-4b4e-b7cc-3aedfb00aaa&title=&width=1080)
 **低代码设计器研发框架**
 
 低代码引擎的核心是设计器，通过扩展、周边生态等可以产出各式各样的设计器。它不是一套可以适合所有人的低代码平台，而是帮助低代码平台的开发者，快速生产低代码平台的工具。

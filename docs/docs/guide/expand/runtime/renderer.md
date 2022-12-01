@@ -43,7 +43,7 @@ ReactDOM.render((
 - rax-renderer：npm 包替换为 @alilc/lowcode-rax-renderer
 ####
 ### 项目使用示例
-> [设计器 demo](https://lowcode-engine.cn/demo/demo-general/index.html)
+> 设计器 demo：[https://lowcode-engine.cn/demo](https://lowcode-engine.cn/demo)
 > 项目代码完整示例：[https://github.com/alibaba/lowcode-demo](https://github.com/alibaba/lowcode-demo)
 
 **step 1：在设计器中获取组件列表**
@@ -310,13 +310,13 @@ designMode 属性主要在搭建场景中使用，主要有以下作用：
 
 ### suspended
 
-渲染模块是否挂起，当设置为 `true` 时，渲染模块最外层容器的 `shouldComponentUpdate`将始终返回 false，在下钻编辑或者多引擎渲染的场景会用到该参数。
+渲染模块是否挂起，当设置为 `true` 时，渲染模块最外层容器的 `shouldComponentUpdate` 将始终返回false，在下钻编辑或者多引擎渲染的场景会用到该参数。
 
 ### onCompGetRef
 
 组件 ref 的回调，在搭建场景下编排模块可以根据该回调获取组件实例并实现生命周期注入或者组件 DOM 操作等功能，回调函数主要包含两个参数：
 
-- `schema`：当前组件的 schema 模型结构
+- `schema`： 当前组件的 schema 模型结构
 - `ref`：当前组件的 ref 实例
 
 ### onCompGetCtx
