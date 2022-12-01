@@ -37,7 +37,7 @@ const VALID_ENGINE_OPTIONS = {
   },
   locale: {
     type: 'string',
-    default: 'zh_CN',
+    default: 'zh-CN',
     description: '语言',
   },
   renderEnv: {
@@ -166,7 +166,7 @@ export interface EngineOptions {
    */
   deviceClassName?: string;
   /**
-   * 语言，默认值：'zh_CN'
+   * 语言，默认值：'zh-CN'
    */
   locale?: string;
   /**

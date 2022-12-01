@@ -69,6 +69,7 @@ import { LiveEditing } from './live-editing/live-editing';
 import { Project } from '../project';
 import { Scroller } from '../designer/scroller';
 import { isElementNode, isDOMNodeVisible } from '../utils/misc';
+import { debounce } from 'lodash';
 
 export interface LibraryItem extends Package{
   package: string;
@@ -176,6 +177,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   readonly injectionConsumer: ResourceConsumer;
 
+  readonly i18nConsumer: ResourceConsumer;
+
   /**
    * 是否为画布自动渲染
    */
@@ -199,14 +202,18 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.injectionConsumer = new ResourceConsumer(() => {
       return {
         appHelper: engineConfig.get('appHelper'),
-        i18n: this.project.i18n,
       };
     });
+
+    this.i18nConsumer = new ResourceConsumer(() => this.project.i18n);
+
     transactionManager.onStartTransaction(() => {
       this.stopAutoRepaintNode();
     }, TransitionType.REPAINT);
+    // 防止批量调用 transaction 时，执行多次 rerender
+    const rerender = debounce(this.rerender.bind(this), 28);
     transactionManager.onEndTransaction(() => {
-      this.rerender();
+      rerender();
       this.enableAutoRepaintNode();
     }, TransitionType.REPAINT);
   }
@@ -249,6 +256,14 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   get enableStrictNotFoundMode(): any {
     return engineConfig.get('enableStrictNotFoundMode') ?? false;
+  }
+
+  get notFoundComponent(): any {
+    return engineConfig.get('notFoundComponent') ?? null;
+  }
+
+  get faultComponent(): any {
+    return engineConfig.get('faultComponent') ?? null;
   }
 
   @computed get componentsAsset(): Asset | undefined {

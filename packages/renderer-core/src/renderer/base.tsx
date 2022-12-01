@@ -174,7 +174,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       this.__compScopes = {};
       this.__instanceMap = {};
       this.__bindCustomMethods(props);
-      this.__initI18nAPIs(props);
+      this.__initI18nAPIs();
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -358,12 +358,12 @@ export default function baseRendererFactory(): IBaseRenderComponent {
      * init i18n apis
      * @PRIVATE
      */
-    __initI18nAPIs = (props: IBaseRendererProps) => {
+    __initI18nAPIs = () => {
       this.i18n = (key: string, values = {}) => {
-        const { locale, messages } = props;
+        const { locale, messages } = this.props;
         return getI18n(key, values, locale, messages);
       };
-      this.getLocale = () => props.locale;
+      this.getLocale = () => this.props.locale;
       this.setLocale = (loc: string) => {
         const setLocaleFn = this.appHelper?.utils?.i18n?.setLocale;
         if (!setLocaleFn || typeof setLocaleFn !== 'function') {
@@ -823,7 +823,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         }
       }
 
-      const handleI18nData = (innerProps: any) => innerProps[innerProps.use || 'zh_CN'];
+      const handleI18nData = (innerProps: any) => innerProps[innerProps.use || 'zh-CN'];
 
       // @LEGACY 兼容老平台设计态 i18n 数据
       if (isI18nData(props)) {

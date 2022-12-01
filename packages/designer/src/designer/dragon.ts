@@ -408,7 +408,7 @@ export class Dragon {
       if (e) {
         const { isRGL, rglNode } = getRGL(e);
         /* istanbul ignore next */
-        if (isRGL && this._canDrop) {
+        if (isRGL && this._canDrop && this._dragging) {
           const tarNode = dragObject.nodes[0];
           if (rglNode.id !== tarNode.id) {
             // 避免死循环

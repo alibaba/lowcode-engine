@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import { obx, computed, makeObservable, action } from '@alilc/lowcode-editor-core';
 import { Designer } from '../designer';
-import { DocumentModel, isDocumentModel, isPageSchema } from '../document';
+import { DocumentModel, isDocumentModel } from '../document';
 import {
   ProjectSchema,
   RootSchema,
@@ -54,7 +54,7 @@ export class Project {
   }
 
   @obx.ref private _i18n: any = {};
-  get i18n(): any {
+  @computed get i18n(): any {
     return this._i18n;
   }
   set i18n(value: any) {
