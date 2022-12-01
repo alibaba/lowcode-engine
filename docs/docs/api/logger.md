@@ -35,7 +35,7 @@ import { logger } from '@alilc/lowcode-engine';
 
 // 内部实现：logger = getLogger({ level: 'warn', bizName: 'designer:pluginManager' })
 
-// 若在url query中增加 `__logConf__` 可改变打印日志级别和限定业务类型日志
+// 若在 url query 中增加 `__logConf__` 可改变打印日志级别和限定业务类型日志
 // 默认：__logConf__=warn:*
 logger.log('log');          // 不输出
 logger.warn('warn');        // 输出

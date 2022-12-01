@@ -250,7 +250,7 @@ API 是组件的属性解释，给开发者作为组件属性配置的参考。�
 | direction      | enum           | 方向，取值采用缩写的方式。                                   | hoz（水平）, ver（垂直）                                  |
 | align          | enum           | 对齐方式                                                     | tl, tc, tr, cl, cc, cr, bl, bc, br                    |
 | status         | enum           | 状态                                                         | normal, success, error, warning                       |
-| size           | enum           | 大小                                                         | small, medium, large 更大或更小可用(xxs, xs, xl, xxl) |
+| size           | enum           | 大小                                                         | small, medium, large 更大或更小可用 (xxs, xs, xl, xxl) |
 | type           | enum or string | 分类:1. dom 结构不变、只有皮肤的变化 2.组件类型只有并列的几类 | normal, primary, secondary                            |
 | visible        | boolean        | 是否显示                                                     |                                                       |
 | defaultVisible | boolean        | 是否显示（非受控）                                           |                                                       |
@@ -266,7 +266,7 @@ API 是组件的属性解释，给开发者作为组件属性配置的参考。�
 
 当某个 API 的接口，允许用户指定多个枚举值的时候，我们把这个接口定义为多选枚举。一个很典型的例子是某个弹层组件的 `closable` 属性，我们会允许：键盘 esc 按键、点击 mask、点击 close 按钮、点击组件以外的任何区域进行关闭。
 
-不要有一个 API 值，支持多种类型。例如某个弹层的组件，我们会允许 esc、点击 mask、点击 close 按钮等进行关闭。此时 API 设计可以通过多个 API 承载，例如:
+不要有一个 API 值，支持多种类型。例如某个弹层的组件，我们会允许 esc、点击 mask、点击 close 按钮等进行关闭。此时 API 设计可以通过多个 API 承载，例如：
 
 ```js
 closable?: boolean;         // 默认为 true
@@ -283,14 +283,14 @@ true 表示触发规则都会关闭，false 表示触发规则不会关闭。
 
 #### 事件
 
-- 标准事件或者自定义的符合 w3c 标准的事件，命名必须 on 开头, 即 `on` + 事件名，如 onExpand。
+- 标准事件或者自定义的符合 w3c 标准的事件，命名必须 on 开头， 即 `on` + 事件名，如 onExpand。
 
 #### 表单规范
 
 - 支持[受控模式](https://reactjs.org/docs/forms.html#controlled-components)(value + onChange) （A)
    - value 控制组件数据展现
    - onChange 组件发生变化时候的回调函数（第一个参数可以给到 value)
-- `value={undefined}` 的时候清空数据, field 的 reset 函数会给所有组件下发 undefined 数据 (AA)
+- `value={undefined}`的时候清空数据，field 的 reset 函数会给所有组件下发 undefined 数据 (AA))
 - 一次完整操作抛一次 onChange 事件 `建议` 比如有 Process 表示进展中的状态，建议增加 API `onProcess`；如果有 Start 表示启动状态，建议增加 API `onStart`  (AA)
 
 #### 属性的传递
@@ -357,7 +357,7 @@ $ iceworks sync
 
 #### 目录规范
 
-在 `src` 目录新增 `locale` 目录用于管理不同语言的文案.
+在 `src` 目录新增 `locale` 目录用于管理不同语言的文案。
 
 ```
 |- BizHello
@@ -499,9 +499,9 @@ export default {
 
 api 属性标准参考 [https://fusion.design/help.html#/dev-biz](https://fusion.design/help.html#/dev-biz)
 
-#### 2.1.7 无障碍访问规范(AAA)
+#### 2.1.7 无障碍访问规范 (AAA)
 
-无障碍需要符合 [WCAG 2.1 A级标准](https://www.w3.org/TR/WCAG21/)，可参考 [W3C 无障碍最佳实践](https://www.w3.org/TR/wai-aria-practices-1.1/)、[Fusion 无障碍指引 2.3.1](https://alibaba-fusion.github.io/next/part1/basics.html) 章节等。
+无障碍需要符合 [WCAG 2.1 A 级标准](https://www.w3.org/TR/WCAG21/)，可参考 [W3C 无障碍最佳实践](https://www.w3.org/TR/wai-aria-practices-1.1/)、[Fusion 无障碍指引 2.3.1](https://alibaba-fusion.github.io/next/part1/basics.html) 章节等。
 
 
 #### 增加 a11y.md 无障碍 demo
@@ -552,7 +552,7 @@ component
 | -------------- | ------------------------------------------------------------------------------------------------- | ------ |
 | version        | 协议版本号                                                                                        | String |
 | componentsMap  | 描述组件映射关系的集合                                                                            | Array  |
-| componentsTree | 低代码业务组件树描述，是长度固定为1的数组, 即数组内仅包含根容器的描述（低代码业务组件容器类型） | Array  |
+| componentsTree | 低代码业务组件树描述，是长度固定为 1 的数组，即数组内仅包含根容器的描述（低代码业务组件容器类型） | Array  |
 | utils          | 工具类扩展映射关系                                                                                | Array  |
 | i18n           | 国际化语料                                                                                        | Object |
 
@@ -572,7 +572,7 @@ component
       "name": "lucy",
     },
     "static": {},                        // 用于定义自定组件的 static 属性
-    "defaultProps": {                    // 默认 props：  选填仅用于定义低代码业务组件的默认属性固定对象
+    "defaultProps": {                    // 默认 props：选填仅用于定义低代码业务组件的默认属性固定对象
       "name": "xxx"
     },
     "children": [{
@@ -608,8 +608,6 @@ component
 - **基础信息 (A)：** 描述组件的基础信息，通常包含包信息、组件名称、标题、描述等。
 - **组件属性信息 (A)：** 描述组件属性信息，通常包含参数、说明、类型、默认值 4 项内容。
 - **能力配置/体验增强：** 推荐用于优化搭建产品编辑体验，定制编辑能力的配置信息。
-
-整体结构概览: [http://lowcode-engine.cn/doc?url=sde3wf](http://lowcode-engine.cn/doc?url=sde3wf)
 
 ##### 2.2.2.2 基础信息（A）
 
@@ -837,7 +835,7 @@ props 数组下对象字段描述：
 | defaultValue | 默认值 | Any(视字段类型而定) | type = 'field' 生效 |
 | supportVariable | 是否支持配置变量 | Boolean | type = 'field' 生效 |
 | condition | 配置当前 prop 是否展示 | (target: SettingTarget) => boolean; | - |
-| setter     | 单个控件(setter)描述，搭建基础协议组件的描述对象，支持 JSExpression / JSFunction / JSSlot | `String\|Object\|Function` | type = 'field' 生效 |
+| setter     | 单个控件 (setter) 描述，搭建基础协议组件的描述对象，支持 JSExpression / JSFunction / JSSlot | `String\|Object\|Function` | type = 'field' 生效 |
 | extraProps | 其他配置属性（不做流通要求）                                                           | Object            | 其他配置            |
 | extraProps.getValue | setter 渲染时被调用，setter 会根据该函数的返回值设置 setter 当前值 | Function            | (target: SettingTarget, value: any) => any;            |
 | extraProps.setValue | setter 内容修改时调用，开发者可在该函数内部修改节点 schema 或者进行其他操作 | Function            | (target: SettingTarget, value: any) => void;            |
@@ -885,7 +883,7 @@ props 数组下对象字段描述：
 | nestingRule.descendantBlacklist | 后裔节点类型黑名单                                                                                  | `String\|Function`  |
 | nestingRule.ancestorWhitelist   | 祖父节点类型白名单                                                                                  | `String\|Function`  |
 | isNullNode(AAA)                 | 是否存在渲染的根节点                                                                                | Boolean |
-| isLayout(AAA)                   | 是否是layout布局组件                                                                                | Boolean |
+| isLayout(AAA)                   | 是否是 layout 布局组件                                                                                | Boolean |
 | rootSelector(AAA)                   | 组件选中框的 cssSelector                                                                                | String |
 | disableBehaviors(AAA)                   | 用于屏蔽在设计器中选中组件时提供的操作项，默认操作项有 copy、hide、remove                                                                                | String[] |
 | actions(AAA)                   | 用于详细配置上述操作项的内容                                                                                | Object |
@@ -925,20 +923,20 @@ props 数组下对象字段描述：
 
 | 字段 | 用途 | 类型 | 备注 |
 | ------------------------------- | --------------------------------------------------------------------------------------------------- | ------- | --- |
-|initialChildren	|组件拖入“设计器”时根据此配置自动生成 children 节点 schema |NodeData[]/Function	NodeData[] | ((target: SettingTarget) => NodeData[]);|
-|getResizingHandlers|	用于配置设计器中组件 resize 操作工具的样式和内容|	Function|	(currentNode: any) => Array<{ type: 'N' | 'W' | 'S' | 'E' | 'NW' | 'NE' | 'SE' | 'SW'; content?: ReactElement; propTarget?: string; appearOn?: 'mouse-enter' | 'mouse-hover' | 'selected' | 'always'; }> / ReactElement[];
-|callbacks|	配置 callbacks 可捕获引擎抛出的一些事件，例如 onNodeAdd、onResize 等|	Callback|	-
+|initialChildren	| 组件拖入“设计器”时根据此配置自动生成 children 节点 schema |NodeData[]/Function	NodeData[] | ((target: SettingTarget) => NodeData[]);|
+|getResizingHandlers|	用于配置设计器中组件 resize 操作工具的样式和内容 |	Function|	(currentNode: any) => Array<{ type: 'N' | 'W' | 'S' | 'E' | 'NW' | 'NE' | 'SE' | 'SW'; content?: ReactElement; propTarget?: string; appearOn?: 'mouse-enter' | 'mouse-hover' | 'selected' | 'always'; }> / ReactElement[];
+|callbacks|	配置 callbacks 可捕获引擎抛出的一些事件，例如 onNodeAdd、onResize 等 |	Callback|	-
 |callbacks.onNodeAdd|	在容器中拖入组件时触发的事件回调|	Function|	(e: MouseEvent, currentNode: any) => any
 |callbacks.onNodeRemove|	在容器中删除组件时触发的事件回调|	Function|	(e: MouseEvent, currentNode: any) => any
-|callbacks.onResize|	调整容器尺寸时触发的事件回调，常常与 getResizingHandlers搭配使用|	Function|	详见 Types 定义
-|callbacks.onResizeStart|	调整容器尺寸开始时触发的事件回调，常常与 getResizingHandlers搭配使用|	Function|	详见 Types 定义
-|callbacks.onResizeEnd|	调整容器尺寸结束时触发的事件回调，常常与 getResizingHandlers搭配使用|	Function|	详见 Types 定义
+|callbacks.onResize|	调整容器尺寸时触发的事件回调，常常与 getResizingHandlers 搭配使用 |	Function|	详见 Types 定义
+|callbacks.onResizeStart|	调整容器尺寸开始时触发的事件回调，常常与 getResizingHandlers 搭配使用 |	Function|	详见 Types 定义
+|callbacks.onResizeEnd|	调整容器尺寸结束时触发的事件回调，常常与 getResizingHandlers 搭配使用 |	Function|	详见 Types 定义
 |callbacks.onSubtreeModified|	容器节点结构树发生变化时触发的回调|	Function|	(currentNode: any, options: any) => void;
 |callbacks.onMouseDownHook|	鼠标按下操作回调|	Function|	(e: MouseEvent, currentNode: any) => any;
 |callbacks.onClickHook|	鼠标单击操作回调|	Function|	(e: MouseEvent, currentNode: any) => any;
 |callbacks.onDblClickHook|	鼠标双击操作回调|	Function|	(e: MouseEvent, currentNode: any) => any;
-|callbacks.onMoveHook|	节点被拖动回调|	Function|	(currentNode: any) => boolean;
-|callbacks.onHoverHook|	节点被 hover 回调|	Function|	(currentNode: any) => boolean;
+|callbacks.onMoveHook|	节点被拖动回调 |	Function|	(currentNode: any) => boolean;
+|callbacks.onHoverHook|	节点被 hover 回调 |	Function|	(currentNode: any) => boolean;
 |callbacks.onChildMoveHook|	容器节点的子节点被拖动回调|	Function|	(childNode: any, currentNode: any) => boolean;
 
 
@@ -1211,7 +1209,7 @@ export interface ComponentDescription { // 组件描述协议，通过 npm 中�
 - components { Array } 所有组件的描述协议列表
 - sort { Object } 用于描述组件面板中的 tab 和 category
 
-##### 2.2.3.2 version（A）
+##### 2.2.3.2 version (A)
 
 定义当前协议 schema 的版本号；
 
@@ -1219,9 +1217,9 @@ export interface ComponentDescription { // 组件描述协议，通过 npm 中�
 | ---------- | ------ | ---------- | -------- | ------ |
 | version    | String | 协议版本号 | -        | 1.0.0  |
 
-##### 2.2.3.3 packages（A）
+##### 2.2.3.3 packages (A)
 
-定义低代码编辑器中加载的资源列表，包含公共库和组件(库) cdn 资源等；
+定义低代码编辑器中加载的资源列表，包含公共库和组件 (库) cdn 资源等；
 
 | 字段             | 字段描述                | 字段类型   | 备注                                                          |
 | --------------- | ---------------------- | --------  | ------------------------------------------------------------ |
@@ -1232,7 +1230,7 @@ export interface ComponentDescription { // 组件描述协议，通过 npm 中�
 | packages[].editUrls (A)        | 组件编辑态视图打包后的 CDN url 列表，包含 js 和 css     | Array\<String\>   | 低代码引擎编辑器会加载这些 url   |
 | packages[].urls (AA) | 组件渲染态视图打包后的 CDN url 列表，包含 js 和 css     | Array\<String\>   | 低代码引擎渲染模块会加载这些 url |
 
-描述举例:
+描述举例：
 
 ```json
 {
@@ -1253,7 +1251,7 @@ export interface ComponentDescription { // 组件描述协议，通过 npm 中�
       ]
     },
     {
-      "title": "fusion组件库",
+      "title": "fusion 组件库",
       "package": "@alifd/next",
       "version": "1.24.18",
       "urls": [
@@ -1292,11 +1290,11 @@ export interface ComponentDescription { // 组件描述协议，通过 npm 中�
 }
 ```
 
-##### 2.2.3.4 components （A）
+##### 2.2.3.4 components (A)
 
 定义所有组件的描述协议列表，组件描述协议遵循本规范章节 2.2.2 的定义；
 
-##### 2.2.3.5 sort （A）
+##### 2.2.3.5 sort (A)
 
 定义组件列表分组
 
@@ -1330,7 +1328,7 @@ export interface RemoteComponentDescription {
 }
 ```
 
-## 3 物料规范-区块规范
+## 3 物料规范 - 区块规范
 
 ### 3.1 源码规范
 
@@ -1386,14 +1384,14 @@ block/
     "category": "form",
     "screenshot": "https://unpkg.com/@icedesign/user-landing-block/screenshot.png",
     "views": [{                                            // 区块视图，配置此项后会进入 fusion cool
-        "title": "视图1标题",                               // 区块视图标题
+        "title": "视图 1 标题",                               // 区块视图标题
         "props": {                                         // 区块支持的 props
           "type": "primary"
         },
         "screenshot": "build/views/block_view1.png",       // 【编译自动填充】视图截图，会在 build 时自动生成
         "html": "build/views/block_view1.html",            // 【编译自动填充】视图渲染后 html 结构，会在 build 时自动生成
     },{
-        "title": "视图2标题",                               // 区块视图标题
+        "title": "视图 2 标题",                               // 区块视图标题
         "props": {                                         // 区块支持的 props
           "type": "sencondary"
         },
@@ -1417,7 +1415,7 @@ block/
 | i18n           | 国际化语料                         | Object |
 
 
-描述举例1：
+描述举例 1：
 
 ```json
 {
@@ -1425,7 +1423,7 @@ block/
   "componentsMap": [{ }],
   "componentsTree": [{                   // 区块组件树，顶层由区块容器组件包裹；
     "componentName": "Block",            // 区块容器组件名
-    "fileName": "block1",                // 区块容器1
+    "fileName": "block1",                // 区块容器 1
     "props": {},
     "css": "body {font-size: 12px;}",
     "state": {
@@ -1454,7 +1452,7 @@ block/
 }
 ```
 
-描述举例2：
+描述举例 2：
 
 ```json
 {
@@ -1527,13 +1525,13 @@ block/
 │   │   └── app.js                 # 应用配置文件
 │   ├── utils/                     # 工具库
 │   │   └── index.js               # 应用第三方扩展函数
-│   ├── stores/                    # [可选]全局状态管理
+│   ├── stores/                    # [可选] 全局状态管理
 │   │   └── user.js
-│   ├── locales/                   # [可选]国际化资源
+│   ├── locales/                   # [可选] 国际化资源
 │   │   ├── en-US
 │   │   └── zh-CN
 │   ├── global.scss                # 全局样式
-│   └── index.jsx                  # 应用入口脚本, 依赖 config/routes.js 的路由配置动态生成路由；
+│   └── index.jsx                  # 应用入口脚本，依赖 config/routes.js 的路由配置动态生成路由；
 ├── webpack.config.js              # 项目工程配置，包含插件配置及自定义 `webpack` 配置等
 ├── README.md
 ├── package.json
@@ -1567,11 +1565,11 @@ ReactDOM.render(<App />, document.getElementById(pkg.config && pkg.config.target
 (/src/config/app.js)
 
 - 支持配置路由方式：historyMode
-   - 支持2种路由方式：
-      - 浏览器路由： browser
-      - 哈希路由:  hash
+   - 支持 2 种路由方式：
+      - 浏览器路由：browser
+      - 哈希路由：hash
    - 支持透传路由产生的参数到所有组件的上下文 this 对象上
-      - history 对象： this.history
+      - history 对象：this.history
       - location 对象：this.location
          - 支持内置 query 参数的解析：this.location.query
       - match 对象：this.match
@@ -1658,15 +1656,15 @@ a {
     "category": "form",
     "screenshot": "https://unpkg.com/@icedesign/user-landing-block/screenshot.png",
     "views": [{                                    // 模板视图，配置此项后会进入 fusion cool
-      "title": "视图1标题",                       // 模板视图标题
-      "path": "#/dashboard/monitor",             // 读取路由列表生成，hash 路由必须加#
-      "screenshot": "build/views/page0.png",     // 【编译自动填充】视图截图，会在 build 时自动生成
-      "html": "build/views/page0.html",          // 【编译自动填充】视图渲染后 html 结构，会在 build 时自动生成
+      "title": "视图 1 标题",                       // 模板视图标题
+      "path": "#/dashboard/monitor",               // 读取路由列表生成，hash 路由必须加#
+      "screenshot": "build/views/page0.png",       // 【编译自动填充】视图截图，会在 build 时自动生成
+      "html": "build/views/page0.html",            // 【编译自动填充】视图渲染后 html 结构，会在 build 时自动生成
     },{
-      "title": "视图2标题",                       // 区块视图标题
-      "path": "#/dashboard/list",                // 读取路由列表生成，hash 路由必须加#
-      "screenshot": "build/views/page1.png",     // 【编译自动填充】视图截图，会在 build 时自动生成
-      "html": "build/views/page1.html",          // 【编译自动填充】视图渲染后 html 结构，会在 build 时自动生成
+      "title": "视图 2 标题",                       // 区块视图标题
+      "path": "#/dashboard/list",                  // 读取路由列表生成，hash 路由必须加#
+      "screenshot": "build/views/page1.png",       // 【编译自动填充】视图截图，会在 build 时自动生成
+      "html": "build/views/page1.html",            // 【编译自动填充】视图渲染后 html 结构，会在 build 时自动生成
     }]
   }
 }
