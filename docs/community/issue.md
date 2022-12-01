@@ -65,7 +65,7 @@ window.AliLowCodeEngine.project.openDocument('docl4xkca5b')
 
 期望：
 
-- 页面中的xxx部分和预期不符合，期望的效果是 xxx
+- 页面中的 xxx 部分和预期不符合，期望的效果是 xxx
 
 #### 【支持稍慢】通过线上 demo + 完整操作步骤可复现
 **示例**
