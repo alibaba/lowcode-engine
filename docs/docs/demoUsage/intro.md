@@ -29,7 +29,7 @@ sidebar_position: 0
 
 它们操作的数据关系是：
 
-- 页面中的 Schema 数据：保存在低代码引擎中的 Schema，点击 Schema 面板中的“保存 Schema” 时将修改引擎中的值，此外低代码引擎中的所有操作都可能修改到 Schema
+- 页面中的 Schema 数据：保存在低代码引擎中的 Schema，点击 Schema 面板中的“保存 Schema”时将修改引擎中的值，此外低代码引擎中的所有操作都可能修改到 Schema
 - localStorage 数据：由“保存到本地”保存到 localStorage 中，页面初始化时将读取，预览页面时也会读取
 - 默认 Schema：保存在 Demo 项目中的默认 Schema（`public/schema.json`），初始化页面时如果不存在 localStorage 数据即会读取，点击“重置页面”时，也会读取
 

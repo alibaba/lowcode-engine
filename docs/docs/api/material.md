@@ -12,7 +12,7 @@ sidebar_position: 2
 # 方法签名（functions）
 ## 资产包
 ### setAssets
-设置「[资产包](https://www.yuque.com/lce/doc/vgcyf1)」结构
+设置「[资产包](/site/docs/specs/lowcode-spec#2-协议结构)」结构
 
 **类型定义**
 ```typescript

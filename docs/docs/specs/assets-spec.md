@@ -65,7 +65,7 @@ sidebar_position: 2
 - setters { Array } 设计器中设置器描述协议列表
 - extConfig { Object } 平台自定义扩展字段
 
-### 2.1 version（A）
+### 2.1 version (A)
 
 定义当前协议 schema 的版本号；
 
@@ -73,9 +73,9 @@ sidebar_position: 2
 | ---------- | ------ | ---------- | -------- | ------ |
 | version    | String | 协议版本号 | -        | 1.1.0  |
 
-### 2.2 packages（A）
+### 2.2 packages (A)
 
-定义低代码编辑器中加载的资源列表，包含公共库和组件(库) cdn 资源等；
+定义低代码编辑器中加载的资源列表，包含公共库和组件 (库) cdn 资源等；
 
 | 字段                 | 字段描述                                                        | 字段类型      | 规范等级 | 备注                                                                                                     |
 | -------------------- | --------------------------------------------------------------- | ------------- | -------- | -------------------------------------------------------------------------------------------------------- |
@@ -92,13 +92,13 @@ sidebar_position: 2
 | packages[].advancedEditUrls | 组件多个编辑态视图打包后的 CDN url 列表集合，包含 js 和 css     | Object        | AAA      | 上层平台根据特定标识提取某个编辑态的资源，低代码引擎编辑器会加载这些资源，优先级高于 packages[].editUrls |
 | packages[].advancedUrls     | 组件多个端的渲染态视图打包后的 CDN url 列表集合，包含 js 和 css | Object        | AAA      | 上层平台根据特定标识提取某个渲染态的资源， 低代码引擎渲染模块会加载这些资源，优先级高于 packages[].urls  |
 | packages[].external  | 当前资源在作为其他资源的依赖，在其他依赖打包时时是否被排除了(同 webpack 中 external 概念)                            | Boolean       | AAA      | 某些资源会被单独提取出来，是其他依赖的前置依赖，根据这个字段决定是否提前加载该资源                       |
-| packages[].loadEnv   | 指定当前资源加载的环境                                          | Array<String\> | AAA      | 主要用于指定 external 资源加载的环境，取值为 design(设计态)、runtime(预览态)中的一个或多个               |
+| packages[].loadEnv   | 指定当前资源加载的环境                                          | Array<String\> | AAA      | 主要用于指定 external 资源加载的环境，取值为 design(设计态)、runtime(预览态) 中的一个或多个               |
 | packages[].exportSourceId     | 标识当前 package 内容是从哪个 package 导出来的   | String | AAA       | 此时 urls 无效 |
 | packages[].exportSourceLibrary     | 标识当前 package 是从 window 上的哪个属性导出来的   | String | AAA       | exportSourceId 的优先级高于exportSourceLibrary ,此时 urls 无效 |
 | packages[].async     | 标识当前 package 资源加载在 window.library 上的是否是一个异步对象   | Boolean | A       | async 为 true 时，需要通过 await 才能拿到真正内容 |
 | packages[].exportMode     | 标识当前 package 从其他 package 的导出方式   | String | A       | 目前只支持 `"functionCall"`, exportMode等于 `"functionCall"` 时，当前package 的内容以函数的方式从其他 package 中导出，具体导出接口如: (library: string, packageName: string, isRuntime?: boolean) => any | Promise<any\>, library 为当前 package 的 library, packageName 为当前的包名，返回值为当前 package 的导出内容  |
 
-描述举例:
+描述举例：
 
 ```json
 {
@@ -298,14 +298,14 @@ sidebar_position: 2
 }
 ```
 
-### 2.3 components （A）
+### 2.3 components (A)
 
 定义资产包中包含的所有组件的低代码描述的集合，分为“ComponentDescription”和“RemoteComponentDescription”(详见 2.6 TypeScript 定义)：
 
 - ComponentDescription: 符合“组件描述协议”的数据，详见物料规范中`2.2.2 组件描述协议`部分；
 - RemoteComponentDescription 是将一个或多个 ComponentDescription 构建打包的 js 资源的描述，在浏览器中加载该资源后可获取到其中包含的每个组件的 ComponentDescription 的具体内容；
 
-### 2.4 sort （AA）
+### 2.4 sort (AA)
 
 定义组件列表分组
 
@@ -346,7 +346,7 @@ sidebar_position: 2
 
 ### 2.7 extConfig (AAA)
 
-定义平台相关的扩展内容，用于存放平台自身实现的一些私有协议, 以允许存量平台能够平滑地迁移至标准协议。 extConfig 是一个 key-value 结构的对象，协议不会规定 extConfig 中的字段名称以及类型, 完全自定义
+定义平台相关的扩展内容，用于存放平台自身实现的一些私有协议，以允许存量平台能够平滑地迁移至标准协议。extConfig 是一个 key-value 结构的对象，协议不会规定 extConfig 中的字段名称以及类型，完全自定义
 
 ### 2.8 TypeScript 定义
 
