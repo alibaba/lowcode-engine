@@ -8,34 +8,34 @@ sidebar_position: 0
 1. clone 低代码项目的官方 demo，直接启动项目。适合普通人。
 2. 手工引入低代码 UMD 包，手工配置、打包和启动。适合 Webpack 配置工程师。
 
-## 方法 1: 以官方 Demo 为基础使用
-
-可以通过两种方式之一获取低代码编辑器的示例代码：
-
-1. 直接[在 github 仓库下](https://github.com/alibaba/lowcode-demo)进行下载
-
-  ![](https://img.alicdn.com/imgextra/i3/O1CN01PfGV3h1oJ1Wv3sakc_!!6000000005203-2-tps-1500-517.png)
-
-2. 如果本地安装了 git，可以通过 git clone 方式进行下载
-
-（这个方法的好处是 demo 有了更新，可以通过 merge 方式跟上）
-  ```bash
-  git clone https://github.com/alibaba/lowcode-demo.git
-  ```
-
-拉取仓库代码后，需要进行如下配置或安装过程：
+## 方法 1：通过官方命令行工具创建编辑器
 
 1. 确保本地安装了 Node.js 和 npm，如果没有，[您可以通过 nvm 进行快捷的安装](https://github.com/nvm-sh/nvm)
 2. 确保为 npm [设置了可以访问的 npm 源，保证安装过程无网络问题](https://npmmirror.com/)
-3. 选择目录下其中一个 demo 工程进入，建议选择 `demo-general`
+3. 安装官方命令行工具
    ```bash
-   cd demo-general
+   npm install -g @alilc/create-element@latest
    ```
-4. 安装依赖
+4. 通过命令行工具创建
+   ```bash
+   npm init @alilc/element editor-project-name
+   ```
+   这时会看到一个选项列表
+
+   <img src="https://img.alicdn.com/imgextra/i3/O1CN01LAaw2R1veHDYUzGB1_!!6000000006197-2-tps-676-142.png" width="350"/>
+
+   选择`编辑器`，并填写对应的问题，即可完成创建。
+
+   > 注 @alilc/create-element 版本需 >= 1.0.4，若看不到`编辑器`选项，请重新执行步骤 3
+5. 进入创建后的目录
+   ```bash
+   cd editor-project-name
+   ```
+6. 安装依赖
    ```bash
    npm install
    ```
-5. 安装依赖成功后，启动项目 (注意观察上一步的输出，如有 error 等失败信息，请先进行排查)
+7. 安装依赖成功后，启动项目 (注意观察上一步的输出，如有 error 等失败信息，请先进行排查)
    ```bash
    npm start
    ```

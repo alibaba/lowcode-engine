@@ -16,21 +16,24 @@ sidebar_position: 7
 ## 脚手架功能
 ### 脚手架初始化
 
-```shell
-$ npm init @alilc/element your-element-name
+```bash
+npm init @alilc/element your-element-name
 ```
-
 不写 your-element-name 的情况下，则在当前目录创建。
 
-> 觉得安装速度比较慢的同学，可以设置 npm 国内镜像，如
-
+> 注 1：如遇错误提示 `sh: create-element: command not found` 可先执行下述命令
 ```bash
-$ npm init @alilc/element your-element-name --registry=https://registry.npmmirror.com
+npm install -g @alilc/create-element
+```
+
+> 注 2：觉得安装速度比较慢的同学，可以设置 npm 国内镜像，如
+```bash
+npm init @alilc/element your-element-name --registry=https://registry.npmmirror.com
 ```
 
 选择对应的元素类型，并填写对应的问题，即可完成创建。
 
-![image.png](https://img.alicdn.com/imgextra/i3/O1CN01SNaXUg1g4LurKuBHs_!!6000000004088-2-tps-688-148.png)
+![image.png](https://img.alicdn.com/imgextra/i3/O1CN01LAaw2R1veHDYUzGB1_!!6000000006197-2-tps-676-142.png)
 
 ### 脚手架本地环境调试
 
@@ -43,7 +46,7 @@ npm start
 ### 脚手架构建
 
 ```bash
-$ npm run build
+npm run build
 ```
 
 ### 脚手架发布
@@ -51,19 +54,14 @@ $ npm run build
 修改版本号后，执行如下指令即可：
 
 ```bash
-$ npm publish
+npm publish
 ```
 
-# 🔥🔥🔥 调试物料/插件/设置器
+## 🔥🔥🔥 调试物料/插件/设置器
 
 > 📢📢📢 低代码生态脚手架提供的调试利器，在启动 setter/插件/物料 项目后，直接在已有的低代码平台就可以调试，不需要 npm link / 手改 npm main 入口等传统方式，轻松上手，强烈推荐使用！！
 
-
-注：若控制台出现如下错误，直接访问一次该 url 即可~
-
-![image.png](https://img.alicdn.com/imgextra/i1/O1CN01cvKmeK1saCqpIxbLW_!!6000000005782-2-tps-1418-226.png)
-
-## 组件/插件/Setter 侧
+### 组件/插件/Setter 侧
 
 1. 插件/setter 在原有 alt 的配置中添加相关的调试配置
   ```json
@@ -120,7 +118,7 @@ $ npm publish
   https://lowcode-engine.cn/demo/demo-general/index.html?debug
   ```
 
-## 项目侧的准备
+### 项目侧的准备
 
 > 如果你的低代码项目 fork 自官方 demo，那么项目侧的准备已经就绪，不用再看以下内容~
 
@@ -175,7 +173,12 @@ $ npm publish
   }
   ```
 
-# Meta 信息
+注：若控制台出现如下错误，直接访问一次该 url 即可~
+
+![image.png](https://img.alicdn.com/imgextra/i1/O1CN01cvKmeK1saCqpIxbLW_!!6000000005782-2-tps-1418-226.png)
+
+
+## Meta 信息
 meta 信息是放在生态元素 package.json 中的一小段 json，用户可以通过 meta 了解到这个元素的一些基本信息，如元素类型，一些入口信息等。
 
 ```typescript
