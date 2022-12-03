@@ -9,31 +9,31 @@ import {
   isNodeSchema as innerIsNodeSchema,
   NodeSchema,
   TransitionType,
+  TransformStage as InnerTransitionStage,
 } from '@alilc/lowcode-types';
 import {
-  SettingField,
-  isSettingField,
+  SettingField as InnerSettingField,
+  isSettingField as innerIsSettingField,
   Designer,
-  TransformStage,
-  LiveEditing,
-  isDragNodeDataObject,
-  isDragNodeObject,
-  isDragAnyObject,
-  DragObjectType,
-  isNode,
-  isShaken,
-  contains,
-  LocationDetailType,
-  isLocationChildrenDetail,
-  ScrollTarget,
+  LiveEditing as InnerLiveEditing,
+  isDragNodeDataObject as innerIsDragNodeDataObject,
+  isDragNodeObject as innerIsDragNodeObject,
+  isDragAnyObject as innerIsDragAnyObject,
+  DragObjectType as InnerDragObjectType,
+  isNode as innerIsNode,
+  isShaken as innerIsShaken,
+  contains as innerContains,
+  LocationDetailType as InnerLocationDetailType,
+  isLocationChildrenDetail as innerIsLocationChildrenDetail,
+  ScrollTarget as InnerScrollTarget,
   getConvertedExtraKey as innerGetConvertedExtraKey,
   getOriginalExtraKey as innerGetOriginalExtraKey,
 } from '@alilc/lowcode-designer';
 import {
   Skeleton as InnerSkeleton,
-  createSettingFieldView,
-  PopupContext,
-  PopupPipe,
+  createSettingFieldView as innerCreateSettingFieldView,
+  PopupContext as InnerPopupContext,
+  PopupPipe as InnerPopupPipe,
   Workbench as InnerWorkbench,
 } from '@alilc/lowcode-editor-skeleton';
 import Dragon from './dragon';
@@ -41,60 +41,145 @@ import {
   Editor,
   Title as InnerTitle,
   Tip as InnerTip,
-  shallowIntl,
+  shallowIntl as innerShallowIntl,
   createIntl as innerCreateIntl,
-  intl,
-  createSetterContent,
-  obx,
-  observable,
-  makeObservable,
-  untracked,
-  computed,
-  observer,
-  globalLocale,
+  intl as innerIntl,
+  createSetterContent as innerCreateSetterContent,
+  globalLocale as innerGlobalLocale,
+  obx as innerObx,
+  observable as innerObservable,
+  makeObservable as innerMakeObservable,
+  untracked as innerUntracked,
+  computed as innerComputed,
+  observer as innerObserver,
 } from '@alilc/lowcode-editor-core';
 import { ReactNode } from 'react';
 
 
-const getDesignerCabin = (editor: Editor) => {
-  const designer = editor.get('designer') as Designer;
+class DesignerCabin {
+  private readonly [editorSymbol]: Editor;
+  /**
+   * @deprecated
+   */
+  readonly [designerCabinSymbol]: any;
 
-  return {
-    SettingField,
-    isSettingField,
-    dragon: Dragon.create(designer.dragon),
-    TransformStage,
-    LiveEditing,
-    DragObjectType,
-    isDragNodeDataObject,
-    isNode,
-    [designerCabinSymbol]: {
-      isDragNodeObject,
-      isDragAnyObject,
-      isShaken,
-      contains,
-      LocationDetailType,
-      isLocationChildrenDetail,
-      ScrollTarget,
-      isSettingField,
-      TransformStage,
-      SettingField,
-      LiveEditing,
-      DragObjectType,
-      isDragNodeDataObject,
-      isNode,
-    },
-  };
-};
+  constructor(editor: Editor) {
+    this[editorSymbol] = editor;
+    this[designerCabinSymbol] = {
+      isDragNodeObject: innerIsDragNodeObject,
+      isDragAnyObject: innerIsDragAnyObject,
+      isShaken: innerIsShaken,
+      contains: innerContains,
+      LocationDetailType: InnerLocationDetailType,
+      isLocationChildrenDetail: innerIsLocationChildrenDetail,
+      ScrollTarget: InnerScrollTarget,
+      isSettingField: innerIsSettingField,
+      TransformStage: InnerTransitionStage,
+      SettingField: InnerSettingField,
+      LiveEditing: InnerLiveEditing,
+      DragObjectType: InnerDragObjectType,
+      isDragNodeDataObject: innerIsDragNodeDataObject,
+      isNode: innerIsNode,
+    };
+  }
 
-const getSkeletonCabin = (skeleton: InnerSkeleton) => {
-  return {
-    createSettingFieldView,
-    PopupContext,
-    PopupPipe,
-    Workbench: (props: any) => <InnerWorkbench {...props} skeleton={skeleton} />, // hijack skeleton
-  };
-};
+  /**
+   * 是否是 SettingField 实例
+   *
+   * @param {*} obj
+   * @returns {obj is SettingField}
+   * @memberof DesignerCabin
+   */
+  isSettingField(obj: any): obj is InnerSettingField {
+    return innerIsSettingField(obj);
+  }
+
+  /**
+   * 转换类型枚举对象，包含 init / upgrade / render 等类型
+   * [参考](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/transform-stage.ts)
+   * @deprecated use { TransformStage } from '@alilc/lowcode-types' instead
+   */
+  get TransformStage() {
+    return InnerTransitionStage;
+  }
+
+  /**
+   * @deprecated
+   */
+  get SettingField() {
+    return InnerSettingField;
+  }
+
+  /**
+   * @deprecated
+   */
+  get dragon() {
+    const designer = this[editorSymbol].get('designer') as Designer;
+    return Dragon.create(designer.dragon);
+  }
+
+  /**
+   * @deprecated
+   */
+  get LiveEditing() {
+    return InnerLiveEditing;
+  }
+
+  /**
+   * @deprecated
+   */
+  get DragObjectType() {
+    return InnerDragObjectType;
+  }
+
+  /**
+   * @deprecated
+   */
+  isDragNodeDataObject(obj: any): boolean {
+    return innerIsDragNodeDataObject(obj);
+  }
+
+  /**
+   * @deprecated
+   */
+  isNode(node: any): boolean {
+    return innerIsNode(node);
+  }
+}
+
+class SkeletonCabin {
+  private readonly [skeletonSymbol]: InnerSkeleton;
+
+  constructor(skeleton: InnerSkeleton) {
+    this[skeletonSymbol] = skeleton;
+  }
+
+  get Workbench(): any {
+    const innerSkeleton = this[skeletonSymbol];
+    return (props: any) => <InnerWorkbench {...props} skeleton={innerSkeleton} />;
+  }
+
+  /**
+   * @deprecated
+   */
+  createSettingFieldView(item: any, field: any) {
+    return innerCreateSettingFieldView(item, field);
+  }
+
+  /**
+   * @deprecated
+   */
+  get PopupContext(): any {
+    return InnerPopupContext;
+  }
+
+  /**
+   * @deprecated
+   */
+   get PopupPipe(): any {
+    return InnerPopupPipe;
+  }
+}
 
 class Utils {
   isNodeSchema(data: any): data is NodeSchema {
@@ -135,19 +220,110 @@ class Utils {
   }
 }
 
+class EditorCabin {
+  /**
+   * @deprecated
+   */
+  get Title() {
+    return InnerTitle;
+  }
+
+  /**
+   * @deprecated
+   */
+  get Tip() {
+    return InnerTip;
+  }
+
+  /**
+   * @deprecated
+   */
+  shallowIntl(data: any): any {
+    return innerShallowIntl(data);
+  }
+
+  /**
+   * @deprecated use common.utils.createIntl instead
+   */
+  createIntl(instance: any): any {
+    return innerCreateIntl(instance);
+  }
+
+  /**
+   * @deprecated
+   */
+  intl(data: any, params?: object): any {
+    return innerIntl(data, params);
+  }
+
+  /**
+   * @deprecated
+   */
+  createSetterContent(setter: any, props: Record<string, any>): ReactNode {
+    return innerCreateSetterContent(setter, props);
+  }
+
+  /**
+   * @deprecated
+   */
+  get globalLocale() {
+    return innerGlobalLocale;
+  }
+
+  /**
+   * @deprecated
+   */
+  get obx() {
+    return innerObx;
+  }
+
+  /**
+   * @deprecated
+   */
+  get observable() {
+    return innerObservable;
+  }
+
+  /**
+   * @deprecated
+   */
+  makeObservable(target: any, annotations: any, options: any) {
+    return innerMakeObservable(target, annotations, options);
+  }
+
+  /**
+   * @deprecated
+   */
+  untracked(action: any) {
+    return innerUntracked(action);
+  }
+
+  /**
+   * @deprecated
+   */
+  get computed() {
+    return innerComputed;
+  }
+
+  /**
+   * @deprecated
+   */
+  observer(component: any) {
+    return innerObserver(component);
+  }
+}
+
+
 export default class Common {
-  private readonly [editorSymbol]: Editor;
-  private readonly [skeletonSymbol]: InnerSkeleton;
   private readonly __designerCabin: any;
   private readonly __skeletonCabin: any;
   private readonly __editorCabin: any;
   private readonly __utils: Utils;
 
   constructor(editor: Editor, skeleton: InnerSkeleton) {
-    this[editorSymbol] = editor;
-    this[skeletonSymbol] = skeleton;
-    this.__designerCabin = getDesignerCabin(this[editorSymbol]);
-    this.__skeletonCabin = getSkeletonCabin(this[skeletonSymbol]);
+    this.__designerCabin = new DesignerCabin(editor);
+    this.__skeletonCabin = new SkeletonCabin(skeleton);
+    this.__editorCabin = new EditorCabin();
     this.__utils = new Utils();
   }
 
@@ -155,22 +331,13 @@ export default class Common {
     return this.__utils;
   }
 
+  /**
+   * 历史原因导致此处设计不合理，慎用。
+   * this load of crap will be removed in some future versions, don`t use it.
+   * @deprecated
+   */
   get editorCabin(): any {
-    return {
-      Title: InnerTitle,
-      Tip: InnerTip,
-      shallowIntl,
-      createIntl: innerCreateIntl,
-      intl,
-      createSetterContent,
-      obx,
-      observable,
-      makeObservable,
-      untracked,
-      computed,
-      observer,
-      globalLocale,
-    };
+    return this.__editorCabin;
   }
 
   get designerCabin(): any {
@@ -179,5 +346,16 @@ export default class Common {
 
   get skeletonCabin(): any {
     return this.__skeletonCabin;
+  }
+
+  /**
+   * 历史原因导致此处设计不合理，慎用。
+   * this load of crap will be removed in some future versions, don`t use it.
+   * @deprecated use { TransformStage } from '@alilc/lowcode-types' instead
+   */
+  get objects(): any {
+    return {
+      TransformStage: InnerTransitionStage,
+    };
   }
 }
