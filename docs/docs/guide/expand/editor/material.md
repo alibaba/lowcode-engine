@@ -182,7 +182,15 @@ npm run lowcode:build
   display: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry' // 常用的是 inline(默认), block、entry
 }
 ```
-发布组件
+
+#### 编辑态视图
+用户可以在 lowcode/<component-name\> 目录下新增 view.tsx 来增加编辑态视图。编辑态视图用于在编辑态时展示与真实预览不一样的视图。
+view.tsx 输出的也是一个 React 组件。
+
+注意：如果是单组件，而非组件库模式的话，view.tsx 应置于 lowcode 而非 lowcode/<component-name\> 目录下
+
+
+#### 发布组件
 ```
 # 在组件根目录下，执行
 $ npm publish

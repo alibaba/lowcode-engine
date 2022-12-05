@@ -7,8 +7,8 @@ sidebar_position: 7
 在 fork 低代码编辑器 demo 项目后，您可以直接在项目中任意扩展低代码编辑器。如果您想要将自己的组件/插件/设置器封装成一个独立的 npm 包并提供给社区，您可以使用我们的低代码脚手架建立低代码扩展。
 
 > Windows 开发者请在 WSL 环境下使用开发工具
-> WSL 中文 doc：[https://docs.microsoft.com/zh-cn/windows/wsl/install](https://docs.microsoft.com/zh-cn/windows/wsl/install)
-中文教程：[https://blog.csdn.net/weixin_45027467/article/details/106862520](https://blog.csdn.net/weixin_45027467/article/details/106862520)
+> * WSL 中文 doc：[https://docs.microsoft.com/zh-cn/windows/wsl/install](https://docs.microsoft.com/zh-cn/windows/wsl/install)
+> * 中文教程：[https://blog.csdn.net/weixin_45027467/article/details/106862520](https://blog.csdn.net/weixin_45027467/article/details/106862520)
 
 
 ## 脚手架功能
@@ -43,13 +43,9 @@ $ npm run build
 $ npm publish
 ```
 
-# 🔥🔥🔥 调试物料/插件/设置器
+# 🔥🔥🔥 在低代码项目中调试物料/插件/设置器
 
-> 📢📢 📢  低代码生态脚手架提供的调试利器，在启动 setter/插件/物料 项目后，直接在已有的低代码平台就可以调试，不需要 npm link / 手改 npm main 入口等传统方式，轻松上手，强烈推荐使用！！
-
-
-注：若控制台出现如下错误，直接访问一次该 url 即可~
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/2622706/1652408638502-0509191d-1cd6-435c-9196-5c7abac7cc4d.png#averageHue=%23c8e1be&clientId=u0b1196f0-7f06-4&crop=0&crop=0&crop=1&crop=1&errorMessage=unknown%20error&from=paste&height=113&id=tjF5F&margin=%5Bobject%20Object%5D&name=image.png&originHeight=226&originWidth=1418&originalType=binary&ratio=1&rotation=0&showTitle=false&size=180782&status=error&style=none&taskId=u57eb2bdc-6dfd-4332-b176-c453947be2d&title=&width=709)
+📢📢📢  低代码生态脚手架提供的调试利器，在启动 setter/插件/物料 项目后，直接在已有的低代码平台就可以调试，不需要 npm link / 手改 npm main 入口等传统方式，轻松上手，强烈推荐使用！！
 
 ## 组件/插件/Setter 侧
 
@@ -116,7 +112,7 @@ npm i @alilc/lowcode-plugin-inject  --save-dev
 ```
 
 2. 在引擎初始化侧引入插件
-```json
+```js
 import Inject, { injectAssets } from '@alilc/lowcode-plugin-inject';
 
 export default async () => {
