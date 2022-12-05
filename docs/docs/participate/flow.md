@@ -91,6 +91,7 @@ sidebar_position: 2
 2. 拉 release 分支，此处以 1.0.1 版本做示例
    ```bash
    git checkout -b release/1.0.1-beta
+   git push --set-upstream origin release/1.0.1-beta
    ```
 3. build
    ```bash

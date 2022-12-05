@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { createElement } from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { globalContext, Editor, engineConfig, EngineOptions } from '@alilc/lowcode-editor-core';
@@ -5,6 +6,8 @@ import {
   Designer,
   LowCodePluginManager,
   ILowCodePluginContext,
+  ILowCodePluginContextPrivate,
+  ILowCodePluginContextApiAssembler,
   PluginPreference,
 } from '@alilc/lowcode-designer';
 import {
@@ -46,10 +49,6 @@ editor.set('skeleton' as any, innerSkeleton);
 
 const designer = new Designer({ editor });
 editor.set('designer' as any, designer);
-
-const plugins = new LowCodePluginManager(editor).toProxy();
-editor.set('plugins' as any, plugins);
-
 const { project: innerProject } = designer;
 
 const hotkey = new Hotkey();
@@ -61,6 +60,21 @@ const config = engineConfig;
 const event = new Event(editor, { prefix: 'common' });
 const logger = getLogger({ level: 'warn', bizName: 'common' });
 const common = new Common(editor, innerSkeleton);
+
+const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
+  assembleApis: (context: ILowCodePluginContextPrivate) => {
+    context.hotkey = hotkey;
+    context.project = project;
+    context.skeleton = skeleton;
+    context.setters = setters;
+    context.material = material;
+    context.event = event;
+    context.config = config;
+    context.common = common;
+  },
+};
+const plugins = new LowCodePluginManager(pluginContextApiAssembler).toProxy();
+editor.set('plugins' as any, plugins);
 
 export {
   skeleton,

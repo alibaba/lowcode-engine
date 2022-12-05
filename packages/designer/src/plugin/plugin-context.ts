@@ -1,7 +1,6 @@
 /* eslint-disable no-multi-assign */
-import { Editor, EngineConfig, engineConfig } from '@alilc/lowcode-editor-core';
-import { Designer, ILowCodePluginManager } from '@alilc/lowcode-designer';
-import { Skeleton as InnerSkeleton } from '@alilc/lowcode-editor-skeleton';
+import { EngineConfig, engineConfig } from '@alilc/lowcode-editor-core';
+import { ILowCodePluginManager } from '@alilc/lowcode-designer';
 import {
   Hotkey,
   Project,
@@ -9,9 +8,7 @@ import {
   Setters,
   Material,
   Event,
-  editorSymbol,
-  designerSymbol,
-  skeletonSymbol,
+  Common,
 } from '@alilc/lowcode-shell';
 import { getLogger, Logger } from '@alilc/lowcode-utils';
 import {
@@ -20,45 +17,40 @@ import {
   ILowCodePluginPreferenceDeclaration,
   PreferenceValueType,
   IPluginPreferenceMananger,
+  ILowCodePluginContextApiAssembler,
+  ILowCodePluginContextPrivate,
 } from './plugin-types';
 import { isValidPreferenceKey } from './plugin-utils';
 
-export default class PluginContext implements ILowCodePluginContext {
-  private readonly [editorSymbol]: Editor;
-  private readonly [designerSymbol]: Designer;
-  private readonly [skeletonSymbol]: InnerSkeleton;
+
+export default class PluginContext implements ILowCodePluginContext, ILowCodePluginContextPrivate {
   hotkey: Hotkey;
   project: Project;
   skeleton: Skeleton;
-  logger: Logger;
   setters: Setters;
   material: Material;
-  config: EngineConfig;
   event: Event;
+  config: EngineConfig;
+  common: Common;
+  logger: Logger;
   plugins: ILowCodePluginManager;
   preference: IPluginPreferenceMananger;
 
-  constructor(plugins: ILowCodePluginManager, options: IPluginContextOptions) {
-    const editor = this[editorSymbol] = plugins.editor;
-    const designer = this[designerSymbol] = editor.get('designer')!;
-    const skeleton = this[skeletonSymbol] = editor.get('skeleton')!;
-
-    const { pluginName = 'anonymous' } = options;
-    const project = designer?.project;
-    this.hotkey = new Hotkey();
-    this.project = new Project(project);
-    this.skeleton = new Skeleton(skeleton);
-    this.setters = new Setters();
-    this.material = new Material(editor);
-    this.config = engineConfig;
+  constructor(
+      plugins: ILowCodePluginManager,
+      options: IPluginContextOptions,
+      contextApiAssembler: ILowCodePluginContextApiAssembler,
+    ) {
     this.plugins = plugins;
-    this.event = new Event(editor, { prefix: 'common' });
+    const { pluginName = 'anonymous' } = options;
     this.logger = getLogger({ level: 'warn', bizName: `designer:plugin:${pluginName}` });
 
     const enhancePluginContextHook = engineConfig.get('enhancePluginContextHook');
     if (enhancePluginContextHook) {
       enhancePluginContextHook(this);
     }
+
+    contextApiAssembler.assembleApis(this);
   }
 
   setPreference(
