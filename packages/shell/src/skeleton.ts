@@ -1,3 +1,4 @@
+import { globalContext } from '@alilc/lowcode-editor-core';
 import {
   Skeleton as InnerSkeleton,
   IWidgetBaseConfig,
@@ -6,11 +7,25 @@ import {
 } from '@alilc/lowcode-editor-skeleton';
 import { skeletonSymbol } from './symbols';
 
-export default class Skeleton {
-  private readonly [skeletonSymbol]: InnerSkeleton;
+const innerSkeletonSymbol = Symbol('skeleton');
 
-  constructor(skeleton: InnerSkeleton) {
-    this[skeletonSymbol] = skeleton;
+export default class Skeleton {
+  private readonly [innerSkeletonSymbol]: InnerSkeleton;
+
+  get [skeletonSymbol]() {
+    if (this.workspaceMode) {
+      return this[innerSkeletonSymbol];
+    }
+    const workSpace = globalContext.get('workSpace');
+    if (workSpace.isActive) {
+      return workSpace.window.innerSkeleton;
+    }
+
+    return this[innerSkeletonSymbol];
+  }
+
+  constructor(skeleton: InnerSkeleton, readonly workspaceMode: boolean = false) {
+    this[innerSkeletonSymbol] = skeleton;
   }
 
   /**

@@ -21,7 +21,7 @@ export class EditorView extends Component<any, any> {
   render() {
     const { active } = this.props;
     const editorView = this.props.editorView;
-    const skeleton = editorView.skeleton;
+    const skeleton = editorView.innerSkeleton;
     if (!editorView.isInit) {
       return null;
     }

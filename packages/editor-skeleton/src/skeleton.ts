@@ -59,7 +59,7 @@ export class Skeleton {
 
   readonly stages: Area<StageConfig, Stage>;
 
-  constructor(readonly editor: Editor) {
+  constructor(readonly editor: Editor, readonly name: string = 'unknown') {
     makeObservable(this);
     this.leftArea = new Area(
       this,

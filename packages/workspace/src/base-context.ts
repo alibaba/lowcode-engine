@@ -34,6 +34,7 @@ export class BasicContext {
   designer;
   registerInnerPlugins: any;
   innerSetters: any;
+  innerSkeleton: any;
 
   constructor(workSpace: WorkSpace, name: string, public editorWindow?: EditorWindow) {
     const editor = new Editor(name, true);
@@ -46,7 +47,7 @@ export class BasicContext {
     // if (editorWindow) {
     // }
 
-    const innerSkeleton = new InnerSkeleton(editor);
+    const innerSkeleton = new InnerSkeleton(editor, name);
     editor.set('skeleton' as any, innerSkeleton);
 
     const designer: Designer = new Designer({
@@ -62,16 +63,18 @@ export class BasicContext {
     const hotkey = new Hotkey(name);
     const innerSetters = new InnerSetters(name);
     const setters = new Setters(innerSetters, true);
-    const material = new Material(editor, true);
+    const material = new Material(editor, true, name);
     const project = new Project(innerProject, true);
     const config = engineConfig;
     const event = new Event(editor, { prefix: 'common' });
     const logger = getLogger({ level: 'warn', bizName: 'common' });
+    const skeleton = new Skeleton(innerSkeleton, true);
     editor.set('setters', setters);
     editor.set('project', project);
     editor.set('material', material);
     this.innerSetters = innerSetters;
-    this.skeleton = innerSkeleton;
+    this.innerSkeleton = innerSkeleton;
+    this.skeleton = skeleton;
     this.plugins = plugins;
     this.innerProject = innerProject;
     this.project = project;

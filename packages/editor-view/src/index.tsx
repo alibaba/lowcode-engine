@@ -20,7 +20,6 @@ export class EditorView extends Component<any, any> {
 
   render() {
     const innerSkeleton = this.ctx.skeleton[skeletonSymbol];
-    // debugger;
     return (
       <Workbench
         skeleton={innerSkeleton}

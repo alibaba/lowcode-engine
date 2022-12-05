@@ -17,7 +17,7 @@ export class EditorWindow {
 
   initViewTypes = async () => {
     const editorViews = this.resource.editorViews;
-    for (let i = 0; i < editorViews.length; i++) {
+    for (let i = editorViews.length - 1; i >= 0; i--) {
       const name = editorViews[i].name;
       await this.initViewType(name);
       if (!this.editorView) {
@@ -28,7 +28,7 @@ export class EditorWindow {
 
   execViewTypesInit = async () => {
     const editorViews = this.resource.editorViews;
-    for (let i = 0; i < editorViews.length; i++) {
+    for (let i = editorViews.length - 1; i >= 0; i--) {
       const name = editorViews[i].name;
       this.changeViewType(name);
       await this.editorViews.get(name)?.init();
@@ -66,6 +66,10 @@ export class EditorWindow {
 
   get innerProject() {
     return this.editorView?.innerProject;
+  }
+
+  get innerSkeleton() {
+    return this.editorView?.innerSkeleton;
   }
 
   get innerSetters() {
