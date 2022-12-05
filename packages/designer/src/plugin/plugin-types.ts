@@ -1,6 +1,6 @@
 import { CompositeObject, ComponentAction } from '@alilc/lowcode-types';
 import Logger from 'zen-logger';
-import { Hotkey, Skeleton, Project, Event, Material } from '@alilc/lowcode-shell';
+import { Hotkey, Skeleton, Project, Event, Material, Common } from '@alilc/lowcode-shell';
 import { EngineConfig } from '@alilc/lowcode-editor-core';
 import { MetadataTransducer } from '@alilc/lowcode-designer';
 import { Setters } from '../types';
@@ -96,17 +96,32 @@ export interface IPluginPreferenceMananger {
 }
 
 export interface ILowCodePluginContext {
-  skeleton: Skeleton;
-  hotkey: Hotkey;
+  get skeleton(): Skeleton;
+  get hotkey(): Hotkey;
+  get setters(): Setters;
+  get config(): EngineConfig;
+  get material(): Material;
+  get event(): Event;
+  get project(): Project;
+  get common(): Common;
   logger: Logger;
   plugins: ILowCodePluginManager;
-  setters: Setters;
-  config: EngineConfig;
-  material: Material;
-  event: Event;
-  project: Project;
   preference: IPluginPreferenceMananger;
 }
+export interface ILowCodePluginContextPrivate {
+  set hotkey(hotkey: Hotkey);
+  set project(project: Project);
+  set skeleton(skeleton: Skeleton);
+  set setters(setters: Setters);
+  set material(material: Material);
+  set event(event: Event);
+  set config(config: EngineConfig);
+  set common(common: Common);
+}
+export interface ILowCodePluginContextApiAssembler {
+  assembleApis: (context: ILowCodePluginContextPrivate) => void;
+}
+
 
 interface ILowCodePluginManagerPluginAccessor {
   [pluginName: string]: ILowCodePlugin | any;

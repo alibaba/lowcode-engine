@@ -1,4 +1,4 @@
-import { Editor, engineConfig } from '@alilc/lowcode-editor-core';
+import { engineConfig } from '@alilc/lowcode-editor-core';
 import { getLogger } from '@alilc/lowcode-utils';
 import {
   ILowCodePlugin,
@@ -12,9 +12,11 @@ import {
   PluginPreference,
   ILowCodePluginPreferenceDeclaration,
   isLowCodeRegisterOptions,
+  ILowCodePluginContextApiAssembler,
 } from './plugin-types';
 import { filterValidOptions } from './plugin-utils';
 import { LowCodePlugin } from './plugin';
+// eslint-disable-next-line import/no-named-as-default
 import LowCodePluginContext from './plugin-context';
 import { invariant } from '../utils';
 import sequencify from './sequencify';
@@ -28,14 +30,15 @@ export class LowCodePluginManager implements ILowCodePluginManager {
   private pluginsMap: Map<string, ILowCodePlugin> = new Map();
 
   private pluginPreference?: PluginPreference = new Map();
-  private editor: Editor;
 
-  constructor(editor: Editor) {
-    this.editor = editor;
+  contextApiAssembler: ILowCodePluginContextApiAssembler;
+
+  constructor(contextApiAssembler: ILowCodePluginContextApiAssembler) {
+    this.contextApiAssembler = contextApiAssembler;
   }
 
   private _getLowCodePluginContext(options: IPluginContextOptions) {
-    return new LowCodePluginContext(this, options);
+    return new LowCodePluginContext(this, options, this.contextApiAssembler);
   }
 
   isEngineVersionMatched(versionExp: string): boolean {
