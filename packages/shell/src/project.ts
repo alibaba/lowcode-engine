@@ -5,18 +5,32 @@ import {
   TransformStage,
 } from '@alilc/lowcode-designer';
 import { RootSchema, ProjectSchema, IEditor } from '@alilc/lowcode-types';
+import { globalContext } from '@alilc/lowcode-editor-core';
 import DocumentModel from './document-model';
 import SimulatorHost from './simulator-host';
 import { editorSymbol, projectSymbol, simulatorHostSymbol, simulatorRendererSymbol, documentSymbol } from './symbols';
 
+const innerProjectSymbol = Symbol('project');
+
 export default class Project {
-  private readonly [projectSymbol]: InnerProject;
   private readonly [editorSymbol]: IEditor;
+  private readonly [innerProjectSymbol]: InnerProject;
   private [simulatorHostSymbol]: BuiltinSimulatorHost;
   private [simulatorRendererSymbol]: any;
+  get [projectSymbol]() {
+    if (this.workspaceMode) {
+      return this[innerProjectSymbol];
+    }
+    const workSpace = globalContext.get('workSpace');
+    if (workSpace.isActive) {
+      return workSpace.window.innerProject;
+    }
 
-  constructor(project: InnerProject) {
-    this[projectSymbol] = project;
+    return this[innerProjectSymbol];
+  }
+
+  constructor(project: InnerProject, public workspaceMode: boolean = false) {
+    this[innerProjectSymbol] = project;
     this[editorSymbol] = project?.designer.editor;
   }
 

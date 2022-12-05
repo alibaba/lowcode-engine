@@ -192,10 +192,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.renderer?.enableAutoRepaintNode();
   }
 
-  constructor(project: Project) {
+  constructor(project: Project, designer: Designer) {
     makeObservable(this);
     this.project = project;
-    this.designer = project?.designer;
+    this.designer = designer;
     this.scroller = this.designer.createScroller(this.viewport);
     this.autoRender = !engineConfig.get('disableAutoRender', false);
     this.componentsConsumer = new ResourceConsumer<Asset | undefined>(() => this.componentsAsset);

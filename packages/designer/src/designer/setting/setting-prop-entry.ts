@@ -1,4 +1,4 @@
-import { obx, computed, makeObservable, runInAction } from '@alilc/lowcode-editor-core';
+import { obx, computed, makeObservable, runInAction, Setters } from '@alilc/lowcode-editor-core';
 import { GlobalEvent, IEditor, isJSExpression } from '@alilc/lowcode-types';
 import { uniqueId } from '@alilc/lowcode-utils';
 import { SettingPropEntry as ShellSettingPropEntry } from '@alilc/lowcode-shell';
@@ -19,6 +19,8 @@ export class SettingPropEntry implements SettingEntry {
   readonly isMultiple: boolean;
 
   readonly isSingle: boolean;
+
+  readonly setters: Setters;
 
   readonly nodes: Node[];
 
@@ -72,6 +74,7 @@ export class SettingPropEntry implements SettingEntry {
     // copy parent static properties
     this.editor = parent.editor;
     this.nodes = parent.nodes;
+    this.setters = parent.setters;
     this.componentMeta = parent.componentMeta;
     this.isSameComponent = parent.isSameComponent;
     this.isMultiple = parent.isMultiple;

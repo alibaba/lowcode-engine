@@ -1,5 +1,5 @@
 import { Component, MouseEvent, Fragment } from 'react';
-import { shallowIntl, createSetterContent, observer, obx, engineConfig, runInAction, globalContext } from '@alilc/lowcode-editor-core';
+import { shallowIntl, observer, obx, engineConfig, runInAction, globalContext } from '@alilc/lowcode-editor-core';
 import { createContent } from '@alilc/lowcode-utils';
 import { Skeleton } from '@alilc/lowcode-editor-skeleton';
 import { isSetterConfig, CustomView, isJSSlot } from '@alilc/lowcode-types';
@@ -9,6 +9,7 @@ import PopupService, { PopupPipe } from '../popup';
 import { SkeletonContext } from '../../context';
 // import { Icon } from '@alifd/next';
 import { intl } from '../../locale';
+import { Setters } from '@alilc/lowcode-shell';
 
 function isStandardComponent(componentMeta: ComponentMeta | null) {
   if (!componentMeta) return false;
@@ -39,6 +40,8 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
 
   stageName: string | undefined;
 
+  setters: Setters;
+
   constructor(props: SettingFieldViewProps) {
     super(props);
 
@@ -46,8 +49,10 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
     const { extraProps } = field;
     const { display } = extraProps;
 
-    const editor = globalContext.get('editor');
+    const workSpace = globalContext.get('workSpace');
+    const editor = workSpace.isActive ? workSpace.window.editor : globalContext.get('editor');
     const { stages } = editor.get('skeleton') as Skeleton;
+    this.setters = editor.get('setters');
     let stageName;
     if (display === 'entry') {
       runInAction(() => {
@@ -216,7 +221,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
         ...extraProps,
       },
       !stageName &&
-      createSetterContent(setterType, {
+      this.setters.createSetterContent(setterType, {
         ...shallowIntl(setterProps),
         forceInline: extraProps.forceInline,
         key: field.id,
@@ -269,7 +274,8 @@ class SettingGroupView extends Component<SettingGroupViewProps> {
     const { field } = this.props;
     const { extraProps } = field;
     const { display } = extraProps;
-    const editor = globalContext.get('editor');
+    const workSpace = globalContext.get('workSpace');
+    const editor = workSpace.isActive ? workSpace.window.editor : globalContext.get('editor');
     const { stages } = editor.get('skeleton') as Skeleton;
     // const items = field.items;
 

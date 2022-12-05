@@ -49,6 +49,9 @@ export declare interface Editor extends StrictEventEmitter<EventEmitter, GlobalE
 
 // eslint-disable-next-line no-redeclare
 export class Editor extends (EventEmitter as any) implements IEditor {
+  constructor(public name: string = 'unknown', public workspaceMode: boolean = false) {
+    super();
+  }
   /**
    * Ioc Container
    */
@@ -76,7 +79,7 @@ export class Editor extends (EventEmitter as any) implements IEditor {
     return this.context.has(keyOrType);
   }
 
-  set(key: KeyType, data: any): void | Promise<void>  {
+  set(key: KeyType, data: any): void | Promise<void> {
     if (key === 'assets') {
       return this.setAssets(data);
     }

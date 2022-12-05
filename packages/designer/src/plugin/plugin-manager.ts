@@ -15,7 +15,7 @@ import {
 } from './plugin-types';
 import { filterValidOptions } from './plugin-utils';
 import { LowCodePlugin } from './plugin';
-import LowCodePluginContext from './plugin-context';
+import { PluginContext } from './plugin-context';
 import { invariant } from '../utils';
 import sequencify from './sequencify';
 import semverSatisfies from 'semver/functions/satisfies';
@@ -34,8 +34,8 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     this.editor = editor;
   }
 
-  private _getLowCodePluginContext(options: IPluginContextOptions) {
-    return new LowCodePluginContext(this, options);
+  _getLowCodePluginContext(options: IPluginContextOptions) {
+    return new PluginContext(this, options);
   }
 
   isEngineVersionMatched(versionExp: string): boolean {
@@ -104,6 +104,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     const plugin = new LowCodePlugin(pluginName, this, config, meta);
     // support initialization of those plugins which registered after normal initialization by plugin-manager
     if (registerOptions?.autoInit) {
+      // debugger
       await plugin.init();
     }
     this.plugins.push(plugin);

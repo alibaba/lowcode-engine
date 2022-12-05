@@ -3,7 +3,6 @@ import {
   isFormEvent as innerIsFormEvent,
   compatibleLegaoSchema as innerCompatibleLegaoSchema,
   getNodeSchemaById as innerGetNodeSchemaById,
-  transactionManager,
 } from '@alilc/lowcode-utils';
 import {
   isNodeSchema as innerIsNodeSchema,
@@ -44,7 +43,7 @@ import {
   shallowIntl,
   createIntl as innerCreateIntl,
   intl,
-  createSetterContent,
+  // createSetterContent,
   obx,
   observable,
   makeObservable,
@@ -54,7 +53,7 @@ import {
   globalLocale,
 } from '@alilc/lowcode-editor-core';
 import { ReactNode } from 'react';
-
+import { transactionManager } from 'utils/src/transaction-manager';
 
 const getDesignerCabin = (editor: Editor) => {
   const designer = editor.get('designer') as Designer;
@@ -97,6 +96,12 @@ const getSkeletonCabin = (skeleton: InnerSkeleton) => {
 };
 
 class Utils {
+  readonly [editorSymbol]: Editor;
+
+  constructor(editor: Editor) {
+    this[editorSymbol] = editor;
+  }
+
   isNodeSchema(data: any): data is NodeSchema {
     return innerIsNodeSchema(data);
   }
@@ -148,21 +153,26 @@ export default class Common {
     this[skeletonSymbol] = skeleton;
     this.__designerCabin = getDesignerCabin(this[editorSymbol]);
     this.__skeletonCabin = getSkeletonCabin(this[skeletonSymbol]);
-    this.__utils = new Utils();
+    this.__utils = new Utils(this[editorSymbol]);
   }
+
+  objects = {
+    TransformStage,
+  };
 
   get utils(): any {
     return this.__utils;
   }
 
   get editorCabin(): any {
+    const Setters = this[editorSymbol].get('setters');
     return {
       Title: InnerTitle,
       Tip: InnerTip,
       shallowIntl,
       createIntl: innerCreateIntl,
       intl,
-      createSetterContent,
+      createSetterContent: Setters.createSetterContent,
       obx,
       observable,
       makeObservable,

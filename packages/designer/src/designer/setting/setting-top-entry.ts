@@ -71,6 +71,8 @@ export class SettingTopEntry implements SettingEntry {
 
   readonly designer: Designer;
 
+  readonly setters: any;
+
   disposeFunctions: any[] = [];
 
   constructor(readonly editor: IEditor, readonly nodes: Node[]) {
@@ -80,6 +82,7 @@ export class SettingTopEntry implements SettingEntry {
     this.id = generateSessionId(nodes);
     this.first = nodes[0];
     this.designer = this.first.document.designer;
+    this.setters = editor.get('setters');
 
     // setups
     this.setupComponentMeta();

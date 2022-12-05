@@ -14,19 +14,25 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
   state = {
     shouldIgnoreRoot: false,
   };
-  private main = new SettingsMain(globalContext.get('editor'));
+  private main;
 
   @obx.ref private _activeKey?: any;
 
   constructor(props) {
     super(props);
     makeObservable(this);
+    const workSpace = globalContext.get('workSpace');
+    const editor = workSpace.isActive ? workSpace.window.editor : globalContext.get('editor');
+    this.main = new SettingsMain(editor);
   }
 
   componentDidMount() {
     this.setShouldIgnoreRoot();
 
-    globalContext.get('editor').on('designer.selection.change', () => {
+    const workSpace = globalContext.get('workSpace');
+    const editor = workSpace.isActive ? workSpace.window.editor : globalContext.get('editor');
+
+    editor.on('designer.selection.change', () => {
       if (!engineConfig.get('stayOnTheSameSettingTab', false)) {
         this._activeKey = null;
       }
@@ -65,7 +71,8 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
       );
     }
 
-    const editor = globalContext.get('editor');
+    const workSpace = globalContext.get('workSpace');
+    const editor = workSpace.isActive ? workSpace.window.editor : globalContext.get('editor');
     const designer = editor.get('designer');
     const current = designer?.currentSelection?.getNodes()?.[0];
     let node: Node | null = settings.first;
@@ -128,7 +135,8 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
 
   render() {
     const { settings } = this.main;
-    const editor = globalContext.get('editor');
+    const workSpace = globalContext.get('workSpace');
+    const editor = workSpace.isActive ? workSpace.window.editor : globalContext.get('editor');
     if (!settings) {
       // 未选中节点，提示选中 或者 显示根节点设置
       return (

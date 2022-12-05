@@ -1,4 +1,4 @@
-import { Editor } from '@alilc/lowcode-editor-core';
+import { Editor, globalContext } from '@alilc/lowcode-editor-core';
 import {
   Designer,
   registerMetadataTransducer,
@@ -14,13 +14,32 @@ import { ComponentAction, ComponentMetadata } from '@alilc/lowcode-types';
 import { editorSymbol, designerSymbol } from './symbols';
 import ComponentMeta from './component-meta';
 
-export default class Material {
-  private readonly [editorSymbol]: Editor;
-  private readonly [designerSymbol]: Designer;
+const innerEditorSymbol = Symbol('editor');
 
-  constructor(editor: Editor) {
-    this[editorSymbol] = editor;
-    this[designerSymbol] = editor.get('designer')!;
+export default class Material {
+  // private readonly [editorSymbol]: Editor;
+  private readonly [innerEditorSymbol]: Editor;
+  // private readonly [designerSymbol]: Designer;
+
+  get [editorSymbol]() {
+    if (this.workspaceMode) {
+      return this[innerEditorSymbol];
+    }
+    const workSpace = globalContext.get('workSpace');
+    if (workSpace.isActive) {
+      return workSpace.window.editor;
+    }
+
+    return this[innerEditorSymbol];
+  }
+
+  get [designerSymbol]() {
+    return this[editorSymbol].get('designer')!;
+  }
+
+  constructor(editor: Editor, public workspaceMode: boolean = false, public name: string = 'unknown') {
+    this[innerEditorSymbol] = editor;
+    // this[designerSymbol] = editor.get('designer')!;
   }
 
   /**

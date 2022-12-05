@@ -5,6 +5,13 @@ import { insertChildren, TransformStage } from '../document';
 import clipboard from './clipboard';
 
 export function isInLiveEditing() {
+  const workSpace = globalContext.get('workSpace');
+  if (workSpace.isActive) {
+    return Boolean(
+      workSpace.window.editor.get('designer')?.project?.simulator?.liveEditing?.editing,
+    );
+  }
+
   if (globalContext.has(Editor)) {
     return Boolean(
       globalContext.get(Editor).get('designer')?.project?.simulator?.liveEditing?.editing,

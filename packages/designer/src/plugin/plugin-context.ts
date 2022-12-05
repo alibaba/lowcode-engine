@@ -1,5 +1,5 @@
 /* eslint-disable no-multi-assign */
-import { Editor, EngineConfig, engineConfig } from '@alilc/lowcode-editor-core';
+import { Editor, EngineConfig, engineConfig, Setters as InnerSetters } from '@alilc/lowcode-editor-core';
 import { Designer, ILowCodePluginManager } from '@alilc/lowcode-designer';
 import { Skeleton as InnerSkeleton } from '@alilc/lowcode-editor-skeleton';
 import {
@@ -23,7 +23,7 @@ import {
 } from './plugin-types';
 import { isValidPreferenceKey } from './plugin-utils';
 
-export default class PluginContext implements ILowCodePluginContext {
+export class PluginContext implements ILowCodePluginContext {
   private readonly [editorSymbol]: Editor;
   private readonly [designerSymbol]: Designer;
   private readonly [skeletonSymbol]: InnerSkeleton;
@@ -42,14 +42,18 @@ export default class PluginContext implements ILowCodePluginContext {
     const editor = this[editorSymbol] = plugins.editor;
     const designer = this[designerSymbol] = editor.get('designer')!;
     const skeleton = this[skeletonSymbol] = editor.get('skeleton')!;
+    const setters = editor.get('setters')!;
+    const project = editor.get('project')!;
+    const material = editor.get('material')!;
 
     const { pluginName = 'anonymous' } = options;
-    const project = designer?.project;
-    this.hotkey = new Hotkey();
-    this.project = new Project(project);
+    // const project = designer?.project;
+    const innerSetters = new InnerSetters();
+    this.hotkey = new Hotkey(editor.name, editor.workspaceMode);
+    this.project = project;
     this.skeleton = new Skeleton(skeleton);
-    this.setters = new Setters();
-    this.material = new Material(editor);
+    this.setters = setters;
+    this.material = material;
     this.config = engineConfig;
     this.plugins = plugins;
     this.event = new Event(editor, { prefix: 'common' });

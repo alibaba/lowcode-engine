@@ -10,10 +10,12 @@ export class DesignerView extends Component<DesignerProps & {
   designer?: Designer;
 }> {
   readonly designer: Designer;
+  readonly name: string;
 
   constructor(props: any) {
     super(props);
     const { designer, ...designerProps } = props;
+    this.name = designer.name;
     if (designer) {
       this.designer = designer;
       designer.setProps(designerProps);

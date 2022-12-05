@@ -8,8 +8,10 @@ type EventOptions = {
   prefix: string;
 };
 
+const innerEditorSymbol = Symbol('editor');
+
 export default class Event {
-  private readonly [editorSymbol]: InnerEditor;
+  private readonly [innerEditorSymbol]: InnerEditor;
   private readonly options: EventOptions;
 
   // TODO:
@@ -18,8 +20,20 @@ export default class Event {
    */
   readonly names = [];
 
-  constructor(editor: InnerEditor, options: EventOptions) {
-    this[editorSymbol] = editor;
+  get [editorSymbol](): InnerEditor {
+    if (this.workspaceMode) {
+      return this[innerEditorSymbol];
+    }
+    const workSpace = globalContext.get('workSpace');
+    if (workSpace.isActive) {
+      return workSpace.window.editor;
+    }
+
+    return this[innerEditorSymbol];
+  }
+
+  constructor(editor: InnerEditor, options: EventOptions, public workspaceMode = false) {
+    this[innerEditorSymbol] = editor;
     this.options = options;
     if (!this.options.prefix) {
       logger.warn('prefix is required while initializing Event');

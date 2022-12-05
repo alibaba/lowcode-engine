@@ -131,7 +131,8 @@ function createAction(content: ReactNode | ComponentType<any> | ActionContentObj
         className="lc-borders-action"
         onClick={() => {
           action && action(node);
-          const editor = globalContext.get('editor');
+          const workSpace = globalContext.get('workSpace');
+          const editor = workSpace.isActive ? workSpace.window.editor : globalContext.get('editor');
           const npm = node?.componentMeta?.npm;
           const selected =
             [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||

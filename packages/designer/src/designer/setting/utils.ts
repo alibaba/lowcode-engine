@@ -1,7 +1,6 @@
 // all this file for polyfill vision logic
 import { isValidElement } from 'react';
 import { isSetterConfig, isDynamicSetter, FieldConfig, SetterConfig } from '@alilc/lowcode-types';
-import { getSetter } from '@alilc/lowcode-editor-core';
 import { SettingField } from './setting-field';
 
 function getHotterFromSetter(setter) {
@@ -63,7 +62,7 @@ export class Transducer {
       isDynamic = dynamicFlag !== false;
     }
     if (typeof setter === 'string') {
-      const { component, isDynamic: dynamicFlag } = getSetter(setter) || {};
+      const { component, isDynamic: dynamicFlag } = context.setters.getSetter(setter) || {};
       setter = component;
       // 如果在物料配置中声明了，在 registerSetter 没有声明，取物料配置中的声明
       isDynamic = dynamicFlag === undefined ? isDynamic : dynamicFlag !== false;

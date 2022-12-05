@@ -62,7 +62,8 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
 
     if (canClick && typeof node.select === 'function') {
       node.select();
-      const editor = globalContext.get(Editor);
+      const workSpace = globalContext.get('workSpace');
+      const editor = workSpace.isActive ? workSpace.window.editor : globalContext.get('editor');
       const npm = node?.componentMeta?.npm;
       const selected =
         [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||

@@ -22,6 +22,7 @@ export function createSimulator(
   const doc = iframe.contentDocument!;
 
   win.LCSimulatorHost = host;
+  win._ = window._;
 
   const styles: any = {};
   const scripts: any = {};

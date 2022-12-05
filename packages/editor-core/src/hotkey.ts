@@ -331,7 +331,8 @@ function getKeyInfo(combination: string, action?: string): KeyInfo {
  */
 function fireCallback(callback: HotkeyCallback, e: KeyboardEvent, combo?: string, sequence?: string): void {
   try {
-    const editor = globalContext.get(Editor);
+    const workSpace = globalContext.get('workSpace');
+    const editor = workSpace.isActive ? workSpace.window.editor : globalContext.get('editor');
     const designer = editor.get('designer');
     const node = designer?.currentSelection?.getNodes()?.[0];
     const npm = node?.componentMeta?.npm;

@@ -7,9 +7,15 @@ import './style.less';
 import { IEditor } from '@alilc/lowcode-types';
 import Filter from './filter';
 
+interface Props { config: any; editor: IEditor }
 @observer
-export class OutlinePane extends Component<{ config: any; editor: IEditor }> {
-  private main = new OutlineMain(globalContext.get('editor'), this.props.config.name || this.props.config.pluginKey);
+export class OutlinePane extends Component<any> {
+  private main;
+
+  constructor(props: Props) {
+    super(props);
+    this.main = new OutlineMain(this.props.engineEditor, this.props.config.name || this.props.config.pluginKey);
+  }
 
   componentWillUnmount() {
     this.main.purge();

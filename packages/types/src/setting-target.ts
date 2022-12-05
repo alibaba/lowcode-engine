@@ -21,6 +21,8 @@ export interface SettingTarget {
    */
   readonly editor: IEditor;
 
+  readonly setters: any;
+
   /**
    * 访问路径
    */

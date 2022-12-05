@@ -70,13 +70,16 @@ export class Designer {
     return this.currentDocument?.selection;
   }
 
+  name: string;
+
   constructor(props: DesignerProps) {
     makeObservable(this);
-    const { editor } = props;
+    const { editor, name } = props;
     this.editor = editor;
+    this.name = name;
     this.setProps(props);
 
-    this.project = new Project(this, props.defaultSchema);
+    this.project = new Project(this, props.defaultSchema, name);
 
     let startTime: any;
     let src = '';
@@ -400,7 +403,7 @@ export class Designer {
     }
 
     if (components) {
-      // 合并assets
+      // 合并 assets
       let assets = this.editor.get('assets');
       let newAssets = megreAssets(assets, incrementalAssets);
       // 对于 assets 存在需要二次网络下载的过程，必须 await 等待结束之后，再进行事件触发
@@ -433,6 +436,21 @@ export class Designer {
 
   @computed get simulatorProps(): object | ((project: Project) => object) {
     return this._simulatorProps || {};
+  }
+
+  /**
+   * 提供给模拟器的参数
+   */
+  @computed get projectSimulatorProps(): any {
+    return {
+      ...this.simulatorProps,
+      project: this.project,
+      designer: this,
+      onMount: (simulator: any) => {
+        this.project.mountSimulator(simulator);
+        this.editor.set('simulator', simulator);
+      },
+    };
   }
 
   @obx.ref private _suspensed = false;

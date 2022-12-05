@@ -277,6 +277,8 @@ export interface EngineOptions {
    * 配置指定节点为根组件
    */
   focusNodeSelector?: (rootNode: Node) => Node;
+
+  enableWorkspaceMode?: boolean;
 }
 
 const getStrictModeValue = (engineOptions: EngineOptions, defaultValue: boolean): boolean => {

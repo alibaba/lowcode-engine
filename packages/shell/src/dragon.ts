@@ -7,12 +7,27 @@ import {
 import { dragonSymbol } from './symbols';
 import LocateEvent from './locate-event';
 import DragObject from './drag-object';
+import { globalContext } from '@alilc/lowcode-editor-core';
+
+export const innerDragonSymbol = Symbol('innerDragonSymbol');
 
 export default class Dragon {
-  private readonly [dragonSymbol]: InnerDragon;
+  private readonly [innerDragonSymbol]: InnerDragon;
+
+  get [dragonSymbol](): any {
+    const workSpace = globalContext.get('workSpace');
+    let editor = globalContext.get('editor');
+
+    if (workSpace.isActive) {
+      editor = workSpace.window.editor;
+    }
+
+    const designer = editor.get('designer');
+    return designer.dragon;
+  }
 
   constructor(dragon: InnerDragon) {
-    this[dragonSymbol] = dragon;
+    this[innerDragonSymbol] = dragon;
   }
 
   static create(dragon: InnerDragon | null) {

@@ -113,7 +113,8 @@ export class History<T = NodeSchema> {
     }
     const cursor = this.session.cursor - 1;
     this.go(cursor);
-    const editor = globalContext.get(Editor);
+    const workSpace = globalContext.get('workSpace');
+    const editor = workSpace.isActive ? workSpace.window.editor : globalContext.get('editor');
     if (!editor) {
       return;
     }
@@ -126,7 +127,8 @@ export class History<T = NodeSchema> {
     }
     const cursor = this.session.cursor + 1;
     this.go(cursor);
-    const editor = globalContext.get(Editor);
+    const workSpace = globalContext.get('workSpace');
+    const editor = workSpace.isActive ? workSpace.window.editor : globalContext.get('editor');
     if (!editor) {
       return;
     }

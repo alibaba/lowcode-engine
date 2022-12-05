@@ -2,6 +2,9 @@ import { hotkey, HotkeyCallback } from '@alilc/lowcode-editor-core';
 import { Disposable } from '@alilc/lowcode-types';
 
 export default class Hotkey {
+  constructor(public name: string = 'unknown', public workspaceMode: boolean = false) {
+  }
+
   get callbacks() {
     return hotkey.callBacks;
   }
