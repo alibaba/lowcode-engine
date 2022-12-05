@@ -223,15 +223,16 @@ plugins.delete('builtinPluginRegistry');
 **类型定义**
 ```typescript
 export interface ILowCodePluginContext {
-  skeleton: Skeleton;                // 参考面板 API
-  hotkey: Hotkey;                    // 参考快捷键 API
-  logger: Logger;                    // 参考日志 API
-  plugins: ILowCodePluginManager;    // 参考插件 API
-  setters: Setters;                  // 参考设置器 API
-  config: EngineConfig;              // 参考配置 API
-  material: Material;                // 参考物料 API
-  event: Event;                      // 参考事件 API
-  project: Project;                  // 参考模型 API
+  skeleton: Skeleton;                       // 参考面板 API
+  hotkey: Hotkey;                           // 参考快捷键 API
+  setters: Setters;                         // 参考设置器 API
+  config: EngineConfig;                     // 参考配置 API
+  material: Material;                       // 参考物料 API
+  event: Event;                             // 参考事件 API
+  project: Project;                         // 参考模型 API
+  common: Common;                           // 参考模型 API
+  logger: Logger;                           // 参考日志 API
+  plugins: ILowCodePluginManager;           // 即本文档描述内容
   preference: IPluginPreferenceMananger;
 }
 ```
