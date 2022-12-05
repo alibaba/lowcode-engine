@@ -10,6 +10,7 @@ const jestConfig = {
   //   // '^.+\\.(js|jsx)$': 'babel-jest',
   // },
   // testMatch: ['**/node-children.test.ts'],
+  // testMatch: ['**/plugin-manager.test.ts'],
   // testMatch: ['**/history/history.test.ts'],
   // testMatch: ['**/host-view.test.tsx'],
   // testMatch: ['(/tests?/.*(test))\\.[jt]s$'],
