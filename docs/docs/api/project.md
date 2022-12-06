@@ -248,7 +248,7 @@ onChangeNodeVisible(fn: (node: Node, visible: boolean) => void)
 
 ### onChangeNodeChildren
 
-onChangeNodeChildren(fn: (info?: IOnChangeOptions) => void)
+onChangeNodeChildren(fn: (info?: IPublicOnChangeOptions) => void)
 
 当前 document 的节点 children 变更事件
 

@@ -75,11 +75,6 @@ export type PropsList = Array<{
 
 export type NodeData = NodeSchema | JSExpression | DOMText;
 export type NodeDataType = NodeData | NodeData[];
-
-export function isDOMText(data: any): data is DOMText {
-  return typeof data === 'string';
-}
-
 export type DOMText = string;
 
 /**
@@ -217,12 +212,4 @@ export interface ProjectSchema {
    * 当前应用元数据信息
    */
   meta?: Record<string, any>;
-}
-
-export function isNodeSchema(data: any): data is NodeSchema {
-  return data && data.componentName;
-}
-
-export function isProjectSchema(data: any): data is ProjectSchema {
-  return data && data.componentsTree;
 }

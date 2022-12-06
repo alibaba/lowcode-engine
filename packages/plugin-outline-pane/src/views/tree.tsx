@@ -1,9 +1,10 @@
 import { Component, MouseEvent as ReactMouseEvent } from 'react';
 import { observer, Editor, globalContext } from '@alilc/lowcode-editor-core';
-import { Node, DragObjectType, isShaken } from '@alilc/lowcode-designer';
+import { Node, isShaken } from '@alilc/lowcode-designer';
 import { isFormEvent, canClickNode } from '@alilc/lowcode-utils';
 import { Tree } from '../tree';
 import RootTreeNodeView from './root-tree-node';
+import { DragObjectType } from '@alilc/lowcode-types';
 
 function getTreeNodeIdByEvent(e: ReactMouseEvent, stop: Element): null | string {
   let target: Element | null = e.target as Element;

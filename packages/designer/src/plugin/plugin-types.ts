@@ -1,8 +1,7 @@
-import { CompositeObject, ComponentAction } from '@alilc/lowcode-types';
+import { CompositeObject, ComponentAction, MetadataTransducer } from '@alilc/lowcode-types';
 import Logger from 'zen-logger';
 import { Hotkey, Skeleton, Project, Event, Material, Common } from '@alilc/lowcode-shell';
 import { EngineConfig } from '@alilc/lowcode-editor-core';
-import { MetadataTransducer } from '@alilc/lowcode-designer';
 import { Setters } from '../types';
 
 export type PreferenceValueType = string | number | boolean;

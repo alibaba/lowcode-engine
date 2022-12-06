@@ -3,7 +3,7 @@ import { Editor, globalContext } from '@alilc/lowcode-editor-core';
 import { Project } from '../../src/project/project';
 import { DocumentModel } from '../../src/document/document-model';
 import { Designer } from '../../src/designer/designer';
-import { Dragon, DragObjectType } from '../../src/designer/dragon';
+import { Dragon } from '../../src/designer/dragon';
 import { TransformStage } from '../../src/document/node/transform-stage';
 import formSchema from '../fixtures/schema/form';
 import buttonMetadata from '../fixtures/component-metadata/button';
@@ -11,6 +11,7 @@ import pageMetadata from '../fixtures/component-metadata/page';
 import divMetadata from '../fixtures/component-metadata/div';
 import { delayObxTick } from '../utils';
 import { fireEvent } from '@testing-library/react';
+import { DragObjectType } from '@alilc/lowcode-types';
 
 const mockNode = {
   internalToShellNode() {

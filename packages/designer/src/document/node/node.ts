@@ -2,8 +2,6 @@ import { ReactElement } from 'react';
 import { EventEmitter } from 'events';
 import { obx, computed, autorun, makeObservable, runInAction, wrapWithEventSwitch, action } from '@alilc/lowcode-editor-core';
 import {
-  isDOMText,
-  isJSExpression,
   NodeSchema,
   PropsMap,
   PropsList,
@@ -17,7 +15,7 @@ import {
   GlobalEvent,
   ComponentAction,
 } from '@alilc/lowcode-types';
-import { compatStage } from '@alilc/lowcode-utils';
+import { compatStage, isDOMText, isJSExpression } from '@alilc/lowcode-utils';
 import { SettingTopEntry } from '@alilc/lowcode-designer';
 import { Node as ShellNode } from '@alilc/lowcode-shell';
 import { Props, getConvertedExtraKey } from './props/props';
@@ -94,7 +92,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   /**
    * 节点组件类型
-   * 特殊节点:
+   * 特殊节点：
    *  * Page 页面
    *  * Block 区块
    *  * Component 组件/元件

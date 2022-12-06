@@ -1,30 +1,14 @@
 // @ts-ignore
-import React from 'react';
-import set from 'lodash/set';
-import cloneDeep from 'lodash/cloneDeep';
 import '../fixtures/window';
 import { Editor, globalContext } from '@alilc/lowcode-editor-core';
 import {
-  AssetLevel,
-  Asset,
-  AssetList,
-  assetBundle,
-  assetItem,
   AssetType,
 } from '@alilc/lowcode-utils';
 import {
-  Dragon,
-  isDragNodeObject,
-  isDragNodeDataObject,
-  isDragAnyObject,
-  isLocateEvent,
   DragObjectType,
-  isShaken,
-  setShaken,
-} from '../../src/designer/dragon';
+} from '@alilc/lowcode-types';
 import { Project } from '../../src/project/project';
 import pageMetadata from '../fixtures/component-metadata/page';
-import { Node } from '../../src/document/node/node';
 import { Designer } from '../../src/designer/designer';
 import { DocumentModel } from '../../src/document/document-model';
 import formSchema from '../fixtures/schema/form';

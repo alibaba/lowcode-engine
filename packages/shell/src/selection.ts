@@ -5,15 +5,14 @@ import {
   Designer as InnerDesigner,
 } from '@alilc/lowcode-designer';
 import Node from './node';
-import { documentSymbol, selectionSymbol, designerSymbol, nodeSymbol } from './symbols';
+import { selectionSymbol, designerSymbol, nodeSymbol } from './symbols';
+import { IPublicModelSelection, IPublicModelNode } from '@alilc/lowcode-types';
 
-export default class Selection {
-  private readonly [documentSymbol]: InnerDocumentModel;
+export default class Selection implements IPublicModelSelection {
   private readonly [selectionSymbol]: InnerSelection;
   private readonly [designerSymbol]: InnerDesigner;
 
   constructor(document: InnerDocumentModel) {
-    this[documentSymbol] = document;
     this[selectionSymbol] = document.selection;
     this[designerSymbol] = document.designer;
   }
@@ -28,15 +27,16 @@ export default class Selection {
   /**
    * return selected Node instance
    */
-  get node(): Node {
-    return this.getNodes()[0];
+  get node(): IPublicModelNode | null {
+    const nodes = this.getNodes();
+    return nodes && nodes.length > 0 ? nodes[0] : null;
   }
 
   /**
    * 选中指定节点（覆盖方式）
    * @param id
    */
-  select(id: string) {
+  select(id: string): void {
     this[selectionSymbol].select(id);
   }
 
@@ -44,7 +44,7 @@ export default class Selection {
    * 批量选中指定节点们
    * @param ids
    */
-  selectAll(ids: string[]) {
+  selectAll(ids: string[]): void {
     this[selectionSymbol].selectAll(ids);
   }
 
@@ -52,14 +52,14 @@ export default class Selection {
    * 移除选中的指定节点
    * @param id
    */
-  remove(id: string) {
+  remove(id: string): void {
     this[selectionSymbol].remove(id);
   }
 
   /**
    * 清除所有选中节点
    */
-  clear() {
+  clear(): void {
     this[selectionSymbol].clear();
   }
 
@@ -68,7 +68,7 @@ export default class Selection {
    * @param id
    * @returns
    */
-  has(id: string) {
+  has(id: string): boolean {
     return this[selectionSymbol].has(id);
   }
 
@@ -76,7 +76,7 @@ export default class Selection {
    * 选中指定节点（增量方式）
    * @param id
    */
-  add(id: string) {
+  add(id: string): void {
     this[selectionSymbol].add(id);
   }
 
@@ -84,7 +84,7 @@ export default class Selection {
    * 获取选中的节点实例
    * @returns
    */
-  getNodes(): Node[] {
+  getNodes(): Array<IPublicModelNode | null> {
     return this[selectionSymbol].getNodes().map((node: InnerNode) => Node.create(node));
   }
 
@@ -95,7 +95,7 @@ export default class Selection {
    *  getTopNodes() will return [A, B], subA will be removed
    * @returns
    */
-  getTopNodes(): Node[] {
+  getTopNodes(): Array<IPublicModelNode | null> {
     return this[selectionSymbol].getTopNodes().map((node: InnerNode) => Node.create(node));
   }
 

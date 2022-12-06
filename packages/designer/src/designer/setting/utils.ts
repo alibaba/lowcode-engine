@@ -1,6 +1,7 @@
 // all this file for polyfill vision logic
 import { isValidElement } from 'react';
-import { isSetterConfig, isDynamicSetter, FieldConfig, SetterConfig } from '@alilc/lowcode-types';
+import { FieldConfig, SetterConfig } from '@alilc/lowcode-types';
+import { isSetterConfig, isDynamicSetter } from '@alilc/lowcode-utils';
 import { getSetter } from '@alilc/lowcode-editor-core';
 import { SettingField } from './setting-field';
 

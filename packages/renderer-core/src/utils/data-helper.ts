@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable max-len */
 /* eslint-disable object-curly-newline */
-import { isJSFunction } from '@alilc/lowcode-types';
+import { isJSFunction } from '@alilc/lowcode-utils';
 import { transformArrayToMap, transformStringToFunction } from './common';
 import { jsonp, request, get, post } from './request';
 import logger from './logger';

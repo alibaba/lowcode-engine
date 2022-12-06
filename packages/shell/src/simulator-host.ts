@@ -2,16 +2,17 @@ import {
   BuiltinSimulatorHost,
 } from '@alilc/lowcode-designer';
 import { simulatorHostSymbol, nodeSymbol } from './symbols';
+import { IPublicApiSimulatorHost, IPublicModelNode } from '@alilc/lowcode-types';
 import type Node from './node';
 
-export default class SimulatorHost {
+export default class SimulatorHost implements IPublicApiSimulatorHost {
   private readonly [simulatorHostSymbol]: BuiltinSimulatorHost;
 
   constructor(simulator: BuiltinSimulatorHost) {
     this[simulatorHostSymbol] = simulator;
   }
 
-  static create(host: BuiltinSimulatorHost) {
+  static create(host: BuiltinSimulatorHost): IPublicApiSimulatorHost | null {
     if (!host) return null;
     return new SimulatorHost(host);
   }
@@ -19,18 +20,18 @@ export default class SimulatorHost {
   /**
    * 获取 contentWindow
    */
-  get contentWindow() {
+  get contentWindow(): Window | undefined {
     return this[simulatorHostSymbol].contentWindow;
   }
 
   /**
    * 获取 contentDocument
    */
-  get contentDocument() {
+  get contentDocument(): Document | undefined {
     return this[simulatorHostSymbol].contentDocument;
   }
 
-  get renderer() {
+  get renderer(): any {
     return this[simulatorHostSymbol].renderer;
   }
 
@@ -39,7 +40,7 @@ export default class SimulatorHost {
    * @param key
    * @param value
    */
-  set(key: string, value: any) {
+  set(key: string, value: any): void {
     this[simulatorHostSymbol].set(key, value);
   }
 
@@ -48,7 +49,7 @@ export default class SimulatorHost {
    * @param key
    * @returns
    */
-  get(key: string) {
+  get(key: string): any {
     return this[simulatorHostSymbol].get(key);
   }
 
@@ -56,14 +57,14 @@ export default class SimulatorHost {
    * scroll to specific node
    * @param node
    */
-  scrollToNode(node: Node) {
-    this[simulatorHostSymbol].scrollToNode(node[nodeSymbol]);
+  scrollToNode(node: IPublicModelNode): void {
+    this[simulatorHostSymbol].scrollToNode((node as any)[nodeSymbol]);
   }
 
   /**
    * 刷新渲染画布
    */
-  rerender() {
+  rerender(): void {
     this[simulatorHostSymbol].rerender();
   }
 }
