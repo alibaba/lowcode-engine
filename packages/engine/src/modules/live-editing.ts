@@ -1,5 +1,5 @@
 import { EditingTarget, Node as DocNode, SaveHandler, LiveEditing } from '@alilc/lowcode-designer';
-import { isJSExpression } from '@alilc/lowcode-types';
+import { isJSExpression } from '@alilc/lowcode-utils';
 
 function getText(node: DocNode, prop: string) {
   const p = node.getProp(prop, false);
@@ -53,8 +53,7 @@ function equalText(v: any, innerText: string) {
 
 export const liveEditingSaveHander: SaveHandler = {
   condition: (prop) => {
-    // const v = prop.getValue();
-    return prop.type === 'expression'; // || isI18nData(v);
+    return prop.type === 'expression';
   },
   onSaveContent: (content, prop) => {
     const v = prop.getValue();

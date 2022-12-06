@@ -1,7 +1,7 @@
-import { hotkey, HotkeyCallback } from '@alilc/lowcode-editor-core';
-import { Disposable } from '@alilc/lowcode-types';
+import { hotkey } from '@alilc/lowcode-editor-core';
+import { Disposable, HotkeyCallback, IPublicApiHotkey } from '@alilc/lowcode-types';
 
-export default class Hotkey {
+export default class Hotkey implements IPublicApiHotkey {
   get callbacks() {
     return hotkey.callBacks;
   }

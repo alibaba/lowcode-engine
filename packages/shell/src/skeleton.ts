@@ -1,12 +1,11 @@
 import {
   Skeleton as InnerSkeleton,
-  IWidgetBaseConfig,
-  IWidgetConfigArea,
   SkeletonEvents,
 } from '@alilc/lowcode-editor-skeleton';
 import { skeletonSymbol } from './symbols';
+import { IPublicApiSkeleton, IWidgetBaseConfig, IWidgetConfigArea } from '@alilc/lowcode-types';
 
-export default class Skeleton {
+export default class Skeleton implements IPublicApiSkeleton {
   private readonly [skeletonSymbol]: InnerSkeleton;
 
   constructor(skeleton: InnerSkeleton) {
@@ -28,11 +27,13 @@ export default class Skeleton {
    * @param config
    * @returns
    */
-  remove(config: IWidgetBaseConfig) {
+  remove(config: IWidgetBaseConfig): number | undefined {
     const { area, name } = config;
     const skeleton = this[skeletonSymbol];
-    if (!normalizeArea(area)) return;
-    skeleton[normalizeArea(area)!].container.remove(name);
+    if (!normalizeArea(area)) {
+      return;
+    }
+    skeleton[normalizeArea(area)!].container?.remove(name);
   }
 
   /**

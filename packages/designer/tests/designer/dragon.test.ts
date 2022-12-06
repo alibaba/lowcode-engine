@@ -10,12 +10,12 @@ import {
   isDragNodeDataObject,
   isDragAnyObject,
   isLocateEvent,
-  DragObjectType,
   isShaken,
   setShaken,
   isInvalidPoint,
   isSameAs,
 } from '../../src/designer/dragon';
+import { DragObjectType } from '@alilc/lowcode-types';
 import formSchema from '../fixtures/schema/form';
 import { fireEvent } from '@testing-library/react';
 

@@ -3,7 +3,8 @@
 /* eslint-disable react/prop-types */
 import classnames from 'classnames';
 import { create as createDataSourceEngine } from '@alilc/lowcode-datasource-engine/interpret';
-import { isI18nData, isJSExpression, isJSFunction, NodeSchema, NodeData, JSONValue, CompositeValue } from '@alilc/lowcode-types';
+import { NodeSchema, NodeData, JSONValue, CompositeValue } from '@alilc/lowcode-types';
+import { isI18nData, isJSExpression, isJSFunction } from '@alilc/lowcode-utils';
 import adapter from '../adapter';
 import divFactory from '../components/Div';
 import visualDomFactory from '../components/VisualDom';
@@ -29,7 +30,7 @@ import {
   isVariable,
   isJSSlot,
 } from '../utils';
-import { IBaseRendererProps, INodeInfo, IBaseRenderComponent, IBaseRendererContext, IGeneralConstructor, IRendererAppHelper, DataSource } from '../types';
+import { IBaseRendererProps, INodeInfo, IBaseRenderComponent, IBaseRendererContext, IRendererAppHelper, DataSource } from '../types';
 import { compWrapper } from '../hoc';
 import { IComponentConstruct, leafWrapper } from '../hoc/leaf';
 import logger from '../utils/logger';
