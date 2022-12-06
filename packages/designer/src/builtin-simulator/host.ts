@@ -39,8 +39,6 @@ import {
   transactionManager,
 } from '@alilc/lowcode-utils';
 import {
-  DragObjectType,
-  DragNodeObject,
   isShaken,
   LocateEvent,
   isDragAnyObject,
@@ -62,6 +60,8 @@ import {
   ComponentSchema,
   Package,
   TransitionType,
+  DragObjectType,
+  DragNodeObject,
 } from '@alilc/lowcode-types';
 import { BuiltinSimulatorRenderer } from './renderer';
 import clipboard from '../designer/clipboard';

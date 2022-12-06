@@ -1,24 +1,28 @@
 import { ModalNodesManager as InnerModalNodesManager, Node as InnerNode } from '@alilc/lowcode-designer';
-import { NodeSchema, NodeData, TransformStage } from '@alilc/lowcode-types';
+import { IPublicModelModalNodesManager, IPublicModelNode } from '@alilc/lowcode-types';
 import Node from './node';
 import { nodeSymbol, modalNodesManagerSymbol } from './symbols';
 
-export default class ModalNodesManager {
+export default class ModalNodesManager implements IPublicModelModalNodesManager {
   private readonly [modalNodesManagerSymbol]: InnerModalNodesManager;
 
   constructor(modalNodesManager: InnerModalNodesManager) {
     this[modalNodesManagerSymbol] = modalNodesManager;
   }
 
-  static create(modalNodesManager: InnerModalNodesManager | null) {
-    if (!modalNodesManager) return null;
+  static create(
+    modalNodesManager: InnerModalNodesManager | null,
+  ): IPublicModelModalNodesManager | null {
+    if (!modalNodesManager) {
+      return null;
+    }
     return new ModalNodesManager(modalNodesManager);
   }
 
   /**
    * 设置模态节点，触发内部事件
    */
-  setNodes() {
+  setNodes(): void {
     this[modalNodesManagerSymbol].setNodes();
   }
 
@@ -26,7 +30,7 @@ export default class ModalNodesManager {
    * 获取模态节点（们）
    * @returns
    */
-  getModalNodes() {
+  getModalNodes(): any {
     return this[modalNodesManagerSymbol].getModalNodes().map((node) => Node.create(node));
   }
 
@@ -34,14 +38,14 @@ export default class ModalNodesManager {
    * 获取当前可见的模态节点
    * @returns
    */
-  getVisibleModalNode() {
+  getVisibleModalNode(): any {
     return Node.create(this[modalNodesManagerSymbol].getVisibleModalNode());
   }
 
   /**
    * 隐藏模态节点（们）
    */
-  hideModalNodes() {
+  hideModalNodes(): void {
     this[modalNodesManagerSymbol].hideModalNodes();
   }
 
@@ -49,7 +53,7 @@ export default class ModalNodesManager {
    * 设置指定节点为可见态
    * @param node Node
    */
-  setVisible(node: Node) {
+  setVisible(node: IPublicModelNode): void {
     this[modalNodesManagerSymbol].setVisible(node[nodeSymbol]);
   }
 
@@ -57,7 +61,7 @@ export default class ModalNodesManager {
    * 设置指定节点为不可见态
    * @param node Node
    */
-   setInvisible(node: Node) {
+   setInvisible(node: IPublicModelNode): void {
     this[modalNodesManagerSymbol].setInvisible(node[nodeSymbol]);
   }
 }

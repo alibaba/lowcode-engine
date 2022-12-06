@@ -8,12 +8,12 @@ import {
   TitleContent,
   TransformedComponentMetadata,
   NestingFilter,
-  isTitleConfig,
   I18nData,
   LiveTextEditingConfig,
   FieldConfig,
+  MetadataTransducer,
 } from '@alilc/lowcode-types';
-import { deprecate, isRegExp } from '@alilc/lowcode-utils';
+import { deprecate, isRegExp, isTitleConfig } from '@alilc/lowcode-utils';
 import { computed, engineConfig } from '@alilc/lowcode-editor-core';
 import EventEmitter from 'events';
 import { componentDefaults, legacyIssues } from './transducers';
@@ -128,8 +128,8 @@ export class ComponentMeta {
 
   private _isTopFixed?: boolean;
 
-  get isTopFixed() {
-    return this._isTopFixed;
+  get isTopFixed(): boolean {
+    return !!(this._isTopFixed);
   }
 
   private parentWhitelist?: NestingFilter | null;
@@ -279,7 +279,7 @@ export class ComponentMeta {
     return result as any;
   }
 
-  isRootComponent(includeBlock = true) {
+  isRootComponent(includeBlock = true): boolean {
     return (
       this.componentName === 'Page' ||
       this.componentName === 'Component' ||
@@ -326,7 +326,7 @@ export class ComponentMeta {
     return true;
   }
 
-  checkNestingDown(my: Node, target: Node | NodeSchema | NodeSchema[]) {
+  checkNestingDown(my: Node, target: Node | NodeSchema | NodeSchema[]): boolean {
     // 检查父子关系，直接约束型，在画布中拖拽直接掠过目标容器
     if (this.childWhitelist) {
       const _target: any = !Array.isArray(target) ? [target] : target;
@@ -375,19 +375,7 @@ function preprocessMetadata(metadata: ComponentMetadata): TransformedComponentMe
   };
 }
 
-export interface MetadataTransducer {
-  (prev: TransformedComponentMetadata): TransformedComponentMetadata;
-  /**
-   * 0 - 9   system
-   * 10 - 99 builtin-plugin
-   * 100 -   app & plugin
-   */
-  level?: number;
-  /**
-   * use to replace TODO
-   */
-  id?: string;
-}
+
 const metadataTransducers: MetadataTransducer[] = [];
 
 export function registerMetadataTransducer(

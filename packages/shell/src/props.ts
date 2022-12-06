@@ -1,39 +1,41 @@
 import { Props as InnerProps, getConvertedExtraKey } from '@alilc/lowcode-designer';
-import { CompositeValue, TransformStage } from '@alilc/lowcode-types';
+import { CompositeValue, IPublicModelProps, IPublicModelNode, IPublicModelProp } from '@alilc/lowcode-types';
 import { propsSymbol } from './symbols';
 import Node from './node';
 import Prop from './prop';
 
-export default class Props {
+export default class Props implements IPublicModelProps {
   private readonly [propsSymbol]: InnerProps;
 
   constructor(props: InnerProps) {
     this[propsSymbol] = props;
   }
 
-  static create(props: InnerProps | undefined | null) {
-    if (!props) return null;
+  static create(props: InnerProps | undefined | null): IPublicModelProps | null {
+    if (!props) {
+      return null;
+    }
     return new Props(props);
   }
 
   /**
    * id
    */
-  get id() {
+  get id(): string {
     return this[propsSymbol].id;
   }
 
   /**
    * 返回当前 props 的路径
    */
-  get path() {
+  get path(): any[] {
     return this[propsSymbol].path;
   }
 
   /**
    * 返回所属的 node 实例
    */
-  get node(): Node | null {
+  get node(): IPublicModelNode | null {
     return Node.create(this[propsSymbol].getNode());
   }
 
@@ -42,7 +44,7 @@ export default class Props {
    * @param path 属性路径，支持 a / a.b / a.0 等格式
    * @returns
    */
-  getProp(path: string): Prop | null {
+  getProp(path: string): IPublicModelProp | null {
     return Prop.create(this[propsSymbol].getProp(path));
   }
 
@@ -51,7 +53,7 @@ export default class Props {
    * @param path 属性路径，支持 a / a.b / a.0 等格式
    * @returns
    */
-  getPropValue(path: string) {
+  getPropValue(path: string): any {
     return this.getProp(path)?.getValue();
   }
 
@@ -61,7 +63,7 @@ export default class Props {
    * @param path 属性路径，支持 a / a.b / a.0 等格式
    * @returns
    */
-  getExtraProp(path: string): Prop | null {
+  getExtraProp(path: string): IPublicModelProp | null {
     return Prop.create(this[propsSymbol].getProp(getConvertedExtraKey(path)));
   }
 
@@ -71,7 +73,7 @@ export default class Props {
    * @param path 属性路径，支持 a / a.b / a.0 等格式
    * @returns
    */
-  getExtraPropValue(path: string) {
+  getExtraPropValue(path: string): any {
     return this.getExtraProp(path)?.getValue();
   }
 
@@ -81,7 +83,7 @@ export default class Props {
    * @param value 值
    * @returns
    */
-  setPropValue(path: string, value: CompositeValue) {
+  setPropValue(path: string, value: CompositeValue): void {
     return this.getProp(path)?.setValue(value);
   }
 
@@ -91,7 +93,7 @@ export default class Props {
    * @param value 值
    * @returns
    */
-  setExtraPropValue(path: string, value: CompositeValue) {
+  setExtraPropValue(path: string, value: CompositeValue): void {
     return this.getExtraProp(path)?.setValue(value);
   }
 
@@ -100,7 +102,7 @@ export default class Props {
    * @param key
    * @returns
    */
-  has(key: string) {
+  has(key: string): boolean {
     return this[propsSymbol].has(key);
   }
 
@@ -110,7 +112,7 @@ export default class Props {
    * @param key
    * @returns
    */
-  add(value: CompositeValue, key?: string | number | undefined) {
+  add(value: CompositeValue, key?: string | number | undefined): any {
     return this[propsSymbol].add(value, key);
   }
 }

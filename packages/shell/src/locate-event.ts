@@ -1,48 +1,51 @@
 import { LocateEvent as InnerLocateEvent } from '@alilc/lowcode-designer';
 import { locateEventSymbol } from './symbols';
 import DragObject from './drag-object';
+import { IPublicModelLocateEvent, IPublicModelDragObject } from '@alilc/lowcode-types';
 
-export default class LocateEvent {
+export default class LocateEvent implements IPublicModelLocateEvent {
   private readonly [locateEventSymbol]: InnerLocateEvent;
 
   constructor(locateEvent: InnerLocateEvent) {
     this[locateEventSymbol] = locateEvent;
   }
 
-  static create(locateEvent: InnerLocateEvent) {
-    if (!locateEvent) return null;
+  static create(locateEvent: InnerLocateEvent): IPublicModelLocateEvent | null {
+    if (!locateEvent) {
+      return null;
+    }
     return new LocateEvent(locateEvent);
   }
 
-  get type() {
+  get type(): string {
     return this[locateEventSymbol].type;
   }
 
-  get globalX() {
+  get globalX(): number {
     return this[locateEventSymbol].globalX;
   }
 
-  get globalY() {
+  get globalY(): number {
     return this[locateEventSymbol].globalY;
   }
 
-  get originalEvent() {
+  get originalEvent(): MouseEvent | DragEvent {
     return this[locateEventSymbol].originalEvent;
   }
 
-  get target() {
+  get target(): Element | null | undefined {
     return this[locateEventSymbol].target;
   }
 
-  get canvasX() {
+  get canvasX(): number | undefined {
     return this[locateEventSymbol].canvasX;
   }
 
-  get canvasY() {
+  get canvasY(): number | undefined {
     return this[locateEventSymbol].canvasY;
   }
 
-  get dragObject() {
+  get dragObject(): IPublicModelDragObject | null {
     return DragObject.create(this[locateEventSymbol].dragObject);
   }
 }

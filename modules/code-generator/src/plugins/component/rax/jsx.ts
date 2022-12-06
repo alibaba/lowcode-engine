@@ -147,7 +147,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
         function __$$eval(expr) {
           try {
             return expr();
-          } catch (error) { 
+          } catch (error) {
             ${evalErrorsHandler}
           }
         }
