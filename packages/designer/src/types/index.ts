@@ -1,6 +1,5 @@
 import { getSetter, registerSetter, getSettersMap } from '@alilc/lowcode-editor-core';
-import { isFormEvent, compatibleLegaoSchema, getNodeSchemaById } from '@alilc/lowcode-utils';
-import { isNodeSchema } from '@alilc/lowcode-types';
+import { isFormEvent, compatibleLegaoSchema, getNodeSchemaById, isNodeSchema } from '@alilc/lowcode-utils';
 
 export type Setters = {
   getSetter: typeof getSetter;
@@ -19,20 +18,3 @@ export const utils = {
   getNodeSchemaById,
 };
 export type Utils = typeof utils;
-
-export enum PROP_VALUE_CHANGED_TYPE {
-  /**
-   * normal set value
-   */
-  SET_VALUE = 'SET_VALUE',
-  /**
-   * value changed caused by sub-prop value change
-   */
-  SUB_VALUE_CHANGE = 'SUB_VALUE_CHANGE',
-}
-
-export interface ISetValueOptions {
-  disableMutator?: boolean;
-  type?: PROP_VALUE_CHANGED_TYPE;
-  fromSetHotValue?: boolean;
-}

@@ -1,35 +1,13 @@
 import '../fixtures/window';
-import { set } from '../utils';
 import { Editor, globalContext } from '@alilc/lowcode-editor-core';
 import { Project } from '../../src/project/project';
 import { DocumentModel } from '../../src/document/document-model';
 import { ScrollTarget, Scroller } from '../../src/designer/scroller';
-import {
-  isRootNode,
-  isNode,
-  comparePosition,
-  contains,
-  insertChild,
-  insertChildren,
-  PositionNO,
-} from '../../src/document/node/node';
 import { Designer } from '../../src/designer/designer';
 import {
   Dragon,
-  isDragNodeObject,
-  isDragNodeDataObject,
-  isDragAnyObject,
-  isLocateEvent,
-  DragObjectType,
-  isShaken,
-  setShaken,
 } from '../../src/designer/dragon';
 import formSchema from '../fixtures/schema/form';
-import divMetadata from '../fixtures/component-metadata/div';
-import formMetadata from '../fixtures/component-metadata/form';
-import otherMeta from '../fixtures/component-metadata/other';
-import pageMetadata from '../fixtures/component-metadata/page';
-import { fireEvent } from '@testing-library/react';
 
 describe('Scroller 测试', () => {
   let editor: Editor;

@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { obx, makeObservable } from '@alilc/lowcode-editor-core';
-import { NodeSchema } from '@alilc/lowcode-types';
+import { DragNodeObject, DragAnyObject, DragObjectType, DragNodeDataObject, DragObject } from '@alilc/lowcode-types';
 import { Node as ShellNode } from '@alilc/lowcode-shell';
 import { setNativeSelection, cursor } from '@alilc/lowcode-utils';
 import { DropLocation } from './location';
@@ -78,31 +78,6 @@ export interface ISensor {
    * 获取节点实例
    */
   getNodeInstanceFromElement(e: Element | null): NodeInstance<ComponentInstance> | null;
-}
-
-export type DragObject = DragNodeObject | DragNodeDataObject | DragAnyObject;
-
-export enum DragObjectType {
-  // eslint-disable-next-line no-shadow
-  Node = 'node',
-  NodeData = 'nodedata',
-}
-
-export interface DragNodeObject {
-  type: DragObjectType.Node;
-  nodes: (Node | ShellNode)[];
-}
-export interface DragNodeDataObject {
-  type: DragObjectType.NodeData;
-  data: NodeSchema | NodeSchema[];
-  thumbnail?: string;
-  description?: string;
-  [extra: string]: any;
-}
-
-export interface DragAnyObject {
-  type: string;
-  [key: string]: any;
 }
 
 export function isDragNodeObject(obj: any): obj is DragNodeObject {

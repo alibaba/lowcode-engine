@@ -1,18 +1,9 @@
-import { ComponentClass, Component, ComponentType, ReactElement, isValidElement } from 'react';
+import { ComponentType, ReactElement } from 'react';
 import { TitleContent } from './title';
 import { SettingTarget } from './setting-target';
 import { CompositeValue } from './value-type';
 
-function isReactClass(obj: any): obj is ComponentClass<any> {
-  return obj && obj.prototype && (obj.prototype.isReactComponent || obj.prototype instanceof Component);
-}
-
-function isReactComponent(obj: any): obj is ComponentType<any> {
-  return obj && (isReactClass(obj) || typeof obj === 'function');
-}
-
 export type CustomView = ReactElement | ComponentType<any>;
-
 export type DynamicProps = (target: SettingTarget) => Record<string, unknown>;
 export type DynamicSetter = (target: SettingTarget) => string | SetterConfig | CustomView;
 
@@ -63,21 +54,9 @@ export interface SetterConfig {
    * @todo 物料协议推进
    */
   valueType?: CompositeValue[];
-  // 标识是否为动态setter，默认为true
+  // 标识是否为动态 setter，默认为 true
   isDynamic?: boolean;
 }
 
 // if *string* passed must be a registered Setter Name, future support blockSchema
 export type SetterType = SetterConfig | SetterConfig[] | string | CustomView;
-
-export function isSetterConfig(obj: any): obj is SetterConfig {
-  return obj && typeof obj === 'object' && 'componentName' in obj && !isCustomView(obj);
-}
-
-export function isCustomView(obj: any): obj is CustomView {
-  return obj && (isValidElement(obj) || isReactComponent(obj));
-}
-
-export function isDynamicSetter(obj: any): obj is DynamicSetter {
-  return obj && typeof obj === 'function' && !isReactClass(obj);
-}

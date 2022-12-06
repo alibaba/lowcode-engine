@@ -1,23 +1,8 @@
 import { ReactNode } from 'react';
-import { CustomView, isCustomView, TitleContent } from '@alilc/lowcode-types';
-import { createContent } from '@alilc/lowcode-utils';
+import { CustomView, RegisteredSetter } from '@alilc/lowcode-types';
+import { createContent, isCustomView } from '@alilc/lowcode-utils';
 
-export type RegisteredSetter = {
-  component: CustomView;
-  defaultProps?: object;
-  title?: TitleContent;
-  /**
-   * for MixedSetter to check this setter if available
-   */
-  condition?: (field: any) => boolean;
-  /**
-   * for MixedSetter to manual change to this setter
-   */
-  initialValue?: any | ((field: any) => any);
-  recommend?: boolean;
-  // 标识是否为动态setter，默认为true
-  isDynamic?: boolean;
-};
+
 const settersMap = new Map<string, RegisteredSetter & {
   type: string;
 }>();

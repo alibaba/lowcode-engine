@@ -1,13 +1,12 @@
 import { Component, MouseEvent, Fragment } from 'react';
 import { shallowIntl, createSetterContent, observer, obx, engineConfig, runInAction, globalContext } from '@alilc/lowcode-editor-core';
-import { createContent } from '@alilc/lowcode-utils';
+import { createContent, isJSSlot, isSetterConfig } from '@alilc/lowcode-utils';
 import { Skeleton } from '@alilc/lowcode-editor-skeleton';
-import { isSetterConfig, CustomView, isJSSlot } from '@alilc/lowcode-types';
+import { CustomView } from '@alilc/lowcode-types';
 import { SettingField, isSettingField, SettingTopEntry, SettingEntry, ComponentMeta } from '@alilc/lowcode-designer';
 import { createField } from '../field';
 import PopupService, { PopupPipe } from '../popup';
 import { SkeletonContext } from '../../context';
-// import { Icon } from '@alifd/next';
 import { intl } from '../../locale';
 
 function isStandardComponent(componentMeta: ComponentMeta | null) {

@@ -7,9 +7,8 @@ import {
   RootSchema,
   ComponentsMap,
   TransformStage,
-  isLowCodeComponentType,
-  isProCodeComponentType,
 } from '@alilc/lowcode-types';
+import { isLowCodeComponentType, isProCodeComponentType } from '@alilc/lowcode-utils';
 import { ISimulatorHost } from '../simulator';
 
 export class Project {

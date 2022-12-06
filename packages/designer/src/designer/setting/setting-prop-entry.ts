@@ -1,13 +1,12 @@
 import { obx, computed, makeObservable, runInAction } from '@alilc/lowcode-editor-core';
-import { GlobalEvent, IEditor, isJSExpression } from '@alilc/lowcode-types';
-import { uniqueId } from '@alilc/lowcode-utils';
+import { GlobalEvent, IEditor, ISetValueOptions } from '@alilc/lowcode-types';
+import { uniqueId, isJSExpression } from '@alilc/lowcode-utils';
 import { SettingPropEntry as ShellSettingPropEntry } from '@alilc/lowcode-shell';
 import { SettingEntry } from './setting-entry';
 import { Node } from '../../document';
 import { ComponentMeta } from '../../component-meta';
 import { Designer } from '../designer';
 import { EventEmitter } from 'events';
-import { ISetValueOptions } from '../../types';
 import { isSettingField } from './setting-field';
 
 export class SettingPropEntry implements SettingEntry {

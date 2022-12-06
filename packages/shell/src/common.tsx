@@ -4,12 +4,17 @@ import {
   compatibleLegaoSchema as innerCompatibleLegaoSchema,
   getNodeSchemaById as innerGetNodeSchemaById,
   transactionManager,
+  isNodeSchema as innerIsNodeSchema,
 } from '@alilc/lowcode-utils';
 import {
-  isNodeSchema as innerIsNodeSchema,
   NodeSchema,
   TransitionType,
   TransformStage as InnerTransitionStage,
+  IPublicCommonDesignerCabin,
+  IPublicCommonSkeletonCabin,
+  IPublicCommonUtils,
+  IPublicApiCommon,
+  DragObjectType as InnerDragObjectType,
 } from '@alilc/lowcode-types';
 import {
   SettingField as InnerSettingField,
@@ -19,7 +24,6 @@ import {
   isDragNodeDataObject as innerIsDragNodeDataObject,
   isDragNodeObject as innerIsDragNodeObject,
   isDragAnyObject as innerIsDragAnyObject,
-  DragObjectType as InnerDragObjectType,
   isNode as innerIsNode,
   isShaken as innerIsShaken,
   contains as innerContains,
@@ -56,7 +60,7 @@ import {
 import { ReactNode } from 'react';
 
 
-class DesignerCabin {
+class DesignerCabin implements IPublicCommonDesignerCabin {
   private readonly [editorSymbol]: Editor;
   /**
    * @deprecated
@@ -147,7 +151,7 @@ class DesignerCabin {
   }
 }
 
-class SkeletonCabin {
+class SkeletonCabin implements IPublicCommonSkeletonCabin {
   private readonly [skeletonSymbol]: InnerSkeleton;
 
   constructor(skeleton: InnerSkeleton) {
@@ -181,7 +185,7 @@ class SkeletonCabin {
   }
 }
 
-class Utils {
+class Utils implements IPublicCommonUtils {
   isNodeSchema(data: any): data is NodeSchema {
     return innerIsNodeSchema(data);
   }
@@ -314,7 +318,7 @@ class EditorCabin {
 }
 
 
-export default class Common {
+export default class Common implements IPublicApiCommon {
   private readonly __designerCabin: any;
   private readonly __skeletonCabin: any;
   private readonly __editorCabin: any;

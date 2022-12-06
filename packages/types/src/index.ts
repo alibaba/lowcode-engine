@@ -22,3 +22,10 @@ export * from './assets';
 export * as GlobalEvent from './event';
 export * from './disposable';
 export * from './start-transaction';
+export * from './props-transducer';
+export * from './editor-skeleton';
+export * from './designer';
+export * from './dragon';
+export * from './shell';
+// TODO: remove this in future versions
+export * from './deprecated';

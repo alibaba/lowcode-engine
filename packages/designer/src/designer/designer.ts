@@ -8,10 +8,10 @@ import {
   IEditor,
   CompositeObject,
   PropsList,
-  isNodeSchema,
   NodeSchema,
+  PropsTransducer,
 } from '@alilc/lowcode-types';
-import { megreAssets, AssetsJson } from '@alilc/lowcode-utils';
+import { megreAssets, AssetsJson, isNodeSchema } from '@alilc/lowcode-utils';
 import { Project } from '../project';
 import { Node, DocumentModel, insertChildren, ParentalNode, TransformStage } from '../document';
 import { ComponentMeta } from '../component-meta';
@@ -494,7 +494,7 @@ export class Designer {
   getComponentMeta(
     componentName: string,
     generateMetadata?: () => ComponentMetadata | null,
-  ): ComponentMeta {
+  ) {
     if (this._componentMetasMap.has(componentName)) {
       return this._componentMetasMap.get(componentName)!;
     }
@@ -536,7 +536,7 @@ export class Designer {
     return maps;
   }
 
-  private propsReducers = new Map<TransformStage, PropsReducer[]>();
+  private propsReducers = new Map<TransformStage, PropsTransducer[]>();
 
   transformProps(props: CompositeObject | PropsList, node: Node, stage: TransformStage) {
     if (Array.isArray(props)) {
@@ -560,7 +560,7 @@ export class Designer {
     }, props);
   }
 
-  addPropsReducer(reducer: PropsReducer, stage: TransformStage) {
+  addPropsReducer(reducer: PropsTransducer, stage: TransformStage) {
     const reducers = this.propsReducers.get(stage);
     if (reducers) {
       reducers.push(reducer);
@@ -577,10 +577,3 @@ export class Designer {
     // TODO:
   }
 }
-
-export type PropsReducerContext = { stage: TransformStage };
-export type PropsReducer = (
-  props: CompositeObject,
-  node: Node,
-  ctx?: PropsReducerContext,
-) => CompositeObject;

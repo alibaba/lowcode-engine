@@ -33,7 +33,6 @@ import './modules/live-editing';
 import classes from './modules/classes';
 import symbols from './modules/symbols';
 
-export * from './modules/editor-types';
 export * from './modules/skeleton-types';
 export * from './modules/designer-types';
 export * from './modules/lowcode-types';

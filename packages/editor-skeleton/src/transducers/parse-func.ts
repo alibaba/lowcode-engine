@@ -1,9 +1,5 @@
-import {
-  FieldConfig,
-  TransformedComponentMetadata,
-  isJSFunction,
-} from '@alilc/lowcode-types';
-import { isPlainObject } from '@alilc/lowcode-utils';
+import { TransformedComponentMetadata } from '@alilc/lowcode-types';
+import { isPlainObject, isJSFunction } from '@alilc/lowcode-utils';
 
 const leadingFnRe = /^function/;
 const leadingFnNameRe = /^\w+\s*\(/;
