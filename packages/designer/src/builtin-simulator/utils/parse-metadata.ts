@@ -113,7 +113,7 @@ LowcodeTypes.exact = (typesMap: any) => {
 };
 
 // An object taking on a particular shape
-LowcodeTypes.shape = (typesMap: any) => {
+LowcodeTypes.shape = (typesMap: any = {}) => {
   const configs = Object.keys(typesMap).map(key => {
     return {
       name: key,
