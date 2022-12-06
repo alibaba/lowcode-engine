@@ -11,7 +11,7 @@ title: 快速开始
 ### WSL（Window 电脑）
 Window 环境需要使用 WSL 在 windows 下进行低代码引擎相关的开发。安装教程 ➡️ [WSL 安装教程](https://docs.microsoft.com/zh-cn/windows/wsl/install)。<br />**对于 Window 环境来说，之后所有需要执行命令的操作都是在 WSL 终端执行的。**
 ### Node
-node 版本推荐 14.17.0。
+node 版本推荐 16.18.0。
 
 #### 查看 Node 版本
 ![image.png](https://img.alicdn.com/imgextra/i4/O1CN01oCZKNz290LIu8YUTk_!!6000000008005-2-tps-238-70.png)
