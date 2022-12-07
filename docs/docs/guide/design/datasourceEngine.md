@@ -32,7 +32,6 @@ create 接收三个参数，第一个是 DataSource，对于运行时渲染和�
 ```typescript
 /**
  * 数据源对象--运行时渲染
- * @see https://yuque.antfin-inc.com/mo/spec/spec-low-code-building-schema#XMeF5
  */
 export interface DataSource {
     list: DataSourceConfig[];
@@ -41,7 +40,6 @@ export interface DataSource {
 
 /**
  * 数据源对象
- * @see https://yuque.antfin-inc.com/mo/spec/spec-low-code-building-schema#XMeF5
  */
 export interface DataSourceConfig {
     id: string;
@@ -96,7 +94,6 @@ export interface RuntimeDataSourceConfig {
 
 /**
  * 数据源对象
- * @see https://yuque.antfin-inc.com/mo/spec/spec-low-code-building-schema#XMeF5
  */
 export interface RuntimeDataSource {
     list: RuntimeDataSourceConfig[];

@@ -319,7 +319,7 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
         title: {
           label: '渲染唯一标识（key）',
           tip: '搭配「条件渲染」或「循环渲染」时使用，和 react 组件中的 key 原理相同，点击查看帮助',
-          docUrl: 'https://lowcode-engine.cn/docV2/qm75w3',
+          docUrl: 'https://www.yuque.com/lce/doc/qm75w3',
         },
         setter: [
           {

@@ -10,7 +10,7 @@ sidebar_position: 0
 ![image.png](https://img.alicdn.com/imgextra/i2/O1CN01UU8pVT26XN1A0ExVG_!!6000000007671-2-tps-3032-1648.png)
 
 将他们拖到画布之中：
-![Feb-16-2022 16-58-59.gif](https://cdn.nlark.com/yuque/0/2022/gif/242652/1645002115004-4f01eb8d-cf68-4a7c-b0db-bc5aaf2604a3.gif#clientId=uf61aba9b-3a69-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=396&id=uf69dc239&margin=%5Bobject%20Object%5D&name=Feb-16-2022%2016-58-59.gif&originHeight=792&originWidth=1534&originalType=binary&ratio=1&rotation=0&showTitle=false&size=7510570&status=done&style=stroke&taskId=ua6ea2651-6c6c-4762-98cc-cc3ab5734cd&title=&width=767)
+![Feb-16-2022 16-58-59.gif](https://img.alicdn.com/imgextra/i3/O1CN01UAsQ8124HgDptzPrn_!!6000000007366-1-tps-1534-792.gif)
 ### 配置组件
 
 选中刚拖入的“查询筛选”组件，您可以配置此组件：
@@ -21,7 +21,7 @@ sidebar_position: 0
 ![image.png](https://img.alicdn.com/imgextra/i2/O1CN01eWOK0d1fOfsF9PZu9_!!6000000003997-2-tps-3060-1476.png)
 
 掌握组件配置功能，我们就可以完成一个常用的查询框的配置：
-![Feb-21-2022 18-05-52.gif](https://cdn.nlark.com/yuque/0/2022/gif/242652/1645437973453-1fd1dc10-99ad-4c18-af49-2741bd81c4ae.gif#clientId=u022fc577-71a7-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=395&id=u964ae52f&margin=%5Bobject%20Object%5D&name=Feb-21-2022%2018-05-52.gif&originHeight=790&originWidth=1532&originalType=binary&ratio=1&rotation=0&showTitle=false&size=7210902&status=done&style=stroke&taskId=u9e39c54a-7467-4a96-b716-681cf598f09&title=&width=766)
+![Feb-21-2022 18-05-52.gif](https://img.alicdn.com/imgextra/i1/O1CN0138fb0P1CTbHKWDBeo_!!6000000000082-1-tps-1532-790.gif)
 
 ### 绑定数据
 
@@ -98,7 +98,7 @@ class LowcodeComponent extends Component {
 
 ![image.png](https://img.alicdn.com/imgextra/i1/O1CN01K3Pwjo1PKWQcoBl5K_!!6000000001822-2-tps-3170-1904.png)
 
-![Feb-16-2022 20-24-35.gif](https://cdn.nlark.com/yuque/0/2022/gif/242652/1645014292272-68e07740-47dc-4c94-8437-beded0b07c63.gif#clientId=uf61aba9b-3a69-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=396&id=u4506fc72&margin=%5Bobject%20Object%5D&name=Feb-16-2022%2020-24-35.gif&originHeight=792&originWidth=1532&originalType=binary&ratio=1&rotation=0&showTitle=false&size=6960677&status=done&style=stroke&taskId=u9fe02184-e6dc-4886-b371-c48ca1e2832&title=&width=766)
+![Feb-16-2022 20-24-35.gif](https://img.alicdn.com/imgextra/i2/O1CN01VGlZPS1JitoljrFFY_!!6000000001063-1-tps-1532-792.gif)
 
 将 Loading 的“是否显示”字段绑定 `this.state.loading` 后，我们可以看到，这里暴露了一个插槽。插槽是可以任意扩展的预设部分，我们可以把其他的部分拖进插槽：
 
@@ -110,16 +110,16 @@ class LowcodeComponent extends Component {
 ### 列挂钩浮层
 
 为了能够让表格里的操作挂钩浮层，我们先拖入一个浮层：
-![Feb-16-2022 20-32-09.gif](https://cdn.nlark.com/yuque/0/2022/gif/242652/1645014772471-0fce9b50-0f70-492e-bb53-5f875c00f5b4.gif#clientId=uf61aba9b-3a69-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=396&id=u4d33cd05&margin=%5Bobject%20Object%5D&name=Feb-16-2022%2020-32-09.gif&originHeight=792&originWidth=1532&originalType=binary&ratio=1&rotation=0&showTitle=false&size=7475148&status=done&style=stroke&taskId=u9dc26cba-41eb-4fe8-b96f-fe391968861&title=&width=766)
+![Feb-16-2022 20-32-09.gif](https://img.alicdn.com/imgextra/i2/O1CN01bX3SHk21Z8T4O6knp_!!6000000006998-1-tps-1532-792.gif)
 
 使用大纲树能够临时显示和隐藏此浮层：
-![Feb-16-2022 20-32-39.gif](https://cdn.nlark.com/yuque/0/2022/gif/242652/1645014828329-b2de4db6-9032-4280-b886-db17070eea21.gif#clientId=uf61aba9b-3a69-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=396&id=ue27e6676&margin=%5Bobject%20Object%5D&name=Feb-16-2022%2020-32-39.gif&originHeight=792&originWidth=1530&originalType=binary&ratio=1&rotation=0&showTitle=false&size=7335022&status=done&style=stroke&taskId=u73554a5d-5ebe-48d1-a861-426ba8501b1&title=&width=765)
+![Feb-16-2022 20-32-39.gif](https://img.alicdn.com/imgextra/i3/O1CN01ZtSp0P1LvNqYPeUHg_!!6000000001361-1-tps-1530-792.gif)
 
 我们给表格增加一个数据列：
 ![Feb-16-2022 20-39-41.gif](https://img.alicdn.com/imgextra/i2/O1CN012K6qWI1hgCG6KwRF7_!!6000000004306-1-tps-1532-792.gif)
 
 然后配置它的行为为“弹窗”：
-![Feb-16-2022 20-40-05.gif](https://cdn.nlark.com/yuque/0/2022/gif/242652/1645015223838-7f180e28-43e0-442b-a47e-ea5ff69d4900.gif#clientId=uf61aba9b-3a69-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=396&id=u80f44f38&margin=%5Bobject%20Object%5D&name=Feb-16-2022%2020-40-05.gif&originHeight=792&originWidth=1532&originalType=binary&ratio=1&rotation=0&showTitle=false&size=7261162&status=done&style=stroke&taskId=u3828503a-ecac-452a-8d20-02e4a46ad02&title=&width=766)
+![Feb-16-2022 20-40-05.gif](https://img.alicdn.com/imgextra/i2/O1CN016axZh61uc9ln0L3Rz_!!6000000006057-1-tps-1532-792.gif)
 
 实现的效果如下：
 ![Feb-16-2022 20-42-51.gif](https://img.alicdn.com/imgextra/i4/O1CN018iana91j4l71QTmpE_!!6000000004495-1-tps-1534-792.gif)
@@ -127,10 +127,10 @@ class LowcodeComponent extends Component {
 ### 事件回调
 
 上述功能点中，我们是把操作行为绑定在数据列上的，这一节我们绑定到操作列中。在操作列按钮处，点击下方的“添加一项”：
-![Feb-23-2022 11-58-02.gif](https://cdn.nlark.com/yuque/0/2022/gif/242652/1645588703676-2a36cab4-52f4-4f31-9018-d56b41a55283.gif#clientId=u74bf469f-47f0-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=395&id=u18d8ea0b&margin=%5Bobject%20Object%5D&name=Feb-23-2022%2011-58-02.gif&originHeight=790&originWidth=1534&originalType=binary&ratio=1&rotation=0&showTitle=false&size=8440133&status=done&style=stroke&taskId=u73e25800-c0fa-486b-9b68-4df7db9b9f1&title=&width=767)
+![Feb-23-2022 11-58-02.gif](https://img.alicdn.com/imgextra/i4/O1CN01DsBoHQ1tyli2rtoFR_!!6000000005971-1-tps-1534-790.gif)
 
 点击左侧的详情按钮，配置它的事件回调：
-![Feb-23-2022 12-00-18.gif](https://cdn.nlark.com/yuque/0/2022/gif/242652/1645588832183-7ed0f06b-731d-4bd8-b934-723de43a8b42.gif#clientId=u74bf469f-47f0-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=395&id=u59505da7&margin=%5Bobject%20Object%5D&name=Feb-23-2022%2012-00-18.gif&originHeight=790&originWidth=1534&originalType=binary&ratio=1&rotation=0&showTitle=false&size=9047220&status=done&style=stroke&taskId=ub8ab1b4e-4195-426f-b792-fc8bf91d142&title=&width=767)
+![Feb-23-2022 12-00-18.gif](https://img.alicdn.com/imgextra/i2/O1CN017BuNLP1LPmW8zH7hx_!!6000000001292-1-tps-1534-790.gif)
 
 代码侧，我们配置这个回调函数：
 ```javascript

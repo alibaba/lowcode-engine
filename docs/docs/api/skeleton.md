@@ -5,10 +5,10 @@ sidebar_position: 1
 ## 模块简介
 面板 API 提供了面板扩展和管理的能力，如下图蓝色内容都是扩展出来的。
 
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/110793/1645442085447-d1822e7f-9e5a-4e06-a770-04b1023d5daf.png#clientId=u9aca70b6-1a98-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=498&id=u2dd3deb2&margin=%5Bobject%20Object%5D&name=image.png&originHeight=996&originWidth=1780&originalType=binary&ratio=1&rotation=0&showTitle=false&size=1549904&status=done&style=none&taskId=u28659b69-981c-416e-bed6-b2f06b8e6fc&title=&width=890)
+![image.png](https://img.alicdn.com/imgextra/i4/O1CN01eVA0U41xYRP3e5zo0_!!6000000006455-2-tps-1780-996.png)
 
 页面上可以扩展的区域共 5 个，具体如下：
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/110793/1645431386085-2710d33d-0652-450a-a993-c804368da1ce.png#clientId=u1724eb73-4c0c-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=487&id=ud138f866&margin=%5Bobject%20Object%5D&name=image.png&originHeight=974&originWidth=1892&originalType=binary&ratio=1&rotation=0&showTitle=false&size=228235&status=done&style=none&taskId=u265d50a5-3700-406e-84b2-0158ebadaae&title=&width=946)
+![image.png](https://img.alicdn.com/imgextra/i3/O1CN014d2AcS1D5c9TshEiQ_!!6000000000165-2-tps-1892-974.png)
 ### 基本概念
 #### 扩展区域位置 (area)
 ##### topArea

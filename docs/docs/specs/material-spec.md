@@ -841,7 +841,7 @@ props 数组下对象字段描述：
 | extraProps.setValue | setter 内容修改时调用，开发者可在该函数内部修改节点 schema 或者进行其他操作 | Function            | (target: SettingTarget, value: any) => void;            |
 
 
-根据属性值类型 propType，确定对应控件类型 (setter) ，详见 [https://lowcode-engine.cn/docV2/grfylu](https://lowcode-engine.cn/docV2/grfylu)
+根据属性值类型 propType，确定对应控件类型 (setter) 。
 
 
 ###### 2.2.2.4.2 通用扩展面板支持性配置 supports (AA)
