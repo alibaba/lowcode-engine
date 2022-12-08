@@ -1,18 +1,13 @@
-// @ts-nocheck
-import set from 'lodash/set';
-import cloneDeep from 'lodash/cloneDeep';
 import '../../fixtures/window';
 import { Editor } from '@alilc/lowcode-editor-core';
-import { Project } from '../../../src/project/project';
 import { SettingTopEntry } from '../../../src/designer/setting/setting-top-entry';
 import { SettingPropEntry } from '../../../src/designer/setting/setting-prop-entry';
 import { Node } from '../../../src/document/node/node';
 import { Designer } from '../../../src/designer/designer';
-import formSchema from '../../../fixtures/schema/form';
 import settingSchema from '../../fixtures/schema/setting';
 import divMeta from '../../fixtures/component-metadata/div';
-import { getIdsFromSchema, getNodeFromSchemaById } from '../../utils';
 import { DocumentModel } from 'designer/src/document';
+import { shellModelFactory } from '../../../../engine/src/modules/shell-model-factory';
 
 const editor = new Editor();
 
@@ -20,7 +15,7 @@ describe('setting-prop-entry 测试', () => {
   let designer: Designer;
   let doc: DocumentModel;
   beforeEach(() => {
-    designer = new Designer({ editor });
+    designer = new Designer({ editor, shellModelFactory });
     designer.createComponentMeta(divMeta);
     doc = designer.project.open(settingSchema);
   });

@@ -27,5 +27,6 @@ export * from './editor-skeleton';
 export * from './designer';
 export * from './dragon';
 export * from './shell';
+export * from './shell-model-factory';
 // TODO: remove this in future versions
 export * from './deprecated';

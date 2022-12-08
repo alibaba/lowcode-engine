@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Editor } from '@alilc/lowcode-editor-core';
 import { TransformStage } from '@alilc/lowcode-types';
 import { isPlainObject, isVariable, isJSBlock } from '@alilc/lowcode-utils';
@@ -7,6 +6,7 @@ import { Designer } from '../../src/designer/designer';
 import { DocumentModel } from '../../src/document/document-model';
 import { Project } from '../../src/project/project';
 import formSchema from '../fixtures/schema/form';
+import { shellModelFactory } from '../../../engine/src/modules/shell-model-factory';
 
 /**
  * bug 背景：
@@ -58,7 +58,7 @@ describe('Node 方法测试', () => {
 
   it('原始 prop 值是 variable 结构，通过一个 propsReducer 转成了 JSExpression 结构', () => {
     editor = new Editor();
-    designer = new Designer({ editor });
+    designer = new Designer({ editor, shellModelFactory });
     designer.addPropsReducer(upgradePropsReducer, TransformStage.Upgrade);
     project = designer.project;
     doc = new DocumentModel(project, formSchema);

@@ -1,5 +1,7 @@
-import { IPublicModelNode } from './model/node';
-import { IPublicModelProp } from './model/prop';
+import {
+  IPublicModelNode,
+  IPublicModelProp,
+} from './model';
 
 export interface PropChangeOptions {
   key?: string | number;

@@ -1,4 +1,3 @@
-// @ts-ignore
 import '../fixtures/window';
 import { Editor, globalContext } from '@alilc/lowcode-editor-core';
 import {
@@ -15,6 +14,7 @@ import formSchema from '../fixtures/schema/form';
 import { getMockDocument, getMockWindow, getMockEvent, delayObxTick } from '../utils';
 import { BuiltinSimulatorHost } from '../../src/builtin-simulator/host';
 import { fireEvent } from '@testing-library/react';
+import { shellModelFactory } from '../../../engine/src/modules/shell-model-factory';
 
 describe('Host 测试', () => {
   let editor: Editor;
@@ -29,7 +29,7 @@ describe('Host 测试', () => {
   });
 
   beforeEach(() => {
-    designer = new Designer({ editor });
+    designer = new Designer({ editor, shellModelFactory });
     project = designer.project;
     designer.createComponentMeta(pageMetadata);
     doc = project.createDocument(formSchema);

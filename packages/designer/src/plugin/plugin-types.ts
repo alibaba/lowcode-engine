@@ -1,6 +1,16 @@
-import { CompositeObject, ComponentAction, MetadataTransducer } from '@alilc/lowcode-types';
 import Logger from 'zen-logger';
-import { Hotkey, Skeleton, Project, Event, Material, Common } from '@alilc/lowcode-shell';
+import {
+  IPublicApiHotkey,
+  IPublicApiProject,
+  IPublicApiSkeleton,
+  IPublicApiSetters,
+  IPublicApiMaterial,
+  IPublicApiEvent,
+  IPublicApiCommon,
+  CompositeObject,
+  ComponentAction,
+  MetadataTransducer,
+} from '@alilc/lowcode-types';
 import { EngineConfig } from '@alilc/lowcode-editor-core';
 import { Setters } from '../types';
 
@@ -95,27 +105,27 @@ export interface IPluginPreferenceMananger {
 }
 
 export interface ILowCodePluginContext {
-  get skeleton(): Skeleton;
-  get hotkey(): Hotkey;
-  get setters(): Setters;
+  get skeleton(): IPublicApiSkeleton;
+  get hotkey(): IPublicApiHotkey;
+  get setters(): IPublicApiSetters;
   get config(): EngineConfig;
-  get material(): Material;
-  get event(): Event;
-  get project(): Project;
-  get common(): Common;
+  get material(): IPublicApiMaterial;
+  get event(): IPublicApiEvent;
+  get project(): IPublicApiProject;
+  get common(): IPublicApiCommon;
   logger: Logger;
   plugins: ILowCodePluginManager;
   preference: IPluginPreferenceMananger;
 }
 export interface ILowCodePluginContextPrivate {
-  set hotkey(hotkey: Hotkey);
-  set project(project: Project);
-  set skeleton(skeleton: Skeleton);
+  set hotkey(hotkey: IPublicApiHotkey);
+  set project(project: IPublicApiProject);
+  set skeleton(skeleton: IPublicApiSkeleton);
   set setters(setters: Setters);
-  set material(material: Material);
-  set event(event: Event);
+  set material(material: IPublicApiMaterial);
+  set event(event: IPublicApiEvent);
   set config(config: EngineConfig);
-  set common(common: Common);
+  set common(common: IPublicApiCommon);
 }
 export interface ILowCodePluginContextApiAssembler {
   assembleApis: (context: ILowCodePluginContextPrivate) => void;

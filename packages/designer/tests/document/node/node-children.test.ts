@@ -8,6 +8,7 @@ import {
 import { Designer } from '../../../src/designer/designer';
 import formSchema from '../../fixtures/schema/form';
 import divMetadata from '../../fixtures/component-metadata/div';
+import { shellModelFactory } from '../../../../engine/src/modules/shell-model-factory';
 
 describe('NodeChildren 方法测试', () => {
   let editor: Editor;
@@ -17,7 +18,7 @@ describe('NodeChildren 方法测试', () => {
 
   beforeEach(() => {
     editor = new Editor();
-    designer = new Designer({ editor });
+    designer = new Designer({ editor, shellModelFactory });
     project = designer.project;
     doc = new DocumentModel(project, formSchema);
   });
