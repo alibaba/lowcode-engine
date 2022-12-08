@@ -123,7 +123,7 @@ console.log(result); // 出码结果 (默认是递归结构描述的，可以传
 
 ### 5）自定义出码
 前端框架灵活多变，默认内置的出码方案很难满足所有人的需求，好在此代码生成器支持非常灵活的插件机制 -- 内置功能大多都是通过插件完成的（在 `src/plugins`下），比如：
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/263300/1644824565650-584c2be5-4be3-4c9a-96d9-e27990111b0b.png#averageHue=%232b2b2e&clientId=u8b65d964-7bef-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=376&id=u3e0a61a8&margin=%5Bobject%20Object%5D&name=image.png&originHeight=376&originWidth=457&originalType=binary&ratio=1&rotation=0&showTitle=false&size=151355&status=done&style=none&taskId=ueef52494-2e18-45a2-8409-7f68e200f63&title=&width=457)
+![image.png](https://img.alicdn.com/imgextra/i1/O1CN01CEl2Hq1omnH0UCyGF_!!6000000005268-2-tps-457-376.png)
 所以您可以通过添加自己的插件或替换掉默认内置的插件来实现您的自定义功能。
 为了方便自定义出码方案，出码模块还提供自定义出码方案的脚手架功能，即执行下面脚本即可生成一个自定义出码方案：
 ```shell

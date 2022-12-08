@@ -194,7 +194,7 @@ ReactDOM.render((
 画布的渲染和预览模式的渲染的区别在于，画布的渲染和设计器之间是有交互的。所以在这里我们新增了一层 `Simulator` 作为设计器和渲染的连接器。
 `Simulator` 是将设计器传入的 `DocumentModel` 和组件/库描述转成相应的 Schema 和 组件类。再调用 Render 层完成渲染。我们这里介绍一下它提供的能力。
 ##### 整体架构
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/242652/1644398136330-0f48202b-b581-4b1f-af79-72a667a194d9.png#clientId=udd4eb4ee-bdb1-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=432&id=u734b5c16&margin=%5Bobject%20Object%5D&name=image.png&originHeight=864&originWidth=1500&originalType=binary&ratio=1&rotation=0&showTitle=false&size=572012&status=done&style=none&taskId=u7d7cf569-d5a9-4bea-9b2d-1121b85728f&title=&width=750)
+![image.png](https://img.alicdn.com/imgextra/i2/O1CN017cYBAp1hvJKPUVLbx_!!6000000004339-2-tps-1500-864.png)
 
 - `Project`：位于顶层的 Project，保留了对所有文档模型的引用，用于管理应用级 Schema 的导入与导出。
 - `Document`：文档模型包括 Simulator 与数据模型两部分。Simulator 通过一份 Simulator Host 协议与数据模型层通信，达到画布上的 UI 操作驱动数据模型变化。通过多文档的设计及多 Tab 交互方式，能够实现同时设计多个页面，以及在一个浏览器标签里进行搭建与配置应用属性。
@@ -207,7 +207,7 @@ ReactDOM.render((
 - 通用交互模型：内置了拖拽、活跃追踪、悬停探测、剪贴板、滚动、快捷键绑定。
 
 ##### 模拟器介绍
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/242652/1644398137096-260646a0-f264-48af-9600-6f7141a6a1d8.png#clientId=udd4eb4ee-bdb1-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=370&id=ubfb08f11&margin=%5Bobject%20Object%5D&name=image.png&originHeight=740&originWidth=1500&originalType=binary&ratio=1&rotation=0&showTitle=false&size=353179&status=done&style=none&taskId=u3cd764bb-52f6-47a6-8026-fee6a36d08d&title=&width=750)
+![image.png](https://img.alicdn.com/imgextra/i2/O1CN01GF1PMj288kxovvnK8_!!6000000007888-2-tps-1500-740.png)
 
 - 运行时环境：从运行时环境来看，目前我们有 React 生态、Rax 生态。而在对外的历程中，我们也会拥有 Vue 生态、Angular 生态等。
 - 布局模式：不同于 C 端营销页的搭建，中后台场景大多是表单、表格，流式布局是主流的选择。对于设计师、产品来说，是需要绝对布局的方式来进行页面研发的。

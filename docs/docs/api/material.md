@@ -151,7 +151,7 @@ material.addBuiltinComponentAction({
   condition: true,
 });
 ```
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/2622706/1645446545381-aa6f4543-5f6e-4a03-91c1-e88817823153.png#clientId=u51926daa-3723-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=198&id=u34e8d0d9&margin=%5Bobject%20Object%5D&name=image.png&originHeight=198&originWidth=230&originalType=binary&ratio=1&rotation=0&showTitle=false&size=16907&status=done&style=none&taskId=u27bac39f-a38f-43bf-a0e5-157118e3aa6&title=&width=230)
+![image.png](https://img.alicdn.com/imgextra/i4/O1CN01jDbN7B1KfWVzJ16tw_!!6000000001191-2-tps-230-198.png)
 
 ### removeBuiltinComponentAction
 移除设计器辅助层的指定 action
