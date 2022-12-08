@@ -42,6 +42,12 @@ export class History<T = NodeSchema> {
       if (this.asleep) return;
       untracked(() => {
         const log = this.currentSerialization.serialize(data);
+
+        // do not record unchanged data
+        if (this.session.data === log) {
+          return;
+        }
+
         if (this.session.isActive()) {
           this.session.log(log);
         } else {
