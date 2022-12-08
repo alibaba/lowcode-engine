@@ -2,14 +2,14 @@
 import { EngineConfig, engineConfig } from '@alilc/lowcode-editor-core';
 import { ILowCodePluginManager } from '@alilc/lowcode-designer';
 import {
-  Hotkey,
-  Project,
-  Skeleton,
-  Setters,
-  Material,
-  Event,
-  Common,
-} from '@alilc/lowcode-shell';
+  IPublicApiHotkey,
+  IPublicApiProject,
+  IPublicApiSkeleton,
+  IPublicApiSetters,
+  IPublicApiMaterial,
+  IPublicApiEvent,
+  IPublicApiCommon,
+} from '@alilc/lowcode-types';
 import { getLogger, Logger } from '@alilc/lowcode-utils';
 import {
   ILowCodePluginContext,
@@ -24,14 +24,14 @@ import { isValidPreferenceKey } from './plugin-utils';
 
 
 export default class PluginContext implements ILowCodePluginContext, ILowCodePluginContextPrivate {
-  hotkey: Hotkey;
-  project: Project;
-  skeleton: Skeleton;
-  setters: Setters;
-  material: Material;
-  event: Event;
+  hotkey: IPublicApiHotkey;
+  project: IPublicApiProject;
+  skeleton: IPublicApiSkeleton;
+  setters: IPublicApiSetters;
+  material: IPublicApiMaterial;
+  event: IPublicApiEvent;
   config: EngineConfig;
-  common: Common;
+  common: IPublicApiCommon;
   logger: Logger;
   plugins: ILowCodePluginManager;
   preference: IPluginPreferenceMananger;

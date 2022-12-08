@@ -1,7 +1,6 @@
 import { obx, computed, makeObservable, runInAction } from '@alilc/lowcode-editor-core';
 import { GlobalEvent, IEditor, ISetValueOptions } from '@alilc/lowcode-types';
 import { uniqueId, isJSExpression } from '@alilc/lowcode-utils';
-import { SettingPropEntry as ShellSettingPropEntry } from '@alilc/lowcode-shell';
 import { SettingEntry } from './setting-entry';
 import { Node } from '../../document';
 import { ComponentMeta } from '../../component-meta';
@@ -363,6 +362,6 @@ export class SettingPropEntry implements SettingEntry {
   }
 
   internalToShellPropEntry() {
-    return ShellSettingPropEntry.create(this) as any;
+    return this.designer.shellModelFactory.createSettingPropEntry(this);
   }
 }

@@ -1,11 +1,11 @@
 import '../fixtures/window';
-import { getMockWindow, set, getMockElement, delay } from '../utils';
+import { getMockWindow, getMockElement, delay } from '../utils';
 import { Editor, globalContext } from '@alilc/lowcode-editor-core';
 import { Project } from '../../src/project/project';
 import { DocumentModel } from '../../src/document/document-model';
 import Viewport from '../../src/builtin-simulator/viewport';
 import { Designer } from '../../src/designer/designer';
-import { fireEvent } from '@testing-library/react';
+import { shellModelFactory } from '../../../engine/src/modules/shell-model-factory';
 
 
 describe('Viewport 测试', () => {
@@ -28,7 +28,7 @@ describe('Viewport 测试', () => {
   });
 
   beforeEach(() => {
-    designer = new Designer({ editor });
+    designer = new Designer({ editor, shellModelFactory });
     project = designer.project;
     // doc = project.createDocument(formSchema);
   });
