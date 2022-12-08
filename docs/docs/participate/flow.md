@@ -19,7 +19,7 @@ sidebar_position: 2
 几点要求：
 
 1. commit message 格式遵循 [ConvensionalCommits](https://www.conventionalcommits.org/en/v1.0.0/#summary)
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/110793/1645066644352-4de1c64c-bff6-4482-90d1-1fb610aa91f2.png#averageHue=%23eceef0&clientId=u6dcee4f0-35df-4&crop=0&crop=0&crop=1&crop=1&height=297&id=CfpQy&margin=%5Bobject%20Object%5D&name=image.png&originHeight=594&originWidth=2070&originalType=binary&ratio=1&rotation=0&showTitle=false&size=341605&status=done&style=none&taskId=u4499b752-5e24-42f6-9186-280fd5a51aa&title=&width=1035)
+![image.png](https://img.alicdn.com/imgextra/i3/O1CN01M9UzVM1iqYpyxECdV_!!6000000004464-2-tps-2070-594.png)
 2. 请按照一个 bugfix / feature 对应一个 commit，假如不是，请 rebase 后再提交 MR，不要一堆无用的、试验性的 commit。
 
 好处：从引擎的整体 commit 历史来看，会很清晰，**每个 commit 完成一件确定的事，changelog 也能自动生成**。另外，假如因为某个 commit 导致了 bug，也很容易通过 rebase drop 等方式快速修复。

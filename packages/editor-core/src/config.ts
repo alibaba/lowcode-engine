@@ -123,7 +123,7 @@ const VALID_ENGINE_OPTIONS = {
     description: '自定义 simulatorUrl 的地址',
   },
   /**
-   * 与 react-renderer 的 appHelper 一致，  https://lowcode-engine.cn/docV2/nhilce#appHelper
+   * 与 react-renderer 的 appHelper 一致，  https://www.yuque.com/lce/doc/nhilce#appHelper
    */
   appHelper: {
     type: 'object',
@@ -247,7 +247,7 @@ export interface EngineOptions {
     enableFilterReducerInRenderStage?: boolean;
   };
   /**
-   * 与 react-renderer 的 appHelper 一致，  https://lowcode-engine.cn/docV2/nhilce#appHelper
+   * 与 react-renderer 的 appHelper 一致，  https://www.yuque.com/lce/doc/nhilce#appHelper
    */
   appHelper?: {
     /** 全局公共函数 */

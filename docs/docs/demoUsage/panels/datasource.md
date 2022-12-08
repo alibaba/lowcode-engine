@@ -5,14 +5,14 @@ sidebar_position: 4
 ## 🪚 概述
 数据源面板主要负责管理低代码中远程数据源内容，通过可视化编辑的方式操作低代码协议中的数据源 Schema，配合 [数据源引擎](/site/docs/guide/design/datasourceEngine) 即可实现低代码中数据源的生产和消费；
 
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/84508/1648397674378-aec10892-5ee4-414d-807e-39f55f3a5be5.png#clientId=u38847497-05f3-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=821&id=u07e82f8a&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1642&originWidth=2878&originalType=binary&ratio=1&rotation=0&showTitle=false&size=246032&status=done&style=none&taskId=uc18acbc5-1404-4266-a499-e952d1084c4&title=&width=1439)
+![image.png](https://img.alicdn.com/imgextra/i1/O1CN0170HeBg276B7fM9rqh_!!6000000007747-2-tps-2878-1642.png)
 
 数据源面板
 ## ❓如何使用
 > 面板内包含了数据源创建、删除、编辑、排序、导入导出、复制以及搜索等能力，内置支持了 `fecth` & `JSONP`两种常用远程请求类型；
 
 ### 三步创建一个数据源
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/84508/1648398269436-bd241801-e617-4640-830f-03b44aca80a1.png#clientId=u38847497-05f3-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=819&id=u1ee9fa0d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1638&originWidth=2878&originalType=binary&ratio=1&rotation=0&showTitle=false&size=279302&status=done&style=none&taskId=ue1248934-df36-423c-86f3-160a4e865da&title=&width=1439)
+![image.png](https://img.alicdn.com/imgextra/i2/O1CN01bkgbqj1cOGfwQtEif_!!6000000003590-2-tps-2878-1638.png)
 三步创建数据源
 
 ### 参数详解

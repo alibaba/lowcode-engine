@@ -5,7 +5,7 @@ sidebar_position: 2
 # 设置器介绍
 ## 展示区域
 设置器，又称为 Setter，主要展示在编辑器的右边区域，如下图：
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/2553587/1647695118402-ac146307-f6e2-4755-8be3-67278c505283.png#clientId=u547a37e3-c43d-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=865&id=u3cac31de&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1730&originWidth=3836&originalType=binary&ratio=1&rotation=0&showTitle=false&size=947162&status=done&style=none&taskId=u35373859-102e-4809-adfd-680b2dd4cda&title=&width=1918)
+![image.png](https://img.alicdn.com/imgextra/i4/O1CN01jN0toi1OknXWrPuYt_!!6000000001744-2-tps-3836-1730.png)
 其中包含 属性、样式、事件、高级
 
 - 属性：展示该物料常规的属性
@@ -18,7 +18,7 @@ sidebar_position: 2
 ## 设置器
 上述区域中是有多项设置器的，对于一个组件来说，每一项配置都对应一个设置器，比如我们的配置是一个文本，我们需要的是文本设置器，我们需要配置的是数字，我们需要的就是数字设置器。
 下图中的标题和按钮类型配置就分别是文本设置器和下拉框设置器。
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/2553587/1647695118227-bf6caf7c-4974-4b35-8d6b-0c4969fc316d.png#clientId=u547a37e3-c43d-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=407&id=u51d889e6&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1460&originWidth=2120&originalType=binary&ratio=1&rotation=0&showTitle=false&size=489840&status=done&style=none&taskId=u35d4519f-b82d-43c4-9eb4-bd44e6d67b1&title=&width=591)
+![image.png](https://img.alicdn.com/imgextra/i4/O1CN01Bl2hgm1GiUcXD3TOO_!!6000000000656-2-tps-2120-1460.png)
 我们提供了常用的设置器作为内置设置器，也提供了定制能力帮助大家开发特定需求的设置器。
 # 内置设置器
 | **预置 Setter** | **用途** |
