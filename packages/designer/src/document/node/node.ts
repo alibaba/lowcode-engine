@@ -14,10 +14,10 @@ import {
   CompositeValue,
   GlobalEvent,
   ComponentAction,
+  IPublicModelNode,
 } from '@alilc/lowcode-types';
 import { compatStage, isDOMText, isJSExpression } from '@alilc/lowcode-utils';
 import { SettingTopEntry } from '@alilc/lowcode-designer';
-import { Node as ShellNode } from '@alilc/lowcode-shell';
 import { Props, getConvertedExtraKey } from './props/props';
 import { DocumentModel } from '../document-model';
 import { NodeChildren } from './node-children';
@@ -366,8 +366,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this._slotFor = slotFor;
   }
 
-  internalToShellNode(): ShellNode | null {
-    return ShellNode.create(this);
+  internalToShellNode(): IPublicModelNode | null {
+    return this.document.designer.shellModelFactory.createNode(this);
   }
 
   /**

@@ -12,6 +12,7 @@ import divMetadata from '../fixtures/component-metadata/div';
 import { delayObxTick } from '../utils';
 import { fireEvent } from '@testing-library/react';
 import { DragObjectType } from '@alilc/lowcode-types';
+import { shellModelFactory } from '../../../engine/src/modules/shell-model-factory';
 
 const mockNode = {
   internalToShellNode() {
@@ -32,7 +33,7 @@ describe('Designer 测试', () => {
   });
 
   beforeEach(() => {
-    designer = new Designer({ editor });
+    designer = new Designer({ editor, shellModelFactory });
     project = designer.project;
     doc = project.createDocument(formSchema);
     dragon = new Dragon(designer);
@@ -58,6 +59,7 @@ describe('Designer 测试', () => {
 
       const designer = new Designer({
         editor,
+        shellModelFactory,
         onDragstart: dragStartMockFn,
         onDrag: dragMockFn,
         onDragend: dragEndMockFn,
@@ -124,6 +126,7 @@ describe('Designer 测试', () => {
 
       const designer = new Designer({
         editor,
+        shellModelFactory,
         onDragstart: dragStartMockFn,
         onDrag: dragMockFn,
         onDragend: dragEndMockFn,
@@ -245,14 +248,18 @@ describe('Designer 测试', () => {
       suspensed: true,
       componentMetadatas: [buttonMetadata, divMetadata],
     };
-    designer = new Designer({ editor, ...initialProps });
+    designer = new Designer({
+      editor,
+      shellModelFactory,
+      ...initialProps,
+     });
 
     expect(designer.simulatorComponent).toEqual({ isSimulatorComp: true });
     expect(designer.simulatorProps).toEqual({ designMode: 'design' });
     expect(designer.suspensed).toBeTruthy();
-    expect(designer._componentMetasMap.has('Div')).toBeTruthy();
-    expect(designer._componentMetasMap.has('Button')).toBeTruthy();
-    const { editor: editorFromDesigner, ...others } = designer.props;
+    expect((designer as any)._componentMetasMap.has('Div')).toBeTruthy();
+    expect((designer as any)._componentMetasMap.has('Button')).toBeTruthy();
+    const { editor: editorFromDesigner, shellModelFactory: shellModelFactoryFromDesigner, ...others } = (designer as any).props;
     expect(others).toEqual(initialProps);
     expect(designer.get('simulatorProps')).toEqual({ designMode: 'design' });
     expect(designer.get('suspensed')).toBeTruthy();
@@ -270,9 +277,9 @@ describe('Designer 测试', () => {
     expect(designer.simulatorComponent).toEqual({ isSimulatorComp2: true });
     expect(designer.simulatorProps).toEqual({ designMode: 'live' });
     expect(designer.suspensed).toBeFalsy();
-    expect(designer._componentMetasMap.has('Button')).toBeTruthy();
-    expect(designer._componentMetasMap.has('Div')).toBeTruthy();
-    const { editor: editorFromDesigner2, ...others2 } = designer.props;
+    expect((designer as any)._componentMetasMap.has('Button')).toBeTruthy();
+    expect((designer as any)._componentMetasMap.has('Div')).toBeTruthy();
+    const { editor: editorFromDesigner2, shellModelFactory: shellModelFactoryFromDesigner2,  ...others2 } = (designer as any).props;
     expect(others2).toEqual(updatedProps);
 
     // 第三次设置 props，跟第二次值一样，for 覆盖率测试
@@ -282,9 +289,9 @@ describe('Designer 测试', () => {
     expect(designer.simulatorComponent).toEqual({ isSimulatorComp2: true });
     expect(designer.simulatorProps).toEqual({ designMode: 'live' });
     expect(designer.suspensed).toBeFalsy();
-    expect(designer._componentMetasMap.has('Button')).toBeTruthy();
-    expect(designer._componentMetasMap.has('Div')).toBeTruthy();
-    const { editor: editorFromDesigner3, ...others3 } = designer.props;
+    expect((designer as any)._componentMetasMap.has('Button')).toBeTruthy();
+    expect((designer as any)._componentMetasMap.has('Div')).toBeTruthy();
+    const { editor: editorFromDesigner3, shellModelFactory: shellModelFactoryFromDesigner3, ...others3 } = (designer as any).props;
     expect(others3).toEqual(updatedProps);
   });
 

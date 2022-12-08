@@ -32,6 +32,7 @@ import { getLogger, isPlainObject } from '@alilc/lowcode-utils';
 import './modules/live-editing';
 import classes from './modules/classes';
 import symbols from './modules/symbols';
+import { shellModelFactory } from './modules/shell-model-factory';
 
 export * from './modules/skeleton-types';
 export * from './modules/designer-types';
@@ -46,7 +47,7 @@ globalContext.register(editor, 'editor');
 const innerSkeleton = new InnerSkeleton(editor);
 editor.set('skeleton' as any, innerSkeleton);
 
-const designer = new Designer({ editor });
+const designer = new Designer({ editor, shellModelFactory });
 editor.set('designer' as any, designer);
 const { project: innerProject } = designer;
 

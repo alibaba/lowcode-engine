@@ -8,6 +8,7 @@ import {
   Dragon,
 } from '../../src/designer/dragon';
 import formSchema from '../fixtures/schema/form';
+import { shellModelFactory } from '../../../engine/src/modules/shell-model-factory';
 
 describe('Scroller 测试', () => {
   let editor: Editor;
@@ -22,7 +23,7 @@ describe('Scroller 测试', () => {
   });
 
   beforeEach(() => {
-    designer = new Designer({ editor });
+    designer = new Designer({ editor, shellModelFactory });
     project = designer.project;
     doc = project.createDocument(formSchema);
     dragon = new Dragon(designer);

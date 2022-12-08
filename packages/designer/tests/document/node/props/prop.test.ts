@@ -1,11 +1,10 @@
-// @ts-nocheck
 import '../../../fixtures/window';
-import { delayObxTick } from '../../../utils';
 import { Editor, engineConfig } from '@alilc/lowcode-editor-core';
 import { Designer } from '../../../../src/designer/designer';
 import { DocumentModel } from '../../../../src/document/document-model';
 import { Prop, isProp, isValidArrayIndex } from '../../../../src/document/node/props/prop';
 import { TransformStage } from '@alilc/lowcode-types';
+import { shellModelFactory } from '../../../../../engine/src/modules/shell-model-factory';
 
 const slotNodeImportMockFn = jest.fn();
 const slotNodeRemoveMockFn = jest.fn();
@@ -465,7 +464,7 @@ describe('Prop 类测试', () => {
 
   describe('slotNode / setAsSlot', () => {
     const editor = new Editor();
-    const designer = new Designer({ editor });
+    const designer = new Designer({ editor, shellModelFactory });
     const doc = new DocumentModel(designer.project, {
       componentName: 'Page',
       children: [
