@@ -399,12 +399,12 @@ export class Designer {
     const { components, packages } = incrementalAssets;
     components && this.buildComponentMetasMap(components);
     if (packages) {
-      await this.project.simulator!.setupComponents(packages);
+      await this.project.simulator?.setupComponents(packages);
     }
 
     if (components) {
       // 合并 assets
-      let assets = this.editor.get('assets');
+      let assets = this.editor.get('assets') || {};
       let newAssets = megreAssets(assets, incrementalAssets);
       // 对于 assets 存在需要二次网络下载的过程，必须 await 等待结束之后，再进行事件触发
       await this.editor.set('assets', newAssets);

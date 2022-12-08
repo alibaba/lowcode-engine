@@ -21,7 +21,7 @@ export default class Material {
   private readonly [innerEditorSymbol]: Editor;
   // private readonly [designerSymbol]: Designer;
 
-  get [editorSymbol]() {
+  get [editorSymbol](): Editor {
     if (this.workspaceMode) {
       return this[innerEditorSymbol];
     }
@@ -33,7 +33,7 @@ export default class Material {
     return this[innerEditorSymbol];
   }
 
-  get [designerSymbol]() {
+  get [designerSymbol](): Designer {
     return this[editorSymbol].get('designer')!;
   }
 
@@ -64,6 +64,10 @@ export default class Material {
    */
   getAssets() {
     return this[editorSymbol].get('assets');
+  }
+
+  async asyncGetAssets() {
+    return await this[editorSymbol].get('assets');
   }
 
   /**

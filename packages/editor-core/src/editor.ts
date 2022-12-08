@@ -113,10 +113,25 @@ export class Editor extends (EventEmitter as any) implements IEditor {
       if (remoteComponentDescriptions && remoteComponentDescriptions.length) {
         await Promise.all(
           remoteComponentDescriptions.map(async (component: any) => {
-            const { exportName, url } = component;
+            const { exportName, url, npm } = component;
             await (new AssetLoader()).load(url);
             if (window[exportName]) {
-              assets.components = assets.components.concat(window[exportName].components || []);
+              if (Array.isArray(window[exportName])) {
+                (window[exportName] as any).forEach((d: any, i: number) => {
+                  assets.components = assets.components.concat({
+                    npm: {
+                      ...npm,
+                      exportName: i.toString(),
+                      subName: i.toString(),
+                    },
+                    ...d.components,
+                  } || []);
+                });
+              }
+              assets.components = assets.components.concat({
+                npm,
+                ...window[exportName].components,
+              } || []);
               assets.componentList = assets.componentList.concat(window[exportName].componentList || []);
             }
             return window[exportName];
@@ -124,6 +139,7 @@ export class Editor extends (EventEmitter as any) implements IEditor {
         );
       }
     }
+
     this.context.set('assets', assets);
     this.notifyGot('assets');
   }

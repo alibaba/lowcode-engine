@@ -6,7 +6,7 @@ import {
 } from '@alilc/lowcode-designer';
 import { RootSchema, ProjectSchema, IEditor } from '@alilc/lowcode-types';
 import { globalContext } from '@alilc/lowcode-editor-core';
-import DocumentModel from './document-model';
+import DocumentModel, { Events } from './document-model';
 import SimulatorHost from './simulator-host';
 import { editorSymbol, projectSymbol, simulatorHostSymbol, simulatorRendererSymbol, documentSymbol } from './symbols';
 
@@ -129,6 +129,7 @@ export default class Project {
    */
   importSchema(schema?: ProjectSchema) {
     this[projectSymbol].load(schema, true);
+    // this[editorSymbol].emit(Events.IMPORT_SCHEMA, schema);
   }
 
   /**

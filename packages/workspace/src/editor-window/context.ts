@@ -9,6 +9,15 @@ export class EditorWindow {
     this.init();
   }
 
+  async importSchema(schema: any) {
+    const newSchema = await this.resource.import(schema);
+
+    Object.keys(newSchema).forEach(key => {
+      const view = this.editorViews.get(key);
+      view?.project.importSchema(newSchema[key]);
+    });
+  }
+
   async init() {
     await this.initViewTypes();
     await this.execViewTypesInit();
@@ -17,7 +26,7 @@ export class EditorWindow {
 
   initViewTypes = async () => {
     const editorViews = this.resource.editorViews;
-    for (let i = editorViews.length - 1; i >= 0; i--) {
+    for (let i = 0; i < editorViews.length; i++) {
       const name = editorViews[i].name;
       await this.initViewType(name);
       if (!this.editorView) {
@@ -28,7 +37,7 @@ export class EditorWindow {
 
   execViewTypesInit = async () => {
     const editorViews = this.resource.editorViews;
-    for (let i = editorViews.length - 1; i >= 0; i--) {
+    for (let i = 0; i < editorViews.length; i++) {
       const name = editorViews[i].name;
       this.changeViewType(name);
       await this.editorViews.get(name)?.init();

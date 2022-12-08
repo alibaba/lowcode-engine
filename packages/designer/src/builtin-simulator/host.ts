@@ -418,7 +418,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.renderer?.rerender?.();
   }
 
-  async mountContentFrame(iframe: HTMLIFrameElement | null) {
+  async mountContentFrame(iframe: HTMLIFrameElement | null): Promise<void> {
     if (!iframe || this._iframe === iframe) {
       return;
     }

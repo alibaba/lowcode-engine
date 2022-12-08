@@ -36,7 +36,7 @@ type PropChangeOptions = {
   oldValue: any;
 };
 
-const Events = {
+export const Events = {
   IMPORT_SCHEMA: 'shell.document.importSchema',
 };
 

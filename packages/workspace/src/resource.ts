@@ -19,6 +19,10 @@ export class Resource {
     this.options.init(ctx);
   }
 
+  async import(schema: any) {
+    return await this.options.import?.(schema);
+  }
+
   getEditorView(name: string) {
     return this.editorViewMap.get(name);
   }

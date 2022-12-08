@@ -67,6 +67,7 @@ export interface ResourceOptions {
   editorViews?: EditorViewOptions[];
   init: (ctx: any) => Promise<void>;
   dispose: (ctx: any) => Promise<void>;
+  import: (ctx: any) => Promise<any>;
 }
 
 export interface EditorViewOptions {
