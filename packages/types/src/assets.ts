@@ -62,7 +62,7 @@ export interface AssetsJson {
    */
   version: string;
   /**
-   * 大包列表，external与package的概念相似，融合在一起
+   * 大包列表，external 与 package 的概念相似，融合在一起
    */
   packages?: Package[];
   /**

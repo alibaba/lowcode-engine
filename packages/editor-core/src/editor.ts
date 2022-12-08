@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable max-len */
 import { StrictEventEmitter } from 'strict-event-emitter-types';
 import { EventEmitter } from 'events';
 import {
@@ -13,7 +15,6 @@ import {
 } from '@alilc/lowcode-types';
 import { engineConfig } from './config';
 import { globalLocale } from './intl';
-import * as utils from './utils';
 import Preference from './utils/preference';
 import { obx } from './utils';
 import { AssetsJson, AssetLoader } from '@alilc/lowcode-utils';
@@ -68,7 +69,9 @@ export class Editor extends (EventEmitter as any) implements IEditor {
 
   private hooks: HookConfig[] = [];
 
-  get<T = undefined, KeyOrType = any>(keyOrType: KeyOrType): GetReturnType<T, KeyOrType> | undefined {
+  get<T = undefined, KeyOrType = any>(
+      keyOrType: KeyOrType,
+    ): GetReturnType<T, KeyOrType> | undefined {
     return this.context.get(keyOrType as any);
   }
 
@@ -76,7 +79,7 @@ export class Editor extends (EventEmitter as any) implements IEditor {
     return this.context.has(keyOrType);
   }
 
-  set(key: KeyType, data: any): void | Promise<void>  {
+  set(key: KeyType, data: any): void | Promise<void> {
     if (key === 'assets') {
       return this.setAssets(data);
     }
@@ -113,8 +116,8 @@ export class Editor extends (EventEmitter as any) implements IEditor {
             const { exportName, url } = component;
             await (new AssetLoader()).load(url);
             if (window[exportName]) {
-              assets.components = assets.components.concat(window[exportName].components || []);
-              assets.componentList = assets.componentList.concat(window[exportName].componentList || []);
+              assets.components = assets.components.concat((window[exportName] as any).components || []);
+              assets.componentList = assets.componentList?.concat((window[exportName] as any).componentList || []);
             }
             return window[exportName];
           }),
@@ -215,7 +218,7 @@ export class Editor extends (EventEmitter as any) implements IEditor {
   registerHooks = (hooks: HookConfig[]) => {
     this.initHooks(hooks).forEach(({ message, type, handler }) => {
       if (['on', 'once'].indexOf(type) !== -1) {
-        this[type](message, handler);
+        this[type]((message as any), handler);
       }
     });
   };

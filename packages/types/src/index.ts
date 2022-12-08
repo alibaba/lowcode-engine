@@ -28,5 +28,6 @@ export * from './designer';
 export * from './dragon';
 export * from './shell';
 export * from './shell-model-factory';
+export * from './engine-config';
 // TODO: remove this in future versions
 export * from './deprecated';
