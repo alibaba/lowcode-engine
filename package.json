@@ -59,7 +59,8 @@
     "lockfile": "enable"
   },
   "resolutions": {
-    "@builder/babel-preset-ice": "1.0.1"
+    "@builder/babel-preset-ice": "1.0.1",
+    "typescript": "4.6.2"
   },
   "repository": "git@github.com:alibaba/lowcode-engine.git"
 }
