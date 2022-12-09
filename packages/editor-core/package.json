@@ -37,7 +37,7 @@
     "@types/react": "^16",
     "@types/react-dom": "^16",
     "@types/store": "^2.0.2",
-    "build-plugin-component": "^0.2.11",
+    "build-plugin-component": "^1.0.0",
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0"
   },

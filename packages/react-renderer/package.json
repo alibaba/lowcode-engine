@@ -27,7 +27,7 @@
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
     "@alifd/next": "^1.19.17",
-    "build-plugin-component": "^0.2.10",
+    "build-plugin-component": "^1.0.0",
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0",
     "react": "^16.4.1",
