@@ -2,7 +2,6 @@ import { Editor, globalContext } from '@alilc/lowcode-editor-core';
 import {
   Designer,
   registerMetadataTransducer,
-  MetadataTransducer,
   getRegisteredMetadataTransducers,
   addBuiltinComponentAction,
   removeBuiltinComponentAction,
@@ -10,13 +9,18 @@ import {
   isComponentMeta,
 } from '@alilc/lowcode-designer';
 import { AssetsJson } from '@alilc/lowcode-utils';
-import { ComponentAction, ComponentMetadata } from '@alilc/lowcode-types';
+import {
+  ComponentAction,
+  ComponentMetadata,
+  IPublicApiMaterial,
+  MetadataTransducer,
+  IPublicModelComponentMeta,
+} from '@alilc/lowcode-types';
 import { editorSymbol, designerSymbol } from './symbols';
 import ComponentMeta from './component-meta';
 
 const innerEditorSymbol = Symbol('editor');
-
-export default class Material {
+export default class Material implements IPublicApiMaterial {
   // private readonly [editorSymbol]: Editor;
   private readonly [innerEditorSymbol]: Editor;
   // private readonly [designerSymbol]: Designer;
@@ -106,8 +110,9 @@ export default class Material {
    * @param componentName
    * @returns
    */
-  getComponentMeta(componentName: string) {
-    return ComponentMeta.create(this[designerSymbol].getComponentMeta(componentName));
+  getComponentMeta(componentName: string): IPublicModelComponentMeta | null {
+    const innerMeta = this[designerSymbol].getComponentMeta(componentName);
+    return ComponentMeta.create(innerMeta);
   }
 
   /**
@@ -132,8 +137,8 @@ export default class Material {
    * 获取所有已注册的物料元数据
    * @returns
    */
-  getComponentMetasMap() {
-    const map = new Map<string, ComponentMeta>();
+  getComponentMetasMap(): Map<string, IPublicModelComponentMeta> {
+    const map = new Map<string, IPublicModelComponentMeta>();
     const originalMap = this[designerSymbol].getComponentMetasMap();
     for (let componentName of originalMap.keys()) {
       map.set(componentName, this.getComponentMeta(componentName)!);

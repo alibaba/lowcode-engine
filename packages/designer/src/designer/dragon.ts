@@ -1,7 +1,6 @@
 import { EventEmitter } from 'events';
 import { obx, makeObservable } from '@alilc/lowcode-editor-core';
-import { NodeSchema } from '@alilc/lowcode-types';
-import { Node as ShellNode } from '@alilc/lowcode-shell';
+import { DragNodeObject, DragAnyObject, DragObjectType, DragNodeDataObject, DragObject, IPublicModelNode } from '@alilc/lowcode-types';
 import { setNativeSelection, cursor } from '@alilc/lowcode-utils';
 import { DropLocation } from './location';
 import { Node, DocumentModel } from '../document';
@@ -78,31 +77,6 @@ export interface ISensor {
    * 获取节点实例
    */
   getNodeInstanceFromElement(e: Element | null): NodeInstance<ComponentInstance> | null;
-}
-
-export type DragObject = DragNodeObject | DragNodeDataObject | DragAnyObject;
-
-export enum DragObjectType {
-  // eslint-disable-next-line no-shadow
-  Node = 'node',
-  NodeData = 'nodedata',
-}
-
-export interface DragNodeObject {
-  type: DragObjectType.Node;
-  nodes: (Node | ShellNode)[];
-}
-export interface DragNodeDataObject {
-  type: DragObjectType.NodeData;
-  data: NodeSchema | NodeSchema[];
-  thumbnail?: string;
-  description?: string;
-  [extra: string]: any;
-}
-
-export interface DragAnyObject {
-  type: string;
-  [key: string]: any;
 }
 
 export function isDragNodeObject(obj: any): obj is DragNodeObject {
@@ -231,13 +205,13 @@ export class Dragon {
    * @param dragObject 拖拽对象
    * @param boostEvent 拖拽初始时事件
    */
-  boost(dragObject: DragObject, boostEvent: MouseEvent | DragEvent, fromRglNode?: Node | ShellNode) {
+  boost(dragObject: DragObject, boostEvent: MouseEvent | DragEvent, fromRglNode?: Node | IPublicModelNode) {
     const { designer } = this;
     const masterSensors = this.getMasterSensors();
     const handleEvents = makeEventsHandler(boostEvent, masterSensors);
     const newBie = !isDragNodeObject(dragObject);
     const forceCopyState =
-      isDragNodeObject(dragObject) && dragObject.nodes.some((node: Node | ShellNode) => (typeof node.isSlot === 'function' ? node.isSlot() : node.isSlot));
+      isDragNodeObject(dragObject) && dragObject.nodes.some((node: Node | IPublicModelNode) => (typeof node.isSlot === 'function' ? node.isSlot() : node.isSlot));
     const isBoostFromDragAPI = isDragEvent(boostEvent);
     let lastSensor: ISensor | undefined;
 

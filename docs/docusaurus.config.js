@@ -74,6 +74,10 @@ const config = {
       },
       // 语雀文档导出的图片，会进行 referrer 校验，这里设置关闭，不然加载不了语雀的图片
       metadata: [{ name: 'referrer', content: 'no-referrer' }],
+      tableOfContents: {
+        minHeadingLevel: 2,
+        maxHeadingLevel: 5,
+      },
     }),
 
   themes: [

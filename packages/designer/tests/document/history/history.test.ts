@@ -272,20 +272,6 @@ describe('History', () => {
     expect(history.records).toHaveLength(0);
   });
 
-  it('internalToShellHistory()', async () => {
-    const history = new History<Node>(
-      () => {
-        const data = tree.toObject();
-        return data;
-      },
-      (data) => {
-        mockRedoFn(data);
-      },
-    );
-
-    expect(history.internalToShellHistory().isModified).toBeUndefined();
-  });
-
   it('sleep & wakeup', async () => {
     const mockRedoFn = jest.fn();
     const history = new History<Node>(

@@ -1,8 +1,8 @@
 import { BuiltinSimulatorRenderer, Component, DocumentModel, Node, NodeInstance } from '@alilc/lowcode-designer';
-import { ComponentSchema, NodeSchema, NpmInfo, RootSchema, TransformStage } from '@alilc/lowcode-types';
+import { ComponentSchema, NodeSchema, NpmInfo, TransformStage } from '@alilc/lowcode-types';
 import { Asset, compatibleLegaoSchema, cursor, isElement, isESModule, isPlainObject, isReactComponent, setNativeSelection } from '@alilc/lowcode-utils';
 import LowCodeRenderer from '@alilc/lowcode-rax-renderer';
-import { computed, observable as obx, untracked, makeObservable, configure } from 'mobx';
+import { computed, observable as obx, makeObservable, configure } from 'mobx';
 import DriverUniversal from 'driver-universal';
 import { EventEmitter } from 'events';
 import { createMemoryHistory, MemoryHistory } from 'history';

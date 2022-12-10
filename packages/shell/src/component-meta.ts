@@ -2,19 +2,21 @@ import {
   ComponentMeta as InnerComponentMeta,
   ParentalNode,
 } from '@alilc/lowcode-designer';
-import Node from './node';
-import { NodeData, NodeSchema } from '@alilc/lowcode-types';
+import { NodeData, NodeSchema, IPublicModelComponentMeta, I18nData, IconType, NpmInfo, TransformedComponentMetadata, IPublicModelNode } from '@alilc/lowcode-types';
 import { componentMetaSymbol, nodeSymbol } from './symbols';
+import { ReactElement } from 'react';
 
-export default class ComponentMeta {
+export default class ComponentMeta implements IPublicModelComponentMeta {
   private readonly [componentMetaSymbol]: InnerComponentMeta;
 
   constructor(componentMeta: InnerComponentMeta) {
     this[componentMetaSymbol] = componentMeta;
   }
 
-  static create(componentMeta: InnerComponentMeta | null) {
-    if (!componentMeta) return null;
+  static create(componentMeta: InnerComponentMeta | null): IPublicModelComponentMeta | null {
+    if (!componentMeta) {
+      return null;
+    }
     return new ComponentMeta(componentMeta);
   }
 
@@ -52,28 +54,28 @@ export default class ComponentMeta {
   /**
    * 元数据配置
    */
-  get configure() {
+  get configure(): any {
     return this[componentMetaSymbol].configure;
   }
 
   /**
    * 标题
    */
-  get title() {
+  get title(): string | I18nData | ReactElement {
     return this[componentMetaSymbol].title;
   }
 
   /**
    * 图标
    */
-  get icon() {
+  get icon(): IconType {
     return this[componentMetaSymbol].icon;
   }
 
   /**
    * 组件 npm 信息
    */
-  get npm() {
+  get npm(): NpmInfo {
     return this[componentMetaSymbol].npm;
   }
 
@@ -84,7 +86,7 @@ export default class ComponentMeta {
     return this[componentMetaSymbol].prototype;
   }
 
-  get availableActions() {
+  get availableActions(): any {
     return this[componentMetaSymbol].availableActions;
   }
 
@@ -92,7 +94,7 @@ export default class ComponentMeta {
    * 设置 npm 信息
    * @param npm
    */
-  setNpm(npm: any) {
+  setNpm(npm: NpmInfo): void {
     this[componentMetaSymbol].setNpm(npm);
   }
 
@@ -100,7 +102,7 @@ export default class ComponentMeta {
    * 获取元数据
    * @returns
    */
-  getMetadata() {
+  getMetadata(): TransformedComponentMetadata {
     return this[componentMetaSymbol].getMetadata();
   }
 
@@ -111,8 +113,8 @@ export default class ComponentMeta {
    * @param parent
    * @returns
    */
-  checkNestingUp(my: Node | NodeData, parent: ParentalNode<NodeSchema>) {
-    const curNode = my.isNode ? my[nodeSymbol] : my;
+  checkNestingUp(my: IPublicModelNode | NodeData, parent: ParentalNode<NodeSchema>): boolean {
+    const curNode = (my as any).isNode ? (my as any)[nodeSymbol] : my;
     return this[componentMetaSymbol].checkNestingUp(curNode as any, parent);
   }
 
@@ -122,12 +124,12 @@ export default class ComponentMeta {
    * @param parent
    * @returns
    */
-  checkNestingDown(my: Node | NodeData, target: NodeSchema | Node | NodeSchema[]) {
-    const curNode = my.isNode ? my[nodeSymbol] : my;
-    return this[componentMetaSymbol].checkNestingDown(curNode as any, target[nodeSymbol] || target);
+  checkNestingDown(my: IPublicModelNode | NodeData, target: NodeSchema | IPublicModelNode | NodeSchema[]) {
+    const curNode = (my as any)?.isNode ? (my as any)[nodeSymbol] : my;
+    return this[componentMetaSymbol].checkNestingDown(curNode as any, (target as any)[nodeSymbol] || target);
   }
 
-  refreshMetadata() {
+  refreshMetadata(): void {
     this[componentMetaSymbol].refreshMetadata();
   }
 }

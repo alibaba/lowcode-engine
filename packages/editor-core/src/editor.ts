@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable max-len */
 import { StrictEventEmitter } from 'strict-event-emitter-types';
 import { EventEmitter } from 'events';
 import {
@@ -13,7 +15,6 @@ import {
 } from '@alilc/lowcode-types';
 import { engineConfig } from './config';
 import { globalLocale } from './intl';
-import * as utils from './utils';
 import Preference from './utils/preference';
 import { obx } from './utils';
 import { AssetsJson, AssetLoader } from '@alilc/lowcode-utils';
@@ -50,6 +51,7 @@ export declare interface Editor extends StrictEventEmitter<EventEmitter, GlobalE
 // eslint-disable-next-line no-redeclare
 export class Editor extends (EventEmitter as any) implements IEditor {
   constructor(public name: string = 'unknown', public workspaceMode: boolean = false) {
+    // eslint-disable-next-line constructor-super
     super();
   }
   /**
@@ -71,7 +73,9 @@ export class Editor extends (EventEmitter as any) implements IEditor {
 
   private hooks: HookConfig[] = [];
 
-  get<T = undefined, KeyOrType = any>(keyOrType: KeyOrType): GetReturnType<T, KeyOrType> | undefined {
+  get<T = undefined, KeyOrType = any>(
+      keyOrType: KeyOrType,
+    ): GetReturnType<T, KeyOrType> | undefined {
     return this.context.get(keyOrType as any);
   }
 
@@ -253,7 +257,7 @@ export class Editor extends (EventEmitter as any) implements IEditor {
   registerHooks = (hooks: HookConfig[]) => {
     this.initHooks(hooks).forEach(({ message, type, handler }) => {
       if (['on', 'once'].indexOf(type) !== -1) {
-        this[type](message, handler);
+        this[type]((message as any), handler);
       }
     });
   };

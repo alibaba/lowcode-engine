@@ -1,6 +1,7 @@
 import { Editor as InnerEditor, globalContext } from '@alilc/lowcode-editor-core';
 import { getLogger } from '@alilc/lowcode-utils';
 import { editorSymbol } from './symbols';
+import { IPublicApiEvent } from '@alilc/lowcode-types';
 
 const logger = getLogger({ level: 'warn', bizName: 'shell:event' });
 
@@ -10,8 +11,9 @@ type EventOptions = {
 
 const innerEditorSymbol = Symbol('editor');
 
-export default class Event {
+export default class Event implements IPublicApiEvent {
   private readonly [innerEditorSymbol]: InnerEditor;
+  // private readonly [editorSymbol]: InnerEditor;
   private readonly options: EventOptions;
 
   // TODO:

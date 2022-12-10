@@ -1,17 +1,27 @@
 import {
   Dragon as InnerDragon,
-  DragObject as InnerDragObject,
-  DragNodeDataObject,
   LocateEvent as InnerLocateEvent,
 } from '@alilc/lowcode-designer';
 import { dragonSymbol } from './symbols';
 import LocateEvent from './locate-event';
 import DragObject from './drag-object';
 import { globalContext } from '@alilc/lowcode-editor-core';
+import {
+  IPublicModelDragon,
+  IPublicModelLocateEvent,
+  IPublicModelDragObject,
+  DragObject as InnerDragObject,
+  DragNodeDataObject,
+} from '@alilc/lowcode-types';
 
 export const innerDragonSymbol = Symbol('innerDragonSymbol');
 
-export default class Dragon {
+
+export default class Dragon implements IPublicModelDragon {
+  constructor(dragon: InnerDragon) {
+    this[innerDragonSymbol] = dragon;
+  }
+
   private readonly [innerDragonSymbol]: InnerDragon;
 
   get [dragonSymbol](): any {
@@ -26,19 +36,17 @@ export default class Dragon {
     return designer.dragon;
   }
 
-  constructor(dragon: InnerDragon) {
-    this[innerDragonSymbol] = dragon;
-  }
-
-  static create(dragon: InnerDragon | null) {
-    if (!dragon) return null;
+  static create(dragon: InnerDragon | null): IPublicModelDragon | null {
+    if (!dragon) {
+      return null;
+    }
     return new Dragon(dragon);
   }
 
   /**
    * is dragging or not
    */
-  get dragging() {
+  get dragging(): boolean {
     return this[dragonSymbol].dragging;
   }
 
@@ -47,7 +55,7 @@ export default class Dragon {
    * @param func
    * @returns
    */
-  onDragstart(func: (e: LocateEvent) => any) {
+  onDragstart(func: (e: IPublicModelLocateEvent) => any): () => void {
     return this[dragonSymbol].onDragstart((e: InnerLocateEvent) => func(LocateEvent.create(e)!));
   }
 
@@ -56,7 +64,7 @@ export default class Dragon {
    * @param func
    * @returns
    */
-  onDrag(func: (e: LocateEvent) => any) {
+  onDrag(func: (e: IPublicModelLocateEvent) => any): () => void {
     return this[dragonSymbol].onDrag((e: InnerLocateEvent) => func(LocateEvent.create(e)!));
   }
 
@@ -65,7 +73,7 @@ export default class Dragon {
    * @param func
    * @returns
    */
-  onDragend(func: (o: { dragObject: DragObject; copy?: boolean }) => any) {
+  onDragend(func: (o: { dragObject: IPublicModelDragObject; copy?: boolean }) => any): () => void {
     return this[dragonSymbol].onDragend(
       (o: { dragObject: InnerDragObject; copy?: boolean }) => func({
         dragObject: DragObject.create(o.dragObject)!,
@@ -79,7 +87,7 @@ export default class Dragon {
    * @param shell 拖拽监听的区域
    * @param boost 拖拽转换函数
    */
-  from(shell: Element, boost: (e: MouseEvent) => DragNodeDataObject | null) {
+  from(shell: Element, boost: (e: MouseEvent) => DragNodeDataObject | null): any {
     return this[dragonSymbol].from(shell, boost);
   }
 }

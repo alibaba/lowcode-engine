@@ -1,23 +1,41 @@
 import { ReactNode } from 'react';
-import { CustomView, isCustomView, TitleContent } from '@alilc/lowcode-types';
-import { createContent } from '@alilc/lowcode-utils';
+import { CustomView, RegisteredSetter } from '@alilc/lowcode-types';
+import { createContent, isCustomView } from '@alilc/lowcode-utils';
 
-export type RegisteredSetter = {
-  component: CustomView;
-  defaultProps?: object;
-  title?: TitleContent;
-  /**
-   * for MixedSetter to check this setter if available
-   */
-  condition?: (field: any) => boolean;
-  /**
-   * for MixedSetter to manual change to this setter
-   */
-  initialValue?: any | ((field: any) => any);
-  recommend?: boolean;
-  // 标识是否为动态setter，默认为true
-  isDynamic?: boolean;
-};
+
+const settersMap = new Map<string, RegisteredSetter & {
+  type: string;
+}>();
+export function registerSetter(
+  typeOrMaps: string | { [key: string]: CustomView | RegisteredSetter },
+  setter?: CustomView | RegisteredSetter,
+) {
+  if (typeof typeOrMaps === 'object') {
+    Object.keys(typeOrMaps).forEach(type => {
+      registerSetter(type, typeOrMaps[type]);
+    });
+    return;
+  }
+  if (!setter) {
+    return;
+  }
+  if (isCustomView(setter)) {
+    setter = {
+      component: setter,
+      // todo: intl
+      title: (setter as any).displayName || (setter as any).name || 'CustomSetter',
+    };
+  }
+  if (!setter.initialValue) {
+    const initial = getInitialFromSetter(setter.component);
+    if (initial) {
+      setter.initialValue = (field: any) => {
+        return initial.call(field, field.getValue());
+      };
+    }
+  }
+  settersMap.set(typeOrMaps, { type: typeOrMaps, ...setter });
+}
 
 function getInitialFromSetter(setter: any) {
   return setter && (

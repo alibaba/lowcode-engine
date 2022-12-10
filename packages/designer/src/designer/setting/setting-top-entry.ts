@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
-import { CustomView, isCustomView, IEditor } from '@alilc/lowcode-types';
+import { CustomView, IEditor } from '@alilc/lowcode-types';
+import { isCustomView } from '@alilc/lowcode-utils';
 import { computed } from '@alilc/lowcode-editor-core';
 import { SettingEntry } from './setting-entry';
 import { SettingField } from './setting-field';

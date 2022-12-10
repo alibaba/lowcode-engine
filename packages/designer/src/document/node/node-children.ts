@@ -1,17 +1,15 @@
 import { obx, computed, globalContext, makeObservable } from '@alilc/lowcode-editor-core';
 import { Node, ParentalNode } from './node';
 import { TransformStage } from './transform-stage';
-import { NodeData, isNodeSchema } from '@alilc/lowcode-types';
-import { shallowEqual, compatStage } from '@alilc/lowcode-utils';
+import { NodeData } from '@alilc/lowcode-types';
+import { shallowEqual, compatStage, isNodeSchema } from '@alilc/lowcode-utils';
 import { EventEmitter } from 'events';
 import { foreachReverse } from '../../utils/tree';
 import { NodeRemoveOptions } from '../../types';
-
 export interface IOnChangeOptions {
   type: string;
   node: Node;
 }
-
 export class NodeChildren {
   @obx.shallow private children: Node[];
 
@@ -356,7 +354,7 @@ export class NodeChildren {
     return this.children.find(fn);
   }
 
-  reduce(fn: (acc: any, cur: Node) => any, initialValue: any) {
+  reduce(fn: (acc: any, cur: Node) => any, initialValue: any): void {
     return this.children.reduce(fn, initialValue);
   }
 
@@ -364,7 +362,7 @@ export class NodeChildren {
     remover: (node: Node, idx: number) => boolean,
     adder: (children: Node[]) => NodeData[] | null,
     sorter: (firstNode: Node, secondNode: Node) => number,
-  ) {
+  ): any {
     let changed = false;
     if (remover) {
       const willRemove = this.children.filter(remover);

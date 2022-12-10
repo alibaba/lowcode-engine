@@ -336,10 +336,6 @@ export interface ComponentAction {
   important?: boolean;
 }
 
-export function isActionContentObject(obj: any): obj is ActionContentObject {
-  return obj && typeof obj === 'object';
-}
-
 /**
  * 组件 meta 配置
  */
@@ -472,4 +468,18 @@ export interface Callbacks {
     },
     currentNode: any,
   ) => void;
+}
+
+export interface MetadataTransducer {
+  (prev: TransformedComponentMetadata): TransformedComponentMetadata;
+  /**
+   * 0 - 9   system
+   * 10 - 99 builtin-plugin
+   * 100 -   app & plugin
+   */
+  level?: number;
+  /**
+   * use to replace TODO
+   */
+  id?: string;
 }

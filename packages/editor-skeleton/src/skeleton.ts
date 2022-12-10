@@ -3,7 +3,6 @@ import {
   DockConfig,
   PanelConfig,
   WidgetConfig,
-  IWidgetBaseConfig,
   PanelDockConfig,
   DialogDockConfig,
   isDockConfig,
@@ -11,7 +10,6 @@ import {
   isPanelConfig,
   DividerConfig,
   isDividerConfig,
-  IWidgetConfigArea,
 } from './types';
 import Panel, { isPanel } from './widget/panel';
 import WidgetContainer from './widget/widget-container';
@@ -23,7 +21,12 @@ import { Stage, StageConfig } from './widget/stage';
 import { isValidElement } from 'react';
 import { isPlainObject, uniqueId } from '@alilc/lowcode-utils';
 import { Divider } from '@alifd/next';
-import { EditorConfig, PluginClassSet } from '@alilc/lowcode-types';
+import {
+  EditorConfig,
+  PluginClassSet,
+  IWidgetBaseConfig,
+  IWidgetConfigArea,
+} from '@alilc/lowcode-types';
 
 export enum SkeletonEvents {
   PANEL_DOCK_ACTIVE = 'skeleton.panel-dock.active',

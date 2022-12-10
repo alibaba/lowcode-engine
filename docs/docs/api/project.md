@@ -5,7 +5,7 @@ sidebar_position: 3
 # 模块简介
 引擎编排模块中包含多种模型，包括[项目模型（project）](#DADnF)、[文档模型（document-model）](#lp7xO)、[节点模型（node）](#m0cJS)、[节点孩子模型（node-children）](#W8seq)、[属性集模型（props）](#IJeRY)以及[属性模型（prop）](#w1diM)。
 他们的依赖关系如下图：
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/110793/1645510146964-62f26151-e624-48f6-a422-dacdcb60dbea.png#averageHue=%23fefefe&clientId=ue969b413-090d-4&crop=0&crop=0&crop=1&crop=1&errorMessage=unknown%20error&from=paste&height=676&id=ucd07aeff&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1352&originWidth=1650&originalType=binary&ratio=1&rotation=0&showTitle=false&size=282048&status=error&style=none&taskId=u8ec0cad1-ed80-46f5-8b6b-b7278b4bb7d&title=&width=825)
+![image.png](https://img.alicdn.com/imgextra/i3/O1CN01B1bAZi1asNU3KaSUJ_!!6000000003385-2-tps-1650-1352.png)
 在文档模型内部，又有一些引申模型，比如[历史操作（history）](#xvIKj)、[画布节点选中（selection）](#GtFkP)、[画布节点悬停（detecting）](#Tjt05)等。
 
 整个模型系统，以项目模型为最顶层的模型，其他模型实例均需要通过 project 来获得，比如 project.currentDocument 来获取当前的文档模型，project.currentDocument.nodesMap 来获取当前文档模型里所有的节点列表。
@@ -248,7 +248,7 @@ onChangeNodeVisible(fn: (node: Node, visible: boolean) => void)
 
 ### onChangeNodeChildren
 
-onChangeNodeChildren(fn: (info?: IOnChangeOptions) => void)
+onChangeNodeChildren(fn: (info?: IPublicOnChangeOptions) => void)
 
 当前 document 的节点 children 变更事件
 

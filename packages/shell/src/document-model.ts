@@ -2,16 +2,26 @@ import { Editor } from '@alilc/lowcode-editor-core';
 import {
   DocumentModel as InnerDocumentModel,
   Node as InnerNode,
-  IOnChangeOptions as InnerIOnChangeOptions,
-  DragObject as InnerDragObject,
-  DragNodeObject,
-  DragNodeDataObject,
   isDragNodeObject,
+  IOnChangeOptions as InnerOnChangeOptions,
 } from '@alilc/lowcode-designer';
 import {
   TransformStage,
   RootSchema,
   GlobalEvent,
+  IPublicModelDocumentModel,
+  IPublicOnChangeOptions,
+  DragObject,
+  DragNodeObject,
+  DragNodeDataObject,
+  IPublicModelNode,
+  IPublicModelSelection,
+  IPublicModelDetecting,
+  IPublicModelHistory,
+  IPublicModelCanvas,
+  IPublicApiProject,
+  IPublicModelModalNodesManager,
+  PropChangeOptions,
 } from '@alilc/lowcode-types';
 import Node from './node';
 import Selection from './selection';
@@ -23,33 +33,20 @@ import Canvas from './canvas';
 import ModalNodesManager from './modal-nodes-manager';
 import { documentSymbol, editorSymbol, nodeSymbol } from './symbols';
 
-type IOnChangeOptions = {
-  type: string;
-  node: Node;
-};
-
-type PropChangeOptions = {
-  key?: string | number;
-  prop?: Prop;
-  node: Node;
-  newValue: any;
-  oldValue: any;
-};
-
 export const Events = {
   IMPORT_SCHEMA: 'shell.document.importSchema',
 };
 
 const shellDocSymbol = Symbol('shellDocSymbol');
 
-export default class DocumentModel {
+export default class DocumentModel implements IPublicModelDocumentModel {
   private readonly [documentSymbol]: InnerDocumentModel;
   private readonly [editorSymbol]: Editor;
-  private _focusNode: Node;
-  public selection: Selection;
-  public detecting: Detecting;
-  public history: History;
-  public canvas: Canvas;
+  private _focusNode: IPublicModelNode | null;
+  selection: IPublicModelSelection;
+  detecting: IPublicModelDetecting;
+  history: IPublicModelHistory;
+  canvas: IPublicModelCanvas;
 
   constructor(document: InnerDocumentModel) {
     this[documentSymbol] = document;
@@ -62,10 +59,14 @@ export default class DocumentModel {
     this._focusNode = Node.create(this[documentSymbol].focusNode);
   }
 
-  static create(document: InnerDocumentModel | undefined | null) {
-    if (!document) return null;
+  static create(document: InnerDocumentModel | undefined | null): IPublicModelDocumentModel | null {
+    if (!document) {
+      return null;
+    }
     // @ts-ignore 直接返回已挂载的 shell doc 实例
-    if (document[shellDocSymbol]) return document[shellDocSymbol];
+    if (document[shellDocSymbol]) {
+      return (document as any)[shellDocSymbol];
+    }
     const shellDoc = new DocumentModel(document);
     // @ts-ignore 直接返回已挂载的 shell doc 实例
     document[shellDocSymbol] = shellDoc;
@@ -75,7 +76,7 @@ export default class DocumentModel {
   /**
    * id
    */
-  get id() {
+  get id(): string {
     return this[documentSymbol].id;
   }
 
@@ -87,7 +88,7 @@ export default class DocumentModel {
    * 获取当前文档所属的 project
    * @returns
    */
-  get project() {
+  get project(): IPublicApiProject | null {
     return Project.create(this[documentSymbol].project);
   }
 
@@ -95,15 +96,15 @@ export default class DocumentModel {
    * 获取文档的根节点
    * @returns
    */
-  get root(): Node | null {
+  get root(): IPublicModelNode | null {
     return Node.create(this[documentSymbol].getRoot());
   }
 
-  get focusNode(): Node {
+  get focusNode(): IPublicModelNode | null {
     return this._focusNode || this.root;
   }
 
-  set focusNode(node: Node) {
+  set focusNode(node: IPublicModelNode | null) {
     this._focusNode = node;
   }
 
@@ -111,8 +112,8 @@ export default class DocumentModel {
    * 获取文档下所有节点
    * @returns
    */
-  get nodesMap() {
-    const map = new Map<string, Node>();
+  get nodesMap(): any {
+    const map = new Map<string, IPublicModelNode>();
     for (let id of this[documentSymbol].nodesMap.keys()) {
       map.set(id, this.getNodeById(id)!);
     }
@@ -122,12 +123,15 @@ export default class DocumentModel {
   /**
    * 模态节点管理
    */
-  get modalNodesManager() {
+  get modalNodesManager(): IPublicModelModalNodesManager | null {
     return ModalNodesManager.create(this[documentSymbol].modalNodesManager);
   }
 
-  // @TODO: 不能直接暴露
-  get dropLocation() {
+  /**
+   * @TODO: 不能直接暴露
+   * @deprecated
+   */
+  get dropLocation(): any {
     return this[documentSymbol].dropLocation;
   }
 
@@ -136,7 +140,7 @@ export default class DocumentModel {
    * @param nodeId
    * @returns
    */
-  getNodeById(nodeId: string) {
+  getNodeById(nodeId: string): IPublicModelNode | null {
     return Node.create(this[documentSymbol].getNode(nodeId));
   }
 
@@ -144,7 +148,7 @@ export default class DocumentModel {
    * 导入 schema
    * @param schema
    */
-  importSchema(schema: RootSchema) {
+  importSchema(schema: RootSchema): void {
     this[documentSymbol].import(schema);
     this[editorSymbol].emit(Events.IMPORT_SCHEMA, schema);
   }
@@ -154,7 +158,7 @@ export default class DocumentModel {
    * @param stage
    * @returns
    */
-  exportSchema(stage: TransformStage = TransformStage.Render) {
+  exportSchema(stage: TransformStage = TransformStage.Render): any {
     return this[documentSymbol].export(stage);
   }
 
@@ -167,14 +171,14 @@ export default class DocumentModel {
    * @returns
    */
   insertNode(
-    parent: Node,
-    thing: Node,
+    parent: IPublicModelNode,
+    thing: IPublicModelNode,
     at?: number | null | undefined,
     copy?: boolean | undefined,
-  ) {
+  ): IPublicModelNode | null {
     const node = this[documentSymbol].insertNode(
-      parent[nodeSymbol] ? parent[nodeSymbol] : parent,
-      thing?.[nodeSymbol] ? thing[nodeSymbol] : thing,
+      (parent as any)[nodeSymbol] ? (parent as any)[nodeSymbol] : parent,
+      (thing as any)?.[nodeSymbol] ? (thing as any)[nodeSymbol] : thing,
       at,
       copy,
     );
@@ -186,7 +190,7 @@ export default class DocumentModel {
    * @param data
    * @returns
    */
-  createNode(data: any) {
+  createNode(data: any): IPublicModelNode | null {
     return Node.create(this[documentSymbol].createNode(data));
   }
 
@@ -194,7 +198,7 @@ export default class DocumentModel {
    * 移除指定节点/节点id
    * @param idOrNode
    */
-  removeNode(idOrNode: string | Node) {
+  removeNode(idOrNode: string | IPublicModelNode): void {
     this[documentSymbol].removeNode(idOrNode as any);
   }
 
@@ -203,7 +207,7 @@ export default class DocumentModel {
    * @param extraComps
    * @returns
    */
-  getComponentsMap(extraComps?: string[]) {
+  getComponentsMap(extraComps?: string[]): any {
     return this[documentSymbol].getComponentsMap(extraComps);
   }
 
@@ -213,13 +217,16 @@ export default class DocumentModel {
    * @param dragObject 拖拽的对象
    * @returns boolean 是否可以放置
    */
-  checkNesting(dropTarget: Node, dragObject: DragNodeObject | DragNodeDataObject): boolean {
-    let innerDragObject: InnerDragObject = dragObject;
+  checkNesting(
+      dropTarget: IPublicModelNode,
+      dragObject: DragNodeObject | DragNodeDataObject,
+    ): boolean {
+    let innerDragObject: DragObject = dragObject;
     if (isDragNodeObject(dragObject)) {
       innerDragObject.nodes = innerDragObject.nodes.map((node: Node) => (node[nodeSymbol] || node));
     }
     return this[documentSymbol].checkNesting(
-      (dropTarget[nodeSymbol] || dropTarget) as any,
+      ((dropTarget as any)[nodeSymbol] || dropTarget) as any,
       innerDragObject as any,
     );
   }
@@ -227,7 +234,7 @@ export default class DocumentModel {
   /**
    * 当前 document 新增节点事件
    */
-  onAddNode(fn: (node: Node) => void) {
+  onAddNode(fn: (node: IPublicModelNode) => void): () => void {
     return this[documentSymbol].onNodeCreate((node: InnerNode) => {
       fn(Node.create(node)!);
     });
@@ -236,7 +243,7 @@ export default class DocumentModel {
   /**
    * 当前 document 新增节点事件，此时节点已经挂载到 document 上
    */
-  onMountNode(fn: (payload: { node: Node }) => void) {
+  onMountNode(fn: (payload: { node: IPublicModelNode }) => void): () => void {
     this[editorSymbol].on('node.add', fn as any);
     return () => {
       this[editorSymbol].off('node.add', fn as any);
@@ -246,7 +253,7 @@ export default class DocumentModel {
   /**
    * 当前 document 删除节点事件
    */
-  onRemoveNode(fn: (node: Node) => void) {
+  onRemoveNode(fn: (node: IPublicModelNode) => void): () => void {
     return this[documentSymbol].onNodeDestroy((node: InnerNode) => {
       fn(Node.create(node)!);
     });
@@ -255,7 +262,7 @@ export default class DocumentModel {
   /**
    * 当前 document 的 hover 变更事件
    */
-  onChangeDetecting(fn: (node: Node) => void) {
+  onChangeDetecting(fn: (node: IPublicModelNode) => void): () => void {
     return this[documentSymbol].designer.detecting.onDetectingChange((node: InnerNode) => {
       fn(Node.create(node)!);
     });
@@ -264,7 +271,7 @@ export default class DocumentModel {
   /**
    * 当前 document 的选中变更事件
    */
-  onChangeSelection(fn: (ids: string[]) => void) {
+  onChangeSelection(fn: (ids: string[]) => void): () => void {
     return this[documentSymbol].selection.onSelectionChange((ids: string[]) => {
       fn(ids);
     });
@@ -274,9 +281,9 @@ export default class DocumentModel {
    * 当前 document 的节点显隐状态变更事件
    * @param fn
    */
-  onChangeNodeVisible(fn: (node: Node, visible: boolean) => void) {
+  onChangeNodeVisible(fn: (node: IPublicModelNode, visible: boolean) => void): void {
     // TODO: history 变化时需要重新绑定
-    this[documentSymbol].nodesMap.forEach((node) => {
+    this[documentSymbol].nodesMap?.forEach((node) => {
       node.onVisibleChange((flag: boolean) => {
         fn(Node.create(node)!, flag);
       });
@@ -287,10 +294,10 @@ export default class DocumentModel {
    * 当前 document 的节点 children 变更事件
    * @param fn
    */
-  onChangeNodeChildren(fn: (info?: IOnChangeOptions) => void) {
+  onChangeNodeChildren(fn: (info?: IPublicOnChangeOptions) => void): void {
     // TODO: history 变化时需要重新绑定
-    this[documentSymbol].nodesMap.forEach((node) => {
-      node.onChildrenChange((info?: InnerIOnChangeOptions) => {
+    this[documentSymbol].nodesMap?.forEach((node) => {
+      node.onChildrenChange((info?: InnerOnChangeOptions) => {
         return info
           ? fn({
               type: info.type,
@@ -305,7 +312,7 @@ export default class DocumentModel {
    * 当前 document 节点属性修改事件
    * @param fn
    */
-  onChangeNodeProp(fn: (info: PropChangeOptions) => void) {
+  onChangeNodeProp(fn: (info: PropChangeOptions) => void): void {
     this[editorSymbol].on(
       GlobalEvent.Node.Prop.InnerChange,
       (info: GlobalEvent.Node.Prop.ChangeOptions) => {
@@ -324,7 +331,7 @@ export default class DocumentModel {
    * import schema event
    * @param fn
    */
-  onImportSchema(fn: (schema: RootSchema) => void) {
+  onImportSchema(fn: (schema: RootSchema) => void): void {
     this[editorSymbol].on(Events.IMPORT_SCHEMA, fn as any);
   }
 }

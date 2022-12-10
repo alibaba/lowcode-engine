@@ -1,17 +1,12 @@
 import '../../fixtures/window';
-import { set } from '../../utils';
 import { Editor, globalContext } from '@alilc/lowcode-editor-core';
 import { Project } from '../../../src/project/project';
 import { DocumentModel } from '../../../src/document/document-model';
 import { Designer } from '../../../src/designer/designer';
 import DragResizeEngine from '../../../src/builtin-simulator/bem-tools/drag-resize-engine';
 import formSchema from '../../fixtures/schema/form';
-import divMetadata from '../../fixtures/component-metadata/div';
-import formMetadata from '../../fixtures/component-metadata/form';
-import otherMeta from '../../fixtures/component-metadata/other';
-import pageMetadata from '../../fixtures/component-metadata/page';
 import { fireEvent, createEvent } from '@testing-library/react';
-import { create } from 'lodash';
+import { shellModelFactory } from '../../../../engine/src/modules/shell-model-factory';
 
 describe('DragResizeEngine 测试', () => {
   let editor: Editor;
@@ -26,7 +21,7 @@ describe('DragResizeEngine 测试', () => {
   });
 
   beforeEach(() => {
-    designer = new Designer({ editor });
+    designer = new Designer({ editor, shellModelFactory });
     project = designer.project;
     doc = project.createDocument(formSchema);
     doc.open();
