@@ -37,7 +37,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     this.contextApiAssembler = contextApiAssembler;
   }
 
-  private _getLowCodePluginContext(options: IPluginContextOptions) {
+  _getLowCodePluginContext(options: IPluginContextOptions) {
     return new LowCodePluginContext(this, options, this.contextApiAssembler);
   }
 

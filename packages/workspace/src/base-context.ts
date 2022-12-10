@@ -1,8 +1,9 @@
 import { Editor, engineConfig, Setters as InnerSetters } from '@alilc/lowcode-editor-core';
 import {
   Designer,
+  ILowCodePluginContextApiAssembler,
   LowCodePluginManager,
-  TransformStage,
+  ILowCodePluginContextPrivate,
 } from '@alilc/lowcode-designer';
 import {
   Skeleton as InnerSkeleton,
@@ -12,12 +13,13 @@ import {
   WorkSpace,
 } from '@alilc/lowcode-workspace';
 
-import { Hotkey, Project, Skeleton, Setters, Material, Event } from '@alilc/lowcode-shell';
+import { Hotkey, Project, Skeleton, Setters, Material, Event, Common } from '@alilc/lowcode-shell';
 import { getLogger } from '@alilc/lowcode-utils';
 import { setterRegistry } from 'engine/src/inner-plugins/setter-registry';
 import { componentMetaParser } from 'engine/src/inner-plugins/component-meta-parser';
 import defaultPanelRegistry from 'engine/src/inner-plugins/default-panel-registry';
 import { EditorWindow } from './editor-window/context';
+import { shellModelFactory } from './shell-model-factory';
 
 export class BasicContext {
   skeleton;
@@ -53,11 +55,9 @@ export class BasicContext {
     const designer: Designer = new Designer({
       editor,
       name,
+      shellModelFactory,
     });
     editor.set('designer' as any, designer);
-
-    const plugins = new LowCodePluginManager(editor).toProxy();
-    editor.set('plugins' as any, plugins);
 
     const { project: innerProject } = designer;
     const hotkey = new Hotkey(name);
@@ -75,7 +75,6 @@ export class BasicContext {
     this.innerSetters = innerSetters;
     this.innerSkeleton = innerSkeleton;
     this.skeleton = skeleton;
-    this.plugins = plugins;
     this.innerProject = innerProject;
     this.project = project;
     this.setters = setters;
@@ -86,6 +85,24 @@ export class BasicContext {
     this.hotkey = hotkey;
     this.editor = editor;
     this.designer = designer;
+    const common = new Common(editor, innerSkeleton);
+
+    const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
+      assembleApis: (context: ILowCodePluginContextPrivate) => {
+        context.hotkey = hotkey;
+        context.project = project;
+        context.skeleton = skeleton;
+        context.setters = setters;
+        context.material = material;
+        context.event = event;
+        context.config = config;
+        context.common = common;
+      },
+    };
+
+    const plugins = new LowCodePluginManager(pluginContextApiAssembler).toProxy();
+    editor.set('plugins' as any, plugins);
+    this.plugins = plugins;
 
     // 注册一批内置插件
     this.registerInnerPlugins = async function registerPlugins() {
