@@ -198,7 +198,6 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
       setterProps = {},
       setterType,
       initialValue = null,
-
     } = this.setterInfo;
 
     const value = this.value;

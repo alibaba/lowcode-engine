@@ -104,6 +104,7 @@ export default class ComponentMeta {
     return this[componentMetaSymbol].getMetadata();
   }
 
+  isComponentMeta = true;
   /**
    * check if the current node could be placed in parent node
    * @param my

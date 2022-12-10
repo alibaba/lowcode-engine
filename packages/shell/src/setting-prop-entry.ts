@@ -62,7 +62,7 @@ export default class SettingPropEntry {
    * 获取设置属性的 setter
    */
   get setter() {
-    return this[settingPropEntrySymbol].innerSetters;
+    return this[settingPropEntrySymbol].setter;
   }
 
   /**

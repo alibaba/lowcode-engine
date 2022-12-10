@@ -363,6 +363,12 @@ export class Skeleton {
       ...this.parseConfig(config),
       ...extraConfig,
     };
+    parsedConfig.contentProps = {
+      context: this.editor.get('plugins')?._getLowCodePluginContext({
+        pluginName: 'any',
+      }),
+      ...(parsedConfig.contentProps || {}),
+    };
     let { area } = parsedConfig;
     if (!area) {
       if (parsedConfig.type === 'Panel') {

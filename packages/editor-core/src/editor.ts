@@ -115,24 +115,43 @@ export class Editor extends (EventEmitter as any) implements IEditor {
           remoteComponentDescriptions.map(async (component: any) => {
             const { exportName, url, npm } = component;
             await (new AssetLoader()).load(url);
-            if (window[exportName]) {
-              if (Array.isArray(window[exportName])) {
-                (window[exportName] as any).forEach((d: any, i: number) => {
+            function setAssetsComponent(component: any, extraNpmInfo: any = {}) {
+              const components = component.components;
+              if (Array.isArray(components)) {
+                components.forEach(d => {
                   assets.components = assets.components.concat({
                     npm: {
                       ...npm,
-                      exportName: i.toString(),
-                      subName: i.toString(),
+                      ...extraNpmInfo,
                     },
-                    ...d.components,
+                    ...d,
                   } || []);
                 });
+                return;
               }
               assets.components = assets.components.concat({
-                npm,
-                ...window[exportName].components,
+                npm: {
+                  ...npm,
+                  ...extraNpmInfo,
+                },
+                ...component.components,
               } || []);
-              assets.componentList = assets.componentList.concat(window[exportName].componentList || []);
+              // assets.componentList = assets.componentList.concat(component.componentList || []);
+            }
+            function setArrayAssets(value: any[]) {
+              value.forEach((d: any, i: number) => {
+                Array.isArray(d) ? setArrayAssets(d) : setAssetsComponent(d, {
+                  exportName: i.toString(),
+                  subName: i.toString(),
+                });
+              });
+            }
+            if (window[exportName]) {
+              if (Array.isArray(window[exportName])) {
+                setArrayAssets(window[exportName] as any);
+              } else {
+                setAssetsComponent(window[exportName] as any);
+              }
             }
             return window[exportName];
           }),
