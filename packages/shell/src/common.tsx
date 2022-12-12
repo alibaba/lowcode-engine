@@ -224,6 +224,11 @@ class Utils implements IPublicCommonUtils {
 }
 
 class EditorCabin {
+  private readonly [editorSymbol]: Editor;
+
+  constructor(editor: Editor) {
+    this[editorSymbol] = editor;
+  }
   /**
    * @deprecated
    */
@@ -259,12 +264,13 @@ class EditorCabin {
     return innerIntl(data, params);
   }
 
-  // /**
-  //  * @deprecated
-  //  */
-  // createSetterContent(setter: any, props: Record<string, any>): ReactNode {
-  //   return innerCreateSetterContent(setter, props);
-  // }
+  /**
+   * @deprecated
+   */
+  createSetterContent = (setter: any, props: Record<string, any>): ReactNode => {
+    const setters = this[editorSymbol].get('setters');
+    return setters.createSetterContent(setter, props);
+  };
 
   /**
    * @deprecated
@@ -326,7 +332,7 @@ export default class Common implements IPublicApiCommon {
   constructor(editor: Editor, skeleton: InnerSkeleton) {
     this.__designerCabin = new DesignerCabin(editor);
     this.__skeletonCabin = new SkeletonCabin(skeleton);
-    this.__editorCabin = new EditorCabin();
+    this.__editorCabin = new EditorCabin(editor);
     this.__utils = new Utils();
   }
 

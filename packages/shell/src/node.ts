@@ -527,4 +527,8 @@ export default class Node implements IPublicModelNode {
   internalToShellNode() {
     return this;
   }
+
+  canPerformAction(actionName: string): boolean {
+    return this[nodeSymbol].canPerformAction(actionName);
+  }
 }

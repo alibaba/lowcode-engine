@@ -85,6 +85,10 @@ export class EditorWindow {
     return this.editorView?.innerSetters;
   }
 
+  get innerHotkey() {
+    return this.editorView?.innerHotkey;
+  }
+
   get editor() {
     return this.editorView?.editor;
   }

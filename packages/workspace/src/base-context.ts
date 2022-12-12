@@ -1,4 +1,4 @@
-import { Editor, engineConfig, Setters as InnerSetters } from '@alilc/lowcode-editor-core';
+import { Editor, engineConfig, Setters as InnerSetters, Hotkey as InnerHotkey } from '@alilc/lowcode-editor-core';
 import {
   Designer,
   ILowCodePluginContextApiAssembler,
@@ -18,6 +18,7 @@ import { getLogger } from '@alilc/lowcode-utils';
 import { setterRegistry } from 'engine/src/inner-plugins/setter-registry';
 import { componentMetaParser } from 'engine/src/inner-plugins/component-meta-parser';
 import defaultPanelRegistry from 'engine/src/inner-plugins/default-panel-registry';
+import { builtinHotkey } from 'engine/src/inner-plugins/builtin-hotkey';
 import { EditorWindow } from './editor-window/context';
 import { shellModelFactory } from './shell-model-factory';
 
@@ -37,6 +38,7 @@ export class BasicContext {
   registerInnerPlugins: any;
   innerSetters: any;
   innerSkeleton: any;
+  innerHotkey: any;
 
   constructor(workSpace: WorkSpace, name: string, public editorWindow?: EditorWindow) {
     const editor = new Editor(name, true);
@@ -60,7 +62,8 @@ export class BasicContext {
     editor.set('designer' as any, designer);
 
     const { project: innerProject } = designer;
-    const hotkey = new Hotkey(name);
+    const innerHotkey = new InnerHotkey(name);
+    const hotkey = new Hotkey(innerHotkey, name, true);
     const innerSetters = new InnerSetters(name);
     const setters = new Setters(innerSetters, true);
     const material = new Material(editor, true, name);
@@ -72,6 +75,9 @@ export class BasicContext {
     editor.set('setters', setters);
     editor.set('project', project);
     editor.set('material', material);
+    editor.set('hotkey', hotkey);
+    editor.set('innerHotkey', innerHotkey);
+    innerHotkey.mount(window);
     this.innerSetters = innerSetters;
     this.innerSkeleton = innerSkeleton;
     this.skeleton = skeleton;
@@ -83,6 +89,7 @@ export class BasicContext {
     this.event = event;
     this.logger = logger;
     this.hotkey = hotkey;
+    this.innerHotkey = innerHotkey;
     this.editor = editor;
     this.designer = designer;
     const common = new Common(editor, innerSkeleton);
@@ -110,6 +117,7 @@ export class BasicContext {
       await plugins.register(componentMetaParser(designer));
       await plugins.register(setterRegistry);
       await plugins.register(defaultPanelRegistry(editor, designer));
+      await plugins.register(builtinHotkey);
     };
   }
 

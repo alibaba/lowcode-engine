@@ -5,6 +5,8 @@ import { IPublicApiProject } from '../api';
 import { PropChangeOptions } from '../index';
 import { IPublicModelModalNodesManager } from './modal-nodes-manager';
 import { IPublicModelNode } from './node';
+import { IPublicModelSelection } from './selection';
+import { IPublicModelHistory } from './history';
 
 
 export interface IPublicModelDocumentModel {
@@ -15,6 +17,10 @@ export interface IPublicModelDocumentModel {
   get id(): string;
 
   set id(id);
+
+  selection: IPublicModelSelection;
+
+  history: IPublicModelHistory;
 
   /**
    * 获取当前文档所属的 project

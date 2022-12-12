@@ -64,7 +64,7 @@ import {
   DragNodeObject,
 } from '@alilc/lowcode-types';
 import { BuiltinSimulatorRenderer } from './renderer';
-import clipboard from '../designer/clipboard';
+import { clipboard } from '../designer/clipboard';
 import { LiveEditing } from './live-editing/live-editing';
 import { Project } from '../project';
 import { Scroller } from '../designer/scroller';
@@ -478,6 +478,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.setupEvents();
 
     // bind hotkey & clipboard
+    const hotkey = this.designer.editor.get('innerHotkey');
     hotkey.mount(this._contentWindow);
     focusTracker.mount(this._contentWindow);
     clipboard.injectCopyPaster(this._contentDocument);

@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    "build-plugin-component",
-    "@alilc/lowcode-test-mate/plugin/index.ts"
-  ]
-}

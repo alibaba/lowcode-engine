@@ -4,7 +4,7 @@ import BuiltinDragGhostComponent from './drag-ghost';
 import { Designer, DesignerProps } from './designer';
 import { ProjectView } from '../project';
 import './designer.less';
-import clipboard from './clipboard';
+import { clipboard } from './clipboard';
 
 export class DesignerView extends Component<DesignerProps & {
   designer?: Designer;

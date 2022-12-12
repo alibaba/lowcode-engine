@@ -1,8 +1,16 @@
 /* eslint-disable no-param-reassign */
 import { createElement } from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
-import { globalContext, Editor, engineConfig, Setters as InnerSetters } from '@alilc/lowcode-editor-core';
-import { EngineOptions } from '@alilc/lowcode-types';
+import {
+  globalContext,
+  Editor,
+  engineConfig,
+  Setters as InnerSetters,
+  Hotkey as InnerHotkey,
+} from '@alilc/lowcode-editor-core';
+import { EngineOptions,
+  IPublicModelDocumentModel,
+} from '@alilc/lowcode-types';
 import {
   Designer,
   LowCodePluginManager,
@@ -37,6 +45,7 @@ import { componentMetaParser } from './inner-plugins/component-meta-parser';
 import { setterRegistry } from './inner-plugins/setter-registry';
 import { defaultPanelRegistry } from './inner-plugins/default-panel-registry';
 import { shellModelFactory } from './modules/shell-model-factory';
+import { builtinHotkey } from './inner-plugins/builtin-hotkey';
 
 export * from './modules/skeleton-types';
 export * from './modules/designer-types';
@@ -57,7 +66,8 @@ const designer = new Designer({ editor, shellModelFactory });
 editor.set('designer' as any, designer);
 const { project: innerProject } = designer;
 
-const hotkey = new Hotkey();
+const innerHotkey = new InnerHotkey();
+const hotkey = new Hotkey(innerHotkey);
 const project = new Project(innerProject);
 const skeleton = new Skeleton(innerSkeleton);
 const innerSetters = new InnerSetters();
@@ -67,6 +77,7 @@ const material = new Material(editor);
 editor.set('project', project);
 editor.set('setters' as any, setters);
 editor.set('material', material);
+editor.set('innerHotkey', innerHotkey);
 const config = engineConfig;
 const event = new Event(editor, { prefix: 'common' });
 const logger = getLogger({ level: 'warn', bizName: 'common' });
@@ -158,6 +169,7 @@ export async function init(
   await plugins.register(componentMetaParser(designer));
   await plugins.register(setterRegistry);
   await plugins.register(defaultPanelRegistry(editor, designer));
+  await plugins.register(builtinHotkey);
 
   await plugins.init(pluginPreference as any);
 
@@ -189,7 +201,7 @@ export async function destroy() {
   // remove all documents
   const { documents } = project;
   if (Array.isArray(documents) && documents.length > 0) {
-    documents.forEach(((doc: DocumentModel) => project.removeDocument(doc)));
+    documents.forEach(((doc: IPublicModelDocumentModel) => project.removeDocument(doc)));
   }
 
   // TODO: delete plugins except for core plugins

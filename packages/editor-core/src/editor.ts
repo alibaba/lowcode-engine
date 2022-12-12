@@ -142,11 +142,13 @@ export class Editor extends (EventEmitter as any) implements IEditor {
               } || []);
               // assets.componentList = assets.componentList.concat(component.componentList || []);
             }
-            function setArrayAssets(value: any[]) {
+            function setArrayAssets(value: any[], preExportName: string = '', preSubName: string = '') {
               value.forEach((d: any, i: number) => {
-                Array.isArray(d) ? setArrayAssets(d) : setAssetsComponent(d, {
-                  exportName: i.toString(),
-                  subName: i.toString(),
+                const exportName = [preExportName, i.toString()].filter(d => !!d).join('.');
+                const subName = [preSubName, i.toString()].filter(d => !!d).join('.');
+                Array.isArray(d) ? setArrayAssets(d, exportName, subName) : setAssetsComponent(d, {
+                  exportName,
+                  subName,
                 });
               });
             }

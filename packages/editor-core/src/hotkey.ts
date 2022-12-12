@@ -354,7 +354,7 @@ function fireCallback(callback: HotkeyCallback, e: KeyboardEvent, combo?: string
 }
 
 export class Hotkey {
-  private callBacks: HotkeyCallbacks = {};
+  callBacks: HotkeyCallbacks = {};
 
   private directMap: HotkeyDirectMap = {};
 
@@ -367,6 +367,8 @@ export class Hotkey {
   private ignoreNextKeypress = false;
 
   private nextExpectedAction: boolean | string = false;
+
+  constructor(readonly name: string = 'unknown') {}
 
   mount(window: Window) {
     const { document } = window;
@@ -645,5 +647,5 @@ export class Hotkey {
   }
 }
 
-export const hotkey = new Hotkey();
-hotkey.mount(window);
+// export const hotkey = new Hotkey();
+// hotkey.mount(window);
