@@ -1,5 +1,6 @@
 import { Snippet, ComponentMetadata } from './metadata';
 import { I18nData } from './i18n';
+import { Reference } from './npm';
 
 export interface AssetItem {
   type: AssetType;
@@ -105,9 +106,13 @@ export interface ComponentSort {
  */
 export interface Package {
   /**
-   * 包名
+   * npm 包名
    */
-  package: string;
+  package?: string;
+  /**
+   * 包唯一标识
+   */
+  id?: string;
   /**
    * 包版本号
    */
@@ -208,6 +213,10 @@ export interface ComponentDescription extends ComponentMetadata {
    * @todo 待补充文档 @jinchan
    */
   keywords: string[];
+  /**
+   * 替代 npm 字段的升级版本
+   */
+  reference?: Reference;
 }
 
 /**

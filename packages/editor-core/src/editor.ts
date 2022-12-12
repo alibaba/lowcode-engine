@@ -17,6 +17,7 @@ import * as utils from './utils';
 import Preference from './utils/preference';
 import { obx } from './utils';
 import { AssetsJson, AssetLoader } from '@alilc/lowcode-utils';
+import { assetsTransform } from './utils/assets-transform';
 
 EventEmitter.defaultMaxListeners = 100;
 
@@ -76,7 +77,7 @@ export class Editor extends (EventEmitter as any) implements IEditor {
     return this.context.has(keyOrType);
   }
 
-  set(key: KeyType, data: any): void | Promise<void>  {
+  set(key: KeyType, data: any): void | Promise<void> {
     if (key === 'assets') {
       return this.setAssets(data);
     }
@@ -121,7 +122,8 @@ export class Editor extends (EventEmitter as any) implements IEditor {
         );
       }
     }
-    this.context.set('assets', assets);
+    const innerAssets = assetsTransform(assets);
+    this.context.set('assets', innerAssets);
     this.notifyGot('assets');
   }
 
@@ -142,7 +144,7 @@ export class Editor extends (EventEmitter as any) implements IEditor {
     const x = this.context.get(keyOrType);
     if (x !== undefined) {
       fn(x);
-      return () => {};
+      return () => { };
     } else {
       this.setWait(keyOrType, fn);
       return () => {
@@ -166,7 +168,7 @@ export class Editor extends (EventEmitter as any) implements IEditor {
     const { hooks = [], lifeCycles } = this.config;
 
     this.emit('editor.beforeInit');
-    const init = (lifeCycles && lifeCycles.init) || ((): void => {});
+    const init = (lifeCycles && lifeCycles.init) || ((): void => { });
 
     try {
       await init(this);
@@ -228,11 +230,11 @@ export class Editor extends (EventEmitter as any) implements IEditor {
 
   /* eslint-disable */
   private waits = new Map<
-  KeyType,
-  Array<{
-    once?: boolean;
-    resolve: (data: any) => void;
-  }>
+    KeyType,
+    Array<{
+      once?: boolean;
+      resolve: (data: any) => void;
+    }>
   >();
   /* eslint-enable */
 
