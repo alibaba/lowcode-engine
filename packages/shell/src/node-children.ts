@@ -10,11 +10,11 @@ export default class NodeChildren implements IPublicModelNodeChildren {
     this[nodeChildrenSymbol] = nodeChildren;
   }
 
-  static create(nodeChldren: InnerNodeChildren | null): IPublicModelNodeChildren | null {
-    if (!nodeChldren) {
+  static create(nodeChildren: InnerNodeChildren | null): IPublicModelNodeChildren | null {
+    if (!nodeChildren) {
       return null;
     }
-    return new NodeChildren(nodeChldren);
+    return new NodeChildren(nodeChildren);
   }
 
   /**

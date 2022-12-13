@@ -1,3 +1,4 @@
+import { IPublicModelNode } from './../../../types/src/shell/model/node';
 import { Editor, globalContext } from '@alilc/lowcode-editor-core';
 import { isFormEvent } from '@alilc/lowcode-utils';
 import {
@@ -24,16 +25,16 @@ export function isInLiveEditing() {
 }
 
 /* istanbul ignore next */
-function getNextForSelect(next: any, head?: any, parent?: any): any {
+function getNextForSelect(next: IPublicModelNode | null, head?: any, parent?: IPublicModelNode | null): any {
   if (next) {
     if (!head) {
       return next;
     }
 
     let ret;
-    if (next.isContainer()) {
-      const children = next.getChildren() || [];
-      if (children && !children.isEmpty()) {
+    if (next.isContainer) {
+      const children = next.children;
+      if (children && !children.isEmpty) {
         ret = getNextForSelect(children.get(0));
         if (ret) {
           return ret;
@@ -48,19 +49,19 @@ function getNextForSelect(next: any, head?: any, parent?: any): any {
   }
 
   if (parent) {
-    return getNextForSelect(parent.nextSibling, false, parent.getParent());
+    return getNextForSelect(parent.nextSibling, false, parent?.parent);
   }
 
   return null;
 }
 
 /* istanbul ignore next */
-function getPrevForSelect(prev: any, head?: any, parent?: any): any {
+function getPrevForSelect(prev: IPublicModelNode | null, head?: any, parent?: IPublicModelNode | null): any {
   if (prev) {
     let ret;
-    if (!head && prev.isContainer()) {
-      const children = prev.getChildren() || [];
-      const lastChild = children && !children.isEmpty() ? children.get(children.size - 1) : null;
+    if (!head && prev.isContainer) {
+      const children = prev.children;
+      const lastChild = children && !children.isEmpty ? children.get(children.size - 1) : null;
 
       ret = getPrevForSelect(lastChild);
       if (ret) {
