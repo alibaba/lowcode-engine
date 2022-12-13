@@ -27,7 +27,7 @@ const logger = getLogger({ level: 'warn', bizName: 'designer:pluginManager' });
 export class LowCodePluginManager implements ILowCodePluginManager {
   private plugins: ILowCodePlugin[] = [];
 
-  private pluginsMap: Map<string, ILowCodePlugin> = new Map();
+  pluginsMap: Map<string, ILowCodePlugin> = new Map();
 
   private pluginPreference?: PluginPreference = new Map();
 

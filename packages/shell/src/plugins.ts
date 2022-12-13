@@ -10,7 +10,7 @@ import { pluginsSymbol } from './symbols';
 const innerPluginsSymbol = Symbol('plugin');
 export default class Plugins implements IPublicApiPlugins {
   private readonly [innerPluginsSymbol]: LowCodePluginManager;
-  get [pluginsSymbol]() {
+  get [pluginsSymbol](): LowCodePluginManager {
     if (this.workspaceMode) {
       return this[innerPluginsSymbol];
     }
@@ -32,6 +32,14 @@ export default class Plugins implements IPublicApiPlugins {
     registerOptions?: any,
   ): Promise<void> {
     await this[pluginsSymbol].register(pluginConfigCreator, options, registerOptions);
+  }
+
+  async init(registerOptions: any) {
+    await this[pluginsSymbol].init(registerOptions);
+  }
+
+  async getPluginPreference(pluginName: string) {
+    await this[pluginsSymbol].getPluginPreference(pluginName);
   }
 
   toProxy() {

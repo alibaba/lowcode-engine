@@ -83,7 +83,7 @@ const config = engineConfig;
 const event = new Event(editor, { prefix: 'common' });
 const logger = getLogger({ level: 'warn', bizName: 'common' });
 const common = new Common(editor, innerSkeleton);
-let plugins: any;
+let plugins: Plugins;
 
 const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
   assembleApis: (context: ILowCodePluginContextPrivate) => {
