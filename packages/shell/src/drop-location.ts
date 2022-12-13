@@ -3,16 +3,19 @@ import {
 } from '@alilc/lowcode-designer';
 import { dropLocationSymbol } from './symbols';
 import Node from './node';
+import { IPublicModelDropLocation } from '@alilc/lowcode-types';
 
-export default class DropLocation {
+export default class DropLocation implements IPublicModelDropLocation {
   private readonly [dropLocationSymbol]: InnerDropLocation;
 
   constructor(dropLocation: InnerDropLocation) {
     this[dropLocationSymbol] = dropLocation;
   }
 
-  static create(dropLocation: InnerDropLocation | null) {
-    if (!dropLocation) return null;
+  static create(dropLocation: InnerDropLocation | null): DropLocation | null {
+    if (!dropLocation) {
+      return null;
+    }
     return new DropLocation(dropLocation);
   }
 

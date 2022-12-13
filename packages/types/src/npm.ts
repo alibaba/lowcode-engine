@@ -80,13 +80,4 @@ export interface LowCodeComponentType {
 
 export type ProCodeComponentType = NpmInfo;
 export type ComponentMap = ProCodeComponentType | LowCodeComponentType;
-
-export function isProCodeComponentType(desc: ComponentMap): desc is ProCodeComponentType {
-  return 'package' in desc;
-}
-
-export function isLowCodeComponentType(desc: ComponentMap): desc is LowCodeComponentType {
-  return !isProCodeComponentType(desc);
-}
-
 export type ComponentsMap = ComponentMap[];

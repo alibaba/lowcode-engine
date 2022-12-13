@@ -1,31 +1,33 @@
 import { NodeChildren as InnerNodeChildren, Node as InnerNode } from '@alilc/lowcode-designer';
-import { NodeSchema, NodeData, TransformStage } from '@alilc/lowcode-types';
+import { NodeSchema, NodeData, TransformStage, IPublicModelNodeChildren, IPublicModelNode } from '@alilc/lowcode-types';
 import Node from './node';
 import { nodeSymbol, nodeChildrenSymbol } from './symbols';
 
-export default class NodeChildren {
+export default class NodeChildren implements IPublicModelNodeChildren {
   private readonly [nodeChildrenSymbol]: InnerNodeChildren;
 
   constructor(nodeChildren: InnerNodeChildren) {
     this[nodeChildrenSymbol] = nodeChildren;
   }
 
-  static create(nodeChldren: InnerNodeChildren | null) {
-    if (!nodeChldren) return null;
+  static create(nodeChldren: InnerNodeChildren | null): IPublicModelNodeChildren | null {
+    if (!nodeChldren) {
+      return null;
+    }
     return new NodeChildren(nodeChldren);
   }
 
   /**
    * 返回当前 children 实例所属的节点实例
    */
-  get owner(): Node | null {
+  get owner(): IPublicModelNode | null {
     return Node.create(this[nodeChildrenSymbol].owner);
   }
 
   /**
    * children 内的节点实例数
    */
-  get size() {
+  get size(): number {
     return this[nodeChildrenSymbol].size;
   }
 
@@ -33,14 +35,14 @@ export default class NodeChildren {
    * 是否为空
    * @returns
    */
-  get isEmpty() {
+  get isEmpty(): boolean {
     return this[nodeChildrenSymbol].isEmpty();
   }
 
   /**
    * judge if it is not empty
    */
-  get notEmpty() {
+  get notEmpty(): boolean {
     return !this.isEmpty;
   }
 
@@ -49,8 +51,8 @@ export default class NodeChildren {
    * @param node
    * @returns
    */
-  delete(node: Node) {
-    return this[nodeChildrenSymbol].delete(node[nodeSymbol]);
+  delete(node: IPublicModelNode): boolean {
+    return this[nodeChildrenSymbol].delete((node as any)[nodeSymbol]);
   }
 
   /**
@@ -59,8 +61,8 @@ export default class NodeChildren {
    * @param at 插入下标
    * @returns
    */
-  insert(node: Node, at?: number | null) {
-    return this[nodeChildrenSymbol].insert(node[nodeSymbol], at, true);
+  insert(node: IPublicModelNode, at?: number | null): void {
+    return this[nodeChildrenSymbol].insert((node as any)[nodeSymbol], at, true);
   }
 
   /**
@@ -68,8 +70,8 @@ export default class NodeChildren {
    * @param node
    * @returns
    */
-  indexOf(node: Node) {
-    return this[nodeChildrenSymbol].indexOf(node[nodeSymbol]);
+  indexOf(node: IPublicModelNode): number {
+    return this[nodeChildrenSymbol].indexOf((node as any)[nodeSymbol]);
   }
 
   /**
@@ -78,8 +80,8 @@ export default class NodeChildren {
    * @param deleteCount
    * @param node
    */
-  splice(start: number, deleteCount: number, node?: Node) {
-    this[nodeChildrenSymbol].splice(start, deleteCount, node?.[nodeSymbol]);
+  splice(start: number, deleteCount: number, node?: IPublicModelNode): any {
+    this[nodeChildrenSymbol].splice(start, deleteCount, (node as any)?.[nodeSymbol]);
   }
 
   /**
@@ -87,7 +89,7 @@ export default class NodeChildren {
    * @param index
    * @returns
    */
-  get(index: number) {
+  get(index: number): any {
     return Node.create(this[nodeChildrenSymbol].get(index));
   }
 
@@ -96,15 +98,15 @@ export default class NodeChildren {
    * @param node
    * @returns
    */
-  has(node: Node) {
-    return this[nodeChildrenSymbol].has(node[nodeSymbol]);
+  has(node: IPublicModelNode): boolean {
+    return this[nodeChildrenSymbol].has((node as any)[nodeSymbol]);
   }
 
   /**
    * 类似数组的 forEach
    * @param fn
    */
-  forEach(fn: (node: Node, index: number) => void) {
+  forEach(fn: (node: IPublicModelNode, index: number) => void): void {
     this[nodeChildrenSymbol].forEach((item: InnerNode<NodeSchema>, index: number) => {
       fn(Node.create(item)!, index);
     });
@@ -114,7 +116,7 @@ export default class NodeChildren {
    * 类似数组的 map
    * @param fn
    */
-  map<T>(fn: (node: Node, index: number) => T[]) {
+  map<T>(fn: (node: IPublicModelNode, index: number) => T[]): any[] | null {
     return this[nodeChildrenSymbol].map((item: InnerNode<NodeSchema>, index: number) => {
       return fn(Node.create(item)!, index);
     });
@@ -124,7 +126,7 @@ export default class NodeChildren {
    * 类似数组的 every
    * @param fn
    */
-  every(fn: (node: Node, index: number) => boolean) {
+  every(fn: (node: IPublicModelNode, index: number) => boolean): boolean {
     return this[nodeChildrenSymbol].every((item: InnerNode<NodeSchema>, index: number) => {
       return fn(Node.create(item)!, index);
     });
@@ -134,7 +136,7 @@ export default class NodeChildren {
    * 类似数组的 some
    * @param fn
    */
-  some(fn: (node: Node, index: number) => boolean) {
+  some(fn: (node: IPublicModelNode, index: number) => boolean): boolean {
     return this[nodeChildrenSymbol].some((item: InnerNode<NodeSchema>, index: number) => {
       return fn(Node.create(item)!, index);
     });
@@ -144,7 +146,7 @@ export default class NodeChildren {
    * 类似数组的 filter
    * @param fn
    */
-  filter(fn: (node: Node, index: number) => boolean) {
+  filter(fn: (node: IPublicModelNode, index: number) => boolean): any {
     return this[nodeChildrenSymbol]
       .filter((item: InnerNode<NodeSchema>, index: number) => {
         return fn(Node.create(item)!, index);
@@ -156,7 +158,7 @@ export default class NodeChildren {
    * 类似数组的 find
    * @param fn
    */
-  find(fn: (node: Node, index: number) => boolean) {
+  find(fn: (node: IPublicModelNode, index: number) => boolean): IPublicModelNode | null {
     return Node.create(
       this[nodeChildrenSymbol].find((item: InnerNode<NodeSchema>, index: number) => {
         return fn(Node.create(item)!, index);
@@ -168,7 +170,7 @@ export default class NodeChildren {
    * 类似数组的 reduce
    * @param fn
    */
-  reduce(fn: (acc: any, cur: Node) => any, initialValue: any) {
+  reduce(fn: (acc: any, cur: IPublicModelNode) => any, initialValue: any): void {
     return this[nodeChildrenSymbol].reduce((acc: any, cur: InnerNode) => {
       return fn(acc, Node.create(cur)!);
     }, initialValue);
@@ -178,7 +180,7 @@ export default class NodeChildren {
    * 导入 schema
    * @param data
    */
-  importSchema(data?: NodeData | NodeData[]) {
+  importSchema(data?: NodeData | NodeData[]): void {
     this[nodeChildrenSymbol].import(data);
   }
 
@@ -187,7 +189,7 @@ export default class NodeChildren {
    * @param stage
    * @returns
    */
-  exportSchema(stage: TransformStage = TransformStage.Render) {
+  exportSchema(stage: TransformStage = TransformStage.Render): any {
     return this[nodeChildrenSymbol].export(stage);
   }
 
@@ -198,9 +200,9 @@ export default class NodeChildren {
    * @param sorter
    */
   mergeChildren(
-    remover: (node: Node, idx: number) => boolean,
-    adder: (children: Node[]) => any,
-    sorter: (firstNode: Node, secondNode: Node) => number,
+    remover: (node: IPublicModelNode, idx: number) => boolean,
+    adder: (children: IPublicModelNode[]) => any,
+    sorter: (firstNode: IPublicModelNode, secondNode: IPublicModelNode) => number,
   ) {
     if (!sorter) {
       sorter = () => 0;

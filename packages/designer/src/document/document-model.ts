@@ -1,15 +1,15 @@
 import { makeObservable, obx, engineConfig, action, runWithGlobalEventOff, wrapWithEventSwitch } from '@alilc/lowcode-editor-core';
-import { NodeData, isJSExpression, isDOMText, NodeSchema, isNodeSchema, RootSchema, PageSchema, ComponentsMap } from '@alilc/lowcode-types';
+import { NodeData, NodeSchema, RootSchema, PageSchema, ComponentsMap, DragNodeObject, DragNodeDataObject } from '@alilc/lowcode-types';
 import { EventEmitter } from 'events';
 import { Project } from '../project';
 import { ISimulatorHost } from '../simulator';
 import { ComponentMeta } from '../component-meta';
-import { isDragNodeDataObject, DragNodeObject, DragNodeDataObject, DropLocation, Designer, isDragNodeObject } from '../designer';
+import { isDragNodeDataObject, DropLocation, Designer, isDragNodeObject } from '../designer';
 import { Node, insertChildren, insertChild, isNode, RootNode, ParentalNode } from './node/node';
 import { Selection } from './selection';
 import { History } from './history';
 import { TransformStage, ModalNodesManager } from './node';
-import { uniqueId, isPlainObject, compatStage } from '@alilc/lowcode-utils';
+import { uniqueId, isPlainObject, compatStage, isJSExpression, isDOMText, isNodeSchema } from '@alilc/lowcode-utils';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {

@@ -1,7 +1,8 @@
-import { History as InnerHistory, DocumentModel as InnerDocumentModel } from '@alilc/lowcode-designer';
+import { DocumentModel as InnerDocumentModel } from '@alilc/lowcode-designer';
 import { historySymbol, documentSymbol } from './symbols';
+import { IPublicModelHistory } from '@alilc/lowcode-types';
 
-export default class History {
+export default class History implements IPublicModelHistory {
   private readonly [documentSymbol]: InnerDocumentModel;
 
   private get [historySymbol]() {
@@ -16,28 +17,28 @@ export default class History {
    * 历史记录跳转到指定位置
    * @param cursor
    */
-  go(cursor: number) {
+  go(cursor: number): void {
     this[historySymbol].go(cursor);
   }
 
   /**
    * 历史记录后退
    */
-  back() {
+  back(): void {
     this[historySymbol].back();
   }
 
   /**
    * 历史记录前进
    */
-  forward() {
+  forward(): void {
     this[historySymbol].forward();
   }
 
   /**
    * 保存当前状态
    */
-  savePoint() {
+  savePoint(): void {
     this[historySymbol].savePoint();
   }
 
@@ -45,7 +46,7 @@ export default class History {
    * 当前是否是「保存点」，即是否有状态变更但未保存
    * @returns
    */
-  isSavePoint() {
+  isSavePoint(): boolean {
     return this[historySymbol].isSavePoint();
   }
 
@@ -53,7 +54,7 @@ export default class History {
    * 获取 state，判断当前是否为「可回退」、「可前进」的状态
    * @returns
    */
-  getState() {
+  getState(): any {
     return this[historySymbol].getState();
   }
 
@@ -62,7 +63,7 @@ export default class History {
    * @param func
    * @returns
    */
-  onChangeState(func: () => any) {
+  onChangeState(func: () => any): () => void {
     return this[historySymbol].onStateChange(func);
   }
 
@@ -71,7 +72,7 @@ export default class History {
    * @param func
    * @returns
    */
-  onChangeCursor(func: () => any) {
+  onChangeCursor(func: () => any): () => void {
     return this[historySymbol].onCursor(func);
   }
 }

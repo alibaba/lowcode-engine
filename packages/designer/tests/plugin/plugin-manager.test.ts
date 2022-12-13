@@ -1,14 +1,19 @@
 import '../fixtures/window';
 import { Editor, engineConfig } from '@alilc/lowcode-editor-core';
 import { LowCodePluginManager } from '../../src/plugin/plugin-manager';
-import { ILowCodePluginContext, ILowCodePluginManager } from '../../src/plugin/plugin-types';
+import { ILowCodePluginContext, ILowCodePluginManager, ILowCodePluginContextApiAssembler } from '../../src/plugin/plugin-types';
 
 const editor = new Editor();
+const contextApiAssembler = {
+  assembleApis(){
+    // mock set apis
+  }
+};
 
 describe('plugin 测试', () => {
   let pluginManager: ILowCodePluginManager;
   beforeEach(() => {
-    pluginManager = new LowCodePluginManager(editor).toProxy();
+    pluginManager = new LowCodePluginManager(contextApiAssembler).toProxy();
   });
   afterEach(() => {
     pluginManager.dispose();

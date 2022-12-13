@@ -3,6 +3,8 @@ import StrictEventEmitter from 'strict-event-emitter-types';
 import { ReactNode, ComponentType } from 'react';
 import { NpmInfo } from './npm';
 import * as GlobalEvent from './event';
+import { CustomView } from './setter-config';
+import { TitleContent } from './title';
 
 export type KeyType = (new (...args: any[]) => any) | symbol | string;
 export type ClassType = new (...args: any[]) => any;
@@ -196,4 +198,23 @@ export interface PluginStatus {
 
 export interface PluginStatusSet {
   [key: string]: PluginStatus;
+}
+
+export type HotkeyCallback = (e: KeyboardEvent, combo?: string) => any | false;
+
+export interface RegisteredSetter {
+  component: CustomView;
+  defaultProps?: object;
+  title?: TitleContent;
+  /**
+   * for MixedSetter to check this setter if available
+   */
+  condition?: (field: any) => boolean;
+  /**
+   * for MixedSetter to manual change to this setter
+   */
+  initialValue?: any | ((field: any) => any);
+  recommend?: boolean;
+  // 标识是否为动态 setter，默认为 true
+  isDynamic?: boolean;
 }

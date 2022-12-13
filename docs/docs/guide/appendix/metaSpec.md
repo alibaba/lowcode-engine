@@ -2,6 +2,6 @@
 title: 搭建组件协议结构
 sidebar_position: 1
 ---
-完整协议请查看：[http://lowcode-engine.cn/material](http://lowcode-engine.cn/material)
+完整协议[查看](/site/docs/specs/material-spec)
 
-![](https://cdn.nlark.com/yuque/0/2022/jpeg/2622706/1646040400808-9a4a4d7d-6ad2-43be-8c97-d88f0cab7cc6.jpeg)
+![](https://img.alicdn.com/imgextra/i4/O1CN01hozDem1apAhnvdESN_!!6000000003378-0-tps-2474-4128.jpg)

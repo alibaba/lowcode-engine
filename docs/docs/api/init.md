@@ -41,7 +41,7 @@ interface EngineOptions {
    */
   enableCanvasLock?: boolean;
   /**
-   * 容器锁定后，容器本身是否可以设置属性，仅当画布锁定特性开启时生效， 默认值为：false
+   * 容器锁定后，容器本身是否可以设置属性，仅当画布锁定特性开启时生效，默认值为：false
    */
   enableLockedNodeSetting?: boolean;
   /**
@@ -135,4 +135,4 @@ init({
 ```
 
 在引擎中即可这样使用。
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/2622706/1657272220368-9ee4430e-9e42-4746-9de8-a233840b0950.png#clientId=u951c1fcc-9dab-4&crop=0&crop=0&crop=1&crop=1&errorMessage=unknown%20error&from=paste&height=292&id=uacb8d50d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1796&originWidth=3584&originalType=binary&ratio=1&rotation=0&showTitle=false&size=1641368&status=error&style=none&taskId=u559fb5cd-4a48-4732-b169-c9868a6d7b7&title=&width=582)
+![image.png](https://img.alicdn.com/imgextra/i4/O1CN01FWvu051OxAEYrHBy5_!!6000000001771-2-tps-3584-1796.png)
