@@ -16,6 +16,7 @@ export class Context extends BasicContext {
 
   setActivate = (_activate: boolean) => {
     this._activate = _activate;
+    this.innerHotkey.activate(this._activate);
   };
 
   get active() {

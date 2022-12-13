@@ -368,8 +368,14 @@ export class Hotkey {
 
   private nextExpectedAction: boolean | string = false;
 
+  private isActivate = true;
+
   constructor(readonly name: string = 'unknown') {
     this.mount(window);
+  }
+
+  activate(activate: boolean): void {
+    this.isActivate = activate;
   }
 
   mount(window: Window) {
@@ -546,6 +552,9 @@ export class Hotkey {
   }
 
   private handleKeyEvent(e: KeyboardEvent): void {
+    if (!this.isActivate) {
+      return;
+    }
     const character = characterFromEvent(e);
 
     // no character found then stop

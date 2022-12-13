@@ -80,7 +80,6 @@ export class BasicContext {
     editor.set('material', material);
     editor.set('hotkey', hotkey);
     editor.set('innerHotkey', innerHotkey);
-    innerHotkey.mount(window);
     this.innerSetters = innerSetters;
     this.innerSkeleton = innerSkeleton;
     this.skeleton = skeleton;
