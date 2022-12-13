@@ -10,6 +10,7 @@ import {
   CompositeObject,
   ComponentAction,
   MetadataTransducer,
+  IPublicApiPlugins,
 } from '@alilc/lowcode-types';
 import { EngineConfig } from '@alilc/lowcode-editor-core';
 import { Setters } from '../types';
@@ -126,6 +127,7 @@ export interface ILowCodePluginContextPrivate {
   set event(event: IPublicApiEvent);
   set config(config: EngineConfig);
   set common(common: IPublicApiCommon);
+  set plugins(plugins: IPublicApiPlugins);
 }
 export interface ILowCodePluginContextApiAssembler {
   assembleApis: (context: ILowCodePluginContextPrivate) => void;

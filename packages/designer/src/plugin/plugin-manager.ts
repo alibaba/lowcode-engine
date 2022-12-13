@@ -33,13 +33,13 @@ export class LowCodePluginManager implements ILowCodePluginManager {
 
   contextApiAssembler: ILowCodePluginContextApiAssembler;
 
-  constructor(contextApiAssembler: ILowCodePluginContextApiAssembler) {
+  constructor(contextApiAssembler: ILowCodePluginContextApiAssembler, readonly name = 'unknown') {
     this.contextApiAssembler = contextApiAssembler;
   }
 
-  _getLowCodePluginContext(options: IPluginContextOptions) {
+  _getLowCodePluginContext = (options: IPluginContextOptions) => {
     return new LowCodePluginContext(this, options, this.contextApiAssembler);
-  }
+  };
 
   isEngineVersionMatched(versionExp: string): boolean {
     const engineVersion = engineConfig.get('ENGINE_VERSION');

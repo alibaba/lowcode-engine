@@ -367,7 +367,7 @@ export class Skeleton {
       ...extraConfig,
     };
     parsedConfig.contentProps = {
-      context: this.editor.get('plugins')?._getLowCodePluginContext({
+      context: this.editor.get('innerPlugins')?._getLowCodePluginContext({
         pluginName: 'any',
       }),
       ...(parsedConfig.contentProps || {}),

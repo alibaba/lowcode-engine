@@ -26,10 +26,10 @@ export class Context extends BasicContext {
 
   init = flow(function* (this: any) {
     yield this.registerInnerPlugins();
-    yield this.editorView?.init(this.plugins._getLowCodePluginContext({
+    yield this.editorView?.init(this.innerPlugins._getLowCodePluginContext({
       pluginName: 'any',
     }));
-    yield this.plugins.init();
+    yield this.innerPlugins.init();
     this.isInit = true;
   });
 }

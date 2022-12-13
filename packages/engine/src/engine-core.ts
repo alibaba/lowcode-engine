@@ -34,6 +34,7 @@ import {
   Setters,
   Material,
   Event,
+  Plugins,
   DocumentModel,
   Common,
 } from '@alilc/lowcode-shell';
@@ -82,6 +83,7 @@ const config = engineConfig;
 const event = new Event(editor, { prefix: 'common' });
 const logger = getLogger({ level: 'warn', bizName: 'common' });
 const common = new Common(editor, innerSkeleton);
+let plugins: any;
 
 const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
   assembleApis: (context: ILowCodePluginContextPrivate) => {
@@ -93,9 +95,13 @@ const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
     context.event = event;
     context.config = config;
     context.common = common;
+    context.plugins = plugins;
   },
 };
-const plugins = new LowCodePluginManager(pluginContextApiAssembler).toProxy();
+
+const innerPlugins = new LowCodePluginManager(pluginContextApiAssembler);
+plugins = new Plugins(innerPlugins).toProxy();
+editor.set('innerPlugins' as any, innerPlugins);
 editor.set('plugins' as any, plugins);
 
 export {

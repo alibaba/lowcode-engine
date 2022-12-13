@@ -96,4 +96,8 @@ export class EditorWindow {
   get designer() {
     return this.editorView?.designer;
   }
+
+  get innerPlugins() {
+    return this.editorView?.innerPlugins;
+  }
 }
