@@ -6,6 +6,7 @@ import TreeView from './tree';
 import './style.less';
 import { IEditor } from '@alilc/lowcode-types';
 import Filter from './filter';
+import { registerTreeTitleExtra } from '../helper/tree-title-extra';
 
 @observer
 export class OutlinePane extends Component<{ config: any; editor: IEditor }> {
@@ -13,6 +14,10 @@ export class OutlinePane extends Component<{ config: any; editor: IEditor }> {
 
   componentWillUnmount() {
     this.main.purge();
+  }
+
+  componentDidMount() {
+    registerTreeTitleExtra(this.props?.config?.contentProps?.treeTitleExtra);
   }
 
   render() {
