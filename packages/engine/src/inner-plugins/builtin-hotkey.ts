@@ -89,10 +89,14 @@ function getPrevForSelect(prev: any, head?: any, parent?: any): any {
 export const builtinHotkey = (ctx: ILowCodePluginContext) => {
   return {
     init() {
-      const { hotkey, project } = ctx;
+      const { hotkey, project, logger } = ctx;
       // hotkey binding
-      hotkey.bind(['backspace', 'del'], (e: KeyboardEvent) => {
-        if (isInLiveEditing()) return;
+      hotkey.bind(['backspace', 'del'], (e: KeyboardEvent, action) => {
+        logger.info(`action ${action} is triggered`);
+
+        if (isInLiveEditing()) {
+          return;
+        }
         // TODO: use focus-tracker
         const doc = project.currentDocument;
         if (isFormEvent(e) || !doc) {
@@ -111,9 +115,12 @@ export const builtinHotkey = (ctx: ILowCodePluginContext) => {
         sel.clear();
       });
 
-      hotkey.bind('escape', (e: KeyboardEvent) => {
+      hotkey.bind('escape', (e: KeyboardEvent, action) => {
+        logger.info(`action ${action} is triggered`);
         // const currentFocus = focusing.current;
-        if (isInLiveEditing()) return;
+        if (isInLiveEditing()) {
+          return;
+        }
         const sel = focusing.focusDesigner?.currentDocument?.selection;
         if (isFormEvent(e) || !sel) {
           return;
@@ -126,7 +133,10 @@ export const builtinHotkey = (ctx: ILowCodePluginContext) => {
 
       // command + c copy  command + x cut
       hotkey.bind(['command+c', 'ctrl+c', 'command+x', 'ctrl+x'], (e, action) => {
-        if (isInLiveEditing()) return;
+        logger.info(`action ${action} is triggered`);
+        if (isInLiveEditing()) {
+          return;
+        }
         const doc = project.currentDocument;
         if (isFormEvent(e) || !doc) {
           return;
@@ -161,7 +171,11 @@ export const builtinHotkey = (ctx: ILowCodePluginContext) => {
       });
 
       // command + v paste
-      hotkey.bind(['command+v', 'ctrl+v'], (e) => {
+      hotkey.bind(['command+v', 'ctrl+v'], (e, action) => {
+        logger.info(`action ${action} is triggered`);
+        if (isInLiveEditing()) {
+          return;
+        }
         if (isInLiveEditing()) return;
         // TODO
         const designer = focusing.focusDesigner;
@@ -190,8 +204,11 @@ export const builtinHotkey = (ctx: ILowCodePluginContext) => {
       });
 
       // command + z undo
-      hotkey.bind(['command+z', 'ctrl+z'], (e) => {
-        if (isInLiveEditing()) return;
+      hotkey.bind(['command+z', 'ctrl+z'], (e, action) => {
+        logger.info(`action ${action} is triggered`);
+        if (isInLiveEditing()) {
+          return;
+        }
         const history = project.currentDocument?.history;
         if (isFormEvent(e) || !history) {
           return;
@@ -205,8 +222,11 @@ export const builtinHotkey = (ctx: ILowCodePluginContext) => {
       });
 
       // command + shift + z redo
-      hotkey.bind(['command+y', 'ctrl+y', 'command+shift+z'], (e) => {
-        if (isInLiveEditing()) return;
+      hotkey.bind(['command+y', 'ctrl+y', 'command+shift+z'], (e, action) => {
+        logger.info(`action ${action} is triggered`);
+        if (isInLiveEditing()) {
+          return;
+        }
         const history = project.currentDocument?.history;
         if (isFormEvent(e) || !history) {
           return;
@@ -220,7 +240,10 @@ export const builtinHotkey = (ctx: ILowCodePluginContext) => {
 
       // sibling selection
       hotkey.bind(['left', 'right'], (e, action) => {
-        if (isInLiveEditing()) return;
+        logger.info(`action ${action} is triggered`);
+        if (isInLiveEditing()) {
+          return;
+        }
         const doc = project.currentDocument;
         if (isFormEvent(e) || !doc) {
           return;
@@ -236,7 +259,10 @@ export const builtinHotkey = (ctx: ILowCodePluginContext) => {
       });
 
       hotkey.bind(['up', 'down'], (e, action) => {
-        if (isInLiveEditing()) return;
+        logger.info(`action ${action} is triggered`);
+        if (isInLiveEditing()) {
+          return;
+        }
         const doc = project.currentDocument;
         if (isFormEvent(e) || !doc) {
           return;
@@ -258,7 +284,10 @@ export const builtinHotkey = (ctx: ILowCodePluginContext) => {
       });
 
       hotkey.bind(['option+left', 'option+right'], (e, action) => {
-        if (isInLiveEditing()) return;
+        logger.info(`action ${action} is triggered`);
+        if (isInLiveEditing()) {
+          return;
+        }
         const doc = project.currentDocument;
         if (isFormEvent(e) || !doc) {
           return;
@@ -288,8 +317,11 @@ export const builtinHotkey = (ctx: ILowCodePluginContext) => {
         }
       });
 
-      hotkey.bind(['option+up'], (e) => {
-        if (isInLiveEditing()) return;
+      hotkey.bind(['option+up'], (e, action) => {
+        logger.info(`action ${action} is triggered`);
+        if (isInLiveEditing()) {
+          return;
+        }
         const doc = project.currentDocument;
         if (isFormEvent(e) || !doc) {
           return;
@@ -326,8 +358,11 @@ export const builtinHotkey = (ctx: ILowCodePluginContext) => {
         }
       });
 
-      hotkey.bind(['option+down'], (e) => {
-        if (isInLiveEditing()) return;
+      hotkey.bind(['option+down'], (e, action) => {
+        logger.info(`action ${action} is triggered`);
+        if (isInLiveEditing()) {
+          return;
+        }
         const doc = project.getCurrentDocument();
         if (isFormEvent(e) || !doc) {
           return;
@@ -337,7 +372,7 @@ export const builtinHotkey = (ctx: ILowCodePluginContext) => {
         if (!selected || selected.length < 1) {
           return;
         }
-        // TODO: 此处需要增加判断当前节点是否可被操作移动，原ve里是用 node.canOperating()来判断
+        // TODO: 此处需要增加判断当前节点是否可被操作移动，原 ve 里是用 node.canOperating() 来判断
         // TODO: 移动逻辑也需要重新梳理，对于移动目标位置的选择，是否可以移入，需要增加判断
 
         const firstNode = selected[0];

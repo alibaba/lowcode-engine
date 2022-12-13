@@ -368,7 +368,9 @@ export class Hotkey {
 
   private nextExpectedAction: boolean | string = false;
 
-  constructor(readonly name: string = 'unknown') {}
+  constructor(readonly name: string = 'unknown') {
+    this.mount(window);
+  }
 
   mount(window: Window) {
     const { document } = window;
