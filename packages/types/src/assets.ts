@@ -1,5 +1,7 @@
 import { Snippet, ComponentMetadata } from './metadata';
 import { I18nData } from './i18n';
+import { Reference } from './npm';
+import { EitherOr } from './utils';
 
 export interface AssetItem {
   type: AssetType;
@@ -103,11 +105,15 @@ export interface ComponentSort {
  * 定义组件大包及 external 资源的信息
  * 应该被编辑器默认加载
  */
-export interface Package {
+export type Package = EitherOr<{
   /**
-   * 包名
+   * npm 包名
    */
   package: string;
+  /**
+   * 包唯一标识
+   */
+  id: string;
   /**
    * 包版本号
    */
@@ -142,7 +148,7 @@ export interface Package {
    * 组件描述导出名字，可以通过 window[exportName] 获取到组件描述的 Object 内容；
    */
   exportName?: string;
-}
+}, 'package', 'id'>;
 
 /**
  * 组件分类
@@ -208,6 +214,10 @@ export interface ComponentDescription extends ComponentMetadata {
    * @todo 待补充文档 @jinchan
    */
   keywords: string[];
+  /**
+   * 替代 npm 字段的升级版本
+   */
+  reference?: Reference;
 }
 
 /**
