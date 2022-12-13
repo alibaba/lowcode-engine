@@ -32,7 +32,7 @@ import {
 import { SUPPORT_SCHEMA_VERSION_LIST } from '../const';
 
 import { getErrorMessage } from '../utils/errors';
-import { handleSubNodes } from '../utils/schema';
+import { handleSubNodes, isValidContainerType } from '../utils/schema';
 import { uniqueArray } from '../utils/common';
 import { componentAnalyzer } from '../analyzer/componentAnalyzer';
 import { ensureValidClassName } from '../utils/validate';
@@ -141,7 +141,7 @@ export class SchemaParser implements ISchemaParser {
     if (schema.componentsTree.length > 0) {
       const firstRoot: ContainerSchema = schema.componentsTree[0] as ContainerSchema;
 
-      if (!('fileName' in firstRoot) || !firstRoot.fileName) {
+      if (!firstRoot.fileName && !isValidContainerType(firstRoot)) {
         // 整个 schema 描述一个容器，且无根节点定义
         const container: IContainerInfo = {
           ...firstRoot,
@@ -259,8 +259,7 @@ export class SchemaParser implements ISchemaParser {
       utils = schema.utils;
       utilsDeps = schema.utils
         .filter(
-          (u): u is { name: string; type: 'npm' | 'tnpm'; content: NpmInfo } =>
-            u.type !== 'function',
+          (u): u is { name: string; type: 'npm' | 'tnpm'; content: NpmInfo } => u.type !== 'function',
         )
         .map(
           (u): IExternalDependency => ({

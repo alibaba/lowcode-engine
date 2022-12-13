@@ -138,3 +138,11 @@ export function handleSubNodes<T>(
     return [];
   }
 }
+
+export function isValidContainerType(schema: NodeSchema) {
+  return [
+    'Page',
+    'Component',
+    'Block',
+  ].includes(schema.componentName);
+}

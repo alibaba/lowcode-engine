@@ -170,11 +170,17 @@ export interface IProjectBuilder {
 /** 项目级别的前置处理器 */
 export type ProjectPreProcessor = (schema: ProjectSchema) => Promise<ProjectSchema> | ProjectSchema;
 
+export interface ProjectPostProcessorOptions {
+  parseResult?: IParseResult;
+  template?: IProjectTemplate;
+}
+
 /** 项目级别的后置处理器 */
 export type ProjectPostProcessor = (
   result: ResultDir,
   schema: ProjectSchema,
   originalSchema: ProjectSchema | string,
+  options: ProjectPostProcessorOptions,
 ) => Promise<ResultDir> | ResultDir;
 
 /** 模块级别的后置处理器的工厂方法 */

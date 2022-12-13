@@ -9,7 +9,7 @@ const PARSERS = ['css', 'scss', 'less', 'json', 'html', 'vue'];
 
 export interface ProcessorConfig {
   customFileTypeParser: Record<string, string>;
-  plugins?: Array<prettier.Plugin>;
+  plugins?: prettier.Plugin[];
 }
 
 const factory: PostProcessorFactory<ProcessorConfig> = (config?: ProcessorConfig) => {
@@ -33,6 +33,8 @@ const factory: PostProcessorFactory<ProcessorConfig> = (config?: ProcessorConfig
     return prettier.format(content, {
       parser,
       plugins: [parserBabel, parserPostCss, parserHtml, ...(cfg.plugins || [])],
+      singleQuote: true,
+      jsxSingleQuote: false,
     });
   };
 
