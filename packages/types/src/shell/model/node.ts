@@ -12,7 +12,6 @@ import { IPublicModelNodeChildren } from './node-children';
 import { IPublicModelComponentMeta } from './component-meta';
 
 export interface IPublicModelNode {
-
   /**
    * 节点 id
    */
@@ -313,4 +312,11 @@ export interface IPublicModelNode {
    * @returns Boolean
    */
   get isRGLContainer();
+
+  /**
+   * 是否可执行某 action
+   * @param actionName action 名字
+   * @returns boolean
+   */
+  canPerformAction(actionName: string): boolean;
 }

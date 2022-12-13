@@ -1,9 +1,29 @@
-import { hotkey } from '@alilc/lowcode-editor-core';
+import { globalContext, Hotkey as InnerHotkey } from '@alilc/lowcode-editor-core';
+import { hotkeySymbol } from './symbols';
 import { Disposable, HotkeyCallback, IPublicApiHotkey } from '@alilc/lowcode-types';
 
+const innerHotkeySymbol = Symbol('innerHotkey');
+
 export default class Hotkey implements IPublicApiHotkey {
-  get callbacks() {
-    return hotkey.callBacks;
+  private readonly [innerHotkeySymbol]: InnerHotkey;
+  get [hotkeySymbol](): InnerHotkey {
+    if (this.workspaceMode) {
+      return this[innerHotkeySymbol];
+    }
+    const workSpace = globalContext.get('workSpace');
+    if (workSpace.isActive) {
+      return workSpace.window.innerHotkey;
+    }
+
+    return this[innerHotkeySymbol];
+  }
+
+  constructor(hotkey: InnerHotkey, public name: string = 'unknown', public workspaceMode: boolean = false) {
+    this[innerHotkeySymbol] = hotkey;
+  }
+
+  get callbacks(): any {
+    return this[hotkeySymbol].callBacks;
   }
   /**
    * @deprecated
@@ -19,9 +39,9 @@ export default class Hotkey implements IPublicApiHotkey {
    * @returns
    */
   bind(combos: string[] | string, callback: HotkeyCallback, action?: string): Disposable {
-    hotkey.bind(combos, callback, action);
+    this[hotkeySymbol].bind(combos, callback, action);
     return () => {
-      hotkey.unbind(combos, callback, action);
+      this[hotkeySymbol].unbind(combos, callback, action);
     };
   }
 }

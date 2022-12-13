@@ -171,6 +171,7 @@ class Renderer extends Component<{
     this.schemaChangedSymbol = false;
 
     if (!container.autoRender || isRendererDetached()) return null;
+
     return (
       <LowCodeRenderer
         locale={locale}

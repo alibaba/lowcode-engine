@@ -48,7 +48,7 @@ import {
   shallowIntl as innerShallowIntl,
   createIntl as innerCreateIntl,
   intl as innerIntl,
-  createSetterContent as innerCreateSetterContent,
+  // createSetterContent as innerCreateSetterContent,
   globalLocale as innerGlobalLocale,
   obx as innerObx,
   observable as innerObservable,
@@ -58,7 +58,6 @@ import {
   observer as innerObserver,
 } from '@alilc/lowcode-editor-core';
 import { ReactNode } from 'react';
-
 
 class DesignerCabin implements IPublicCommonDesignerCabin {
   private readonly [editorSymbol]: Editor;
@@ -225,6 +224,11 @@ class Utils implements IPublicCommonUtils {
 }
 
 class EditorCabin {
+  private readonly [editorSymbol]: Editor;
+
+  constructor(editor: Editor) {
+    this[editorSymbol] = editor;
+  }
   /**
    * @deprecated
    */
@@ -263,9 +267,10 @@ class EditorCabin {
   /**
    * @deprecated
    */
-  createSetterContent(setter: any, props: Record<string, any>): ReactNode {
-    return innerCreateSetterContent(setter, props);
-  }
+  createSetterContent = (setter: any, props: Record<string, any>): ReactNode => {
+    const setters = this[editorSymbol].get('setters');
+    return setters.createSetterContent(setter, props);
+  };
 
   /**
    * @deprecated
@@ -327,7 +332,7 @@ export default class Common implements IPublicApiCommon {
   constructor(editor: Editor, skeleton: InnerSkeleton) {
     this.__designerCabin = new DesignerCabin(editor);
     this.__skeletonCabin = new SkeletonCabin(skeleton);
-    this.__editorCabin = new EditorCabin();
+    this.__editorCabin = new EditorCabin(editor);
     this.__utils = new Utils();
   }
 

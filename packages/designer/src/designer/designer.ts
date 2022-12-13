@@ -74,14 +74,17 @@ export class Designer {
     return this.currentDocument?.selection;
   }
 
+  name: string;
+
   constructor(props: DesignerProps) {
     makeObservable(this);
-    const { editor, shellModelFactory } = props;
+    const { editor, name, shellModelFactory } = props;
     this.editor = editor;
+    this.name = name;
     this.shellModelFactory = shellModelFactory;
     this.setProps(props);
 
-    this.project = new Project(this, props.defaultSchema);
+    this.project = new Project(this, props.defaultSchema, name);
 
     this.dragon.onDragstart((e) => {
       this.detecting.enable = false;
@@ -364,12 +367,12 @@ export class Designer {
     const { components, packages } = incrementalAssets;
     components && this.buildComponentMetasMap(components);
     if (packages) {
-      await this.project.simulator!.setupComponents(packages);
+      await this.project.simulator?.setupComponents(packages);
     }
 
     if (components) {
-      // 合并assets
-      let assets = this.editor.get('assets');
+      // 合并 assets
+      let assets = this.editor.get('assets') || {};
       let newAssets = megreAssets(assets, incrementalAssets);
       // 对于 assets 存在需要二次网络下载的过程，必须 await 等待结束之后，再进行事件触发
       await this.editor.set('assets', newAssets);
@@ -401,6 +404,21 @@ export class Designer {
 
   @computed get simulatorProps(): object | ((project: Project) => object) {
     return this._simulatorProps || {};
+  }
+
+  /**
+   * 提供给模拟器的参数
+   */
+  @computed get projectSimulatorProps(): any {
+    return {
+      ...this.simulatorProps,
+      project: this.project,
+      designer: this,
+      onMount: (simulator: any) => {
+        this.project.mountSimulator(simulator);
+        this.editor.set('simulator', simulator);
+      },
+    };
   }
 
   @obx.ref private _suspensed = false;

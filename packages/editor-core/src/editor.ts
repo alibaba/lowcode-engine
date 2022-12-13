@@ -51,6 +51,10 @@ export declare interface Editor extends StrictEventEmitter<EventEmitter, GlobalE
 
 // eslint-disable-next-line no-redeclare
 export class Editor extends (EventEmitter as any) implements IEditor {
+  constructor(public name: string = 'unknown', public workspaceMode: boolean = false) {
+    // eslint-disable-next-line constructor-super
+    super();
+  }
   /**
    * Ioc Container
    */
@@ -114,11 +118,47 @@ export class Editor extends (EventEmitter as any) implements IEditor {
       if (remoteComponentDescriptions && remoteComponentDescriptions.length) {
         await Promise.all(
           remoteComponentDescriptions.map(async (component: any) => {
-            const { exportName, url } = component;
+            const { exportName, url, npm } = component;
             await (new AssetLoader()).load(url);
+            function setAssetsComponent(component: any, extraNpmInfo: any = {}) {
+              const components = component.components;
+              if (Array.isArray(components)) {
+                components.forEach(d => {
+                  assets.components = assets.components.concat({
+                    npm: {
+                      ...npm,
+                      ...extraNpmInfo,
+                    },
+                    ...d,
+                  } || []);
+                });
+                return;
+              }
+              assets.components = assets.components.concat({
+                npm: {
+                  ...npm,
+                  ...extraNpmInfo,
+                },
+                ...component.components,
+              } || []);
+              // assets.componentList = assets.componentList.concat(component.componentList || []);
+            }
+            function setArrayAssets(value: any[], preExportName: string = '', preSubName: string = '') {
+              value.forEach((d: any, i: number) => {
+                const exportName = [preExportName, i.toString()].filter(d => !!d).join('.');
+                const subName = [preSubName, i.toString()].filter(d => !!d).join('.');
+                Array.isArray(d) ? setArrayAssets(d, exportName, subName) : setAssetsComponent(d, {
+                  exportName,
+                  subName,
+                });
+              });
+            }
             if (window[exportName]) {
-              assets.components = assets.components.concat((window[exportName] as any).components || []);
-              assets.componentList = assets.componentList?.concat((window[exportName] as any).componentList || []);
+              if (Array.isArray(window[exportName])) {
+                setArrayAssets(window[exportName] as any);
+              } else {
+                setAssetsComponent(window[exportName] as any);
+              }
             }
             return window[exportName];
           }),

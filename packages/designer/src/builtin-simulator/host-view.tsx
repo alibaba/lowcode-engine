@@ -23,8 +23,8 @@ export class BuiltinSimulatorHostView extends Component<SimulatorHostProps> {
 
   constructor(props: any) {
     super(props);
-    const { project, onMount } = this.props;
-    this.host = (project.simulator as BuiltinSimulatorHost) || new BuiltinSimulatorHost(project);
+    const { project, onMount, designer } = this.props;
+    this.host = (project.simulator as BuiltinSimulatorHost) || new BuiltinSimulatorHost(project, designer);
     this.host.setProps(this.props);
     onMount?.(this.host);
   }
@@ -76,7 +76,8 @@ class Content extends Component<{ host: BuiltinSimulatorHost }> {
   private dispose?: () => void;
 
   componentDidMount() {
-    const editor = globalContext.get('editor');
+    const workSpace = globalContext.get('workSpace');
+    const editor = workSpace.isActive ? workSpace.window.editor : globalContext.get('editor');
     const onEnableEvents = (type: boolean) => {
       this.setState({
         disabledEvents: type,
@@ -97,7 +98,7 @@ class Content extends Component<{ host: BuiltinSimulatorHost }> {
   render() {
     const sim = this.props.host;
     const { disabledEvents } = this.state;
-    const { viewport } = sim;
+    const { viewport, designer } = sim;
     const frameStyle: any = {
       transform: `scale(${viewport.scale})`,
       height: viewport.contentHeight,
@@ -107,10 +108,12 @@ class Content extends Component<{ host: BuiltinSimulatorHost }> {
       frameStyle.pointerEvents = 'none';
     }
 
+    const name = designer.name;
+
     return (
       <div className="lc-simulator-content">
         <iframe
-          name="SimulatorRenderer"
+          name={`${name}-SimulatorRenderer`}
           className="lc-simulator-content-frame"
           style={frameStyle}
           ref={(frame) => sim.mountContentFrame(frame)}

@@ -67,7 +67,8 @@ export default class TreeView extends Component<{ tree: Tree }> {
       }
     } else {
       selection.select(id);
-      const editor = globalContext.get(Editor);
+      const workSpace = globalContext.get('workSpace');
+      const editor = workSpace.isActive ? workSpace.window.editor : globalContext.get('editor');
       const selectedNode = designer.currentSelection?.getNodes()?.[0];
       const npm = selectedNode?.componentMeta?.npm;
       const selected =

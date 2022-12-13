@@ -92,7 +92,7 @@ export default class Selection implements IPublicModelSelection {
    *  getTopNodes() will return [A, B], subA will be removed
    * @returns
    */
-  getTopNodes(): Array<IPublicModelNode | null> {
-    return this[selectionSymbol].getTopNodes().map((node: InnerNode) => Node.create(node));
+  getTopNodes(includeRoot: boolean = false): Array<IPublicModelNode | null> {
+    return this[selectionSymbol].getTopNodes(includeRoot).map((node: InnerNode) => Node.create(node));
   }
 }

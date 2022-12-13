@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { obx, computed, makeObservable, action } from '@alilc/lowcode-editor-core';
+import { obx, computed, makeObservable, action, engineConfig } from '@alilc/lowcode-editor-core';
 import { Designer } from '../designer';
 import { DocumentModel, isDocumentModel } from '../document';
 import {
@@ -32,9 +32,11 @@ export class Project {
     return this._simulator || null;
   }
 
+  key = Math.random();
+
   // TODO: 考虑项目级别 History
 
-  constructor(readonly designer: Designer, schema?: ProjectSchema) {
+  constructor(readonly designer: Designer, schema?: ProjectSchema, public name = 'unknown') {
     makeObservable(this);
     this.load(schema);
   }
@@ -301,25 +303,9 @@ export class Project {
     });
   }
 
-  /**
-   * 提供给模拟器的参数
-   */
-  @computed get simulatorProps(): object {
-    let { simulatorProps } = this.designer;
-    if (typeof simulatorProps === 'function') {
-      simulatorProps = simulatorProps(this);
-    }
-    return {
-      ...simulatorProps,
-      project: this,
-      onMount: this.mountSimulator.bind(this),
-    };
-  }
-
-  private mountSimulator(simulator: ISimulatorHost) {
+  mountSimulator(simulator: ISimulatorHost) {
     // TODO: 多设备 simulator 支持
     this._simulator = simulator;
-    this.designer.editor.set('simulator', simulator);
     this.emitter.emit('lowcode_engine_simulator_ready', simulator);
   }
 

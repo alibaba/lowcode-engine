@@ -1,3 +1,4 @@
+import { globalContext } from '@alilc/lowcode-editor-core';
 import {
   Skeleton as InnerSkeleton,
   SkeletonEvents,
@@ -5,11 +6,24 @@ import {
 import { skeletonSymbol } from './symbols';
 import { IPublicApiSkeleton, IWidgetBaseConfig, IWidgetConfigArea } from '@alilc/lowcode-types';
 
+const innerSkeletonSymbol = Symbol('skeleton');
 export default class Skeleton implements IPublicApiSkeleton {
-  private readonly [skeletonSymbol]: InnerSkeleton;
+  private readonly [innerSkeletonSymbol]: InnerSkeleton;
 
-  constructor(skeleton: InnerSkeleton) {
-    this[skeletonSymbol] = skeleton;
+  get [skeletonSymbol]() {
+    if (this.workspaceMode) {
+      return this[innerSkeletonSymbol];
+    }
+    const workSpace = globalContext.get('workSpace');
+    if (workSpace.isActive) {
+      return workSpace.window.innerSkeleton;
+    }
+
+    return this[innerSkeletonSymbol];
+  }
+
+  constructor(skeleton: InnerSkeleton, readonly workspaceMode: boolean = false) {
+    this[innerSkeletonSymbol] = skeleton;
   }
 
   /**

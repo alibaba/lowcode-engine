@@ -1,4 +1,4 @@
-import { Editor, action, makeObservable } from '@alilc/lowcode-editor-core';
+import { Editor, action, makeObservable, obx } from '@alilc/lowcode-editor-core';
 import {
   DockConfig,
   PanelConfig,
@@ -56,13 +56,13 @@ export class Skeleton {
 
   readonly rightArea: Area<PanelConfig, Panel>;
 
-  readonly mainArea: Area<WidgetConfig | PanelConfig, Widget | Panel>;
+  @obx readonly mainArea: Area<WidgetConfig | PanelConfig, Widget | Panel>;
 
   readonly bottomArea: Area<PanelConfig, Panel>;
 
   readonly stages: Area<StageConfig, Stage>;
 
-  constructor(readonly editor: Editor) {
+  constructor(readonly editor: Editor, readonly name: string = 'unknown') {
     makeObservable(this);
     this.leftArea = new Area(
       this,
@@ -365,6 +365,12 @@ export class Skeleton {
     const parsedConfig = {
       ...this.parseConfig(config),
       ...extraConfig,
+    };
+    parsedConfig.contentProps = {
+      context: this.editor.get('innerPlugins')?._getLowCodePluginContext({
+        pluginName: 'any',
+      }),
+      ...(parsedConfig.contentProps || {}),
     };
     let { area } = parsedConfig;
     if (!area) {

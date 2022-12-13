@@ -132,6 +132,11 @@ export interface EngineOptions {
    * 配置指定节点为根组件
    */
   focusNodeSelector?: (rootNode: Node) => Node;
+
+  /**
+   * 开启应用级设计模式
+   */
+  enableWorkspaceMode?: boolean;
 }
 
 export interface IEngineConfig {

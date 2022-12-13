@@ -33,7 +33,7 @@ import Canvas from './canvas';
 import ModalNodesManager from './modal-nodes-manager';
 import { documentSymbol, editorSymbol, nodeSymbol } from './symbols';
 
-const Events = {
+export const Events = {
   IMPORT_SCHEMA: 'shell.document.importSchema',
 };
 

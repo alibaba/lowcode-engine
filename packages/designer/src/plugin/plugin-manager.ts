@@ -27,19 +27,19 @@ const logger = getLogger({ level: 'warn', bizName: 'designer:pluginManager' });
 export class LowCodePluginManager implements ILowCodePluginManager {
   private plugins: ILowCodePlugin[] = [];
 
-  private pluginsMap: Map<string, ILowCodePlugin> = new Map();
+  pluginsMap: Map<string, ILowCodePlugin> = new Map();
 
   private pluginPreference?: PluginPreference = new Map();
 
   contextApiAssembler: ILowCodePluginContextApiAssembler;
 
-  constructor(contextApiAssembler: ILowCodePluginContextApiAssembler) {
+  constructor(contextApiAssembler: ILowCodePluginContextApiAssembler, readonly name = 'unknown') {
     this.contextApiAssembler = contextApiAssembler;
   }
 
-  private _getLowCodePluginContext(options: IPluginContextOptions) {
+  _getLowCodePluginContext = (options: IPluginContextOptions) => {
     return new LowCodePluginContext(this, options, this.contextApiAssembler);
-  }
+  };
 
   isEngineVersionMatched(versionExp: string): boolean {
     const engineVersion = engineConfig.get('ENGINE_VERSION');
@@ -107,6 +107,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     const plugin = new LowCodePlugin(pluginName, this, config, meta);
     // support initialization of those plugins which registered after normal initialization by plugin-manager
     if (registerOptions?.autoInit) {
+      // debugger
       await plugin.init();
     }
     this.plugins.push(plugin);

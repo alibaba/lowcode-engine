@@ -53,9 +53,8 @@ export function megreAssets(assets: AssetsJson, incrementalAssets: AssetsJson): 
   }
 
   if (incrementalAssets.components) {
-    assets.components = [...assets.components, ...incrementalAssets.components];
+    assets.components = [...(assets.components || []), ...incrementalAssets.components];
   }
-
 
   megreAssetsComponentList(assets, incrementalAssets, 'componentList');
   megreAssetsComponentList(assets, incrementalAssets, 'bizComponentList');

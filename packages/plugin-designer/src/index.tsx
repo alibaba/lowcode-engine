@@ -5,7 +5,9 @@ import { Asset } from '@alilc/lowcode-utils';
 import './index.scss';
 
 export interface PluginProps {
-  editor: Editor;
+  // editor?: Editor;
+  // engineConfig?: any;
+  engineEditor?: any;
 }
 
 interface DesignerPluginState {
@@ -46,7 +48,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
   }
 
   private async setupAssets() {
-    const editor = globalContext.get('editor');
+    const editor = this.props.engineEditor;
     try {
       const assets = await editor.onceGot('assets');
       const renderEnv = engineConfig.get('renderEnv') || editor.get('renderEnv');
@@ -85,7 +87,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
   }
 
   private handleDesignerMount = (designer: Designer): void => {
-    const editor = globalContext.get('editor');
+    const editor = this.props.engineEditor;
     editor.set('designer', designer);
     editor.emit('designer.ready', designer);
     editor.onGot('schema', (schema) => {
@@ -94,7 +96,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
   };
 
   render(): React.ReactNode {
-    const editor = globalContext.get('editor');
+    const editor = this.props.engineEditor;
     const {
       componentMetadatas,
       utilsMetadata,
@@ -119,6 +121,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
         onMount={this.handleDesignerMount}
         className="lowcode-plugin-designer"
         editor={editor}
+        name={editor.name}
         designer={editor.get('designer')}
         componentMetadatas={componentMetadatas}
         simulatorProps={{

@@ -330,7 +330,8 @@ function getKeyInfo(combination: string, action?: string): KeyInfo {
  */
 function fireCallback(callback: HotkeyCallback, e: KeyboardEvent, combo?: string, sequence?: string): void {
   try {
-    const editor = globalContext.get(Editor);
+    const workSpace = globalContext.get('workSpace');
+    const editor = workSpace.isActive ? workSpace.window.editor : globalContext.get('editor');
     const designer = editor.get('designer');
     const node = designer?.currentSelection?.getNodes()?.[0];
     const npm = node?.componentMeta?.npm;
@@ -353,7 +354,7 @@ function fireCallback(callback: HotkeyCallback, e: KeyboardEvent, combo?: string
 }
 
 export class Hotkey {
-  private callBacks: HotkeyCallbacks = {};
+  callBacks: HotkeyCallbacks = {};
 
   private directMap: HotkeyDirectMap = {};
 
@@ -366,6 +367,16 @@ export class Hotkey {
   private ignoreNextKeypress = false;
 
   private nextExpectedAction: boolean | string = false;
+
+  private isActivate = true;
+
+  constructor(readonly name: string = 'unknown') {
+    this.mount(window);
+  }
+
+  activate(activate: boolean): void {
+    this.isActivate = activate;
+  }
 
   mount(window: Window) {
     const { document } = window;
@@ -541,6 +552,9 @@ export class Hotkey {
   }
 
   private handleKeyEvent(e: KeyboardEvent): void {
+    if (!this.isActivate) {
+      return;
+    }
     const character = characterFromEvent(e);
 
     // no character found then stop
@@ -644,5 +658,5 @@ export class Hotkey {
   }
 }
 
-export const hotkey = new Hotkey();
-hotkey.mount(window);
+// export const hotkey = new Hotkey();
+// hotkey.mount(window);

@@ -145,6 +145,8 @@ function isDragEvent(e: any): e is DragEvent {
 export class Dragon {
   private sensors: ISensor[] = [];
 
+  key = Math.random();
+
   /**
    * current active sensor, 可用于感应区高亮
    */
@@ -162,10 +164,13 @@ export class Dragon {
     return this._dragging;
   }
 
+  name: string;
+
   private emitter = new EventEmitter();
 
   constructor(readonly designer: Designer) {
     makeObservable(this);
+    this.name = designer.name;
   }
 
   /**

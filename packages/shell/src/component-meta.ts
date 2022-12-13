@@ -106,6 +106,7 @@ export default class ComponentMeta implements IPublicModelComponentMeta {
     return this[componentMetaSymbol].getMetadata();
   }
 
+  isComponentMeta = true;
   /**
    * check if the current node could be placed in parent node
    * @param my

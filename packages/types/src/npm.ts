@@ -1,4 +1,5 @@
 import { EitherOr } from './utils';
+
 /**
  * npm 源引入完整描述对象
  */

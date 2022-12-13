@@ -15,6 +15,7 @@ import Dragon from './dragon';
 import SettingPropEntry from './setting-prop-entry';
 import SettingTopEntry from './setting-top-entry';
 import Common from './common';
+import Plugins from './plugins';
 
 export * from './symbols';
 
@@ -44,4 +45,5 @@ export {
   Dragon,
   Common,
   getEvent,
+  Plugins,
 };

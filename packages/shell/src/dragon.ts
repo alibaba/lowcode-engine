@@ -5,6 +5,7 @@ import {
 import { dragonSymbol } from './symbols';
 import LocateEvent from './locate-event';
 import DragObject from './drag-object';
+import { globalContext } from '@alilc/lowcode-editor-core';
 import {
   IPublicModelDragon,
   IPublicModelLocateEvent,
@@ -13,11 +14,26 @@ import {
   DragNodeDataObject,
 } from '@alilc/lowcode-types';
 
-export default class Dragon implements IPublicModelDragon {
-  private readonly [dragonSymbol]: InnerDragon;
+export const innerDragonSymbol = Symbol('innerDragonSymbol');
 
+
+export default class Dragon implements IPublicModelDragon {
   constructor(dragon: InnerDragon) {
-    this[dragonSymbol] = dragon;
+    this[innerDragonSymbol] = dragon;
+  }
+
+  private readonly [innerDragonSymbol]: InnerDragon;
+
+  get [dragonSymbol](): any {
+    const workSpace = globalContext.get('workSpace');
+    let editor = globalContext.get('editor');
+
+    if (workSpace.isActive) {
+      editor = workSpace.window.editor;
+    }
+
+    const designer = editor.get('designer');
+    return designer.dragon;
   }
 
   static create(dragon: InnerDragon | null): IPublicModelDragon | null {

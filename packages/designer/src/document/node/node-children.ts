@@ -161,7 +161,9 @@ export class NodeChildren {
     const { document } = node;
     /* istanbul ignore next */
     if (globalContext.has('editor')) {
-      globalContext.get('editor').emit('node.remove', { node, index: i });
+      const workSpace = globalContext.get('workSpace');
+      const editor = workSpace.isActive ? workSpace.window.editor : globalContext.get('editor');
+      editor.emit('node.remove', { node, index: i });
     }
     document.unlinkNode(node);
     document.selection.remove(node.id);
@@ -196,12 +198,14 @@ export class NodeChildren {
     const i = children.indexOf(node);
 
     if (node.parent) {
-      /* istanbul ignore next */
-      globalContext.has('editor') &&
-        globalContext.get('editor').emit('node.remove.topLevel', {
+      if (globalContext.has('editor')) {
+        const workSpace = globalContext.get('workSpace');
+        const editor = workSpace.isActive ? workSpace.window.editor : globalContext.get('editor');
+        editor.emit('node.remove.topLevel', {
           node,
           index: node.index,
         });
+      }
     }
 
     if (i < 0) {
@@ -231,7 +235,9 @@ export class NodeChildren {
     this.emitter.emit('insert', node);
     /* istanbul ignore next */
     if (globalContext.has('editor')) {
-      globalContext.get('editor').emit('node.add', { node });
+      const workSpace = globalContext.get('workSpace');
+      const editor = workSpace.isActive ? workSpace.window.editor : globalContext.get('editor');
+      editor.emit('node.add', { node });
     }
     if (useMutator) {
       this.reportModified(node, this.owner, { type: 'insert' });

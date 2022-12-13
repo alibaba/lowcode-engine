@@ -5,11 +5,12 @@ import { OutlinePane } from './pane';
 
 export const Backup = Symbol.for('backup-outline');
 
-export class OutlineBackupPane extends PureComponent<PluginProps> {
+export class OutlineBackupPane extends PureComponent<any> {
   render() {
     return (
       <OutlinePane
-        editor={globalContext.get('editor')}
+        editor={this.props.engineEditor}
+        engineEditor={this.props.engineEditor}
         config={{
           name: Backup,
         }}

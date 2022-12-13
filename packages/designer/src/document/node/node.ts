@@ -1018,7 +1018,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   /**
-   * @deprecated
+   * TODO: replace non standard metas with standard ones.
    */
   getSuitablePlace(node: Node, ref: any): any {
     const focusNode = this.document?.focusNode;

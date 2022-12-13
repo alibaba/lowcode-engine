@@ -1,4 +1,4 @@
-import { Editor } from '@alilc/lowcode-editor-core';
+import { Editor, globalContext } from '@alilc/lowcode-editor-core';
 import {
   Designer,
   registerMetadataTransducer,
@@ -19,13 +19,31 @@ import {
 import { editorSymbol, designerSymbol } from './symbols';
 import ComponentMeta from './component-meta';
 
+const innerEditorSymbol = Symbol('editor');
 export default class Material implements IPublicApiMaterial {
-  private readonly [editorSymbol]: Editor;
-  private readonly [designerSymbol]: Designer;
+  // private readonly [editorSymbol]: Editor;
+  private readonly [innerEditorSymbol]: Editor;
+  // private readonly [designerSymbol]: Designer;
 
-  constructor(editor: Editor) {
-    this[editorSymbol] = editor;
-    this[designerSymbol] = editor.get('designer')!;
+  get [editorSymbol](): Editor {
+    if (this.workspaceMode) {
+      return this[innerEditorSymbol];
+    }
+    const workSpace = globalContext.get('workSpace');
+    if (workSpace.isActive) {
+      return workSpace.window.editor;
+    }
+
+    return this[innerEditorSymbol];
+  }
+
+  get [designerSymbol](): Designer {
+    return this[editorSymbol].get('designer')!;
+  }
+
+  constructor(editor: Editor, public workspaceMode: boolean = false, public name: string = 'unknown') {
+    this[innerEditorSymbol] = editor;
+    // this[designerSymbol] = editor.get('designer')!;
   }
 
   /**
@@ -50,6 +68,10 @@ export default class Material implements IPublicApiMaterial {
    */
   getAssets() {
     return this[editorSymbol].get('assets');
+  }
+
+  async asyncGetAssets() {
+    return await this[editorSymbol].get('assets');
   }
 
   /**

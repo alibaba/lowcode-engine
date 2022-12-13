@@ -64,7 +64,7 @@ import {
   DragNodeObject,
 } from '@alilc/lowcode-types';
 import { BuiltinSimulatorRenderer } from './renderer';
-import clipboard from '../designer/clipboard';
+import { clipboard } from '../designer/clipboard';
 import { LiveEditing } from './live-editing/live-editing';
 import { Project } from '../project';
 import { Scroller } from '../designer/scroller';
@@ -192,10 +192,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.renderer?.enableAutoRepaintNode();
   }
 
-  constructor(project: Project) {
+  constructor(project: Project, designer: Designer) {
     makeObservable(this);
     this.project = project;
-    this.designer = project?.designer;
+    this.designer = designer;
     this.scroller = this.designer.createScroller(this.viewport);
     this.autoRender = !engineConfig.get('disableAutoRender', false);
     this.componentsConsumer = new ResourceConsumer<Asset | undefined>(() => this.componentsAsset);
@@ -418,7 +418,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.renderer?.rerender?.();
   }
 
-  async mountContentFrame(iframe: HTMLIFrameElement | null) {
+  async mountContentFrame(iframe: HTMLIFrameElement | null): Promise<void> {
     if (!iframe || this._iframe === iframe) {
       return;
     }
@@ -478,6 +478,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.setupEvents();
 
     // bind hotkey & clipboard
+    const hotkey = this.designer.editor.get('innerHotkey');
     hotkey.mount(this._contentWindow);
     focusTracker.mount(this._contentWindow);
     clipboard.injectCopyPaster(this._contentDocument);

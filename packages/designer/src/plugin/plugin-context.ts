@@ -42,7 +42,6 @@ export default class PluginContext implements ILowCodePluginContext, ILowCodePlu
       contextApiAssembler: ILowCodePluginContextApiAssembler,
     ) {
     contextApiAssembler.assembleApis(this);
-    this.plugins = plugins;
     const { pluginName = 'anonymous' } = options;
     this.logger = getLogger({ level: 'warn', bizName: `designer:plugin:${pluginName}` });
 

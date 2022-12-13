@@ -1,15 +1,38 @@
-import { getSetter, registerSetter, getSettersMap } from '@alilc/lowcode-editor-core';
 import { CustomView, IPublicApiSetters, RegisteredSetter } from '@alilc/lowcode-types';
+import { Setters as InnerSetters, globalContext } from '@alilc/lowcode-editor-core';
+import { ReactNode } from 'react';
+
+const innerSettersSymbol = Symbol('setters');
+const settersSymbol = Symbol('setters');
 
 export default class Setters implements IPublicApiSetters {
+  readonly [innerSettersSymbol]: InnerSetters;
+
+  get [settersSymbol](): InnerSetters {
+    if (this.workspaceMode) {
+      return this[innerSettersSymbol];
+    }
+
+    const workSpace = globalContext.get('workSpace');
+    if (workSpace.isActive) {
+      return workSpace.window.innerSetters;
+    }
+
+    return this[innerSettersSymbol];
+  }
+
+  constructor(innerSetters: InnerSetters, readonly workspaceMode = false) {
+    this[innerSettersSymbol] = innerSetters;
+  }
+
   /**
    * 获取指定 setter
    * @param type
    * @returns
    */
-  getSetter(type: string): RegisteredSetter | null {
-    return getSetter(type);
-  }
+  getSetter = (type: string) => {
+    return this[settersSymbol].getSetter(type);
+  };
 
   /**
    * 获取已注册的所有 settersMap
@@ -18,7 +41,7 @@ export default class Setters implements IPublicApiSetters {
   getSettersMap(): Map<string, RegisteredSetter & {
     type: string;
   }> {
-    return getSettersMap();
+    return this[settersSymbol].getSettersMap();
   }
 
   /**
@@ -27,10 +50,14 @@ export default class Setters implements IPublicApiSetters {
    * @param setter
    * @returns
    */
-  registerSetter(
+  registerSetter = (
     typeOrMaps: string | { [key: string]: CustomView | RegisteredSetter },
     setter?: CustomView | RegisteredSetter | undefined,
-  ) {
-    return registerSetter(typeOrMaps, setter);
-  }
+  ) => {
+    return this[settersSymbol].registerSetter(typeOrMaps, setter);
+  };
+
+  createSetterContent = (setter: any, props: Record<string, any>): ReactNode => {
+    return this[settersSymbol].createSetterContent(setter, props);
+  };
 }

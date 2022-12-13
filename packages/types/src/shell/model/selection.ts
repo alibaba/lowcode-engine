@@ -61,5 +61,5 @@ export interface IPublicModelSelection {
    *  getTopNodes() will return [A, B], subA will be removed
    * @returns
    */
-  getTopNodes(): Array<IPublicModelNode | null>;
+  getTopNodes(includeRoot?: boolean): Array<IPublicModelNode | null>;
 }
