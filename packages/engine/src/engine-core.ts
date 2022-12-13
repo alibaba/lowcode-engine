@@ -172,6 +172,9 @@ engineConfig.set('isOpenSource', isOpenSource);
             keepVisibleWhileDragging: true,
             ...engineConfig.get('defaultOutlinePaneProps'),
           },
+          contentProps: {
+            treeTitleExtra: engineConfig.get('treeTitleExtra'),
+          },
         });
         skeleton.add({
           area: 'rightArea',
