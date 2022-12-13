@@ -62,10 +62,10 @@ export class ProjectBuilder implements IProjectBuilder {
   private projectPostProcessors: ProjectPostProcessor[];
 
   /** 是否处于严格模式 */
-  public readonly inStrictMode: boolean;
+  readonly inStrictMode: boolean;
 
   /** 一些额外的上下文数据 */
-  public readonly extraContextData: IContextData;
+  readonly extraContextData: IContextData;
 
   constructor({
     template,
@@ -260,7 +260,10 @@ export class ProjectBuilder implements IProjectBuilder {
     let finalResult = projectRoot;
     for (const projectPostProcessor of this.projectPostProcessors) {
       // eslint-disable-next-line no-await-in-loop
-      finalResult = await projectPostProcessor(finalResult, schema, originalSchema);
+      finalResult = await projectPostProcessor(finalResult, schema, originalSchema, {
+        template: this.template,
+        parseResult,
+      });
     }
 
     return finalResult;

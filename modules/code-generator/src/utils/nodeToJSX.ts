@@ -182,7 +182,7 @@ function generateSimpleNode(
 function linkPieces(pieces: CodePiece[]): string {
   const tagsPieces = pieces.filter((p) => p.type === PIECE_TYPE.TAG);
   if (tagsPieces.length !== 1) {
-    throw new CodeGeneratorError('One node only need one tag define');
+    throw new CodeGeneratorError('Only one tag definition required', tagsPieces);
   }
   const tagName = tagsPieces[0].value;
 
@@ -270,8 +270,7 @@ export function generateReactLoopCtrl(
     const loopDataExpr = pipe(
       nodeItem.loop,
       // 将 JSExpression 转换为 JS 表达式代码:
-      (expr) =>
-        generateCompositeType(expr, scope, {
+      (expr) => generateCompositeType(expr, scope, {
           handlers: config?.handlers,
           tolerateEvalErrors: false, // 这个内部不需要包 try catch, 下面会统一加的
         }),
@@ -391,8 +390,7 @@ export function createNodeGenerator(cfg: NodeGeneratorConfig = {}): NodeGenerato
     return `{${valueStr}}`;
   };
 
-  return (nodeItem: NodeDataType, scope: IScope) =>
-    unwrapJsExprQuoteInJsx(generateNode(nodeItem, scope));
+  return (nodeItem: NodeDataType, scope: IScope) => unwrapJsExprQuoteInJsx(generateNode(nodeItem, scope));
 }
 
 const defaultReactGeneratorConfig: NodeGeneratorConfig = {

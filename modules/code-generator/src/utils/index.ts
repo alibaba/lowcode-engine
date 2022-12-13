@@ -11,6 +11,7 @@ import * as schema from './schema';
 import * as version from './version';
 import * as scope from './Scope';
 import * as expressionParser from './expressionParser';
+import * as dataSource from './dataSource';
 
 export {
   common,
@@ -25,4 +26,5 @@ export {
   version,
   scope,
   expressionParser,
+  dataSource,
 };
