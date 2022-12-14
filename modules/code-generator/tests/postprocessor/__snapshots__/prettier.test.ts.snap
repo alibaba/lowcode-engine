@@ -11,7 +11,7 @@ exports[`postprocessor/prettier should works for custom files 1`] = `
 `;
 
 exports[`postprocessor/prettier should works for js file 1`] = `
-"import { Button } from \\"@alifd/next\\";
+"import { Button } from '@alifd/next';
 export function App() {
   return <Button />;
 }
@@ -24,7 +24,7 @@ exports[`postprocessor/prettier should works for json file 1`] = `
 `;
 
 exports[`postprocessor/prettier should works for jsx file 1`] = `
-"import { Button } from \\"@alifd/next\\";
+"import { Button } from '@alifd/next';
 export function App() {
   return <Button />;
 }

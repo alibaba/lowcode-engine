@@ -1,10 +1,17 @@
-import BasicLayout from "@/layouts/BasicLayout";
+import $ from '@/pages/$';
+
+import BasicLayout from '@/layouts/BasicLayout';
 
 const routerConfig = [
   {
-    path: "/",
+    path: '/',
     component: BasicLayout,
-    children: [],
+    children: [
+      {
+        path: '',
+        component: $,
+      },
+    ],
   },
 ];
 

@@ -19,7 +19,7 @@ describe(testCaseBaseName, () => {
       `
         <Greetings
           content={this._i18nText({
-            key: "greetings.hello",
+            key: 'greetings.hello',
             params: { name: this.state.name },
           })}
         />

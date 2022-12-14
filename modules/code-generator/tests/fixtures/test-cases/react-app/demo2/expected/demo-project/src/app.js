@@ -1,11 +1,11 @@
-import { createApp } from "ice";
+import { createApp } from 'ice';
 
 const appConfig = {
   app: {
-    rootId: "app",
+    rootId: 'app',
   },
   router: {
-    type: "hash",
+    type: 'hash',
   },
 };
 createApp(appConfig);
