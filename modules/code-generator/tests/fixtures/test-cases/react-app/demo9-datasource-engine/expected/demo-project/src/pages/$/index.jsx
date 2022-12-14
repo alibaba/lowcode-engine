@@ -2,16 +2,7 @@
 // 例外：react 框架的导出名和各种组件名除外。
 import React from 'react';
 
-import Super, {
-  Button,
-  Input as CustomInput,
-  Form,
-  NumberPicker,
-  Select,
-  SearchTable as SearchTableExport,
-} from '@alifd/next';
-
-import SuperOther from '@alifd/next';
+import { Switch } from '@alifd/next';
 
 import utils from '../../utils';
 
@@ -21,13 +12,7 @@ import __$$constants from '../../constants';
 
 import './index.css';
 
-const SuperSub = Super.Sub;
-
-const SelectOption = Select.Option;
-
-const SearchTable = SearchTableExport.default;
-
-class Test$$Page extends React.Component {
+class $$Page extends React.Component {
   _context = this;
 
   get constants() {
@@ -55,22 +40,23 @@ class Test$$Page extends React.Component {
     const { state } = __$$context;
     return (
       <div>
-        <Super title={__$$eval(() => this.state.title)} />
-        <SuperSub />
-        <SuperOther />
-        <Button />
-        <Button.Group />
-        <CustomInput />
-        <Form.Item />
-        <NumberPicker />
-        <SelectOption />
-        <SearchTable />
+        {__$$evalArray(() => this.dataSourceMap.todos.data).map((item, index) =>
+          ((__$$context) => (
+            <div>
+              <Switch
+                checkedChildren="开"
+                unCheckedChildren="关"
+                checked={__$$eval(() => item.done)}
+              />
+            </div>
+          ))(__$$createChildContext(__$$context, { item, index }))
+        )}
       </div>
     );
   }
 }
 
-export default Test$$Page;
+export default $$Page;
 
 function __$$eval(expr) {
   try {

@@ -12,7 +12,7 @@
     },
     {
       "package": "@alife/container",
-      "version": "latest",
+      "version": "^1.0.0",
       "exportName": "P",
       "main": "lib/index.js",
       "destructuring": true,
@@ -21,7 +21,7 @@
     },
     {
       "package": "@alife/container",
-      "version": "latest",
+      "version": "^1.0.0",
       "exportName": "Block",
       "main": "lib/index.js",
       "destructuring": true,
@@ -30,7 +30,7 @@
     },
     {
       "package": "@alife/container",
-      "version": "latest",
+      "version": "^1.0.0",
       "exportName": "Block",
       "main": "lib/index.js",
       "destructuring": true,
@@ -39,7 +39,7 @@
     },
     {
       "package": "@alife/container",
-      "version": "latest",
+      "version": "^1.0.0",
       "exportName": "Text",
       "main": "lib/index.js",
       "destructuring": true,
@@ -48,7 +48,7 @@
     },
     {
       "package": "@alife/container",
-      "version": "latest",
+      "version": "^1.0.0",
       "exportName": "Page",
       "main": "lib/index.js",
       "destructuring": true,

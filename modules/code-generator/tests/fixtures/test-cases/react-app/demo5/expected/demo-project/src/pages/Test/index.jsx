@@ -1,12 +1,12 @@
 // 注意: 出码引擎注入的临时变量默认都以 "__$$" 开头，禁止在搭建的代码中直接访问。
 // 例外：react 框架的导出名和各种组件名除外。
-import React from "react";
+import React from 'react';
 
 import {
   Page as NextPage,
   Block as NextBlock,
   P as NextP,
-} from "@alife/container/lib/index.js";
+} from '@alife/container/lib/index.js';
 
 import {
   Card,
@@ -18,17 +18,17 @@ import {
   Form,
   InputNumber,
   Input,
-} from "@alilc/antd-lowcode/dist/antd-lowcode.esm.js";
+} from '@alilc/antd-lowcode/dist/antd-lowcode.esm.js';
 
-import { AliAutoSearchTable } from "@alife/mc-assets-1935/build/lowcode/index.js";
+import { AliAutoSearchTable } from '@alife/mc-assets-1935/build/lowcode/index.js';
 
-import utils, { RefsManager } from "../../utils";
+import utils, { RefsManager } from '../../utils';
 
-import * as __$$i18n from "../../i18n";
+import * as __$$i18n from '../../i18n';
 
-import __$$constants from "../../constants";
+import __$$constants from '../../constants';
 
-import "./index.css";
+import './index.css';
 
 const NextBlockCell = NextBlock.Cell;
 
@@ -51,7 +51,7 @@ class Test$$Page extends React.Component {
     __$$i18n._inject2(this);
 
     this.state = {
-      name: "nongzhou",
+      name: 'nongzhou',
       gateways: [],
       selectedGateway: null,
       records: [],
@@ -102,23 +102,23 @@ class Test$$Page extends React.Component {
     const { state } = __$$context;
     return (
       <div
-        ref={this._refsManager.linkRef("outterView")}
-        style={{ height: "100%" }}
+        ref={this._refsManager.linkRef('outterView')}
+        style={{ height: '100%' }}
       >
         <NextPage
           columns={12}
           headerDivider={true}
-          placeholderStyle={{ gridRowEnd: "span 1", gridColumnEnd: "span 12" }}
+          placeholderStyle={{ gridRowEnd: 'span 1', gridColumnEnd: 'span 12' }}
           placeholder="页面主体内容：拖拽Block布局组件到这里"
           header={null}
-          headerProps={{ background: "surface" }}
+          headerProps={{ background: 'surface' }}
           footer={null}
           minHeight="100vh"
-          style={{ cursor: "pointer" }}
+          style={{ cursor: 'pointer' }}
         >
           <NextBlock
             prefix="next-"
-            placeholderStyle={{ height: "100%" }}
+            placeholderStyle={{ height: '100%' }}
             noPadding={false}
             noBorder={false}
             background="surface"
@@ -130,7 +130,7 @@ class Test$$Page extends React.Component {
             <NextBlockCell
               title=""
               prefix="next-"
-              placeholderStyle={{ height: "100%" }}
+              placeholderStyle={{ height: '100%' }}
               layoutmode="O"
               childTotalColumns={12}
               isAutoContainer={true}
@@ -151,16 +151,16 @@ class Test$$Page extends React.Component {
                     <Typography.Text>所在网关：</Typography.Text>
                     <Select
                       style={{
-                        marginTop: "16px",
-                        marginRight: "16px",
-                        marginBottom: "16px",
-                        marginLeft: "16px",
-                        width: "400px",
-                        display: "inline-block",
+                        marginTop: '16px',
+                        marginRight: '16px',
+                        marginBottom: '16px',
+                        marginLeft: '16px',
+                        width: '400px',
+                        display: 'inline-block',
                       }}
                       options={__$$eval(() => this.state.gateways)}
                       mode="single"
-                      defaultValue={["auto-edd-uniproxy"]}
+                      defaultValue={['auto-edd-uniproxy']}
                       labelInValue={true}
                       showSearch={true}
                       allowClear={false}
@@ -171,23 +171,23 @@ class Test$$Page extends React.Component {
                       __events={{
                         eventDataList: [
                           {
-                            type: "componentEvent",
-                            name: "onChange",
-                            relatedEventName: "onChange",
+                            type: 'componentEvent',
+                            name: 'onChange',
+                            relatedEventName: 'onChange',
                           },
                         ],
                         eventList: [
-                          { name: "onBlur", disabled: false },
-                          { name: "onChange", disabled: true },
-                          { name: "onDeselect", disabled: false },
-                          { name: "onFocus", disabled: false },
-                          { name: "onInputKeyDown", disabled: false },
-                          { name: "onMouseEnter", disabled: false },
-                          { name: "onMouseLeave", disabled: false },
-                          { name: "onPopupScroll", disabled: false },
-                          { name: "onSearch", disabled: false },
-                          { name: "onSelect", disabled: false },
-                          { name: "onDropdownVisibleChange", disabled: false },
+                          { name: 'onBlur', disabled: false },
+                          { name: 'onChange', disabled: true },
+                          { name: 'onDeselect', disabled: false },
+                          { name: 'onFocus', disabled: false },
+                          { name: 'onInputKeyDown', disabled: false },
+                          { name: 'onMouseEnter', disabled: false },
+                          { name: 'onMouseLeave', disabled: false },
+                          { name: 'onPopupScroll', disabled: false },
+                          { name: 'onSearch', disabled: false },
+                          { name: 'onSelect', disabled: false },
+                          { name: 'onDropdownVisibleChange', disabled: false },
                         ],
                       }}
                       onChange={function () {
@@ -201,19 +201,19 @@ class Test$$Page extends React.Component {
                   <Button
                     type="primary"
                     style={{
-                      display: "block",
-                      marginTop: "20px",
-                      marginBottom: "20px",
+                      display: 'block',
+                      marginTop: '20px',
+                      marginBottom: '20px',
                     }}
                     __events={{
                       eventDataList: [
                         {
-                          type: "componentEvent",
-                          name: "onClick",
-                          relatedEventName: "onCreateOrder",
+                          type: 'componentEvent',
+                          name: 'onClick',
+                          relatedEventName: 'onCreateOrder',
                         },
                       ],
-                      eventList: [{ name: "onClick", disabled: true }],
+                      eventList: [{ name: 'onClick', disabled: true }],
                     }}
                     onClick={function () {
                       this.onCreateOrder.apply(
@@ -231,14 +231,14 @@ class Test$$Page extends React.Component {
                     __events={{
                       eventDataList: [
                         {
-                          type: "componentEvent",
-                          name: "onCancel",
-                          relatedEventName: "onCancelModal",
+                          type: 'componentEvent',
+                          name: 'onCancel',
+                          relatedEventName: 'onCancelModal',
                         },
                       ],
                       eventList: [
-                        { name: "onCancel", disabled: true },
-                        { name: "onOk", disabled: false },
+                        { name: 'onCancel', disabled: true },
+                        { name: 'onOk', disabled: false },
                       ],
                     }}
                     onCancel={function () {
@@ -262,16 +262,16 @@ class Test$$Page extends React.Component {
                       __events={{
                         eventDataList: [
                           {
-                            type: "componentEvent",
-                            name: "onFinish",
-                            relatedEventName: "onConfirmCreateOrder",
+                            type: 'componentEvent',
+                            name: 'onFinish',
+                            relatedEventName: 'onConfirmCreateOrder',
                           },
                         ],
                         eventList: [
-                          { name: "onFinish", disabled: true },
-                          { name: "onFinishFailed", disabled: false },
-                          { name: "onFieldsChange", disabled: false },
-                          { name: "onValuesChange", disabled: false },
+                          { name: 'onFinish', disabled: true },
+                          { name: 'onFinishFailed', disabled: false },
+                          { name: 'onFieldsChange', disabled: false },
+                          { name: 'onValuesChange', disabled: false },
                         ],
                       }}
                     >
@@ -287,10 +287,10 @@ class Test$$Page extends React.Component {
                       <Form.Item
                         wrapperCol={{ offset: 6 }}
                         style={{
-                          flexDirection: "row",
-                          alignItems: "flex-end",
-                          justifyContent: "center",
-                          display: "flex",
+                          flexDirection: 'row',
+                          alignItems: 'flex-end',
+                          justifyContent: 'center',
+                          display: 'flex',
                         }}
                         labelAlign="right"
                       >
@@ -302,12 +302,12 @@ class Test$$Page extends React.Component {
                           __events={{
                             eventDataList: [
                               {
-                                type: "componentEvent",
-                                name: "onClick",
-                                relatedEventName: "onCancelModal",
+                                type: 'componentEvent',
+                                name: 'onClick',
+                                relatedEventName: 'onCancelModal',
                               },
                             ],
-                            eventList: [{ name: "onClick", disabled: true }],
+                            eventList: [{ name: 'onClick', disabled: true }],
                           }}
                           onClick={function () {
                             this.onCancelModal.apply(
@@ -326,27 +326,27 @@ class Test$$Page extends React.Component {
                     dataSource={__$$eval(() => this.state.records)}
                     columns={[
                       {
-                        title: "发布名称",
-                        dataIndex: "order_name",
-                        key: "name",
+                        title: '发布名称',
+                        dataIndex: 'order_name',
+                        key: 'name',
                       },
                       {
-                        title: "类型",
-                        dataIndex: "order_type_desc",
-                        key: "age",
+                        title: '类型',
+                        dataIndex: 'order_type_desc',
+                        key: 'age',
                       },
                       {
-                        title: "发布状态",
-                        dataIndex: "order_status_desc",
-                        key: "address",
+                        title: '发布状态',
+                        dataIndex: 'order_status_desc',
+                        key: 'address',
                       },
-                      { title: "发布人", dataIndex: "creator_name" },
-                      { title: "当前批次/总批次", dataIndex: "cur_batch_no" },
+                      { title: '发布人', dataIndex: 'creator_name' },
+                      { title: '当前批次/总批次', dataIndex: 'cur_batch_no' },
                       {
-                        title: "发布机器/总机器",
-                        dataIndex: "pubblish_ip_finish_num",
+                        title: '发布机器/总机器',
+                        dataIndex: 'pubblish_ip_finish_num',
                       },
-                      { title: "发布时间", dataIndex: "publish_id" },
+                      { title: '发布时间', dataIndex: 'publish_id' },
                     ]}
                     actions={__$$eval(() => this.actions || [])}
                     getActions={function () {

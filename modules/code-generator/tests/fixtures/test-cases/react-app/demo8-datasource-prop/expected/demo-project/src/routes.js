@@ -1,14 +1,14 @@
-import Example from "@/pages/Example";
+import Example from '@/pages/Example';
 
-import BasicLayout from "@/layouts/BasicLayout";
+import BasicLayout from '@/layouts/BasicLayout';
 
 const routerConfig = [
   {
-    path: "/",
+    path: '/',
     component: BasicLayout,
     children: [
       {
-        path: "",
+        path: '',
         component: Example,
       },
     ],
