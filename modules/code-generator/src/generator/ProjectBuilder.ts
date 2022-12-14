@@ -241,6 +241,15 @@ export class ProjectBuilder implements IProjectBuilder {
       });
     }
 
+    // demo
+    if (parseResult.project && builders.demo) {
+      const { files } = await builders.demo.generateModule(parseResult.project);
+      buildResult.push({
+        path: this.template.slots.demo.path,
+        files,
+      });
+    }
+
     // TODO: 更多 slots 的处理？？是不是可以考虑把 template 中所有的 slots 都处理下？
 
     // Post Process

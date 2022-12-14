@@ -25,6 +25,7 @@ export enum FileType {
   TS = 'ts',
   TSX = 'tsx',
   JSON = 'json',
+  MD = 'md',
 }
 
 export enum ChunkType {
