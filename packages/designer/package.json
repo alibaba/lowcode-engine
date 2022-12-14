@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-designer",
-  "version": "1.1.0-beta.3",
+  "version": "1.1.0-beta.4",
   "description": "Designer for Ali LowCode Engine",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -15,9 +15,9 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@alilc/lowcode-editor-core": "1.1.0-beta.3",
-    "@alilc/lowcode-types": "1.1.0-beta.3",
-    "@alilc/lowcode-utils": "1.1.0-beta.3",
+    "@alilc/lowcode-editor-core": "1.1.0-beta.4",
+    "@alilc/lowcode-types": "1.1.0-beta.4",
+    "@alilc/lowcode-utils": "1.1.0-beta.4",
     "classnames": "^2.2.6",
     "react": "^16",
     "react-dom": "^16.7.0",
@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.29",
-    "@alilc/lowcode-shell": "1.1.0-beta.3",
+    "@alilc/lowcode-shell": "1.1.0-beta.4",
     "@alilc/lowcode-test-mate": "^1.0.1",
     "@testing-library/react": "^11.2.2",
     "@types/classnames": "^2.2.7",
