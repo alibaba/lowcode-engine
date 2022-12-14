@@ -281,7 +281,7 @@ sidebar_position: 0
 
 | 参数            | 说明                   | 类型                      | 变量支持 | 默认值 |
 | --------------- | ---------------------- | ------------------------- | -------- | ------ |
-| componentsMap[] | 描述组件映射关系的集合 | Array\<**ComponentMap**\> | -        | null   |
+| componentsMap[] | 描述组件映射关系的集合 | **ComponentMap**[] | -        | null   |
 
 **ComponentMap 结构描述**如下：
 
@@ -413,7 +413,7 @@ import { Input as CustomInput } from '@ali/custom/lib/input';
 
 | 参数        | 说明                   | 类型                                   | 支持变量 | 默认值 | 备注                                                                                                        |
 | ----------- | ---------------------- | -------------------------------------- | -------- | ------ | ----------------------------------------------------------------------------------------------------------- |
-| list[]     | 数据源列表             | Array\<**ComponentDataSourceItem**\> | -        | -      | 成为为单个请求配置, 内容定义详见 [ComponentDataSourceItem 对象描述](#2314-componentdatasourceitem-对象描述) |
+| list[]     | 数据源列表             | **ComponentDataSourceItem**[] | -        | -      | 成为为单个请求配置, 内容定义详见 [ComponentDataSourceItem 对象描述](#2314-componentdatasourceitem-对象描述) |
 | dataHandler | 所有请求数据的处理函数 | Function                               | -        | -      | 详见 [dataHandler Function 描述](#2317-datahandler-function 描述)                                           |
 
 ##### 2.3.1.4 ComponentDataSourceItem 对象描述
@@ -607,7 +607,7 @@ try {
 | props { }       | 组件属性对象               | **Props**                                                                                                  | -        | {}     | 必填，详见 [Props 结构描述](#2311-props-结构描述)                                                                             |
 | static          | 低代码业务组件类的静态对象 |                                                                                                            |          |        |                                                                                                                               |
 | defaultProps    | 低代码业务组件默认属性     | Object                                                                                                     | -        | -      | 选填，仅用于定义低代码业务组件的默认属性                                                                                      |
-| propDefinitions | 低代码业务组件属性类型定义 | **Array\<ComponentPropDefinition\>**                                                                       | -        | -      | 选填，仅用于定义低代码业务组件的属性数据类型。详见 [ComponentPropDefinition 对象描述](#2318-componentpropdefinition-对象描述) |
+| propDefinitions | 低代码业务组件属性类型定义 | **ComponentPropDefinition**[]                                                                       | -        | -      | 选填，仅用于定义低代码业务组件的属性数据类型。详见 [ComponentPropDefinition 对象描述](#2318-componentpropdefinition-对象描述) |
 | condition       | 渲染条件                   | Boolean                                                                                                    | ✅        | true   | 选填，根据表达式结果判断是否渲染物料；支持变量表达式                                                                          |
 | state           | 容器初始数据               | Object                                                                                                     | ✅        | -      | 选填，支持变量表达式                                                                                                          |
 | children        | 子组件                     | Array                                                                                                      | -        |        | 选填，支持变量表达式                                                                                                          |
@@ -751,7 +751,7 @@ try {
 | 参数  | 说明       | 值类型                | 默认值   | 备注                                                           |
 | ----- | ---------- | --------------------- | -------- | -------------------------------------------------------------- |
 | type  | 值类型描述 | String                | 'JSSlot' | 固定值                                                         |
-| value | 具体的值   | Array\<NodeSchema\> | null     | 内容为 NodeSchema 类型，详见[组件结构描述](#232-组件结构描述（A）) |
+| value | 具体的值   | NodeSchema \| NodeSchema[] | null     | 内容为 NodeSchema 类型，详见[组件结构描述](#232-组件结构描述（A）) |
 
 
 举例描述：如 **Card** 的 **title** 属性
@@ -782,8 +782,8 @@ try {
 | 参数   | 说明       | 值类型                | 默认值   | 备注                                                           |
 | ------ | ---------- | --------------------- | -------- | -------------------------------------------------------------- |
 | type   | 值类型描述 | String                | 'JSSlot' | 固定值                                                         |
-| value  | 具体的值   | Array\<NodeSchema\> | null     | 内容为 NodeSchema 类型，详见[组件结构描述](#232-组件结构描述 a) |
-| params | 函数的参数 | Array\<String\>     | null     | 函数的入参，其子节点可以通过 `this[参数名]` 来获取对应的参数。 |
+| value  | 具体的值   | NodeSchema \| NodeSchema[] | null     | 内容为 NodeSchema 类型，详见[组件结构描述](#232-组件结构描述 a) |
+| params | 函数的参数 | String[]     | null     | 函数的入参，其子节点可以通过 `this[参数名]` 来获取对应的参数。 |
 
 
 举例描述：如 **Table.Column** 的 **cell** 属性
@@ -1106,7 +1106,7 @@ this.setState((prevState) => ({ count: prevState.count + 1 }));
 
 | 参数               | 说明               | 类型                                                                                                             | 支持变量 | 默认值 |
 | ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- | -------- | ------ |
-| utils[]           | 工具类扩展映射关系 | Array\<**UtilItem**\>                                                                                          | -        |        |
+| utils[]           | 工具类扩展映射关系 | **UtilItem**[]                                                                                          | -        |        |
 | *UtilItem*.name    | 工具类扩展项名称   | String                                                                                                           | -        |        |
 | *UtilItem*.type    | 工具类扩展项类型   | 枚举， `'npm'` （代表公网 npm 类型） / `'tnpm'` （代表阿里巴巴内部 npm 类型） / `'function'` （代表 Javascript 函数类型） | -        |        |
 | *UtilItem*.content | 工具类扩展项内容   | [ComponentMap 类型](#22-组件映射关系 a) 或 [JSFunction](#2432事件函数类型 a)                                        | -        |        |
