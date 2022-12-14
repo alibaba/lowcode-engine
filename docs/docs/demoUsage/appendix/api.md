@@ -1,7 +1,8 @@
 ---
-title: DataSource - 数据源 API
-sidebar_position: 12
+title: demo 使用相关 API
+sidebar_position: 2
 ---
+## 数据源相关
 ### 请求数据源
 ```javascript
 // 请求 userList（userList 在数据源面板中定义）
