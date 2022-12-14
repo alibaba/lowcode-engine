@@ -1,4 +1,5 @@
 import { ILowCodePluginContext } from '@alilc/lowcode-designer';
+import { engineConfig } from '@alilc/lowcode-editor-core';
 import { SettingsPrimaryPane } from '@alilc/lowcode-editor-skeleton';
 import DesignerPlugin from '@alilc/lowcode-plugin-designer';
 import Outline, { getTreeMaster, OutlineBackupPane } from '@alilc/lowcode-plugin-outline-pane';
@@ -62,6 +63,9 @@ export const defaultPanelRegistry = (editor: any, designer: any) => {
             area: isInFloatArea ? 'leftFloatArea' : 'leftFixedArea',
             keepVisibleWhileDragging: true,
             ...config.get('defaultOutlinePaneProps'),
+          },
+          contentProps: {
+            treeTitleExtra: engineConfig.get('treeTitleExtra'),
           },
         });
         skeleton.add({
