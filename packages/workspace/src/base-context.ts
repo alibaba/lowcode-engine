@@ -23,6 +23,7 @@ import {
   Material,
   Event,
   Common,
+  Logger,
 } from '@alilc/lowcode-shell';
 import { getLogger } from '@alilc/lowcode-utils';
 import { setterRegistry } from 'engine/src/inner-plugins/setter-registry';
@@ -98,7 +99,7 @@ export class BasicContext {
     let plugins: any;
 
     const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
-      assembleApis: (context: ILowCodePluginContextPrivate) => {
+      assembleApis: (context: ILowCodePluginContextPrivate, pluginName: string) => {
         context.hotkey = hotkey;
         context.project = project;
         context.skeleton = skeleton;
@@ -108,6 +109,7 @@ export class BasicContext {
         context.config = config;
         context.common = common;
         context.plugins = plugins;
+        context.logger = new Logger({ level: 'warn', bizName: `plugin:${pluginName}` });
       },
     };
 

@@ -26,6 +26,7 @@ pluginConfigCreator 是一个 ILowCodePluginConfig 生成函数，ILowCodePlugin
 #### 简单示例
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
+import { ILowCodePluginContext } from '@alilc/lowcode-types';
 
 const builtinPluginRegistry = (ctx: ILowCodePluginContext) => {
   return {
@@ -58,6 +59,7 @@ await plugins.register(builtinPluginRegistry);
 #### 使用 exports 示例
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
+import { ILowCodePluginContext } from '@alilc/lowcode-types';
 
 const pluginA = (ctx: ILowCodePluginContext) => {
   return {
@@ -89,6 +91,7 @@ await plugins.register(pluginB);
 #### 设置兼容引擎版本示例
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
+import { ILowCodePluginContext } from '@alilc/lowcode-types';
 
 const builtinPluginRegistry = (ctx: ILowCodePluginContext) => {
   return {
@@ -108,6 +111,7 @@ await plugins.register(builtinPluginRegistry);
 #### 设置插件参数版本示例
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
+import { ILowCodePluginContext } from '@alilc/lowcode-types';
 
 const builtinPluginRegistry = (ctx: ILowCodePluginContext, options: any) => {
   return {
@@ -223,16 +227,16 @@ plugins.delete('builtinPluginRegistry');
 **类型定义**
 ```typescript
 export interface ILowCodePluginContext {
-  skeleton: Skeleton;                       // 参考面板 API
-  hotkey: Hotkey;                           // 参考快捷键 API
-  setters: Setters;                         // 参考设置器 API
-  config: EngineConfig;                     // 参考配置 API
-  material: Material;                       // 参考物料 API
-  event: Event;                             // 参考事件 API
-  project: Project;                         // 参考模型 API
-  common: Common;                           // 参考模型 API
-  logger: Logger;                           // 参考日志 API
-  plugins: ILowCodePluginManager;           // 即本文档描述内容
+  get skeleton(): IPublicApiSkeleton;
+  get hotkey(): IPublicApiHotkey;
+  get setters(): IPublicApiSetters;
+  get config(): IEngineConfig;
+  get material(): IPublicApiMaterial;
+  get event(): IPublicApiEvent;
+  get project(): IPublicApiProject;
+  get common(): IPublicApiCommon;
+  logger: IPublicApiLogger;
+  plugins: IPublicApiPlugins;
   preference: IPluginPreferenceMananger;
 }
 ```

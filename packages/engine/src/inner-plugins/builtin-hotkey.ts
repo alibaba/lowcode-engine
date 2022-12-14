@@ -6,8 +6,10 @@ import {
   insertChildren,
   TransformStage,
   clipboard,
-  ILowCodePluginContext,
 } from '@alilc/lowcode-designer';
+import {
+  ILowCodePluginContext,
+} from '@alilc/lowcode-types';
 
 export function isInLiveEditing() {
   const workSpace = globalContext.get('workSpace');

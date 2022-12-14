@@ -1,7 +1,8 @@
 import '../fixtures/window';
 import { Editor, engineConfig } from '@alilc/lowcode-editor-core';
 import { LowCodePluginManager } from '../../src/plugin/plugin-manager';
-import { ILowCodePluginContext, ILowCodePluginManager, ILowCodePluginContextApiAssembler } from '../../src/plugin/plugin-types';
+import { ILowCodePluginContext } from '@alilc/lowcode-types';
+import { ILowCodePluginManager } from '../../src/plugin/plugin-types';
 
 const editor = new Editor();
 const contextApiAssembler = {

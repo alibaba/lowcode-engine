@@ -2,12 +2,8 @@ import { engineConfig } from '@alilc/lowcode-editor-core';
 import { getLogger } from '@alilc/lowcode-utils';
 import {
   ILowCodePlugin,
-  ILowCodePluginConfig,
   ILowCodePluginManager,
-  ILowCodePluginContext,
-  ILowCodeRegisterOptions,
   IPluginContextOptions,
-  PreferenceValueType,
   ILowCodePluginConfigMeta,
   PluginPreference,
   ILowCodePluginPreferenceDeclaration,
@@ -21,6 +17,12 @@ import LowCodePluginContext from './plugin-context';
 import { invariant } from '../utils';
 import sequencify from './sequencify';
 import semverSatisfies from 'semver/functions/satisfies';
+import {
+  ILowCodePluginContext,
+  ILowCodePluginConfig,
+  ILowCodeRegisterOptions,
+  PreferenceValueType,
+} from '@alilc/lowcode-types';
 
 const logger = getLogger({ level: 'warn', bizName: 'designer:pluginManager' });
 
@@ -38,7 +40,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
   }
 
   _getLowCodePluginContext = (options: IPluginContextOptions) => {
-    return new LowCodePluginContext(this, options, this.contextApiAssembler);
+    return new LowCodePluginContext(options, this.contextApiAssembler);
   };
 
   isEngineVersionMatched(versionExp: string): boolean {
@@ -105,7 +107,8 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     }
 
     const plugin = new LowCodePlugin(pluginName, this, config, meta);
-    // support initialization of those plugins which registered after normal initialization by plugin-manager
+    // support initialization of those plugins which registered
+    // after normal initialization by plugin-manager
     if (registerOptions?.autoInit) {
       // debugger
       await plugin.init();

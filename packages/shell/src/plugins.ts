@@ -4,6 +4,10 @@ import {
 import { globalContext } from '@alilc/lowcode-editor-core';
 import {
   IPublicApiPlugins,
+  ILowCodePluginContext,
+  ILowCodePluginConfig,
+  ILowCodeRegisterOptions,
+  PreferenceValueType,
 } from '@alilc/lowcode-types';
 import { pluginsSymbol } from './symbols';
 
@@ -27,9 +31,9 @@ export default class Plugins implements IPublicApiPlugins {
   }
 
   async register(
-    pluginConfigCreator: (ctx: any, options: any) => any,
+    pluginConfigCreator: (ctx: ILowCodePluginContext, options: any) => ILowCodePluginConfig,
     options?: any,
-    registerOptions?: any,
+    registerOptions?: ILowCodeRegisterOptions,
   ): Promise<void> {
     await this[pluginsSymbol].register(pluginConfigCreator, options, registerOptions);
   }
@@ -38,8 +42,8 @@ export default class Plugins implements IPublicApiPlugins {
     await this[pluginsSymbol].init(registerOptions);
   }
 
-  async getPluginPreference(pluginName: string) {
-    await this[pluginsSymbol].getPluginPreference(pluginName);
+  getPluginPreference(pluginName: string): Record<string, PreferenceValueType> | null | undefined {
+    return this[pluginsSymbol].getPluginPreference(pluginName);
   }
 
   toProxy() {

@@ -30,7 +30,8 @@ material.setAssets(assets);
 
 通过物料中心接口动态引入资产包
 ```typescript
-import { ILowCodePluginContext, material, plugins } from '@alilc/lowcode-engine'
+import { material, plugins } from '@alilc/lowcode-engine';
+import { ILowCodePluginContext } from '@alilc/lowcode-types';
 
 // 动态加载 assets
 plugins.register((ctx: ILowCodePluginContext) => {

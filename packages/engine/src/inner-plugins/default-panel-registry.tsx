@@ -1,5 +1,5 @@
-import { ILowCodePluginContext } from '@alilc/lowcode-designer';
 import { engineConfig } from '@alilc/lowcode-editor-core';
+import { ILowCodePluginContext } from '@alilc/lowcode-types';
 import { SettingsPrimaryPane } from '@alilc/lowcode-editor-skeleton';
 import DesignerPlugin from '@alilc/lowcode-plugin-designer';
 import Outline, { getTreeMaster, OutlineBackupPane } from '@alilc/lowcode-plugin-outline-pane';

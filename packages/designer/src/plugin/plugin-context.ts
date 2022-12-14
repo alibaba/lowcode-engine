@@ -1,6 +1,5 @@
 /* eslint-disable no-multi-assign */
-import { EngineConfig, engineConfig } from '@alilc/lowcode-editor-core';
-import { ILowCodePluginManager } from '@alilc/lowcode-designer';
+import { engineConfig } from '@alilc/lowcode-editor-core';
 import {
   IPublicApiHotkey,
   IPublicApiProject,
@@ -9,14 +8,16 @@ import {
   IPublicApiMaterial,
   IPublicApiEvent,
   IPublicApiCommon,
-} from '@alilc/lowcode-types';
-import { getLogger, Logger } from '@alilc/lowcode-utils';
-import {
   ILowCodePluginContext,
+  IPluginPreferenceMananger,
+  PreferenceValueType,
+  IEngineConfig,
+  IPublicApiLogger,
+  IPublicApiPlugins,
+} from '@alilc/lowcode-types';
+import {
   IPluginContextOptions,
   ILowCodePluginPreferenceDeclaration,
-  PreferenceValueType,
-  IPluginPreferenceMananger,
   ILowCodePluginContextApiAssembler,
   ILowCodePluginContextPrivate,
 } from './plugin-types';
@@ -30,20 +31,18 @@ export default class PluginContext implements ILowCodePluginContext, ILowCodePlu
   setters: IPublicApiSetters;
   material: IPublicApiMaterial;
   event: IPublicApiEvent;
-  config: EngineConfig;
+  config: IEngineConfig;
   common: IPublicApiCommon;
-  logger: Logger;
-  plugins: ILowCodePluginManager;
+  logger: IPublicApiLogger;
+  plugins: IPublicApiPlugins;
   preference: IPluginPreferenceMananger;
 
   constructor(
-      plugins: ILowCodePluginManager,
       options: IPluginContextOptions,
       contextApiAssembler: ILowCodePluginContextApiAssembler,
     ) {
-    contextApiAssembler.assembleApis(this);
     const { pluginName = 'anonymous' } = options;
-    this.logger = getLogger({ level: 'warn', bizName: `designer:plugin:${pluginName}` });
+    contextApiAssembler.assembleApis(this, pluginName);
 
     const enhancePluginContextHook = engineConfig.get('enhancePluginContextHook');
     if (enhancePluginContextHook) {

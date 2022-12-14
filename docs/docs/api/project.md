@@ -79,8 +79,8 @@ addPropsTransducer(transducer: PropsTransducer, stage: TransformStage)
 
 **示例 1：在保存的时候删除每一个组件的 props.hidden**
 ```typescript
-import { ILowCodePluginContext, project } from '@alilc/lowcode-engine';
-import { CompositeObject, TransformStage } from '@alilc/lowcode-types';
+import { project } from '@alilc/lowcode-engine';
+import { CompositeObject, TransformStage, ILowCodePluginContext } from '@alilc/lowcode-types';
 
 export const deleteHiddenTransducer = (ctx: ILowCodePluginContext) => {
   return {

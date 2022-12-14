@@ -1,4 +1,3 @@
-import Logger from 'zen-logger';
 import {
   IPublicApiHotkey,
   IPublicApiProject,
@@ -11,11 +10,13 @@ import {
   ComponentAction,
   MetadataTransducer,
   IPublicApiPlugins,
+  ILowCodePluginContext,
+  ILowCodePluginConfig,
+  IPublicApiLogger,
+  ILowCodeRegisterOptions,
+  PreferenceValueType,
+  IEngineConfig,
 } from '@alilc/lowcode-types';
-import { EngineConfig } from '@alilc/lowcode-editor-core';
-import { Setters } from '../types';
-
-export type PreferenceValueType = string | number | boolean;
 
 export interface ILowCodePluginPreferenceDeclarationProperty {
   // shape like 'name' or 'group.name' or 'group.subGroup.name'
@@ -52,12 +53,6 @@ export interface ILowCodePluginPreferenceDeclaration {
 
 export type PluginPreference = Map<string, Record<string, PreferenceValueType>>;
 
-export interface ILowCodePluginConfig {
-  dep?: string | string[];
-  init?(): void;
-  destroy?(): void;
-  exports?(): any;
-}
 
 export interface ILowCodePluginConfigMetaEngineConfig {
   lowcodeEngine?: string;
@@ -74,7 +69,7 @@ export interface ILowCodePluginCore {
   dep: string[];
   disabled: boolean;
   config: ILowCodePluginConfig;
-  logger: Logger;
+  logger: IPublicApiLogger;
   on(event: string | symbol, listener: (...args: any[]) => void): any;
   emit(event: string | symbol, ...args: any[]): boolean;
   removeAllListeners(event?: string | symbol): this;
@@ -97,42 +92,21 @@ export interface IDesignerCabin {
   removeBuiltinComponentAction: (actionName: string) => void;
 }
 
-export interface IPluginPreferenceMananger {
-  // eslint-disable-next-line max-len
-  getPreferenceValue: (
-    key: string,
-    defaultValue?: PreferenceValueType,
-  ) => PreferenceValueType | undefined;
-}
-
-export interface ILowCodePluginContext {
-  get skeleton(): IPublicApiSkeleton;
-  get hotkey(): IPublicApiHotkey;
-  get setters(): IPublicApiSetters;
-  get config(): EngineConfig;
-  get material(): IPublicApiMaterial;
-  get event(): IPublicApiEvent;
-  get project(): IPublicApiProject;
-  get common(): IPublicApiCommon;
-  logger: Logger;
-  plugins: ILowCodePluginManager;
-  preference: IPluginPreferenceMananger;
-}
 export interface ILowCodePluginContextPrivate {
   set hotkey(hotkey: IPublicApiHotkey);
   set project(project: IPublicApiProject);
   set skeleton(skeleton: IPublicApiSkeleton);
-  set setters(setters: Setters);
+  set setters(setters: IPublicApiSetters);
   set material(material: IPublicApiMaterial);
   set event(event: IPublicApiEvent);
-  set config(config: EngineConfig);
+  set config(config: IEngineConfig);
   set common(common: IPublicApiCommon);
   set plugins(plugins: IPublicApiPlugins);
+  set logger(plugins: IPublicApiLogger);
 }
 export interface ILowCodePluginContextApiAssembler {
-  assembleApis: (context: ILowCodePluginContextPrivate) => void;
+  assembleApis: (context: ILowCodePluginContextPrivate, pluginName: string) => void;
 }
-
 
 interface ILowCodePluginManagerPluginAccessor {
   [pluginName: string]: ILowCodePlugin | any;
@@ -159,15 +133,6 @@ export function isLowCodeRegisterOptions(opts: any): opts is ILowCodeRegisterOpt
   return opts && ('autoInit' in opts || 'override' in opts);
 }
 
-export interface ILowCodeRegisterOptions {
-  /** Will enable plugin registered with auto-initialization immediately
-   * other than plugin-manager init all plugins at certain time.
-   * It is helpful when plugin register is later than plugin-manager initialization. */
-  autoInit?: boolean;
-  /** allow overriding existing plugin with same name when override === true */
-  override?: boolean;
-}
-
 export interface IPluginContextOptions {
   pluginName: string;
 }
@@ -181,13 +146,3 @@ export interface IPluginMetaDefinition {
     lowcodeEngine?: string;
   };
 }
-
-interface IPluginConfigCreatorFn<T extends Record<string, any> = Record<string, any>> {
-  (ctx: ILowCodePluginContext, pluginOptions?: T): ILowCodePluginConfig;
-}
-
-export type IPluginConfigCreator<T extends Record<string, any> = Record<string, any>> =
-  IPluginConfigCreatorFn<T> & {
-    pluginName: string;
-    meta?: IPluginMetaDefinition;
-  };

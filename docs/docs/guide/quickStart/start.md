@@ -125,7 +125,7 @@ Demo 根据**不同的设计器所需要的物料不同**，分为了下面的 8
 可以在 demo/sample-plugins 直接新增插件，这里我新增的插件目录是 plugin-demo。并且新增了 index.tsx 文件，将下面的代码粘贴到 index.tsx 中。
 ```javascript
 import * as React from 'react';
-import { ILowCodePluginContext } from '@alilc/lowcode-engine';
+import { ILowCodePluginContext } from '@alilc/lowcode-types';
 
 const LowcodePluginPluginDemo = (ctx: ILowCodePluginContext) => {
   return {

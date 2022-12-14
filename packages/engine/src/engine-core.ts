@@ -8,8 +8,10 @@ import {
   Setters as InnerSetters,
   Hotkey as InnerHotkey,
 } from '@alilc/lowcode-editor-core';
-import { EngineOptions,
+import {
+  EngineOptions,
   IPublicModelDocumentModel,
+  ILowCodePluginContext,
 } from '@alilc/lowcode-types';
 import {
   Designer,
@@ -35,10 +37,10 @@ import {
   Material,
   Event,
   Plugins,
-  DocumentModel,
   Common,
+  Logger,
 } from '@alilc/lowcode-shell';
-import { getLogger, isPlainObject } from '@alilc/lowcode-utils';
+import { isPlainObject } from '@alilc/lowcode-utils';
 import './modules/live-editing';
 import classes from './modules/classes';
 import symbols from './modules/symbols';
@@ -81,12 +83,12 @@ editor.set('material', material);
 editor.set('innerHotkey', innerHotkey);
 const config = engineConfig;
 const event = new Event(editor, { prefix: 'common' });
-const logger = getLogger({ level: 'warn', bizName: 'common' });
+const logger = new Logger({ level: 'warn', bizName: 'common' });
 const common = new Common(editor, innerSkeleton);
 let plugins: Plugins;
 
 const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
-  assembleApis: (context: ILowCodePluginContextPrivate) => {
+  assembleApis: (context: ILowCodePluginContextPrivate, pluginName: string) => {
     context.hotkey = hotkey;
     context.project = project;
     context.skeleton = skeleton;
@@ -96,6 +98,7 @@ const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
     context.config = config;
     context.common = common;
     context.plugins = plugins;
+    context.logger = new Logger({ level: 'warn', bizName: `plugin:${pluginName}` });
   },
 };
 

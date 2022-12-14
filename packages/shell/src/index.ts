@@ -16,6 +16,7 @@ import SettingPropEntry from './setting-prop-entry';
 import SettingTopEntry from './setting-top-entry';
 import Common from './common';
 import Plugins from './plugins';
+import Logger from './logger';
 
 export * from './symbols';
 
@@ -46,4 +47,5 @@ export {
   Common,
   getEvent,
   Plugins,
+  Logger,
 };

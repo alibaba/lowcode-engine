@@ -1,4 +1,4 @@
-import { ILowCodePluginContext } from '@alilc/lowcode-designer';
+import { ILowCodePluginContext } from '@alilc/lowcode-types';
 
 export const componentMetaParser = (designer: any) => {
   const fun = (ctx: ILowCodePluginContext) => {

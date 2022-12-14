@@ -7,3 +7,4 @@ export * from './setters';
 export * from './simulator-host';
 export * from './skeleton';
 export * from './plugins';
+export * from './logger';

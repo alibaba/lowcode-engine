@@ -1,10 +1,12 @@
 import { getLogger, Logger } from '@alilc/lowcode-utils';
 import {
   ILowCodePlugin,
-  ILowCodePluginConfig,
   ILowCodePluginManager,
   ILowCodePluginConfigMeta,
 } from './plugin-types';
+import {
+  ILowCodePluginConfig,
+} from '@alilc/lowcode-types';
 import { EventEmitter } from 'events';
 import { invariant } from '../utils';
 

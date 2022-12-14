@@ -10,6 +10,7 @@ sidebar_position: 6
 
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
+import { ILowCodePluginContext } from '@alilc/lowcode-types';
 import { Icon, Message } from '@alifd/next';
 
 const addHelloAction = (ctx: ILowCodePluginContext) => {
@@ -46,6 +47,7 @@ await plugins.register(addHelloAction);
 
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
+import { ILowCodePluginContext } from '@alilc/lowcode-types';
 
 const removeCopyAction = (ctx: ILowCodePluginContext) => {
   return {

@@ -1,4 +1,4 @@
-import { ILowCodePluginContext } from '@alilc/lowcode-designer';
+import { ILowCodePluginContext } from '@alilc/lowcode-types';
 
 // 注册默认的 setters
 export const setterRegistry = (ctx: ILowCodePluginContext) => {

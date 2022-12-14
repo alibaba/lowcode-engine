@@ -17,7 +17,8 @@ sidebar_position: 5
 ## 注册插件 API
 
 ```typescript
-import { plugins, ILowCodePluginContext } from '@alilc/lowcode-engine';
+import { plugins } from '@alilc/lowcode-engine';
+import { ILowCodePluginContext } from '@alilc/lowcode-types';
 
 const pluginA = (ctx: ILowCodePluginContext, options: any) => {
 	return {
