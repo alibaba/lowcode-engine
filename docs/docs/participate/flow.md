@@ -19,7 +19,8 @@ sidebar_position: 2
 几点要求：
 
 1. commit message 格式遵循 [ConvensionalCommits](https://www.conventionalcommits.org/en/v1.0.0/#summary)
-![image.png](https://img.alicdn.com/imgextra/i3/O1CN01M9UzVM1iqYpyxECdV_!!6000000004464-2-tps-2070-594.png)
+
+   <img src="https://img.alicdn.com/imgextra/i3/O1CN01M9UzVM1iqYpyxECdV_!!6000000004464-2-tps-2070-594.png" width="700"/>
 2. 请按照一个 bugfix / feature 对应一个 commit，假如不是，请 rebase 后再提交 MR，不要一堆无用的、试验性的 commit。
 
 好处：从引擎的整体 commit 历史来看，会很清晰，**每个 commit 完成一件确定的事，changelog 也能自动生成**。另外，假如因为某个 commit 导致了 bug，也很容易通过 rebase drop 等方式快速修复。
@@ -42,7 +43,7 @@ sidebar_position: 2
 
 > 此处是理想节奏，实际情况可能会有调整
 
-- 日常迭代 2 周，一般月中或月底
+- 日常迭代 2 周，一般月中或月底，发版日两天前发最后一个 beta 版本，原则上不接受新 pr，灰度 2 天后，发正式版。
 - 特殊情况紧急迭代随时发
 - 大 Feature 迭代，每年 2 - 4 次
 
@@ -79,7 +80,34 @@ sidebar_position: 2
 
 如果是发布 beta 版本，步骤如下（以发布 1.0.1 版本为例）：
 
-#### 发某版本首个 beta，如 1.0.1-beta.0
+#### 发某 y 位版本首个 beta，如 1.1.0-beta.0
+1. 拉 develop 分支
+   ```bash
+   git checkout develop
+   ```
+   更新到最新（如需）
+   ```bash
+   git pull
+   ```
+2. 拉 release 分支，此处以 1.1.0 版本做示例
+   ```bash
+   git checkout -b release/1.1.0-beta
+   git push --set-upstream origin release/1.1.0-beta
+   ```
+3. build
+   ```bash
+   npm run build
+   ```
+4. 发布，此处需有 @alilc scope 发包权限
+   ```bash
+   npm run pub:preminor
+   ```
+5. 同步到 tnpm 源 & alifd CDN
+   ```bash
+   tnpm run sync
+   ```
+
+#### 发某 z 位版本首个 beta，如 1.0.1-beta.0
 1. 拉 develop 分支
    ```bash
    git checkout develop

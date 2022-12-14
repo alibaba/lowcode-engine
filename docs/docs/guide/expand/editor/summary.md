@@ -1,5 +1,5 @@
 ---
-title: 低代码扩展简述
+title: 编辑态扩展简述
 sidebar_position: 0
 ---
 ## 扩展点简述
