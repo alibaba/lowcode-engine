@@ -19,13 +19,13 @@ import DocumentModel from './document-model';
 import SimulatorHost from './simulator-host';
 import { editorSymbol, projectSymbol, simulatorHostSymbol, simulatorRendererSymbol, documentSymbol } from './symbols';
 
-const innerProjectSymbol = Symbol('project');
+const innerProjectSymbol = Symbol('innerProject');
 export default class Project implements IPublicApiProject {
   private readonly [editorSymbol]: IEditor;
   private readonly [innerProjectSymbol]: InnerProject;
   private [simulatorHostSymbol]: BuiltinSimulatorHost;
   private [simulatorRendererSymbol]: any;
-  get [projectSymbol]() {
+  get [projectSymbol](): InnerProject {
     if (this.workspaceMode) {
       return this[innerProjectSymbol];
     }
