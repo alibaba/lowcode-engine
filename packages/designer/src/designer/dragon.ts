@@ -1,11 +1,13 @@
 import { EventEmitter } from 'events';
 import { obx, makeObservable } from '@alilc/lowcode-editor-core';
 import { NodeSchema } from '@alilc/lowcode-types';
+import { Node as ShellNode } from '@alilc/lowcode-shell';
 import { setNativeSelection, cursor } from '@alilc/lowcode-utils';
 import { DropLocation } from './location';
 import { Node, DocumentModel } from '../document';
 import { ISimulatorHost, isSimulatorHost, NodeInstance, ComponentInstance } from '../simulator';
 import { Designer } from './designer';
+import { makeEventsHandler } from '../utils/misc';
 
 export interface LocateEvent {
   readonly type: 'LocateEvent';
@@ -88,7 +90,7 @@ export enum DragObjectType {
 
 export interface DragNodeObject {
   type: DragObjectType.Node;
-  nodes: Node[];
+  nodes: (Node | ShellNode)[];
 }
 export interface DragNodeDataObject {
   type: DragObjectType.NodeData;
@@ -135,7 +137,7 @@ export function isShaken(e1: MouseEvent | DragEvent, e2: MouseEvent | DragEvent)
   );
 }
 
-function isInvalidPoint(e: any, last: any): boolean {
+export function isInvalidPoint(e: any, last: any): boolean {
   return (
     e.clientX === 0 &&
     e.clientY === 0 &&
@@ -144,7 +146,7 @@ function isInvalidPoint(e: any, last: any): boolean {
   );
 }
 
-function isSameAs(e1: MouseEvent | DragEvent, e2: MouseEvent | DragEvent): boolean {
+export function isSameAs(e1: MouseEvent | DragEvent, e2: MouseEvent | DragEvent): boolean {
   return e1.clientY === e2.clientY && e1.clientX === e2.clientX;
 }
 
@@ -157,31 +159,6 @@ function getSourceSensor(dragObject: DragObject): ISimulatorHost | null {
     return null;
   }
   return dragObject.nodes[0]?.document.simulator || null;
-}
-
-/**
- * make a handler that listen all sensors:document, avoid frame lost
- */
-function makeEventsHandler(
-  boostEvent: MouseEvent | DragEvent,
-  sensors: ISimulatorHost[],
-): (fn: (sdoc: Document) => void) => void {
-  const topDoc = window.document;
-  const sourceDoc = boostEvent.view?.document || topDoc;
-  // TODO: optimize this logic, reduce listener
-  const docs = new Set<Document>();
-  docs.add(topDoc);
-  docs.add(sourceDoc);
-  sensors.forEach((sim) => {
-    const sdoc = sim.contentDocument;
-    if (sdoc) {
-      docs.add(sdoc);
-    }
-  });
-
-  return (handle: (sdoc: Document) => void) => {
-    docs.forEach((doc) => handle(doc));
-  };
 }
 
 function isDragEvent(e: any): e is DragEvent {
@@ -249,13 +226,13 @@ export class Dragon {
    * @param dragObject 拖拽对象
    * @param boostEvent 拖拽初始时事件
    */
-  boost(dragObject: DragObject, boostEvent: MouseEvent | DragEvent, fromRglNode?: Node) {
+  boost(dragObject: DragObject, boostEvent: MouseEvent | DragEvent, fromRglNode?: Node | ShellNode) {
     const { designer } = this;
     const masterSensors = this.getMasterSensors();
     const handleEvents = makeEventsHandler(boostEvent, masterSensors);
     const newBie = !isDragNodeObject(dragObject);
     const forceCopyState =
-      isDragNodeObject(dragObject) && dragObject.nodes.some((node) => node.isSlot());
+      isDragNodeObject(dragObject) && dragObject.nodes.some((node: Node | ShellNode) => (typeof node.isSlot === 'function' ? node.isSlot() : node.isSlot));
     const isBoostFromDragAPI = isDragEvent(boostEvent);
     let lastSensor: ISensor | undefined;
 
@@ -325,6 +302,7 @@ export class Dragon {
       const locateEvent = createLocateEvent(e);
       const sensor = chooseSensor(locateEvent);
 
+      /* istanbul ignore next */
       if (isRGL) {
         // 禁止被拖拽元素的阻断
         const nodeInst = dragObject.nodes[0].getDOMNode();
@@ -429,7 +407,8 @@ export class Dragon {
       // 发送drop事件
       if (e) {
         const { isRGL, rglNode } = getRGL(e);
-        if (isRGL && this._canDrop) {
+        /* istanbul ignore next */
+        if (isRGL && this._canDrop && this._dragging) {
           const tarNode = dragObject.nodes[0];
           if (rglNode.id !== tarNode.id) {
             // 避免死循环
@@ -468,7 +447,7 @@ export class Dragon {
         this._dragging = false;
         try {
           this.emitter.emit('dragend', { dragObject, copy });
-        } catch (ex) {
+        } catch (ex) /* istanbul ignore next */ {
           exception = ex;
         }
       }
@@ -489,6 +468,7 @@ export class Dragon {
         doc.removeEventListener('keydown', checkcopy, false);
         doc.removeEventListener('keyup', checkcopy, false);
       });
+      /* istanbul ignore next */
       if (exception) {
         throw exception;
       }
@@ -509,7 +489,7 @@ export class Dragon {
       if (!sourceDocument || sourceDocument === document) {
         evt.globalX = e.clientX;
         evt.globalY = e.clientY;
-      } /* istanbul ignore next */ else {
+      } else /* istanbul ignore next */ {
         // event from simulator sandbox
         let srcSim: ISimulatorHost | undefined;
         const lastSim = lastSensor && isSimulatorHost(lastSensor) ? lastSensor : null;
@@ -616,6 +596,7 @@ export class Dragon {
     }
   }
 
+  /* istanbul ignore next */
   private getMasterSensors(): ISimulatorHost[] {
     return Array.from(
       new Set(

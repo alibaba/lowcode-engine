@@ -4,7 +4,7 @@ import { IBaseRendererProps, IBaseRenderComponent } from '../types';
 export default function pageRendererFactory(): IBaseRenderComponent {
   const BaseRenderer = baseRendererFactory();
   return class PageRenderer extends BaseRenderer {
-    static dislayName = 'page-renderer';
+    static displayName = 'PageRenderer';
 
     __namespace = 'page';
 
@@ -20,10 +20,9 @@ export default function pageRendererFactory(): IBaseRenderComponent {
 
     async componentDidUpdate(prevProps: IBaseRendererProps, _prevState: {}, snapshot: unknown) {
       const { __ctx } = this.props;
-      const prevState = this.__parseData(prevProps.__schema.state, __ctx);
-      const newState = this.__parseData(this.props.__schema.state, __ctx);
-      // 当编排的时候修改schema.state值，需要将最新schema.state值setState
-      if (JSON.stringify(newState) != JSON.stringify(prevState)) {
+      // 当编排的时候修改schema.state值，需要将最新 schema.state 值 setState
+      if (JSON.stringify(prevProps.__schema.state) != JSON.stringify(this.props.__schema.state)) {
+        const newState = this.__parseData(this.props.__schema.state, __ctx);
         this.setState(newState);
       }
 
@@ -35,12 +34,10 @@ export default function pageRendererFactory(): IBaseRenderComponent {
       if (this.__checkSchema(__schema)) {
         return '页面schema结构异常！';
       }
-      this.__debug(`${PageRenderer.dislayName} render - ${__schema.fileName}`);
+      this.__debug(`${PageRenderer.displayName} render - ${__schema.fileName}`);
 
       this.__bindCustomMethods(this.props);
       this.__initDataSource(this.props);
-
-      // this.__excuteLifeCycleMethod('constructor', arguments);
 
       this.__generateCtx({
         page: this,

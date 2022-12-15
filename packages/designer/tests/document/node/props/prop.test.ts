@@ -9,7 +9,7 @@ import { TransformStage } from '@alilc/lowcode-types';
 
 const slotNodeImportMockFn = jest.fn();
 const slotNodeRemoveMockFn = jest.fn();
-const mockedOwner = {
+const mockOwner = {
   componentName: 'Div',
   addSlot() {},
   document: {
@@ -30,10 +30,10 @@ const mockedOwner = {
   isInited: true,
 };
 
-const mockedPropsInst = {
-  owner: mockedOwner,
+const mockPropsInst = {
+  owner: mockOwner,
 };
-mockedPropsInst.props = mockedPropsInst;
+mockPropsInst.props = mockPropsInst;
 
 describe('Prop 类测试', () => {
   describe('基础类型', () => {
@@ -44,13 +44,13 @@ describe('Prop 类测试', () => {
     let expProp: Prop;
     let slotProp: Prop;
     beforeEach(() => {
-      boolProp = new Prop(mockedPropsInst, true, 'boolProp');
-      strProp = new Prop(mockedPropsInst, 'haha', 'strProp');
-      numProp = new Prop(mockedPropsInst, 1, 'numProp');
-      nullProp = new Prop(mockedPropsInst, null, 'nullProp');
-      expProp = new Prop(mockedPropsInst, { type: 'JSExpression', value: 'state.haha' }, 'expProp');
+      boolProp = new Prop(mockPropsInst, true, 'boolProp');
+      strProp = new Prop(mockPropsInst, 'haha', 'strProp');
+      numProp = new Prop(mockPropsInst, 1, 'numProp');
+      nullProp = new Prop(mockPropsInst, null, 'nullProp');
+      expProp = new Prop(mockPropsInst, { type: 'JSExpression', value: 'state.haha' }, 'expProp');
       slotProp = new Prop(
-        mockedPropsInst,
+        mockPropsInst,
         {
           type: 'JSSlot',
           title: '测试 slot',
@@ -73,9 +73,9 @@ describe('Prop 类测试', () => {
     });
 
     it('consturctor / getProps / getNode', () => {
-      expect(boolProp.parent).toBe(mockedPropsInst);
-      expect(boolProp.getProps()).toBe(mockedPropsInst);
-      expect(boolProp.getNode()).toBe(mockedOwner);
+      expect(boolProp.parent).toBe(mockPropsInst);
+      expect(boolProp.getProps()).toBe(mockPropsInst);
+      expect(boolProp.getNode()).toBe(mockOwner);
     });
 
     it('misc', () => {
@@ -94,6 +94,7 @@ describe('Prop 类测试', () => {
 
     it('getValue / getAsString / setValue', () => {
       expect(strProp.getValue()).toBe('haha');
+      strProp.setValue('heihei');
       strProp.setValue('heihei');
       expect(strProp.getValue()).toBe('heihei');
       expect(strProp.getAsString()).toBe('heihei');
@@ -149,11 +150,11 @@ describe('Prop 类测试', () => {
       expect(strProp.export(TransformStage.Save)).toBeUndefined();
 
       expect(
-        new Prop(mockedPropsInst, false, '___condition___').export(TransformStage.Render),
+        new Prop(mockPropsInst, false, '___condition___').export(TransformStage.Render),
       ).toBeTruthy();
       engineConfig.set('enableCondition', true);
       expect(
-        new Prop(mockedPropsInst, false, '___condition___').export(TransformStage.Render),
+        new Prop(mockPropsInst, false, '___condition___').export(TransformStage.Render),
       ).toBeFalsy();
       expect(slotProp.export(TransformStage.Render)).toEqual({
         type: 'JSSlot',
@@ -176,7 +177,8 @@ describe('Prop 类测试', () => {
     });
 
     it('compare', () => {
-      const newProp = new Prop(mockedPropsInst, 'haha');
+      const newProp = new Prop(mockPropsInst, 'haha');
+      const newProp2 = new Prop(mockPropsInst, { a: 1 });
       expect(strProp.compare(newProp)).toBe(0);
       expect(strProp.compare(expProp)).toBe(2);
 
@@ -184,10 +186,11 @@ describe('Prop 类测试', () => {
       expect(strProp.compare(newProp)).toBe(2);
       strProp.unset();
       expect(strProp.compare(newProp)).toBe(0);
+      expect(strProp.compare(newProp2)).toBe(2);
     });
 
     it('isVirtual', () => {
-      expect(new Prop(mockedPropsInst, 111, '!virtualProp')).toBeTruthy();
+      expect(new Prop(mockPropsInst, 111, '!virtualProp')).toBeTruthy();
     });
 
     it('purge', () => {
@@ -214,24 +217,24 @@ describe('Prop 类测试', () => {
     });
 
     it('迭代器 / map / forEach', () => {
-      const mockedFn = jest.fn();
+      const mockFn = jest.fn();
       for (const item of strProp) {
-        mockedFn();
+        mockFn();
       }
-      expect(mockedFn).not.toHaveBeenCalled();
-      mockedFn.mockClear();
+      expect(mockFn).not.toHaveBeenCalled();
+      mockFn.mockClear();
 
       strProp.forEach((item) => {
-        mockedFn();
+        mockFn();
       });
-      expect(mockedFn).not.toHaveBeenCalled();
-      mockedFn.mockClear();
+      expect(mockFn).not.toHaveBeenCalled();
+      mockFn.mockClear();
 
       strProp.map((item) => {
-        return mockedFn();
+        return mockFn();
       });
-      expect(mockedFn).not.toHaveBeenCalled();
-      mockedFn.mockClear();
+      expect(mockFn).not.toHaveBeenCalled();
+      mockFn.mockClear();
     });
   });
 
@@ -239,7 +242,7 @@ describe('Prop 类测试', () => {
     describe('items(map 类型)', () => {
       let prop: Prop;
       beforeEach(() => {
-        prop = new Prop(mockedPropsInst, {
+        prop = new Prop(mockPropsInst, {
           a: 1,
           b: 'str',
           c: true,
@@ -316,8 +319,8 @@ describe('Prop 类测试', () => {
       });
 
       it('compare', () => {
-        const prop1 = new Prop(mockedPropsInst, { a: 1 });
-        const prop2 = new Prop(mockedPropsInst, { b: 1 });
+        const prop1 = new Prop(mockPropsInst, { a: 1 });
+        const prop2 = new Prop(mockPropsInst, { b: 1 });
         expect(prop1.compare(prop2)).toBe(1);
       });
 
@@ -352,24 +355,24 @@ describe('Prop 类测试', () => {
       });
 
       it('迭代器 / map / forEach', () => {
-        const mockedFn = jest.fn();
+        const mockFn = jest.fn();
         for (const item of prop) {
-          mockedFn();
+          mockFn();
         }
-        expect(mockedFn).toHaveBeenCalledTimes(7);
-        mockedFn.mockClear();
+        expect(mockFn).toHaveBeenCalledTimes(7);
+        mockFn.mockClear();
 
         prop.forEach((item) => {
-          mockedFn();
+          mockFn();
         });
-        expect(mockedFn).toHaveBeenCalledTimes(7);
-        mockedFn.mockClear();
+        expect(mockFn).toHaveBeenCalledTimes(7);
+        mockFn.mockClear();
 
         prop.map((item) => {
-          return mockedFn();
+          return mockFn();
         });
-        expect(mockedFn).toHaveBeenCalledTimes(7);
-        mockedFn.mockClear();
+        expect(mockFn).toHaveBeenCalledTimes(7);
+        mockFn.mockClear();
       });
 
       it('dispose', () => {
@@ -384,7 +387,7 @@ describe('Prop 类测试', () => {
     describe('items(list 类型)', () => {
       let prop: Prop;
       beforeEach(() => {
-        prop = new Prop(mockedPropsInst, [1, true, 'haha']);
+        prop = new Prop(mockPropsInst, [1, true, 'haha']);
       });
       afterEach(() => {
         prop.purge();
@@ -417,9 +420,9 @@ describe('Prop 类测试', () => {
       });
 
       it('compare', () => {
-        const prop1 = new Prop(mockedPropsInst, [1]);
-        const prop2 = new Prop(mockedPropsInst, [2]);
-        const prop3 = new Prop(mockedPropsInst, [1, 2]);
+        const prop1 = new Prop(mockPropsInst, [1]);
+        const prop2 = new Prop(mockPropsInst, [2]);
+        const prop3 = new Prop(mockPropsInst, [1, 2]);
         expect(prop1.compare(prop2)).toBe(1);
         expect(prop1.compare(prop3)).toBe(2);
       });
@@ -432,8 +435,30 @@ describe('Prop 类测试', () => {
       });
 
       it('should return undefined when all items are undefined', () => {
-        prop = new Prop(mockedPropsInst, [undefined, undefined], '___loopArgs___');
+        prop = new Prop(mockPropsInst, [undefined, undefined], '___loopArgs___');
         expect(prop.getValue()).toBeUndefined();
+      });
+
+      it('迭代器 / map / forEach', () => {
+        const listProp = new Prop(mockPropsInst, [1, 2]);
+        const mockFn = jest.fn();
+        for (const item of listProp) {
+          mockFn();
+        }
+        expect(mockFn).toHaveBeenCalledTimes(2);
+        mockFn.mockClear();
+
+        listProp.forEach((item) => {
+          mockFn();
+        });
+        expect(mockFn).toHaveBeenCalledTimes(2);
+        mockFn.mockClear();
+
+        listProp.map((item) => {
+          return mockFn();
+        });
+        expect(mockFn).toHaveBeenCalledTimes(2);
+        mockFn.mockClear();
       });
     });
   });

@@ -64,8 +64,6 @@ export interface NodeSchema {
 
   /** @experimental 编辑态内部使用 */
   __ctx?: any;
-  /** @experimental 编辑态内部使用 */
-  __ignoreParse?: any[];
 }
 
 export type PropsMap = CompositeObject;

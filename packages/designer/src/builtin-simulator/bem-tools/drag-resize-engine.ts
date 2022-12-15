@@ -2,35 +2,7 @@ import { EventEmitter } from 'events';
 import { ISimulatorHost } from '../../simulator';
 import { Designer, Point } from '../../designer';
 import { cursor } from '@alilc/lowcode-utils';
-// import Cursor from './cursor';
-// import Pages from './pages';
-
-function makeEventsHandler(
-  boostEvent: MouseEvent | DragEvent,
-  sensors: ISimulatorHost[],
-): (fn: (sdoc: Document) => void) => void {
-  const topDoc = window.document;
-  const sourceDoc = boostEvent.view?.document || topDoc;
-  // TODO: optimize this logic, reduce listener
-  // const boostPrevented = boostEvent.defaultPrevented;
-  const docs = new Set<Document>();
-  // if (boostPrevented || isDragEvent(boostEvent)) {
-  docs.add(topDoc);
-  // }
-  docs.add(sourceDoc);
-  // if (sourceDoc !== topDoc || isDragEvent(boostEvent)) {
-  sensors.forEach(sim => {
-    const sdoc = sim.contentDocument;
-    if (sdoc) {
-      docs.add(sdoc);
-    }
-  });
-  // }
-
-  return (handle: (sdoc: Document) => void) => {
-    docs.forEach(doc => handle(doc));
-  };
-}
+import { makeEventsHandler } from '../../utils/misc';
 
 // 拖动缩放
 export default class DragResizeEngine {
@@ -73,6 +45,7 @@ export default class DragResizeEngine {
 
     const masterSensors = this.getMasterSensors();
 
+    /* istanbul ignore next */
     const createResizeEvent = (e: MouseEvent | DragEvent): Point => {
       const sourceDocument = e.view?.document;
 

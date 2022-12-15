@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { autorun, reaction, mobx, untracked, globalContext, Editor } from '@alilc/lowcode-editor-core';
+import { reaction, untracked, globalContext, Editor } from '@alilc/lowcode-editor-core';
 import { NodeSchema } from '@alilc/lowcode-types';
 import { History as ShellHistory } from '@alilc/lowcode-shell';
 
@@ -32,31 +32,30 @@ export class History<T = NodeSchema> {
     this.currentSerialization = serialization;
   }
 
-  constructor(dataFn: () => T, private redoer: (data: T) => void, private timeGap: number = 1000) {
+  constructor(dataFn: () => T | null, private redoer: (data: T) => void, private timeGap: number = 1000) {
     this.session = new Session(0, null, this.timeGap);
     this.records = [this.session];
 
-    reaction(() => {
+    reaction((): any => {
       return dataFn();
     }, (data: T) => {
       if (this.asleep) return;
       untracked(() => {
         const log = this.currentSerialization.serialize(data);
-          if (this.session.isActive()) {
-            this.session.log(log);
-          } else {
-            this.session.end();
-            const lastState = this.getState();
-            const cursor = this.session.cursor + 1;
-            const session = new Session(cursor, log, this.timeGap);
-            this.session = session;
-            this.records.splice(cursor, this.records.length - cursor, session);
-            const currentState = this.getState();
-            if (currentState !== lastState) {
-              this.emitter.emit('statechange', currentState);
-            }
+        if (this.session.isActive()) {
+          this.session.log(log);
+        } else {
+          this.session.end();
+          const lastState = this.getState();
+          const cursor = this.session.cursor + 1;
+          const session = new Session(cursor, log, this.timeGap);
+          this.session = session;
+          this.records.splice(cursor, this.records.length - cursor, session);
+          const currentState = this.getState();
+          if (currentState !== lastState) {
+            this.emitter.emit('statechange', currentState);
           }
-        // }
+        }
       });
     }, { fireImmediately: true });
   }

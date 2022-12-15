@@ -84,6 +84,22 @@ export default class Skeleton {
   }
 
   /**
+   * show area
+   * @param areaName name of area
+   */
+  showArea(areaName: string) {
+    (this[skeletonSymbol] as any)[areaName]?.show();
+  }
+
+  /**
+   * hide area
+   * @param areaName name of area
+   */
+  hideArea(areaName: string) {
+    (this[skeletonSymbol] as any)[areaName]?.hide();
+  }
+
+  /**
    * 监听 panel 显示事件
    * @param listener
    * @returns

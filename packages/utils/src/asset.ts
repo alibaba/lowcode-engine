@@ -1,10 +1,12 @@
-import { AssetItem, AssetType, AssetLevels, Asset, AssetList, AssetBundle, AssetLevel, AssetsJson } from '@alilc/lowcode-types';
+import { AssetType, AssetLevels, AssetLevel } from '@alilc/lowcode-types';
+import type { AssetItem, Asset, AssetList, AssetBundle, AssetsJson } from '@alilc/lowcode-types';
 import { isCSSUrl } from './is-css-url';
 import { createDefer } from './create-defer';
 import { load, evaluate } from './script';
 
 // API 向下兼容
-export { AssetItem, AssetType, AssetLevels, Asset, AssetList, AssetBundle, AssetLevel, AssetsJson } from '@alilc/lowcode-types';
+export { AssetType, AssetLevels, AssetLevel } from '@alilc/lowcode-types';
+export type { AssetItem, Asset, AssetList, AssetBundle, AssetsJson } from '@alilc/lowcode-types';
 
 export function isAssetItem(obj: any): obj is AssetItem {
   return obj && obj.type;
@@ -266,17 +268,24 @@ export class AssetLoader {
   async loadAsyncLibrary(asyncLibraryMap: Record<string, any>) {
     const promiseList: any[] = [];
     const libraryKeyList: any[] = [];
+    const pkgs: any[] = [];
     for (const key in asyncLibraryMap) {
       // 需要异步加载
       if (asyncLibraryMap[key].async) {
         promiseList.push(window[asyncLibraryMap[key].library]);
         libraryKeyList.push(asyncLibraryMap[key].library);
+        pkgs.push(asyncLibraryMap[key]);
       }
     }
     await Promise.all(promiseList).then((mods) => {
       if (mods.length > 0) {
         mods.map((item, index) => {
-          window[libraryKeyList[index]] = item;
+          const { exportMode, exportSourceLibrary, library } = pkgs[index];
+          window[libraryKeyList[index]] =
+            exportMode === 'functionCall' &&
+            (exportSourceLibrary == null || exportSourceLibrary === library)
+              ? item()
+              : item;
           return item;
         });
       }

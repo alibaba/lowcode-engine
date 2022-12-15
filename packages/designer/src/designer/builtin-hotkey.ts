@@ -4,7 +4,7 @@ import { focusing } from './focusing';
 import { insertChildren, TransformStage } from '../document';
 import clipboard from './clipboard';
 
-function isInLiveEditing() {
+export function isInLiveEditing() {
   if (globalContext.has(Editor)) {
     return Boolean(
       globalContext.get(Editor).get('designer')?.project?.simulator?.liveEditing?.editing,
@@ -12,6 +12,7 @@ function isInLiveEditing() {
   }
 }
 
+/* istanbul ignore next */
 function getNextForSelect(next: any, head?: any, parent?: any): any {
   if (next) {
     if (!head) {
@@ -42,6 +43,7 @@ function getNextForSelect(next: any, head?: any, parent?: any): any {
   return null;
 }
 
+/* istanbul ignore next */
 function getPrevForSelect(prev: any, head?: any, parent?: any): any {
   if (prev) {
     let ret;
@@ -150,6 +152,7 @@ hotkey.bind(['command+v', 'ctrl+v'], (e) => {
   if (isFormEvent(e) || !designer || !doc) {
     return;
   }
+  /* istanbul ignore next */
   clipboard.waitPasteData(e, ({ componentsTree }) => {
     if (componentsTree) {
       const { target, index } = designer.getSuitableInsertion(componentsTree) || {};
@@ -179,7 +182,7 @@ hotkey.bind(['command+z', 'ctrl+z'], (e) => {
 
   e.preventDefault();
   const selection = focusing.focusDesigner?.currentSelection;
-  const curSelected = Array.from(selection?.selected || []);
+  const curSelected = Array.from(selection?.selected);
   his.back();
   selection?.selectAll(curSelected);
 });
@@ -193,7 +196,7 @@ hotkey.bind(['command+y', 'ctrl+y', 'command+shift+z'], (e) => {
   }
   e.preventDefault();
   const selection = focusing.focusDesigner?.currentSelection;
-  const curSelected = Array.from(selection?.selected || []);
+  const curSelected = Array.from(selection?.selected);
   his.forward();
   selection?.selectAll(curSelected);
 });

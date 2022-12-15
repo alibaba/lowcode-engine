@@ -51,15 +51,16 @@ describe('DragResizeEngine 测试', () => {
     const offResize = resizeEngine.onResize(resizeMockFn);
     const offResizeEnd = resizeEngine.onResizeEnd(resizeEndMockFn);
     const boostedNode = doc.getNode('node_k1ow3cbn');
-    const mockedBoostFn = jest
+    const mockBoostFn = jest
       .fn((e) => {
         return boostedNode;
       });
 
     // do nothing
-    resizeEngine.from();
+    const noop = resizeEngine.from();
+    noop();
 
-    const offFrom = resizeEngine.from(document, 'e', mockedBoostFn);
+    const offFrom = resizeEngine.from(document, 'e', mockBoostFn);
 
     const mouseDownEvt = createEvent.mouseDown(document, { clientX: 100, clientY: 100 });
     fireEvent(document, mouseDownEvt);
@@ -112,18 +113,18 @@ describe('DragResizeEngine 测试', () => {
   });
 
   it('has sensor', () => {
-    const mockedDoc = document.createElement('iframe').contentWindow?.document;
+    const mockDoc = document.createElement('iframe').contentWindow?.document;
     project.mountSimulator({
       sensorAvailable: true,
       contentDocument: document,
     });
 
-    const mockedBoostFn = jest
+    const mockBoostFn = jest
       .fn((e) => {
         return doc.getNode('node_k1ow3cbn');
       });
 
-    const offFrom = resizeEngine.from(document, 'e', mockedBoostFn);
+    const offFrom = resizeEngine.from(document, 'e', mockBoostFn);
 
     // TODO: 想办法 mock 一个 iframe.currentDocument
     fireEvent.mouseDown(document, { clientX: 100, clientY: 100 });

@@ -37,7 +37,7 @@ const VALID_ENGINE_OPTIONS = {
   },
   locale: {
     type: 'string',
-    default: 'zh_CN',
+    default: 'zh-CN',
     description: '语言',
   },
   renderEnv: {
@@ -137,6 +137,14 @@ const VALID_ENGINE_OPTIONS = {
     type: 'boolean',
     description: 'JSExpression 是否只支持使用 this 来访问上下文变量',
   },
+  enableStrictNotFoundMode: {
+    type: 'boolean',
+    description: '当开启组件未找到严格模式时，渲染模块不会默认给一个容器组件',
+  },
+  focusNodeSelector: {
+    type: 'function',
+    description: '配置指定节点为根组件',
+  },
 };
 export interface EngineOptions {
   /**
@@ -158,7 +166,7 @@ export interface EngineOptions {
    */
   deviceClassName?: string;
   /**
-   * 语言，默认值：'zh_CN'
+   * 语言，默认值：'zh-CN'
    */
   locale?: string;
   /**
@@ -258,6 +266,17 @@ export interface EngineOptions {
    * JSExpression 是否只支持使用 this 来访问上下文变量，假如需要兼容原来的 'state.xxx'，则设置为 false
    */
   thisRequiredInJSE?: boolean;
+
+  /**
+   * @default false
+   * 当开启组件未找到严格模式时，渲染模块不会默认给一个容器组件
+   */
+  enableStrictNotFoundMode?: boolean;
+
+  /**
+   * 配置指定节点为根组件
+   */
+  focusNodeSelector?: (rootNode: Node) => Node;
 }
 
 const getStrictModeValue = (engineOptions: EngineOptions, defaultValue: boolean): boolean => {

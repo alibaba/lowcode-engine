@@ -34,11 +34,11 @@ export default {
           id: 'node_ockvuu8u916',
           props: {
             content: {
-              use: 'zh_CN',
+              use: 'zh-CN',
               type: 'JSExpression',
-              en_US: 'Tips content',
+              'en-US': 'Tips content',
               value: '"我是一个简单的测试页面"',
-              zh_CN: '我是一个简单的测试页面',
+              'zh-CN': '我是一个简单的测试页面',
               extType: 'i18n',
             },
             fieldId: 'text_kvuu9gl2',

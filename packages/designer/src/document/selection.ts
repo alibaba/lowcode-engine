@@ -147,9 +147,8 @@ export class Selection {
         if (n === PositionNO.Contains || n === PositionNO.TheSame) {
           isTop = false;
           break;
-        }
-        // node contains nodes[i], delete nodes[i]
-        if (n === PositionNO.ContainedBy) {
+        } else if (n === PositionNO.ContainedBy) {
+          // node contains nodes[i], delete nodes[i]
           nodes.splice(i, 1);
         }
       }

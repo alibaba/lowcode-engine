@@ -173,7 +173,7 @@ export class Prop implements IPropParent {
       const values = this.items!.map((prop) => {
         return prop.export(stage);
       });
-      if (values.every(val => val === undefined)) {
+      if (values.every((val) => val === undefined)) {
         return undefined;
       }
       return values;
@@ -259,7 +259,7 @@ export class Prop implements IPropParent {
       } else {
         this._type = 'map';
       }
-    } /* istanbul ignore next */ else {
+    } else /* istanbul ignore next */ {
       this._type = 'expression';
       this._value = {
         type: 'JSExpression',
@@ -314,14 +314,21 @@ export class Prop implements IPropParent {
   @action
   setAsSlot(data: JSSlot) {
     this._type = 'slot';
-    const slotSchema: SlotSchema = {
-      componentName: 'Slot',
-      title: data.title,
-      id: data.id,
-      name: data.name,
-      params: data.params,
-      children: data.value,
-    };
+    let slotSchema: SlotSchema;
+    // 当 data.value 的结构为 { componentName: 'Slot' } 时，直接当成 slotSchema 使用
+    if ((isPlainObject(data.value) && data.value?.componentName === 'Slot')) {
+      slotSchema = data.value as SlotSchema;
+    } else {
+      slotSchema = {
+        componentName: 'Slot',
+        title: data.title,
+        id: data.id,
+        name: data.name,
+        params: data.params,
+        children: data.value,
+      };
+    }
+
     if (this._slotNode) {
       this._slotNode.import(slotSchema);
     } else {
@@ -399,10 +406,10 @@ export class Prop implements IPropParent {
       let items: Prop[] | null = null;
       if (this._type === 'list') {
         const data = this._value;
-        for (const item of data) {
+        data.forEach((item: any, idx: number) => {
           items = items || [];
-          items.push(new Prop(this, item));
-        }
+          items.push(new Prop(this, item, idx));
+        });
         this._maps = null;
       } else if (this._type === 'map') {
         const data = this._value;
@@ -502,6 +509,7 @@ export class Prop implements IPropParent {
    */
   @action
   delete(prop: Prop): void {
+    /* istanbul ignore else */
     if (this._items) {
       const i = this._items.indexOf(prop);
       if (i > -1) {
@@ -519,6 +527,7 @@ export class Prop implements IPropParent {
    */
   @action
   deleteKey(key: string): void {
+    /* istanbul ignore else */
     if (this.maps) {
       const prop = this.maps.get(key);
       if (prop) {

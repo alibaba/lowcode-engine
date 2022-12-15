@@ -62,6 +62,10 @@ class Host {
     consume() {}
   }
 
+  i18nConsumer = {
+    consume() {}
+  }
+
   /** 下列的函数或者方法是方便测试用 */
   mockSchema = (schema: any) => {
     this.schema = schema;

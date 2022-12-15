@@ -31,7 +31,7 @@ const loader = new AssetLoader();
 configure({ enforceActions: 'never' });
 
 export class DocumentInstance {
-  public instancesMap = new Map<string, ReactInstance[]>();
+  instancesMap = new Map<string, ReactInstance[]>();
 
   get schema(): any {
     return this.document.export(TransformStage.Render);
@@ -49,24 +49,6 @@ export class DocumentInstance {
     // 根据 device 选择不同组件，进行响应式
     // 更好的做法是，根据 device 选择加载不同的组件资源，甚至是 simulatorUrl
     return this._components;
-  }
-
-  /**
-   * 本次的变更数据
-   */
-  @obx.ref private _deltaData: any = {};
-
-  @computed get deltaData(): any {
-    return this._deltaData;
-  }
-
-  /**
-   * 是否使用增量模式
-   */
-  @obx.ref private _deltaMode: boolean = false;
-
-  @computed get deltaMode(): boolean {
-    return this._deltaMode;
   }
 
   // context from: utils、constants、history、location、match
@@ -116,7 +98,7 @@ export class DocumentInstance {
     return this.document.id;
   }
 
-  private unmountIntance(id: string, instance: ReactInstance) {
+  private unmountInstance(id: string, instance: ReactInstance) {
     const instances = this.instancesMap.get(id);
     if (instances) {
       const i = instances.indexOf(instance);
@@ -144,11 +126,11 @@ export class DocumentInstance {
       }
       return;
     }
-    const unmountIntance = this.unmountIntance.bind(this);
+    const unmountInstance = this.unmountInstance.bind(this);
     const origId = (instance as any)[SYMBOL_VNID];
     if (origId && origId !== id) {
       // 另外一个节点的 instance 在此被复用了，需要从原来地方卸载
-      unmountIntance(origId, instance);
+      unmountInstance(origId, instance);
     }
     if (isElement(instance)) {
       cacheReactKey(instance);
@@ -160,7 +142,7 @@ export class DocumentInstance {
       }
       // hack! delete instance from map
       const newUnmount = function (this: any) {
-        unmountIntance(id, instance);
+        unmountInstance(id, instance);
         origUnmount && origUnmount.call(this);
       };
       (newUnmount as any).origUnmount = origUnmount;
@@ -208,6 +190,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   readonly history: MemoryHistory;
 
   @obx.ref private _documentInstances: DocumentInstance[] = [];
+  private _requestHandlersMap: any;
   get documentInstances() {
     return this._documentInstances;
   }
@@ -221,7 +204,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       this._layout = host.project.get('config').layout;
 
       // todo: split with others, not all should recompute
-      if (this._libraryMap !== host.libraryMap || this._componentsMap !== host.designer.componentsMap) {
+      if (this._libraryMap !== host.libraryMap
+        || this._componentsMap !== host.designer.componentsMap) {
         this._libraryMap = host.libraryMap || {};
         this._componentsMap = host.designer.componentsMap;
         this.buildComponents();
@@ -264,7 +248,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       initialEntries: [initialEntry],
     });
     this.history = history;
-    history.listen((location, action) => {
+    history.listen((location) => {
       const docId = location.pathname.slice(1);
       docId && host.project.open(docId);
     });
@@ -303,13 +287,21 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       constants: {},
       requestHandlersMap: this._requestHandlersMap,
     };
+
     host.injectionConsumer.consume((data) => {
       // TODO: sync utils, i18n, contants,... config
       const newCtx = {
         ...this._appContext,
       };
-      newCtx.utils.i18n.messages = data.i18n || {};
       merge(newCtx, data.appHelper || {});
+      this._appContext = newCtx;
+    });
+
+    host.i18nConsumer.consume((data) => {
+      const newCtx = {
+        ...this._appContext,
+      };
+      newCtx.utils.i18n.messages = data || {};
       this._appContext = newCtx;
     });
   }
@@ -328,7 +320,11 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   private _libraryMap: { [key: string]: string } = {};
 
   private buildComponents() {
-    this._components = buildComponents(this._libraryMap, this._componentsMap, this.createComponent.bind(this));
+    this._components = buildComponents(
+        this._libraryMap,
+        this._componentsMap,
+        this.createComponent.bind(this),
+      );
     this._components = {
       ...builtinComponents,
       ...this._components,
@@ -367,6 +363,11 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
    * 是否为画布自动渲染
    */
   autoRender = true;
+
+  /**
+   * 画布是否自动监听事件来重绘节点
+   */
+  autoRepaintNode = true;
   /**
    * 加载资源
    */
@@ -465,6 +466,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
             // mock _leaf，减少性能开销
             const _leaf = {
               isEmpty: () => false,
+              isMock: true,
             };
             viewProps._leaf = _leaf;
             return createElement(Comp, viewProps, children);
@@ -508,9 +510,17 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     this._appContext = { ...this._appContext };
   }
 
+  stopAutoRepaintNode() {
+    this.autoRepaintNode = false;
+  }
+
+  enableAutoRepaintNode() {
+    this.autoRepaintNode = true;
+  }
+
   dispose() {
-    this.disposeFunctions.forEach(fn => fn());
-    this.documentInstances.forEach(docInst => docInst.dispose());
+    this.disposeFunctions.forEach((fn) => fn());
+    this.documentInstances.forEach((docInst) => docInst.dispose());
     untracked(() => {
       this._componentsMap = {};
       this._components = null;
@@ -544,7 +554,10 @@ function cacheReactKey(el: Element): Element {
 const SYMBOL_VNID = Symbol('_LCNodeId');
 const SYMBOL_VDID = Symbol('_LCDocId');
 
-function getClosestNodeInstance(from: ReactInstance, specId?: string): NodeInstance<ReactInstance> | null {
+function getClosestNodeInstance(
+    from: ReactInstance,
+    specId?: string,
+  ): NodeInstance<ReactInstance> | null {
   let el: any = from;
   if (el) {
     if (isElement(el)) {
@@ -603,7 +616,7 @@ function getLowCodeComponentProps(props: any) {
     return props;
   }
   const newProps: any = {};
-  Object.keys(props).forEach(k => {
+  Object.keys(props).forEach((k) => {
     if (['children', 'componentId', '__designMode', '_componentName', '_leaf'].includes(k)) {
       return;
     }

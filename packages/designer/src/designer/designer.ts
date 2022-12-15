@@ -403,7 +403,8 @@ export class Designer {
       // 合并assets
       let assets = this.editor.get('assets');
       let newAssets = megreAssets(assets, incrementalAssets);
-      this.editor.set('assets', newAssets);
+      // 对于 assets 存在需要二次网络下载的过程，必须 await 等待结束之后，再进行事件触发
+      await this.editor.set('assets', newAssets);
     }
     // TODO: 因为涉及修改 prototype.view，之后在 renderer 里修改了 vc 的 view 获取逻辑后，可删除
     this.refreshComponentMetasMap();
@@ -419,7 +420,7 @@ export class Designer {
   }
 
   get(key: string): any {
-    return this.props ? this.props[key] : null;
+    return this.props?.[key];
   }
 
   @obx.ref private _simulatorComponent?: ComponentType<any>;

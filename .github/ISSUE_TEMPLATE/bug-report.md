@@ -1,6 +1,6 @@
 ---
 name: Bug report / 提交 bug
-about: Create a report to help us improve / 提交一个好的 issue 帮助我们优化引擎，[引擎的 issue 说明](https://www.yuque.com/lce/doc/yvlxhs)
+about: Create a report to help us improve / 提交一个好的 issue 帮助我们优化引擎，[引擎的 issue 说明](https://lowcode-engine.cn/site/community/issue)
 title: ''
 labels: ''
 assignees: ''

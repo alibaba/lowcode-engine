@@ -67,22 +67,31 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
     this.stageName = stageName;
   }
 
-  render() {
-    const { field } = this.props;
-    const { extraProps, componentMeta } = field;
-    const { condition, defaultValue } = extraProps;
-    let visible;
+  get field() {
+    return this.props.field;
+  }
+
+  get visible() {
+    const { extraProps } = this.field;
+    const { condition } = extraProps;
     try {
-      visible = typeof condition === 'function' ? condition(field.internalToShellPropEntry()) !== false : true;
+      return typeof condition === 'function' ? condition(this.field.internalToShellPropEntry()) !== false : true;
     } catch (error) {
       console.error('exception when condition (hidden) is excuted', error);
     }
 
-    if (!visible) {
-      return null;
-    }
-    const { setter } = field;
+    return true;
+  }
 
+  get setterInfo(): {
+    setterProps: any;
+    initialValue: any;
+    setterType: any;
+  } {
+    const { extraProps, componentMeta } = this.field;
+    const { defaultValue } = extraProps;
+
+    const { setter } = this.field;
     let setterProps: any = {};
     let setterType: any;
     let initialValue: any = null;
@@ -97,7 +106,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
       if (setter.props) {
         setterProps = setter.props;
         if (typeof setterProps === 'function') {
-          setterProps = setterProps(field.internalToShellPropEntry());
+          setterProps = setterProps(this.field.internalToShellPropEntry());
         }
       }
       if (setter.initialValue != null) {
@@ -107,8 +116,22 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
       setterType = setter;
     }
 
+    if (defaultValue != null && !('defaultValue' in setterProps)) {
+      setterProps.defaultValue = defaultValue;
+      if (initialValue == null) {
+        initialValue = defaultValue;
+      }
+    }
+
+    if (this.field.valueState === -1) {
+      setterProps.multiValue = true;
+      if (!('placeholder' in setterProps)) {
+        setterProps.placeholder = intl('Multiple Value');
+      }
+    }
+
     // 根据是否支持变量配置做相应的更改
-    const supportVariable = field.extraProps?.supportVariable;
+    const supportVariable = this.field.extraProps?.supportVariable;
     // supportVariableGlobally 只对标准组件生效，vc 需要单独配置
     const supportVariableGlobally = engineConfig.get('supportVariableGlobally', false) && isStandardComponent(componentMeta);
     if (supportVariable || supportVariableGlobally) {
@@ -128,29 +151,52 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
       }
     }
 
-    let value = null;
-    if (defaultValue != null && !('defaultValue' in setterProps)) {
-      setterProps.defaultValue = defaultValue;
-      if (initialValue == null) {
-        initialValue = defaultValue;
-      }
-    }
-    if (field.valueState === -1) {
-      setterProps.multiValue = true;
-      if (!('placeholder' in setterProps)) {
-        setterProps.placeholder = intl('Multiple Value');
-      }
-    } else {
-      value = field.getValue();
-    }
+    return {
+      setterProps,
+      initialValue,
+      setterType,
+    };
+  }
 
+  get value() {
+    return this.field.valueState === -1 ? null : this.field.getValue();
+  }
+
+  initDefaultValue() {
+    const { initialValue } = this.setterInfo;
+    if (this.state?.fromOnChange ||
+      !isInitialValueNotEmpty(initialValue) ||
+      this.value !== undefined
+    ) {
+      return;
+    }
     // 当前 field 没有 value 值时，将 initialValue 写入 field
     // 之所以用 initialValue，而不是 defaultValue 是为了保持跟 props.onInitial 的逻辑一致
-    if (!this.state?.fromOnChange && value === undefined && isInitialValueNotEmpty(initialValue)) {
-      const _initialValue = typeof initialValue === 'function' ? initialValue(field.internalToShellPropEntry()) : initialValue;
-      field.setValue(_initialValue);
-      value = _initialValue;
+    const _initialValue = typeof initialValue === 'function' ? initialValue(this.field.internalToShellPropEntry()) : initialValue;
+    this.field.setValue(_initialValue);
+  }
+
+  componentDidMount() {
+    this.initDefaultValue();
+  }
+
+  render() {
+    const field = this.field;
+    const { extraProps } = field;
+    const visible = this.visible;
+
+    if (!visible) {
+      return null;
     }
+
+    const {
+      setterProps = {},
+      setterType,
+      initialValue = null,
+
+    } = this.setterInfo;
+
+    const value = this.value;
 
     let _onChange = extraProps?.onChange;
     let stageName = this.stageName;

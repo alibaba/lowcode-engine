@@ -21,12 +21,12 @@ interface IGeneralComponent<P = {}, S = {}, SS = any> extends ComponentLifecycle
 }
 
 export type IGeneralConstructor<
-  P = {
+  T = {
     [key: string]: any;
   }, S = {
     [key: string]: any;
-  }, SS = any
-> = new (props: any, context: any) => IGeneralComponent<P, S, SS>;
+  }, D = any
+> = new <TT = T, SS = S, DD = D>(props: TT, context: any) => IGeneralComponent<TT, SS, DD>;
 
 /**
  * duck-typed History
@@ -98,10 +98,16 @@ export interface IRendererProps {
   id?: string | number;
   /** 语言 */
   locale?: string;
+  /**
+   * 多语言语料
+   * 配置规范参见《低代码搭建组件描述协议》https://lowcode-engine.cn/lowcode 中 2.6 国际化多语言支持
+   * */
+  messages?: Record<string, any>;
   /** 主要用于设置渲染模块的全局上下文，里面定义的内容可以在低代码中通过 this 来访问，比如 this.utils */
   appHelper?: IRendererAppHelper;
   /**
-   * 配置规范参见《中后台搭建组件描述协议》，主要在搭建场景中使用，用于提升用户搭建体验。
+   * 配置规范参见《低代码搭建组件描述协议》https://lowcode-engine.cn/lowcode
+   * 主要在搭建场景中使用，用于提升用户搭建体验。
    *
    * > 在生产环境下不需要设置
    */
@@ -133,6 +139,11 @@ export interface IRendererProps {
    * JSExpression 是否只支持使用 this 来访问上下文变量
    */
   thisRequiredInJSE?: boolean;
+  /**
+   * @default false
+   * 当开启组件未找到严格模式时，渲染模块不会默认给一个容器组件
+   */
+  enableStrictNotFoundMode?: boolean;
 }
 
 export interface IRendererState {
@@ -168,7 +179,7 @@ export interface IBaseRendererProps {
   device?: 'default' | 'mobile' | string;
 }
 
-export interface IInfo {
+export interface INodeInfo {
   schema?: NodeSchema;
   Comp: any;
   componentInfo?: any;
@@ -236,7 +247,6 @@ export type IBaseRendererInstance = IGeneralComponent<
 >
   & {
     reloadDataSource(): Promise<any>;
-    getSchemaChildren(schema: NodeSchema | undefined): NodeData | NodeData[] | undefined;
     __beforeInit(props: IBaseRendererProps): void;
     __init(props: IBaseRendererProps): void;
     __afterInit(props: IBaseRendererProps): void;
@@ -254,9 +264,9 @@ export type IBaseRendererInstance = IGeneralComponent<
     ): any;
     __getComponentProps(schema: NodeSchema | undefined, scope: any, Comp: any, componentInfo?: any): any;
     __createDom(): any;
-    __createVirtualDom(schema: any, self: any, parentInfo: IInfo, idx: string | number): any;
-    __createLoopVirtualDom(schema: any, self: any, parentInfo: IInfo, idx: number | string): any;
-    __parseProps(props: any, self: any, path: string, info: IInfo): any;
+    __createVirtualDom(schema: any, self: any, parentInfo: INodeInfo, idx: string | number): any;
+    __createLoopVirtualDom(schema: any, self: any, parentInfo: INodeInfo, idx: number | string): any;
+    __parseProps(props: any, self: any, path: string, info: INodeInfo): any;
     __initDebug?(): void;
     __debug(...args: any[]): void;
     __renderContextProvider(customProps?: object, children?: any): any;
@@ -289,7 +299,7 @@ export interface IRenderComponent {
     getNotFoundComponent(): any;
     getFaultComponent(): any;
   };
-  dislayName: string;
+  displayName: string;
   defaultProps: IRendererProps;
   findDOMNode: (...args: any) => any;
 }

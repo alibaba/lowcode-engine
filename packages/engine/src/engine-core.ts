@@ -1,12 +1,11 @@
 import { createElement } from 'react';
-import { render } from 'react-dom';
+import { render, unmountComponentAtNode } from 'react-dom';
 import { globalContext, Editor, engineConfig, EngineOptions } from '@alilc/lowcode-editor-core';
 import {
   Designer,
   LowCodePluginManager,
   ILowCodePluginContext,
   PluginPreference,
-  TransformStage,
 } from '@alilc/lowcode-designer';
 import {
   Skeleton as InnerSkeleton,
@@ -16,15 +15,21 @@ import {
 
 import Outline, { OutlineBackupPane, getTreeMaster } from '@alilc/lowcode-plugin-outline-pane';
 import DesignerPlugin from '@alilc/lowcode-plugin-designer';
-import { Hotkey, Project, Skeleton, Setters, Material, Event } from '@alilc/lowcode-shell';
+import {
+  Hotkey,
+  Project,
+  Skeleton,
+  Setters,
+  Material,
+  Event,
+  DocumentModel,
+  Common,
+} from '@alilc/lowcode-shell';
 import { getLogger, isPlainObject } from '@alilc/lowcode-utils';
 import './modules/live-editing';
-import utils from './modules/utils';
-import * as editorCabin from './modules/editor-cabin';
-import getSkeletonCabin from './modules/skeleton-cabin';
-import getDesignerCabin from './modules/designer-cabin';
 import classes from './modules/classes';
 import symbols from './modules/symbols';
+
 export * from './modules/editor-types';
 export * from './modules/skeleton-types';
 export * from './modules/designer-types';
@@ -46,8 +51,6 @@ const plugins = new LowCodePluginManager(editor).toProxy();
 editor.set('plugins' as any, plugins);
 
 const { project: innerProject } = designer;
-const skeletonCabin = getSkeletonCabin(innerSkeleton);
-const { Workbench } = skeletonCabin;
 
 const hotkey = new Hotkey();
 const project = new Project(innerProject);
@@ -57,17 +60,7 @@ const material = new Material(editor);
 const config = engineConfig;
 const event = new Event(editor, { prefix: 'common' });
 const logger = getLogger({ level: 'warn', bizName: 'common' });
-const designerCabin = getDesignerCabin(editor);
-const objects = {
-  TransformStage,
-};
-const common = {
-  utils,
-  objects,
-  editorCabin,
-  designerCabin,
-  skeletonCabin,
-};
+const common = new Common(editor, innerSkeleton);
 
 export {
   skeleton,
@@ -89,6 +82,7 @@ export const __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = {
   symbols,
   classes,
 };
+engineConfig.set('isOpenSource', isOpenSource);
 
 // 注册一批内置插件
 (async function registerPlugins() {
@@ -183,35 +177,38 @@ export const __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = {
   await plugins.register(defaultPanelRegistry);
 })();
 
-let engineInited = false;
+// container which will host LowCodeEngine DOM
+let engineContainer: HTMLElement;
 // @ts-ignore webpack Define variable
 export const version = VERSION_PLACEHOLDER;
 engineConfig.set('ENGINE_VERSION', version);
+
 export async function init(
   container?: HTMLElement,
   options?: EngineOptions,
   pluginPreference?: PluginPreference,
   ) {
-  if (engineInited) return;
-  engineInited = true;
+  await destroy();
   let engineOptions = null;
-  let engineContainer = null;
   if (isPlainObject(container)) {
     engineOptions = container;
     engineContainer = document.createElement('div');
+    engineContainer.id = 'engine';
     document.body.appendChild(engineContainer);
   } else {
     engineOptions = options;
     engineContainer = container;
     if (!container) {
       engineContainer = document.createElement('div');
+      engineContainer.id = 'engine';
       document.body.appendChild(engineContainer);
     }
   }
-  engineContainer.id = 'engine';
   engineConfig.setEngineOptions(engineOptions as any);
 
   await plugins.init(pluginPreference as any);
+
+  const { Workbench } = common.skeletonCabin;
   render(
     createElement(Workbench, {
       skeleton: innerSkeleton,
@@ -220,4 +217,18 @@ export async function init(
     }),
     engineContainer,
   );
+}
+
+export async function destroy() {
+  // remove all documents
+  const { documents } = project;
+  if (Array.isArray(documents) && documents.length > 0) {
+    documents.forEach(((doc: DocumentModel) => project.removeDocument(doc)));
+  }
+
+  // TODO: delete plugins except for core plugins
+
+  // unmount DOM container, this will trigger React componentWillUnmount lifeCycle,
+  // so necessary cleanups will be done.
+  engineContainer && unmountComponentAtNode(engineContainer);
 }

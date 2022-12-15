@@ -98,6 +98,13 @@ export default class SettingPropEntry {
   }
 
   /**
+   * 获取顶级设置属性
+   */
+   get top(): SettingTopEntry {
+    return SettingTopEntry.create(this[settingPropEntrySymbol].top);
+  }
+
+  /**
    * 是否是 SettingField 实例
    */
   get isSettingField(): boolean {
@@ -193,6 +200,20 @@ export default class SettingPropEntry {
    */
   getPropValue(propName: string | number) {
     return this[settingPropEntrySymbol].getPropValue(propName);
+  }
+
+  /**
+   * 获取顶层附属属性值
+   */
+  getExtraPropValue(propName: string) {
+    return this[settingPropEntrySymbol].getExtraPropValue(propName);
+  }
+
+  /**
+   * 设置顶层附属属性值
+   */
+  setExtraPropValue(propName: string, value: any) {
+    this[settingPropEntrySymbol].setExtraPropValue(propName, value);
   }
 
   /**

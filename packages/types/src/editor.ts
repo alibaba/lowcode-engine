@@ -40,7 +40,7 @@ export interface IEditor extends StrictEventEmitter<EventEmitter, GlobalEvent.Ev
 
   has: (keyOrType: KeyType) => boolean;
 
-  set: (key: KeyType, data: any) => void;
+  set: (key: KeyType, data: any) => void | Promise<void>;
 
   onceGot: <T = undefined, KeyOrType extends KeyType = any>
     (keyOrType: KeyOrType) => Promise<GetReturnType<T, KeyOrType>>;
@@ -156,7 +156,7 @@ export interface Utils {
 }
 
 export interface PluginProps {
-  editor: IEditor;
+  editor?: IEditor;
   config: PluginConfig;
   [key: string]: any;
 }

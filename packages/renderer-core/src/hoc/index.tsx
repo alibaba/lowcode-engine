@@ -12,6 +12,7 @@ export function compWrapper(Comp: any) {
       return createElement(Comp, this.props);
     }
   }
+  (Wrapper as any).displayName = Comp.displayName;
 
   return cloneEnumerableProperty(forwardRef((props: any, ref: any) => {
     return createElement(Wrapper, { ...props, forwardRef: ref });
