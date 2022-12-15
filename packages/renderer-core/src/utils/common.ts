@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 /* eslint-disable no-new-func */
 import logger from './logger';
-import { isI18nData, RootSchema, NodeSchema, isJSExpression, JSSlot } from '@alilc/lowcode-types';
+import { RootSchema, NodeSchema, JSSlot } from '@alilc/lowcode-types';
+import { isI18nData, isJSExpression } from '@alilc/lowcode-utils';
 import { isEmpty } from 'lodash';
 import IntlMessageFormat from 'intl-messageformat';
 import pkg from '../../package.json';

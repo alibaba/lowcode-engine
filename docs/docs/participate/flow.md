@@ -19,7 +19,8 @@ sidebar_position: 2
 几点要求：
 
 1. commit message 格式遵循 [ConvensionalCommits](https://www.conventionalcommits.org/en/v1.0.0/#summary)
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/110793/1645066644352-4de1c64c-bff6-4482-90d1-1fb610aa91f2.png#averageHue=%23eceef0&clientId=u6dcee4f0-35df-4&crop=0&crop=0&crop=1&crop=1&height=297&id=CfpQy&margin=%5Bobject%20Object%5D&name=image.png&originHeight=594&originWidth=2070&originalType=binary&ratio=1&rotation=0&showTitle=false&size=341605&status=done&style=none&taskId=u4499b752-5e24-42f6-9186-280fd5a51aa&title=&width=1035)
+
+   <img src="https://img.alicdn.com/imgextra/i3/O1CN01M9UzVM1iqYpyxECdV_!!6000000004464-2-tps-2070-594.png" width="700"/>
 2. 请按照一个 bugfix / feature 对应一个 commit，假如不是，请 rebase 后再提交 MR，不要一堆无用的、试验性的 commit。
 
 好处：从引擎的整体 commit 历史来看，会很清晰，**每个 commit 完成一件确定的事，changelog 也能自动生成**。另外，假如因为某个 commit 导致了 bug，也很容易通过 rebase drop 等方式快速修复。
@@ -42,9 +43,9 @@ sidebar_position: 2
 
 > 此处是理想节奏，实际情况可能会有调整
 
-- 日常迭代 2 周，一般月中或月底
+- 日常迭代 2 周，一般月中或月底，发版日两天前发最后一个 beta 版本，原则上不接受新 pr，灰度 2 天后，发正式版。
 - 特殊情况紧急迭代随时发
-- 大Feature迭代，每年 2 - 4 次
+- 大 Feature 迭代，每年 2 - 4 次
 
 
 ### 发布步骤
@@ -57,7 +58,7 @@ sidebar_position: 2
    ```bash
    git checkout develop
    ```
-2. 创建release分支
+2. 创建 release 分支
    ```bash
    git checkout -b release/1.0.0
    ```
@@ -65,7 +66,7 @@ sidebar_position: 2
    ```bash
    npm run build
    ```
-4. 发布到npm
+4. 发布到 npm
    ```bash
    npm run pub
    ```
@@ -77,9 +78,36 @@ sidebar_position: 2
 7. 合并 release/x.x.x 到 main 分支
 8. 合并 main 分支到 develop 分支
 
-如果是发布beta 版本，步骤如下（以发布 1.0.1 版本为例）：
+如果是发布 beta 版本，步骤如下（以发布 1.0.1 版本为例）：
 
-#### 发某版本首个 beta ，如 1.0.1-beta.0
+#### 发某 y 位版本首个 beta，如 1.1.0-beta.0
+1. 拉 develop 分支
+   ```bash
+   git checkout develop
+   ```
+   更新到最新（如需）
+   ```bash
+   git pull
+   ```
+2. 拉 release 分支，此处以 1.1.0 版本做示例
+   ```bash
+   git checkout -b release/1.1.0-beta
+   git push --set-upstream origin release/1.1.0-beta
+   ```
+3. build
+   ```bash
+   npm run build
+   ```
+4. 发布，此处需有 @alilc scope 发包权限
+   ```bash
+   npm run pub:preminor
+   ```
+5. 同步到 tnpm 源 & alifd CDN
+   ```bash
+   tnpm run sync
+   ```
+
+#### 发某 z 位版本首个 beta，如 1.0.1-beta.0
 1. 拉 develop 分支
    ```bash
    git checkout develop
@@ -91,6 +119,7 @@ sidebar_position: 2
 2. 拉 release 分支，此处以 1.0.1 版本做示例
    ```bash
    git checkout -b release/1.0.1-beta
+   git push --set-upstream origin release/1.0.1-beta
    ```
 3. build
    ```bash
@@ -105,7 +134,7 @@ sidebar_position: 2
    tnpm run sync
    ```
 
-#### 发某版本非首个 beta ，如 1.0.1-beta.0 -> 1.0.1-beta.1
+#### 发某版本非首个 beta，如 1.0.1-beta.0 -> 1.0.1-beta.1
 1. 切换到 release 分支
    ```bash
    git checkout release/1.0.1-beta
@@ -136,7 +165,7 @@ sidebar_position: 2
    ```bash
    npm run build
    ```
-3. publish （此步骤需要 npm 发包权限）
+3. publish（此步骤需要 npm 发包权限）
    ```bash
    npm run pub
    ```

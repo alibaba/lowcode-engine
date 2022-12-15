@@ -1,7 +1,6 @@
 import { EventEmitter } from 'events';
 import { reaction, untracked, globalContext, Editor } from '@alilc/lowcode-editor-core';
 import { NodeSchema } from '@alilc/lowcode-types';
-import { History as ShellHistory } from '@alilc/lowcode-shell';
 
 export interface Serialization<K = NodeSchema, T = string> {
   serialize(data: K): T;
@@ -42,6 +41,12 @@ export class History<T = NodeSchema> {
       if (this.asleep) return;
       untracked(() => {
         const log = this.currentSerialization.serialize(data);
+
+        // do not record unchanged data
+        if (this.session.data === log) {
+          return;
+        }
+
         if (this.session.isActive()) {
           this.session.log(log);
         } else {
@@ -191,10 +196,6 @@ export class History<T = NodeSchema> {
    */
   isModified() {
     return this.isSavePoint();
-  }
-
-  internalToShellHistory() {
-    return new ShellHistory(this);
   }
 }
 

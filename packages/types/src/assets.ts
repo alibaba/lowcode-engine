@@ -1,5 +1,8 @@
 import { Snippet, ComponentMetadata } from './metadata';
 import { I18nData } from './i18n';
+import { Reference } from './npm';
+import { EitherOr } from './utils';
+import { ComponentSchema } from './schema';
 
 export interface AssetItem {
   type: AssetType;
@@ -62,7 +65,7 @@ export interface AssetsJson {
    */
   version: string;
   /**
-   * 大包列表，external与package的概念相似，融合在一起
+   * 大包列表，external 与 package 的概念相似，融合在一起
    */
   packages?: Package[];
   /**
@@ -103,11 +106,15 @@ export interface ComponentSort {
  * 定义组件大包及 external 资源的信息
  * 应该被编辑器默认加载
  */
-export interface Package {
+export type Package = EitherOr<{
   /**
-   * 包名
+   * npm 包名
    */
   package: string;
+  /**
+   * 包唯一标识
+   */
+  id: string;
   /**
    * 包版本号
    */
@@ -142,7 +149,11 @@ export interface Package {
    * 组件描述导出名字，可以通过 window[exportName] 获取到组件描述的 Object 内容；
    */
   exportName?: string;
-}
+  /**
+   * 低代码组件 schema 内容
+   */
+  schema?: ComponentSchema;
+}, 'package', 'id'>;
 
 /**
  * 组件分类
@@ -208,12 +219,16 @@ export interface ComponentDescription extends ComponentMetadata {
    * @todo 待补充文档 @jinchan
    */
   keywords: string[];
+  /**
+   * 替代 npm 字段的升级版本
+   */
+  reference?: Reference;
 }
 
 /**
  * 远程物料描述
  */
-export interface RemoteComponentDescription {
+export interface RemoteComponentDescription extends ComponentMetadata {
   /**
    * 组件描述导出名字，可以通过 window[exportName] 获取到组件描述的 Object 内容；
    */
@@ -223,9 +238,14 @@ export interface RemoteComponentDescription {
    */
   url?: string;
   /**
-   * 组件(库)的 npm 信息；
+   * 组件 (库) 的 npm 信息；
    */
   package?: {
     npm?: string;
   };
+
+  /**
+   * 替代 npm 字段的升级版本
+   */
+  reference?: Reference;
 }

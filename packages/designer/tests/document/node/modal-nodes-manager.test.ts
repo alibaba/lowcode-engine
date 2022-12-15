@@ -7,6 +7,7 @@ import { Designer } from '../../../src/designer/designer';
 import formSchema from '../../fixtures/schema/form-with-modal';
 import dlgMetadata from '../../fixtures/component-metadata/dialog';
 import { getModalNodes } from '../../../src/document/node/modal-nodes-manager';
+import { shellModelFactory } from '../../../../engine/src/modules/shell-model-factory';
 
 let editor: Editor;
 let designer: Designer;
@@ -15,7 +16,7 @@ let doc: DocumentModel;
 
 beforeEach(() => {
   editor = new Editor();
-  designer = new Designer({ editor });
+  designer = new Designer({ editor, shellModelFactory });
   designer.createComponentMeta(dlgMetadata);
   project = designer.project;
   doc = new DocumentModel(project, formSchema);

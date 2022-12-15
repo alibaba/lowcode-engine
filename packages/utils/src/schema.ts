@@ -1,4 +1,5 @@
-import { isJSBlock, isJSSlot, ActivityType, NodeSchema, PageSchema, RootSchema } from '@alilc/lowcode-types';
+import { ActivityType, NodeSchema, RootSchema } from '@alilc/lowcode-types';
+import { isJSBlock, isJSSlot } from './check-types';
 import { isVariable } from './misc';
 import { isPlainObject } from './is-plain-object';
 

@@ -1,4 +1,5 @@
-import { IconType, TitleContent, isI18nData, TipContent, isTitleConfig } from '@alilc/lowcode-types';
+import { IconType, TitleContent, TipContent } from '@alilc/lowcode-types';
+import { isI18nData, isTitleConfig } from '@alilc/lowcode-utils';
 import { isValidElement } from 'react';
 
 export function composeTitle(title?: TitleContent, icon?: IconType, tip?: TipContent, tipAsTitle?: boolean, noIcon?: boolean) {

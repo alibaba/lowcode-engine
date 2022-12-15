@@ -1,9 +1,23 @@
 import {
   DocumentModel as InnerDocumentModel,
   Node as InnerNode,
-  getConvertedExtraKey,
 } from '@alilc/lowcode-designer';
-import { CompositeValue, NodeSchema, TransformStage } from '@alilc/lowcode-types';
+import {
+  CompositeValue,
+  NodeSchema,
+  TransformStage,
+  IPublicModelNode,
+  IconType,
+  I18nData,
+  IPublicModelComponentMeta,
+  IPublicModelDocumentModel,
+  IPublicModelNodeChildren,
+  IPublicModelProp,
+  IPublicModelProps,
+  PropsMap,
+  PropsList,
+  IPublicModelSettingTopEntry,
+} from '@alilc/lowcode-types';
 import Prop from './prop';
 import Props from './props';
 import DocumentModel from './document-model';
@@ -11,10 +25,11 @@ import NodeChildren from './node-children';
 import ComponentMeta from './component-meta';
 import SettingTopEntry from './setting-top-entry';
 import { documentSymbol, nodeSymbol } from './symbols';
+import { ReactElement } from 'react';
 
 const shellNodeSymbol = Symbol('shellNodeSymbol');
 
-export default class Node {
+export default class Node implements IPublicModelNode {
   private readonly [documentSymbol]: InnerDocumentModel;
   private readonly [nodeSymbol]: InnerNode;
 
@@ -27,10 +42,14 @@ export default class Node {
     this._id = this[nodeSymbol].id;
   }
 
-  static create(node: InnerNode | null | undefined) {
-    if (!node) return null;
+  static create(node: InnerNode | null | undefined): IPublicModelNode | null {
+    if (!node) {
+      return null;
+    }
     // @ts-ignore 直接返回已挂载的 shell node 实例
-    if (node[shellNodeSymbol]) return node[shellNodeSymbol];
+    if (node[shellNodeSymbol]) {
+      return (node as any)[shellNodeSymbol];
+    }
     const shellNode = new Node(node);
     // @ts-ignore 挂载 shell node 实例
     node[shellNodeSymbol] = shellNode;
@@ -54,70 +73,70 @@ export default class Node {
   /**
    * 节点标题
    */
-  get title() {
+  get title(): string | I18nData | ReactElement {
     return this[nodeSymbol].title;
   }
 
   /**
    * 是否为「容器型」节点
    */
-  get isContainer() {
+  get isContainer(): boolean {
     return this[nodeSymbol].isContainer();
   }
 
   /**
    * 是否为根节点
    */
-  get isRoot() {
+  get isRoot(): boolean {
     return this[nodeSymbol].isRoot();
   }
 
   /**
    * 是否为空节点（无 children 或者 children 为空）
    */
-  get isEmpty() {
+  get isEmpty(): boolean {
     return this[nodeSymbol].isEmpty();
   }
 
   /**
    * 是否为 Page 节点
    */
-  get isPage() {
+  get isPage(): boolean {
     return this[nodeSymbol].isPage();
   }
 
   /**
    * 是否为 Component 节点
    */
-  get isComponent() {
+  get isComponent(): boolean {
     return this[nodeSymbol].isComponent();
   }
 
   /**
    * 是否为「模态框」节点
    */
-  get isModal() {
+  get isModal(): boolean {
     return this[nodeSymbol].isModal();
   }
 
   /**
    * 是否为插槽节点
    */
-  get isSlot() {
+  get isSlot(): boolean {
     return this[nodeSymbol].isSlot();
   }
 
   /**
    * 是否为父类/分支节点
    */
-  get isParental() {
+  get isParental(): boolean {
     return this[nodeSymbol].isParental();
   }
 
   /**
    * 是否为叶子节点
    */
-  get isLeaf() {
+  get isLeaf(): boolean {
     return this[nodeSymbol].isLeaf();
   }
 
@@ -129,7 +148,7 @@ export default class Node {
   /**
    * 获取当前节点的锁定状态
    */
-  get isLocked() {
+  get isLocked(): boolean {
     return this[nodeSymbol].isLocked;
   }
 
@@ -143,28 +162,28 @@ export default class Node {
   /**
    * 图标
    */
-  get icon() {
+  get icon(): IconType {
     return this[nodeSymbol].icon;
   }
 
   /**
    * 节点所在树的层级深度，根节点深度为 0
    */
-  get zLevel() {
+  get zLevel(): number {
     return this[nodeSymbol].zLevel;
   }
 
   /**
    * 节点 componentName
    */
-  get componentName() {
+  get componentName(): string {
     return this[nodeSymbol].componentName;
   }
 
   /**
    * 节点的物料元数据
    */
-  get componentMeta() {
+  get componentMeta(): IPublicModelComponentMeta | null {
     return ComponentMeta.create(this[nodeSymbol].componentMeta);
   }
 
@@ -172,7 +191,7 @@ export default class Node {
    * 获取节点所属的文档模型对象
    * @returns
    */
-  get document() {
+  get document(): IPublicModelDocumentModel | null {
     return DocumentModel.create(this[documentSymbol]);
   }
 
@@ -180,7 +199,7 @@ export default class Node {
    * 获取当前节点的前一个兄弟节点
    * @returns
    */
-  get prevSibling(): Node | null {
+  get prevSibling(): IPublicModelNode | null {
     return Node.create(this[nodeSymbol].prevSibling);
   }
 
@@ -188,7 +207,7 @@ export default class Node {
    * 获取当前节点的后一个兄弟节点
    * @returns
    */
-  get nextSibling(): Node | null {
+  get nextSibling(): IPublicModelNode | null {
     return Node.create(this[nodeSymbol].nextSibling);
   }
 
@@ -196,7 +215,7 @@ export default class Node {
    * 获取当前节点的父亲节点
    * @returns
    */
-  get parent(): Node | null {
+  get parent(): IPublicModelNode | null {
     return Node.create(this[nodeSymbol].parent);
   }
 
@@ -204,46 +223,46 @@ export default class Node {
    * 获取当前节点的孩子节点模型
    * @returns
    */
-  get children() {
+  get children(): IPublicModelNodeChildren | null {
     return NodeChildren.create(this[nodeSymbol].children);
   }
 
   /**
    * 节点上挂载的插槽节点们
    */
-  get slots(): Node[] {
+  get slots(): IPublicModelNode[] {
     return this[nodeSymbol].slots.map((node: InnerNode) => Node.create(node)!);
   }
 
   /**
    * 当前节点为插槽节点时，返回节点对应的属性实例
    */
-  get slotFor() {
+  get slotFor(): IPublicModelProp | null {
     return Prop.create(this[nodeSymbol].slotFor);
   }
 
   /**
    * 返回节点的属性集
    */
-  get props() {
+  get props(): IPublicModelProps | null {
     return Props.create(this[nodeSymbol].props);
   }
 
   /**
    * 返回节点的属性集
    */
-  get propsData() {
+  get propsData(): PropsMap | PropsList | null {
     return this[nodeSymbol].propsData;
   }
 
   /**
-   * 获取符合搭建协议-节点 schema 结构
+   * 获取符合搭建协议 - 节点 schema 结构
    */
-  get schema(): any {
+  get schema(): NodeSchema {
     return this[nodeSymbol].schema;
   }
 
-  get settingEntry(): any {
+  get settingEntry(): IPublicModelSettingTopEntry {
     return SettingTopEntry.create(this[nodeSymbol].settingEntry as any);
   }
 
@@ -256,6 +275,7 @@ export default class Node {
 
   /**
    * 获取节点实例对应的 dom 节点
+   * @deprecated
    */
   getDOMNode() {
     return this[nodeSymbol].getDOMNode();
@@ -268,10 +288,10 @@ export default class Node {
    * @param sorter
    */
   mergeChildren(
-    remover: (node: Node, idx: number) => boolean,
-    adder: (children: Node[]) => any,
-    sorter: (firstNode: Node, secondNode: Node) => number,
-  ) {
+    remover: (node: IPublicModelNode, idx: number) => boolean,
+    adder: (children: IPublicModelNode[]) => any,
+    sorter: (firstNode: IPublicModelNode, secondNode: IPublicModelNode) => number,
+  ): any {
     return this.children?.mergeChildren(remover, adder, sorter);
   }
 
@@ -279,7 +299,7 @@ export default class Node {
    * 返回节点的尺寸、位置信息
    * @returns
    */
-  getRect() {
+  getRect(): DOMRect | null {
     return this[nodeSymbol].getRect();
   }
 
@@ -287,7 +307,7 @@ export default class Node {
    * 是否有挂载插槽节点
    * @returns
    */
-  hasSlots() {
+  hasSlots(): boolean {
     return this[nodeSymbol].hasSlots();
   }
 
@@ -295,7 +315,7 @@ export default class Node {
    * 是否设定了渲染条件
    * @returns
    */
-  hasCondition() {
+  hasCondition(): boolean {
     return this[nodeSymbol].hasCondition();
   }
 
@@ -303,19 +323,19 @@ export default class Node {
    * 是否设定了循环数据
    * @returns
    */
-  hasLoop() {
+  hasLoop(): boolean {
     return this[nodeSymbol].hasLoop();
   }
 
-  getVisible() {
+  getVisible(): boolean {
     return this[nodeSymbol].getVisible();
   }
 
-  setVisible(flag: boolean) {
+  setVisible(flag: boolean): void {
     this[nodeSymbol].setVisible(flag);
   }
 
-  isConditionalVisible() {
+  isConditionalVisible(): boolean | undefined {
     return this[nodeSymbol].isConditionalVisible();
   }
 
@@ -323,7 +343,7 @@ export default class Node {
    * 设置节点锁定状态
    * @param flag
    */
-  lock(flag?: boolean) {
+  lock(flag?: boolean): void {
     this[nodeSymbol].lock(flag);
   }
 
@@ -334,8 +354,8 @@ export default class Node {
     return this.props;
   }
 
-  contains(node: Node) {
-    return this[nodeSymbol].contains(node[nodeSymbol]);
+  contains(node: IPublicModelNode): boolean {
+    return this[nodeSymbol].contains((node as any)[nodeSymbol]);
   }
 
   /**
@@ -343,7 +363,7 @@ export default class Node {
    * @param path 属性路径，支持 a / a.b / a.0 等格式
    * @returns
    */
-  getProp(path: string, createIfNone = true): Prop | null {
+  getProp(path: string, createIfNone = true): IPublicModelProp | null {
     return Prop.create(this[nodeSymbol].getProp(path, createIfNone));
   }
 
@@ -363,7 +383,7 @@ export default class Node {
    * @param createIfNone 当没有属性的时候，是否创建一个属性
    * @returns
    */
-  getExtraProp(path: string, createIfNone?: boolean): Prop | null {
+  getExtraProp(path: string, createIfNone?: boolean): IPublicModelProp | null {
     return Prop.create(this[nodeSymbol].getExtraProp(path, createIfNone));
   }
 
@@ -373,7 +393,7 @@ export default class Node {
    * @param path 属性路径，支持 a / a.b / a.0 等格式
    * @returns
    */
-  getExtraPropValue(path: string) {
+  getExtraPropValue(path: string): any {
     return this.getExtraProp(path)?.getValue();
   }
 
@@ -383,7 +403,7 @@ export default class Node {
    * @param value 值
    * @returns
    */
-  setPropValue(path: string, value: CompositeValue) {
+  setPropValue(path: string, value: CompositeValue): void {
     return this.getProp(path)?.setValue(value);
   }
 
@@ -393,7 +413,7 @@ export default class Node {
    * @param value 值
    * @returns
    */
-  setExtraPropValue(path: string, value: CompositeValue) {
+  setExtraPropValue(path: string, value: CompositeValue): void {
     return this.getExtraProp(path)?.setValue(value);
   }
 
@@ -401,7 +421,7 @@ export default class Node {
    * 导入节点数据
    * @param data
    */
-  importSchema(data: NodeSchema) {
+  importSchema(data: NodeSchema): void {
     this[nodeSymbol].import(data);
   }
 
@@ -411,7 +431,7 @@ export default class Node {
    * @param options
    * @returns
    */
-  exportSchema(stage: TransformStage = TransformStage.Render, options?: any) {
+  exportSchema(stage: TransformStage = TransformStage.Render, options?: any): NodeSchema {
     return this[nodeSymbol].export(stage, options);
   }
 
@@ -421,8 +441,16 @@ export default class Node {
    * @param ref
    * @param useMutator
    */
-  insertBefore(node: Node, ref?: Node | undefined, useMutator?: boolean) {
-    this[nodeSymbol].insertBefore(node[nodeSymbol] || node, ref?.[nodeSymbol], useMutator);
+  insertBefore(
+      node: IPublicModelNode,
+      ref?: IPublicModelNode | undefined,
+      useMutator?: boolean,
+    ): void {
+    this[nodeSymbol].insertBefore(
+        (node as any)[nodeSymbol] || node,
+        (ref as any)?.[nodeSymbol],
+        useMutator,
+      );
   }
 
   /**
@@ -431,8 +459,16 @@ export default class Node {
    * @param ref
    * @param useMutator
    */
-  insertAfter(node: Node, ref?: Node | undefined, useMutator?: boolean) {
-    this[nodeSymbol].insertAfter(node[nodeSymbol] || node, ref?.[nodeSymbol], useMutator);
+  insertAfter(
+      node: IPublicModelNode,
+      ref?: IPublicModelNode | undefined,
+      useMutator?: boolean,
+    ): void {
+    this[nodeSymbol].insertAfter(
+        (node as any)[nodeSymbol] || node,
+        (ref as any)?.[nodeSymbol],
+        useMutator,
+      );
   }
 
   /**
@@ -441,22 +477,22 @@ export default class Node {
    * @param data 用作替换的节点对象或者节点描述
    * @returns
    */
-  replaceChild(node: Node, data: any) {
-    return Node.create(this[nodeSymbol].replaceChild(node[nodeSymbol], data));
+  replaceChild(node: IPublicModelNode, data: any): IPublicModelNode | null {
+    return Node.create(this[nodeSymbol].replaceChild((node as any)[nodeSymbol], data));
   }
 
   /**
    * 将当前节点替换成指定节点描述
    * @param schema
    */
-  replaceWith(schema: NodeSchema) {
+  replaceWith(schema: NodeSchema): any {
     this[nodeSymbol].replaceWith(schema);
   }
 
   /**
    * 选中当前节点实例
    */
-  select() {
+  select(): void {
     this[nodeSymbol].select();
   }
 
@@ -464,14 +500,14 @@ export default class Node {
    * 设置悬停态
    * @param flag
    */
-  hover(flag = true) {
+  hover(flag = true): void {
     this[nodeSymbol].hover(flag);
   }
 
   /**
    * 删除当前节点实例
    */
-  remove() {
+  remove(): void {
     this[nodeSymbol].remove();
   }
   /**

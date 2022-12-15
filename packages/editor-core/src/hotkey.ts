@@ -1,6 +1,7 @@
 import { isEqual } from 'lodash';
 import { globalContext } from './di';
 import { Editor } from './editor';
+import { HotkeyCallback } from '@alilc/lowcode-types';
 
 interface KeyMap {
   [key: number]: string;
@@ -21,8 +22,6 @@ interface HotkeyCallbacks {
 interface HotkeyDirectMap {
   [key: string]: HotkeyCallback;
 }
-
-export type HotkeyCallback = (e: KeyboardEvent, combo?: string) => any | false;
 
 interface HotkeyCallbackCfg {
   callback: HotkeyCallback;

@@ -1,5 +1,6 @@
 ---
 title: 编码规约
+sidebar_position: 5
 ---
 
 编码规约
@@ -26,7 +27,7 @@ title: 编码规约
  - 不要在全局命名空间内定义类型/值
  - 共享的类型应该在 `types.ts` 里定义
  - 在一个文件里，类型定义应该出现在顶部
- - interface 和 type 很类似，原则上能用 interface 实现，就用 interface , 如果不能才用 type 
+ - interface 和 type 很类似，原则上能用 interface 实现，就用 interface , 如果不能才用 type
 
 ### 注释
 

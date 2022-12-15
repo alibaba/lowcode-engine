@@ -29,8 +29,8 @@ sidebar_position: 1
 
 ### 2) 通过设计器插件快速体验
 
-1. 安装依赖: `npm install --save @alilc/lowcode-plugin-code-generator`
-2. 注册插件:
+1. 安装依赖： `npm install --save @alilc/lowcode-plugin-code-generator`
+2. 注册插件：
 
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
@@ -49,14 +49,14 @@ await plugins.register(CodeGenPlugin, { disableCodeGenActionBtn: true });
 
 此代码生成器一开始就是为服务端出码设计的，你可以直接这样来在 node.js 环境中使用：
 
-1. 安装依赖: `npm install --save @alilc/lowcode-code-generator`
-2. 引入代码生成器:
+1. 安装依赖： `npm install --save @alilc/lowcode-code-generator`
+2. 引入代码生成器：
 
 ```javascript
 import CodeGenerator from '@alilc/lowcode-code-generator';
 ```
 
-3. 创建项目构建器:
+3. 创建项目构建器：
 
 ```javascript
 const projectBuilder = CodeGenerator.solutions.icejs();
@@ -70,7 +70,7 @@ const project = await projectBuilder.generateProject(
 );
 ```
 
-5. 将生成的代码写入到磁盘中(也可以生成一个 zip 包)
+5. 将生成的代码写入到磁盘中 (也可以生成一个 zip 包)
 
 ```javascript
 // 写入磁盘
@@ -94,17 +94,17 @@ await CodeGenerator.publishers.zip().publish({
 
 随着现在电脑性能和浏览器技术的发展，出码其实已经不必非得在服务端做了，借助于 Web Worker 特性，可以在浏览器中进行出码：
 
-1. 安装依赖: `npm install --save @alilc/lowcode-code-generator`
-2. 引入代码生成器:
+1. 安装依赖： `npm install --save @alilc/lowcode-code-generator`
+2. 引入代码生成器：
 
 ```javascript
 import * as CodeGenerator from '@alilc/lowcode-code-generator/standalone-loader';
 ```
 
-3. 【可选】提前初始化代码生成器:
+3. 【可选】提前初始化代码生成器：
 
 ```javascript
-// 提前初始化下，这样后面用的时候更快(这个 init 内部会提前准备好创建 worker 的一些资源)
+// 提前初始化下，这样后面用的时候更快 (这个 init 内部会提前准备好创建 worker 的一些资源)
 await CodeGenerator.init();
 ```
 
@@ -116,17 +116,17 @@ const result = await CodeGenerator.generateCode({
   schema, // 编排搭建出来的 schema
 });
 
-console.log(result); // 出码结果(默认是递归结构描述的，可以传 flattenResult: true 以生成扁平结构的结果)
+console.log(result); // 出码结果 (默认是递归结构描述的，可以传 flattenResult: true 以生成扁平结构的结果)
 ```
 
 注：一般来说在浏览器中出码适合做即时预览功能。
 
 ### 5）自定义出码
 前端框架灵活多变，默认内置的出码方案很难满足所有人的需求，好在此代码生成器支持非常灵活的插件机制 -- 内置功能大多都是通过插件完成的（在 `src/plugins`下），比如：
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/263300/1644824565650-584c2be5-4be3-4c9a-96d9-e27990111b0b.png#averageHue=%232b2b2e&clientId=u8b65d964-7bef-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=376&id=u3e0a61a8&margin=%5Bobject%20Object%5D&name=image.png&originHeight=376&originWidth=457&originalType=binary&ratio=1&rotation=0&showTitle=false&size=151355&status=done&style=none&taskId=ueef52494-2e18-45a2-8409-7f68e200f63&title=&width=457)
+![image.png](https://img.alicdn.com/imgextra/i1/O1CN01CEl2Hq1omnH0UCyGF_!!6000000005268-2-tps-457-376.png)
 所以您可以通过添加自己的插件或替换掉默认内置的插件来实现您的自定义功能。
 为了方便自定义出码方案，出码模块还提供自定义出码方案的脚手架功能，即执行下面脚本即可生成一个自定义出码方案：
 ```shell
 npx @alilc/lowcode-code-generator init-solution <your-solution-name>
 ```
-里面内置了一个示例的插件(在 `src/plugins/example.ts`中)，您可以根据注释引导来完善相关插件，从而组合生成您的专属出码方案(`src/index.ts`)。您所生成的出码方案可以发布成 NPM 包，从而能按上文 1~4 中的使用方案进行使用。
+里面内置了一个示例的插件 (在 `src/plugins/example.ts`中)，您可以根据注释引导来完善相关插件，从而组合生成您的专属出码方案 (`src/index.ts`)。您所生成的出码方案可以发布成 NPM 包，从而能按上文 1~4 中的使用方案进行使用。

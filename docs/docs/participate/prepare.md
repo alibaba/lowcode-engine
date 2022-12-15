@@ -9,7 +9,7 @@ sidebar_position: 1
 如果您需要对低代码编辑器进行定制，您可能只需要 clone [lowcode-demo 项目](https://github.com/alibaba/lowcode-demo)并进行修改，参考“[配置低代码扩展点](/site/docs/guide/expand/editor/summary)”章节。
 
 > 前置条件：
-> node >= 14
+> node 推荐使用 16.18.0（14.x 也可以）
 
 ### 1. 拉取代码，启动项目
 ```bash

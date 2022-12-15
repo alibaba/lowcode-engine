@@ -8,10 +8,11 @@ import {
   IEditor,
   CompositeObject,
   PropsList,
-  isNodeSchema,
   NodeSchema,
+  PropsTransducer,
+  IShellModelFactory,
 } from '@alilc/lowcode-types';
-import { megreAssets, AssetsJson } from '@alilc/lowcode-utils';
+import { megreAssets, AssetsJson, isNodeSchema } from '@alilc/lowcode-utils';
 import { Project } from '../project';
 import { Node, DocumentModel, insertChildren, ParentalNode, TransformStage } from '../document';
 import { ComponentMeta } from '../component-meta';
@@ -28,6 +29,7 @@ import { BemToolsManager } from '../builtin-simulator/bem-tools/manager';
 
 export interface DesignerProps {
   editor: IEditor;
+  shellModelFactory: IShellModelFactory;
   className?: string;
   style?: object;
   defaultSchema?: ProjectSchema;
@@ -58,6 +60,8 @@ export class Designer {
 
   readonly bemToolsManager = new BemToolsManager(this);
 
+  readonly shellModelFactory: IShellModelFactory;
+
   get currentDocument() {
     return this.project.currentDocument;
   }
@@ -72,25 +76,17 @@ export class Designer {
 
   constructor(props: DesignerProps) {
     makeObservable(this);
-    const { editor } = props;
+    const { editor, shellModelFactory } = props;
     this.editor = editor;
+    this.shellModelFactory = shellModelFactory;
     this.setProps(props);
 
     this.project = new Project(this, props.defaultSchema);
 
-    let startTime: any;
-    let src = '';
     this.dragon.onDragstart((e) => {
-      startTime = Date.now() / 1000;
       this.detecting.enable = false;
       const { dragObject } = e;
       if (isDragNodeObject(dragObject)) {
-        const node = dragObject.nodes[0]?.parent;
-        const npm = node?.componentMeta?.npm;
-        src =
-          [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
-          node?.componentMeta?.componentName ||
-          '';
         if (dragObject.nodes.length === 1) {
           if (dragObject.nodes[0].parent) {
             // ensure current selecting
@@ -135,34 +131,6 @@ export class Designer {
           if (nodes) {
             loc.document.selection.selectAll(nodes.map((o) => o.id));
             setTimeout(() => this.activeTracker.track(nodes![0]), 10);
-            const endTime: any = Date.now() / 1000;
-            const parent = nodes[0]?.parent;
-            const npm = parent?.componentMeta?.npm;
-            const dest =
-              [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
-              parent?.componentMeta?.componentName ||
-              '';
-            // eslint-disable-next-line no-unused-expressions
-            // this.postEvent('drag', {
-            //   time: (endTime - startTime).toFixed(2),
-            //   selected: nodes
-            //     ?.map((n) => {
-            //       if (!n) {
-            //         return;
-            //       }
-            //       // eslint-disable-next-line no-shadow
-            //       const npm = n?.componentMeta?.npm;
-            //       return (
-            //         [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
-            //         n?.componentMeta?.componentName
-            //       );
-            //     })
-            //     .join('&'),
-            //   align: loc?.detail?.near?.align || '',
-            //   pos: loc?.detail?.near?.pos || '',
-            //   src,
-            //   dest,
-            // });
           }
         }
       }
@@ -494,7 +462,7 @@ export class Designer {
   getComponentMeta(
     componentName: string,
     generateMetadata?: () => ComponentMetadata | null,
-  ): ComponentMeta {
+  ) {
     if (this._componentMetasMap.has(componentName)) {
       return this._componentMetasMap.get(componentName)!;
     }
@@ -536,7 +504,7 @@ export class Designer {
     return maps;
   }
 
-  private propsReducers = new Map<TransformStage, PropsReducer[]>();
+  private propsReducers = new Map<TransformStage, PropsTransducer[]>();
 
   transformProps(props: CompositeObject | PropsList, node: Node, stage: TransformStage) {
     if (Array.isArray(props)) {
@@ -560,7 +528,7 @@ export class Designer {
     }, props);
   }
 
-  addPropsReducer(reducer: PropsReducer, stage: TransformStage) {
+  addPropsReducer(reducer: PropsTransducer, stage: TransformStage) {
     const reducers = this.propsReducers.get(stage);
     if (reducers) {
       reducers.push(reducer);
@@ -577,10 +545,3 @@ export class Designer {
     // TODO:
   }
 }
-
-export type PropsReducerContext = { stage: TransformStage };
-export type PropsReducer = (
-  props: CompositeObject,
-  node: Node,
-  ctx?: PropsReducerContext,
-) => CompositeObject;

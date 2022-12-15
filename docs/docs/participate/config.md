@@ -2,13 +2,14 @@
 title: 工程化配置
 sidebar_position: 3
 ---
-目前引擎体系共包含 3 个 js 文件，即：
+目前引擎体系共包含 2 个 js 文件，即：
 ```html
 <!-- engine-core 引擎的 core，负责引擎的基础模块 -->
 <script crossorigin="anonymous" src="//alifd.alicdn.com/npm/@alilc/lowcode-engine@1.0.0/dist/js/engine-core.js"></script>
 <!-- engine-ext 引擎的扩展包，负责收拢内置 setters / plugins，方便迭代 -->
 <script crossorigin="anonymous" src="//alifd.alicdn.com/npm/@alilc/lowcode-engine-ext@1.0.1/dist/js/engine-ext.js"></script>
 ```
+> 注，这里的版本号是示例，请尽量选用最新版
 
 工程化配置我们进行了统一，具体如下：
 ```shell
@@ -22,7 +23,6 @@ sidebar_position: 3
     "react": "var window.React",
     "react-dom": "var window.ReactDOM",
     "prop-types": "var window.PropTypes",
-    "rax": "var window.Rax",
     "@alilc/lowcode-engine": "var window.AliLowCodeEngine",
     "@alilc/lowcode-engine-ext": "var window.AliLowCodeEngineExt",
     "moment": "var moment",
@@ -39,7 +39,7 @@ sidebar_position: 3
     ["build-plugin-fusion", {
     }],
     ["build-plugin-moment-locales", {
-      "locales": ["zh-cn"]
+      "locales": ["zh-CN"]
     }],
     "./build.plugin.js"
   ]

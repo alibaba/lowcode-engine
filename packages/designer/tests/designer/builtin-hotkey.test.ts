@@ -5,6 +5,7 @@ import formSchema from '../fixtures/schema/form';
 import '../../src/designer/builtin-hotkey';
 import { fireEvent } from '@testing-library/react';
 import { isInLiveEditing } from '../../src/designer/builtin-hotkey';
+import { shellModelFactory } from '../../../engine/src/modules/shell-model-factory';
 
 const editor = new Editor();
 
@@ -23,7 +24,7 @@ describe('快捷键测试', () => {
     globalContext.register(editor, Editor);
   });
   beforeEach(() => {
-    designer = new Designer({ editor });
+    designer = new Designer({ editor, shellModelFactory });
     editor.set('designer', designer);
     designer.project.open(formSchema);
   });
