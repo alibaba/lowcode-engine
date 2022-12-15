@@ -2,17 +2,20 @@ import {
   DocumentModel as InnerDocumentModel,
   Node as InnerNode,
   Selection as InnerSelection,
+  Designer as InnerDesigner,
 } from '@alilc/lowcode-designer';
 import Node from './node';
-import { documentSymbol, selectionSymbol } from './symbols';
+import { documentSymbol, selectionSymbol, designerSymbol, nodeSymbol } from './symbols';
 
 export default class Selection {
   private readonly [documentSymbol]: InnerDocumentModel;
   private readonly [selectionSymbol]: InnerSelection;
+  private readonly [designerSymbol]: InnerDesigner;
 
   constructor(document: InnerDocumentModel) {
     this[documentSymbol] = document;
     this[selectionSymbol] = document.selection;
+    this[designerSymbol] = document.designer;
   }
 
   /**
@@ -94,5 +97,12 @@ export default class Selection {
    */
   getTopNodes(): Node[] {
     return this[selectionSymbol].getTopNodes().map((node: InnerNode) => Node.create(node));
+  }
+
+  /**
+   * 定位节点在大纲树中的位置
+   */
+  focusNodeOnOutlinePosition(node: Node): void {
+    this[designerSymbol].activeTracker.track(node[nodeSymbol]);
   }
 }
