@@ -1,15 +1,22 @@
 import {
   BuiltinSimulatorHost,
   Project as InnerProject,
-  PropsReducer as PropsTransducer,
   TransformStage,
 } from '@alilc/lowcode-designer';
-import { RootSchema, ProjectSchema, IEditor } from '@alilc/lowcode-types';
+import {
+  RootSchema,
+  ProjectSchema,
+  IEditor,
+  IPublicApiProject,
+  IPublicApiSimulatorHost,
+  IPublicModelDocumentModel,
+  PropsTransducer,
+} from '@alilc/lowcode-types';
 import DocumentModel from './document-model';
 import SimulatorHost from './simulator-host';
 import { editorSymbol, projectSymbol, simulatorHostSymbol, simulatorRendererSymbol, documentSymbol } from './symbols';
 
-export default class Project {
+export default class Project implements IPublicApiProject {
   private readonly [projectSymbol]: InnerProject;
   private readonly [editorSymbol]: IEditor;
   private [simulatorHostSymbol]: BuiltinSimulatorHost;
@@ -28,7 +35,7 @@ export default class Project {
    * 获取当前的 document
    * @returns
    */
-  get currentDocument(): DocumentModel | null {
+  get currentDocument(): IPublicModelDocumentModel | null {
     return this.getCurrentDocument();
   }
 
@@ -36,14 +43,14 @@ export default class Project {
    * 获取当前 project 下所有 documents
    * @returns
    */
-  get documents(): DocumentModel[] {
+  get documents(): IPublicModelDocumentModel[] {
     return this[projectSymbol].documents.map((doc) => DocumentModel.create(doc)!);
   }
 
   /**
    * 获取模拟器的 host
    */
-  get simulatorHost() {
+  get simulatorHost(): IPublicApiSimulatorHost | null {
     return SimulatorHost.create(this[projectSymbol].simulator as any || this[simulatorHostSymbol]);
   }
 
@@ -70,7 +77,7 @@ export default class Project {
    * @param data
    * @returns
    */
-  createDocument(data?: RootSchema): DocumentModel | null {
+  createDocument(data?: RootSchema): IPublicModelDocumentModel | null {
     const doc = this[projectSymbol].createDocument(data);
     return DocumentModel.create(doc);
   }
@@ -79,8 +86,8 @@ export default class Project {
    * 删除一个 document
    * @param doc
    */
-  removeDocument(doc: DocumentModel) {
-    this[projectSymbol].removeDocument(doc[documentSymbol]);
+  removeDocument(doc: IPublicModelDocumentModel) {
+    this[projectSymbol].removeDocument((doc as any)[documentSymbol]);
   }
 
   /**
@@ -88,7 +95,7 @@ export default class Project {
    * @param fileName
    * @returns
    */
-  getDocumentByFileName(fileName: string): DocumentModel | null {
+  getDocumentByFileName(fileName: string): IPublicModelDocumentModel | null {
     return DocumentModel.create(this[projectSymbol].getDocumentByFileName(fileName));
   }
 
@@ -97,7 +104,7 @@ export default class Project {
    * @param id
    * @returns
    */
-  getDocumentById(id: string): DocumentModel | null {
+  getDocumentById(id: string): IPublicModelDocumentModel | null {
     return DocumentModel.create(this[projectSymbol].getDocument(id));
   }
 
@@ -113,7 +120,7 @@ export default class Project {
    * 导入 project
    * @param schema 待导入的 project 数据
    */
-  importSchema(schema?: ProjectSchema) {
+  importSchema(schema?: ProjectSchema): void {
     this[projectSymbol].load(schema, true);
   }
 
@@ -121,7 +128,7 @@ export default class Project {
    * 获取当前的 document
    * @returns
    */
-  getCurrentDocument(): DocumentModel | null {
+  getCurrentDocument(): IPublicModelDocumentModel | null {
     return DocumentModel.create(this[projectSymbol].currentDocument);
   }
 
@@ -130,7 +137,7 @@ export default class Project {
    * @param transducer
    * @param stage
    */
-  addPropsTransducer(transducer: PropsTransducer, stage: TransformStage) {
+  addPropsTransducer(transducer: PropsTransducer, stage: TransformStage): void {
     this[projectSymbol].designer.addPropsReducer(transducer, stage);
   }
 
@@ -139,14 +146,14 @@ export default class Project {
    * @param fn
    * @returns
    */
-  onRemoveDocument(fn: (data: { id: string}) => void) {
+  onRemoveDocument(fn: (data: { id: string}) => void): any {
     return this[editorSymbol].on('designer.document.remove', (data: { id: string }) => fn(data));
   }
 
   /**
    * 当前 project 内的 document 变更事件
    */
-  onChangeDocument(fn: (doc: DocumentModel) => void) {
+  onChangeDocument(fn: (doc: IPublicModelDocumentModel) => void) {
     const offFn = this[projectSymbol].onCurrentDocumentChange((originalDoc) => {
       fn(DocumentModel.create(originalDoc)!);
     });
@@ -159,7 +166,7 @@ export default class Project {
   /**
    * 当前 project 的模拟器 ready 事件
    */
-  onSimulatorHostReady(fn: (host: SimulatorHost) => void) {
+  onSimulatorHostReady(fn: (host: IPublicApiSimulatorHost) => void) {
     const offFn = this[projectSymbol].onSimulatorReady((simulator: BuiltinSimulatorHost) => {
       this[simulatorHostSymbol] = simulator;
       fn(SimulatorHost.create(simulator)!);

@@ -13,6 +13,7 @@ import { IconLoop } from '../icons/loop';
 import { IconRadioActive } from '../icons/radio-active';
 import { IconRadio } from '../icons/radio';
 import { IconLock, IconUnlock } from '../icons';
+import { getTreeTitleExtra } from '../helper/tree-title-extra';
 
 
 function emitOutlineEvent(type: string, treeNode: TreeNode, rest?: Record<string, unknown>) {
@@ -97,6 +98,7 @@ export default class TreeTitle extends Component<{
       };
     }
     const { filterWorking, matchSelf, keywords } = treeNode.filterReult;
+    const Extra = getTreeTitleExtra();
 
     return (
       <div
@@ -153,6 +155,7 @@ export default class TreeTitle extends Component<{
                 match={filterWorking && matchSelf}
                 keywords={keywords}
               />
+              {Extra && <Extra node={treeNode?.node} />}
               {node.slotFor && (
                 <a className="tree-node-tag slot">
                   {/* todo: click redirect to prop */}

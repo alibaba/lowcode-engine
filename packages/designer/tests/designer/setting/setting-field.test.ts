@@ -1,7 +1,6 @@
 // @ts-nocheck
 import '../../fixtures/window';
 import { Editor } from '@alilc/lowcode-editor-core';
-import { Project } from '../../../src/project/project';
 import { SettingTopEntry } from '../../../src/designer/setting/setting-top-entry';
 import { SettingField } from '../../../src/designer/setting/setting-field';
 import { Node } from '../../../src/document/node/node';
@@ -10,6 +9,7 @@ import settingSchema from '../../fixtures/schema/setting';
 import buttonMeta from '../../fixtures/component-metadata/button';
 import { DocumentModel } from 'designer/src/document';
 import { delayObxTick } from '../../utils';
+import { shellModelFactory } from '../../../../engine/src/modules/shell-model-factory';
 
 const editor = new Editor();
 
@@ -17,7 +17,7 @@ describe('setting-field 测试', () => {
   let designer: Designer;
   let doc: DocumentModel;
   beforeEach(() => {
-    designer = new Designer({ editor });
+    designer = new Designer({ editor, shellModelFactory });
     designer.createComponentMeta(buttonMeta);
     doc = designer.project.open(settingSchema);
   });

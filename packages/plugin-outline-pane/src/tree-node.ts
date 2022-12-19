@@ -1,4 +1,5 @@
-import { TitleContent, isI18nData } from '@alilc/lowcode-types';
+import { TitleContent } from '@alilc/lowcode-types';
+import { isI18nData } from '@alilc/lowcode-utils';
 import { computed, obx, intl, makeObservable, action } from '@alilc/lowcode-editor-core';
 import { Node, DocumentModel, isLocationChildrenDetail, LocationChildrenDetail, Designer } from '@alilc/lowcode-designer';
 import { Tree } from './tree';

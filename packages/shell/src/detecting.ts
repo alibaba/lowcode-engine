@@ -4,8 +4,9 @@ import {
   DocumentModel as InnerDocumentModel,
 } from '@alilc/lowcode-designer';
 import { documentSymbol, detectingSymbol } from './symbols';
+import { IPublicModelDetecting } from '@alilc/lowcode-types';
 
-export default class Detecting {
+export default class Detecting implements IPublicModelDetecting {
   private readonly [documentSymbol]: InnerDocumentModel;
   private readonly [detectingSymbol]: InnerDetecting;
 

@@ -83,7 +83,7 @@ interface AltStringSetterProps {
   value: string;
   // 默认值
   initialValue: string;
-  // setter唯一输出
+  // setter 唯一输出
   onChange: (val: string) => void;
   // AltStringSetter 特殊配置
   placeholder: string;
@@ -254,7 +254,7 @@ interface AltStringSetterProps {
   value: string;
   // 默认值
   initialValue: string;
-  // setter唯一输出
+  // setter 唯一输出
   onChange: (val: string) => void;
   // AltStringSetter 特殊配置
   placeholder: string;

@@ -1,7 +1,7 @@
 import { ReactNode, Component, createElement } from 'react';
 import { IntlMessageFormat } from 'intl-messageformat';
 import { globalLocale } from './global-locale';
-import { isI18nData } from '@alilc/lowcode-types';
+import { isI18nData } from '@alilc/lowcode-utils';
 import { observer } from '../utils';
 
 function generateTryLocales(locale: string) {

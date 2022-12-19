@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "lib",
+    "types": ["node","jest"]
+  },
+  "include": [
+    "./src/",
+    "./tests/"
+  ],
+  "exclude": ["**/lib", "**/es", "node_modules"]
+}

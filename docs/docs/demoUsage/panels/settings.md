@@ -5,7 +5,7 @@ sidebar_position: 2
 # 设置器介绍
 ## 展示区域
 设置器，又称为 Setter，主要展示在编辑器的右边区域，如下图：
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/2553587/1647695118402-ac146307-f6e2-4755-8be3-67278c505283.png#clientId=u547a37e3-c43d-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=865&id=u3cac31de&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1730&originWidth=3836&originalType=binary&ratio=1&rotation=0&showTitle=false&size=947162&status=done&style=none&taskId=u35373859-102e-4809-adfd-680b2dd4cda&title=&width=1918)
+![image.png](https://img.alicdn.com/imgextra/i4/O1CN01jN0toi1OknXWrPuYt_!!6000000001744-2-tps-3836-1730.png)
 其中包含 属性、样式、事件、高级
 
 - 属性：展示该物料常规的属性
@@ -18,7 +18,7 @@ sidebar_position: 2
 ## 设置器
 上述区域中是有多项设置器的，对于一个组件来说，每一项配置都对应一个设置器，比如我们的配置是一个文本，我们需要的是文本设置器，我们需要配置的是数字，我们需要的就是数字设置器。
 下图中的标题和按钮类型配置就分别是文本设置器和下拉框设置器。
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/2553587/1647695118227-bf6caf7c-4974-4b35-8d6b-0c4969fc316d.png#clientId=u547a37e3-c43d-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=407&id=u51d889e6&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1460&originWidth=2120&originalType=binary&ratio=1&rotation=0&showTitle=false&size=489840&status=done&style=none&taskId=u35d4519f-b82d-43c4-9eb4-bd44e6d67b1&title=&width=591)
+![image.png](https://img.alicdn.com/imgextra/i4/O1CN01Bl2hgm1GiUcXD3TOO_!!6000000000656-2-tps-2120-1460.png)
 我们提供了常用的设置器作为内置设置器，也提供了定制能力帮助大家开发特定需求的设置器。
 # 内置设置器
 | **预置 Setter** | **用途** |
@@ -28,23 +28,23 @@ sidebar_position: 2
 | BoolSetter | 布尔型数据设置器， |
 | SelectSetter | 枚举型数据设置器，采用下拉的形式展现 |
 | VariableSetter | 变量型数据设置器， |
-| RadioGroupSetter | 枚举型数据设置器，采用tab选择的形式展现 |
+| RadioGroupSetter | 枚举型数据设置器，采用 tab 选择的形式展现 |
 | TextAreaSetter | 长文本型数据设置器，可换行 |
 | DateSetter | 日期型数据设置器 |
 | TimePicker | 时间型数据设置器 |
-| DateYearSetter | 日期型-年数据设置器 |
-| DateMonthSetter | 日期型-月数据设置器 |
+| DateYearSetter | 日期型 - 年数据设置器 |
+| DateMonthSetter | 日期型 - 月数据设置器 |
 | DateRangeSetter | 日期型数据设置器，可选择时间区间 |
 | EventsSetter | 事件绑定设置器 |
 | ColorSetter | 颜色设置器 |
-| JsonSetter | json型数据设置器 |
+| JsonSetter | json 型数据设置器 |
 | StyleSetter | 样式设置器 |
 | ClassNameSetter | 样式名设置器 |
 | FunctionSetter | 函数型数据设置器 |
 | MixedSetter | 混合型数据设置器 |
 | SlotSetter | 节点型数据设置器 |
 | ArraySetter | 列表数组行数据设置器 |
-| ObjectSetter | 对象数据设置器，一般内嵌在ArraySetter中 |
+| ObjectSetter | 对象数据设置器，一般内嵌在 ArraySetter 中 |
 
 
 # 设置器定制
@@ -60,7 +60,7 @@ interface AltStringSetterProps {
   value: string;
   // 默认值
   defaultValue: string;
-  // setter唯一输出
+  // setter 唯一输出
   onChange: (val: string) => void;
   // AltStringSetter 特殊配置
   placeholder: string;
@@ -73,7 +73,7 @@ export default class AltStringSetter extends React.PureComponent<AltStringSetter
     }
   }
 
-  // 声明Setter的title
+  // 声明 Setter 的 title
  	static displayName = 'AltStringSetter';
 
   render() {
@@ -95,7 +95,7 @@ export default class AltStringSetter extends React.PureComponent<AltStringSetter
 import { event } from '@ali/lowcode-engine';
 
 componentDidMount() {
-		// 这里由于面板上会有多个setter，这里我用field.id来标记setter名
+		// 这里由于面板上会有多个 setter，这里我用 field.id 来标记 setter 名
     this.emitEventName = `${SETTER_NAME}-${this.props.field.id}`;
     event.on(`${this.emitEventName}.bindEvent`, this.bindEvent)
 }
@@ -105,7 +105,7 @@ bindEvent = (eventName) => {
 }
 
 componentWillUnmount() {
-  // setter是以实例为单位的，每个setter注销的时候需要把事件也注销掉，避免事件池过多
+  // setter 是以实例为单位的，每个 setter 注销的时候需要把事件也注销掉，避免事件池过多
   event.off(`${this.emitEventName}.bindEvent`, this.bindEvent)
 }
 ```
@@ -115,7 +115,7 @@ import { event } from '@ali/lowcode-engine';
 
 bindFunction = () => {
   const { field, value } = this.props;
-  // 这里展示的和插件进行通信,事件规则是插件名+方法
+  // 这里展示的和插件进行通信，事件规则是插件名 + 方法
   event.emit('eventBindDialog.openDialog', field.name, this.emitEventName);
 }
 ```
@@ -125,9 +125,9 @@ setter 本身只影响其中一个 props 的值，如果需要影响其他组件
 bindFunction = () => {
     const { field, value } = this.props;
     const propsField = field.parent;
-		// 获取同级其他属性showJump的值
+		// 获取同级其他属性 showJump 的值
     const otherValue = propsField.getPropValue('showJump');
-    // set同级其他属性showJump的值
+    // set 同级其他属性 showJump 的值
     propsField.setPropValue('showJump', false);
 }
 ```

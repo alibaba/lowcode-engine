@@ -2,8 +2,6 @@ import { ReactElement } from 'react';
 import { EventEmitter } from 'events';
 import { obx, computed, autorun, makeObservable, runInAction, wrapWithEventSwitch, action } from '@alilc/lowcode-editor-core';
 import {
-  isDOMText,
-  isJSExpression,
   NodeSchema,
   PropsMap,
   PropsList,
@@ -16,10 +14,10 @@ import {
   CompositeValue,
   GlobalEvent,
   ComponentAction,
+  IPublicModelNode,
 } from '@alilc/lowcode-types';
-import { compatStage } from '@alilc/lowcode-utils';
+import { compatStage, isDOMText, isJSExpression } from '@alilc/lowcode-utils';
 import { SettingTopEntry } from '@alilc/lowcode-designer';
-import { Node as ShellNode } from '@alilc/lowcode-shell';
 import { Props, getConvertedExtraKey } from './props/props';
 import { DocumentModel } from '../document-model';
 import { NodeChildren } from './node-children';
@@ -94,7 +92,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   /**
    * 节点组件类型
-   * 特殊节点:
+   * 特殊节点：
    *  * Page 页面
    *  * Block 区块
    *  * Component 组件/元件
@@ -368,8 +366,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this._slotFor = slotFor;
   }
 
-  internalToShellNode(): ShellNode | null {
-    return ShellNode.create(this);
+  internalToShellNode(): IPublicModelNode | null {
+    return this.document.designer.shellModelFactory.createNode(this);
   }
 
   /**

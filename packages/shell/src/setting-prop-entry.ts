@@ -1,106 +1,118 @@
-import { SettingField, ISetValueOptions } from '@alilc/lowcode-designer';
-import { CompositeValue, FieldConfig, CustomView, isCustomView } from '@alilc/lowcode-types';
+import { SettingField, SettingEntry } from '@alilc/lowcode-designer';
+import {
+  CompositeValue,
+  FieldConfig,
+  CustomView,
+  IPublicModelSettingPropEntry,
+  SetterType,
+  FieldExtraProps,
+  IPublicModelSettingTopEntry,
+  IPublicModelNode,
+  IPublicModelComponentMeta,
+  ISetValueOptions,
+} from '@alilc/lowcode-types';
 import { settingPropEntrySymbol } from './symbols';
 import Node from './node';
 import SettingTopEntry from './setting-top-entry';
 import ComponentMeta from './component-meta';
+import { isCustomView } from '@alilc/lowcode-utils';
 
-export default class SettingPropEntry {
+export default class SettingPropEntry implements IPublicModelSettingPropEntry {
   private readonly [settingPropEntrySymbol]: SettingField;
 
   constructor(prop: SettingField) {
     this[settingPropEntrySymbol] = prop;
   }
 
-  static create(prop: SettingField) {
+  static create(prop: SettingField): IPublicModelSettingPropEntry {
     return new SettingPropEntry(prop);
   }
 
   /**
    * 获取设置属性的 isGroup
    */
-  get isGroup() {
+  get isGroup(): boolean {
     return this[settingPropEntrySymbol].isGroup;
   }
 
   /**
    * 获取设置属性的 id
    */
-  get id() {
+  get id(): string {
     return this[settingPropEntrySymbol].id;
   }
 
   /**
    * 获取设置属性的 name
    */
-  get name() {
+  get name(): string | number {
     return this[settingPropEntrySymbol].name;
   }
 
   /**
    * 获取设置属性的 key
    */
-  get key() {
+  get key(): string | number {
     return this[settingPropEntrySymbol].getKey();
   }
 
   /**
    * 获取设置属性的 path
    */
-  get path() {
+  get path(): any[] {
     return this[settingPropEntrySymbol].path;
   }
 
   /**
    * 获取设置属性的 title
    */
-  get title() {
+  get title(): any {
     return this[settingPropEntrySymbol].title;
   }
 
   /**
    * 获取设置属性的 setter
    */
-  get setter() {
+  get setter(): SetterType | null {
     return this[settingPropEntrySymbol].setter;
   }
 
   /**
    * 获取设置属性的 expanded
    */
-  get expanded() {
+  get expanded(): boolean {
     return this[settingPropEntrySymbol].expanded;
   }
 
   /**
    * 获取设置属性的 extraProps
    */
-  get extraProps() {
+  get extraProps(): FieldExtraProps {
     return this[settingPropEntrySymbol].extraProps;
   }
 
-  get props() {
+  get props(): IPublicModelSettingTopEntry {
     return SettingTopEntry.create(this[settingPropEntrySymbol].props);
   }
 
   /**
    * 获取设置属性对应的节点实例
    */
-  get node(): Node | null {
+  get node(): IPublicModelNode | null {
     return Node.create(this[settingPropEntrySymbol].getNode());
   }
 
   /**
    * 获取设置属性的父设置属性
    */
-  get parent(): SettingPropEntry {
+  get parent(): IPublicModelSettingPropEntry {
     return SettingPropEntry.create(this[settingPropEntrySymbol].parent as any);
   }
 
   /**
    * 获取顶级设置属性
    */
-   get top(): SettingTopEntry {
+  get top(): IPublicModelSettingTopEntry {
     return SettingTopEntry.create(this[settingPropEntrySymbol].top);
   }
 
@@ -114,14 +126,14 @@ export default class SettingPropEntry {
   /**
    * componentMeta
    */
-  get componentMeta(): ComponentMeta | null {
+  get componentMeta(): IPublicModelComponentMeta | null {
     return ComponentMeta.create(this[settingPropEntrySymbol].componentMeta);
   }
 
   /**
    * 获取设置属性的 items
    */
-  get items(): Array<SettingPropEntry | CustomView> {
+  get items(): Array<IPublicModelSettingPropEntry | CustomView> {
     return this[settingPropEntrySymbol].items?.map((item) => {
       if (isCustomView(item)) {
         return item;
@@ -134,7 +146,7 @@ export default class SettingPropEntry {
    * 设置 key 值
    * @param key
    */
-  setKey(key: string | number) {
+  setKey(key: string | number): void {
     this[settingPropEntrySymbol].setKey(key);
   }
 
@@ -156,7 +168,7 @@ export default class SettingPropEntry {
    * 设置值
    * @param val 值
    */
-  setValue(val: CompositeValue, extraOptions?: ISetValueOptions) {
+  setValue(val: CompositeValue, extraOptions?: ISetValueOptions): void {
     this[settingPropEntrySymbol].setValue(val, false, false, extraOptions);
   }
 
@@ -165,7 +177,7 @@ export default class SettingPropEntry {
    * @param propName 子属性名
    * @param value 值
    */
-  setPropValue(propName: string | number, value: any) {
+  setPropValue(propName: string | number, value: any): void {
     this[settingPropEntrySymbol].setPropValue(propName, value);
   }
 
@@ -173,7 +185,7 @@ export default class SettingPropEntry {
    * 清空指定属性值
    * @param propName
    */
-  clearPropValue(propName: string | number) {
+  clearPropValue(propName: string | number): void {
     this[settingPropEntrySymbol].clearPropValue(propName);
   }
 
@@ -181,7 +193,7 @@ export default class SettingPropEntry {
    * 获取配置的默认值
    * @returns
    */
-  getDefaultValue() {
+  getDefaultValue(): any {
     return this[settingPropEntrySymbol].getDefaultValue();
   }
 
@@ -189,7 +201,7 @@ export default class SettingPropEntry {
    * 获取值
    * @returns
    */
-  getValue() {
+  getValue(): any {
     return this[settingPropEntrySymbol].getValue();
   }
 
@@ -198,21 +210,21 @@ export default class SettingPropEntry {
    * @param propName 子属性名
    * @returns
    */
-  getPropValue(propName: string | number) {
+  getPropValue(propName: string | number): any {
     return this[settingPropEntrySymbol].getPropValue(propName);
   }
 
   /**
    * 获取顶层附属属性值
    */
-  getExtraPropValue(propName: string) {
+  getExtraPropValue(propName: string): any {
     return this[settingPropEntrySymbol].getExtraPropValue(propName);
   }
 
   /**
    * 设置顶层附属属性值
    */
-  setExtraPropValue(propName: string, value: any) {
+  setExtraPropValue(propName: string, value: any): void {
     this[settingPropEntrySymbol].setExtraPropValue(propName, value);
   }
 
@@ -220,7 +232,7 @@ export default class SettingPropEntry {
    * 获取设置属性集
    * @returns
    */
-  getProps() {
+  getProps(): IPublicModelSettingTopEntry {
     return SettingTopEntry.create(this[settingPropEntrySymbol].getProps() as SettingEntry) as any;
   }
 
@@ -228,7 +240,7 @@ export default class SettingPropEntry {
    * 是否绑定了变量
    * @returns
    */
-  isUseVariable() {
+  isUseVariable(): boolean {
     return this[settingPropEntrySymbol].isUseVariable();
   }
 
@@ -236,7 +248,7 @@ export default class SettingPropEntry {
    * 设置绑定变量
    * @param flag
    */
-  setUseVariable(flag: boolean) {
+  setUseVariable(flag: boolean): void {
     this[settingPropEntrySymbol].setUseVariable(flag);
   }
 
@@ -245,7 +257,7 @@ export default class SettingPropEntry {
    * @param config
    * @returns
    */
-  createField(config: FieldConfig) {
+  createField(config: FieldConfig): IPublicModelSettingPropEntry {
     return SettingPropEntry.create(this[settingPropEntrySymbol].createField(config));
   }
 
@@ -253,21 +265,21 @@ export default class SettingPropEntry {
    * 获取值，当为变量时，返回 mock
    * @returns
    */
-  getMockOrValue() {
+  getMockOrValue(): any {
     return this[settingPropEntrySymbol].getMockOrValue();
   }
 
   /**
    * 销毁当前 field 实例
    */
-  purge() {
+  purge(): void {
     this[settingPropEntrySymbol].purge();
   }
 
   /**
    * 移除当前 field 实例
    */
-  remove() {
+  remove(): void {
     this[settingPropEntrySymbol].remove();
   }
 
@@ -276,7 +288,7 @@ export default class SettingPropEntry {
    * @param action
    * @returns
    */
-  onEffect(action: () => void) {
+  onEffect(action: () => void): () => void {
     return this[settingPropEntrySymbol].onEffect(action);
   }
 
