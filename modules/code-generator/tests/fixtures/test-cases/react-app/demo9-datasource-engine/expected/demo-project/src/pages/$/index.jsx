@@ -4,6 +4,10 @@ import React from 'react';
 
 import { Switch } from '@alifd/next';
 
+import { createJsonpHandler as __$$createJsonpRequestHandler } from '@alilc/lowcode-datasource-jsonp-handler';
+
+import { create as __$$createDataSourceEngine } from '@alilc/lowcode-datasource-engine/runtime';
+
 import utils from '../../utils';
 
 import * as __$$i18n from '../../i18n';
@@ -14,6 +18,20 @@ import './index.css';
 
 class $$Page extends React.Component {
   _context = this;
+
+  _dataSourceConfig = this._defineDataSourceConfig();
+  _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this, {
+    runtimeConfig: true,
+    requestHandlersMap: { jsonp: __$$createJsonpRequestHandler() },
+  });
+
+  get dataSourceMap() {
+    return this._dataSourceEngine.dataSourceMap || {};
+  }
+
+  reloadDataSource = async () => {
+    await this._dataSourceEngine.reloadDataSource();
+  };
 
   get constants() {
     return __$$constants || {};
@@ -33,7 +51,33 @@ class $$Page extends React.Component {
 
   $$ = () => [];
 
-  componentDidMount() {}
+  _defineDataSourceConfig() {
+    const _this = this;
+    return {
+      list: [
+        {
+          id: 'todos',
+          isInit: function () {
+            return true;
+          },
+          type: 'jsonp',
+          options: function () {
+            return {
+              method: 'GET',
+              uri: 'https://a0ee9135-6a7f-4c0f-a215-f0f247ad907d.mock.pstmn.io',
+            };
+          },
+          dataHandler: function dataHandler(data) {
+            return data.data;
+          },
+        },
+      ],
+    };
+  }
+
+  componentDidMount() {
+    this._dataSourceEngine.reloadDataSource();
+  }
 
   render() {
     const __$$context = this._context || this;
