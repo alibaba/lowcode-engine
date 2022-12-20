@@ -32,7 +32,8 @@
     "test": "lerna run test --stream",
     "test:snapshot": "lerna run test:snapshot",
     "watchdog:build": "node ./scripts/watchdog.js",
-    "sync": "./scripts/sync.sh"
+    "sync": "./scripts/sync.sh",
+    "syncOss": "node ./scripts/sync-oss.js"
   },
   "husky": {
     "hooks": {
