@@ -80,7 +80,9 @@ sidebar_position: 0
 <!-- 低代码引擎官方扩展的主包 -->
 <script crossorigin="anonymous" src="https://alifd.alicdn.com/npm/@alilc/lowcode-engine-ext@latest/dist/js/engine-ext.js"></script>
 ```
-> 注：如果 unpkg 的服务比较缓慢，您可以使用 alicdn 来获得确定版本的低代码引擎，如对于引擎的 1.0.1 版本，可用 [https://alifd.alicdn.com/npm/@alilc/lowcode-engine@1.0.1/dist/js/engine-core.js](https://alifd.alicdn.com/npm/@alilc/lowcode-engine@1.0.1/dist/js/engine-core.js)
+> 注：如果 unpkg 的服务比较缓慢，您可以使用 alicdn 来获得确定版本的低代码引擎，如对于引擎的 1.0.18 版本，可用以下官方 cdn 替代
+> - [https://alifd.alicdn.com/npm/@alilc/lowcode-engine@1.0.18/dist/js/engine-core.js](https://alifd.alicdn.com/npm/@alilc/lowcode-engine@1.0.18/dist/js/engine-core.js)
+> - [https://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/1.0.18/dist/js/engine-core.js](https://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/1.0.18/dist/js/engine-core.js)
 
 
 ### 配置打包
