@@ -33,6 +33,14 @@ export interface IRouterInfo extends IWithDependency {
   }>;
 }
 
+/**
+ * project's remarks
+ */
+export interface ProjectRemark {
+  /** if current project only contain one container which type is `Component` */
+  isSingleComponent?: boolean;
+}
+
 export interface IProjectInfo {
   css?: string;
   containersDeps?: IDependency[];
@@ -43,6 +51,7 @@ export interface IProjectInfo {
   meta?: { name?: string; title?: string } | Record<string, any>;
   config?: Record<string, any>;
   dataSourcesTypes?: string[];
+  projectRemark?: ProjectRemark;
 }
 
 export interface IPageMeta {

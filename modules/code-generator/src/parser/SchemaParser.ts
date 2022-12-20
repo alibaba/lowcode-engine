@@ -36,6 +36,7 @@ import { handleSubNodes, isValidContainerType } from '../utils/schema';
 import { uniqueArray } from '../utils/common';
 import { componentAnalyzer } from '../analyzer/componentAnalyzer';
 import { ensureValidClassName } from '../utils/validate';
+import type { ProjectRemark } from '../types/intermediate';
 
 const defaultContainer: IContainerInfo = {
   containerType: 'Component',
@@ -319,7 +320,14 @@ export class SchemaParser implements ISchemaParser {
         utilsDeps,
         packages: npms || [],
         dataSourcesTypes: this.collectDataSourcesTypes(schema),
+        projectRemark: this.getProjectRemark(containers),
       },
+    };
+  }
+
+  getProjectRemark(containers: IContainerInfo[]): ProjectRemark {
+    return {
+      isSingleComponent: containers.length === 1 && containers[0].containerType === 'Component',
     };
   }
 

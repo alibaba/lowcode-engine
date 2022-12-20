@@ -27,7 +27,7 @@ import {
 
 import { generateCompositeType } from '../../../utils/compositeType';
 import { parseExpressionConvertThis2Context } from '../../../utils/expressionParser';
-import { isContainerSchema } from '../../../utils/schema';
+import { isValidContainerType } from '../../../utils/schema';
 import { REACT_CHUNK_NAME } from './const';
 
 export interface PluginConfig {
@@ -67,7 +67,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     };
 
     const scope = Scope.createRootScope();
-    const dataSourceConfig = isContainerSchema(pre.ir) ? pre.ir.dataSource : null;
+    const dataSourceConfig = isValidContainerType(pre.ir) ? pre.ir.dataSource : null;
     const dataSourceItems: InterpretDataSourceConfig[] =
       (dataSourceConfig && dataSourceConfig.list) || [];
     const dataSourceEngineOptions = { runtimeConfig: true };

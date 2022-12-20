@@ -90,24 +90,22 @@ export class ProjectBuilder implements IProjectBuilder {
   async generateProject(originalSchema: ProjectSchema | string): Promise<ResultDir> {
     // Init
     const { schemaParser } = this;
-    const builders = this.createModuleBuilders();
 
     const projectRoot = await this.template.generateTemplate();
 
     let schema: ProjectSchema =
       typeof originalSchema === 'string' ? JSON.parse(originalSchema) : originalSchema;
 
-    // Validate
-    if (!schemaParser.validate(schema)) {
-      throw new CodeGeneratorError('Schema is invalid');
-    }
-
     // Parse / Format
-
     // Preprocess
     for (const preProcessor of this.projectPreProcessors) {
       // eslint-disable-next-line no-await-in-loop
       schema = await preProcessor(schema);
+    }
+
+    // Validate
+    if (!schemaParser.validate(schema)) {
+      throw new CodeGeneratorError('Schema is invalid');
     }
 
     // Collect Deps
@@ -115,6 +113,11 @@ export class ProjectBuilder implements IProjectBuilder {
     const parseResult: IParseResult = schemaParser.parse(schema);
     let buildResult: IModuleInfo[] = [];
 
+    const builders = this.createModuleBuilders({
+      extraContextData: {
+        projectRemark: parseResult?.project?.projectRemark,
+      },
+    });
     // Generator Code module
     // components
     // pages
@@ -253,11 +256,12 @@ export class ProjectBuilder implements IProjectBuilder {
     // TODO: 更多 slots 的处理？？是不是可以考虑把 template 中所有的 slots 都处理下？
 
     // Post Process
-
+    const isSingleComponent = parseResult?.project?.projectRemark?.isSingleComponent;
     // Combine Modules
     buildResult.forEach((moduleInfo) => {
       let targetDir = getDirFromRoot(projectRoot, moduleInfo.path);
-      if (moduleInfo.moduleName) {
+      // if project only contain single component, skip creation of directory.
+      if (moduleInfo.moduleName && !isSingleComponent) {
         const dir = createResultDir(moduleInfo.moduleName);
         addDirectory(targetDir, dir);
         targetDir = dir;
@@ -278,7 +282,8 @@ export class ProjectBuilder implements IProjectBuilder {
     return finalResult;
   }
 
-  private createModuleBuilders(): Record<string, IModuleBuilder> {
+  private createModuleBuilders(extraContextData: Record<string, unknown> = {}):
+    Record<string, IModuleBuilder> {
     const builders: Record<string, IModuleBuilder> = {};
 
     Object.keys(this.plugins).forEach((pluginName) => {
@@ -291,10 +296,12 @@ export class ProjectBuilder implements IProjectBuilder {
           plugins: this.plugins[pluginName],
           postProcessors: this.postProcessors,
           contextData: {
+            // template: this.template,
             inStrictMode: this.inStrictMode,
             tolerateEvalErrors: true,
             evalErrorsHandler: '',
             ...this.extraContextData,
+            ...extraContextData,
           },
           ...options,
         });
