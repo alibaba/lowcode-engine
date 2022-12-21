@@ -1,23 +1,35 @@
+/* eslint-disable max-len */
 /* eslint-disable no-param-reassign */
 import { createElement } from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
-import { globalContext, Editor, engineConfig, EngineOptions } from '@alilc/lowcode-editor-core';
+import {
+  globalContext,
+  Editor,
+  engineConfig,
+  Setters as InnerSetters,
+  Hotkey as InnerHotkey,
+} from '@alilc/lowcode-editor-core';
+import {
+  EngineOptions,
+  IPublicModelDocumentModel,
+  IPublicTypePluginMeta,
+} from '@alilc/lowcode-types';
 import {
   Designer,
   LowCodePluginManager,
-  ILowCodePluginContext,
   ILowCodePluginContextPrivate,
   ILowCodePluginContextApiAssembler,
   PluginPreference,
 } from '@alilc/lowcode-designer';
 import {
   Skeleton as InnerSkeleton,
-  SettingsPrimaryPane,
   registerDefaults,
 } from '@alilc/lowcode-editor-skeleton';
+import {
+  Workspace as InnerWorkspace,
+  Workbench as WorkSpaceWorkbench,
+} from '@alilc/lowcode-workspace';
 
-import Outline, { OutlineBackupPane, getTreeMaster } from '@alilc/lowcode-plugin-outline-pane';
-import DesignerPlugin from '@alilc/lowcode-plugin-designer';
 import {
   Hotkey,
   Project,
@@ -25,14 +37,22 @@ import {
   Setters,
   Material,
   Event,
-  DocumentModel,
+  Plugins,
   Common,
+  Logger,
+  Canvas,
+  Workspace,
 } from '@alilc/lowcode-shell';
-import { getLogger, isPlainObject } from '@alilc/lowcode-utils';
+import { isPlainObject } from '@alilc/lowcode-utils';
 import './modules/live-editing';
 import classes from './modules/classes';
 import symbols from './modules/symbols';
+import { componentMetaParser } from './inner-plugins/component-meta-parser';
+import { setterRegistry } from './inner-plugins/setter-registry';
+import { defaultPanelRegistry } from './inner-plugins/default-panel-registry';
 import { shellModelFactory } from './modules/shell-model-factory';
+import { builtinHotkey } from './inner-plugins/builtin-hotkey';
+import { OutlinePlugin } from '@alilc/lowcode-plugin-outline-pane';
 
 export * from './modules/skeleton-types';
 export * from './modules/designer-types';
@@ -40,9 +60,12 @@ export * from './modules/lowcode-types';
 
 registerDefaults();
 
+const innerWorkspace = new InnerWorkspace();
+const workspace = new Workspace(innerWorkspace);
 const editor = new Editor();
 globalContext.register(editor, Editor);
 globalContext.register(editor, 'editor');
+globalContext.register(innerWorkspace, 'workspace');
 
 const innerSkeleton = new InnerSkeleton(editor);
 editor.set('skeleton' as any, innerSkeleton);
@@ -51,29 +74,46 @@ const designer = new Designer({ editor, shellModelFactory });
 editor.set('designer' as any, designer);
 const { project: innerProject } = designer;
 
-const hotkey = new Hotkey();
+const innerHotkey = new InnerHotkey();
+const hotkey = new Hotkey(innerHotkey);
 const project = new Project(innerProject);
 const skeleton = new Skeleton(innerSkeleton);
-const setters = new Setters();
+const innerSetters = new InnerSetters();
+const setters = new Setters(innerSetters);
+
 const material = new Material(editor);
+editor.set('project', project);
+editor.set('setters' as any, setters);
+editor.set('material', material);
+editor.set('innerHotkey', innerHotkey);
 const config = engineConfig;
 const event = new Event(editor, { prefix: 'common' });
-const logger = getLogger({ level: 'warn', bizName: 'common' });
+const logger = new Logger({ level: 'warn', bizName: 'common' });
 const common = new Common(editor, innerSkeleton);
+const canvas = new Canvas(editor);
+let plugins: Plugins;
 
 const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
-  assembleApis: (context: ILowCodePluginContextPrivate) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  assembleApis: (context: ILowCodePluginContextPrivate, pluginName: string, meta: IPublicTypePluginMeta) => {
     context.hotkey = hotkey;
     context.project = project;
     context.skeleton = skeleton;
     context.setters = setters;
     context.material = material;
-    context.event = event;
+    const eventPrefix = meta?.eventPrefix || 'common';
+    context.event = new Event(editor, { prefix: eventPrefix });
     context.config = config;
     context.common = common;
+    context.canvas = canvas;
+    context.plugins = plugins;
+    context.logger = new Logger({ level: 'warn', bizName: `plugin:${pluginName}` });
   },
 };
-const plugins = new LowCodePluginManager(pluginContextApiAssembler).toProxy();
+
+const innerPlugins = new LowCodePluginManager(pluginContextApiAssembler);
+plugins = new Plugins(innerPlugins).toProxy();
+editor.set('innerPlugins' as any, innerPlugins);
 editor.set('plugins' as any, plugins);
 
 export {
@@ -89,6 +129,8 @@ export {
   common,
   // 兼容原 editor 的事件功能
   event as editor,
+  workspace,
+  canvas,
 };
 // declare this is open-source version
 export const isOpenSource = true;
@@ -97,102 +139,6 @@ export const __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = {
   classes,
 };
 engineConfig.set('isOpenSource', isOpenSource);
-
-// 注册一批内置插件
-(async function registerPlugins() {
-  // 处理 editor.set('assets')，将组件元数据创建好
-  const componentMetaParser = (ctx: ILowCodePluginContext) => {
-    return {
-      init() {
-        editor.onGot('assets', (assets: any) => {
-          const { components = [] } = assets;
-          designer.buildComponentMetasMap(components);
-        });
-      },
-    };
-  };
-  componentMetaParser.pluginName = '___component_meta_parser___';
-  await plugins.register(componentMetaParser);
-
-  // 注册默认的 setters
-  const setterRegistry = (ctx: ILowCodePluginContext) => {
-    return {
-      init() {
-        if (engineConfig.get('disableDefaultSetters')) return;
-        const builtinSetters = require('@alilc/lowcode-engine-ext')?.setters;
-        if (builtinSetters) {
-          ctx.setters.registerSetter(builtinSetters);
-        }
-      },
-    };
-  };
-  setterRegistry.pluginName = '___setter_registry___';
-  await plugins.register(setterRegistry);
-
-  // 注册默认的面板
-  const defaultPanelRegistry = (ctx: ILowCodePluginContext) => {
-    return {
-      init() {
-        skeleton.add({
-          area: 'mainArea',
-          name: 'designer',
-          type: 'Widget',
-          content: DesignerPlugin,
-        });
-        if (!engineConfig.get('disableDefaultSettingPanel')) {
-          skeleton.add({
-            area: 'rightArea',
-            name: 'settingsPane',
-            type: 'Panel',
-            content: SettingsPrimaryPane,
-            props: {
-              ignoreRoot: true,
-            },
-          });
-        }
-
-        // by default in float area;
-        let isInFloatArea = true;
-        const hasPreferenceForOutline = editor
-          ?.getPreference()
-          ?.contains('outline-pane-pinned-status-isFloat', 'skeleton');
-        if (hasPreferenceForOutline) {
-          isInFloatArea = editor
-            ?.getPreference()
-            ?.get('outline-pane-pinned-status-isFloat', 'skeleton');
-        }
-
-        skeleton.add({
-          area: 'leftArea',
-          name: 'outlinePane',
-          type: 'PanelDock',
-          content: Outline,
-          panelProps: {
-            area: isInFloatArea ? 'leftFloatArea' : 'leftFixedArea',
-            keepVisibleWhileDragging: true,
-            ...engineConfig.get('defaultOutlinePaneProps'),
-          },
-          contentProps: {
-            treeTitleExtra: engineConfig.get('treeTitleExtra'),
-          },
-        });
-        skeleton.add({
-          area: 'rightArea',
-          name: 'backupOutline',
-          type: 'Panel',
-          props: {
-            condition: () => {
-              return designer.dragon.dragging && !getTreeMaster(designer).hasVisibleTreeBoard();
-            },
-          },
-          content: OutlineBackupPane,
-        });
-      },
-    };
-  };
-  defaultPanelRegistry.pluginName = '___default_panel___';
-  await plugins.register(defaultPanelRegistry);
-})();
 
 // container which will host LowCodeEngine DOM
 let engineContainer: HTMLElement;
@@ -223,9 +169,30 @@ export async function init(
   }
   engineConfig.setEngineOptions(engineOptions as any);
 
+  // 注册一批内置插件
+  await plugins.register(OutlinePlugin);
+  await plugins.register(componentMetaParser(designer));
+  await plugins.register(setterRegistry);
+  await plugins.register(defaultPanelRegistry(editor, designer));
+  await plugins.register(builtinHotkey);
+
   await plugins.init(pluginPreference as any);
 
   const { Workbench } = common.skeletonCabin;
+  if (options && options.enableWorkspaceMode) {
+    render(
+      createElement(WorkSpaceWorkbench, {
+        workspace: innerWorkspace,
+        // skeleton: workspace.skeleton,
+        className: 'engine-main',
+        topAreaItemClassName: 'engine-actionitem',
+      }),
+      engineContainer,
+    );
+    innerWorkspace.setActive(true);
+    return;
+  }
+
   render(
     createElement(Workbench, {
       skeleton: innerSkeleton,
@@ -240,7 +207,7 @@ export async function destroy() {
   // remove all documents
   const { documents } = project;
   if (Array.isArray(documents) && documents.length > 0) {
-    documents.forEach(((doc: DocumentModel) => project.removeDocument(doc)));
+    documents.forEach(((doc: IPublicModelDocumentModel) => project.removeDocument(doc)));
   }
 
   // TODO: delete plugins except for core plugins

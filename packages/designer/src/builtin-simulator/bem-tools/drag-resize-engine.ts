@@ -1,12 +1,12 @@
-import { EventEmitter } from 'events';
 import { ISimulatorHost } from '../../simulator';
 import { Designer, Point } from '../../designer';
 import { cursor } from '@alilc/lowcode-utils';
 import { makeEventsHandler } from '../../utils/misc';
+import { createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
 
 // 拖动缩放
 export default class DragResizeEngine {
-  private emitter: EventEmitter;
+  private emitter: IEventBus;
 
   private dragResizing = false;
 
@@ -14,7 +14,7 @@ export default class DragResizeEngine {
 
   constructor(designer: Designer) {
     this.designer = designer;
-    this.emitter = new EventEmitter();
+    this.emitter = createModuleEventBus('DragResizeEngine');
   }
 
   isDragResizing() {

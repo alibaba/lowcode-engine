@@ -12,7 +12,7 @@ import {
 
 import CodeGenerator from '../../../src';
 
-import type { ProjectSchema } from '@alilc/lowcode-types';
+import type { IPublicTypeProjectSchema } from '@alilc/lowcode-types';
 
 jest.setTimeout(15 * 1000);
 
@@ -49,7 +49,7 @@ function defineTest(caseDirName: string) {
   });
 }
 
-async function exportProject(schemaJson: ProjectSchema, targetPath: string, projectName: string) {
+async function exportProject(schemaJson: IPublicTypeProjectSchema, targetPath: string, projectName: string) {
   const reactAppBuilder = CodeGenerator.solutions.icejs();
   const result = await reactAppBuilder.generateProject(schemaJson);
 

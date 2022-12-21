@@ -1,5 +1,4 @@
-import { IPublicModelNode } from './node';
-import { IPublicModelSettingPropEntry } from './setting-prop-entry';
+import { IPublicModelNode, IPublicModelSettingPropEntry } from './';
 
 export interface IPublicModelSettingTopEntry {
   /**

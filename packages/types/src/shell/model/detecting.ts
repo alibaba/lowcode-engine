@@ -1,4 +1,12 @@
+import { IPublicModelNode } from './';
+
 export interface IPublicModelDetecting {
+
+  /**
+   * 控制大纲树 hover 时是否出现悬停效果
+   */
+  get enable(): boolean;
+
   /**
    * 当前 hover 的节点
    */
@@ -20,4 +28,6 @@ export interface IPublicModelDetecting {
    * 清空 hover 态
    */
   leave(): any;
+
+  onDetectingChange(fn: (node: IPublicModelNode) => void): () => void;
 }

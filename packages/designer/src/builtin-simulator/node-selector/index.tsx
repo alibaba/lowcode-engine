@@ -1,10 +1,10 @@
 import { Overlay } from '@alifd/next';
 import React from 'react';
-import { Title, globalContext, Editor } from '@alilc/lowcode-editor-core';
+import { Title, globalContext } from '@alilc/lowcode-editor-core';
 import { canClickNode } from '@alilc/lowcode-utils';
 import './index.less';
 
-import { Node, ParentalNode } from '@alilc/lowcode-designer';
+import { Node, INode } from '@alilc/lowcode-designer';
 
 const { Popup } = Overlay;
 
@@ -16,7 +16,7 @@ export interface IState {
   parentNodes: Node[];
 }
 
-type UnionNode = Node | ParentalNode | null;
+type UnionNode = INode | null;
 
 export default class InstanceNodeSelector extends React.Component<IProps, IState> {
   state: IState = {
@@ -30,7 +30,7 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
     });
   }
 
-  // 获取节点的父级节点（最多获取5层）
+  // 获取节点的父级节点（最多获取 5 层）
   getParentNodes = (node: Node) => {
     const parentNodes: any[] = [];
     const { focusNode } = node.document;
@@ -62,13 +62,14 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
 
     if (canClick && typeof node.select === 'function') {
       node.select();
-      const editor = globalContext.get(Editor);
+      const workspace = globalContext.get('workspace');
+      const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
       const npm = node?.componentMeta?.npm;
       const selected =
         [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
         node?.componentMeta?.componentName ||
         '';
-      editor?.emit('designer.border.action', {
+      editor?.eventBus.emit('designer.border.action', {
         name: 'select',
         selected,
       });

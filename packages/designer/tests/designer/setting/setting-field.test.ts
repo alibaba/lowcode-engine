@@ -1,6 +1,12 @@
 // @ts-nocheck
 import '../../fixtures/window';
-import { Editor } from '@alilc/lowcode-editor-core';
+import {
+  Editor,
+  Setters as InnerSetters,
+} from '@alilc/lowcode-editor-core';
+import {
+  Setters,
+} from '@alilc/lowcode-shell';
 import { SettingTopEntry } from '../../../src/designer/setting/setting-top-entry';
 import { SettingField } from '../../../src/designer/setting/setting-field';
 import { Node } from '../../../src/document/node/node';
@@ -16,7 +22,10 @@ const editor = new Editor();
 describe('setting-field 测试', () => {
   let designer: Designer;
   let doc: DocumentModel;
+  let setters: Setters;
   beforeEach(() => {
+    setters = new InnerSetters();
+    editor.set('setters', setters);
     designer = new Designer({ editor, shellModelFactory });
     designer.createComponentMeta(buttonMeta);
     doc = designer.project.open(settingSchema);

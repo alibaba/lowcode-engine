@@ -1,20 +1,21 @@
 import { ReactElement } from 'react';
-import { EventEmitter } from 'events';
-import { obx, computed, autorun, makeObservable, runInAction, wrapWithEventSwitch, action } from '@alilc/lowcode-editor-core';
+import { obx, computed, autorun, makeObservable, runInAction, wrapWithEventSwitch, action, createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
 import {
-  NodeSchema,
-  PropsMap,
-  PropsList,
-  NodeData,
-  I18nData,
+  IPublicTypeNodeSchema,
+  IPublicTypePropsMap,
+  IPublicTypePropsList,
+  IPublicTypeNodeData,
+  IPublicTypeI18nData,
   SlotSchema,
-  PageSchema,
-  ComponentSchema,
+  IPublicTypePageSchema,
+  IPublicTypeComponentSchema,
   NodeStatus,
-  CompositeValue,
+  IPublicTypeCompositeValue,
   GlobalEvent,
-  ComponentAction,
+  IPublicTypeComponentAction,
   IPublicModelNode,
+  IPublicModelExclusiveGroup,
+  IPublicEnumTransformStage,
 } from '@alilc/lowcode-types';
 import { compatStage, isDOMText, isJSExpression } from '@alilc/lowcode-utils';
 import { SettingTopEntry } from '@alilc/lowcode-designer';
@@ -24,10 +25,14 @@ import { NodeChildren } from './node-children';
 import { Prop } from './props/prop';
 import { ComponentMeta } from '../../component-meta';
 import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
-import { TransformStage } from './transform-stage';
 import { includeSlot, removeSlot } from '../../utils/slot';
 import { foreachReverse } from '../../utils/tree';
 import { NodeRemoveOptions } from '../../types';
+
+
+export interface INode extends IPublicModelNode {
+
+}
 
 /**
  * 基础节点
@@ -77,8 +82,8 @@ import { NodeRemoveOptions } from '../../types';
  *  isLocked
  *  hidden
  */
-export class Node<Schema extends NodeSchema = NodeSchema> {
-  private emitter: EventEmitter;
+export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> implements INode {
+  private emitter: IEventBus;
 
   /**
    * 是节点实例
@@ -114,12 +119,12 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    */
   private _addons: { [key: string]: { exportData: () => any; isProp: boolean } } = {};
 
-  @obx.ref private _parent: ParentalNode | null = null;
+  @obx.ref private _parent: INode | null = null;
 
   /**
    * 父级节点
    */
-  get parent(): ParentalNode | null {
+  get parent(): INode | null {
     return this._parent;
   }
 
@@ -140,7 +145,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return 0;
   }
 
-  @computed get title(): string | I18nData | ReactElement {
+  @computed get title(): string | IPublicTypeI18nData | ReactElement {
     let t = this.getExtraProp('title');
     // TODO: 暂时走不到这个分支
     // if (!t && this.componentMeta.descriptor) {
@@ -172,7 +177,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       });
     } else {
       this.props = new Props(this, props, extras);
-      this._children = new NodeChildren(this as ParentalNode, this.initialChildren(children));
+      this._children = new NodeChildren(this as INode, this.initialChildren(children));
       this._children.internalInitParent();
       this.props.merge(
         this.upgradeProps(this.initProps(props || {})),
@@ -184,7 +189,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this.initBuiltinProps();
 
     this.isInited = true;
-    this.emitter = new EventEmitter();
+    this.emitter = createModuleEventBus('Node');
   }
 
   _settingEntry: SettingTopEntry;
@@ -210,12 +215,12 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   @action
   private initProps(props: any): any {
-    return this.document.designer.transformProps(props, this, TransformStage.Init);
+    return this.document.designer.transformProps(props, this, IPublicEnumTransformStage.Init);
   }
 
   @action
   private upgradeProps(props: any): any {
-    return this.document.designer.transformProps(props, this, TransformStage.Upgrade);
+    return this.document.designer.transformProps(props, this, IPublicEnumTransformStage.Upgrade);
   }
 
   private autoruns?: Array<() => void>;
@@ -232,7 +237,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     });
   }
 
-  private initialChildren(children: any): NodeData[] {
+  private initialChildren(children: any): IPublicTypeNodeData[] {
     // FIXME! this is dirty code
     if (children == null) {
       const initialChildren = this.componentMeta.getMetadata().configure.advanced?.initialChildren;
@@ -283,7 +288,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 是否一个父亲类节点
    */
-  isParental(): this is ParentalNode {
+  isParental(): boolean {
     return !this.isLeaf();
   }
 
@@ -325,7 +330,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * 内部方法，请勿使用
    * @param useMutator 是否触发联动逻辑
    */
-  internalSetParent(parent: ParentalNode | null, useMutator = false) {
+  internalSetParent(parent: INode | null, useMutator = false) {
     if (this._parent === parent) {
       return;
     }
@@ -387,7 +392,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   ) {
     if (this.parent) {
       if (!options.suppressRemoveEvent) {
-        this.document.designer.editor?.emit('node.remove.topLevel', {
+        this.document.designer.editor?.eventBus.emit('node.remove.topLevel', {
           node: this,
           index: this.parent?.children?.indexOf(this),
         });
@@ -440,11 +445,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.document.getComponentMeta(this.componentName);
   }
 
-  @computed get propsData(): PropsMap | PropsList | null {
+  @computed get propsData(): IPublicTypePropsMap | IPublicTypePropsList | null {
     if (!this.isParental() || this.componentName === 'Fragment') {
       return null;
     }
-    return this.props.export(TransformStage.Serilize).props || null;
+    return this.props.export(IPublicEnumTransformStage.Serilize).props || null;
   }
 
   @obx.shallow _slots: Node[] = [];
@@ -458,15 +463,15 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   /* istanbul ignore next */
-  @obx.ref private _conditionGroup: ExclusiveGroup | null = null;
+  @obx.ref private _conditionGroup: IPublicModelExclusiveGroup | null = null;
 
   /* istanbul ignore next */
-  get conditionGroup(): ExclusiveGroup | null {
+  get conditionGroup(): IPublicModelExclusiveGroup | null {
     return this._conditionGroup;
   }
 
   /* istanbul ignore next */
-  setConditionGroup(grp: ExclusiveGroup | string | null) {
+  setConditionGroup(grp: IPublicModelExclusiveGroup | string | null) {
     if (!grp) {
       this.getExtraProp('conditionGroup', false)?.remove();
       if (this._conditionGroup) {
@@ -589,7 +594,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.props.get(getConvertedExtraKey(key), createIfNone) || null;
   }
 
-  setExtraProp(key: string, value: CompositeValue) {
+  setExtraProp(key: string, value: IPublicTypeCompositeValue) {
     this.getProp(getConvertedExtraKey(key), true)?.setValue(value);
   }
 
@@ -617,14 +622,14 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 设置多个属性值，和原有值合并
    */
-  mergeProps(props: PropsMap) {
+  mergeProps(props: IPublicTypePropsMap) {
     this.props.merge(props);
   }
 
   /**
    * 设置多个属性值，替换原有值
    */
-  setProps(props?: PropsMap | PropsList | Props | null) {
+  setProps(props?: IPublicTypePropsMap | IPublicTypePropsList | Props | null) {
     if (props instanceof Props) {
       this.props = props;
       return;
@@ -674,7 +679,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * 获取符合搭建协议-节点 schema 结构
    */
   get schema(): Schema {
-    return this.export(TransformStage.Save);
+    return this.export(IPublicEnumTransformStage.Save);
   }
 
   set schema(data: Schema) {
@@ -709,16 +714,16 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 导出 schema
    */
-  export(stage: TransformStage = TransformStage.Save, options: any = {}): Schema {
+  export(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Save, options: any = {}): Schema {
     stage = compatStage(stage);
     const baseSchema: any = {
       componentName: this.componentName,
     };
 
-    if (stage !== TransformStage.Clone) {
+    if (stage !== IPublicEnumTransformStage.Clone) {
       baseSchema.id = this.id;
     }
-    if (stage === TransformStage.Render) {
+    if (stage === IPublicEnumTransformStage.Render) {
       baseSchema.docId = this.document.id;
     }
 
@@ -817,7 +822,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (includeSlot(this, slotName)) {
       removeSlot(this, slotName);
     }
-    slotNode.internalSetParent(this as ParentalNode, true);
+    slotNode.internalSetParent(this as INode, true);
     this._slots.push(slotNode);
   }
 
@@ -880,13 +885,13 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    */
   canPerformAction(actionName: string): boolean {
     const availableActions =
-      this.componentMeta?.availableActions?.filter((action: ComponentAction) => {
+      this.componentMeta?.availableActions?.filter((action: IPublicTypeComponentAction) => {
         const { condition } = action;
         return typeof condition === 'function' ?
           condition(this) !== false :
           condition !== false;
       })
-      .map((action: ComponentAction) => action.name) || [];
+      .map((action: IPublicTypeComponentAction) => action.name) || [];
 
     return availableActions.indexOf(actionName) >= 0;
   }
@@ -949,7 +954,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   mergeChildren(
     remover: () => any,
-    adder: (children: Node[]) => NodeData[] | null,
+    adder: (children: Node[]) => IPublicTypeNodeData[] | null,
     sorter: () => any,
   ) {
     this.children?.mergeChildren(remover, adder, sorter);
@@ -1018,7 +1023,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   /**
-   * @deprecated
+   * TODO: replace non standard metas with standard ones.
    */
   getSuitablePlace(node: Node, ref: any): any {
     const focusNode = this.document?.focusNode;
@@ -1137,11 +1142,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.id;
   }
 
-  emitPropChange(val: PropChangeOptions) {
+  emitPropChange(val: IPublicTypePropChangeOptions) {
     this.emitter?.emit('propChange', val);
   }
 
-  onPropChange(func: (info: PropChangeOptions) => void): Function {
+  onPropChange(func: (info: IPublicTypePropChangeOptions) => void): Function {
     const wrappedFunc = wrapWithEventSwitch(func);
     this.emitter.on('propChange', wrappedFunc);
     return () => {
@@ -1164,20 +1169,21 @@ function ensureNode(node: any, document: DocumentModel): Node {
   return nodeInstance;
 }
 
-export interface ParentalNode<T extends NodeSchema = NodeSchema> extends Node<T> {
-  readonly children: NodeChildren;
-}
+
 export interface LeafNode extends Node {
   readonly children: null;
 }
 
-export type PropChangeOptions = Omit<GlobalEvent.Node.Prop.ChangeOptions, 'node'>;
+export type IPublicTypePropChangeOptions = Omit<GlobalEvent.Node.Prop.ChangeOptions, 'node'>;
 
-export type SlotNode = ParentalNode<SlotSchema>;
-export type PageNode = ParentalNode<PageSchema>;
-export type ComponentNode = ParentalNode<ComponentSchema>;
+export type SlotNode = Node<SlotSchema>;
+export type PageNode = Node<IPublicTypePageSchema>;
+export type ComponentNode = Node<IPublicTypeComponentSchema>;
 export type RootNode = PageNode | ComponentNode;
 
+/**
+ * @deprecated use same function from '@alilc/lowcode-utils' instead
+ */
 export function isNode(node: any): node is Node {
   return node && node.isNode;
 }
@@ -1266,14 +1272,14 @@ export function comparePosition(node1: Node, node2: Node): PositionNO {
 }
 
 export function insertChild(
-  container: ParentalNode,
-  thing: Node | NodeData,
+  container: INode,
+  thing: Node | IPublicTypeNodeData,
   at?: number | null,
   copy?: boolean,
 ): Node {
   let node: Node;
   if (isNode(thing) && (copy || thing.isSlot())) {
-    thing = thing.export(TransformStage.Clone);
+    thing = thing.export(IPublicEnumTransformStage.Clone);
   }
   if (isNode(thing)) {
     node = thing;
@@ -1287,8 +1293,8 @@ export function insertChild(
 }
 
 export function insertChildren(
-  container: ParentalNode,
-  nodes: Node[] | NodeData[],
+  container: INode,
+  nodes: Node[] | IPublicTypeNodeData[],
   at?: number | null,
   copy?: boolean,
 ): Node[] {

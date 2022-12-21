@@ -36,7 +36,6 @@
     "@types/rax": "^1.0.0",
     "@types/react": "^16",
     "@types/react-dom": "^16",
-    "build-plugin-component": "^1.0.0",
     "build-plugin-rax-component": "^0.2.11"
   },
   "peerDependencies": {

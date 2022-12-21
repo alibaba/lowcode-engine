@@ -1,4 +1,4 @@
-import { NodeSchema } from './schema';
+import { IPublicTypeNodeSchema } from './shell';
 
 export enum ActivityType {
   'ADDED' = 'added',
@@ -8,7 +8,7 @@ export enum ActivityType {
 }
 
 export interface IActivityPayload {
-  schema: NodeSchema;
+  schema: IPublicTypeNodeSchema;
   location?: {
     parent: {
       nodeId: string;

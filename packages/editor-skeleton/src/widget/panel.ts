@@ -1,18 +1,17 @@
-import { EventEmitter } from 'events';
 import { createElement, ReactNode } from 'react';
-import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
+import { obx, computed, makeObservable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { uniqueId, createContent } from '@alilc/lowcode-utils';
-import { TitleContent } from '@alilc/lowcode-types';
-import WidgetContainer from './widget-container';
+import { IPublicTypeTitleContent } from '@alilc/lowcode-types';
+import { WidgetContainer } from './widget-container';
 import { getEvent } from '@alilc/lowcode-shell';
 import { PanelConfig, HelpTipConfig } from '../types';
 import { TitledPanelView, TabsPanelView, PanelView } from '../components/widget-views';
 import { Skeleton } from '../skeleton';
 import { composeTitle } from './utils';
 import { IWidget } from './widget';
-import PanelDock, { isPanelDock } from './panel-dock';
+import { isPanelDock, PanelDock } from './panel-dock';
 
-export default class Panel implements IWidget {
+export class Panel implements IWidget {
   readonly isWidget = true;
 
   readonly name: string;
@@ -23,7 +22,7 @@ export default class Panel implements IWidget {
 
   @obx.ref private _actived = false;
 
-  private emitter = new EventEmitter();
+  private emitter: IEventBus = createModuleEventBus('Panel');
 
   @computed get actived(): boolean {
     return this._actived;
@@ -71,7 +70,7 @@ export default class Panel implements IWidget {
     return createElement(TitledPanelView, { panel: this, key: this.id, area });
   }
 
-  readonly title: TitleContent;
+  readonly title: IPublicTypeTitleContent;
 
   readonly help?: HelpTipConfig;
 

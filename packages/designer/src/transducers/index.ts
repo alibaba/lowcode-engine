@@ -1,4 +1,4 @@
-import { TransformedComponentMetadata as Metadata } from '@alilc/lowcode-types';
+import { IPublicTypeTransformedComponentMetadata as Metadata } from '@alilc/lowcode-types';
 
 export function legacyIssues(metadata: Metadata): Metadata {
   const { devMode } = metadata;

@@ -1,45 +1,46 @@
 import { engineConfig } from '@alilc/lowcode-editor-core';
 import { getLogger } from '@alilc/lowcode-utils';
 import {
-  ILowCodePlugin,
-  ILowCodePluginConfig,
+  ILowCodePluginRuntime,
   ILowCodePluginManager,
-  ILowCodePluginContext,
-  ILowCodeRegisterOptions,
   IPluginContextOptions,
-  PreferenceValueType,
-  ILowCodePluginConfigMeta,
   PluginPreference,
-  ILowCodePluginPreferenceDeclaration,
-  isLowCodeRegisterOptions,
   ILowCodePluginContextApiAssembler,
 } from './plugin-types';
-import { filterValidOptions } from './plugin-utils';
-import { LowCodePlugin } from './plugin';
+import { filterValidOptions, isLowCodeRegisterOptions } from './plugin-utils';
+import { LowCodePluginRuntime } from './plugin';
 // eslint-disable-next-line import/no-named-as-default
 import LowCodePluginContext from './plugin-context';
 import { invariant } from '../utils';
 import sequencify from './sequencify';
 import semverSatisfies from 'semver/functions/satisfies';
+import {
+  ILowCodeRegisterOptions,
+  IPublicTypePreferenceValueType,
+  IPublicTypePlugin,
+} from '@alilc/lowcode-types';
 
 const logger = getLogger({ level: 'warn', bizName: 'designer:pluginManager' });
 
-export class LowCodePluginManager implements ILowCodePluginManager {
-  private plugins: ILowCodePlugin[] = [];
+// 保留的事件前缀
+const RESERVED_EVENT_PREFIX = ['designer', 'editor', 'skeleton', 'renderer', 'render', 'utils', 'plugin', 'engine', 'editor-core', 'engine-core', 'plugins', 'event', 'events', 'log', 'logger', 'ctx', 'context'];
 
-  private pluginsMap: Map<string, ILowCodePlugin> = new Map();
+export class LowCodePluginManager implements ILowCodePluginManager {
+  private plugins: ILowCodePluginRuntime[] = [];
+
+  pluginsMap: Map<string, ILowCodePluginRuntime> = new Map();
 
   private pluginPreference?: PluginPreference = new Map();
 
   contextApiAssembler: ILowCodePluginContextApiAssembler;
 
-  constructor(contextApiAssembler: ILowCodePluginContextApiAssembler) {
+  constructor(contextApiAssembler: ILowCodePluginContextApiAssembler, readonly viewName = 'global') {
     this.contextApiAssembler = contextApiAssembler;
   }
 
-  private _getLowCodePluginContext(options: IPluginContextOptions) {
-    return new LowCodePluginContext(this, options, this.contextApiAssembler);
-  }
+  _getLowCodePluginContext = (options: IPluginContextOptions) => {
+    return new LowCodePluginContext(options, this.contextApiAssembler);
+  };
 
   isEngineVersionMatched(versionExp: string): boolean {
     const engineVersion = engineConfig.get('ENGINE_VERSION');
@@ -55,7 +56,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
    * @param registerOptions - the plugin register options
    */
   async register(
-    pluginConfigCreator: (ctx: ILowCodePluginContext, options: any) => ILowCodePluginConfig,
+    pluginModel: IPublicTypePlugin,
     options?: any,
     registerOptions?: ILowCodeRegisterOptions,
   ): Promise<void> {
@@ -64,11 +65,18 @@ export class LowCodePluginManager implements ILowCodePluginManager {
       registerOptions = options;
       options = {};
     }
-    let { pluginName, meta = {} } = pluginConfigCreator as any;
-    const { preferenceDeclaration, engines } = meta as ILowCodePluginConfigMeta;
-    const ctx = this._getLowCodePluginContext({ pluginName });
+    let { pluginName, meta = {} } = pluginModel;
+    const { preferenceDeclaration, engines } = meta;
+    // filter invalid eventPrefix
+    const { eventPrefix } = meta;
+    const isReservedPrefix = RESERVED_EVENT_PREFIX.find((item) => item === eventPrefix);
+    if (isReservedPrefix) {
+      meta.eventPrefix = undefined;
+      logger.warn(`plugin ${pluginName} is trying to use ${eventPrefix} as event prefix, which is a reserved event prefix, please use another one`);
+    }
+    const ctx = this._getLowCodePluginContext({ pluginName, meta });
     const customFilterValidOptions = engineConfig.get('customPluginFilterOptions', filterValidOptions);
-    const config = pluginConfigCreator(ctx, customFilterValidOptions(options, preferenceDeclaration!));
+    const config = pluginModel(ctx, customFilterValidOptions(options, preferenceDeclaration!));
     // compat the legacy way to declare pluginName
     // @ts-ignore
     pluginName = pluginName || config.name;
@@ -78,7 +86,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
       config,
     );
 
-    ctx.setPreference(pluginName, (preferenceDeclaration as ILowCodePluginPreferenceDeclaration));
+    ctx.setPreference(pluginName, preferenceDeclaration);
 
     const allowOverride = registerOptions?.override === true;
 
@@ -104,21 +112,22 @@ export class LowCodePluginManager implements ILowCodePluginManager {
       throw new Error(`plugin ${pluginName} skipped, engine check failed, current engine version is ${engineConfig.get('ENGINE_VERSION')}, meta.engines.lowcodeEngine is ${engineVersionExp}`);
     }
 
-    const plugin = new LowCodePlugin(pluginName, this, config, meta);
-    // support initialization of those plugins which registered after normal initialization by plugin-manager
+    const plugin = new LowCodePluginRuntime(pluginName, this, config, meta);
+    // support initialization of those plugins which registered
+    // after normal initialization by plugin-manager
     if (registerOptions?.autoInit) {
       await plugin.init();
     }
     this.plugins.push(plugin);
     this.pluginsMap.set(pluginName, plugin);
-    logger.log(`plugin registered with pluginName: ${pluginName}, config: ${config}, meta: ${meta}`);
+    logger.log(`plugin registered with pluginName: ${pluginName}, config: `, config, 'meta:', meta);
   }
 
-  get(pluginName: string): ILowCodePlugin | undefined {
+  get(pluginName: string): ILowCodePluginRuntime | undefined {
     return this.pluginsMap.get(pluginName);
   }
 
-  getAll(): ILowCodePlugin[] {
+  getAll(): ILowCodePluginRuntime[] {
     return this.plugins;
   }
 
@@ -138,7 +147,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
 
   async init(pluginPreference?: PluginPreference) {
     const pluginNames: string[] = [];
-    const pluginObj: { [name: string]: ILowCodePlugin } = {};
+    const pluginObj: { [name: string]: ILowCodePluginRuntime } = {};
     this.pluginPreference = pluginPreference;
     this.plugins.forEach((plugin) => {
       pluginNames.push(plugin.name);
@@ -170,7 +179,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     return this.pluginsMap.size;
   }
 
-  getPluginPreference(pluginName: string): Record<string, PreferenceValueType> | null | undefined {
+  getPluginPreference(pluginName: string): Record<string, IPublicTypePreferenceValueType> | null | undefined {
     if (!this.pluginPreference) {
       return null;
     }

@@ -1,32 +1,38 @@
 import React, { Component } from 'react';
 import { Tab, Breadcrumb } from '@alifd/next';
 import { Title, observer, Editor, obx, globalContext, engineConfig, makeObservable } from '@alilc/lowcode-editor-core';
-import { Node, isSettingField, SettingField, Designer } from '@alilc/lowcode-designer';
+import { Node, SettingField } from '@alilc/lowcode-designer';
 import classNames from 'classnames';
 import { SettingsMain } from './main';
 import { SettingsPane } from './settings-pane';
 import { StageBox } from '../stage-box';
 import { SkeletonContext } from '../../context';
-import { createIcon } from '@alilc/lowcode-utils';
+import { createIcon, isSettingField } from '@alilc/lowcode-utils';
 
 @observer
 export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any }, { shouldIgnoreRoot: boolean }> {
   state = {
     shouldIgnoreRoot: false,
   };
-  private main = new SettingsMain(globalContext.get('editor'));
+  private main;
 
   @obx.ref private _activeKey?: any;
 
   constructor(props) {
     super(props);
     makeObservable(this);
+    const workspace = globalContext.get('workspace');
+    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
+    this.main = new SettingsMain(editor);
   }
 
   componentDidMount() {
     this.setShouldIgnoreRoot();
 
-    globalContext.get('editor').on('designer.selection.change', () => {
+    const workspace = globalContext.get('workspace');
+    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
+
+    editor.eventBus.on('designer.selection.change', () => {
       if (!engineConfig.get('stayOnTheSameSettingTab', false)) {
         this._activeKey = null;
       }
@@ -65,7 +71,8 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
       );
     }
 
-    const editor = globalContext.get('editor');
+    const workspace = globalContext.get('workspace');
+    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
     const designer = editor.get('designer');
     const current = designer?.currentSelection?.getNodes()?.[0];
     let node: Node | null = settings.first;
@@ -101,7 +108,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
               };
               const selected = getName(current);
               const target = getName(_node);
-              editor?.emit('skeleton.settingsPane.Breadcrumb', {
+              editor?.eventBus.emit('skeleton.settingsPane.Breadcrumb', {
                 selected,
                 target,
               });
@@ -128,7 +135,8 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
 
   render() {
     const { settings } = this.main;
-    const editor = globalContext.get('editor');
+    const workspace = globalContext.get('workspace');
+    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
     if (!settings) {
       // 未选中节点，提示选中 或者 显示根节点设置
       return (
@@ -206,7 +214,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
           key={field.name}
           onClick={
             () => {
-              editor?.emit('skeleton.settingsPane.change', {
+              editor?.eventBus.emit('skeleton.settingsPane.change', {
                 name: field.name,
                 title: field.title,
               });

@@ -1,9 +1,9 @@
 import { Component } from 'react';
 import classNames from 'classnames';
 import { observer } from '@alilc/lowcode-editor-core';
-import Area from '../area';
-import Panel from '../widget/panel';
-import Widget from '../widget/widget';
+import { Area } from '../area';
+import { Panel } from '../widget/panel';
+import { Widget } from '../widget/widget';
 
 @observer
 export default class MainArea extends Component<{ area: Area<any, Panel | Widget> }> {

@@ -2,7 +2,7 @@ import * as parser from '@babel/parser';
 import generate from '@babel/generator';
 import traverse from '@babel/traverse';
 import * as t from '@babel/types';
-import { JSExpression, JSFunction, isJSExpression, isJSFunction } from '@alilc/lowcode-types';
+import { IPublicTypeJSExpression, IPublicTypeJSFunction, isJSExpression, isJSFunction } from '@alilc/lowcode-types';
 import { CodeGeneratorError, IScope } from '../types';
 import { transformExpressionLocalRef, ParseError } from './expressionParser';
 
@@ -84,7 +84,7 @@ export function isJsCode(value: unknown): boolean {
 
 export function generateExpression(value: any, scope: IScope): string {
   if (isJSExpression(value)) {
-    const exprVal = (value as JSExpression).value.trim();
+    const exprVal = (value as IPublicTypeJSExpression).value.trim();
     if (!exprVal) {
       return 'null';
     }
@@ -113,7 +113,7 @@ export function generateFunction(
   },
 ) {
   if (isJsCode(value)) {
-    const functionCfg = value as JSFunction;
+    const functionCfg = value as IPublicTypeJSFunction;
     if (config.isMember) {
       return transformFuncExpr2MethodMember(config.name || '', functionCfg.value);
     }

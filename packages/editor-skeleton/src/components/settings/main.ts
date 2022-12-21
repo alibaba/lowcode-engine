@@ -1,6 +1,5 @@
-import { EventEmitter } from 'events';
 import { Node, Designer, Selection, SettingTopEntry } from '@alilc/lowcode-designer';
-import { Editor, obx, computed, makeObservable, action } from '@alilc/lowcode-editor-core';
+import { Editor, obx, computed, makeObservable, action, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 
 function generateSessionId(nodes: Node[]) {
   return nodes
@@ -10,7 +9,7 @@ function generateSessionId(nodes: Node[]) {
 }
 
 export class SettingsMain {
-  private emitter = new EventEmitter();
+  private emitter: IEventBus = createModuleEventBus('SettingsMain');
 
   private _sessionId = '';
 
@@ -45,7 +44,7 @@ export class SettingsMain {
         this.setup([]);
       }
     };
-    this.editor.on('designer.selection.change', setupSelection);
+    this.editor.eventBus.on('designer.selection.change', setupSelection);
     this.disposeListener = () => {
       this.editor.removeListener('designer.selection.change', setupSelection);
     };

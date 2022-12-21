@@ -3,7 +3,7 @@ import { Editor, engineConfig } from '@alilc/lowcode-editor-core';
 import { Designer } from '../../../../src/designer/designer';
 import { DocumentModel } from '../../../../src/document/document-model';
 import { Prop, isProp, isValidArrayIndex } from '../../../../src/document/node/props/prop';
-import { TransformStage } from '@alilc/lowcode-types';
+import { IPublicEnumTransformStage } from '@alilc/lowcode-types';
 import { shellModelFactory } from '../../../../../engine/src/modules/shell-model-factory';
 
 const slotNodeImportMockFn = jest.fn();
@@ -133,12 +133,12 @@ describe('Prop 类测试', () => {
     });
 
     it('export', () => {
-      expect(boolProp.export(TransformStage.Save)).toBe(true);
-      expect(strProp.export(TransformStage.Save)).toBe('haha');
-      expect(numProp.export(TransformStage.Save)).toBe(1);
-      expect(nullProp.export(TransformStage.Save)).toBe('');
-      expect(nullProp.export(TransformStage.Serilize)).toBe(null);
-      expect(expProp.export(TransformStage.Save)).toEqual({
+      expect(boolProp.export(IPublicEnumTransformStage.Save)).toBe(true);
+      expect(strProp.export(IPublicEnumTransformStage.Save)).toBe('haha');
+      expect(numProp.export(IPublicEnumTransformStage.Save)).toBe(1);
+      expect(nullProp.export(IPublicEnumTransformStage.Save)).toBe('');
+      expect(nullProp.export(IPublicEnumTransformStage.Serilize)).toBe(null);
+      expect(expProp.export(IPublicEnumTransformStage.Save)).toEqual({
         type: 'JSExpression',
         value: 'state.haha',
       });
@@ -146,16 +146,16 @@ describe('Prop 类测试', () => {
       strProp.unset();
       expect(strProp.getValue()).toBeUndefined();
       expect(strProp.isUnset()).toBeTruthy();
-      expect(strProp.export(TransformStage.Save)).toBeUndefined();
+      expect(strProp.export(IPublicEnumTransformStage.Save)).toBeUndefined();
 
       expect(
-        new Prop(mockPropsInst, false, '___condition___').export(TransformStage.Render),
+        new Prop(mockPropsInst, false, '___condition___').export(IPublicEnumTransformStage.Render),
       ).toBeTruthy();
       engineConfig.set('enableCondition', true);
       expect(
-        new Prop(mockPropsInst, false, '___condition___').export(TransformStage.Render),
+        new Prop(mockPropsInst, false, '___condition___').export(IPublicEnumTransformStage.Render),
       ).toBeFalsy();
-      expect(slotProp.export(TransformStage.Render)).toEqual({
+      expect(slotProp.export(IPublicEnumTransformStage.Render)).toEqual({
         type: 'JSSlot',
         params: { a: 1 },
         value: {
@@ -166,7 +166,7 @@ describe('Prop 类测试', () => {
           children: [{ componentName: 'Button' }],
         },
       });
-      expect(slotProp.export(TransformStage.Save)).toEqual({
+      expect(slotProp.export(IPublicEnumTransformStage.Save)).toEqual({
         type: 'JSSlot',
         params: { a: 1 },
         value: [{ componentName: 'Button' }],
@@ -493,7 +493,7 @@ describe('Prop 类测试', () => {
     slotProp.export();
 
     expect(slotProp.export().value[0].componentName).toBe('Button');
-    expect(slotProp.export(TransformStage.Serilize).value[0].componentName).toBe('Button');
+    expect(slotProp.export(IPublicEnumTransformStage.Serilize).value[0].componentName).toBe('Button');
 
     slotProp.purge();
     expect(slotProp.purged).toBeTruthy();

@@ -1,3 +1,3 @@
-import Logger from 'zen-logger';
-// how to use this logger, see https://www.npmjs.com/package/zen-logger
+import { Logger } from '@alilc/lowcode-utils';
+
 export default new Logger({ level: 'warn', bizName: 'renderer' });

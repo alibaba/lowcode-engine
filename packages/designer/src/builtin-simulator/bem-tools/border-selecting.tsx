@@ -11,7 +11,7 @@ import {
 import classNames from 'classnames';
 import { observer, computed, Tip, globalContext } from '@alilc/lowcode-editor-core';
 import { createIcon, isReactComponent, isActionContentObject } from '@alilc/lowcode-utils';
-import { ActionContentObject } from '@alilc/lowcode-types';
+import { IPublicTypeActionContentObject } from '@alilc/lowcode-types';
 import { BuiltinSimulatorHost } from '../host';
 import { OffsetObserver } from '../../designer';
 import { Node } from '../../document';
@@ -116,7 +116,7 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
   }
 }
 
-function createAction(content: ReactNode | ComponentType<any> | ActionContentObject, key: string, node: Node) {
+function createAction(content: ReactNode | ComponentType<any> | IPublicTypeActionContentObject, key: string, node: Node) {
   if (isValidElement(content)) {
     return cloneElement(content, { key, node });
   }
@@ -131,13 +131,14 @@ function createAction(content: ReactNode | ComponentType<any> | ActionContentObj
         className="lc-borders-action"
         onClick={() => {
           action && action(node);
-          const editor = globalContext.get('editor');
+          const workspace = globalContext.get('workspace');
+          const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
           const npm = node?.componentMeta?.npm;
           const selected =
             [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
             node?.componentMeta?.componentName ||
             '';
-          editor?.emit('designer.border.action', {
+          editor?.eventBus.emit('designer.border.action', {
             name: key,
             selected,
           });

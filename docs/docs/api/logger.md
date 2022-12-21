@@ -3,7 +3,7 @@ title: logger - 日志 API
 sidebar_position: 9
 ---
 ## 模块简介
-引擎日志模块，可以按照 **日志级别 **和** 业务类型 **两个维度来定制日志，基于 [zen-logger](https://web.npm.alibaba-inc.com/package/zen-logger) 封装。
+引擎日志模块，可以按照 **日志级别 **和** 业务类型 **两个维度来定制日志，参考 [zen-logger](https://web.npm.alibaba-inc.com/package/zen-logger) 实现进行封装。
 > 注：日志级别可以通过 url query 动态调整，详见下方使用示例。
 
 ## 变量（variables）
@@ -22,8 +22,8 @@ function debug(args: any[]): void
 ```
 **调用示例**
 ```typescript
-import { logger } from '@alilc/lowcode-engine';
-
+import { Logger } from '@alilc/lowcode-utils';
+const logger = new Logger({ level: 'warn', bizName: 'designer:pluginManager' });
 logger.log('Awesome Low-Code Engine');
 ```
 ## 事件（events）
@@ -31,9 +31,9 @@ logger.log('Awesome Low-Code Engine');
 
 ## 使用示例
 ```typescript
-import { logger } from '@alilc/lowcode-engine';
+import { Logger } from '@alilc/lowcode-utils';
 
-// 内部实现：logger = getLogger({ level: 'warn', bizName: 'designer:pluginManager' })
+const logger = new Logger({ level: 'warn', bizName: 'designer:pluginManager' });
 
 // 若在 url query 中增加 `__logConf__` 可改变打印日志级别和限定业务类型日志
 // 默认：__logConf__=warn:*

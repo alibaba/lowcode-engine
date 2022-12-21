@@ -1,8 +1,10 @@
 import store from 'store';
 import { getLogger } from './logger';
+import { IPreference } from '@alilc/lowcode-types';
 
 const logger = getLogger({ level: 'log', bizName: 'Preference' });
 const STORAGE_KEY_PREFIX = 'ale';
+
 
 /**
  * used to store user preferences, such as pinned status of a pannel.
@@ -10,13 +12,13 @@ const STORAGE_KEY_PREFIX = 'ale';
  *
  * @class PreferenceStore
  */
-export default class Preference {
+export default class Preference implements IPreference {
   getStorageKey(key: string, module?: string): string {
     const moduleKey = module || '__inner__';
     return `${STORAGE_KEY_PREFIX}_${moduleKey}.${key}`;
   }
 
-  set(key: string, value: any, module?: string) {
+  set(key: string, value: any, module?: string): void {
     if (!key || typeof key !== 'string' || key.length === 0) {
       logger.error('Invalid key when setting preference', key);
       return;
@@ -54,5 +56,4 @@ export default class Preference {
 
     return !(result === undefined || result === null);
   }
-
 }

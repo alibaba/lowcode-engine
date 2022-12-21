@@ -2,10 +2,10 @@ import { ReactNode, createElement } from 'react';
 import { makeObservable, obx } from '@alilc/lowcode-editor-core';
 import { createContent, uniqueId } from '@alilc/lowcode-utils';
 import { getEvent } from '@alilc/lowcode-shell';
-import { WidgetConfig, IWidgetBaseConfig } from '../types';
+import { WidgetConfig } from '../types';
 import { Skeleton } from '../skeleton';
 import { WidgetView } from '../components/widget-views';
-import { TitleContent } from '@alilc/lowcode-types';
+import { IPublicTypeTitleContent, IPublicTypeWidgetBaseConfig } from '@alilc/lowcode-types';
 
 export interface IWidget {
   readonly name: string;
@@ -16,7 +16,7 @@ export interface IWidget {
   readonly disabled?: boolean;
   readonly body: ReactNode;
   readonly skeleton: Skeleton;
-  readonly config: IWidgetBaseConfig;
+  readonly config: IPublicTypeWidgetBaseConfig;
 
   getName(): string;
   getContent(): any;
@@ -27,7 +27,7 @@ export interface IWidget {
   disable?(): void;
 }
 
-export default class Widget implements IWidget {
+export class Widget implements IWidget {
   readonly isWidget = true;
 
   readonly id = uniqueId('widget');
@@ -69,7 +69,7 @@ export default class Widget implements IWidget {
     });
   }
 
-  readonly title: TitleContent;
+  readonly title: IPublicTypeTitleContent;
 
   constructor(readonly skeleton: Skeleton, readonly config: WidgetConfig) {
     makeObservable(this);
@@ -138,4 +138,3 @@ export default class Widget implements IWidget {
 export function isWidget(obj: any): obj is IWidget {
   return obj && obj.isWidget;
 }
-

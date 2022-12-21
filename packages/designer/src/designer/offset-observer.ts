@@ -2,7 +2,7 @@ import requestIdleCallback, { cancelIdleCallback } from 'ric-shim';
 import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
 import { uniqueId } from '@alilc/lowcode-utils';
 import { INodeSelector, IViewport } from '../simulator';
-import { isRootNode, Node } from '../document';
+import { Node } from '../document';
 
 export class OffsetObserver {
   readonly id = uniqueId('oobx');

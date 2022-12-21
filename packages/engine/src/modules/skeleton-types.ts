@@ -1,3 +1,3 @@
-import * as skeletonCabin from '@alilc/lowcode-editor-skeleton';
+import { IPublicTypeWidgetBaseConfig as innerIWidgetBaseConfig } from '@alilc/lowcode-types';
 
-export type IWidgetBaseConfig = skeletonCabin.IWidgetBaseConfig;
+export type IWidgetBaseConfig = innerIWidgetBaseConfig;

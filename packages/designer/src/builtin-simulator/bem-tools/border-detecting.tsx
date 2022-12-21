@@ -1,14 +1,14 @@
 import { Component, Fragment, PureComponent } from 'react';
 import classNames from 'classnames';
 import { computed, observer, Title } from '@alilc/lowcode-editor-core';
-import { TitleContent } from '@alilc/lowcode-types';
+import { IPublicTypeTitleContent } from '@alilc/lowcode-types';
 import { getClosestNode } from '@alilc/lowcode-utils';
 
 import { BuiltinSimulatorHost } from '../host';
 
 
 export class BorderDetectingInstance extends PureComponent<{
-  title: TitleContent;
+  title: IPublicTypeTitleContent;
   rect: DOMRect | null;
   scale: number;
   scrollX: number;

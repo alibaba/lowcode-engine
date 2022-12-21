@@ -1,6 +1,6 @@
-import { DragNodeDataObject } from '../../dragon';
-import { IPublicModelDragObject } from './drag-object';
-import { IPublicModelLocateEvent } from './locate-event';
+/* eslint-disable max-len */
+import { IPublicTypeDragNodeDataObject, IPublicTypeDragObject } from '../type';
+import { IPublicModelDragObject, IPublicModelLocateEvent, IPublicModelNode } from './';
 
 export interface IPublicModelDragon {
   /**
@@ -35,5 +35,23 @@ export interface IPublicModelDragon {
    * @param shell 拖拽监听的区域
    * @param boost 拖拽转换函数
    */
-  from(shell: Element, boost: (e: MouseEvent) => DragNodeDataObject | null): any;
+  from(shell: Element, boost: (e: MouseEvent) => IPublicTypeDragNodeDataObject | null): any;
+
+  /**
+   * boost your dragObject for dragging(flying) 发射拖拽对象
+   *
+   * @param dragObject 拖拽对象
+   * @param boostEvent 拖拽初始时事件
+   */
+  boost(dragObject: IPublicTypeDragObject, boostEvent: MouseEvent | DragEvent, fromRglNode?: Node | IPublicModelNode): void;
+
+  /**
+   * 添加投放感应区
+   */
+  addSensor(sensor: any): void;
+
+  /**
+   * 移除投放感应
+   */
+  removeSensor(sensor: any): void;
 }

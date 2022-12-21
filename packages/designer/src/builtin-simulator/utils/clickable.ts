@@ -25,7 +25,7 @@ export const getClosestClickableNode = (
     if (canClick) {
       break;
     }
-    // 对于不可点击的节点, 继续向上找
+    // 对于不可点击的节点，继续向上找
     node = node.parent;
   }
   return node;

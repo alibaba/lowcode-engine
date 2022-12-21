@@ -1,15 +1,15 @@
 import {
-  JSONArray,
-  JSONObject,
-  CompositeArray,
-  CompositeObject,
+  IPublicTypeJSONArray,
+  IPublicTypeJSONObject,
+  IPublicTypeCompositeArray,
+  IPublicTypeCompositeObject,
   ResultDir,
   ResultFile,
   NodeDataType,
-  ProjectSchema,
-  JSExpression,
-  JSFunction,
-  JSSlot,
+  IPublicTypeProjectSchema,
+  IPublicTypeJSExpression,
+  IPublicTypeJSFunction,
+  IPublicTypeJSSlot,
 } from '@alilc/lowcode-types';
 
 import { IParseResult } from './intermediate';
@@ -96,7 +96,7 @@ export interface ICompiledModule {
 
 export interface IModuleBuilder {
   generateModule: (input: unknown) => Promise<ICompiledModule>;
-  generateModuleCode: (schema: ProjectSchema | string) => Promise<ResultDir>;
+  generateModuleCode: (schema: IPublicTypeProjectSchema | string) => Promise<ResultDir>;
   linkCodeChunks: (chunks: Record<string, ICodeChunk[]>, fileName: string) => ResultFile[];
   addPlugin: (plugin: BuilderComponentPlugin) => void;
 }
@@ -111,16 +111,16 @@ export interface ICodeGenerator {
   /**
    * 出码接口，把 Schema 转换成代码文件系统描述
    *
-   * @param {(ProjectSchema)} schema 传入的 Schema
+   * @param {(IPublicTypeProjectSchema)} schema 传入的 Schema
    * @returns {ResultDir}
    * @memberof ICodeGenerator
    */
-  toCode: (schema: ProjectSchema) => Promise<ResultDir>;
+  toCode: (schema: IPublicTypeProjectSchema) => Promise<ResultDir>;
 }
 
 export interface ISchemaParser {
-  validate: (schema: ProjectSchema) => boolean;
-  parse: (schema: ProjectSchema | string) => IParseResult;
+  validate: (schema: IPublicTypeProjectSchema) => boolean;
+  parse: (schema: IPublicTypeProjectSchema | string) => IParseResult;
 }
 
 export interface IProjectTemplate {
@@ -165,11 +165,11 @@ export interface IProjectBuilderOptions {
 }
 
 export interface IProjectBuilder {
-  generateProject: (schema: ProjectSchema | string) => Promise<ResultDir>;
+  generateProject: (schema: IPublicTypeProjectSchema | string) => Promise<ResultDir>;
 }
 
 /** 项目级别的前置处理器 */
-export type ProjectPreProcessor = (schema: ProjectSchema) => Promise<ProjectSchema> | ProjectSchema;
+export type ProjectPreProcessor = (schema: IPublicTypeProjectSchema) => Promise<IPublicTypeProjectSchema> | IPublicTypeProjectSchema;
 
 export interface ProjectPostProcessorOptions {
   parseResult?: IParseResult;
@@ -179,8 +179,8 @@ export interface ProjectPostProcessorOptions {
 /** 项目级别的后置处理器 */
 export type ProjectPostProcessor = (
   result: ResultDir,
-  schema: ProjectSchema,
-  originalSchema: ProjectSchema | string,
+  schema: IPublicTypeProjectSchema,
+  originalSchema: IPublicTypeProjectSchema | string,
   options: ProjectPostProcessorOptions,
 ) => Promise<ResultDir> | ResultDir;
 
@@ -209,16 +209,16 @@ export type NodeGenerator<T> = (nodeItem: NodeDataType, scope: IScope) => T;
 
 // FIXME: 在新的实现中，添加了第一参数 this: CustomHandlerSet 作为上下文。究其本质
 // scopeBindings?: IScopeBindings;
-// 这个组合只用来用来处理 CompositeValue 类型，不是这个类型的不要放在这里
+// 这个组合只用来用来处理 IPublicTypeCompositeValue 类型，不是这个类型的不要放在这里
 export interface HandlerSet<T> {
   string?: CompositeTypeGenerator<string, T>;
   boolean?: CompositeTypeGenerator<boolean, T>;
   number?: CompositeTypeGenerator<number, T>;
-  expression?: CompositeTypeGenerator<JSExpression, T>;
-  function?: CompositeTypeGenerator<JSFunction, T>;
-  slot?: CompositeTypeGenerator<JSSlot, T>;
-  array?: CompositeTypeGenerator<JSONArray | CompositeArray, T>;
-  object?: CompositeTypeGenerator<JSONObject | CompositeObject, T>;
+  expression?: CompositeTypeGenerator<IPublicTypeJSExpression, T>;
+  function?: CompositeTypeGenerator<IPublicTypeJSFunction, T>;
+  slot?: CompositeTypeGenerator<IPublicTypeJSSlot, T>;
+  array?: CompositeTypeGenerator<IPublicTypeJSONArray | IPublicTypeCompositeArray, T>;
+  object?: CompositeTypeGenerator<IPublicTypeJSONObject | IPublicTypeCompositeObject, T>;
 }
 
 export interface CompositeValueGeneratorOptions {

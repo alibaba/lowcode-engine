@@ -1,17 +1,17 @@
 import {
-  FieldConfig,
-  PropConfig,
-  PropType,
-  SetterType,
-  OneOf,
-  ObjectOf,
-  ArrayOf,
-  TransformedComponentMetadata,
-  OneOfType,
+  IPublicTypeFieldConfig,
+  IPublicTypePropConfig,
+  IPublicTypePropType,
+  IPublicTypeSetterType,
+  IPublicTypeOneOf,
+  IPublicTypeObjectOf,
+  IPublicTypeArrayOf,
+  IPublicTypeTransformedComponentMetadata,
+  IPublicTypeOneOfType,
   ConfigureSupportEvent,
 } from '@alilc/lowcode-types';
 
-function propConfigToFieldConfig(propConfig: PropConfig): FieldConfig {
+function propConfigToFieldConfig(propConfig: IPublicTypePropConfig): IPublicTypeFieldConfig {
   const { name, description } = propConfig;
   const title = {
     label: {
@@ -29,7 +29,7 @@ function propConfigToFieldConfig(propConfig: PropConfig): FieldConfig {
   };
 }
 
-function propTypeToSetter(propType: PropType): SetterType {
+function propTypeToSetter(propType: IPublicTypePropType): IPublicTypeSetterType {
   let typeName: string;
   let isRequired: boolean | undefined = false;
   if (typeof propType === 'string') {
@@ -61,7 +61,7 @@ function propTypeToSetter(propType: PropType): SetterType {
         initialValue: false,
       };
     case 'oneOf':
-      const dataSource = ((propType as OneOf).value || []).map((value, index) => {
+      const dataSource = ((propType as IPublicTypeOneOf).value || []).map((value, index) => {
         const t = typeof value;
         return {
           label: t === 'string' || t === 'number' || t === 'boolean' ? String(value) : `value ${index}`,
@@ -120,7 +120,7 @@ function propTypeToSetter(propType: PropType): SetterType {
         componentName: 'ObjectSetter',
         props: {
           config: {
-            extraSetter: propTypeToSetter(typeName === 'objectOf' ? (propType as ObjectOf).value : 'any'),
+            extraSetter: propTypeToSetter(typeName === 'objectOf' ? (propType as IPublicTypeObjectOf).value : 'any'),
           },
         },
         isRequired,
@@ -131,7 +131,7 @@ function propTypeToSetter(propType: PropType): SetterType {
       return {
         componentName: 'ArraySetter',
         props: {
-          itemSetter: propTypeToSetter(typeName === 'arrayOf' ? (propType as ArrayOf).value : 'any'),
+          itemSetter: propTypeToSetter(typeName === 'arrayOf' ? (propType as IPublicTypeArrayOf).value : 'any'),
         },
         isRequired,
         initialValue: [],
@@ -151,7 +151,7 @@ function propTypeToSetter(propType: PropType): SetterType {
         componentName: 'MixedSetter',
         props: {
           // TODO:
-          setters: (propType as OneOfType).value.map((item) => propTypeToSetter(item)),
+          setters: (propType as IPublicTypeOneOfType).value.map((item) => propTypeToSetter(item)),
         },
         isRequired,
       };
@@ -167,7 +167,7 @@ function propTypeToSetter(propType: PropType): SetterType {
 
 const EVENT_RE = /^on|after|before[A-Z][\w]*$/;
 
-export default function (metadata: TransformedComponentMetadata): TransformedComponentMetadata {
+export default function (metadata: IPublicTypeTransformedComponentMetadata): IPublicTypeTransformedComponentMetadata {
   const { configure = {} } = metadata;
   // TODO types后续补充
   let extendsProps: any = null;
@@ -205,7 +205,7 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
   }
   const { component = {}, supports = {} } = configure;
   const supportedEvents: ConfigureSupportEvent[] | null = supports.events ? null : [];
-  const props: FieldConfig[] = [];
+  const props: IPublicTypeFieldConfig[] = [];
 
   metadata.props.forEach((prop) => {
     const { name, propType, description } = prop;

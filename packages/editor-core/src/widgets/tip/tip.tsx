@@ -1,9 +1,9 @@
 import { Component } from 'react';
-import { TipConfig } from '@alilc/lowcode-types';
+import { IPublicTypeTipConfig } from '@alilc/lowcode-types';
 import { uniqueId } from '@alilc/lowcode-utils';
 import { postTip } from './tip-handler';
 
-export class Tip extends Component<TipConfig> {
+export class Tip extends Component<IPublicTypeTipConfig> {
   private id = uniqueId('tips$');
 
   componentWillUnmount() {

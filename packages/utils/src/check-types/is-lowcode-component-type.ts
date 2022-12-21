@@ -1,7 +1,7 @@
 import { isProCodeComponentType } from './is-procode-component-type';
-import { ComponentMap, LowCodeComponentType } from '@alilc/lowcode-types';
+import { IPublicTypeComponentMap } from '@alilc/lowcode-types';
 
 
-export function isLowCodeComponentType(desc: ComponentMap): desc is LowCodeComponentType {
+export function isLowCodeComponentType(desc: IPublicTypeComponentMap): boolean {
   return !isProCodeComponentType(desc);
 }

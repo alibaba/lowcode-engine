@@ -1,8 +1,8 @@
 import type { ComponentLifecycle, CSSProperties } from 'react';
 import { BuiltinSimulatorHost } from '@alilc/lowcode-designer';
-import { RequestHandler, NodeSchema, NodeData, RootSchema, JSONObject } from '@alilc/lowcode-types';
+import { RequestHandler, IPublicTypeNodeSchema, IPublicTypeRootSchema, IPublicTypeJSONObject } from '@alilc/lowcode-types';
 
-export type ISchema = NodeSchema | RootSchema;
+export type ISchema = IPublicTypeNodeSchema | IPublicTypeRootSchema;
 
 /*
  ** Duck typed component type supporting both react and rax
@@ -87,7 +87,7 @@ export type IRendererAppHelper = Partial<{
  */
 export interface IRendererProps {
   /** 符合低代码搭建协议的数据 */
-  schema: RootSchema | NodeSchema;
+  schema: IPublicTypeRootSchema | IPublicTypeNodeSchema;
   /** 组件依赖的实例 */
   components: Record<string, IGeneralComponent>;
   /** CSS 类名 */
@@ -117,9 +117,9 @@ export interface IRendererProps {
   /** 渲染模块是否挂起，当设置为 true 时，渲染模块最外层容器的 shouldComponentUpdate 将始终返回false，在下钻编辑或者多引擎渲染的场景会用到该参数。 */
   suspended?: boolean;
   /** 组件获取 ref 时触发的钩子 */
-  onCompGetRef?: (schema: NodeSchema, ref: any) => void;
+  onCompGetRef?: (schema: IPublicTypeNodeSchema, ref: any) => void;
   /** 组件 ctx 更新回调 */
-  onCompGetCtx?: (schema: NodeSchema, ref: any) => void;
+  onCompGetCtx?: (schema: IPublicTypeNodeSchema, ref: any) => void;
   /** 传入的 schema 是否有变更 */
   getSchemaChangedSymbol?: () => boolean;
   /** 设置 schema 是否有变更 */
@@ -160,7 +160,7 @@ export interface IBaseRendererProps {
   __appHelper: IRendererAppHelper;
   __components: Record<string, any>;
   __ctx: Record<string, any>;
-  __schema: RootSchema;
+  __schema: IPublicTypeRootSchema;
   __host?: BuiltinSimulatorHost;
   __container?: any;
   config?: Record<string, any>;
@@ -180,7 +180,7 @@ export interface IBaseRendererProps {
 }
 
 export interface INodeInfo {
-  schema?: NodeSchema;
+  schema?: IPublicTypeNodeSchema;
   Comp: any;
   componentInfo?: any;
   componentChildren?: any;
@@ -197,7 +197,7 @@ export interface DataSourceItem {
   type?: string;
   options?: {
     uri: string | JSExpression;
-    params?: JSONObject | JSExpression;
+    params?: IPublicTypeJSONObject | JSExpression;
     method?: string | JSExpression;
     shouldFetch?: string;
     willFetch?: string;
@@ -258,11 +258,11 @@ export type IBaseRendererInstance = IGeneralComponent<
     __render(): void;
     __getRef(ref: any): void;
     __getSchemaChildrenVirtualDom(
-      schema: NodeSchema | undefined,
+      schema: IPublicTypeNodeSchema | undefined,
       Comp: any,
       nodeChildrenMap?: any
     ): any;
-    __getComponentProps(schema: NodeSchema | undefined, scope: any, Comp: any, componentInfo?: any): any;
+    __getComponentProps(schema: IPublicTypeNodeSchema | undefined, scope: any, Comp: any, componentInfo?: any): any;
     __createDom(): any;
     __createVirtualDom(schema: any, self: any, parentInfo: INodeInfo, idx: string | number): any;
     __createLoopVirtualDom(schema: any, self: any, parentInfo: INodeInfo, idx: number | string): any;
@@ -272,7 +272,7 @@ export type IBaseRendererInstance = IGeneralComponent<
     __renderContextProvider(customProps?: object, children?: any): any;
     __renderContextConsumer(children: any): any;
     __renderContent(children: any): any;
-    __checkSchema(schema: NodeSchema | undefined, extraComponents?: string | string[]): any;
+    __checkSchema(schema: IPublicTypeNodeSchema | undefined, extraComponents?: string | string[]): any;
     __renderComp(Comp: any, ctxProps: object): any;
     $(filedId: string, instance?: any): any;
   };
