@@ -10,9 +10,10 @@ sidebar_position: 6
 
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 import { Icon, Message } from '@alifd/next';
 
-const addHelloAction = (ctx: ILowCodePluginContext) => {
+const addHelloAction = (ctx: IPublicModelPluginContext) => {
   return {
     async init() {
       const { addBuiltinComponentAction } = ctx.material;
@@ -46,8 +47,9 @@ await plugins.register(addHelloAction);
 
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
-const removeCopyAction = (ctx: ILowCodePluginContext) => {
+const removeCopyAction = (ctx: IPublicModelPluginContext) => {
   return {
     async init() {
       const { removeBuiltinComponentAction } = ctx.material;

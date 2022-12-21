@@ -1,8 +1,8 @@
-import { TransformedComponentMetadata, FieldConfig, SettingTarget } from '@alilc/lowcode-types';
+import { IPublicTypeTransformedComponentMetadata, IPublicTypeFieldConfig, IPublicModelSettingTarget } from '@alilc/lowcode-types';
 import { IconSlot } from '../icons/slot';
 import { getConvertedExtraKey } from '@alilc/lowcode-designer';
 
-export default function (metadata: TransformedComponentMetadata): TransformedComponentMetadata {
+export default function (metadata: IPublicTypeTransformedComponentMetadata): IPublicTypeTransformedComponentMetadata {
   const { componentName, configure = {} } = metadata;
 
   // 如果已经处理过，不再重新执行一遍
@@ -140,8 +140,8 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
     ],
   });
   */
-  const stylesGroup: FieldConfig[] = [];
-  const advancedGroup: FieldConfig[] = [];
+  const stylesGroup: IPublicTypeFieldConfig[] = [];
+  const advancedGroup: IPublicTypeFieldConfig[] = [];
   if (propsGroup) {
     let l = propsGroup.length;
     while (l-- > 0) {
@@ -164,7 +164,7 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
       }
     }
   }
-  const combined: FieldConfig[] = [
+  const combined: IPublicTypeFieldConfig[] = [
     {
       title: { type: 'i18n', 'zh-CN': '属性', 'en-US': 'Props' },
       name: '#props',
@@ -210,11 +210,11 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
               definition: eventsDefinition,
             },
           },
-          getValue(field: SettingTarget, val?: any[]) {
+          getValue(field: IPublicModelSettingTarget, val?: any[]) {
             return val;
           },
 
-          setValue(field: SettingTarget, eventData) {
+          setValue(field: IPublicModelSettingTarget, eventData) {
             const { eventDataList, eventList } = eventData;
             Array.isArray(eventList) && eventList.map((item) => {
               field.parent.clearPropValue(item.name);

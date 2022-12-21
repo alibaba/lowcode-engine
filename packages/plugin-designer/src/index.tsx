@@ -1,11 +1,13 @@
 import React, { PureComponent } from 'react';
-import { Editor, engineConfig, globalContext } from '@alilc/lowcode-editor-core';
+import { Editor, engineConfig } from '@alilc/lowcode-editor-core';
 import { DesignerView, Designer } from '@alilc/lowcode-designer';
-import { Asset } from '@alilc/lowcode-utils';
+import { Asset, getLogger } from '@alilc/lowcode-utils';
 import './index.scss';
 
+const logger = getLogger({ level: 'warn', bizName: 'plugin:plugin-designer' });
+
 export interface PluginProps {
-  editor: Editor;
+  engineEditor: Editor;
 }
 
 interface DesignerPluginState {
@@ -46,7 +48,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
   }
 
   private async setupAssets() {
-    const editor = globalContext.get('editor');
+    const editor = this.props.engineEditor;
     try {
       const assets = await editor.onceGot('assets');
       const renderEnv = engineConfig.get('renderEnv') || editor.get('renderEnv');
@@ -76,7 +78,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
       };
       this.setState(state);
     } catch (e) {
-      console.log(e);
+      logger.error(e);
     }
   }
 
@@ -85,16 +87,16 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
   }
 
   private handleDesignerMount = (designer: Designer): void => {
-    const editor = globalContext.get('editor');
+    const editor = this.props.engineEditor;
     editor.set('designer', designer);
-    editor.emit('designer.ready', designer);
+    editor.eventBus.emit('designer.ready', designer);
     editor.onGot('schema', (schema) => {
       designer.project.open(schema);
     });
   };
 
   render(): React.ReactNode {
-    const editor = globalContext.get('editor');
+    const editor: Editor = this.props.engineEditor;
     const {
       componentMetadatas,
       utilsMetadata,
@@ -119,6 +121,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
         onMount={this.handleDesignerMount}
         className="lowcode-plugin-designer"
         editor={editor}
+        name={editor.viewName}
         designer={editor.get('designer')}
         componentMetadatas={componentMetadatas}
         simulatorProps={{

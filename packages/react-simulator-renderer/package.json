@@ -33,8 +33,7 @@
     "@types/node": "^13.7.1",
     "@types/react": "^16",
     "@types/react-dom": "^16",
-    "@types/react-router": "5.1.18",
-    "build-plugin-component": "^1.0.0"
+    "@types/react-router": "5.1.18"
   },
   "publishConfig": {
     "access": "public",

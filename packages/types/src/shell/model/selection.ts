@@ -1,4 +1,4 @@
-import { IPublicModelNode } from './node';
+import { IPublicModelNode } from './';
 
 export interface IPublicModelSelection {
 
@@ -52,7 +52,7 @@ export interface IPublicModelSelection {
    * 获取选中的节点实例
    * @returns
    */
-  getNodes(): Array<IPublicModelNode | null>;
+  getNodes(): IPublicModelNode[];
 
   /**
    * 获取选区的顶层节点
@@ -61,5 +61,7 @@ export interface IPublicModelSelection {
    *  getTopNodes() will return [A, B], subA will be removed
    * @returns
    */
-  getTopNodes(): Array<IPublicModelNode | null>;
+  getTopNodes(includeRoot?: boolean): IPublicModelNode[];
+
+  onSelectionChange(fn: (ids: string[]) => void): () => void;
 }

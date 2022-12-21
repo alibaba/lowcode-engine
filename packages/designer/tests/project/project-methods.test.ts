@@ -145,9 +145,9 @@ describe.only('Project 方法测试', () => {
 
   it('simulatorProps', () => {
     designer._simulatorProps = { a: 1 };
-    expect(project.simulatorProps.a).toBe(1);
+    expect(designer.simulatorProps.a).toBe(1);
     designer._simulatorProps = () => ({ a: 1 });
-    expect(project.simulatorProps.a).toBe(1);
+    expect(designer.simulatorProps.a).toBe(1);
   });
 
   it('onCurrentDocumentChange', () => {

@@ -1,5 +1,5 @@
 import '../../fixtures/window';
-import { Editor } from '@alilc/lowcode-editor-core';
+import { Editor, Setters } from '@alilc/lowcode-editor-core';
 import { Node } from '../../../src/document/node/node';
 import { Designer } from '../../../src/designer/designer';
 import settingSchema from '../../fixtures/schema/setting';
@@ -11,6 +11,7 @@ const editor = new Editor();
 describe('setting-top-entry 测试', () => {
   let designer: Designer;
   beforeEach(() => {
+    editor.set('setters', new Setters())
     designer = new Designer({ editor, shellModelFactory });
   });
   afterEach(() => {

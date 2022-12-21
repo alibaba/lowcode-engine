@@ -5,7 +5,7 @@ import { isFileSchema, isEmpty } from '../utils';
 import baseRendererFactory from './base';
 import divFactory from '../components/Div';
 import { IRenderComponent, IRendererProps, IRendererState } from '../types';
-import { NodeSchema, RootSchema } from '@alilc/lowcode-types';
+import { IPublicTypeNodeSchema, IPublicTypeRootSchema } from '@alilc/lowcode-types';
 
 export default function rendererFactory(): IRenderComponent {
   const { PureComponent, Component, createElement, findDOMNode } = adapter.getRuntime();
@@ -18,7 +18,7 @@ export default function rendererFactory(): IRenderComponent {
 
   const debug = Debug('renderer:entry');
 
-  class FaultComponent extends PureComponent<NodeSchema> {
+  class FaultComponent extends PureComponent<IPublicTypeNodeSchema> {
     render() {
       // FIXME: errorlog
       console.error('render error', this.props);
@@ -59,7 +59,7 @@ export default function rendererFactory(): IRenderComponent {
       components: {},
       designMode: '',
       suspended: false,
-      schema: {} as RootSchema,
+      schema: {} as IPublicTypeRootSchema,
       onCompGetRef: () => { },
       onCompGetCtx: () => { },
       thisRequiredInJSE: true,

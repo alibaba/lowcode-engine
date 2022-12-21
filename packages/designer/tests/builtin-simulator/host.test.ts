@@ -1,10 +1,16 @@
 import '../fixtures/window';
-import { Editor, globalContext } from '@alilc/lowcode-editor-core';
+import {
+  Editor,
+  globalContext,
+  Hotkey as InnerHotkey,
+  Setters as InnerSetters,
+} from '@alilc/lowcode-editor-core';
+import { Workspace as InnerWorkspace } from '@alilc/lowcode-workspace';
 import {
   AssetType,
 } from '@alilc/lowcode-utils';
 import {
-  DragObjectType,
+  IPublicEnumDragObjectType,
 } from '@alilc/lowcode-types';
 import { Project } from '../../src/project/project';
 import pageMetadata from '../fixtures/component-metadata/page';
@@ -15,6 +21,7 @@ import { getMockDocument, getMockWindow, getMockEvent, delayObxTick } from '../u
 import { BuiltinSimulatorHost } from '../../src/builtin-simulator/host';
 import { fireEvent } from '@testing-library/react';
 import { shellModelFactory } from '../../../engine/src/modules/shell-model-factory';
+import { Setters, Workspace } from '@alilc/lowcode-shell';
 
 describe('Host 测试', () => {
   let editor: Editor;
@@ -25,7 +32,12 @@ describe('Host 测试', () => {
 
   beforeAll(() => {
     editor = new Editor();
+    const innerWorkspace = new InnerWorkspace();
+    const workspace = new Workspace(innerWorkspace);
+    editor.set('innerHotkey', new InnerHotkey())
+    editor.set('setters', new Setters(new InnerSetters()));
     !globalContext.has(Editor) && globalContext.register(editor, Editor);
+    !globalContext.has('workspace') && globalContext.register(innerWorkspace, 'workspace');
   });
 
   beforeEach(() => {
@@ -33,7 +45,7 @@ describe('Host 测试', () => {
     project = designer.project;
     designer.createComponentMeta(pageMetadata);
     doc = project.createDocument(formSchema);
-    host = new BuiltinSimulatorHost(designer.project);
+    host = new BuiltinSimulatorHost(designer.project, designer);
   });
 
   afterEach(() => {
@@ -250,7 +262,7 @@ describe('Host 测试', () => {
       host.getDropContainer({
         target: {},
         dragObject: {
-          type: DragObjectType.Node,
+          type: IPublicEnumDragObjectType.Node,
           nodes: [doc.getNode('page')],
         },
       });
@@ -345,7 +357,7 @@ describe('Host 测试', () => {
     it('locate，没有 nodes', () => {
       expect(host.locate({
         dragObject: {
-          type: DragObjectType.Node,
+          type: IPublicEnumDragObjectType.Node,
           nodes: [],
         },
       })).toBeUndefined();
@@ -354,7 +366,7 @@ describe('Host 测试', () => {
       project.removeDocument(doc);
       expect(host.locate({
         dragObject: {
-          type: DragObjectType.Node,
+          type: IPublicEnumDragObjectType.Node,
           nodes: [doc.getNode('page')],
         },
       })).toBeNull();
@@ -362,7 +374,7 @@ describe('Host 测试', () => {
     it('notFoundComponent', () => {
       expect(host.locate({
         dragObject: {
-          type: DragObjectType.Node,
+          type: IPublicEnumDragObjectType.Node,
           nodes: [doc.getNode('form')],
         },
       })).toBeUndefined();
@@ -370,7 +382,7 @@ describe('Host 测试', () => {
     it('locate', () => {
       host.locate({
         dragObject: {
-          type: DragObjectType.Node,
+          type: IPublicEnumDragObjectType.Node,
           nodes: [doc.getNode('page')],
         },
       });

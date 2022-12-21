@@ -51,7 +51,10 @@
     "typescript": "4.6.2",
     "yarn": "^1.22.17",
     "rimraf": "^3.0.2",
-    "@types/react-router": "5.1.18"
+    "@types/react-router": "5.1.18",
+    "build-plugin-component": "^1.12.0",
+    "babel-jest": "^26.5.2",
+    "@alilc/lowcode-test-mate": "^1.0.1"
   },
   "engines": {
     "node": ">=14.17.0 <18"
@@ -61,7 +64,6 @@
     "lockfile": "enable"
   },
   "resolutions": {
-    "@builder/babel-preset-ice": "1.0.1",
     "typescript": "4.6.2"
   },
   "repository": "git@github.com:alibaba/lowcode-engine.git"

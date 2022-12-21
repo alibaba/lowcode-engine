@@ -1,10 +1,10 @@
 import { untracked, computed, obx, engineConfig, action, makeObservable, mobx, runInAction } from '@alilc/lowcode-editor-core';
-import { CompositeValue, GlobalEvent, JSSlot, SlotSchema } from '@alilc/lowcode-types';
+import { IPublicTypeCompositeValue, GlobalEvent, IPublicTypeJSSlot, SlotSchema, IPublicEnumTransformStage } from '@alilc/lowcode-types';
 import { uniqueId, isPlainObject, hasOwnProperty, compatStage, isJSExpression, isJSSlot } from '@alilc/lowcode-utils';
 import { valueToSource } from './value-to-source';
 import { Props } from './props';
 import { SlotNode, Node } from '../node';
-import { TransformStage } from '../transform-stage';
+// import { TransformStage } from '../transform-stage';
 
 const { set: mobxSet, isObservableArray } = mobx;
 export const UNSET = Symbol.for('unset');
@@ -41,7 +41,7 @@ export class Prop implements IPropParent {
 
   constructor(
     public parent: IPropParent,
-    value: CompositeValue | UNSET = UNSET,
+    value: IPublicTypeCompositeValue | UNSET = UNSET,
     key?: string | number,
     spread = false,
     options = {},
@@ -104,14 +104,14 @@ export class Prop implements IPropParent {
   /**
    * 属性值
    */
-  @computed get value(): CompositeValue | UNSET {
-    return this.export(TransformStage.Serilize);
+  @computed get value(): IPublicTypeCompositeValue | UNSET {
+    return this.export(IPublicEnumTransformStage.Serilize);
   }
 
-  export(stage: TransformStage = TransformStage.Save): CompositeValue {
+  export(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Save): IPublicTypeCompositeValue {
     stage = compatStage(stage);
     const type = this._type;
-    if (stage === TransformStage.Render && this.key === '___condition___') {
+    if (stage === IPublicEnumTransformStage.Render && this.key === '___condition___') {
       // 在设计器里，所有组件默认需要展示，除非开启了 enableCondition 配置
       if (engineConfig?.get('enableCondition') !== true) {
         return true;
@@ -125,7 +125,7 @@ export class Prop implements IPropParent {
 
     if (type === 'literal' || type === 'expression') {
       // TODO 后端改造之后删除此逻辑
-      if (this._value === null && stage === TransformStage.Save) {
+      if (this._value === null && stage === IPublicEnumTransformStage.Save) {
         return '';
       }
       return this._value;
@@ -133,7 +133,7 @@ export class Prop implements IPropParent {
 
     if (type === 'slot') {
       const schema = this._slotNode?.export(stage) || {} as any;
-      if (stage === TransformStage.Render) {
+      if (stage === IPublicEnumTransformStage.Render) {
         return {
           type: 'JSSlot',
           params: schema.params,
@@ -191,7 +191,7 @@ export class Prop implements IPropParent {
     }
     // todo: JSFunction ...
     if (this.type === 'slot') {
-      return JSON.stringify(this._slotNode!.export(TransformStage.Save));
+      return JSON.stringify(this._slotNode!.export(IPublicEnumTransformStage.Save));
     }
     return this._code != null ? this._code : JSON.stringify(this.value);
   }
@@ -237,7 +237,7 @@ export class Prop implements IPropParent {
    * set value, val should be JSON Object
    */
   @action
-  setValue(val: CompositeValue) {
+  setValue(val: IPublicTypeCompositeValue) {
     if (val === this._value) return;
     const editor = this.owner.document?.designer.editor;
     const oldValue = this._value;
@@ -277,7 +277,7 @@ export class Prop implements IPropParent {
         newValue: this._value,
       };
 
-      editor?.emit(GlobalEvent.Node.Prop.InnerChange, {
+      editor?.eventBus.emit(GlobalEvent.Node.Prop.InnerChange, {
         node: this.owner as any,
         ...propsInfo,
       });
@@ -286,8 +286,8 @@ export class Prop implements IPropParent {
     }
   }
 
-  getValue(): CompositeValue {
-    return this.export(TransformStage.Serilize);
+  getValue(): IPublicTypeCompositeValue {
+    return this.export(IPublicEnumTransformStage.Serilize);
   }
 
   @action
@@ -312,7 +312,7 @@ export class Prop implements IPropParent {
   }
 
   @action
-  setAsSlot(data: JSSlot) {
+  setAsSlot(data: IPublicTypeJSSlot) {
     this._type = 'slot';
     let slotSchema: SlotSchema;
     // 当 data.value 的结构为 { componentName: 'Slot' } 时，复用部分 slotSchema 数据
@@ -557,7 +557,7 @@ export class Prop implements IPropParent {
    * @param force 强制
    */
   @action
-  add(value: CompositeValue, force = false): Prop | null {
+  add(value: IPublicTypeCompositeValue, force = false): Prop | null {
     const type = this._type;
     if (type !== 'list' && type !== 'unset' && !force) {
       return null;
@@ -577,7 +577,7 @@ export class Prop implements IPropParent {
    * @param force 强制
    */
   @action
-  set(key: string | number, value: CompositeValue | Prop, force = false) {
+  set(key: string | number, value: IPublicTypeCompositeValue | Prop, force = false) {
     const type = this._type;
     if (type !== 'map' && type !== 'list' && type !== 'unset' && !force) {
       return null;

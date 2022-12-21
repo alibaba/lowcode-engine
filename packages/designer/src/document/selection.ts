@@ -1,10 +1,14 @@
-import { EventEmitter } from 'events';
-import { obx, makeObservable } from '@alilc/lowcode-editor-core';
+import { obx, makeObservable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { Node, comparePosition, PositionNO } from './node/node';
 import { DocumentModel } from './document-model';
+import { IPublicModelSelection } from '@alilc/lowcode-types';
 
-export class Selection {
-  private emitter = new EventEmitter();
+export interface ISelection extends IPublicModelSelection {
+
+}
+
+export class Selection implements ISelection {
+  private emitter: IEventBus = createModuleEventBus('Selection');
 
   @obx.shallow private _selected: string[] = [];
 
@@ -129,7 +133,7 @@ export class Selection {
   }
 
   /**
-   * 获取顶层选区节点, 场景：拖拽时，建立蒙层，只蒙在最上层
+   * 获取顶层选区节点，场景：拖拽时，建立蒙层，只蒙在最上层
    */
   getTopNodes(includeRoot = false) {
     const nodes = [];

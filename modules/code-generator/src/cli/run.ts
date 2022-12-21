@@ -9,7 +9,7 @@ import * as path from 'path';
 import { getErrorMessage } from '../utils/errors';
 import CodeGenerator from '..';
 import type { IProjectBuilder } from '..';
-import type { ProjectSchema } from '@alilc/lowcode-types';
+import type { IPublicTypeProjectSchema } from '@alilc/lowcode-types';
 
 /**
  * 执行出码 CLI 命令
@@ -131,7 +131,7 @@ function isLocalSolution(solution: string) {
   return solution.startsWith('.') || solution.startsWith('/') || solution.startsWith('~');
 }
 
-async function loadSchemaFile(schemaFile: string): Promise<ProjectSchema> {
+async function loadSchemaFile(schemaFile: string): Promise<IPublicTypeProjectSchema> {
   if (!schemaFile) {
     throw new Error('invalid schema file name');
   }

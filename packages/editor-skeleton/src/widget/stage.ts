@@ -1,5 +1,5 @@
 // import { uniqueId } from '@alilc/lowcode-utils';
-import Widget from './widget';
+import { Widget } from './widget';
 import { Skeleton } from '../skeleton';
 import { WidgetConfig } from '../types';
 

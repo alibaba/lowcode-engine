@@ -1,9 +1,5 @@
-import { NodeSchema, NodeData } from '../../schema';
-import { IconType } from '../../icon';
-import { TransformedComponentMetadata } from '../../metadata';
+import { IPublicTypeNodeSchema, IPublicTypeNodeData, IPublicTypeIconType, IPublicTypeTransformedComponentMetadata, IPublicTypeI18nData, IPublicTypeNpmInfo } from '../type';
 import { ReactElement } from 'react';
-import { I18nData } from '../../i18n';
-import { NpmInfo } from '../../npm';
 import { IPublicModelNode } from './node';
 
 export interface IPublicModelComponentMeta {
@@ -38,17 +34,17 @@ export interface IPublicModelComponentMeta {
   /**
    * 标题
    */
-  get title(): string | I18nData | ReactElement;
+  get title(): string | IPublicTypeI18nData | ReactElement;
 
   /**
    * 图标
    */
-  get icon(): IconType;
+  get icon(): IPublicTypeIconType;
 
   /**
    * 组件 npm 信息
    */
-  get npm(): NpmInfo;
+  get npm(): IPublicTypeNpmInfo;
 
   get availableActions(): any;
 
@@ -56,13 +52,13 @@ export interface IPublicModelComponentMeta {
    * 设置 npm 信息
    * @param npm
    */
-  setNpm(npm: NpmInfo): void;
+  setNpm(npm: IPublicTypeNpmInfo): void;
 
   /**
    * 获取元数据
    * @returns
    */
-  getMetadata(): TransformedComponentMetadata;
+  getMetadata(): IPublicTypeTransformedComponentMetadata;
 
   /**
    * check if the current node could be placed in parent node
@@ -70,7 +66,7 @@ export interface IPublicModelComponentMeta {
    * @param parent
    * @returns
    */
-  checkNestingUp(my: IPublicModelNode | NodeData, parent: any): boolean;
+  checkNestingUp(my: IPublicModelNode | IPublicTypeNodeData, parent: any): boolean;
 
   /**
    * check if the target node(s) could be placed in current node
@@ -78,7 +74,10 @@ export interface IPublicModelComponentMeta {
    * @param parent
    * @returns
    */
-  checkNestingDown(my: IPublicModelNode | NodeData, target: NodeSchema | IPublicModelNode | NodeSchema[]): boolean;
+  checkNestingDown(
+      my: IPublicModelNode | IPublicTypeNodeData,
+      target: IPublicTypeNodeSchema | IPublicModelNode | IPublicTypeNodeSchema[],
+    ): boolean;
 
 
   refreshMetadata(): void;

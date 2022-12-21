@@ -53,7 +53,7 @@ function saveSchema(schema) {
   // 保存 schema 相关操作
 }
 
-const saveSampleHotKey = (ctx: ILowCodePluginContext) => {
+const saveSampleHotKey = (ctx: IPublicModelPluginContext) => {
   return {
     name: 'saveSample',
     async init() {

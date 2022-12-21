@@ -1,5 +1,3 @@
-import { ProjectSchema } from '@alilc/lowcode-types';
-
-export function isProjectSchema(data: any): data is ProjectSchema {
+export function isProjectSchema(data: any): boolean {
   return data && data.componentsTree;
 }

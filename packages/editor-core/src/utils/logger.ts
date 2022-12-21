@@ -1,4 +1,4 @@
-import Logger, { Level } from 'zen-logger';
+import { Logger, Level } from '@alilc/lowcode-utils';
 
 export { Logger };
 

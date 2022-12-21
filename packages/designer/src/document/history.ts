@@ -1,20 +1,23 @@
-import { EventEmitter } from 'events';
-import { reaction, untracked, globalContext, Editor } from '@alilc/lowcode-editor-core';
-import { NodeSchema } from '@alilc/lowcode-types';
+import { reaction, untracked, globalContext, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
+import { IPublicTypeNodeSchema, IPublicModelHistory } from '@alilc/lowcode-types';
 
-export interface Serialization<K = NodeSchema, T = string> {
+export interface Serialization<K = IPublicTypeNodeSchema, T = string> {
   serialize(data: K): T;
   unserialize(data: T): K;
 }
 
-export class History<T = NodeSchema> {
+export interface IHistory extends IPublicModelHistory {
+
+}
+
+export class History<T = IPublicTypeNodeSchema> implements IHistory {
   private session: Session;
 
   private records: Session[];
 
   private point = 0;
 
-  private emitter = new EventEmitter();
+  private emitter: IEventBus = createModuleEventBus('History');
 
   private asleep = false;
 
@@ -118,11 +121,12 @@ export class History<T = NodeSchema> {
     }
     const cursor = this.session.cursor - 1;
     this.go(cursor);
-    const editor = globalContext.get(Editor);
+    const workspace = globalContext.get('workspace');
+    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
     if (!editor) {
       return;
     }
-    editor.emit('history.back', cursor);
+    editor.eventBus.emit('history.back', cursor);
   }
 
   forward() {
@@ -131,11 +135,12 @@ export class History<T = NodeSchema> {
     }
     const cursor = this.session.cursor + 1;
     this.go(cursor);
-    const editor = globalContext.get(Editor);
+    const workspace = globalContext.get('workspace');
+    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
     if (!editor) {
       return;
     }
-    editor.emit('history.forward', cursor);
+    editor.eventBus.emit('history.forward', cursor);
   }
 
   savePoint() {
@@ -169,6 +174,14 @@ export class History<T = NodeSchema> {
     }
     return state;
   }
+  /**
+   * 监听 state 变更事件
+   * @param func
+   * @returns
+   */
+  onChangeState(func: () => any): () => void {
+    return this.onStateChange(func);
+  }
 
   onStateChange(func: () => any) {
     this.emitter.on('statechange', func);
@@ -177,6 +190,14 @@ export class History<T = NodeSchema> {
     };
   }
 
+  /**
+   * 监听历史记录游标位置变更事件
+   * @param func
+   * @returns
+   */
+  onChangeCursor(func: () => any): () => void {
+    return this.onCursor(func);
+  }
   onCursor(func: () => any) {
     this.emitter.on('cursor', func);
     return () => {

@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import classNames from 'classnames';
-import { TipConfig } from '@alilc/lowcode-types';
+import { IPublicTypeTipConfig } from '@alilc/lowcode-types';
 import { intl } from '../../intl';
 import { resolvePosition } from './utils';
 import { tipHandler } from './tip-handler';
@@ -105,7 +105,7 @@ export class TipItem extends Component {
   }
 
   render() {
-    const tip: TipConfig = tipHandler.tip || ({} as any);
+    const tip: IPublicTypeTipConfig = tipHandler.tip || ({} as any);
     const className = classNames('lc-tip', tip.className, tip && tip.theme ? `lc-theme-${tip.theme}` : null);
 
     this.originClassName = className;
@@ -113,7 +113,7 @@ export class TipItem extends Component {
     return (
       <div
         className={className}
-        ref={ref => {
+        ref={(ref) => {
           this.shell = ref;
         }}
       >

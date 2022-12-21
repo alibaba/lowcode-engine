@@ -1,4 +1,4 @@
-import { JSExpression } from '@alilc/lowcode-types';
+import { IPublicTypeJSExpression } from '@alilc/lowcode-types';
 
 /**
  * 为了避免把 { type: 'JSExpression', extType: 'function' } 误判为表达式，故增加如下逻辑。
@@ -10,6 +10,6 @@ import { JSExpression } from '@alilc/lowcode-types';
  * @param data
  * @returns
  */
-export function isJSExpression(data: any): data is JSExpression {
+export function isJSExpression(data: any): data is IPublicTypeJSExpression {
   return data && data.type === 'JSExpression' && data.extType !== 'function';
 }

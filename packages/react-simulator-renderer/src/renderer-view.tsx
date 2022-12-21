@@ -139,7 +139,7 @@ class Renderer extends Component<{
     if (this.startTime) {
       const time = Date.now() - this.startTime;
       const nodeCount = host.designer.currentDocument?.getNodeCount?.();
-      host.designer.editor?.emit(GlobalEvent.Node.Rerender, {
+      host.designer.editor?.eventBus.emit(GlobalEvent.Node.Rerender, {
         componentName: 'Renderer',
         type: 'All',
         time,
@@ -171,6 +171,7 @@ class Renderer extends Component<{
     this.schemaChangedSymbol = false;
 
     if (!container.autoRender || isRendererDetached()) return null;
+
     return (
       <LowCodeRenderer
         locale={locale}

@@ -1,4 +1,6 @@
-import { ParentalNode, DropLocation, isLocationChildrenDetail, LocateEvent } from '@alilc/lowcode-designer';
+import { isLocationChildrenDetail } from '@alilc/lowcode-utils';
+import { IPublicModelNode, IPublicModelDropLocation, IPublicModelLocateEvent } from '@alilc/lowcode-types';
+
 
 /**
  * 停留检查计时器
@@ -6,20 +8,20 @@ import { ParentalNode, DropLocation, isLocationChildrenDetail, LocateEvent } fro
 export default class DwellTimer {
   private timer: number | undefined;
 
-  private previous?: ParentalNode;
+  private previous?: IPublicModelNode;
 
-  private event?: LocateEvent;
+  private event?: IPublicModelLocateEvent;
 
-  private decide: (node: ParentalNode, event: LocateEvent) => void;
+  private decide: (node: IPublicModelNode, event: IPublicModelLocateEvent) => void;
 
   private timeout = 500;
 
-  constructor(decide: (node: ParentalNode, event: LocateEvent) => void, timeout = 500) {
+  constructor(decide: (node: IPublicModelNode, event: IPublicModelLocateEvent) => void, timeout = 500) {
     this.decide = decide;
     this.timeout = timeout;
   }
 
-  focus(node: ParentalNode, event: LocateEvent) {
+  focus(node: IPublicModelNode, event: IPublicModelLocateEvent) {
     this.event = event;
     if (this.previous === node) {
       return;
@@ -32,7 +34,7 @@ export default class DwellTimer {
     }, this.timeout) as any;
   }
 
-  tryFocus(loc?: DropLocation | null) {
+  tryFocus(loc?: IPublicModelDropLocation | null) {
     if (!loc || !isLocationChildrenDetail(loc.detail)) {
       this.reset();
       return;
