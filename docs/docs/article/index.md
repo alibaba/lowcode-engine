@@ -4,6 +4,7 @@ title: 低代码引擎相关文章资料
 
 ## 官方文章
 
+- [低代码多分支协同开发的建设与实践](https://mp.weixin.qq.com/s/DmwxL67htHfTUP1U966N-Q)
 - [低代码引擎半岁啦，来跟大家唠唠嗑...](https://segmentfault.com/a/1190000042884409)
 - [低代码技术在研发团队的应用模式探讨](https://mp.weixin.qq.com/s/Ynk_wjJbmNw7fEG6UtGZbQ)
 - [关于 LowCode&ProCode 混合研发的思考](https://mp.weixin.qq.com/s/TY3VXjkSmsQoT47xma3wig)
