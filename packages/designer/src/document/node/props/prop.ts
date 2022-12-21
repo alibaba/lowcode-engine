@@ -315,9 +315,17 @@ export class Prop implements IPropParent {
   setAsSlot(data: JSSlot) {
     this._type = 'slot';
     let slotSchema: SlotSchema;
-    // 当 data.value 的结构为 { componentName: 'Slot' } 时，直接当成 slotSchema 使用
+    // 当 data.value 的结构为 { componentName: 'Slot' } 时，复用部分 slotSchema 数据
     if ((isPlainObject(data.value) && data.value?.componentName === 'Slot')) {
-      slotSchema = data.value as SlotSchema;
+      const value = data.value as SlotSchema;
+      slotSchema = {
+        componentName: 'Slot',
+        title: value.title || value.props?.slotTitle,
+        id: data.id,
+        name: value.name || value.props?.slotName,
+        params: value.params || value.props?.slotParams,
+        children: data.value,
+      } as SlotSchema;
     } else {
       slotSchema = {
         componentName: 'Slot',

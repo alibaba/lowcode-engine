@@ -162,7 +162,14 @@ export type RootSchema = PageSchema | ComponentSchema | BlockSchema;
 export interface SlotSchema extends NodeSchema {
   componentName: 'Slot';
   name?: string;
+  title?: string;
   params?: string[];
+  props?: {
+    slotTitle?: string;
+    slotName?: string;
+    slotParams?: string[];
+  };
+  children?: NodeSchema[];
 }
 
 /**
