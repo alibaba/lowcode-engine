@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-workspace",
-  "version": "1.1.0-beta.7",
+  "version": "1.1.0-beta.8",
   "description": "Shell Layer for AliLowCodeEngine",
   "main": "lib/index.js",
   "private": true,
