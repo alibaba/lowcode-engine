@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { pipe } from 'fp-ts/function';
-import { NodeSchema, isNodeSchema, NodeDataType, CompositeValue } from '@alilc/lowcode-types';
+import { IPublicTypeNodeSchema, isNodeSchema, NodeDataType, IPublicTypeCompositeValue } from '@alilc/lowcode-types';
 
 import {
   IScope,
@@ -57,7 +57,7 @@ export function isPureString(v: string) {
 }
 
 function generateAttrValue(
-  attrData: { attrName: string; attrValue: CompositeValue },
+  attrData: { attrName: string; attrValue: IPublicTypeCompositeValue },
   scope: IScope,
   config?: NodeGeneratorConfig,
 ): CodePiece[] {
@@ -76,7 +76,7 @@ function generateAttrValue(
 
 function generateAttr(
   attrName: string,
-  attrValue: CompositeValue,
+  attrValue: IPublicTypeCompositeValue,
   scope: IScope,
   config?: NodeGeneratorConfig,
 ): CodePiece[] {
@@ -115,7 +115,7 @@ function generateAttr(
 }
 
 function generateAttrs(
-  nodeItem: NodeSchema,
+  nodeItem: IPublicTypeNodeSchema,
   scope: IScope,
   config?: NodeGeneratorConfig,
 ): CodePiece[] {
@@ -144,7 +144,7 @@ function generateAttrs(
 }
 
 function generateBasicNode(
-  nodeItem: NodeSchema,
+  nodeItem: IPublicTypeNodeSchema,
   scope: IScope,
   config?: NodeGeneratorConfig,
 ): CodePiece[] {
@@ -160,7 +160,7 @@ function generateBasicNode(
 }
 
 function generateSimpleNode(
-  nodeItem: NodeSchema,
+  nodeItem: IPublicTypeNodeSchema,
   scope: IScope,
   config?: NodeGeneratorConfig,
 ): CodePiece[] {
@@ -216,13 +216,13 @@ function linkPieces(pieces: CodePiece[]): string {
 }
 
 function generateNodeSchema(
-  nodeItem: NodeSchema,
+  nodeItem: IPublicTypeNodeSchema,
   scope: IScope,
   config?: NodeGeneratorConfig,
 ): string {
   const pieces: CodePiece[] = [];
   if (config?.nodePlugins) {
-    const res = executeFunctionStack<NodeSchema, CodePiece[], NodeGeneratorConfig>(
+    const res = executeFunctionStack<IPublicTypeNodeSchema, CodePiece[], NodeGeneratorConfig>(
       nodeItem,
       scope,
       config.nodePlugins,
@@ -247,11 +247,11 @@ function generateNodeSchema(
  * @type NodePlugin Extended
  *
  * @export
- * @param {NodeSchema} nodeItem 当前 UI 节点
+ * @param {IPublicTypeNodeSchema} nodeItem 当前 UI 节点
  * @returns {CodePiece[]} 实现功能的相关代码片段
  */
 export function generateReactLoopCtrl(
-  nodeItem: NodeSchema,
+  nodeItem: IPublicTypeNodeSchema,
   scope: IScope,
   config?: NodeGeneratorConfig,
   next?: NodePlugin,
@@ -301,11 +301,11 @@ export function generateReactLoopCtrl(
  * @type NodePlugin
  *
  * @export
- * @param {NodeSchema} nodeItem 当前 UI 节点
+ * @param {IPublicTypeNodeSchema} nodeItem 当前 UI 节点
  * @returns {CodePiece[]} 实现功能的相关代码片段
  */
 export function generateConditionReactCtrl(
-  nodeItem: NodeSchema,
+  nodeItem: IPublicTypeNodeSchema,
   scope: IScope,
   config?: NodeGeneratorConfig,
   next?: NodePlugin,
@@ -336,11 +336,11 @@ export function generateConditionReactCtrl(
  * @type NodePlugin
  *
  * @export
- * @param {NodeSchema} nodeItem 当前 UI 节点
+ * @param {IPublicTypeNodeSchema} nodeItem 当前 UI 节点
  * @returns {CodePiece[]} 实现功能的相关代码片段
  */
 export function generateReactExprInJS(
-  nodeItem: NodeSchema,
+  nodeItem: IPublicTypeNodeSchema,
   scope: IScope,
   config?: NodeGeneratorConfig,
   next?: NodePlugin,

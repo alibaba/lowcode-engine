@@ -276,7 +276,7 @@
         }
       }
 
-      .tree-node-hide-btn, .tree-node-lock-btn {
+      .tree-node-hide-btn, .tree-node-lock-btn, .tree-node-rename-btn {
         opacity: 0;
         color: var(--color-text);
         line-height: 0;
@@ -290,18 +290,18 @@
         }
       }
       &:hover {
-        .tree-node-hide-btn, .tree-node-lock-btn {
+        .tree-node-hide-btn, .tree-node-lock-btn, .tree-node-rename-btn {
           opacity: 0.5;
         }
       }
       html.lc-cursor-dragging & {
         // FIXME: only hide hover shows
-        .tree-node-hide-btn, .tree-node-lock-btn {
+        .tree-node-hide-btn, .tree-node-lock-btn, .tree-node-rename-btn {
           display: none;
         }
       }
       &.editing {
-        & > .tree-node-hide-btn, & >.tree-node-lock-btn {
+        & > .tree-node-hide-btn, & >.tree-node-lock-btn, & >.tree-node-rename-btn {
           display: none;
         }
       }

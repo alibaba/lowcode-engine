@@ -13,11 +13,11 @@ sidebar_position: 4
 #### 类型定义
 ```typescript
 async function register(
-  pluginConfigCreator: (ctx: ILowCodePluginContext) => ILowCodePluginConfig,
+  pluginConfigCreator: (ctx: IPublicModelPluginContext) => IPublicTypePluginConfig,
   options?: ILowCodeRegisterOptions,
 ): Promise<void>
 ```
-pluginConfigCreator 是一个 ILowCodePluginConfig 生成函数，ILowCodePluginConfig 中包含了该插件的 init / destroy 等钩子函数，以及 exports 函数用于返回插件对外暴露的值。
+pluginConfigCreator 是一个 IPublicTypePluginConfig 生成函数，IPublicTypePluginConfig 中包含了该插件的 init / destroy 等钩子函数，以及 exports 函数用于返回插件对外暴露的值。
 
 另外，pluginConfigCreator 还必须挂载 pluginName 字段，全局确保唯一，否则 register 时会报错，可以选择性挂载 meta 字段，用于描述插件的元数据信息，比如兼容的引擎版本、支持的参数配置、依赖插件声明等。
 > 注：pluginConfigCreator 挂载 pluginName / meta 可以通过低代码工具链的插件脚手架生成，写如 package.json 后将会自动注入到代码中，具体见 [插件元数据工程化示例](#RO9YY)
@@ -26,8 +26,9 @@ pluginConfigCreator 是一个 ILowCodePluginConfig 生成函数，ILowCodePlugin
 #### 简单示例
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
-const builtinPluginRegistry = (ctx: ILowCodePluginContext) => {
+const builtinPluginRegistry = (ctx: IPublicModelPluginContext) => {
   return {
     async init() {
       const { skeleton } = ctx;
@@ -58,8 +59,9 @@ await plugins.register(builtinPluginRegistry);
 #### 使用 exports 示例
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
-const pluginA = (ctx: ILowCodePluginContext) => {
+const pluginA = (ctx: IPublicModelPluginContext) => {
   return {
     async init() {},
     exports() { return { x: 1, } },
@@ -67,7 +69,7 @@ const pluginA = (ctx: ILowCodePluginContext) => {
 }
 pluginA.pluginName = 'pluginA';
 
-const pluginB = (ctx: ILowCodePluginContext) => {
+const pluginB = (ctx: IPublicModelPluginContext) => {
   return {
     async init() {
       // 获取 pluginA 的导出值
@@ -83,14 +85,15 @@ pluginB.meta = {
 await plugins.register(pluginA);
 await plugins.register(pluginB);
 ```
-> 注：ctx 是在插件 creator 中获取引擎 API 的上下文，具体定义参见 [ILowCodePluginContext](#qEhTb)
+> 注：ctx 是在插件 creator 中获取引擎 API 的上下文，具体定义参见 [IPublicModelPluginContext](#qEhTb)
 
 ####
 #### 设置兼容引擎版本示例
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
-const builtinPluginRegistry = (ctx: ILowCodePluginContext) => {
+const builtinPluginRegistry = (ctx: IPublicModelPluginContext) => {
   return {
     async init() {
       ...
@@ -108,8 +111,9 @@ await plugins.register(builtinPluginRegistry);
 #### 设置插件参数版本示例
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
-const builtinPluginRegistry = (ctx: ILowCodePluginContext, options: any) => {
+const builtinPluginRegistry = (ctx: IPublicModelPluginContext, options: any) => {
   return {
     async init() {
       // 1.0.4 之后的传值方式，通过 register(xxx, options)
@@ -219,27 +223,27 @@ plugins.delete('builtinPluginRegistry');
 ## 事件（events）
 无
 ## 相关模块
-### ILowCodePluginContext
+### IPublicModelPluginContext
 **类型定义**
 ```typescript
-export interface ILowCodePluginContext {
-  skeleton: Skeleton;                       // 参考面板 API
-  hotkey: Hotkey;                           // 参考快捷键 API
-  setters: Setters;                         // 参考设置器 API
-  config: EngineConfig;                     // 参考配置 API
-  material: Material;                       // 参考物料 API
-  event: Event;                             // 参考事件 API
-  project: Project;                         // 参考模型 API
-  common: Common;                           // 参考模型 API
-  logger: Logger;                           // 参考日志 API
-  plugins: ILowCodePluginManager;           // 即本文档描述内容
+export interface IPublicModelPluginContext {
+  get skeleton(): IPublicApiSkeleton;
+  get hotkey(): IPublicApiHotkey;
+  get setters(): IPublicApiSetters;
+  get config(): IEngineConfig;
+  get material(): IPublicApiMaterial;
+  get event(): IPublicApiEvent;
+  get project(): IPublicApiProject;
+  get common(): IPublicApiCommon;
+  logger: IPublicApiLogger;
+  plugins: IPublicApiPlugins;
   preference: IPluginPreferenceMananger;
 }
 ```
-### ILowCodePluginConfig
+### IPublicTypePluginConfig
 **类型定义**
 ```typescript
-export interface ILowCodePluginConfig {
+export interface IPublicTypePluginConfig {
   init?(): void;
   destroy?(): void;
   exports?(): any;
@@ -263,7 +267,7 @@ your-plugin/package.json
 ```
 转换后的结构：
 ```json
-const debug = (ctx: ILowCodePluginContext, options: any) => {
+const debug = (ctx: IPublicModelPluginContext, options: any) => {
 	return {};
 }
 

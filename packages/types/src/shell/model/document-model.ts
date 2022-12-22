@@ -1,11 +1,7 @@
-import { RootSchema } from '../../schema';
-import { TransformStage } from '../../transform-stage';
-import { DragNodeDataObject, DragNodeObject } from '../../dragon';
+import { IPublicTypeRootSchema, IPublicTypeDragNodeDataObject, IPublicTypeDragNodeObject, IPublicTypePropChangeOptions } from '../type';
+import { IPublicEnumTransformStage } from '../enum';
 import { IPublicApiProject } from '../api';
-import { PropChangeOptions } from '../index';
-import { IPublicModelModalNodesManager } from './modal-nodes-manager';
-import { IPublicModelNode } from './node';
-
+import { IPublicModelDropLocation, IPublicModelDetecting, IPublicModelNode, IPublicModelSelection, IPublicModelHistory, IPublicModelModalNodesManager } from './';
 
 export interface IPublicModelDocumentModel {
 
@@ -15,6 +11,12 @@ export interface IPublicModelDocumentModel {
   get id(): string;
 
   set id(id);
+
+  selection: IPublicModelSelection;
+
+  detecting: IPublicModelDetecting;
+
+  history: IPublicModelHistory;
 
   /**
    * 获取当前文档所属的 project
@@ -54,14 +56,14 @@ export interface IPublicModelDocumentModel {
    * 导入 schema
    * @param schema
    */
-  importSchema(schema: RootSchema): void;
+  importSchema(schema: IPublicTypeRootSchema): void;
 
   /**
    * 导出 schema
    * @param stage
    * @returns
    */
-  exportSchema(stage: TransformStage): any;
+  exportSchema(stage: IPublicEnumTransformStage): any;
 
   /**
    * 插入节点
@@ -106,7 +108,7 @@ export interface IPublicModelDocumentModel {
    */
   checkNesting(
     dropTarget: IPublicModelNode,
-    dragObject: DragNodeObject | DragNodeDataObject
+    dragObject: IPublicTypeDragNodeObject | IPublicTypeDragNodeDataObject
   ): boolean;
 
   /**
@@ -145,11 +147,21 @@ export interface IPublicModelDocumentModel {
    * 当前 document 节点属性修改事件
    * @param fn
    */
-  onChangeNodeProp(fn: (info: PropChangeOptions) => void): void;
+  onChangeNodeProp(fn: (info: IPublicTypePropChangeOptions) => void): void;
 
   /**
    * import schema event
    * @param fn
    */
-  onImportSchema(fn: (schema: RootSchema) => void): void;
+  onImportSchema(fn: (schema: IPublicTypeRootSchema) => void): void;
+
+  isDetectingNode(node: IPublicModelNode): boolean;
+
+  /**
+   * TODO: 待补充说明
+   */
+  get dropLocation(): IPublicModelDropLocation;
+
+
+  set dropLocation(loc: IPublicModelDropLocation | null);
 }

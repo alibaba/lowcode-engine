@@ -26,8 +26,7 @@ export class ProjectView extends Component<{ designer: Designer }> {
   }
   render() {
     const { designer } = this.props;
-    const { project } = designer;
-    const { simulatorProps } = project;
+    const { project, projectSimulatorProps: simulatorProps } = designer;
     const Simulator = designer.simulatorComponent || BuiltinSimulatorHostView;
     const Loading = engineConfig.get('loadingComponent', BuiltinLoading);
 

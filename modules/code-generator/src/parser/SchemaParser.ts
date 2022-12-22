@@ -4,14 +4,14 @@
  */
 import changeCase from 'change-case';
 import {
-  UtilItem,
+  IPublicTypeUtilItem,
   NodeDataType,
-  NodeSchema,
-  ContainerSchema,
-  ProjectSchema,
-  PropsMap,
-  NodeData,
-  NpmInfo,
+  IPublicTypeNodeSchema,
+  IPublicTypeContainerSchema,
+  IPublicTypeProjectSchema,
+  IPublicTypePropsMap,
+  IPublicTypeNodeData,
+  IPublicTypeNpmInfo,
 } from '@alilc/lowcode-types';
 import {
   IPageMeta,
@@ -72,18 +72,18 @@ function getRootComponentName(typeName: string, maps: Record<string, IExternalDe
   return typeName;
 }
 
-function processChildren(schema: NodeSchema): void {
+function processChildren(schema: IPublicTypeNodeSchema): void {
   if (schema.props) {
     if (Array.isArray(schema.props)) {
       // FIXME: is array type props description
     } else {
-      const nodeProps = schema.props as PropsMap;
+      const nodeProps = schema.props as IPublicTypePropsMap;
       if (nodeProps.children) {
         if (!schema.children) {
           // eslint-disable-next-line no-param-reassign
           schema.children = nodeProps.children as NodeDataType;
         } else {
-          let _children: NodeData[] = [];
+          let _children: IPublicTypeNodeData[] = [];
 
           if (Array.isArray(schema.children)) {
             _children = _children.concat(schema.children);
@@ -92,9 +92,9 @@ function processChildren(schema: NodeSchema): void {
           }
 
           if (Array.isArray(nodeProps.children)) {
-            _children = _children.concat(nodeProps.children as NodeData[]);
+            _children = _children.concat(nodeProps.children as IPublicTypeNodeData[]);
           } else {
-            _children.push(nodeProps.children as NodeData);
+            _children.push(nodeProps.children as IPublicTypeNodeData);
           }
 
           // eslint-disable-next-line no-param-reassign
@@ -107,7 +107,7 @@ function processChildren(schema: NodeSchema): void {
 }
 
 export class SchemaParser implements ISchemaParser {
-  validate(schema: ProjectSchema): boolean {
+  validate(schema: IPublicTypeProjectSchema): boolean {
     if (SUPPORT_SCHEMA_VERSION_LIST.indexOf(schema.version) < 0) {
       throw new CompatibilityError(`Not support schema with version [${schema.version}]`);
     }
@@ -115,7 +115,7 @@ export class SchemaParser implements ISchemaParser {
     return true;
   }
 
-  parse(schemaSrc: ProjectSchema | string): IParseResult {
+  parse(schemaSrc: IPublicTypeProjectSchema | string): IParseResult {
     // TODO: collect utils depends in JSExpression
     const compDeps: Record<string, IExternalDependency> = {};
     const internalDeps: Record<string, IInternalDependency> = {};
@@ -140,7 +140,7 @@ export class SchemaParser implements ISchemaParser {
     let containers: IContainerInfo[];
     // Test if this is a lowcode component without container
     if (schema.componentsTree.length > 0) {
-      const firstRoot: ContainerSchema = schema.componentsTree[0] as ContainerSchema;
+      const firstRoot: IPublicTypeContainerSchema = schema.componentsTree[0] as IPublicTypeContainerSchema;
 
       if (!firstRoot.fileName && !isValidContainerType(firstRoot)) {
         // 整个 schema 描述一个容器，且无根节点定义
@@ -150,13 +150,13 @@ export class SchemaParser implements ISchemaParser {
           props: firstRoot.props || defaultContainer.props,
           css: firstRoot.css || defaultContainer.css,
           moduleName: (firstRoot as IContainerInfo).moduleName || defaultContainer.moduleName,
-          children: schema.componentsTree as NodeSchema[],
+          children: schema.componentsTree as IPublicTypeNodeSchema[],
         };
         containers = [container];
       } else {
         // 普通带 1 到多个容器的 schema
         containers = schema.componentsTree.map((n) => {
-          const subRoot = n as ContainerSchema;
+          const subRoot = n as IPublicTypeContainerSchema;
           const container: IContainerInfo = {
             ...subRoot,
             componentName: getRootComponentName(subRoot.componentName, compDeps),
@@ -173,7 +173,7 @@ export class SchemaParser implements ISchemaParser {
     // 分析引用能力的依赖
     containers = containers.map((con) => ({
       ...con,
-      analyzeResult: componentAnalyzer(con as ContainerSchema),
+      analyzeResult: componentAnalyzer(con as IPublicTypeContainerSchema),
     }));
 
     // 建立所有容器的内部依赖索引
@@ -211,7 +211,7 @@ export class SchemaParser implements ISchemaParser {
         handleSubNodes<void>(
           container.children,
           {
-            node: (i: NodeSchema) => processChildren(i),
+            node: (i: IPublicTypeNodeSchema) => processChildren(i),
           },
           {
             rerun: true,
@@ -255,12 +255,12 @@ export class SchemaParser implements ISchemaParser {
       .filter((dep) => !!dep);
 
     // 分析 Utils 依赖
-    let utils: UtilItem[];
+    let utils: IPublicTypeUtilItem[];
     if (schema.utils) {
       utils = schema.utils;
       utilsDeps = schema.utils
         .filter(
-          (u): u is { name: string; type: 'npm' | 'tnpm'; content: NpmInfo } => u.type !== 'function',
+          (u): u is { name: string; type: 'npm' | 'tnpm'; content: IPublicTypeNpmInfo } => u.type !== 'function',
         )
         .map(
           (u): IExternalDependency => ({
@@ -335,7 +335,7 @@ export class SchemaParser implements ISchemaParser {
     return handleSubNodes<string>(
       children,
       {
-        node: (i: NodeSchema) => i.componentName,
+        node: (i: IPublicTypeNodeSchema) => i.componentName,
       },
       {
         rerun: true,
@@ -343,8 +343,8 @@ export class SchemaParser implements ISchemaParser {
     );
   }
 
-  decodeSchema(schemaSrc: string | ProjectSchema): ProjectSchema {
-    let schema: ProjectSchema;
+  decodeSchema(schemaSrc: string | IPublicTypeProjectSchema): IPublicTypeProjectSchema {
+    let schema: IPublicTypeProjectSchema;
     if (typeof schemaSrc === 'string') {
       try {
         schema = JSON.parse(schemaSrc);
@@ -359,7 +359,7 @@ export class SchemaParser implements ISchemaParser {
     return schema;
   }
 
-  private collectDataSourcesTypes(schema: ProjectSchema): string[] {
+  private collectDataSourcesTypes(schema: IPublicTypeProjectSchema): string[] {
     const dataSourcesTypes = new Set<string>();
 
     // 数据源的默认类型为 fetch

@@ -30,10 +30,11 @@ material.setAssets(assets);
 
 通过物料中心接口动态引入资产包
 ```typescript
-import { ILowCodePluginContext, material, plugins } from '@alilc/lowcode-engine'
+import { material, plugins } from '@alilc/lowcode-engine';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
 // 动态加载 assets
-plugins.register((ctx: ILowCodePluginContext) => {
+plugins.register((ctx: IPublicModelPluginContext) => {
   return {
     name: 'ext-assets',
     async init() {
@@ -88,9 +89,9 @@ material.loadIncrementalAssets(assets2);
 在设计器辅助层增加一个扩展 action
 **类型定义**
 ```typescript
-function addBuiltinComponentAction(action: ComponentAction): void;
+function addBuiltinComponentAction(action: IPublicTypeComponentAction): void;
 
-export interface ComponentAction {
+export interface IPublicTypeComponentAction {
   /**
    * behaviorName
    */
@@ -102,7 +103,7 @@ export interface ComponentAction {
   /**
    * 子集
    */
-  items?: ComponentAction[];
+  items?: IPublicTypeComponentAction[];
   /**
    * 显示与否
    * always: 无法禁用
@@ -174,7 +175,7 @@ material.removeBuiltinComponentAction('myIconName');
 ```typescript
 function modifyBuiltinComponentAction(
   actionName: string,
-  handle: (action: ComponentAction) => void
+  handle: (action: IPublicTypeComponentAction) => void
 ): void;
 ```
 **内置设计器辅助 name**
@@ -293,7 +294,7 @@ material.registerMetadataTransducer(addonCombine, 1, 'parse-func');
 获取所有物料元数据管道函数
 **类型定义**
 ```typescript
-function getRegisteredMetadataTransducers(): MetadataTransducer[];
+function getRegisteredMetadataTransducers(): IPublicTypeMetadataTransducer[];
 ```
 
 **示例**

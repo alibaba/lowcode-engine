@@ -1,7 +1,7 @@
 import { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { observer } from '@alilc/lowcode-editor-core';
-import Area from '../area';
+import { Area } from '../area';
 
 @observer
 export default class LeftArea extends Component<{ area: Area }> {

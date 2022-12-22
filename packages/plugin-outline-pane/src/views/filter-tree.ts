@@ -1,4 +1,4 @@
-import TreeNode from '../tree-node';
+import TreeNode from '../controllers/tree-node';
 
 export const FilterType = {
   CONDITION: 'CONDITION',

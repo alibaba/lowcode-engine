@@ -1,1 +1,1 @@
-export type { NodeSchema } from '@alilc/lowcode-types';
+export type { IPublicTypeNodeSchema } from '@alilc/lowcode-types';

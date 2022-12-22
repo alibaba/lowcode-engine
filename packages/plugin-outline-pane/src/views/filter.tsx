@@ -2,20 +2,17 @@ import React, { Component } from 'react';
 import './style.less';
 import { IconFilter } from '../icons/filter';
 import { Search, Checkbox, Balloon, Divider } from '@alifd/next';
-import TreeNode from '../tree-node';
-import { Tree } from '../tree';
+import TreeNode from '../controllers/tree-node';
+import { Tree } from '../controllers/tree';
 import { matchTreeNode, FILTER_OPTIONS } from './filter-tree';
 
-interface IState {
+
+export default class Filter extends Component<{
+  tree: Tree;
+}, {
   keywords: string;
   filterOps: string[];
-}
-
-interface IProps {
-  tree: Tree;
-}
-
-export default class Filter extends Component<IProps, IState> {
+}> {
   state = {
     keywords: '',
     filterOps: [],

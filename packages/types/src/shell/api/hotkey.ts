@@ -1,6 +1,4 @@
-import { Disposable } from '../../disposable';
-import { HotkeyCallback } from '../../editor';
-
+import { IPublicTypeDisposable, IPublicTypeHotkeyCallback } from '../type';
 
 export interface IPublicApiHotkey {
   get callbacks(): any;
@@ -12,5 +10,5 @@ export interface IPublicApiHotkey {
    * @param action
    * @returns
    */
-  bind(combos: string[] | string, callback: HotkeyCallback, action?: string): Disposable;
+  bind(combos: string[] | string, callback: IPublicTypeHotkeyCallback, action?: string): IPublicTypeDisposable;
 }

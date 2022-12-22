@@ -1,5 +1,3 @@
-import { DOMText } from '@alilc/lowcode-types';
-
-export function isDOMText(data: any): data is DOMText {
+export function isDOMText(data: any): boolean {
   return typeof data === 'string';
 }

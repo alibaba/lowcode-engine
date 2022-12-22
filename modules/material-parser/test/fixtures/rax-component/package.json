@@ -44,7 +44,6 @@
     "@alife/build-plugin-lowcode": "^1.0.17",
     "@iceworks/spec": "^1.0.0",
     "@types/rax": "^1.0.0",
-    "build-plugin-component": "^1.0.0",
     "driver-universal": "^3.1.0",
     "eslint": "^6.8.0",
     "rax": "^1.1.0",

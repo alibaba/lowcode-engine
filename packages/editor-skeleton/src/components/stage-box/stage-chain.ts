@@ -1,13 +1,13 @@
-import { EventEmitter } from 'events';
 import { Stage as StageWidget } from '../../widget/stage';
+import { createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
 
 export default class StageChain {
-  private emitter: EventEmitter;
+  private emitter: IEventBus;
 
   private stage: StageWidget;
 
   constructor(stage: StageWidget) {
-    this.emitter = new EventEmitter();
+    this.emitter = createModuleEventBus('StageChain');
     this.stage = stage;
   }
 

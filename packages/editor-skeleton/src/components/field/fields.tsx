@@ -1,9 +1,10 @@
+/* eslint-disable react/no-unused-prop-types */
 import { Component, MouseEvent } from 'react';
 import { isObject } from 'lodash';
 import classNames from 'classnames';
 import { Icon } from '@alifd/next';
 import { Title } from '@alilc/lowcode-editor-core';
-import { IEditor, TitleContent } from '@alilc/lowcode-types';
+import { IPublicModelEditor, IPublicTypeTitleContent } from '@alilc/lowcode-types';
 import { PopupPipe, PopupContext } from '../popup';
 import './index.less';
 import InlineTip from './inlinetip';
@@ -11,8 +12,8 @@ import InlineTip from './inlinetip';
 export interface FieldProps {
   className?: string;
   meta?: { package: string; componentName: string } | string;
-  title?: TitleContent | null;
-  editor?: IEditor;
+  title?: IPublicTypeTitleContent | null;
+  editor?: IPublicModelEditor;
   defaultDisplay?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry';
   collapsed?: boolean;
   valueState?: number;
@@ -129,7 +130,7 @@ export class Field extends Component<FieldProps> {
 
   clickHandler(event?: MouseEvent) {
     const { editor, name, title, meta } = this.props;
-    editor?.emit('setting.setter.field.click', { name, title, meta, event });
+    editor?.eventBus.emit('setting.setter.field.click', { name, title, meta, event });
   }
 
   render() {

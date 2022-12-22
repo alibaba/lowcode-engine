@@ -1,5 +1,5 @@
 import { Editor } from '@alilc/lowcode-editor-core';
-import { TransformStage } from '@alilc/lowcode-types';
+import { IPublicEnumTransformStage } from '@alilc/lowcode-types';
 import { isPlainObject, isVariable, isJSBlock } from '@alilc/lowcode-utils';
 import '../fixtures/window';
 import { Designer } from '../../src/designer/designer';
@@ -59,7 +59,7 @@ describe('Node 方法测试', () => {
   it('原始 prop 值是 variable 结构，通过一个 propsReducer 转成了 JSExpression 结构', () => {
     editor = new Editor();
     designer = new Designer({ editor, shellModelFactory });
-    designer.addPropsReducer(upgradePropsReducer, TransformStage.Upgrade);
+    designer.addPropsReducer(upgradePropsReducer, IPublicEnumTransformStage.Upgrade);
     project = designer.project;
     doc = new DocumentModel(project, formSchema);
 

@@ -1,35 +1,118 @@
 import { Component } from 'react';
 import classNames from 'classnames';
-import { observer } from '@alilc/lowcode-editor-core';
-import TreeNode from '../tree-node';
+import TreeNode from '../controllers/tree-node';
 import TreeTitle from './tree-title';
 import TreeBranches from './tree-branches';
+import { IPublicModelPluginContext, IPublicEnumEventNames } from '@alilc/lowcode-types';
 
-@observer
 export default class TreeNodeView extends Component<{
   treeNode: TreeNode;
   isModal?: boolean;
+  pluginContext: IPublicModelPluginContext;
 }> {
+  state = {
+    expanded: false,
+    selected: false,
+    hidden: false,
+    locked: false,
+    detecting: false,
+    isRoot: false,
+    highlight: false,
+    dropping: false,
+    conditionFlow: false,
+  };
+
+  eventOffCallbacks: Array<() => void> = [];
+
+  componentDidMount() {
+    const { treeNode, pluginContext } = this.props;
+    const { pluginEvent, event } = pluginContext;
+    const { id } = treeNode;
+
+    this.state = {
+      expanded: false,
+      selected: false,
+      hidden: false,
+      locked: false,
+      detecting: false,
+      isRoot: treeNode.isRoot(),
+      // 是否投放响应
+      dropping: treeNode.dropDetail?.index != null,
+      conditionFlow: treeNode.node.conditionGroup != null,
+      highlight: treeNode.isFocusingNode(),
+    };
+
+    const doc = pluginContext.project.currentDocument;
+
+
+    this.eventOffCallbacks.push(pluginEvent.on('tree-node.hiddenChanged', (payload: any) => {
+      const { hidden, nodeId } = payload;
+      if (nodeId === id) {
+        this.setState({ hidden });
+      }
+    }));
+
+    this.eventOffCallbacks.push(pluginEvent.on('tree-node.expandedChanged', (payload: any) => {
+      const { expanded, nodeId } = payload;
+      if (nodeId === id) {
+        this.setState({ expanded });
+      }
+    }));
+
+    this.eventOffCallbacks.push(pluginEvent.on('tree-node.lockedChanged', (payload: any) => {
+      const { locked, nodeId } = payload;
+      if (nodeId === id) {
+        this.setState({ locked });
+      }
+    }));
+
+    this.eventOffCallbacks.push(
+      event.on(
+        IPublicEnumEventNames.DOCUMENT_DROPLOCATION_CHANGED,
+        (payload: any) => {
+          const { document } = payload;
+          if (document.id === doc?.id) {
+            this.setState({
+              dropping: treeNode.dropDetail?.index != null,
+            });
+          }
+        },
+      ),
+    );
+
+    const offSelectionChange = doc?.selection?.onSelectionChange(() => {
+      this.setState({ selected: treeNode.selected });
+    });
+    this.eventOffCallbacks.push(offSelectionChange!);
+    const offDetectingChange = doc?.detecting?.onDetectingChange(() => {
+      this.setState({ detecting: treeNode.detecting });
+    });
+    this.eventOffCallbacks.push(offDetectingChange!);
+  }
+  componentWillUnmount(): void {
+    this.eventOffCallbacks?.forEach((offFun: () => void) => {
+      offFun();
+    });
+  }
+
   render() {
     const { treeNode, isModal } = this.props;
     const className = classNames('tree-node', {
       // 是否展开
-      expanded: treeNode.expanded,
-      // 是否悬停中
-      detecting: treeNode.detecting,
+      expanded: this.state.expanded,
       // 是否选中的
-      selected: treeNode.selected,
+      selected: this.state.selected,
       // 是否隐藏的
-      hidden: treeNode.hidden,
-      // 是否忽略的
-      // ignored: treeNode.ignored,
+      hidden: this.state.hidden,
       // 是否锁定的
-      locked: treeNode.locked,
+      locked: this.state.locked,
+      // 是否悬停中
+      detecting: this.state.detecting,
       // 是否投放响应
-      dropping: treeNode.dropDetail?.index != null,
-      'is-root': treeNode.isRoot(),
-      'condition-flow': treeNode.node.conditionGroup != null,
-      highlight: treeNode.isFocusingNode(),
+      dropping: this.state.dropping,
+      'is-root': this.state.isRoot,
+      'condition-flow': this.state.conditionFlow,
+      highlight: this.state.highlight,
     });
 
     const { filterWorking, matchChild, matchSelf } = treeNode.filterReult;
@@ -41,8 +124,16 @@ export default class TreeNodeView extends Component<{
 
     return (
       <div className={className} data-id={treeNode.id}>
-        <TreeTitle treeNode={treeNode} isModal={isModal} />
-        <TreeBranches treeNode={treeNode} isModal={false} />
+        <TreeTitle
+          treeNode={treeNode}
+          isModal={isModal}
+          pluginContext={this.props.pluginContext}
+        />
+        <TreeBranches
+          treeNode={treeNode}
+          isModal={false}
+          pluginContext={this.props.pluginContext}
+        />
       </div>
     );
   }

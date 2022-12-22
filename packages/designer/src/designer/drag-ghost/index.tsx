@@ -1,10 +1,10 @@
 import { Component, ReactElement } from 'react';
 import { observer, obx, Title, makeObservable } from '@alilc/lowcode-editor-core';
 import { Designer } from '../designer';
-import { DragObject, isDragNodeObject } from '../dragon';
+import { isDragNodeObject } from '../dragon';
 import { isSimulatorHost } from '../../simulator';
 import './ghost.less';
-import { I18nData, NodeSchema } from '@alilc/lowcode-types';
+import { IPublicTypeI18nData, IPublicTypeNodeSchema, IPublicModelDragObject } from '@alilc/lowcode-types';
 
 type offBinding = () => any;
 
@@ -12,7 +12,7 @@ type offBinding = () => any;
 export default class DragGhost extends Component<{ designer: Designer }> {
   private dispose: offBinding[] = [];
 
-  @obx.ref private titles: (string | I18nData | ReactElement)[] | null = null;
+  @obx.ref private titles: (string | IPublicTypeI18nData | ReactElement)[] | null = null;
 
   @obx.ref private x = 0;
 
@@ -54,14 +54,14 @@ export default class DragGhost extends Component<{ designer: Designer }> {
     ];
   }
 
-  getTitles(dragObject: DragObject) {
+  getTitles(dragObject: IPublicModelDragObject) {
     if (isDragNodeObject(dragObject)) {
       return dragObject.nodes.map((node) => node.title);
     }
 
     const dataList = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
 
-    return dataList.map((item: NodeSchema, i) => (this.props.designer.getComponentMeta(item.componentName).title));
+    return dataList.map((item: IPublicTypeNodeSchema, i) => (this.props.designer.getComponentMeta(item.componentName).title));
   }
 
   componentWillUnmount() {

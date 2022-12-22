@@ -60,7 +60,7 @@ describe('document-model 测试', () => {
     doc.internalRemoveAndPurgeNode({ id: 'mockId' });
 
     // internalSetDropLocation
-    doc.internalSetDropLocation({ a: 1 });
+    doc.dropLocation = { a: 1 };
     expect(doc.dropLocation).toEqual({ a: 1 });
 
     // wrapWith

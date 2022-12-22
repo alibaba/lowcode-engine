@@ -1,4 +1,4 @@
-import { ComponentMetadata } from "@alilc/lowcode-types";
+import { IPublicTypeComponentMetadata } from "@alilc/lowcode-types";
 export default {
   componentName: 'Button',
   npm: {
@@ -95,7 +95,7 @@ export default {
           },
         ],
       },
-      () => 'haha', // CustomView
+      () => 'haha', // IPublicTypeCustomView
       {
         type: 'group',
         name: 'groupkgzzeo41',
@@ -305,4 +305,4 @@ export default {
     ],
     autoruns: [],
   },
-} as ComponentMetadata;
+} as IPublicTypeComponentMetadata;

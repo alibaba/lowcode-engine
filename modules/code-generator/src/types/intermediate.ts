@@ -1,4 +1,9 @@
-import { I18nMap, UtilsMap, ContainerSchema, JSONObject } from '@alilc/lowcode-types';
+import {
+  IPublicTypeI18nMap,
+  IPublicTypeUtilsMap,
+  IPublicTypeContainerSchema,
+  IPublicTypeJSONObject,
+} from '@alilc/lowcode-types';
 
 import { IDependency, INpmPackage } from './deps';
 import { ICompAnalyzeResult } from './analyze';
@@ -6,7 +11,7 @@ import { ICompAnalyzeResult } from './analyze';
 export interface IParseResult {
   containers: IContainerInfo[];
   globalUtils?: IUtilInfo;
-  globalI18n?: I18nMap;
+  globalI18n?: IPublicTypeI18nMap;
   globalRouter?: IRouterInfo;
   project?: IProjectInfo;
 }
@@ -15,14 +20,14 @@ export interface IWithDependency {
   deps?: IDependency[];
 }
 
-export interface IContainerInfo extends ContainerSchema, IWithDependency {
+export interface IContainerInfo extends IPublicTypeContainerSchema, IWithDependency {
   containerType: string;
   moduleName: string;
   analyzeResult?: ICompAnalyzeResult;
 }
 
 export interface IUtilInfo extends IWithDependency {
-  utils: UtilsMap;
+  utils: IPublicTypeUtilsMap;
 }
 
 export interface IRouterInfo extends IWithDependency {
@@ -45,8 +50,8 @@ export interface IProjectInfo {
   css?: string;
   containersDeps?: IDependency[];
   utilsDeps?: IDependency[];
-  constants?: JSONObject;
-  i18n?: I18nMap;
+  constants?: IPublicTypeJSONObject;
+  i18n?: IPublicTypeI18nMap;
   packages: INpmPackage[];
   meta?: { name?: string; title?: string } | Record<string, any>;
   config?: Record<string, any>;

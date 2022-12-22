@@ -1,6 +1,5 @@
-import { AssetsJson } from '../../assets';
-import { MetadataTransducer, ComponentAction } from '../../metadata';
-import { IPublicModelComponentMeta } from '../model/component-meta';
+import { IPublicTypeAssetsJson, IPublicTypeMetadataTransducer, IPublicTypeComponentAction } from '../type';
+import { IPublicModelComponentMeta } from '../model';
 
 
 export interface IPublicApiMaterial {
@@ -10,7 +9,7 @@ export interface IPublicApiMaterial {
    * @param assets
    * @returns
    */
-  setAssets(assets: AssetsJson): void;
+  setAssets(assets: IPublicTypeAssetsJson): void;
 
   /**
    * 获取「资产包」结构
@@ -23,7 +22,7 @@ export interface IPublicApiMaterial {
    * @param incrementalAssets
    * @returns
    */
-  loadIncrementalAssets(incrementalAssets: AssetsJson): void;
+  loadIncrementalAssets(incrementalAssets: IPublicTypeAssetsJson): void;
 
   /**
    * 注册物料元数据管道函数
@@ -32,7 +31,7 @@ export interface IPublicApiMaterial {
    * @param id
    */
   registerMetadataTransducer(
-    transducer: MetadataTransducer,
+    transducer: IPublicTypeMetadataTransducer,
     level?: number,
     id?: string | undefined
   ): void;
@@ -41,7 +40,7 @@ export interface IPublicApiMaterial {
    * 获取所有物料元数据管道函数
    * @returns
    */
-  getRegisteredMetadataTransducers(): MetadataTransducer[];
+  getRegisteredMetadataTransducers(): IPublicTypeMetadataTransducer[];
 
   /**
    * 获取指定名称的物料元数据
@@ -67,7 +66,7 @@ export interface IPublicApiMaterial {
    * 在设计器辅助层增加一个扩展 action
    * @param action
    */
-  addBuiltinComponentAction(action: ComponentAction): void;
+  addBuiltinComponentAction(action: IPublicTypeComponentAction): void;
 
   /**
    * 移除设计器辅助层的指定 action
@@ -80,7 +79,10 @@ export interface IPublicApiMaterial {
    * @param actionName
    * @param handle
    */
-  modifyBuiltinComponentAction(actionName: string, handle: (action: ComponentAction) => void): void;
+  modifyBuiltinComponentAction(
+      actionName: string,
+      handle: (action: IPublicTypeComponentAction) => void,
+    ): void;
 
   /**
    * 监听 assets 变化的事件
