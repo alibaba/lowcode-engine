@@ -34,5 +34,4 @@ const raxComponentRendererFactory: () => any = () => {
     }
   };
 };
-
 export default raxComponentRendererFactory;

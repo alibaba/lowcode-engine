@@ -22,5 +22,4 @@ const raxBlockRendererFactory: () => any = () => {
     }
   };
 };
-
 export default raxBlockRendererFactory;
