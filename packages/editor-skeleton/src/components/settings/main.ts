@@ -13,7 +13,7 @@ export class SettingsMain {
 
   private _sessionId = '';
 
-  @obx.ref private _settings?: SettingTopEntry | null = null;
+  @obx.ref private _settings?: SettingTopEntry;
 
   @computed get length(): number | undefined {
     return this._settings?.nodes.length;

@@ -172,7 +172,7 @@ export async function init(
   // 注册一批内置插件
   await plugins.register(OutlinePlugin);
   await plugins.register(componentMetaParser(designer));
-  await plugins.register(setterRegistry);
+  await plugins.register(setterRegistry, {}, { autoInit: true });
   await plugins.register(defaultPanelRegistry(editor, designer));
   await plugins.register(builtinHotkey);
 
