@@ -1,6 +1,6 @@
-import { TransformStage } from '../../transform-stage';
-import { CompositeValue } from '../../value-type';
-import { IPublicModelNode } from './node';
+import { IPublicEnumTransformStage } from '../enum';
+import { IPublicTypeCompositeValue } from '../type';
+import { IPublicModelNode } from './';
 
 export interface IPublicModelProp {
   /**
@@ -37,7 +37,7 @@ export interface IPublicModelProp {
    * 设置值
    * @param val
    */
-  setValue(val: CompositeValue): void;
+  setValue(val: IPublicTypeCompositeValue): void;
 
   /**
    * 获取值
@@ -55,5 +55,5 @@ export interface IPublicModelProp {
    * @param stage
    * @returns
    */
-  exportSchema(stage: TransformStage): CompositeValue;
+  exportSchema(stage: IPublicEnumTransformStage): IPublicTypeCompositeValue;
 }

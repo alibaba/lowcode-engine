@@ -1,5 +1,4 @@
-import { IWidgetBaseConfig } from '../../editor-skeleton';
-
+import { IPublicTypeWidgetBaseConfig } from '../type';
 
 export interface IPublicApiSkeleton {
   /**
@@ -8,14 +7,14 @@ export interface IPublicApiSkeleton {
    * @param extraConfig
    * @returns
    */
-  add(config: IWidgetBaseConfig, extraConfig?: Record<string, any>): any;
+  add(config: IPublicTypeWidgetBaseConfig, extraConfig?: Record<string, any>): any;
 
   /**
   * 移除一个面板实例
   * @param config
   * @returns
   */
-  remove(config: IWidgetBaseConfig): number | undefined;
+  remove(config: IPublicTypeWidgetBaseConfig): number | undefined;
 
   /**
    * 显示面板
@@ -70,26 +69,26 @@ export interface IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onShowPanel(listener: (...args: unknown[]) => void): () => void;
+  onShowPanel(listener: (...args: any[]) => void): () => void;
 
   /**
    * 监听 panel 隐藏事件
    * @param listener
    * @returns
    */
-  onHidePanel(listener: (...args: unknown[]) => void): () => void;
+  onHidePanel(listener: (...args: any[]) => void): () => void;
 
   /**
    * 监听 widget 显示事件
    * @param listener
    * @returns
    */
-  onShowWidget(listener: (...args: unknown[]) => void): () => void;
+  onShowWidget(listener: (...args: any[]) => void): () => void;
 
   /**
    * 监听 widget 隐藏事件
    * @param listener
    * @returns
    */
-  onHideWidget(listener: (...args: unknown[]) => void): () => void;
+  onHideWidget(listener: (...args: any[]) => void): () => void;
 }

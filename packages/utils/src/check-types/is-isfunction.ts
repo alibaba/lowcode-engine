@@ -1,5 +1,4 @@
-import { JSFunction } from '@alilc/lowcode-types';
 
-export function isJSFunction(x: any): x is JSFunction {
+export function isJSFunction(x: any): boolean {
   return typeof x === 'object' && x && x.type === 'JSFunction';
 }

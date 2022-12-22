@@ -32,14 +32,14 @@ sidebar_position: 11
 *引擎版本 >= 1.0.16
 ```typescript
 import { common } from '@alilc/lowcode-engine';
-import { TransitionType } from '@alilc/lowcode-types';
+import { IPublicEnumTransitionType } from '@alilc/lowcode-types';
 
 common.utils.startTransaction(() => {
   node1.setProps();
   node2.setProps();
   node3.setProps();
   // ...
-}, TransitionType.repaint);
+}, IPublicEnumTransitionType.repaint);
 ```
 
 ### createIntl

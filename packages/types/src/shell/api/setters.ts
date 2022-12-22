@@ -1,6 +1,4 @@
-import { RegisteredSetter } from '../../editor';
-import { CustomView } from '../../setter-config';
-
+import { IPublicTypeRegisteredSetter, IPublicTypeCustomView } from '../type';
 
 export interface IPublicApiSetters {
   /**
@@ -8,13 +6,13 @@ export interface IPublicApiSetters {
    * @param type
    * @returns
    */
-  getSetter(type: string): RegisteredSetter | null;
+  getSetter(type: string): IPublicTypeRegisteredSetter | null;
 
   /**
    * 获取已注册的所有 settersMap
    * @returns
    */
-  getSettersMap(): Map<string, RegisteredSetter & {
+  getSettersMap(): Map<string, IPublicTypeRegisteredSetter & {
     type: string;
   }>;
 
@@ -25,7 +23,7 @@ export interface IPublicApiSetters {
    * @returns
    */
   registerSetter(
-    typeOrMaps: string | { [key: string]: CustomView | RegisteredSetter },
-    setter?: CustomView | RegisteredSetter | undefined
+    typeOrMaps: string | { [key: string]: IPublicTypeCustomView | IPublicTypeRegisteredSetter },
+    setter?: IPublicTypeCustomView | IPublicTypeRegisteredSetter | undefined
   ): void;
 }

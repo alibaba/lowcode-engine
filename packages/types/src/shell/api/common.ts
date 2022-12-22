@@ -1,7 +1,7 @@
 
 import { Component, ReactNode } from 'react';
-import { NodeSchema } from '../../schema';
-import { TransitionType } from '../../start-transaction';
+import { IPublicTypeNodeSchema } from '../type';
+import { IPublicEnumTransitionType } from '../enum';
 
 export interface IPublicCommonUtils {
   isNodeSchema(data: any): boolean;
@@ -10,13 +10,16 @@ export interface IPublicCommonUtils {
 
   compatibleLegaoSchema(props: any): any;
 
-  getNodeSchemaById(schema: NodeSchema, nodeId: string): NodeSchema | undefined;
+  getNodeSchemaById(
+      schema: IPublicTypeNodeSchema,
+      nodeId: string,
+    ): IPublicTypeNodeSchema | undefined;
 
   getConvertedExtraKey(key: string): string;
 
   getOriginalExtraKey(key: string): string;
 
-  executeTransaction(fn: () => void, type: TransitionType): void;
+  executeTransaction(fn: () => void, type: IPublicEnumTransitionType): void;
 
   createIntl(instance: string | object): {
     intlNode(id: string, params?: object): ReactNode;
@@ -27,6 +30,11 @@ export interface IPublicCommonUtils {
 }
 export interface IPublicCommonSkeletonCabin {
   get Workbench(): Component;
+}
+
+export interface IPublicCommonEditorCabin {
+  get Tip(): Component;
+  get Title(): Component;
 }
 
 export interface IPublicCommonDesignerCabin {
@@ -45,6 +53,8 @@ export interface IPublicApiCommon {
   get utils(): IPublicCommonUtils;
 
   get designerCabin(): IPublicCommonDesignerCabin;
+
+  get editorCabin(): IPublicCommonEditorCabin;
 
   get skeletonCabin(): IPublicCommonSkeletonCabin;
 }

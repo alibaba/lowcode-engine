@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import type { ProjectSchema, ResultDir } from '@alilc/lowcode-types';
+import type { IPublicTypeProjectSchema, ResultDir } from '@alilc/lowcode-types';
 import type { FlattenFile } from './types/file';
 
 declare const Worker: any;
@@ -26,7 +26,7 @@ export type Result = ResultDir | FlattenFile[];
 
 export async function generateCode(options: {
   solution: 'icejs' | 'rax';
-  schema: ProjectSchema;
+  schema: IPublicTypeProjectSchema;
   flattenResult?: boolean;
   workerJsUrl?: string;
   timeoutInMs?: number;

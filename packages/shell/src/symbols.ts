@@ -25,3 +25,7 @@ export const simulatorRendererSymbol = Symbol('simulatorRenderer');
 export const dragObjectSymbol = Symbol('dragObject');
 export const locateEventSymbol = Symbol('locateEvent');
 export const designerCabinSymbol = Symbol('designerCabin');
+export const hotkeySymbol = Symbol('hotkey');
+export const pluginsSymbol = Symbol('plugins');
+export const workspaceSymbol = Symbol('workspace');
+export const windowSymbol = Symbol('window');

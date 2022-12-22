@@ -1,6 +1,6 @@
-import { NodeSchema, NodeData } from '../../schema';
-import { TransformStage } from '../../transform-stage';
-import { IPublicModelNode } from './node';
+import { IPublicTypeNodeSchema, IPublicTypeNodeData } from '../type';
+import { IPublicEnumTransformStage } from '../enum';
+import { IPublicModelNode } from './';
 
 export interface IPublicModelNodeChildren {
   /**
@@ -14,15 +14,28 @@ export interface IPublicModelNodeChildren {
   get size(): number;
 
   /**
+   * @deprecated please use isEmptyNode
    * 是否为空
    * @returns
    */
   get isEmpty(): boolean;
 
   /**
+   * 是否为空
+   * @returns
+   */
+  get isEmptyNode(): boolean;
+
+  /**
+   * @deprecated please use notEmptyNode
    * judge if it is not empty
    */
   get notEmpty(): boolean;
+
+  /**
+   * judge if it is not empty
+   */
+  get notEmptyNode(): boolean;
 
   /**
    * 删除指定节点
@@ -110,18 +123,18 @@ export interface IPublicModelNodeChildren {
    * 导入 schema
    * @param data
    */
-  importSchema(data?: NodeData | NodeData[]): void;
+  importSchema(data?: IPublicTypeNodeData | IPublicTypeNodeData[]): void;
 
   /**
    * 导出 schema
    * @param stage
    * @returns
    */
-  exportSchema(stage: TransformStage): NodeSchema;
+  exportSchema(stage: IPublicEnumTransformStage): IPublicTypeNodeSchema;
 
   mergeChildren(
     remover: (node: IPublicModelNode, idx: number) => boolean,
-    adder: (children: IPublicModelNode[]) => NodeData[] | null,
+    adder: (children: IPublicModelNode[]) => IPublicTypeNodeData[] | null,
     sorter: (firstNode: IPublicModelNode, secondNode: IPublicModelNode) => number
   ): any;
 

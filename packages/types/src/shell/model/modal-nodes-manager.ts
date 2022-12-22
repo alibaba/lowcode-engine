@@ -1,4 +1,4 @@
-import { IPublicModelNode } from './node';
+import { IPublicModelNode } from './';
 
 export interface IPublicModelModalNodesManager {
   /**

@@ -1,10 +1,5 @@
-import { EventEmitter } from 'events';
-import StrictEventEmitter from 'strict-event-emitter-types';
 import { ReactNode, ComponentType } from 'react';
-import { NpmInfo } from './npm';
-import * as GlobalEvent from './event';
-import { CustomView } from './setter-config';
-import { TitleContent } from './title';
+import { IPublicTypeNpmInfo, IPublicModelEditor } from './shell';
 
 export type KeyType = (new (...args: any[]) => any) | symbol | string;
 export type ClassType = new (...args: any[]) => any;
@@ -25,34 +20,13 @@ export type GetReturnType<T, ClsType> = T extends undefined
  *
  * @see https://www.npmjs.com/package/power-di
  */
-interface PowerDIRegisterOptions {
+export interface PowerDIRegisterOptions {
   /** default: true */
   singleton?: boolean;
   /** if data a class, auto new a instance.
    *  if data a function, auto run(lazy).
    *  default: true */
   autoNew?: boolean;
-}
-
-export interface IEditor extends StrictEventEmitter<EventEmitter, GlobalEvent.EventConfig> {
-  get: <T = undefined, KeyOrType = any>(
-    keyOrType: KeyOrType,
-    opt?: GetOptions
-  ) => GetReturnType<T, KeyOrType> | undefined;
-
-  has: (keyOrType: KeyType) => boolean;
-
-  set: (key: KeyType, data: any) => void | Promise<void>;
-
-  onceGot: <T = undefined, KeyOrType extends KeyType = any>
-    (keyOrType: KeyOrType) => Promise<GetReturnType<T, KeyOrType>>;
-
-  onGot: <T = undefined, KeyOrType extends KeyType = any>(
-    keyOrType: KeyOrType,
-    fn: (data: GetReturnType<T, KeyOrType>) => void,
-  ) => () => void;
-
-  register: (data: any, key?: KeyType, options?: PowerDIRegisterOptions) => void;
 }
 
 export interface EditorConfig {
@@ -68,7 +42,7 @@ export interface EditorConfig {
 }
 
 export interface SkeletonConfig {
-  config: NpmInfo;
+  config: IPublicTypeNpmInfo;
   props?: Record<string, unknown>;
   handler?: (config: EditorConfig) => EditorConfig;
 }
@@ -104,7 +78,7 @@ export interface PluginConfig {
     panelProps?: Record<string, unknown>;
     linkProps?: Record<string, unknown>;
   };
-  config?: NpmInfo;
+  config?: IPublicTypeNpmInfo;
   pluginProps?: Record<string, unknown>;
 }
 
@@ -113,14 +87,14 @@ export type HooksConfig = HookConfig[];
 export interface HookConfig {
   message: string;
   type: 'on' | 'once';
-  handler: (this: IEditor, editor: IEditor, ...args: any[]) => void;
+  handler: (this: IPublicModelEditor, editor: IPublicModelEditor, ...args: any[]) => void;
 }
 
 export type ShortCutsConfig = ShortCutConfig[];
 
 export interface ShortCutConfig {
   keyboard: string;
-  handler: (editor: IEditor, ev: Event, keymaster: any) => void;
+  handler: (editor: IPublicModelEditor, ev: Event, keymaster: any) => void;
 }
 
 export type UtilsConfig = UtilConfig[];
@@ -128,14 +102,14 @@ export type UtilsConfig = UtilConfig[];
 export interface UtilConfig {
   name: string;
   type: 'npm' | 'function';
-  content: NpmInfo | ((...args: []) => any);
+  content: IPublicTypeNpmInfo | ((...args: []) => any);
 }
 
 export type ConstantsConfig = Record<string, unknown>;
 
 export interface LifeCyclesConfig {
-  init?: (editor: IEditor) => any;
-  destroy?: (editor: IEditor) => any;
+  init?: (editor: IPublicModelEditor) => any;
+  destroy?: (editor: IPublicModelEditor) => any;
 }
 
 export type LocaleType = 'zh-CN' | 'zh-TW' | 'en-US' | 'ja-JP';
@@ -158,7 +132,7 @@ export interface Utils {
 }
 
 export interface PluginProps {
-  editor?: IEditor;
+  editor?: IPublicModelEditor;
   config: PluginConfig;
   [key: string]: any;
 }
@@ -178,7 +152,7 @@ export interface PluginSet {
 }
 
 export type PluginClass = ComponentType<PluginProps> & {
-  init?: (editor: IEditor) => void;
+  init?: (editor: IPublicModelEditor) => void;
   defaultProps?: {
     locale?: LocaleType;
     messages?: I18nMessages;
@@ -198,23 +172,4 @@ export interface PluginStatus {
 
 export interface PluginStatusSet {
   [key: string]: PluginStatus;
-}
-
-export type HotkeyCallback = (e: KeyboardEvent, combo?: string) => any | false;
-
-export interface RegisteredSetter {
-  component: CustomView;
-  defaultProps?: object;
-  title?: TitleContent;
-  /**
-   * for MixedSetter to check this setter if available
-   */
-  condition?: (field: any) => boolean;
-  /**
-   * for MixedSetter to manual change to this setter
-   */
-  initialValue?: any | ((field: any) => any);
-  recommend?: boolean;
-  // 标识是否为动态 setter，默认为 true
-  isDynamic?: boolean;
 }

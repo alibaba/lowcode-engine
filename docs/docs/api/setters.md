@@ -38,8 +38,9 @@ function registerSetter(
 ```typescript
 import { setters, skeleton } from '@alilc/lowcode-engine';
 import { setterMap, pluginMap } from '@alilc/lowcode-engine-ext';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
-const setterRegistry = (ctx: ILowCodePluginContext) => {
+const setterRegistry = (ctx: IPublicModelPluginContext) => {
   return {
     name: 'ext-setters-registry',
     async init() {
@@ -209,8 +210,9 @@ function registerSetter(
 ```typescript
 import { setters, skeleton } from '@alilc/lowcode-engine';
 import { setterMap, pluginMap } from '@alilc/lowcode-engine-ext';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
-const setterRegistry = (ctx: ILowCodePluginContext) => {
+const setterRegistry = (ctx: IPublicModelPluginContext) => {
   return {
     name: 'ext-setters-registry',
     async init() {

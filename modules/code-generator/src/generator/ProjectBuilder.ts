@@ -1,4 +1,4 @@
-import { ResultDir, ResultFile, ProjectSchema } from '@alilc/lowcode-types';
+import { ResultDir, ResultFile, IPublicTypeProjectSchema } from '@alilc/lowcode-types';
 
 import {
   IModuleBuilder,
@@ -87,13 +87,13 @@ export class ProjectBuilder implements IProjectBuilder {
     this.extraContextData = extraContextData;
   }
 
-  async generateProject(originalSchema: ProjectSchema | string): Promise<ResultDir> {
+  async generateProject(originalSchema: IPublicTypeProjectSchema | string): Promise<ResultDir> {
     // Init
     const { schemaParser } = this;
 
     const projectRoot = await this.template.generateTemplate();
 
-    let schema: ProjectSchema =
+    let schema: IPublicTypeProjectSchema =
       typeof originalSchema === 'string' ? JSON.parse(originalSchema) : originalSchema;
 
     // Parse / Format

@@ -1,4 +1,4 @@
-import { ComponentMetadata } from "@alilc/lowcode-types";
+import { IPublicTypeComponentMetadata } from "@alilc/lowcode-types";
 export default {
   componentName: 'Div',
   title: '容器',
@@ -19,4 +19,4 @@ export default {
       },
     },
   },
-} as ComponentMetadata;
+} as IPublicTypeComponentMetadata;

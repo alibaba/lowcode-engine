@@ -109,4 +109,4 @@ class Clipboard {
   }
 }
 
-export default new Clipboard();
+export const clipboard = new Clipboard();

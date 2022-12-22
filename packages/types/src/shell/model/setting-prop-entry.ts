@@ -1,10 +1,6 @@
-import { CustomView, SetterType } from '../../setter-config';
-import { CompositeValue } from '../../value-type';
-import { FieldExtraProps, FieldConfig } from '../../field-config';
-import { ISetValueOptions } from '../../designer';
-import { IPublicModelNode } from './node';
-import { IPublicModelComponentMeta } from './component-meta';
-import { IPublicModelSettingTopEntry } from './setting-top-entry';
+import { IPublicTypeCustomView, IPublicTypeCompositeValue, IPublicTypeSetterType, IPublicTypeSetValueOptions, IPublicTypeFieldConfig, IPublicTypeFieldExtraProps } from '../type';
+import { IPublicModelNode, IPublicModelComponentMeta, IPublicModelSettingTopEntry } from './';
+
 
 export interface IPublicModelSettingPropEntry {
   /**
@@ -40,7 +36,7 @@ export interface IPublicModelSettingPropEntry {
   /**
    * 获取设置属性的 setter
    */
-  get setter(): SetterType | null;
+  get setter(): IPublicTypeSetterType | null;
 
   /**
    * 获取设置属性的 expanded
@@ -50,7 +46,7 @@ export interface IPublicModelSettingPropEntry {
   /**
    * 获取设置属性的 extraProps
    */
-  get extraProps(): FieldExtraProps;
+  get extraProps(): IPublicTypeFieldExtraProps;
 
   get props(): IPublicModelSettingTopEntry;
 
@@ -82,7 +78,7 @@ export interface IPublicModelSettingPropEntry {
   /**
    * 获取设置属性的 items
    */
-  get items(): Array<IPublicModelSettingPropEntry | CustomView>;
+  get items(): Array<IPublicModelSettingPropEntry | IPublicTypeCustomView>;
 
   /**
    * 设置 key 值
@@ -94,7 +90,7 @@ export interface IPublicModelSettingPropEntry {
    * 设置值
    * @param val 值
    */
-  setValue(val: CompositeValue, extraOptions?: ISetValueOptions): void;
+  setValue(val: IPublicTypeCompositeValue, extraOptions?: IPublicTypeSetValueOptions): void;
 
   /**
    * 设置子级属性值
@@ -161,7 +157,7 @@ export interface IPublicModelSettingPropEntry {
    * @param config
    * @returns
    */
-  createField(config: FieldConfig): IPublicModelSettingPropEntry;
+  createField(config: IPublicTypeFieldConfig): IPublicModelSettingPropEntry;
 
   /**
    * 获取值，当为变量时，返回 mock

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import type { ProjectSchema } from '@alilc/lowcode-types';
+import type { IPublicTypeProjectSchema } from '@alilc/lowcode-types';
 import CodeGen from './standalone';
 
 declare const self: any;
@@ -13,7 +13,7 @@ self.onmessage = (event: any) => {
 
 self.postMessage({ type: 'ready' });
 
-async function run(msg: { solution: string; schema: ProjectSchema; flattenResult?: boolean }) {
+async function run(msg: { solution: string; schema: IPublicTypeProjectSchema; flattenResult?: boolean }) {
   try {
     print('begin run...');
     self.postMessage({ type: 'run:begin' });

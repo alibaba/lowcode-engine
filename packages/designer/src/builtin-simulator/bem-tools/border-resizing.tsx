@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import DragResizeEngine from './drag-resize-engine';
-import { observer, computed, globalContext, Editor } from '@alilc/lowcode-editor-core';
+import { observer, computed, globalContext } from '@alilc/lowcode-editor-core';
 import classNames from 'classnames';
 import { SimulatorContext } from '../context';
 import { BuiltinSimulatorHost } from '../host';
@@ -172,13 +172,14 @@ export class BoxResizingInstance extends Component<{
         metadata.configure.advanced.callbacks.onResizeEnd(e, cbNode);
       }
 
-      const editor = globalContext.get(Editor);
+      const workspace = globalContext.get('workspace');
+      const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
       const npm = node?.componentMeta?.npm;
       const selected =
         [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
         node?.componentMeta?.componentName ||
         '';
-      editor?.emit('designer.border.resize', {
+      editor?.eventBus.emit('designer.border.resize', {
         selected,
         layout: node?.parent?.getPropValue('layout') || '',
       });

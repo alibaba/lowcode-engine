@@ -1,6 +1,5 @@
-import { CompositeValue } from '../../value-type';
-import { IPublicModelNode } from './node';
-import { IPublicModelProp } from './prop';
+import { IPublicTypeCompositeValue } from '../type';
+import { IPublicModelNode, IPublicModelProp } from './';
 
 export interface IPublicModelProps {
   /**
@@ -54,7 +53,7 @@ export interface IPublicModelProps {
    * @param value 值
    * @returns
    */
-  setPropValue(path: string, value: CompositeValue): void;
+  setPropValue(path: string, value: IPublicTypeCompositeValue): void;
 
   /**
    * 设置指定 path 的属性模型实例值
@@ -62,7 +61,7 @@ export interface IPublicModelProps {
    * @param value 值
    * @returns
    */
-  setExtraPropValue(path: string, value: CompositeValue): void;
+  setExtraPropValue(path: string, value: IPublicTypeCompositeValue): void;
 
   /**
    * test if the specified key is existing or not.
@@ -77,6 +76,6 @@ export interface IPublicModelProps {
    * @param key
    * @returns
    */
-  add(value: CompositeValue, key?: string | number | undefined): any;
+  add(value: IPublicTypeCompositeValue, key?: string | number | undefined): any;
 
 }

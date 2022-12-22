@@ -270,10 +270,11 @@ npm publish
 
 ### 在项目中引入资产包
 ```typescript
-import { ILowCodePluginContext, material, plugins } from '@alilc/lowcode-engine';
+import { material, plugins } from '@alilc/lowcode-engine';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
 // 动态加载 assets
-plugins.register((ctx: ILowCodePluginContext) => {
+plugins.register((ctx: IPublicModelPluginContext) => {
   return {
     name: 'ext-assets',
     async init() {

@@ -1,7 +1,6 @@
-import { RootSchema, ProjectSchema } from '../../schema';
-import { TransformStage } from '../../transform-stage';
-import { PropsTransducer } from '../../props-transducer';
-import { IPublicApiSimulatorHost } from './simulator-host';
+import { IPublicTypeProjectSchema, IPublicTypeDisposable, IPublicTypeRootSchema, IPublicTypePropsTransducer } from '../type';
+import { IPublicEnumTransformStage } from '../enum';
+import { IPublicApiSimulatorHost } from './';
 import { IPublicModelDocumentModel } from '../model';
 
 
@@ -28,14 +27,14 @@ export interface IPublicApiProject {
   * @param doc
   * @returns
   */
-  openDocument(doc?: string | RootSchema | undefined): IPublicModelDocumentModel | null;
+  openDocument(doc?: string | IPublicTypeRootSchema | undefined): IPublicModelDocumentModel | null;
 
   /**
    * 创建一个 document
    * @param data
    * @returns
    */
-  createDocument(data?: RootSchema): IPublicModelDocumentModel | null;
+  createDocument(data?: IPublicTypeRootSchema): IPublicModelDocumentModel | null;
 
 
   /**
@@ -62,13 +61,13 @@ export interface IPublicApiProject {
    * 导出 project
    * @returns
    */
-  exportSchema(stage: TransformStage): ProjectSchema;
+  exportSchema(stage: IPublicEnumTransformStage): IPublicTypeProjectSchema;
 
   /**
   * 导入 project
   * @param schema 待导入的 project 数据
   */
-  importSchema(schema?: ProjectSchema): void;
+  importSchema(schema?: IPublicTypeProjectSchema): void;
 
   /**
    * 获取当前的 document
@@ -81,7 +80,10 @@ export interface IPublicApiProject {
    * @param transducer
    * @param stage
    */
-  addPropsTransducer(transducer: PropsTransducer, stage: TransformStage): void;
+  addPropsTransducer(
+      transducer: IPublicTypePropsTransducer,
+      stage: IPublicEnumTransformStage,
+    ): void;
 
   /**
    * 绑定删除文档事件
@@ -93,17 +95,17 @@ export interface IPublicApiProject {
   /**
    * 当前 project 内的 document 变更事件
    */
-  onChangeDocument(fn: (doc: IPublicModelDocumentModel) => void): () => void;
+  onChangeDocument(fn: (doc: IPublicModelDocumentModel) => void): IPublicTypeDisposable;
 
   /**
    * 当前 project 的模拟器 ready 事件
    */
-  onSimulatorHostReady(fn: (host: IPublicApiSimulatorHost) => void): () => void;
+  onSimulatorHostReady(fn: (host: IPublicApiSimulatorHost) => void): IPublicTypeDisposable;
 
   /**
    * 当前 project 的渲染器 ready 事件
    */
-  onSimulatorRendererReady(fn: () => void): () => void;
+  onSimulatorRendererReady(fn: () => void): IPublicTypeDisposable;
 
   /**
    * 设置多语言语料

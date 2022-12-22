@@ -14,7 +14,7 @@ function isActiveable(obj: any): obj is Activeable {
   return obj && obj.setActive;
 }
 
-export default class WidgetContainer<T extends WidgetItem = any, G extends WidgetItem = any> {
+export class WidgetContainer<T extends WidgetItem = any, G extends WidgetItem = any> {
   @obx.shallow items: T[] = [];
 
   private maps: { [name: string]: T } = {};
@@ -81,7 +81,7 @@ export default class WidgetContainer<T extends WidgetItem = any, G extends Widge
   }
 
   unactiveAll() {
-    Object.keys(this.maps).forEach(name => this.unactive(name));
+    Object.keys(this.maps).forEach((name) => this.unactive(name));
   }
 
   add(item: T | G): T {
@@ -101,7 +101,8 @@ export default class WidgetContainer<T extends WidgetItem = any, G extends Widge
       item.setParent(this);
     }
     if (this.defaultSetCurrent) {
-      if (!this._current) {
+      const shouldHiddenWhenInit = (item as any).config?.props?.hiddenWhenInit;
+      if (!this._current && !shouldHiddenWhenInit) {
         this.active(item);
       }
     }

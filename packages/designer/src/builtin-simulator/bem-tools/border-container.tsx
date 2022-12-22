@@ -2,14 +2,14 @@ import * as React from 'react';
 import { Component, Fragment, ReactElement, PureComponent } from 'react';
 import classNames from 'classnames';
 import { computed, observer, Title, globalLocale } from '@alilc/lowcode-editor-core';
-import { I18nData, TitleContent } from '@alilc/lowcode-types';
+import { IPublicTypeI18nData, IPublicTypeTitleContent } from '@alilc/lowcode-types';
 import { isI18nData } from '@alilc/lowcode-utils';
 import { DropLocation } from '../../designer';
 import { BuiltinSimulatorHost } from '../../builtin-simulator/host';
-import { ParentalNode } from '../../document/node';
+import { INode } from '../../document/node';
 
 export class BorderContainerInstance extends PureComponent<{
-  title: TitleContent;
+  title: IPublicTypeTitleContent;
   rect: DOMRect | null;
   scale: number;
   scrollX: number;
@@ -37,7 +37,7 @@ export class BorderContainerInstance extends PureComponent<{
   }
 }
 
-function getTitle(title: string | I18nData | ReactElement) {
+function getTitle(title: string | IPublicTypeI18nData | ReactElement) {
   if (typeof title === 'string') return title;
   if (isI18nData(title)) {
     const locale = globalLocale.getLocale() || 'zh-CN';
@@ -50,9 +50,8 @@ function getTitle(title: string | I18nData | ReactElement) {
 export class BorderContainer extends Component<{
   host: BuiltinSimulatorHost;
 }, {
-  target?: ParentalNode;
+  target?: INode;
 }> {
-
   state = {} as any;
 
   @computed get scale() {
@@ -70,7 +69,7 @@ export class BorderContainer extends Component<{
   componentDidMount() {
     const { host } = this.props;
 
-    host.designer.editor.on('designer.dropLocation.change', (loc: DropLocation) => {
+    host.designer.editor.eventBus.on('designer.dropLocation.change', (loc: DropLocation) => {
       let { target } = this.state;
       if (target === loc?.target) return;
       this.setState({

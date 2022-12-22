@@ -1,7 +1,12 @@
 import { get as lodashGet } from 'lodash';
 import { isPlainObject } from '@alilc/lowcode-utils';
-import { EngineOptions, IEngineConfig } from '@alilc/lowcode-types';
+import {
+  EngineOptions,
+  IPublicModelEngineConfig,
+  IPreference,
+} from '@alilc/lowcode-types';
 import { getLogger } from './utils/logger';
+import Preference from './utils/preference';
 
 const logger = getLogger({ level: 'log', bizName: 'config' });
 
@@ -173,7 +178,7 @@ export interface IEngineConfigPrivate {
 }
 
 
-export class EngineConfig implements IEngineConfig, IEngineConfigPrivate {
+export class EngineConfig implements IPublicModelEngineConfig, IEngineConfigPrivate {
   private config: { [key: string]: any } = {};
 
   private waits = new Map<
@@ -184,8 +189,15 @@ export class EngineConfig implements IEngineConfig, IEngineConfigPrivate {
   }>
   >();
 
+  /**
+   * used to store preferences
+   *
+   */
+  readonly preference: IPreference;
+
   constructor(config?: { [key: string]: any }) {
     this.config = config || {};
+    this.preference = new Preference();
   }
 
   /**
@@ -335,6 +347,10 @@ export class EngineConfig implements IEngineConfig, IEngineConfigPrivate {
     if (waits.length < 1) {
       this.waits.delete(key);
     }
+  }
+
+  getPreference(): IPreference {
+    return this.preference;
   }
 }
 

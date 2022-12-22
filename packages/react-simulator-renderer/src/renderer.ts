@@ -17,9 +17,9 @@ import {
   AssetLoader,
   getProjectUtils,
 } from '@alilc/lowcode-utils';
-import { ComponentSchema, TransformStage, NodeSchema } from '@alilc/lowcode-types';
+import { IPublicTypeComponentSchema, IPublicEnumTransformStage, IPublicTypeNodeSchema, NodeInstance } from '@alilc/lowcode-types';
 // just use types
-import { BuiltinSimulatorRenderer, NodeInstance, Component, DocumentModel, Node } from '@alilc/lowcode-designer';
+import { BuiltinSimulatorRenderer, Component, DocumentModel, Node } from '@alilc/lowcode-designer';
 import LowCodeRenderer from '@alilc/lowcode-react-renderer';
 import { createMemoryHistory, MemoryHistory } from 'history';
 import Slot from './builtin-components/slot';
@@ -34,7 +34,7 @@ export class DocumentInstance {
   instancesMap = new Map<string, ReactInstance[]>();
 
   get schema(): any {
-    return this.document.export(TransformStage.Render);
+    return this.document.export(IPublicEnumTransformStage.Render);
   }
 
   private disposeFunctions: Array<() => void> = [];
@@ -427,17 +427,17 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     cursor.release();
   }
 
-  createComponent(schema: NodeSchema): Component | null {
+  createComponent(schema: IPublicTypeNodeSchema): Component | null {
     const _schema: any = {
       ...compatibleLegaoSchema(schema),
     };
 
-    if (schema.componentName === 'Component' && (schema as ComponentSchema).css) {
+    if (schema.componentName === 'Component' && (schema as IPublicTypeComponentSchema).css) {
       const doc = window.document;
       const s = doc.createElement('style');
       s.setAttribute('type', 'text/css');
       s.setAttribute('id', `Component-${schema.id || ''}`);
-      s.appendChild(doc.createTextNode((schema as ComponentSchema).css || ''));
+      s.appendChild(doc.createTextNode((schema as IPublicTypeComponentSchema).css || ''));
       doc.getElementsByTagName('head')[0].appendChild(s);
     }
 

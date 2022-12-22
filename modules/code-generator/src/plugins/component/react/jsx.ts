@@ -16,7 +16,7 @@ import { COMMON_CHUNK_NAME } from '../../../const/generator';
 
 import { createReactNodeGenerator } from '../../../utils/nodeToJSX';
 import { Scope } from '../../../utils/Scope';
-import { JSExpression } from '@alilc/lowcode-types';
+import { IPublicTypeJSExpression } from '@alilc/lowcode-types';
 import { generateExpression } from '../../../utils/jsExpression';
 import { transformJsExpr } from '../../../core/jsx/handlers/transformJsExpression';
 import { transformThis2Context } from '../../../core/jsx/handlers/transformThis2Context';
@@ -47,7 +47,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     // 这里会将内部的一些子上下文的访问(this.xxx)转换为 __$$context.xxx 的形式
     // 与 Rax 所不同的是，这里不会将最顶层的 this 转换掉
     const customHandlers: HandlerSet<string> = {
-      expression(input: JSExpression, scope: IScope, config) {
+      expression(input: IPublicTypeJSExpression, scope: IScope, config) {
         return transformJsExpr(generateExpression(input, scope), scope, {
           dontWrapEval: !(config?.tolerateEvalErrors ?? tolerateEvalErrors),
           dontTransformThis2ContextAtRootScope: true,
@@ -120,7 +120,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
           function __$$eval(expr) {
             try {
               return expr();
-            } catch (error) { 
+            } catch (error) {
               ${evalErrorsHandler}
             }
           }

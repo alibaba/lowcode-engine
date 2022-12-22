@@ -25,12 +25,12 @@ export function liveEditingRule(target: EditingTarget) {
 
   const targetElement = event.target as HTMLElement;
 
-  if (!Array.from(targetElement.childNodes).every(item => item.nodeType === Node.TEXT_NODE)) {
+  if (!Array.from(targetElement.childNodes).every((item) => item.nodeType === Node.TEXT_NODE)) {
     return null;
   }
 
   const { innerText } = targetElement;
-  const propTarget = ['title', 'label', 'text', 'content', 'children'].find(prop => {
+  const propTarget = ['title', 'label', 'text', 'content', 'children'].find((prop) => {
     return equalText(getText(node, prop), innerText);
   });
 

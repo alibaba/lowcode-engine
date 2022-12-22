@@ -1,8 +1,8 @@
 import { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { observer } from '@alilc/lowcode-editor-core';
-import Area from '../area';
-import Panel from '../widget/panel';
+import { Area } from '../area';
+import { Panel } from '../widget/panel';
 
 @observer
 export default class RightArea extends Component<{ area: Area<any, Panel> }> {

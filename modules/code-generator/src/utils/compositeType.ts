@@ -1,13 +1,13 @@
 import {
-  CompositeArray,
-  CompositeValue,
-  CompositeObject,
-  JSFunction,
-  JSExpression,
+  IPublicTypeCompositeArray,
+  IPublicTypeCompositeValue,
+  IPublicTypeCompositeObject,
+  IPublicTypeJSFunction,
+  IPublicTypeJSExpression,
   isJSExpression,
   isJSFunction,
   isJSSlot,
-  JSSlot,
+  IPublicTypeJSSlot,
 } from '@alilc/lowcode-types';
 import _ from 'lodash';
 
@@ -43,7 +43,7 @@ function isDataSource(v: unknown): v is DataSource {
 }
 
 function generateArray(
-  value: CompositeArray,
+  value: IPublicTypeCompositeArray,
   scope: IScope,
   options: CompositeValueGeneratorOptions = {},
 ): string {
@@ -52,7 +52,7 @@ function generateArray(
 }
 
 function generateObject(
-  value: CompositeObject,
+  value: IPublicTypeCompositeObject,
   scope: IScope,
   options: CompositeValueGeneratorOptions = {},
 ): string {
@@ -88,7 +88,7 @@ function generateBool(value: boolean): string {
   return value ? 'true' : 'false';
 }
 
-function genFunction(value: JSFunction): string {
+function genFunction(value: IPublicTypeJSFunction): string {
   const globalVars = parseExpressionGetKeywords(value.value);
 
   if (globalVars.includes('arguments')) {
@@ -98,7 +98,7 @@ function genFunction(value: JSFunction): string {
   return generateFunction(value, { isArrow: true });
 }
 
-function genJsSlot(value: JSSlot, scope: IScope, options: CompositeValueGeneratorOptions = {}) {
+function genJsSlot(value: IPublicTypeJSSlot, scope: IScope, options: CompositeValueGeneratorOptions = {}) {
   if (options.nodeGenerator) {
     return generateJsSlot(value, scope, options.nodeGenerator);
   }
@@ -106,7 +106,7 @@ function genJsSlot(value: JSSlot, scope: IScope, options: CompositeValueGenerato
 }
 
 function generateUnknownType(
-  value: CompositeValue,
+  value: IPublicTypeCompositeValue,
   scope: IScope,
   options: CompositeValueGeneratorOptions = {},
 ): string {
@@ -128,7 +128,7 @@ function generateUnknownType(
   // FIXME: 这个是临时方案
   // 在遇到 type variable 私有类型时，转换为 JSExpression
   if (isVariable(value)) {
-    const transValue: JSExpression = {
+    const transValue: IPublicTypeJSExpression = {
       type: 'JSExpression',
       value: value.variable,
     };
@@ -188,7 +188,7 @@ function generateUnknownType(
     if (options.handlers?.object) {
       return executeFunctionStack(value, scope, options.handlers.object, generateObject, options);
     }
-    return generateObject(value as CompositeObject, scope, options);
+    return generateObject(value as IPublicTypeCompositeObject, scope, options);
   }
 
   if (_.isString(value)) {
@@ -218,7 +218,7 @@ function generateUnknownType(
 // 这一层曾经是对产出做最外层包装的，但其实包装逻辑不应该属于这一层
 // 这一层先不去掉，做冗余，方便后续重构
 export function generateCompositeType(
-  value: CompositeValue,
+  value: IPublicTypeCompositeValue,
   scope: IScope,
   options: CompositeValueGeneratorOptions = {},
 ): string {

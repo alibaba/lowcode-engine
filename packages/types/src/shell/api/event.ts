@@ -1,3 +1,4 @@
+import { IPublicTypeDisposable } from '../type';
 
 export interface IPublicApiEvent {
 
@@ -6,7 +7,7 @@ export interface IPublicApiEvent {
    * @param event 事件名称
    * @param listener 事件回调
    */
-  on(event: string, listener: (...args: unknown[]) => void): void;
+  on(event: string, listener: (...args: any[]) => void): IPublicTypeDisposable;
 
 
   /**
@@ -14,7 +15,7 @@ export interface IPublicApiEvent {
    * @param event 事件名称
    * @param listener 事件回调
    */
-  off(event: string, listener: (...args: unknown[]) => void): void;
+  off(event: string, listener: (...args: any[]) => void): void;
 
   /**
    * 触发事件
@@ -22,5 +23,5 @@ export interface IPublicApiEvent {
    * @param args 事件参数
    * @returns
    */
-  emit(event: string, ...args: unknown[]): void;
+  emit(event: string, ...args: any[]): void;
 }

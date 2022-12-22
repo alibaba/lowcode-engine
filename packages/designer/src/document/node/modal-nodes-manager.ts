@@ -1,6 +1,7 @@
-import { EventEmitter } from 'events';
 import { Node } from './node';
 import { DocumentModel } from '../document-model';
+import { IPublicModelModalNodesManager } from '@alilc/lowcode-types';
+import { createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
 
 export function getModalNodes(node: Node) {
   if (!node) return [];
@@ -17,7 +18,11 @@ export function getModalNodes(node: Node) {
   return nodes;
 }
 
-export class ModalNodesManager {
+export interface IModalNodesManager extends IPublicModelModalNodesManager {
+
+}
+
+export class ModalNodesManager implements IModalNodesManager {
   public willDestroy: any;
 
   private page: DocumentModel;
@@ -26,11 +31,11 @@ export class ModalNodesManager {
 
   private nodeRemoveEvents: any;
 
-  private emitter: EventEmitter;
+  private emitter: IEventBus;
 
   constructor(page: DocumentModel) {
     this.page = page;
-    this.emitter = new EventEmitter();
+    this.emitter = createModuleEventBus('ModalNodesManager');
     this.nodeRemoveEvents = {};
     this.setNodes();
     this.hideModalNodes();

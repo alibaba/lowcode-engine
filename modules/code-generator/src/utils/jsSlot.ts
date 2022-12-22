@@ -1,4 +1,4 @@
-import { JSSlot, isJSSlot, NodeData } from '@alilc/lowcode-types';
+import { IPublicTypeJSSlot, isJSSlot, IPublicTypeNodeData } from '@alilc/lowcode-types';
 import { CodeGeneratorError, NodeGenerator, IScope } from '../types';
 import { unwrapJsExprQuoteInJsx } from './jsxHelpers';
 
@@ -8,7 +8,7 @@ function generateSingleLineComment(commentText: string): string {
 
 export function generateJsSlot(slot: any, scope: IScope, generator: NodeGenerator<string>): string {
   if (isJSSlot(slot)) {
-    const { title, params, value } = slot as JSSlot;
+    const { title, params, value } = slot as IPublicTypeJSSlot;
 
     // slot 也是分有参数和无参数的
     // - 有参数的 slot 就是类似一个 render 函数，需要创建子作用域
@@ -39,7 +39,7 @@ export function generateJsSlot(slot: any, scope: IScope, generator: NodeGenerato
 }
 
 function generateNodeDataOrArrayForJsSlot(
-  value: NodeData | NodeData[],
+  value: IPublicTypeNodeData | IPublicTypeNodeData[],
   generator: NodeGenerator<string>,
   scope: IScope,
 ) {

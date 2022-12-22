@@ -1,10 +1,11 @@
+/* eslint-disable max-len */
 import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
-import WidgetContainer from './widget/widget-container';
+import { WidgetContainer } from './widget/widget-container';
 import { Skeleton } from './skeleton';
 import { IWidget } from './widget/widget';
-import { IWidgetBaseConfig } from './types';
+import { IPublicTypeWidgetBaseConfig, IArea } from '@alilc/lowcode-types';
 
-export default class Area<C extends IWidgetBaseConfig = any, T extends IWidget = IWidget> {
+export class Area<C extends IPublicTypeWidgetBaseConfig = any, T extends IWidget = IWidget> implements IArea<C, T> {
   @obx private _visible = true;
 
   @computed get visible() {
