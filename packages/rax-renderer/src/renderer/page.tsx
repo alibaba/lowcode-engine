@@ -1,6 +1,6 @@
 import { pageRendererFactory, types } from '@alilc/lowcode-renderer-core';
 
-export default function raxPageRendererFactory() {
+const raxPageRendererFactory: () => any = () => {
   const OriginPage = pageRendererFactory();
   return class PageRenderer extends OriginPage {
     async componentDidUpdate() {
@@ -33,4 +33,6 @@ export default function raxPageRendererFactory() {
       }));
     }
   };
-}
+};
+
+export default raxPageRendererFactory;

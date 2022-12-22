@@ -1,6 +1,6 @@
 import { componentRendererFactory, types } from '@alilc/lowcode-renderer-core';
 
-export default function raxComponentRendererFactory() {
+const raxComponentRendererFactory: () => any = () => {
   const OriginComponent = componentRendererFactory();
   return class ComponentRenderer extends OriginComponent {
     render() {
@@ -33,4 +33,6 @@ export default function raxComponentRendererFactory() {
       return that.__renderContent(content);
     }
   };
-}
+};
+
+export default raxComponentRendererFactory;
