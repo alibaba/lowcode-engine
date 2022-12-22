@@ -26,7 +26,6 @@
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.29",
-    "@alilc/lowcode-shell": "1.1.0-beta.7",
     "@testing-library/react": "^11.2.2",
     "@types/classnames": "^2.2.7",
     "@types/enzyme": "^3.10.12",

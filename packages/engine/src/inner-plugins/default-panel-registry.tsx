@@ -22,7 +22,9 @@ export const defaultPanelRegistry = (editor: any, designer: any) => {
             area: 'rightArea',
             name: 'settingsPane',
             type: 'Panel',
-            content: SettingsPrimaryPane,
+            content: <SettingsPrimaryPane
+              engineEditor={editor}
+            />,
             props: {
               ignoreRoot: true,
             },

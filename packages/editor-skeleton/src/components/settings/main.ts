@@ -13,7 +13,7 @@ export class SettingsMain {
 
   private _sessionId = '';
 
-  @obx.ref private _settings?: SettingTopEntry;
+  @obx.ref private _settings?: SettingTopEntry | null = null;
 
   @computed get length(): number | undefined {
     return this._settings?.nodes.length;
@@ -23,7 +23,7 @@ export class SettingsMain {
     return this._settings?.componentMeta;
   }
 
-  get settings() {
+  @computed get settings() {
     return this._settings;
   }
 
@@ -48,7 +48,7 @@ export class SettingsMain {
     this.disposeListener = () => {
       this.editor.removeListener('designer.selection.change', setupSelection);
     };
-    const designer = await this.editor.onceGot(Designer);
+    const designer = await this.editor.onceGot('designer');
     this.designer = designer;
     setupSelection(designer.currentSelection);
   }

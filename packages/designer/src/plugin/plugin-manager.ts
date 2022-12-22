@@ -29,6 +29,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
   private plugins: ILowCodePluginRuntime[] = [];
 
   pluginsMap: Map<string, ILowCodePluginRuntime> = new Map();
+  pluginContextMap: Map<string, LowCodePluginContext> = new Map();
 
   private pluginPreference?: PluginPreference = new Map();
 
@@ -39,7 +40,13 @@ export class LowCodePluginManager implements ILowCodePluginManager {
   }
 
   _getLowCodePluginContext = (options: IPluginContextOptions) => {
-    return new LowCodePluginContext(options, this.contextApiAssembler);
+    const { pluginName } = options;
+    let context = this.pluginContextMap.get(pluginName);
+    if (!context) {
+      context = new LowCodePluginContext(options, this.contextApiAssembler);
+      this.pluginContextMap.set(pluginName, context);
+    }
+    return context;
   };
 
   isEngineVersionMatched(versionExp: string): boolean {

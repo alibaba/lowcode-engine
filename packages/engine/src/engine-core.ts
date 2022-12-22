@@ -77,7 +77,7 @@ const { project: innerProject } = designer;
 const innerHotkey = new InnerHotkey();
 const hotkey = new Hotkey(innerHotkey);
 const project = new Project(innerProject);
-const skeleton = new Skeleton(innerSkeleton);
+const skeleton = new Skeleton(innerSkeleton, 'any', false);
 const innerSetters = new InnerSetters();
 const setters = new Setters(innerSetters);
 
@@ -98,7 +98,7 @@ const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
   assembleApis: (context: ILowCodePluginContextPrivate, pluginName: string, meta: IPublicTypePluginMeta) => {
     context.hotkey = hotkey;
     context.project = project;
-    context.skeleton = skeleton;
+    context.skeleton = new Skeleton(innerSkeleton, pluginName, false);
     context.setters = setters;
     context.material = material;
     const eventPrefix = meta?.eventPrefix || 'common';

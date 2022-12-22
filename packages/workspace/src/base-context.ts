@@ -82,7 +82,7 @@ export class BasicContext {
     const config = engineConfig;
     const event = new Event(editor, { prefix: 'common' });
     const logger = getLogger({ level: 'warn', bizName: 'common' });
-    const skeleton = new Skeleton(innerSkeleton, true);
+    const skeleton = new Skeleton(innerSkeleton, 'any', true);
     editor.set('setters', setters);
     editor.set('project', project);
     editor.set('material', material);
@@ -110,7 +110,7 @@ export class BasicContext {
         context.workspace = workspace;
         context.hotkey = hotkey;
         context.project = project;
-        context.skeleton = skeleton;
+        context.skeleton = new Skeleton(innerSkeleton, pluginName, true);
         context.setters = setters;
         context.material = material;
         const eventPrefix = meta?.eventPrefix || 'common';

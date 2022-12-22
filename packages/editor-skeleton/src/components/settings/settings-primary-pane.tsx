@@ -10,11 +10,11 @@ import { SkeletonContext } from '../../context';
 import { createIcon, isSettingField } from '@alilc/lowcode-utils';
 
 @observer
-export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any }, { shouldIgnoreRoot: boolean }> {
+export class SettingsPrimaryPane extends Component<{ engineEditor: Editor; config: any }, { shouldIgnoreRoot: boolean }> {
   state = {
     shouldIgnoreRoot: false,
   };
-  private main;
+  private main = new SettingsMain(this.props.engineEditor);
 
   @obx.ref private _activeKey?: any;
 
@@ -29,8 +29,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
   componentDidMount() {
     this.setShouldIgnoreRoot();
 
-    const workspace = globalContext.get('workspace');
-    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
+    const editor = this.props.engineEditor;
 
     editor.eventBus.on('designer.selection.change', () => {
       if (!engineConfig.get('stayOnTheSameSettingTab', false)) {
@@ -135,8 +134,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
 
   render() {
     const { settings } = this.main;
-    const workspace = globalContext.get('workspace');
-    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
+    const editor = this.props.engineEditor;
     if (!settings) {
       // 未选中节点，提示选中 或者 显示根节点设置
       return (

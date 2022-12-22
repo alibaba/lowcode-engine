@@ -9,6 +9,7 @@ import { IPublicApiSkeleton, IPublicTypeWidgetBaseConfig, IPublicTypeWidgetConfi
 const innerSkeletonSymbol = Symbol('skeleton');
 export class Skeleton implements IPublicApiSkeleton {
   private readonly [innerSkeletonSymbol]: InnerSkeleton;
+  private readonly pluginName: string;
 
   get [skeletonSymbol]() {
     if (this.workspaceMode) {
@@ -22,8 +23,9 @@ export class Skeleton implements IPublicApiSkeleton {
     return this[innerSkeletonSymbol];
   }
 
-  constructor(skeleton: InnerSkeleton, readonly workspaceMode: boolean = false) {
+  constructor(skeleton: InnerSkeleton, pluginName: string, readonly workspaceMode: boolean = false) {
     this[innerSkeletonSymbol] = skeleton;
+    this.pluginName = pluginName;
   }
 
   /**
@@ -33,7 +35,11 @@ export class Skeleton implements IPublicApiSkeleton {
    * @returns
    */
   add(config: IPublicTypeWidgetBaseConfig, extraConfig?: Record<string, any>) {
-    return this[skeletonSymbol].add(config, extraConfig);
+    const configWithName = {
+      ...config,
+      pluginName: this.pluginName,
+    };
+    return this[skeletonSymbol].add(configWithName, extraConfig);
   }
 
   /**
