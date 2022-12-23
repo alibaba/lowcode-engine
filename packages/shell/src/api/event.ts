@@ -1,6 +1,5 @@
-import { Editor as InnerEditor, globalContext } from '@alilc/lowcode-editor-core';
+import { Editor as InnerEditor, EventBus } from '@alilc/lowcode-editor-core';
 import { getLogger, isPublicEventName, isPluginEventName } from '@alilc/lowcode-utils';
-import { editorSymbol } from '../symbols';
 import { IPublicApiEvent, IPublicTypeDisposable } from '@alilc/lowcode-types';
 
 const logger = getLogger({ level: 'warn', bizName: 'shell-event' });
@@ -9,10 +8,10 @@ type EventOptions = {
   prefix: string;
 };
 
-const innerEditorSymbol = Symbol('editor');
+const eventBusSymbol = Symbol('eventBus');
 
 export class Event implements IPublicApiEvent {
-  private readonly [editorSymbol]: InnerEditor;
+  private readonly [eventBusSymbol]: EventBus;
   private readonly options: EventOptions;
 
   // TODO:
@@ -21,8 +20,8 @@ export class Event implements IPublicApiEvent {
    */
   readonly names = [];
 
-  constructor(editor: InnerEditor, options: EventOptions, public workspaceMode = false) {
-    this[editorSymbol] = editor;
+  constructor(eventBus: EventBus, options: EventOptions, public workspaceMode = false) {
+    this[eventBusSymbol] = eventBus;
     this.options = options;
     if (!this.options.prefix) {
       logger.warn('prefix is required while initializing Event');
@@ -36,7 +35,7 @@ export class Event implements IPublicApiEvent {
    */
   on(event: string, listener: (...args: any[]) => void): IPublicTypeDisposable {
     if (isPluginEventName(event) || isPublicEventName(event)) {
-      return this[editorSymbol].eventBus.on(event, listener);
+      return this[eventBusSymbol].on(event, listener);
     } else {
       logger.warn(`fail to monitor on event ${event}, which is neither a engine public event nor a plugin event`);
       return () => {};
@@ -49,7 +48,7 @@ export class Event implements IPublicApiEvent {
    * @param listener 事件回调
    */
   off(event: string, listener: (...args: any[]) => void) {
-    this[editorSymbol].eventBus.off(event, listener);
+    this[eventBusSymbol].off(event, listener);
   }
 
   /**
@@ -63,7 +62,7 @@ export class Event implements IPublicApiEvent {
       logger.warn('Event#emit has been forbidden while prefix is not specified');
       return;
     }
-    this[editorSymbol].eventBus.emit(`${this.options.prefix}:${event}`, ...args);
+    this[eventBusSymbol].emit(`${this.options.prefix}:${event}`, ...args);
   }
 
   /**
@@ -72,10 +71,10 @@ export class Event implements IPublicApiEvent {
    * @param args
    */
   __internalEmit__(event: string, ...args: unknown[]) {
-    this[editorSymbol].emit(event, ...args);
+    this[eventBusSymbol].emit(event, ...args);
   }
 }
 
 export function getEvent(editor: InnerEditor, options: any = { prefix: 'common' }) {
-  return new Event(editor, options);
+  return new Event(editor.eventBus, options);
 }
