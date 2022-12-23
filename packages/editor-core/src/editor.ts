@@ -326,3 +326,5 @@ export class Editor extends (EventEmitter as any) implements IPublicModelEditor 
     }
   }
 }
+
+export const commonEvent = new EventBus(new EventEmitter());

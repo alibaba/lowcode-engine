@@ -5,6 +5,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import {
   globalContext,
   Editor,
+  commonEvent,
   engineConfig,
   Setters as InnerSetters,
   Hotkey as InnerHotkey,
@@ -87,7 +88,7 @@ editor.set('setters' as any, setters);
 editor.set('material', material);
 editor.set('innerHotkey', innerHotkey);
 const config = engineConfig;
-const event = new Event(editor, { prefix: 'common' });
+const event = new Event(commonEvent, { prefix: 'common' });
 const logger = new Logger({ level: 'warn', bizName: 'common' });
 const common = new Common(editor, innerSkeleton);
 const canvas = new Canvas(editor);
@@ -102,7 +103,7 @@ const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
     context.setters = setters;
     context.material = material;
     const eventPrefix = meta?.eventPrefix || 'common';
-    context.event = new Event(editor, { prefix: eventPrefix });
+    context.event = new Event(commonEvent, { prefix: eventPrefix });
     context.config = config;
     context.common = common;
     context.canvas = canvas;

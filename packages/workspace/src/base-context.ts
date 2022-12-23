@@ -4,6 +4,7 @@ import {
   Editor,
   engineConfig, Setters as InnerSetters,
   Hotkey as InnerHotkey,
+  commonEvent,
 } from '@alilc/lowcode-editor-core';
 import {
   Designer,
@@ -80,7 +81,7 @@ export class BasicContext {
     const material = new Material(editor, true);
     const project = new Project(innerProject, true);
     const config = engineConfig;
-    const event = new Event(editor, { prefix: 'common' });
+    const event = new Event(commonEvent, { prefix: 'common' });
     const logger = getLogger({ level: 'warn', bizName: 'common' });
     const skeleton = new Skeleton(innerSkeleton, 'any', true);
     editor.set('setters', setters);
@@ -114,8 +115,7 @@ export class BasicContext {
         context.setters = setters;
         context.material = material;
         const eventPrefix = meta?.eventPrefix || 'common';
-        context.event = new Event(editor, { prefix: eventPrefix });
-        context.event = event;
+        context.event = new Event(commonEvent, { prefix: eventPrefix });
         context.config = config;
         context.common = common;
         context.plugins = plugins;
