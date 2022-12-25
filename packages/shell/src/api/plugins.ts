@@ -5,7 +5,7 @@ import { globalContext } from '@alilc/lowcode-editor-core';
 import {
   IPublicApiPlugins,
   IPublicTypePlugin,
-  ILowCodeRegisterOptions,
+  IPublicTypePluginRegisterOptions,
   IPublicTypePreferenceValueType,
 } from '@alilc/lowcode-types';
 import { pluginsSymbol } from '../symbols';
@@ -32,7 +32,7 @@ export class Plugins implements IPublicApiPlugins {
   async register(
     pluginModel: IPublicTypePlugin,
     options?: any,
-    registerOptions?: ILowCodeRegisterOptions,
+    registerOptions?: IPublicTypePluginRegisterOptions,
   ): Promise<void> {
     await this[pluginsSymbol].register(pluginModel, options, registerOptions);
   }

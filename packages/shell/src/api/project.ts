@@ -13,6 +13,7 @@ import {
   IPublicTypePropsTransducer,
   IPublicEnumEventNames,
   IPublicEnumTransformStage,
+  IPublicTypeDisposable,
 } from '@alilc/lowcode-types';
 
 
@@ -163,7 +164,7 @@ export class Project implements IPublicApiProject {
    * @param fn
    * @returns
    */
-  onRemoveDocument(fn: (data: { id: string}) => void): any {
+  onRemoveDocument(fn: (data: { id: string}) => void): IPublicTypeDisposable {
     return this[editorSymbol].eventBus.on(
         IPublicEnumEventNames.DESIGNER_DOCUMENT_REMOVE,
         (data: { id: string }) => fn(data),
@@ -173,7 +174,7 @@ export class Project implements IPublicApiProject {
   /**
    * 当前 project 内的 document 变更事件
    */
-  onChangeDocument(fn: (doc: IPublicModelDocumentModel) => void) {
+  onChangeDocument(fn: (doc: IPublicModelDocumentModel) => void): IPublicTypeDisposable {
     const offFn = this[projectSymbol].onCurrentDocumentChange((originalDoc) => {
       fn(DocumentModel.create(originalDoc)!);
     });
@@ -186,7 +187,7 @@ export class Project implements IPublicApiProject {
   /**
    * 当前 project 的模拟器 ready 事件
    */
-  onSimulatorHostReady(fn: (host: IPublicApiSimulatorHost) => void) {
+  onSimulatorHostReady(fn: (host: IPublicApiSimulatorHost) => void): IPublicTypeDisposable {
     const offFn = this[projectSymbol].onSimulatorReady((simulator: BuiltinSimulatorHost) => {
       this[simulatorHostSymbol] = simulator;
       fn(SimulatorHost.create(simulator)!);
@@ -200,7 +201,7 @@ export class Project implements IPublicApiProject {
   /**
    * 当前 project 的渲染器 ready 事件
    */
-  onSimulatorRendererReady(fn: () => void) {
+  onSimulatorRendererReady(fn: () => void): IPublicTypeDisposable {
     const offFn = this[projectSymbol].onRendererReady((renderer: any) => {
       this[simulatorRendererSymbol] = renderer;
       fn();

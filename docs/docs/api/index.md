@@ -5,7 +5,7 @@ sidebar_position: 0
 
 引擎提供的公开 API 分为`命名空间`和`模型`两类，其中`命名空间`用于聚合一大类的 API，`模型`为各 API 涉及到的对象模型。
 
-### 命名空间
+## 命名空间
 
 引擎直接提供以下几大类 API
 
@@ -21,7 +21,7 @@ sidebar_position: 0
 - logger 日志 API
 - init 初始化 API
 
-### 模型
+## 模型
 以下模型通过前面的 API 以返回值等形式间接透出。
 
 - document-model 文档
@@ -37,7 +37,7 @@ sidebar_position: 0
 - history 操作历史
 
 
-### API 设计约定
+## API 设计约定
 一些 API 设计约定：
 
 1. 所有 API 命名空间都按照 variables / functions / events 来组织

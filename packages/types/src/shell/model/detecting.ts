@@ -9,6 +9,7 @@ export interface IPublicModelDetecting {
 
   /**
    * 当前 hover 的节点
+   * @since v1.0.16
    */
   get current(): any;
 
@@ -29,5 +30,10 @@ export interface IPublicModelDetecting {
    */
   leave(): any;
 
+  /**
+   * hover 节点变化事件
+   * set callback which will be called when hovering object changed.
+   * @since v1.1.0
+   */
   onDetectingChange(fn: (node: IPublicModelNode) => void): () => void;
 }

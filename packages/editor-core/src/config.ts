@@ -3,7 +3,7 @@ import { isPlainObject } from '@alilc/lowcode-utils';
 import {
   EngineOptions,
   IPublicModelEngineConfig,
-  IPreference,
+  IPublicModelPreference,
 } from '@alilc/lowcode-types';
 import { getLogger } from './utils/logger';
 import Preference from './utils/preference';
@@ -193,7 +193,7 @@ export class EngineConfig implements IPublicModelEngineConfig, IEngineConfigPriv
    * used to store preferences
    *
    */
-  readonly preference: IPreference;
+  readonly preference: IPublicModelPreference;
 
   constructor(config?: { [key: string]: any }) {
     this.config = config || {};
@@ -349,7 +349,7 @@ export class EngineConfig implements IPublicModelEngineConfig, IEngineConfigPriv
     }
   }
 
-  getPreference(): IPreference {
+  getPreference(): IPublicModelPreference {
     return this.preference;
   }
 }

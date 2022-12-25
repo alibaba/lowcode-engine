@@ -2,6 +2,10 @@
 title: init - 初始化 API
 sidebar_position: 10
 ---
+
+> **@since** v1.0.0
+
+
 ## 模块简介
 提供 init 等方法
 ## 方法签名
@@ -14,6 +18,7 @@ function init(container?: Element, options?: EngineOptions): void
 ```
 
 **初始化引擎的参数**
+
 ```typescript
 interface EngineOptions {
   /**
@@ -102,6 +107,9 @@ interface EngineOptions {
   [key: string]: any;
 }
 ```
+> 源码详见 [EngineOptions](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/engine-config.ts)
+
+
 ## 使用示例
 ```typescript
 import { init } from '@alilc/lowcode-engine';
