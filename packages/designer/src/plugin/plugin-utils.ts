@@ -1,5 +1,5 @@
 import { isPlainObject } from 'lodash';
-import { ILowCodeRegisterOptions, IPublicTypePluginDeclaration } from '@alilc/lowcode-types';
+import { IPublicTypePluginRegisterOptions, IPublicTypePluginDeclaration } from '@alilc/lowcode-types';
 
 export function isValidPreferenceKey(
   key: string,
@@ -13,7 +13,7 @@ export function isValidPreferenceKey(
   });
 }
 
-export function isLowCodeRegisterOptions(opts: any): opts is ILowCodeRegisterOptions {
+export function isLowCodeRegisterOptions(opts: any): opts is IPublicTypePluginRegisterOptions {
   return opts && ('autoInit' in opts || 'override' in opts);
 }
 

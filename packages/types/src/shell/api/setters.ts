@@ -3,6 +3,7 @@ import { IPublicTypeRegisteredSetter, IPublicTypeCustomView } from '../type';
 export interface IPublicApiSetters {
   /**
    * 获取指定 setter
+   * get setter by type
    * @param type
    * @returns
    */
@@ -10,6 +11,7 @@ export interface IPublicApiSetters {
 
   /**
    * 获取已注册的所有 settersMap
+   * get map of all registered setters
    * @returns
    */
   getSettersMap(): Map<string, IPublicTypeRegisteredSetter & {
@@ -18,6 +20,7 @@ export interface IPublicApiSetters {
 
   /**
    * 注册一个 setter
+   * register a setter
    * @param typeOrMaps
    * @param setter
    * @returns

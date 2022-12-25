@@ -17,13 +17,13 @@ import {
   IPublicTypeNodeSchema,
   IPublicEnumTransitionType,
   IPublicEnumTransformStage as InnerTransitionStage,
-  IPublicCommonDesignerCabin,
-  IPublicCommonSkeletonCabin,
-  IPublicCommonUtils,
+  IPublicApiCommonDesignerCabin,
+  IPublicApiCommonSkeletonCabin,
+  IPublicApiCommonUtils,
   IPublicApiCommon,
   IPublicEnumDragObjectType as InnerDragObjectType,
   IPublicTypeLocationDetailType as InnerLocationDetailType,
-  IPublicCommonEditorCabin,
+  IPublicApiCommonEditorCabin,
   IPublicModelDragon,
   IDesigner,
 } from '@alilc/lowcode-types';
@@ -61,7 +61,7 @@ import {
 import { Dragon } from '../model';
 import { ReactNode, Component } from 'react';
 
-class DesignerCabin implements IPublicCommonDesignerCabin {
+class DesignerCabin implements IPublicApiCommonDesignerCabin {
   private readonly [editorSymbol]: Editor;
   /**
    * @deprecated
@@ -150,10 +150,9 @@ class DesignerCabin implements IPublicCommonDesignerCabin {
   get dragon(): IPublicModelDragon | null {
     return Dragon.create(this[designerSymbol].dragon);
   }
-
 }
 
-class SkeletonCabin implements IPublicCommonSkeletonCabin {
+class SkeletonCabin implements IPublicApiCommonSkeletonCabin {
   private readonly [skeletonSymbol]: InnerSkeleton;
 
   constructor(skeleton: InnerSkeleton) {
@@ -187,7 +186,7 @@ class SkeletonCabin implements IPublicCommonSkeletonCabin {
   }
 }
 
-class Utils implements IPublicCommonUtils {
+class Utils implements IPublicApiCommonUtils {
   isNodeSchema(data: any): data is IPublicTypeNodeSchema {
     return innerIsNodeSchema(data);
   }
@@ -196,11 +195,17 @@ class Utils implements IPublicCommonUtils {
     return innerIsFormEvent(e);
   }
 
+  /**
+   * @deprecated this is a legacy api, do not use this if not using is already
+   */
   compatibleLegaoSchema(props: any): any {
     return innerCompatibleLegaoSchema(props);
   }
 
-  getNodeSchemaById(schema: IPublicTypeNodeSchema, nodeId: string): IPublicTypeNodeSchema | undefined {
+  getNodeSchemaById(
+      schema: IPublicTypeNodeSchema,
+      nodeId: string,
+    ): IPublicTypeNodeSchema | undefined {
     return innerGetNodeSchemaById(schema, nodeId);
   }
 
@@ -212,7 +217,10 @@ class Utils implements IPublicCommonUtils {
     return innerGetOriginalExtraKey(key);
   }
 
-  executeTransaction(fn: () => void, type: IPublicEnumTransitionType = IPublicEnumTransitionType.REPAINT): void {
+  executeTransaction(
+      fn: () => void,
+      type: IPublicEnumTransitionType = IPublicEnumTransitionType.REPAINT,
+    ): void {
     transactionManager.executeTransaction(fn, type);
   }
 
@@ -226,7 +234,7 @@ class Utils implements IPublicCommonUtils {
   }
 }
 
-class EditorCabin implements IPublicCommonEditorCabin {
+class EditorCabin implements IPublicApiCommonEditorCabin {
   private readonly [editorSymbol]: Editor;
 
   constructor(editor: Editor) {
@@ -234,6 +242,7 @@ class EditorCabin implements IPublicCommonEditorCabin {
   }
   /**
    * Title 组件
+   * @experimental unstable API, pay extra caution when trying to use this
    */
   get Title(): Component {
     return InnerTitle;
@@ -241,6 +250,7 @@ class EditorCabin implements IPublicCommonEditorCabin {
 
   /**
    * Tip 组件
+   * @experimental unstable API, pay extra caution when trying to use this
    */
   get Tip(): Component {
     return InnerTip;

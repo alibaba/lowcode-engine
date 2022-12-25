@@ -4,6 +4,7 @@ export interface IPublicApiEvent {
 
   /**
    * 监听事件
+   * add monitor to a event
    * @param event 事件名称
    * @param listener 事件回调
    */
@@ -12,6 +13,7 @@ export interface IPublicApiEvent {
 
   /**
    * 取消监听事件
+   * cancel a monitor from a event
    * @param event 事件名称
    * @param listener 事件回调
    */
@@ -19,6 +21,7 @@ export interface IPublicApiEvent {
 
   /**
    * 触发事件
+   * emit a message fot a event
    * @param event 事件名称
    * @param args 事件参数
    * @returns

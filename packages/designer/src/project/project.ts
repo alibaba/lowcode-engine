@@ -5,7 +5,6 @@ import {
   IPublicTypeProjectSchema,
   IPublicTypeRootSchema,
   IPublicTypeComponentsMap,
-  TransformStage,
   IPublicApiProject,
   IPublicModelDocumentModel,
   IPublicEnumTransformStage,
