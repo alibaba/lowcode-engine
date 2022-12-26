@@ -15,7 +15,7 @@ import { invariant } from '../utils';
 import sequencify from './sequencify';
 import semverSatisfies from 'semver/functions/satisfies';
 import {
-  ILowCodeRegisterOptions,
+  IPublicTypePluginRegisterOptions,
   IPublicTypePreferenceValueType,
   IPublicTypePlugin,
 } from '@alilc/lowcode-types';
@@ -65,7 +65,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
   async register(
     pluginModel: IPublicTypePlugin,
     options?: any,
-    registerOptions?: ILowCodeRegisterOptions,
+    registerOptions?: IPublicTypePluginRegisterOptions,
   ): Promise<void> {
     // registerOptions maybe in the second place
     if (isLowCodeRegisterOptions(options)) {

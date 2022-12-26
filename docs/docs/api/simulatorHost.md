@@ -2,11 +2,25 @@
 title: simulatorHost - 模拟器 API
 sidebar_position: 3
 ---
-# 模块简介
+> **@types** [IPublicApiSimulatorHost](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/api/simulator-host.ts)<br/>
+> **@since** v1.0.0
+
+## 模块简介
 负责模拟器相关的 API，包括画布尺寸、语言等。
 
-# 方法（functions）
-## set
+## 方法
+### set
+设置 host 配置值
+```typescript
+/**
+ * 设置若干用于画布渲染的变量，比如画布大小、locale 等。
+ * set config for simulator host, eg. device locale and so on.
+ * @param key
+ * @param value
+ */
+set(key: string, value: any): void;
+```
+#### 示例
 设置若干用于画布渲染的变量，比如画布大小、locale 等。
 
 以设置画布大小为例：
@@ -21,11 +35,41 @@ project.simulatorHost.set('deviceClassName', 'my-canvas-class');
 project.simulatorHost.set('deviceStyle', { canvas: { width: '300px', backgroundColor: 'red' }, viewport: { width: '280px' } });
 ```
 
-## get
+### get
 获取模拟器中设置的变量，比如画布大小、locale 等。
+
 ```typescript
-project.simulatorHost.get('device');
+/**
+ * 获取模拟器中设置的变量，比如画布大小、locale 等。
+ * set config value by key
+ * @param key
+ * @returns
+ */
+get(key: string): any;
+
 ```
 
-## rerender
+### rerender
 刷新渲染画布
+
+```typescript
+/**
+ * 刷新渲染画布
+ * make simulator render again
+ */
+rerender(): void;
+```
+
+### scrollToNode
+滚动到指定节点
+
+```typescript
+/**
+ * 滚动到指定节点
+ * scroll to specific node
+ * @param node
+ * @since v1.1.0
+ */
+scrollToNode(node: IPublicModelNode): void;
+```
+**@since v1.1.0**

@@ -2,6 +2,10 @@
 title: skeleton - 面板 API
 sidebar_position: 1
 ---
+> **@types** [IPublicApiSkeleton](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/api/skeleton.ts)<br/>
+> **@since** v1.0.0
+
+
 ## 模块简介
 面板 API 提供了面板扩展和管理的能力，如下图蓝色内容都是扩展出来的。
 
@@ -131,20 +135,23 @@ skeleton.add({
 });
 ```
 
-## 变量（variables）
+## 方法签名
 
-无
-## 方法签名（functions）
-
-### 1. add
-
-```tsx
-add(config: IWidgetBaseConfig & {
-  area?: string;
-}, extraConfig?: object): IWidget | Panel;
-```
+### add
 
 往指定扩展区加入一块面板
+
+```typescript
+/**
+ * 增加一个面板实例
+ * add a new panel
+ * @param config
+ * @param extraConfig
+ * @returns
+ */
+add(config: IPublicTypeWidgetBaseConfig, extraConfig?: Record<string, any>): any;
+```
+
 
 IWidgetBaseConfig 定义如下：
 
@@ -160,74 +167,181 @@ IWidgetBaseConfig 定义如下：
 | index | 面板的位置，不传默认按插件注册顺序 |  |
 
 
-### 2. remove
-
-remove(config: IWidgetBaseConfig)
+### remove
 
 移除一个面板实例
 
-### 3. showPanel
+```typescript
+/**
+ * 移除一个面板实例
+ * remove a panel
+ * @param config
+ * @returns
+ */
+remove(config: IPublicTypeWidgetBaseConfig): number | undefined;
+```
 
-showPanel(name: string)
+
+### showPanel
 
 展示指定 Panel 实例
 
-### 4. hidePanel
+```typescript
+/**
+ * 展示指定 Panel 实例
+ * show panel by name
+ * @param name
+ */
+showPanel(name: string): void;
+```
 
-hidePanel(name: string)
+### hidePanel
+隐藏面板
 
-### 5. showWidget
+```typescript
+/**
+ * 隐藏面板
+ * hide panel by name
+ * @param name
+ */
+hidePanel(name: string): void;
+```
 
-showWidget(name: string)
+### showWidget
 
 展示指定 Widget 实例
 
-### 6. hideWidget
+```typescript
+/**
+ * 展示指定 Widget 实例
+ * show widget by name
+ * @param name
+ */
+showWidget(name: string): void;
+```
 
-hideWidget(name: string)
+### enableWidget
+将 widget 启用。
+```typescript
+/**
+ * 将 widget 启用
+ * enable widget
+ * @param name
+ */
+enableWidget(name: string): void;
+```
+
+### hideWidget
 
 隐藏指定 widget 实例。
 
-### 7. enableWidget
+```typescript
+/**
+ * 隐藏指定 widget 实例
+ * hide widget by name
+ * @param name
+ */
+hideWidget(name: string): void;
+```
 
-enableWidget(name: string)
-
-将 widget 启用。
-
-注：该函数将会触发全局事件 'skeleton.widget.enable'
-
-### 8. disableWidget
-
-disableWidget(name: string)
+### disableWidget
 
 将 widget 禁用掉，禁用后，所有鼠标事件都会被禁止掉。
 
 适用场景：在该面板还在进行初始化构造时，可以先禁止掉，防止用户点击报错，待初始化完成，重新启用。
 
-## 事件（events）
-### 1. onShowPanel
+```typescript
+/**
+ * 将 widget 禁用掉，禁用后，所有鼠标事件都会被禁止掉。
+ * disable widget，and make it not responding any click event.
+ * @param name
+ */
+disableWidget(name: string): void;
+```
 
-onShowPanel(listener: (...args: unknown[]) => void)
+### showArea
+显示某个 Area
+
+```typescript
+/**
+ * 显示某个 Area
+ * show area
+ * @param areaName name of area
+ */
+showArea(areaName: string): void;
+```
+
+
+### hideArea
+隐藏某个 Area
+
+```typescript
+/**
+ * 隐藏某个 Area
+ * hide area
+ * @param areaName name of area
+ */
+hideArea(areaName: string): void;
+```
+## 事件
+### onShowPanel
 
 监听 Panel 实例显示事件
 
-### 2. onHidePanel
+```typescript
+/**
+ * 监听 panel 显示事件
+ * set callback for panel shown event
+ * @param listener
+ * @returns
+ */
+onShowPanel(listener: (...args: any[]) => void): () => void;
+```
 
-onHidePanel(listener: (...args: unknown[]) => void)
+### onHidePanel
 
 监听 Panel 实例隐藏事件
 
-### 3. onShowWidget
+```typescript
+/**
+ * 监听 Panel 实例隐藏事件
+ * set callback for panel hidden event
+ * @param listener
+ * @returns
+ */
+onHidePanel(listener: (...args: any[]) => void): () => void;
+```
 
-onShowWidget(listener: (...args: unknown[]) => void)
+
+### onShowWidget
 
 监听 Widget 实例显示事件
 
-### 4. onHideWidget
+```typescript
+/**
+ * 监听 Widget 显示事件
+ * set callback for widget shown event
+ * @param listener
+ * @returns
+ */
+onShowWidget(listener: (...args: any[]) => void): () => void;
+```
 
-onHideWidget(listener: (...args: unknown[]) => void)
+
+### onHideWidget
 
 监听 Widget 实例隐藏事件
+
+```typescript
+/**
+ * 监听 Widget 隐藏事件
+ * set callback for widget hidden event
+ * @param listener
+ * @returns
+ */
+onHideWidget(listener: (...args: any[]) => void): () => void;
+```
+
 ## 使用示例
 
 ```typescript

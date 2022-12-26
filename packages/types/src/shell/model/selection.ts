@@ -59,9 +59,15 @@ export interface IPublicModelSelection {
    * for example:
    *  getNodes() returns [A, subA, B], then
    *  getTopNodes() will return [A, B], subA will be removed
+   * @since v1.0.16
    * @returns
    */
   getTopNodes(includeRoot?: boolean): IPublicModelNode[];
 
+  /**
+   * 注册 selection 变化事件回调
+   * set callback which will be called when selection is changed
+   * @since v1.1.0
+   */
   onSelectionChange(fn: (ids: string[]) => void): () => void;
 }

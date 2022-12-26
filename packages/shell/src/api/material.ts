@@ -15,10 +15,12 @@ import {
   IPublicApiMaterial,
   IPublicTypeMetadataTransducer,
   IPublicModelComponentMeta,
+  IPublicTypeNpmInfo,
 } from '@alilc/lowcode-types';
 import { Workspace } from '@alilc/lowcode-workspace';
 import { editorSymbol, designerSymbol } from '../symbols';
 import { ComponentMeta } from '../model/component-meta';
+import { ComponentType } from 'react';
 
 const innerEditorSymbol = Symbol('editor');
 export class Material implements IPublicApiMaterial {
@@ -47,7 +49,7 @@ export class Material implements IPublicApiMaterial {
   /**
    * 获取组件 map 结构
    */
-  get componentsMap() {
+  get componentsMap(): { [key: string]: IPublicTypeNpmInfo | ComponentType<any> | object } {
     return this[designerSymbol].componentsMap;
   }
 
@@ -173,6 +175,6 @@ export class Material implements IPublicApiMaterial {
     // 设置 assets，经过 setAssets 赋值
     this[editorSymbol].onGot('assets', fn);
     // 增量设置 assets，经过 loadIncrementalAssets 赋值
-    this[editorSymbol].on('designer.incrementalAssetsReady', fn);
+    this[editorSymbol].eventBus.on('designer.incrementalAssetsReady', fn);
   }
 }

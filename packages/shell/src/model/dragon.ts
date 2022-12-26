@@ -1,7 +1,7 @@
 import {
   ILocateEvent as InnerLocateEvent,
 } from '@alilc/lowcode-designer';
-import { dragonSymbol } from '../symbols';
+import { dragonSymbol, nodeSymbol } from '../symbols';
 import LocateEvent from './locate-event';
 import { DragObject } from './drag-object';
 import { globalContext } from '@alilc/lowcode-editor-core';
@@ -98,7 +98,10 @@ export class Dragon implements IPublicModelDragon {
    * @param boostEvent 拖拽初始时事件
    */
   boost(dragObject: DragObject, boostEvent: MouseEvent | DragEvent, fromRglNode?: Node | IPublicModelNode): void {
-    return this[dragonSymbol].boost(dragObject, boostEvent, fromRglNode);
+    return this[dragonSymbol].boost({
+      ...dragObject,
+      nodes: dragObject.nodes.map((node: any) => node[nodeSymbol]),
+    }, boostEvent, fromRglNode);
   }
 
   /**

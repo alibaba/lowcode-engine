@@ -25,3 +25,4 @@ export * from './plugin-context';
 export * from './setting-target';
 export * from './engine-config';
 export * from './editor';
+export * from './preference';

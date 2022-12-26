@@ -2,6 +2,7 @@ import { Editor } from '@alilc/lowcode-editor-core';
 import {
   Skeleton as InnerSkeleton,
 } from '@alilc/lowcode-editor-skeleton';
+import { IPublicResourceOptions } from '@alilc/lowcode-types';
 import { EditorWindow } from './editor-window/context';
 import { Resource } from './resource';
 
@@ -35,7 +36,7 @@ export class Workspace {
 
   private resources: Map<string, Resource> = new Map();
 
-  registerResourceType(resourceName: string, resourceType: 'editor' | 'webview', options: ResourceOptions): void {
+  registerResourceType(resourceName: string, resourceType: 'editor' | 'webview', options: IPublicResourceOptions): void {
     if (resourceType === 'editor') {
       const resource = new Resource(options);
       this.resources.set(resourceName, resource);
@@ -62,23 +63,3 @@ export class Workspace {
 
   openEditorWindow() {}
 }
-
-export interface ResourceOptions {
-  description: string;
-  defaultViewType?: string;
-  editorViews?: EditorViewOptions[];
-  init: (ctx: any) => Promise<void>;
-  dispose: (ctx: any) => Promise<void>;
-  import: (ctx: any) => Promise<any>;
-  save: (value: any) => Promise<any>;
-}
-
-export interface ViewFunctions {
-  init: () => Promise<void>;
-  save: () => Promise<void>;
-}
-
-export type EditorViewOptions = {
-  viewName: string;
-  (ctx: any): ViewFunctions;
-};

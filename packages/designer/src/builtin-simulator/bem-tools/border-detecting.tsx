@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { computed, observer, Title } from '@alilc/lowcode-editor-core';
 import { IPublicTypeTitleContent } from '@alilc/lowcode-types';
 import { getClosestNode } from '@alilc/lowcode-utils';
-
+import { intl } from '../../locale';
 import { BuiltinSimulatorHost } from '../host';
 
 
@@ -37,7 +37,7 @@ export class BorderDetectingInstance extends PureComponent<{
       <div className={className} style={style}>
         <Title title={title} className="lc-borders-title" />
         {
-          isLocked ? (<Title title="已锁定" className="lc-borders-status" />) : null
+          isLocked ? (<Title title={intl('locked')} className="lc-borders-status" />) : null
         }
       </div>
     );

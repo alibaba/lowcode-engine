@@ -1,6 +1,6 @@
 import store from 'store';
 import { getLogger } from './logger';
-import { IPreference } from '@alilc/lowcode-types';
+import { IPublicModelPreference } from '@alilc/lowcode-types';
 
 const logger = getLogger({ level: 'log', bizName: 'Preference' });
 const STORAGE_KEY_PREFIX = 'ale';
@@ -12,7 +12,7 @@ const STORAGE_KEY_PREFIX = 'ale';
  *
  * @class PreferenceStore
  */
-export default class Preference implements IPreference {
+export default class Preference implements IPublicModelPreference {
   getStorageKey(key: string, module?: string): string {
     const moduleKey = module || '__inner__';
     return `${STORAGE_KEY_PREFIX}_${moduleKey}.${key}`;

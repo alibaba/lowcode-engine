@@ -4,6 +4,7 @@ import {
   Editor,
   engineConfig, Setters as InnerSetters,
   Hotkey as InnerHotkey,
+  commonEvent,
 } from '@alilc/lowcode-editor-core';
 import {
   Designer,
@@ -27,11 +28,13 @@ import {
   Common,
   Logger,
   Workspace,
+  Canvas,
 } from '@alilc/lowcode-shell';
 import {
   IPublicTypePluginMeta,
 } from '@alilc/lowcode-types';
 import { getLogger } from '@alilc/lowcode-utils';
+import { OutlinePlugin } from '@alilc/lowcode-plugin-outline-pane';
 import { setterRegistry } from '../../engine/src/inner-plugins/setter-registry';
 import { componentMetaParser } from '../../engine/src/inner-plugins/component-meta-parser';
 import defaultPanelRegistry from '../../engine/src/inner-plugins/default-panel-registry';
@@ -57,6 +60,7 @@ export class BasicContext {
   innerSkeleton: any;
   innerHotkey: InnerHotkey;
   innerPlugins: LowCodePluginManager;
+  canvas: Canvas;
 
   constructor(innerWorkspace: any, viewName: string, public editorWindow?: EditorWindow) {
     const editor = new Editor(viewName, true);
@@ -80,9 +84,10 @@ export class BasicContext {
     const material = new Material(editor, true);
     const project = new Project(innerProject, true);
     const config = engineConfig;
-    const event = new Event(editor, { prefix: 'common' });
+    const event = new Event(commonEvent, { prefix: 'common' });
     const logger = getLogger({ level: 'warn', bizName: 'common' });
     const skeleton = new Skeleton(innerSkeleton, 'any', true);
+    const canvas = new Canvas(editor);
     editor.set('setters', setters);
     editor.set('project', project);
     editor.set('material', material);
@@ -102,6 +107,7 @@ export class BasicContext {
     this.innerHotkey = innerHotkey;
     this.editor = editor;
     this.designer = designer;
+    this.canvas = canvas;
     const common = new Common(editor, innerSkeleton);
     let plugins: any;
 
@@ -114,12 +120,12 @@ export class BasicContext {
         context.setters = setters;
         context.material = material;
         const eventPrefix = meta?.eventPrefix || 'common';
-        context.event = new Event(editor, { prefix: eventPrefix });
-        context.event = event;
+        context.event = new Event(commonEvent, { prefix: eventPrefix });
         context.config = config;
         context.common = common;
         context.plugins = plugins;
         context.logger = new Logger({ level: 'warn', bizName: `plugin:${pluginName}` });
+        context.canvas = canvas;
       },
     };
 
@@ -132,6 +138,7 @@ export class BasicContext {
 
     // 注册一批内置插件
     this.registerInnerPlugins = async function registerPlugins() {
+      await plugins.register(OutlinePlugin, {}, { autoInit: true });
       await plugins.register(componentMetaParser(designer));
       await plugins.register(setterRegistry, {}, { autoInit: true });
       await plugins.register(defaultPanelRegistry(editor, designer));

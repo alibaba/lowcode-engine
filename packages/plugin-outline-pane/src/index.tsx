@@ -1,11 +1,13 @@
 import { Pane } from './views/pane';
 import { IconOutline } from './icons/outline';
-import { IPublicModelPluginContext, IPublicEnumEventNames } from '@alilc/lowcode-types';
+import { IPublicModelPluginContext, IPublicModelDocumentModel } from '@alilc/lowcode-types';
 import { enUS, zhCN } from './locale';
 import { MasterPaneName, BackupPaneName } from './helper/consts';
+import { getTreeMaster } from './controllers/tree-master';
+import { PaneController } from './controllers/pane-controller';
 
 export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
-  const { skeleton, config, common, event, canvas } = ctx;
+  const { skeleton, config, common, event, canvas, project } = ctx;
   const { intl, intlNode, getLocale } = common.utils.createIntl({
     'en-US': enUS,
     'zh-CN': zhCN,
@@ -24,7 +26,9 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
     masterPane: false,
     backupPane: false,
   };
-
+  const treeMaster = getTreeMaster(ctx);
+  let masterPaneController: PaneController | null = null;
+  let backupPaneController: PaneController | null = null;
   return {
     async init() {
       skeleton.add({
@@ -39,10 +43,13 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
             description: intlNode('Outline Tree'),
           },
           content: (props: any) => {
+            masterPaneController = new PaneController(MasterPaneName, ctx, treeMaster);
             return (
               <Pane
                 config={config}
                 pluginContext={ctx}
+                treeMaster={treeMaster}
+                controller={masterPaneController}
                 {...props}
               />
             );
@@ -65,12 +72,17 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
         props: {
           hiddenWhenInit: true,
         },
-        content: (props: any) => (
-          <Pane
-            pluginContext={ctx}
-            {...props}
-          />
-        ),
+        content: (props: any) => {
+          backupPaneController = new PaneController(BackupPaneName, ctx, treeMaster);
+          return (
+            <Pane
+              pluginContext={ctx}
+              treeMaster={treeMaster}
+              controller={backupPaneController}
+              {...props}
+            />
+          );
+        },
       });
 
       // 处理 master pane 和 backup pane 切换
@@ -91,8 +103,7 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
       canvas.dragon?.onDragend(() => {
         switchPanes();
       });
-
-      event.on(IPublicEnumEventNames.SKELETON_PANEL_SHOW, (key: string) => {
+      skeleton.onShowPanel((key: string) => {
         if (key === MasterPaneName) {
           showingPanes.masterPane = true;
         }
@@ -100,7 +111,7 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
           showingPanes.backupPane = true;
         }
       });
-      event.on(IPublicEnumEventNames.SKELETON_PANEL_HIDE, (key: string) => {
+      skeleton.onHidePanel((key: string) => {
         if (key === MasterPaneName) {
           showingPanes.masterPane = false;
           switchPanes();
@@ -108,6 +119,25 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
         if (key === BackupPaneName) {
           showingPanes.backupPane = false;
         }
+      });
+      project.onChangeDocument((document: IPublicModelDocumentModel) => {
+        if (!document) {
+          return;
+        }
+
+        const { selection } = document;
+
+        selection?.onSelectionChange(() => {
+          const selectedNodes = selection?.getNodes();
+          if (!selectedNodes || selectedNodes.length === 0) {
+            return;
+          }
+          const tree = treeMaster.currentTree;
+          selectedNodes.forEach((node) => {
+            const treeNode = tree?.getTreeNodeById(node.id);
+            tree?.expandAllAncestors(treeNode);
+          });
+        });
       });
     },
   };
