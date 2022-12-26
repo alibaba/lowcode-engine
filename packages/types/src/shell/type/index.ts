@@ -73,3 +73,4 @@ export * from './tip-config';
 export * from './widget-config-area';
 export * from './hotkey-callback';
 export * from './plugin-register-options';
+export * from './resource-options';

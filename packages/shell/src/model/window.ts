@@ -17,7 +17,7 @@ export class Window implements IPublicModelWindow {
     this[windowSymbol].changeViewType(viewName);
   }
 
-  save() {
-    return this[windowSymbol].save();
+  async save() {
+    return await this[windowSymbol].save();
   }
 }

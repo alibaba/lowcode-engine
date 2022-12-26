@@ -26,7 +26,7 @@ export class EditorWindow {
       const saveResult = await this.editorViews.get(name)?.save();
       value[name] = saveResult;
     }
-    this.resource.save(value);
+    return await this.resource.save(value);
   }
 
   async init() {
