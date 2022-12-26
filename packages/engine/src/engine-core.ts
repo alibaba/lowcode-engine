@@ -61,7 +61,16 @@ export * from './modules/lowcode-types';
 
 registerDefaults();
 
-const innerWorkspace = new InnerWorkspace();
+async function registryInnerPlugin(designer: Designer, editor: Editor, plugins: Plugins) {
+  // 注册一批内置插件
+  await plugins.register(OutlinePlugin, {}, { autoInit: true });
+  await plugins.register(componentMetaParser(designer));
+  await plugins.register(setterRegistry, {}, { autoInit: true });
+  await plugins.register(defaultPanelRegistry(editor, designer));
+  await plugins.register(builtinHotkey);
+}
+
+const innerWorkspace = new InnerWorkspace(registryInnerPlugin, shellModelFactory);
 const workspace = new Workspace(innerWorkspace);
 const editor = new Editor();
 globalContext.register(editor, Editor);
@@ -170,12 +179,7 @@ export async function init(
   }
   engineConfig.setEngineOptions(engineOptions as any);
 
-  // 注册一批内置插件
-  await plugins.register(OutlinePlugin, {}, { autoInit: true });
-  await plugins.register(componentMetaParser(designer));
-  await plugins.register(setterRegistry, {}, { autoInit: true });
-  await plugins.register(defaultPanelRegistry(editor, designer));
-  await plugins.register(builtinHotkey);
+  await registryInnerPlugin(designer, editor, plugins);
 
   await plugins.init(pluginPreference as any);
 
