@@ -16,7 +16,6 @@ import {
 import {
   Skeleton as InnerSkeleton,
 } from '@alilc/lowcode-editor-skeleton';
-
 import {
   Hotkey,
   Plugins,
@@ -34,14 +33,8 @@ import {
   IPublicTypePluginMeta,
 } from '@alilc/lowcode-types';
 import { getLogger } from '@alilc/lowcode-utils';
-import { OutlinePlugin } from '@alilc/lowcode-plugin-outline-pane';
-import { setterRegistry } from '../../engine/src/inner-plugins/setter-registry';
-import { componentMetaParser } from '../../engine/src/inner-plugins/component-meta-parser';
-import defaultPanelRegistry from '../../engine/src/inner-plugins/default-panel-registry';
-import { builtinHotkey } from '../../engine/src/inner-plugins/builtin-hotkey';
+import { Workspace as InnerWorkspace } from './index';
 import { EditorWindow } from './editor-window/context';
-import { shellModelFactory } from './shell-model-factory';
-
 export class BasicContext {
   skeleton: Skeleton;
   plugins: Plugins;
@@ -62,7 +55,7 @@ export class BasicContext {
   innerPlugins: LowCodePluginManager;
   canvas: Canvas;
 
-  constructor(innerWorkspace: any, viewName: string, public editorWindow?: EditorWindow) {
+  constructor(innerWorkspace: InnerWorkspace, viewName: string, public editorWindow?: EditorWindow) {
     const editor = new Editor(viewName, true);
 
     const innerSkeleton = new InnerSkeleton(editor, viewName);
@@ -71,7 +64,7 @@ export class BasicContext {
     const designer: Designer = new Designer({
       editor,
       viewName,
-      shellModelFactory,
+      shellModelFactory: innerWorkspace.shellModelFactory,
     });
     editor.set('designer' as any, designer);
 
@@ -138,11 +131,7 @@ export class BasicContext {
 
     // 注册一批内置插件
     this.registerInnerPlugins = async function registerPlugins() {
-      await plugins.register(OutlinePlugin, {}, { autoInit: true });
-      await plugins.register(componentMetaParser(designer));
-      await plugins.register(setterRegistry, {}, { autoInit: true });
-      await plugins.register(defaultPanelRegistry(editor, designer));
-      await plugins.register(builtinHotkey);
+      await innerWorkspace.registryInnerPlugin(designer, editor, plugins);
     };
   }
 }

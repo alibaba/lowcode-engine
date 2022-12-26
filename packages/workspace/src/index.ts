@@ -1,7 +1,9 @@
+import { Designer } from '@alilc/lowcode-designer';
 import { Editor } from '@alilc/lowcode-editor-core';
 import {
   Skeleton as InnerSkeleton,
 } from '@alilc/lowcode-editor-skeleton';
+import { Plugins } from '@alilc/lowcode-shell';
 import { IPublicResourceOptions } from '@alilc/lowcode-types';
 import { EditorWindow } from './editor-window/context';
 import { Resource } from './resource';
@@ -14,7 +16,10 @@ export class Workspace {
   readonly editor = new Editor();
   readonly skeleton = new InnerSkeleton(this.editor);
 
-  constructor() {
+  constructor(
+    readonly registryInnerPlugin: (designer: Designer, editor: Editor, plugins: Plugins) => Promise<void>,
+    readonly shellModelFactory: any,
+  ) {
     if (this.defaultResource) {
       this.window = new EditorWindow(this.defaultResource, this);
     }

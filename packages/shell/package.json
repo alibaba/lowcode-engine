@@ -20,6 +20,7 @@
     "@alilc/lowcode-editor-skeleton": "1.0.18",
     "@alilc/lowcode-types": "1.0.18",
     "@alilc/lowcode-utils": "1.0.18",
+    "@alilc/lowcode-workspace": "1.0.18",
     "classnames": "^2.2.6",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",

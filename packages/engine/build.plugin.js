@@ -34,7 +34,6 @@ module.exports = ({ context, onGetWebpackConfig }) => {
       .use('babel-loader')
       .tap((options) => {
         const { plugins = [] } = options;
-        console.log('plugins', plugins);
         return {
           ...options,
           plugins: [
