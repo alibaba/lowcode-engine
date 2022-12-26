@@ -18,7 +18,7 @@ sidebar_position: 3
 - [历史操作 History）](./model/history)
 - [画布节点选中 Selection）](./model/selection)
 - [画布节点悬停 Detecting）](./model/detecting)
-- [模态节点管理器 ModalNodesManager](./model/modal_nodes_manager)
+- [模态节点管理器 ModalNodesManager](./model/modal-nodes-manager)
 
 整个模型系统，以 project API 为入口，所有模型实例均需要通过 project 来获得，比如 project.currentDocument 来获取当前的文档模型，project.currentDocument.nodesMap 来获取当前文档模型里所有的节点列表。
 
