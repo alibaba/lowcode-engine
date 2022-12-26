@@ -28,6 +28,7 @@ export default class TreeNode {
   onHiddenChanged: (hidden: boolean) => void;
   onLockedChanged: (locked: boolean) => void;
   onTitleLabelChanged: (treeNode: TreeNode) => void;
+  onExpandableChanged: (expandable: boolean) => void;
 
   get id(): string {
     return this.node.id;
@@ -39,6 +40,13 @@ export default class TreeNode {
   get expandable(): boolean {
     if (this.locked) return false;
     return this.hasChildren() || this.hasSlots() || this.dropDetail?.index != null;
+  }
+
+  /**
+   * 触发 onExpandableChanged 回调
+   */
+  notifyExpandableChanged(): void {
+    this.onExpandableChanged && this.onExpandableChanged(this.expandable);
   }
 
   /**
@@ -96,7 +104,7 @@ export default class TreeNode {
 
   get detecting() {
     const doc = this.pluginContext.project.currentDocument;
-    return doc?.isDetectingNode(this.node);
+    return !!(doc?.isDetectingNode(this.node));
   }
 
   get hidden(): boolean {
