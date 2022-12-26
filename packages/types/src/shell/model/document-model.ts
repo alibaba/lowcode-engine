@@ -1,4 +1,4 @@
-import { IPublicTypeRootSchema, IPublicTypeDragNodeDataObject, IPublicTypeDragNodeObject, IPublicTypePropChangeOptions } from '../type';
+import { IPublicTypeRootSchema, IPublicTypeDragNodeDataObject, IPublicTypeDragNodeObject, IPublicTypePropChangeOptions, IPublicTypeDisposable } from '../type';
 import { IPublicEnumTransformStage } from '../enum';
 import { IPublicApiProject } from '../api';
 import { IPublicModelDropLocation, IPublicModelDetecting, IPublicModelNode, IPublicModelSelection, IPublicModelHistory, IPublicModelModalNodesManager } from './';
@@ -114,27 +114,27 @@ export interface IPublicModelDocumentModel {
   /**
    * 当前 document 新增节点事件
    */
-  onAddNode(fn: (node: IPublicModelNode) => void): () => void;
+  onAddNode(fn: (node: IPublicModelNode) => void): IPublicTypeDisposable;
 
   /**
    * 当前 document 新增节点事件，此时节点已经挂载到 document 上
    */
-  onMountNode(fn: (payload: { node: IPublicModelNode }) => void): () => void;
+  onMountNode(fn: (payload: { node: IPublicModelNode }) => void): IPublicTypeDisposable;
 
   /**
    * 当前 document 删除节点事件
    */
-  onRemoveNode(fn: (node: IPublicModelNode) => void): () => void;
+  onRemoveNode(fn: (node: IPublicModelNode) => void): IPublicTypeDisposable;
 
   /**
    * 当前 document 的 hover 变更事件
    */
-  onChangeDetecting(fn: (node: IPublicModelNode) => void): () => void;
+  onChangeDetecting(fn: (node: IPublicModelNode) => void): IPublicTypeDisposable;
 
   /**
    * 当前 document 的选中变更事件
    */
-  onChangeSelection(fn: (ids: string[]) => void): () => void;
+  onChangeSelection(fn: (ids: string[]) => void): IPublicTypeDisposable;
 
   /**
    * 当前 document 的节点显隐状态变更事件
@@ -152,16 +152,48 @@ export interface IPublicModelDocumentModel {
   /**
    * import schema event
    * @param fn
+   * @since v1.0.15
    */
-  onImportSchema(fn: (schema: IPublicTypeRootSchema) => void): void;
+  onImportSchema(fn: (schema: IPublicTypeRootSchema) => void): IPublicTypeDisposable;
 
+  /**
+   * 判断是否当前节点处于被探测状态
+   * check is node being detected
+   * @param node
+   * @since v1.1.0
+   */
   isDetectingNode(node: IPublicModelNode): boolean;
 
   /**
-   * TODO: 待补充说明
+   * 获取当前的 DropLocation 信息
+   * get current drop location
+   * @since v1.1.0
    */
   get dropLocation(): IPublicModelDropLocation;
 
-
+  /**
+   * 设置当前的 DropLocation 信息
+   * set current drop location
+   * @since v1.1.0
+   */
   set dropLocation(loc: IPublicModelDropLocation | null);
+
+
+  /**
+   * 设置聚焦节点变化的回调
+   * triggered focused node is set mannually from plugin
+   * @param fn
+   * @since v1.1.0
+   */
+  onFocusNodeChanged(
+    fn: (doc: IPublicModelDocumentModel, focusNode: IPublicModelNode) => void,
+  ): IPublicTypeDisposable;
+
+  /**
+   * 设置 DropLocation 变化的回调
+   * triggered when drop location changed
+   * @param fn
+   * @since v1.1.0
+   */
+  onDropLocationChanged(fn: (doc: IPublicModelDocumentModel) => void): IPublicTypeDisposable;
 }

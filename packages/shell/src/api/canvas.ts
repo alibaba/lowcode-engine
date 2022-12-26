@@ -13,9 +13,11 @@ import {
 import {
   ScrollTarget as InnerScrollTarget,
 } from '@alilc/lowcode-designer';
-import { editorSymbol, designerSymbol } from '../symbols';
+import { editorSymbol, designerSymbol, nodeSymbol } from '../symbols';
 import { Dragon } from '../model';
 import { DropLocation } from '../model/drop-location';
+import { ActiveTracker } from '../model/active-tracker';
+
 
 export class Canvas implements IPublicApiCanvas {
   private readonly [editorSymbol]: IPublicModelEditor;
@@ -40,7 +42,10 @@ export class Canvas implements IPublicApiCanvas {
    * 创建插入位置，考虑放到 dragon 中
    */
   createLocation(locationData: IPublicTypeLocationData): IPublicModelDropLocation {
-    return this[designerSymbol].createLocation(locationData);
+    return this[designerSymbol].createLocation({
+      ...locationData,
+      target: (locationData.target as any)[nodeSymbol],
+    });
   }
 
   get dragon(): IPublicModelDragon | null {
@@ -48,8 +53,10 @@ export class Canvas implements IPublicApiCanvas {
   }
 
   get activeTracker(): IPublicModelActiveTracker | null {
-    return this[designerSymbol].activeTracker;
+    const activeTracker = new ActiveTracker(this[designerSymbol].activeTracker);
+    return activeTracker;
   }
+
   /**
    * @deprecated
    */

@@ -11,7 +11,6 @@ import {
   IPublicApiSimulatorHost,
   IPublicModelDocumentModel,
   IPublicTypePropsTransducer,
-  IPublicEnumEventNames,
   IPublicEnumTransformStage,
   IPublicTypeDisposable,
 } from '@alilc/lowcode-types';
@@ -166,7 +165,7 @@ export class Project implements IPublicApiProject {
    */
   onRemoveDocument(fn: (data: { id: string}) => void): IPublicTypeDisposable {
     return this[editorSymbol].eventBus.on(
-        IPublicEnumEventNames.DESIGNER_DOCUMENT_REMOVE,
+        'designer.document.remove',
         (data: { id: string }) => fn(data),
       );
   }

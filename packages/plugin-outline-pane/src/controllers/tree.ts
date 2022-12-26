@@ -20,6 +20,15 @@ export class Tree {
     this.id = this.pluginContext.project.currentDocument?.id;
   }
 
+  setNodeSelected(nodeId: string): void {
+    // 目标节点选中，其他节点展开
+    const treeNode = this.treeNodesMap.get(nodeId);
+    if (!treeNode) {
+      return;
+    }
+    this.expandAllAncestors(treeNode);
+  }
+
   getTreeNode(node: IPublicModelNode): TreeNode {
     if (this.treeNodesMap.has(node.id)) {
       const tnode = this.treeNodesMap.get(node.id)!;
@@ -36,7 +45,29 @@ export class Tree {
     return this.treeNodesMap.get(id);
   }
 
-  expandAllDecendants(treeNode: TreeNode | undefined) {
+  expandAllAncestors(treeNode: TreeNode | undefined | null) {
+    if (!treeNode) {
+      return;
+    }
+    if (treeNode.isRoot()) {
+      return;
+    }
+    const ancestors = [];
+    let currentNode: TreeNode | null | undefined = treeNode;
+    while (!treeNode.isRoot()) {
+      currentNode = currentNode?.parent;
+      if (currentNode) {
+        ancestors.unshift(currentNode);
+      } else {
+        break;
+      }
+    }
+    ancestors.forEach((ancestor) => {
+      ancestor.setExpanded(true);
+    });
+  }
+
+  expandAllDecendants(treeNode: TreeNode | undefined | null) {
     if (!treeNode) {
       return;
     }
@@ -49,7 +80,7 @@ export class Tree {
     }
   }
 
-  collapseAllDecendants(treeNode: TreeNode | undefined) {
+  collapseAllDecendants(treeNode: TreeNode | undefined | null): void {
     if (!treeNode) {
       return;
     }

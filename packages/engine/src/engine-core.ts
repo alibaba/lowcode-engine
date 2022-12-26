@@ -171,7 +171,7 @@ export async function init(
   engineConfig.setEngineOptions(engineOptions as any);
 
   // 注册一批内置插件
-  await plugins.register(OutlinePlugin);
+  await plugins.register(OutlinePlugin, {}, { autoInit: true });
   await plugins.register(componentMetaParser(designer));
   await plugins.register(setterRegistry, {}, { autoInit: true });
   await plugins.register(defaultPanelRegistry(editor, designer));

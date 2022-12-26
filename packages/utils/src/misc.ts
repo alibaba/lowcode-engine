@@ -1,8 +1,8 @@
 
 import { isI18NObject } from './is-object';
 import { get } from 'lodash';
-import { ComponentMeta } from '@alilc/lowcode-designer';
-import { TransformStage } from '@alilc/lowcode-types';
+import { IPublicEnumTransformStage, IPublicModelComponentMeta } from '@alilc/lowcode-types';
+
 interface Variable {
   type: 'variable';
   variable: string;
@@ -65,7 +65,7 @@ export function arrShallowEquals(arr1: any[], arr2: any[]): boolean {
  * 判断当前 meta 是否从 vc prototype 转换而来
  * @param meta
  */
- export function isFromVC(meta: ComponentMeta) {
+ export function isFromVC(meta: IPublicModelComponentMeta) {
   return !!meta?.getMetadata().configure?.advanced;
 }
 
@@ -86,12 +86,12 @@ const stageList = [
  * @param stage
  * @returns
  */
-export function compatStage(stage: TransformStage | number): TransformStage {
+export function compatStage(stage: IPublicEnumTransformStage | number): IPublicEnumTransformStage {
   if (typeof stage === 'number') {
-    console.warn('stage 直接指定为数字的使用方式已经过时，将在下一版本移除，请直接使用 TransformStage.Render|Serilize|Save|Clone|Init|Upgrade');
-    return stageList[stage - 1] as TransformStage;
+    console.warn('stage 直接指定为数字的使用方式已经过时，将在下一版本移除，请直接使用 IPublicEnumTransformStage.Render|Serilize|Save|Clone|Init|Upgrade');
+    return stageList[stage - 1] as IPublicEnumTransformStage;
   }
-  return stage as TransformStage;
+  return stage as IPublicEnumTransformStage;
 }
 
 export function invariant(check: any, message: string, thing?: any) {

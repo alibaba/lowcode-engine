@@ -26,7 +26,6 @@ export * from './node-helper';
 export * from './clone-enumerable-property';
 export * from './logger';
 export * from './is-shaken';
-export * from './is-public-event-name';
 export * from './is-plugin-event-name';
 export * as css from './css-helper';
 export { transactionManager } from './transaction-manager';

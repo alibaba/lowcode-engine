@@ -1,5 +1,5 @@
 import { isLocationChildrenDetail } from '@alilc/lowcode-utils';
-import { IPublicModelPluginContext, IPublicTypeActiveTarget, IPublicModelNode, IPublicEnumEventNames } from '@alilc/lowcode-types';
+import { IPublicModelPluginContext, IPublicTypeActiveTarget, IPublicModelNode } from '@alilc/lowcode-types';
 import TreeNode from './tree-node';
 import { Tree } from './tree';
 
@@ -54,8 +54,8 @@ export class TreeMaster {
         time: (endTime - startTime).toFixed(2),
       });
     });
-    event.on(IPublicEnumEventNames.DESIGNER_DOCUMENT_REMOVE, (doc) => {
-      const { id } = doc as any;
+    project.onRemoveDocument((data: {id: string}) => {
+      const { id } = data;
       this.treeMap.delete(id);
     });
   }

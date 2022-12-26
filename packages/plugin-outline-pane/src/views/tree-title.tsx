@@ -21,6 +21,10 @@ function emitOutlineEvent(event: IPublicApiEvent, type: string, treeNode: TreeNo
 export default class TreeTitle extends Component<{
   treeNode: TreeNode;
   isModal?: boolean;
+  expanded: boolean;
+  hidden: boolean;
+  locked: boolean;
+  expandable: boolean;
   pluginContext: IPublicModelPluginContext;
 }> {
   state: {
@@ -73,30 +77,18 @@ export default class TreeTitle extends Component<{
     // 光标定位最后一个
     // input.selectionStart = input.selectionEnd;
   };
-  offTitleLabelChanged: (() => void) | undefined;
 
   componentDidMount() {
-    const { treeNode, pluginContext } = this.props;
-    const { id } = treeNode;
-    const { pluginEvent } = pluginContext;
+    const { treeNode } = this.props;
     this.setState({
       editing: false,
       title: treeNode.titleLabel,
     });
-    this.offTitleLabelChanged = pluginEvent.on('tree-node.titleLabelChanged', (payload: any) => {
-      const { nodeId } = payload;
-      if (nodeId === id) {
-        this.setState({
-          title: treeNode.titleLabel,
-        });
-      }
-    });
-  }
-
-  componentWillUnmount(): void {
-    if (this.offTitleLabelChanged) {
-      this.offTitleLabelChanged();
-    }
+    treeNode.onTitleLabelChanged = () => {
+      this.setState({
+        title: treeNode.titleLabel,
+      });
+    };
   }
 
   render() {
@@ -158,7 +150,7 @@ export default class TreeTitle extends Component<{
             <IconRadio className="tree-node-modal-radio" />
           </div>
         )}
-        {isCNode && <ExpandBtn treeNode={treeNode} pluginContext={this.props.pluginContext} />}
+        {isCNode && <ExpandBtn expandable={this.props.expandable} expanded={this.props.expanded} treeNode={treeNode} pluginContext={this.props.pluginContext} />}
         <div className="tree-node-icon">{createIcon(treeNode.icon)}</div>
         <div className="tree-node-title-label">
           {editing ? (
@@ -200,8 +192,8 @@ export default class TreeTitle extends Component<{
             </Fragment>
           )}
         </div>
-        {shouldShowHideBtn && <HideBtn treeNode={treeNode} pluginContext={this.props.pluginContext} />}
-        {shouldShowLockBtn && <LockBtn treeNode={treeNode} pluginContext={this.props.pluginContext} />}
+        {shouldShowHideBtn && <HideBtn hidden={this.props.hidden} treeNode={treeNode} pluginContext={this.props.pluginContext} />}
+        {shouldShowLockBtn && <LockBtn locked={this.props.locked} treeNode={treeNode} pluginContext={this.props.pluginContext} />}
         {shouldEditBtn && <RenameBtn treeNode={treeNode} pluginContext={this.props.pluginContext} onClick={this.enableEdit} /> }
 
       </div>
@@ -233,39 +225,10 @@ class RenameBtn extends Component<{
 class LockBtn extends Component<{
   treeNode: TreeNode;
   pluginContext: IPublicModelPluginContext;
-}, {
   locked: boolean;
 }> {
-  state = {
-    locked: false,
-  };
-  offLockedChanged: () => void;
-
-  componentDidMount(): void {
-    const { treeNode, pluginContext } = this.props;
-    const { id } = treeNode;
-    const { pluginEvent } = pluginContext;
-
-    this.setState({
-      locked: treeNode.locked,
-    });
-
-    this.offLockedChanged = pluginEvent.on('tree-node.lockedChanged', (payload: any) => {
-      const { locked, nodeId } = payload;
-      if (nodeId === id) {
-        this.setState({ locked });
-      }
-    });
-  }
-
-  componentWillUnmount() {
-    if (this.offLockedChanged) {
-      this.offLockedChanged();
-    }
-  }
-
   render() {
-    const { treeNode } = this.props;
+    const { treeNode, locked } = this.props;
     const { intl, common } = this.props.pluginContext;
     const Tip = common.editorCabin.Tip;
     return (
@@ -273,11 +236,11 @@ class LockBtn extends Component<{
         className="tree-node-lock-btn"
         onClick={(e) => {
           e.stopPropagation();
-          treeNode.setLocked(!this.state.locked);
+          treeNode.setLocked(!locked);
         }}
       >
-        {this.state.locked ? <IconUnlock /> : <IconLock /> }
-        <Tip>{this.state.locked ? intl('Unlock') : intl('Lock')}</Tip>
+        {locked ? <IconUnlock /> : <IconLock /> }
+        <Tip>{locked ? intl('Unlock') : intl('Lock')}</Tip>
       </div>
     );
   }
@@ -285,35 +248,13 @@ class LockBtn extends Component<{
 
 class HideBtn extends Component<{
   treeNode: TreeNode;
+  hidden: boolean;
   pluginContext: IPublicModelPluginContext;
 }, {
   hidden: boolean;
 }> {
-  state = {
-    hidden: false,
-  };
-  offHiddenChanged: () => void;
-  componentDidMount(): void {
-    const { treeNode, pluginContext } = this.props;
-    const { pluginEvent } = pluginContext;
-    const { id } = treeNode;
-    this.setState({
-      hidden: treeNode.hidden,
-    });
-    this.offHiddenChanged = pluginEvent.on('tree-node.hiddenChanged', (payload: any) => {
-      const { hidden, nodeId } = payload;
-      if (nodeId === id) {
-        this.setState({ hidden });
-      }
-    });
-  }
-  componentWillUnmount(): void {
-    if (this.offHiddenChanged) {
-      this.offHiddenChanged();
-    }
-  }
   render() {
-    const { treeNode } = this.props;
+    const { treeNode, hidden } = this.props;
     const { intl, common } = this.props.pluginContext;
     const Tip = common.editorCabin.Tip;
     return (
@@ -321,12 +262,12 @@ class HideBtn extends Component<{
         className="tree-node-hide-btn"
         onClick={(e) => {
           e.stopPropagation();
-          emitOutlineEvent(this.props.pluginContext.event, this.state.hidden ? 'show' : 'hide', treeNode);
-          treeNode.setHidden(!this.state.hidden);
+          emitOutlineEvent(this.props.pluginContext.event, hidden ? 'show' : 'hide', treeNode);
+          treeNode.setHidden(!hidden);
         }}
       >
-        {this.state.hidden ? <IconEye /> : <IconEyeClose />}
-        <Tip>{this.state.hidden ? intl('Show') : intl('Hide')}</Tip>
+        {hidden ? <IconEye /> : <IconEyeClose />}
+        <Tip>{hidden ? intl('Show') : intl('Hide')}</Tip>
       </div>
     );
   }
@@ -336,52 +277,24 @@ class HideBtn extends Component<{
 class ExpandBtn extends Component<{
   treeNode: TreeNode;
   pluginContext: IPublicModelPluginContext;
-}, {
   expanded: boolean;
   expandable: boolean;
 }> {
-  state = {
-    expanded: false,
-    expandable: false,
-  };
-
-  offExpandedChanged: () => void;
-
-  componentDidMount(): void {
-    const { treeNode, pluginContext } = this.props;
-    const { id } = treeNode;
-    const { pluginEvent } = pluginContext;
-    this.setState({
-      expanded: treeNode.expanded,
-      expandable: treeNode.expandable,
-    });
-    this.offExpandedChanged = pluginEvent.on('tree-node.expandedChanged', (payload: any) => {
-      const { expanded, nodeId } = payload;
-      if (nodeId === id) {
-        this.setState({ expanded });
-      }
-    });
-  }
-  componentWillUnmount(): void {
-    if (this.offExpandedChanged) {
-      this.offExpandedChanged();
-    }
-  }
 
   render() {
-    const { treeNode } = this.props;
-    if (!this.state.expandable) {
+    const { treeNode, expanded, expandable } = this.props;
+    if (!expandable) {
       return <i className="tree-node-expand-placeholder" />;
     }
     return (
       <div
         className="tree-node-expand-btn"
         onClick={(e) => {
-          if (this.state.expanded) {
+          if (expanded) {
             e.stopPropagation();
           }
-          emitOutlineEvent(this.props.pluginContext.event, this.state.expanded ? 'collapse' : 'expand', treeNode);
-          treeNode.setExpanded(!this.state.expanded);
+          emitOutlineEvent(this.props.pluginContext.event, expanded ? 'collapse' : 'expand', treeNode);
+          treeNode.setExpanded(!expanded);
         }}
       >
         <IconArrowRight size="small" />

@@ -7,8 +7,9 @@ import {
 import { isNode } from '@alilc/lowcode-utils';
 
 export interface IActiveTracker extends IPublicModelActiveTracker {
-
+  track(originalTarget: IPublicTypeActiveTarget | INode): void;
 }
+
 export class ActiveTracker implements IActiveTracker {
   private emitter: IEventBus = createModuleEventBus('ActiveTracker');
 

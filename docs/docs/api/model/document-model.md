@@ -42,6 +42,12 @@ sidebar_position: 0
 
 参见 [模态节点管理](./modal-nodes-manager)
 
+### dropLocation
+文档的 dropLocation
+相关类型：[IPublicModelDropLocation](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/drop-location.ts)
+
+**@since v1.1.0**
+
 ## 方法签名
 ### getNodeById
 
@@ -89,6 +95,24 @@ removeNode(idOrNode: string | Node)
 ```typescript
 function checkNesting(dropTarget: Node, dragObject: DragNodeObject | DragNodeDataObject): boolean {}
 ```
+
+### isDetectingNode
+检查拖拽放置的目标节点是否可以放置该拖拽对象
+
+```typescript
+/**
+ * 判断是否当前节点处于被探测状态
+ * check is node being detected
+ * @param node
+ * @since v1.1.0
+ */
+isDetectingNode(node: IPublicModelNode): boolean;
+```
+相关类型：[IPublicModelNode](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/node.ts)
+
+
+**@since v1.1.0**
+
 
 ## 事件
 ### onAddNode
@@ -144,7 +168,53 @@ onChangeNodeProp(fn: (info: IPublicTypePropChangeOptions) => void)
 
 ### onImportSchema
 当前 document 导入新的 schema 事件
-版本 >= 1.0.15
 ```typescript
-onImportSchema(fn: (schema: any) => void)
+/**
+ * import schema event
+ * @param fn
+ * @since v1.0.15
+ */
+onImportSchema(fn: (schema: IPublicTypeRootSchema) => void): IPublicTypeDisposable;
 ```
+相关类型：
+- [IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
+- [IPublicTypeRootSchema](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/root-schema.ts)
+
+**@since v1.0.15**
+
+### onFocusNodeChanged
+设置聚焦节点变化的回调
+
+```typescript
+/**
+ * 设置聚焦节点变化的回调
+ * triggered focused node is set mannually from plugin
+ * @param fn
+ * @since v1.1.0
+ */
+onFocusNodeChanged(
+  fn: (doc: IPublicModelDocumentModel, focusNode: IPublicModelNode) => void,
+): IPublicTypeDisposable;
+```
+相关类型：
+- [IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
+- [IPublicModelNode](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/node.ts)
+
+**@since v1.1.0**
+
+### onDropLocationChanged
+设置 DropLocation 变化的回调
+
+```typescript
+/**
+ * 设置 DropLocation 变化的回调
+ * triggered when drop location changed
+ * @param fn
+ * @since v1.1.0
+ */
+onDropLocationChanged(fn: (doc: IPublicModelDocumentModel) => void): IPublicTypeDisposable;
+```
+
+相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
+
+**@since v1.1.0**

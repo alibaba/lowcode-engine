@@ -24,6 +24,10 @@ export interface FilterResult {
 export default class TreeNode {
   readonly pluginContext: IPublicModelPluginContext;
   onFilterResultChanged: () => void;
+  onExpandedChanged: (expanded: boolean) => void;
+  onHiddenChanged: (hidden: boolean) => void;
+  onLockedChanged: (locked: boolean) => void;
+  onTitleLabelChanged: (treeNode: TreeNode) => void;
 
   get id(): string {
     return this.node.id;
@@ -87,7 +91,7 @@ export default class TreeNode {
 
   setExpanded(value: boolean) {
     this._expanded = value;
-    this.pluginContext.pluginEvent.emit('tree-node.expandedChanged', { expanded: value, nodeId: this.id });
+    this.onExpandedChanged && this.onExpandedChanged(value);
   }
 
   get detecting() {
@@ -108,7 +112,7 @@ export default class TreeNode {
       return;
     }
     this.node.setVisible(!flag);
-    this.pluginContext.pluginEvent.emit('tree-node.hiddenChanged', { hidden: flag, nodeId: this.id });
+    this.onHiddenChanged && this.onHiddenChanged(flag);
   }
 
   get locked(): boolean {
@@ -117,7 +121,7 @@ export default class TreeNode {
 
   setLocked(flag: boolean) {
     this.node.lock(flag);
-    this.pluginContext.pluginEvent.emit('tree-node.lockedChanged', { locked: flag, nodeId: this.id });
+    this.onLockedChanged && this.onLockedChanged(flag);
   }
 
   get selected(): boolean {
@@ -162,7 +166,7 @@ export default class TreeNode {
     } else {
       this.node.getExtraProp('title', true)?.setValue(label);
     }
-    this.pluginContext.pluginEvent.emit('tree-node.titleLabelChanged', { titleLabel: label, nodeId: this.id });
+    this.onTitleLabelChanged && this.onTitleLabelChanged(this);
   }
 
   get icon() {

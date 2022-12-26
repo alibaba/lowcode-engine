@@ -103,15 +103,11 @@ export interface IDropLocation extends IPublicModelDropLocation {
 
   readonly target: INode;
 
-  readonly detail: IPublicTypeLocationDetail;
-
   readonly event: ILocateEvent;
 
   readonly source: string;
 
   get document(): IPublicModelDocumentModel;
-
-  clone(event: ILocateEvent): IDropLocation;
 }
 
 export class DropLocation implements IDropLocation {
