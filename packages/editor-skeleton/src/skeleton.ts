@@ -26,7 +26,6 @@ import {
   PluginClassSet,
   IPublicTypeWidgetBaseConfig,
   IPublicTypeWidgetConfigArea,
-  IPublicEnumEventNames,
 } from '@alilc/lowcode-types';
 
 const logger = new Logger({ level: 'warn', bizName: 'skeleton' });
@@ -174,7 +173,7 @@ export class Skeleton {
    */
   setupEvents() {
     // adjust pinned status when panel shown
-    this.editor.eventBus.on(IPublicEnumEventNames.SKELETON_PANEL_SHOW, (panelName, panel) => {
+    this.editor.eventBus.on(SkeletonEvents.PANEL_SHOW, (panelName, panel) => {
       const panelNameKey = `${panelName}-pinned-status-isFloat`;
       const isInFloatAreaPreferenceExists = engineConfig.getPreference()?.contains(panelNameKey, 'skeleton');
       if (isInFloatAreaPreferenceExists) {

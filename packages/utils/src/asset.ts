@@ -16,7 +16,10 @@ export function isAssetBundle(obj: any): obj is AssetBundle {
   return obj && obj.type === AssetType.Bundle;
 }
 
-export function assetBundle(assets?: Asset | AssetList | null, level?: AssetLevel): AssetBundle | null {
+export function assetBundle(
+    assets?: Asset | AssetList | null,
+    level?: AssetLevel,
+  ): AssetBundle | null {
   if (!assets) {
     return null;
   }

@@ -14,7 +14,6 @@ import {
   IPublicModelNode,
   IPublicApiProject,
   IPublicModelDropLocation,
-  IPublicEnumEventNames,
   IPublicEnumTransformStage,
 } from '@alilc/lowcode-types';
 import { Project } from '../project';
@@ -326,7 +325,7 @@ export class DocumentModel implements IDocumentModel {
     this._dropLocation = loc;
     // pub event
     this.designer.editor.eventBus.emit(
-      IPublicEnumEventNames.DOCUMENT_DROPLOCATION_CHANGED,
+      'document.dropLocation.changed',
       { document: this, location: loc },
     );
   }

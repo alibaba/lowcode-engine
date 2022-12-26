@@ -4,33 +4,27 @@ import TreeView from './tree';
 import './style.less';
 import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 import Filter from './filter';
-import { registerTreeTitleExtra } from '../helper/tree-title-extra';
-import { getTreeMaster, TreeMaster } from '../controllers/tree-master';
+import { TreeMaster } from '../controllers/tree-master';
 
 
 export class Pane extends Component<{
   config: any;
   pluginContext: IPublicModelPluginContext;
+  treeMaster: TreeMaster;
+  controller: PaneController;
 }> {
   private controller;
   private treeMaster: TreeMaster;
 
   constructor(props: any) {
     super(props);
-    this.treeMaster = getTreeMaster(this.props.pluginContext);
-    this.controller = new PaneController(
-        this.props.config.name || this.props.config.pluginKey,
-        this.props.pluginContext,
-        this.treeMaster,
-      );
+    const { controller, treeMaster } = props;
+    this.treeMaster = treeMaster;
+    this.controller = controller;
   }
 
   componentWillUnmount() {
     this.controller.purge();
-  }
-
-  componentDidMount() {
-    registerTreeTitleExtra(this.props?.config?.contentProps?.treeTitleExtra);
   }
 
   render() {

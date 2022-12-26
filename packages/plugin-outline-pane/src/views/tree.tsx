@@ -1,8 +1,8 @@
 import { Component, MouseEvent as ReactMouseEvent } from 'react';
 import { isFormEvent, canClickNode, isShaken } from '@alilc/lowcode-utils';
 import { Tree } from '../controllers/tree';
-import RootTreeNodeView from './root-tree-node';
-import { IPublicEnumDragObjectType, IPublicModelPluginContext, IPublicModelNode, IPublicEnumEventNames } from '@alilc/lowcode-types';
+import TreeNodeView from './tree-node';
+import { IPublicEnumDragObjectType, IPublicModelPluginContext, IPublicModelNode } from '@alilc/lowcode-types';
 
 function getTreeNodeIdByEvent(e: ReactMouseEvent, stop: Element): null | string {
   let target: Element | null = e.target as Element;
@@ -81,6 +81,9 @@ export default class TreeView extends Component<{
   private onDoubleClick = (e: ReactMouseEvent) => {
     e.preventDefault();
     const treeNode = this.getTreeNodeFromEvent(e);
+    if (treeNode?.id === this.state.root?.id) {
+      return;
+    }
     if (!treeNode?.expanded) {
       this.props.tree.expandAllDecendants(treeNode);
     } else {
@@ -173,17 +176,13 @@ export default class TreeView extends Component<{
   componentDidMount() {
     const { tree, pluginContext } = this.props;
     const { root } = tree;
-    const { event, project } = pluginContext;
+    const { project } = pluginContext;
     this.setState({ root });
     const doc = project.currentDocument;
-    // root 变化
-    event.on(IPublicEnumEventNames.DOCUMENT_FOCUS_NODE_CHANGED, (payload: any) => {
-      const { document } = payload;
-      if (document.id === doc?.id) {
-        this.setState({
-          root: tree.root,
-        });
-      }
+    doc?.onFocusNodeChanged(() => {
+      this.setState({
+        root: tree.root,
+      });
     });
   }
 
@@ -201,7 +200,12 @@ export default class TreeView extends Component<{
         onDoubleClick={this.onDoubleClick}
         onMouseLeave={this.onMouseLeave}
       >
-        <RootTreeNodeView key={this.state.root?.id} treeNode={this.state.root} pluginContext={this.props.pluginContext} />
+        <TreeNodeView
+          key={this.state.root?.id}
+          treeNode={this.state.root}
+          pluginContext={this.props.pluginContext}
+          isRootNode
+        />
       </div>
     );
   }

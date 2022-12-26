@@ -2,38 +2,33 @@ import { Component } from 'react';
 import classNames from 'classnames';
 import TreeNode from '../controllers/tree-node';
 import TreeNodeView from './tree-node';
-import { IPublicModelPluginContext, IPublicModelExclusiveGroup, IPublicEnumEventNames, IPublicTypeLocationDetailType } from '@alilc/lowcode-types';
+import { IPublicModelPluginContext, IPublicModelExclusiveGroup } from '@alilc/lowcode-types';
 
 export default class TreeBranches extends Component<{
   treeNode: TreeNode;
   isModal?: boolean;
   pluginContext: IPublicModelPluginContext;
+  expanded: boolean;
 }> {
   state = {
-    expanded: false,
     filterWorking: false,
     matchChild: false,
   };
   private offExpandedChanged: (() => void) | null;
-  componentDidMount() {
-    const { treeNode, pluginContext } = this.props;
-    const { expanded } = treeNode;
-    const { pluginEvent } = pluginContext;
+  constructor(props: any) {
+    super(props);
 
+    const { treeNode } = this.props;
     const { filterWorking, matchChild } = treeNode.filterReult;
-    this.setState({ expanded, filterWorking, matchChild });
+    this.setState({ filterWorking, matchChild });
+  }
+
+  componentDidMount() {
+    const { treeNode } = this.props;
     treeNode.onFilterResultChanged = () => {
       const { filterWorking: newFilterWorking, matchChild: newMatchChild } = treeNode.filterReult;
       this.setState({ filterWorking: newFilterWorking, matchChild: newMatchChild });
     };
-
-    this.offExpandedChanged = pluginEvent.on('tree-node.expandedChanged', (payload: any) => {
-      const { expanded: value, nodeId } = payload;
-      const { id } = this.props.treeNode;
-      if (nodeId === id) {
-        this.setState({ expanded: value });
-      }
-    });
   }
 
   componentWillUnmount(): void {
@@ -43,8 +38,8 @@ export default class TreeBranches extends Component<{
   }
 
   render() {
-    const { treeNode, isModal } = this.props;
-    const { filterWorking, matchChild, expanded } = this.state;
+    const { treeNode, isModal, expanded } = this.props;
+    const { filterWorking, matchChild } = this.state;
     // 条件过滤生效时，如果命中了子节点，需要将该节点展开
     const expandInFilterResult = filterWorking && matchChild;
 
@@ -57,7 +52,11 @@ export default class TreeBranches extends Component<{
         {
           !isModal && <TreeNodeSlots treeNode={treeNode} pluginContext={this.props.pluginContext} />
         }
-        <TreeNodeChildren treeNode={treeNode} isModal={isModal || false} pluginContext={this.props.pluginContext} />
+        <TreeNodeChildren
+          treeNode={treeNode}
+          isModal={isModal || false}
+          pluginContext={this.props.pluginContext}
+        />
       </div>
     );
   }
@@ -77,7 +76,7 @@ class TreeNodeChildren extends Component<{
   offLocationChanged: () => void;
   componentDidMount() {
     const { treeNode, pluginContext } = this.props;
-    const { event } = pluginContext;
+    const { project } = pluginContext;
     const { filterWorking, matchSelf, keywords } = treeNode.filterReult;
     const { dropDetail } = treeNode;
     this.setState({
@@ -98,11 +97,10 @@ class TreeNodeChildren extends Component<{
         keywords: newKeywords,
       });
     };
-    this.offLocationChanged = event.on(
-      IPublicEnumEventNames.DOCUMENT_DROPLOCATION_CHANGED,
-      (payload: any) => {
-        this.setState({ dropDetail: treeNode.dropDetail });
-      },
+    this.offLocationChanged = project.currentDocument?.onDropLocationChanged(
+        () => {
+          this.setState({ dropDetail: treeNode.dropDetail });
+        },
       );
   }
   componentWillUnmount(): void {

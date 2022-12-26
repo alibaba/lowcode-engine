@@ -1,5 +1,5 @@
 import { Editor as InnerEditor, EventBus } from '@alilc/lowcode-editor-core';
-import { getLogger, isPublicEventName, isPluginEventName } from '@alilc/lowcode-utils';
+import { getLogger, isPluginEventName } from '@alilc/lowcode-utils';
 import { IPublicApiEvent, IPublicTypeDisposable } from '@alilc/lowcode-types';
 
 const logger = getLogger({ level: 'warn', bizName: 'shell-event' });
@@ -34,10 +34,10 @@ export class Event implements IPublicApiEvent {
    * @param listener 事件回调
    */
   on(event: string, listener: (...args: any[]) => void): IPublicTypeDisposable {
-    if (isPluginEventName(event) || isPublicEventName(event)) {
+    if (isPluginEventName(event)) {
       return this[eventBusSymbol].on(event, listener);
     } else {
-      logger.warn(`fail to monitor on event ${event}, which is neither a engine public event nor a plugin event`);
+      logger.warn(`fail to monitor on event ${event}, event should have a prefix like 'somePrefix:eventName'`);
       return () => {};
     }
   }

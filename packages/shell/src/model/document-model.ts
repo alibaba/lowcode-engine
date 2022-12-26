@@ -22,8 +22,8 @@ import {
   IPublicModelModalNodesManager,
   IPublicTypePropChangeOptions,
   IPublicModelDropLocation,
-  IPublicEnumEventNames,
   IPublicApiCanvas,
+  IPublicTypeDisposable,
 } from '@alilc/lowcode-types';
 import { Node } from './node';
 import { Selection } from './selection';
@@ -108,7 +108,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
   set focusNode(node: IPublicModelNode | null) {
     this._focusNode = node;
     this[editorSymbol].eventBus.emit(
-      IPublicEnumEventNames.DOCUMENT_FOCUS_NODE_CHANGED,
+      'shell.document.focusNodeChanged',
         { document: this, focusNode: node },
       );
   }
@@ -157,7 +157,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
    */
   importSchema(schema: IPublicTypeRootSchema): void {
     this[documentSymbol].import(schema);
-    this[editorSymbol].eventBus.emit(IPublicEnumEventNames.DOCUMENT_IMPORT_SCHEMA, schema);
+    this[editorSymbol].eventBus.emit('shell.document.importSchema', schema);
   }
 
   /**
@@ -241,7 +241,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
   /**
    * 当前 document 新增节点事件
    */
-  onAddNode(fn: (node: IPublicModelNode) => void): () => void {
+  onAddNode(fn: (node: IPublicModelNode) => void): IPublicTypeDisposable {
     return this[documentSymbol].onNodeCreate((node: InnerNode) => {
       fn(Node.create(node)!);
     });
@@ -250,7 +250,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
   /**
    * 当前 document 新增节点事件，此时节点已经挂载到 document 上
    */
-  onMountNode(fn: (payload: { node: IPublicModelNode }) => void): () => void {
+  onMountNode(fn: (payload: { node: IPublicModelNode }) => void): IPublicTypeDisposable {
     this[editorSymbol].eventBus.on('node.add', fn as any);
     return () => {
       this[editorSymbol].eventBus.off('node.add', fn as any);
@@ -260,7 +260,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
   /**
    * 当前 document 删除节点事件
    */
-  onRemoveNode(fn: (node: IPublicModelNode) => void): () => void {
+  onRemoveNode(fn: (node: IPublicModelNode) => void): IPublicTypeDisposable {
     return this[documentSymbol].onNodeDestroy((node: InnerNode) => {
       fn(Node.create(node)!);
     });
@@ -269,7 +269,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
   /**
    * 当前 document 的 hover 变更事件
    */
-  onChangeDetecting(fn: (node: IPublicModelNode) => void): () => void {
+  onChangeDetecting(fn: (node: IPublicModelNode) => void): IPublicTypeDisposable {
     return this[documentSymbol].designer.detecting.onDetectingChange((node: InnerNode) => {
       fn(Node.create(node)!);
     });
@@ -278,7 +278,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
   /**
    * 当前 document 的选中变更事件
    */
-  onChangeSelection(fn: (ids: string[]) => void): () => void {
+  onChangeSelection(fn: (ids: string[]) => void): IPublicTypeDisposable {
     return this[documentSymbol].selection.onSelectionChange((ids: string[]) => {
       fn(ids);
     });
@@ -338,11 +338,39 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * import schema event
    * @param fn
    */
-  onImportSchema(fn: (schema: IPublicTypeRootSchema) => void): void {
-    this[editorSymbol].on(IPublicEnumEventNames.DOCUMENT_IMPORT_SCHEMA, fn as any);
+  onImportSchema(fn: (schema: IPublicTypeRootSchema) => void): IPublicTypeDisposable {
+    return this[editorSymbol].eventBus.on('shell.document.importSchema', fn as any);
   }
 
   isDetectingNode(node: IPublicModelNode): boolean {
     return this.detecting.current === node;
+  }
+
+  onFocusNodeChanged(
+    fn: (doc: IPublicModelDocumentModel, focusNode: IPublicModelNode) => void,
+  ): IPublicTypeDisposable {
+    if (!fn) {
+      return () => {};
+    }
+    return this[editorSymbol].eventBus.on(
+      'shell.document.focusNodeChanged',
+      (payload) => {
+        const { document, focusNode } = payload;
+        fn(document, focusNode);
+      },
+    );
+  }
+
+  onDropLocationChanged(fn: (doc: IPublicModelDocumentModel) => void): IPublicTypeDisposable {
+    if (!fn) {
+      return () => {};
+    }
+    return this[editorSymbol].eventBus.on(
+      'document.dropLocation.changed',
+      (payload) => {
+        const { document } = payload;
+        fn(document);
+      },
+    );
   }
 }

@@ -7,7 +7,7 @@ import {
   isLocationChildrenDetail,
 } from '@alilc/lowcode-utils';
 import {
-  DragObject,
+  IPublicModelDragObject,
   IPublicModelScrollable,
   ISensor,
   IPublicTypeLocationChildrenDetail,
@@ -49,7 +49,6 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
 
     setup();
   }
-
 
   /** -------------------- ISensor begin -------------------- */
 
@@ -107,12 +106,12 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
     const document = project.getCurrentDocument();
     const pos = getPosFromEvent(e, this._shell);
     const irect = this.getInsertionRect();
-    const originLoc = document.dropLocation;
+    const originLoc = document?.dropLocation;
 
-    const componentMeta = e.dragObject.nodes ? e.dragObject.nodes[0].componentMeta : null;
-    if (e.dragObject.type === 'node' && componentMeta && componentMeta.isModal) {
+    const componentMeta = e.dragObject?.nodes ? e.dragObject.nodes[0].componentMeta : null;
+    if (e.dragObject?.type === 'node' && componentMeta && componentMeta.isModal && document?.focusNode) {
       return canvas.createLocation({
-        target: document.focusNode,
+        target: document?.focusNode,
         detail: {
           type: IPublicTypeLocationDetailType.Children,
           index: 0,
@@ -123,7 +122,9 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
       });
     }
 
-    if (originLoc && ((pos && pos === 'unchanged') || (irect && globalY >= irect.top && globalY <= irect.bottom))) {
+    if (originLoc
+      && ((pos && pos === 'unchanged') || (irect && globalY >= irect.top && globalY <= irect.bottom))
+      && dragObject) {
       const loc = originLoc.clone(e);
       const indented = this.indentTrack.getIndentParent(originLoc, loc);
       if (indented) {
@@ -138,7 +139,7 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
               detail: {
                 type: IPublicTypeLocationDetailType.Children,
                 index,
-                valid: document.checkNesting(parent, e.dragObject as any),
+                valid: document?.checkNesting(parent, e.dragObject as any),
               },
             });
           }
@@ -177,7 +178,7 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
             }
           }
           if (p !== node) {
-            node = p || document.focusNode;
+            node = p || document?.focusNode;
             treeNode = tree.getTreeNode(node);
             focusSlots = false;
           }
@@ -258,7 +259,7 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
       cancelIdleCallback(this.tryScrollAgain);
       this.tryScrollAgain = null;
     }
-    if (this.sensing || !this.bounds || !this.scroller || !this.scrollTarget) {
+    if (!this.bounds || !this.scroller || !this.scrollTarget) {
       // is a active sensor
       return;
     }
@@ -305,7 +306,7 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
       focus = { type: 'slots' };
     } else {
       index = 0;
-      valid = document.checkNesting(target, event.dragObject as any);
+      valid = !!document?.checkNesting(target, event.dragObject as any);
     }
     canvas.createLocation({
       target,
@@ -320,23 +321,28 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
     });
   });
 
-  private getNear(treeNode: TreeNode, e: IPublicModelLocateEvent, index?: number, rect?: DOMRect) {
+  private getNear(treeNode: TreeNode, e: IPublicModelLocateEvent, originalIndex?: number, originalRect?: DOMRect) {
     const { canvas, project } = this.pluginContext;
     const document = project.getCurrentDocument();
     const { globalY, dragObject } = e;
+    if (!dragObject) {
+      return null;
+    }
     // TODO: check dragObject is anyData
     const { node, expanded } = treeNode;
+    let rect = originalRect;
     if (!rect) {
       rect = this.getTreeNodeRect(treeNode);
       if (!rect) {
         return null;
       }
     }
+    let index = originalIndex;
     if (index == null) {
       index = node.index;
     }
 
-    if (node.isSlot) {
+    if (node.isSlotNode) {
       // 是个插槽根节点
       if (!treeNode.isContainer() && !treeNode.hasSlots()) {
         return canvas.createLocation({
@@ -385,7 +391,7 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
         detail: {
           type: IPublicTypeLocationDetailType.Children,
           index,
-          valid: document.checkNesting(node.parent!, dragObject as any),
+          valid: document?.checkNesting(node.parent!, dragObject as any),
           near: { node, pos: 'before' },
           focus: checkRecursion(focusNode, dragObject) ? { type: 'node', node: focusNode } : undefined,
         },
@@ -412,7 +418,7 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
       detail: {
         type: IPublicTypeLocationDetailType.Children,
         index: index + 1,
-        valid: document.checkNesting(node.parent!, dragObject as any),
+        valid: document?.checkNesting(node.parent!, dragObject as any),
         near: { node, pos: 'after' },
         focus: checkRecursion(focusNode, dragObject) ? { type: 'node', node: focusNode } : undefined,
       },
@@ -423,6 +429,9 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
     const { canvas, project } = this.pluginContext;
     const document = project.getCurrentDocument();
     const { dragObject, globalY } = e;
+    if (!dragObject) {
+      return null;
+    }
 
     if (!checkRecursion(treeNode.node, dragObject)) {
       return null;
@@ -454,7 +463,7 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
         detail.valid = false;
       } else {
         detail.index = 0;
-        detail.valid = document.checkNesting(container, dragObject);
+        detail.valid = document?.checkNesting(container, dragObject);
       }
     }
 
@@ -526,7 +535,7 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
       } else {
         detail.index = l;
       }
-      detail.valid = document.checkNesting(container, dragObject);
+      detail.valid = document?.checkNesting(container, dragObject);
     }
 
     return canvas.createLocation(locationData);
@@ -572,9 +581,26 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
       return;
     }
     this._shell = shell;
+    const { canvas, project } = this.pluginContext;
     if (shell) {
-      this._scrollTarget = this.pluginContext.canvas.createScrollTarget(shell);
+      this._scrollTarget = canvas.createScrollTarget(shell);
       this._sensorAvailable = true;
+
+      // check if there is current selection and scroll to it
+      const selection = project.currentDocument?.selection;
+      const topNodes = selection?.getTopNodes(true);
+      const tree = this.treeMaster?.currentTree;
+      if (topNodes && topNodes[0] && tree) {
+        const treeNode = tree.getTreeNodeById(topNodes[0].id);
+        if (treeNode) {
+          // at this moment, it is possible that pane is not ready yet, so
+          // put ui related operations to the next loop
+          setTimeout(() => {
+            tree.setNodeSelected(treeNode.id);
+            this.scrollToNode(treeNode, null, 4);
+          }, 0);
+        }
+      }
     } else {
       this._scrollTarget = undefined;
       this._sensorAvailable = false;
@@ -610,7 +636,7 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
   }
 }
 
-function checkRecursion(parent: IPublicModelNode | undefined | null, dragObject: DragObject): boolean {
+function checkRecursion(parent: IPublicModelNode | undefined | null, dragObject: IPublicModelDragObject): boolean {
   if (!parent) {
     return false;
   }
@@ -633,14 +659,14 @@ function getPosFromEvent(
   if (target.matches('.insertion')) {
     return 'unchanged';
   }
-  target = target.closest('[data-id]');
-  if (!target || !stop.contains(target)) {
+  const closest = target.closest('[data-id]');
+  if (!closest || !stop.contains(closest)) {
     return null;
   }
 
-  const nodeId = (target as HTMLDivElement).dataset.id!;
+  const nodeId = (closest as HTMLDivElement).dataset.id!;
   return {
-    focusSlots: target.matches('.tree-node-slots'),
+    focusSlots: closest.matches('.tree-node-slots'),
     nodeId,
   };
 }
