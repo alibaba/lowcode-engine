@@ -17,7 +17,27 @@ export class Tree {
 
   constructor(pluginContext: IPublicModelPluginContext) {
     this.pluginContext = pluginContext;
-    this.id = this.pluginContext.project.currentDocument?.id;
+    const doc = this.pluginContext.project.currentDocument;
+    this.id = doc?.id;
+
+    doc?.onMountNode((payload: {node: IPublicModelNode }) => {
+      const { node } = payload;
+      const parentNode = node.parent;
+      if (!parentNode) {
+        return;
+      }
+      const parentTreeNode = this.getTreeNodeById(parentNode.id);
+      parentTreeNode?.notifyExpandableChanged();
+    });
+
+    doc?.onRemoveNode((node: IPublicModelNode) => {
+      const parentNode = node.parent;
+      if (!parentNode) {
+        return;
+      }
+      const parentTreeNode = this.getTreeNodeById(parentNode.id);
+      parentTreeNode?.notifyExpandableChanged();
+    });
   }
 
   setNodeSelected(nodeId: string): void {

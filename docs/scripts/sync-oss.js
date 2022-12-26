@@ -4,7 +4,6 @@ const package = require('../package.json');
 const { version, name } = package;
 const options = {
   method: 'PUT',
-  // 暂时使用 日常环境的 uipaas-node，上线后可切换成线上环境 https://uipaas-node.alibaba-inc.com
   hostname: 'uipaas-node.alibaba-inc.com',
   path: '/staticAssets/cdn/packages',
   headers: {
