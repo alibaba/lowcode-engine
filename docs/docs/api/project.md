@@ -5,7 +5,7 @@ sidebar_position: 3
 ## 模块简介
 
 引擎编排模块中包含多种模型，包括：
-- [文档模型 DocumentModel）](./model/document-model)
+- [文档模型 DocumentModel](./model/document-model)
 - [节点模型 Node](./model/node)
 - [节点孩子模型 NodeChildren](./model/node-children)
 - [属性模型 Prop](./model/prop)

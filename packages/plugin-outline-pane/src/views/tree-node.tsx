@@ -32,7 +32,7 @@ class ModalTreeNodeView extends Component<{
     const { project } = this.pluginContext;
     const rootNode = project.currentDocument?.root;
     const rootTreeNode = treeNode.tree.getTreeNode(rootNode!);
-    const expanded = rootTreeNode.expanded;
+    const { expanded } = rootTreeNode;
 
     const hasVisibleModalNode = !!this.modalNodesManager?.getVisibleModalNode();
     return (
@@ -100,7 +100,7 @@ export default class TreeNodeView extends Component<{
 
   componentDidMount() {
     const { treeNode, pluginContext } = this.props;
-    const { event, project } = pluginContext;
+    const { project } = pluginContext;
 
     const doc = project.currentDocument;
 
@@ -112,6 +112,9 @@ export default class TreeNodeView extends Component<{
     };
     treeNode.onLockedChanged = (locked: boolean) => {
       this.setState({ locked });
+    };
+    treeNode.onExpandableChanged = (expandable: boolean) => {
+      this.setState({ expandable });
     };
 
     this.eventOffCallbacks.push(
