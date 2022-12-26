@@ -8,6 +8,7 @@ import { IPublicModelEditor, IPublicTypeTitleContent } from '@alilc/lowcode-type
 import { PopupPipe, PopupContext } from '../popup';
 import './index.less';
 import InlineTip from './inlinetip';
+import { intl } from '../../locale';
 
 export interface FieldProps {
   className?: string;
@@ -106,22 +107,22 @@ export class Field extends Component<FieldProps> {
   getTipContent(propName: string, tip?: any): any {
     let tipContent = (
       <div>
-        <div>属性：{propName}</div>
+        <div>{intl('Attribute: ')}{propName}</div>
       </div>
     );
 
     if (isObject(tip)) {
       tipContent = (
         <div>
-          <div>属性：{propName}</div>
-          <div>说明：{(tip as any).content}</div>
+          <div>{intl('Attribute: ')}{propName}</div>
+          <div>{intl('Description: ')}{(tip as any).content}</div>
         </div>
       );
     } else if (tip) {
       tipContent = (
         <div>
-          <div>属性：{propName}</div>
-          <div>说明：{tip}</div>
+          <div>{intl('Attribute: ')}{propName}</div>
+          <div>{intl('Description: ')}{tip}</div>
         </div>
       );
     }
