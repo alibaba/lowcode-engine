@@ -8,6 +8,8 @@ export interface IPublicViewFunctions {
 export interface IPublicEditorView {
   /** 资源名字 */
   viewName: string;
+  /** 资源类型 */
+  viewType?: 'editor' | 'webview';
   (ctx: any): IPublicViewFunctions;
 }
 
@@ -25,8 +27,12 @@ export interface IPublicResourceOptions {
   editorViews: IPublicEditorView[];
 
   /** save 钩子 */
-  save?: () => Promise<void>;
+  save?: (schema: {
+    [viewName: string]: any;
+  }) => Promise<void>;
 
   /** import 钩子 */
-  import?: () => Promise<void>;
+  import?: (schema: any) => Promise<{
+    [viewName: string]: any;
+  }>;
 }

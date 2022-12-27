@@ -12,6 +12,10 @@ export class EditorWindow {
   async importSchema(schema: any) {
     const newSchema = await this.resource.import(schema);
 
+    if (!newSchema) {
+      return;
+    }
+
     Object.keys(newSchema).forEach(key => {
       const view = this.editorViews.get(key);
       view?.project.importSchema(newSchema[key]);
