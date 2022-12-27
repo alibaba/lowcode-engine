@@ -16,8 +16,10 @@ sidebar_position: 12
 ### importSchema(schema: IPublicTypeNodeSchema)
 当前窗口导入 schema
 
+相关类型：[IPublicTypeNodeSchema](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/node-schema.ts)
+
 ### changeViewType(viewName: string)
 修改当前窗口视图类型
 
-### async save
+### async save()
 调用当前窗口视图保存钩子

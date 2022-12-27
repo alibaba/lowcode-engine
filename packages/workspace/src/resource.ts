@@ -1,7 +1,7 @@
-import { EditorViewOptions, ResourceOptions } from '.';
+import { IPublicEditorView, IPublicResourceOptions } from '@alilc/lowcode-types';
 
 export class Resource {
-  constructor(options: ResourceOptions) {
+  constructor(options: IPublicResourceOptions) {
     if (options.editorViews) {
       options.editorViews.forEach((d: any) => {
         this.editorViewMap.set(d.viewName, d);
@@ -11,9 +11,9 @@ export class Resource {
     this.options = options;
   }
 
-  options: ResourceOptions;
+  options: IPublicResourceOptions;
 
-  editorViewMap: Map<string, EditorViewOptions> = new Map<string, EditorViewOptions>();
+  editorViewMap: Map<string, IPublicEditorView> = new Map<string, IPublicEditorView>();
 
   init(ctx: any) {
     this.options.init(ctx);

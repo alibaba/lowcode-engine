@@ -8,6 +8,9 @@ import { Panel } from '../widget/panel';
 export default class RightArea extends Component<{ area: Area<any, Panel> }> {
   render() {
     const { area } = this.props;
+    if (area.isEmpty()) {
+      return null;
+    }
     return (
       <div className={classNames('lc-right-area engine-tabpane', {
         'lc-area-visible': area.visible,

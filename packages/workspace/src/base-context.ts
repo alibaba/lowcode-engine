@@ -35,6 +35,7 @@ import {
 import { getLogger } from '@alilc/lowcode-utils';
 import { Workspace as InnerWorkspace } from './index';
 import { EditorWindow } from './editor-window/context';
+
 export class BasicContext {
   skeleton: Skeleton;
   plugins: Plugins;

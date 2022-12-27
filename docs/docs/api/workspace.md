@@ -32,3 +32,5 @@ sidebar_position: 12
 /** 注册资源 */
 registerResourceType(resourceName: string, resourceType: 'editor', options: IPublicResourceOptions): void;
 ```
+
+相关类型：[IPublicResourceOptions](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/resource-options.ts)

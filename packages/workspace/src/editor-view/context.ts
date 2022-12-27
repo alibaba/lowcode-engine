@@ -1,16 +1,22 @@
 import { makeObservable, obx } from '@alilc/lowcode-editor-core';
-import { EditorViewOptions, EditorWindow, ViewFunctions } from '@alilc/lowcode-workspace';
+import { IPublicEditorView, IPublicViewFunctions } from '@alilc/lowcode-types';
 import { flow } from 'mobx';
+import { Workspace as InnerWorkspace } from '../';
 import { BasicContext } from '../base-context';
+import { EditorWindow } from '../editor-window/context';
+import { getWebviewPlugin } from '../inner-plugins/webview';
 
 export class Context extends BasicContext {
-  name = 'editor-view';
+  viewName = 'editor-view';
 
-  instance: ViewFunctions;
+  instance: IPublicViewFunctions;
 
-  constructor(public workspace: any, public editorWindow: EditorWindow, public editorView: EditorViewOptions) {
+  viewType: 'editor' | 'webview';
+
+  constructor(public workspace: InnerWorkspace, public editorWindow: EditorWindow, public editorView: IPublicEditorView) {
     super(workspace, editorView.viewName, editorWindow);
-    this.name = editorView.viewName;
+    this.viewType = editorView.viewType || 'editor';
+    this.viewName = editorView.viewName;
     this.instance = editorView(this.innerPlugins._getLowCodePluginContext({
       pluginName: 'any',
     }));
@@ -31,8 +37,13 @@ export class Context extends BasicContext {
   @obx isInit: boolean = false;
 
   init = flow(function* (this: any) {
-    yield this.registerInnerPlugins();
-    yield this.instance?.init();
+    if (this.viewType === 'webview') {
+      const url = yield this.instance?.url?.();
+      yield this.plugins.register(getWebviewPlugin(url, this.viewName));
+    } else {
+      yield this.registerInnerPlugins();
+    }
+    yield this.instance?.init?.();
     yield this.innerPlugins.init();
     this.isInit = true;
   });
