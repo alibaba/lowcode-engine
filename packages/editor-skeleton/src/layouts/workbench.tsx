@@ -15,19 +15,25 @@ import { SkeletonContext } from '../context';
 import { EditorConfig, PluginClassSet } from '@alilc/lowcode-types';
 
 @observer
-export class Workbench extends Component<{ skeleton: Skeleton; config?: EditorConfig; components?: PluginClassSet; className?: string; topAreaItemClassName?: string }> {
+export class Workbench extends Component<{
+  skeleton: Skeleton;
+  config?: EditorConfig;
+  components?: PluginClassSet;
+  className?: string;
+  topAreaItemClassName?: string;
+}> {
   constructor(props: any) {
     super(props);
     const { config, components, skeleton } = this.props;
     skeleton.buildFromConfig(config, components);
   }
 
-  // componentDidCatch(error: any) {
-  //   globalContext.get(Editor).emit('editor.skeleton.workbench.error', error);
-  // }
-
   render() {
-    const { skeleton, className, topAreaItemClassName } = this.props;
+    const {
+      skeleton,
+      className,
+      topAreaItemClassName,
+    } = this.props;
     return (
       <div className={classNames('lc-workbench', className)}>
         <SkeletonContext.Provider value={this.props.skeleton}>

@@ -66,7 +66,7 @@ async function registryInnerPlugin(designer: Designer, editor: Editor, plugins: 
   await plugins.register(OutlinePlugin, {}, { autoInit: true });
   await plugins.register(componentMetaParser(designer));
   await plugins.register(setterRegistry, {}, { autoInit: true });
-  await plugins.register(defaultPanelRegistry(editor, designer));
+  await plugins.register(defaultPanelRegistry(editor));
   await plugins.register(builtinHotkey);
 }
 

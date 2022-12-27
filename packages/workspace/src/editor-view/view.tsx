@@ -3,11 +3,15 @@ import {
   Workbench,
 } from '@alilc/lowcode-editor-skeleton';
 import { Component } from 'react';
+import { Context } from './context';
 
 export * from '../base-context';
 
 @observer
-export class EditorView extends Component<any, any> {
+export class EditorView extends Component<{
+  editorView: Context;
+  active: boolean;
+}, any> {
   render() {
     const { active } = this.props;
     const editorView = this.props.editorView;

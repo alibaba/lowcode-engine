@@ -8,7 +8,5 @@ export interface IPublicModelWindow {
   changeViewType(viewName: string): void;
 
   /** 调用当前窗口视图保存钩子 */
-  save(): Promise<{
-    [viewName: string]: IPublicTypeNodeSchema | any;
-  }>;
+  save(): Promise<any>;
 }
