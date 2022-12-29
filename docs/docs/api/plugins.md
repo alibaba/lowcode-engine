@@ -159,10 +159,51 @@ BuiltinPluginRegistry.meta = {
 await plugins.register(BuiltinPluginRegistry, { key1: 'abc', key5: 'willNotPassToPlugin' });
 ```
 
+### get
+
+获取指定插件
+
+```typescript
+function get(pluginName: string): IPublicModelPluginInstance;
+
+```
+
+关联模型 [IPublicModelPluginInstance](./model/plugin-instance)
+
+### getAll
+
+获取所有的插件实例
+
+```typescript
+function getAll(): IPublicModelPluginInstance[];
+
+```
+
+关联模型 [IPublicModelPluginInstance](./model/plugin-instance)
+
+### has
+
+判断是否有指定插件
+
+```typescript
+function has(pluginName: string): boolean;
+
+```
+
+### delete
+
+删除指定插件
+
+```typescript
+function delete(pluginName: string): void;
+
+```
+
 ## 相关类型定义
 
 - [IPublicModelPluginContext](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/plugin-context.ts)
 - [IPublicTypePluginConfig](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/plugin-config.ts)
+- [IPublicModelPluginInstance](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/plugin-instance.ts)
 
 ## 插件元数据工程转化示例
 your-plugin/package.json

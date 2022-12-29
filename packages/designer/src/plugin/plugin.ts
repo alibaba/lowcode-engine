@@ -20,7 +20,7 @@ export class LowCodePluginRuntime implements ILowCodePluginRuntime {
 
   private pluginName: string;
 
-  private meta: IPublicTypePluginMeta;
+  meta: IPublicTypePluginMeta;
 
   /**
    * 标识插件状态，是否被 disabled

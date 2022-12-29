@@ -1,4 +1,4 @@
-import { IPublicTypePlugin } from '../model';
+import { IPublicModelPluginInstance, IPublicTypePlugin } from '../model';
 import { IPublicTypePreferenceValueType } from '../type';
 import { IPublicTypePluginRegisterOptions } from '../type/plugin-register-options';
 
@@ -25,4 +25,16 @@ export interface IPublicApiPlugins {
   getPluginPreference(
       pluginName: string,
     ): Record<string, IPublicTypePreferenceValueType> | null | undefined;
+
+  /** 获取指定插件 */
+  get(pluginName: string): IPublicModelPluginInstance | null;
+
+  /** 获取所有的插件实例 */
+  getAll(): IPublicModelPluginInstance[];
+
+  /** 判断是否有指定插件 */
+  has(pluginName: string): boolean;
+
+  /** 删除指定插件 */
+  delete(pluginName: string): void;
 }

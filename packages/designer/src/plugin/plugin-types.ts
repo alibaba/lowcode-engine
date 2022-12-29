@@ -31,6 +31,7 @@ export interface ILowCodePluginRuntimeCore {
   destroy(): void;
   toProxy(): any;
   setDisabled(flag: boolean): void;
+  meta: IPublicTypePluginMeta;
 }
 
 interface ILowCodePluginRuntimeExportsAccessor {

@@ -4,10 +4,12 @@ import {
 import { globalContext } from '@alilc/lowcode-editor-core';
 import {
   IPublicApiPlugins,
+  IPublicModelPluginInstance,
   IPublicTypePlugin,
   IPublicTypePluginRegisterOptions,
   IPublicTypePreferenceValueType,
 } from '@alilc/lowcode-types';
+import { PluginInstance } from '../model/plugin-instance';
 import { pluginsSymbol } from '../symbols';
 
 const innerPluginsSymbol = Symbol('plugin');
@@ -43,6 +45,27 @@ export class Plugins implements IPublicApiPlugins {
 
   getPluginPreference(pluginName: string): Record<string, IPublicTypePreferenceValueType> | null | undefined {
     return this[pluginsSymbol].getPluginPreference(pluginName);
+  }
+
+  get(pluginName: string): IPublicModelPluginInstance | null {
+    const instance = this[pluginsSymbol].get(pluginName);
+    if (instance) {
+      return new PluginInstance(instance);
+    }
+
+    return null;
+  }
+
+  getAll() {
+    return this[pluginsSymbol].getAll()?.map(d => new PluginInstance(d));
+  }
+
+  has(pluginName: string) {
+    return this[pluginsSymbol].has(pluginName);
+  }
+
+  delete(pluginName: string) {
+    this[pluginsSymbol].delete(pluginName);
   }
 
   toProxy() {
