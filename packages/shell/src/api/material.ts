@@ -1,11 +1,6 @@
 import { Editor, globalContext } from '@alilc/lowcode-editor-core';
 import {
   Designer,
-  registerMetadataTransducer,
-  getRegisteredMetadataTransducers,
-  addBuiltinComponentAction,
-  removeBuiltinComponentAction,
-  modifyBuiltinComponentAction,
   isComponentMeta,
 } from '@alilc/lowcode-designer';
 import { IPublicTypeAssetsJson } from '@alilc/lowcode-utils';
@@ -85,20 +80,20 @@ export class Material implements IPublicApiMaterial {
    * @param level
    * @param id
    */
-  registerMetadataTransducer(
+  registerMetadataTransducer = (
     transducer: IPublicTypeMetadataTransducer,
     level?: number,
     id?: string | undefined,
-  ) {
-    registerMetadataTransducer(transducer, level, id);
-  }
+  ) => {
+    this[designerSymbol].componentActions.registerMetadataTransducer(transducer, level, id);
+  };
 
   /**
    * 获取所有物料元数据管道函数
    * @returns
    */
   getRegisteredMetadataTransducers() {
-    return getRegisteredMetadataTransducers();
+    return this[designerSymbol].componentActions.getRegisteredMetadataTransducers();
   }
 
   /**
@@ -147,7 +142,7 @@ export class Material implements IPublicApiMaterial {
    * @param action
    */
   addBuiltinComponentAction(action: IPublicTypeComponentAction) {
-    addBuiltinComponentAction(action);
+    this[designerSymbol].componentActions.addBuiltinComponentAction(action);
   }
 
   /**
@@ -155,7 +150,7 @@ export class Material implements IPublicApiMaterial {
    * @param name
    */
   removeBuiltinComponentAction(name: string) {
-    removeBuiltinComponentAction(name);
+    this[designerSymbol].componentActions.removeBuiltinComponentAction(name);
   }
 
   /**
@@ -164,7 +159,7 @@ export class Material implements IPublicApiMaterial {
    * @param handle
    */
   modifyBuiltinComponentAction(actionName: string, handle: (action: IPublicTypeComponentAction) => void) {
-    modifyBuiltinComponentAction(actionName, handle);
+    this[designerSymbol].componentActions.modifyBuiltinComponentAction(actionName, handle);
   }
 
   /**

@@ -18,14 +18,12 @@ import {
 
 import { DocumentModel } from '../model/document-model';
 import { SimulatorHost } from './simulator-host';
-import { editorSymbol, projectSymbol, simulatorHostSymbol, simulatorRendererSymbol, documentSymbol } from '../symbols';
+import { editorSymbol, projectSymbol, simulatorHostSymbol, documentSymbol } from '../symbols';
 
 const innerProjectSymbol = Symbol('innerProject');
 export class Project implements IPublicApiProject {
-  private readonly [editorSymbol]: IPublicModelEditor;
   private readonly [innerProjectSymbol]: InnerProject;
   private [simulatorHostSymbol]: BuiltinSimulatorHost;
-  private [simulatorRendererSymbol]: any;
   get [projectSymbol](): InnerProject {
     if (this.workspaceMode) {
       return this[innerProjectSymbol];
@@ -38,9 +36,12 @@ export class Project implements IPublicApiProject {
     return this[innerProjectSymbol];
   }
 
+  get [editorSymbol](): IPublicModelEditor {
+    return this[projectSymbol]?.designer.editor;
+  }
+
   constructor(project: InnerProject, public workspaceMode: boolean = false) {
     this[innerProjectSymbol] = project;
-    this[editorSymbol] = project?.designer.editor;
   }
 
   static create(project: InnerProject) {
@@ -201,13 +202,9 @@ export class Project implements IPublicApiProject {
    * 当前 project 的渲染器 ready 事件
    */
   onSimulatorRendererReady(fn: () => void): IPublicTypeDisposable {
-    const offFn = this[projectSymbol].onRendererReady((renderer: any) => {
-      this[simulatorRendererSymbol] = renderer;
+    const offFn = this[projectSymbol].onRendererReady(() => {
       fn();
     });
-    if (this[simulatorRendererSymbol]) {
-      fn();
-    }
     return offFn;
   }
 

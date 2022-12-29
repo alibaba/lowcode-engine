@@ -50,6 +50,8 @@ export class Skeleton {
 
   readonly topArea: Area<DockConfig | DividerConfig | PanelDockConfig | DialogDockConfig>;
 
+  readonly subTopArea: Area<DockConfig | DividerConfig | PanelDockConfig | DialogDockConfig>;
+
   readonly toolbar: Area<DockConfig | DividerConfig | PanelDockConfig | DialogDockConfig>;
 
   readonly leftFixedArea: Area<PanelConfig, Panel>;
@@ -80,6 +82,17 @@ export class Skeleton {
     this.topArea = new Area(
       this,
       'topArea',
+      (config) => {
+        if (isWidget(config)) {
+          return config;
+        }
+        return this.createWidget(config);
+      },
+      false,
+    );
+    this.subTopArea = new Area(
+      this,
+      'subTopArea',
       (config) => {
         if (isWidget(config)) {
           return config;
@@ -389,6 +402,8 @@ export class Skeleton {
       case 'topArea':
       case 'top':
         return this.topArea.add(parsedConfig as PanelDockConfig);
+      case 'subTopArea':
+        return this.subTopArea.add(parsedConfig as PanelDockConfig);
       case 'toolbar':
         return this.toolbar.add(parsedConfig as PanelDockConfig);
       case 'mainArea':

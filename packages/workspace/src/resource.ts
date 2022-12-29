@@ -19,6 +19,10 @@ export class Resource {
     this.options.init(ctx);
   }
 
+  get icon() {
+    return this.options.icon;
+  }
+
   async import(schema: any) {
     return await this.options.import?.(schema);
   }
@@ -37,5 +41,9 @@ export class Resource {
 
   async save(value: any) {
     return await this.options.save?.(value);
+  }
+
+  get title() {
+    return this.options.defaultTitle;
   }
 }

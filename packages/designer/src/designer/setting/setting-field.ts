@@ -2,7 +2,7 @@ import { IPublicTypeTitleContent, IPublicTypeSetterType, IPublicTypeDynamicSette
 import { Transducer } from './utils';
 import { SettingPropEntry } from './setting-prop-entry';
 import { SettingEntry } from './setting-entry';
-import { computed, obx, makeObservable, action } from '@alilc/lowcode-editor-core';
+import { computed, obx, makeObservable, action, untracked } from '@alilc/lowcode-editor-core';
 import { cloneDeep, isCustomView, isDynamicSetter } from '@alilc/lowcode-utils';
 
 function getSettingFieldCollectorKey(parent: SettingEntry, config: IPublicTypeFieldConfig) {
@@ -43,8 +43,10 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
       return null;
     }
     if (isDynamicSetter(this._setter)) {
-      const shellThis = this.internalToShellPropEntry();
-      return this._setter.call(shellThis, shellThis);
+      return untracked(() => {
+        const shellThis = this.internalToShellPropEntry();
+        return this._setter.call(shellThis, shellThis);
+      });
     }
     return this._setter;
   }

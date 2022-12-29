@@ -7,6 +7,9 @@ import { Area } from '@alilc/lowcode-editor-skeleton';
 export default class LeftArea extends Component<{ area: Area }> {
   render() {
     const { area } = this.props;
+    if (area.isEmpty()) {
+      return null;
+    }
     return (
       <div className={classNames('lc-left-area', {
         'lc-area-visible': area.visible,
