@@ -69,7 +69,7 @@ export class SettingsPrimaryPane extends Component<{ engineEditor: Editor; confi
     }
 
     const workspace = globalContext.get('workspace');
-    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
+    const editor = this.props.engineEditor;
     const designer = editor.get('designer');
     const current = designer?.currentSelection?.getNodes()?.[0];
     let node: Node | null = settings.first;

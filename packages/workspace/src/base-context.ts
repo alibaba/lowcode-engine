@@ -33,7 +33,7 @@ import {
   IPublicTypePluginMeta,
 } from '@alilc/lowcode-types';
 import { getLogger } from '@alilc/lowcode-utils';
-import { Workspace as InnerWorkspace } from './index';
+import { Workspace as InnerWorkspace } from './workspace';
 import { EditorWindow } from './editor-window/context';
 
 export class BasicContext {
@@ -51,7 +51,7 @@ export class BasicContext {
   designer: Designer;
   registerInnerPlugins: () => Promise<void>;
   innerSetters: InnerSetters;
-  innerSkeleton: any;
+  innerSkeleton: InnerSkeleton;
   innerHotkey: InnerHotkey;
   innerPlugins: LowCodePluginManager;
   canvas: Canvas;
@@ -65,7 +65,7 @@ export class BasicContext {
     const designer: Designer = new Designer({
       editor,
       viewName,
-      shellModelFactory: innerWorkspace.shellModelFactory,
+      shellModelFactory: innerWorkspace?.shellModelFactory,
     });
     editor.set('designer' as any, designer);
 
@@ -132,7 +132,7 @@ export class BasicContext {
 
     // 注册一批内置插件
     this.registerInnerPlugins = async function registerPlugins() {
-      await innerWorkspace.registryInnerPlugin(designer, editor, plugins);
+      await innerWorkspace?.registryInnerPlugin(designer, editor, plugins);
     };
   }
 }

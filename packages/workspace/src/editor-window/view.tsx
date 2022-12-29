@@ -1,28 +1,35 @@
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import { EditorView } from '../editor-view/view';
-import { observer } from '@alilc/lowcode-editor-core';
+import { engineConfig, observer } from '@alilc/lowcode-editor-core';
 import { EditorWindow } from './context';
+import { BuiltinLoading } from '@alilc/lowcode-designer';
 
 @observer
-export class EditorWindowView extends Component<{
+export class EditorWindowView extends PureComponent<{
   editorWindow: EditorWindow;
+  active: boolean;
 }, any> {
   render() {
-    const { resource, editorView, editorViews } = this.props.editorWindow;
+    const { active } = this.props;
+    const { editorView, editorViews } = this.props.editorWindow;
     if (!editorView) {
-      return null;
+      const Loading = engineConfig.get('loadingComponent', BuiltinLoading);
+      return (
+        <div className={`workspace-engine-main ${active ? 'active' : ''}`}>
+          <Loading />
+        </div>
+      );
     }
+
     return (
-      <div className="workspace-engine-main">
+      <div className={`workspace-engine-main ${active ? 'active' : ''}`}>
         {
           Array.from(editorViews.values()).map((editorView: any) => {
             return (
               <EditorView
-                resource={resource}
                 key={editorView.name}
                 active={editorView.active}
                 editorView={editorView}
-                defaultViewType
               />
             );
           })

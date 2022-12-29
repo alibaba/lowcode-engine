@@ -138,6 +138,16 @@ body {
   display: flex;
   flex-direction: column;
   background-color: #edeff3;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+
+  &.active {
+    z-index: 999;
+  }
 
   .lc-workbench {
 

@@ -1,12 +1,21 @@
+import { uniqueId } from '@alilc/lowcode-utils';
 import { makeObservable, obx } from '@alilc/lowcode-editor-core';
 import { Context } from '../editor-view/context';
-import { Workspace } from '..';
+import { Workspace } from '../workspace';
 import { Resource } from '../resource';
 
 export class EditorWindow {
-  constructor(readonly resource: Resource, readonly workspace: Workspace) {
+  id: string = uniqueId('window');
+  icon: React.ReactElement | undefined;
+
+  constructor(readonly resource: Resource, readonly workspace: Workspace, public title: string | undefined = '') {
     makeObservable(this);
     this.init();
+    this.icon = resource.icon;
+  }
+
+  get resourceName(): string {
+    return this.resource.options.name;
   }
 
   async importSchema(schema: any) {

@@ -4,7 +4,7 @@ import { Designer } from '../designer';
 import { BuiltinSimulatorHostView } from '../builtin-simulator';
 import './project.less';
 
-class BuiltinLoading extends Component {
+export class BuiltinLoading extends Component {
   render() {
     return (
       <div id="engine-loading-wrapper">

@@ -32,6 +32,7 @@ import { OffsetObserver, createOffsetObserver } from './offset-observer';
 import { focusing } from './focusing';
 import { SettingTopEntry } from './setting';
 import { BemToolsManager } from '../builtin-simulator/bem-tools/manager';
+import { ComponentActions } from '../component-actions';
 
 const logger = new Logger({ level: 'warn', bizName: 'designer' });
 
@@ -59,6 +60,8 @@ export interface DesignerProps {
 
 export class Designer implements IDesigner {
   readonly dragon = new Dragon(this);
+
+  readonly componentActions = new ComponentActions();
 
   readonly activeTracker = new ActiveTracker();
 

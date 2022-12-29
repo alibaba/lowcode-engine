@@ -1,14 +1,15 @@
-import { observer } from '@alilc/lowcode-editor-core';
+import { BuiltinLoading } from '@alilc/lowcode-designer';
+import { engineConfig, observer } from '@alilc/lowcode-editor-core';
 import {
   Workbench,
 } from '@alilc/lowcode-editor-skeleton';
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import { Context } from './context';
 
 export * from '../base-context';
 
 @observer
-export class EditorView extends Component<{
+export class EditorView extends PureComponent<{
   editorView: Context;
   active: boolean;
 }, any> {
@@ -17,7 +18,8 @@ export class EditorView extends Component<{
     const editorView = this.props.editorView;
     const skeleton = editorView.innerSkeleton;
     if (!editorView.isInit) {
-      return null;
+      const Loading = engineConfig.get('loadingComponent', BuiltinLoading);
+      return <Loading />;
     }
 
     return (
