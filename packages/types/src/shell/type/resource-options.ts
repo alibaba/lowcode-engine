@@ -1,7 +1,7 @@
 export interface IPublicViewFunctions {
-  /** 视图初始化 */
+  /** 视图初始化钩子 */
   init?: () => Promise<void>;
-  /** 资源保存时调用视图的钩子 */
+  /** 资源保存时，会调用视图的钩子 */
   save?: () => Promise<void>;
 }
 
@@ -20,6 +20,9 @@ export interface IPublicResourceOptions {
   /** 资源描述 */
   description?: string;
 
+  /** 资源 icon 标识 */
+  icon?: React.ReactElement;
+
   /** 默认视图类型 */
   defaultViewType: string;
 
@@ -35,4 +38,7 @@ export interface IPublicResourceOptions {
   import?: (schema: any) => Promise<{
     [viewName: string]: any;
   }>;
+
+  /** 默认标题 */
+  defaultTitle?: string;
 }

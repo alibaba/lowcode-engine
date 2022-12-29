@@ -9,4 +9,13 @@ export interface IPublicModelWindow {
 
   /** 调用当前窗口视图保存钩子 */
   save(): Promise<any>;
+
+  /** 窗口 id */
+  id: string;
+
+  /** 窗口标题 */
+  title?: string;
+
+  /** 窗口资源名字 */
+  resourceName?: string;
 }

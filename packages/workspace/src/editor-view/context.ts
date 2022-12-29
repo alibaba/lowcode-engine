@@ -1,7 +1,7 @@
 import { makeObservable, obx } from '@alilc/lowcode-editor-core';
 import { IPublicEditorView, IPublicViewFunctions } from '@alilc/lowcode-types';
 import { flow } from 'mobx';
-import { Workspace as InnerWorkspace } from '../';
+import { Workspace as InnerWorkspace } from '../workspace';
 import { BasicContext } from '../base-context';
 import { EditorWindow } from '../editor-window/context';
 import { getWebviewPlugin } from '../inner-plugins/webview';

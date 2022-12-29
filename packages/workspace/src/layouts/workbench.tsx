@@ -11,10 +11,17 @@ import BottomArea from './bottom-area';
 import './workbench.less';
 import { SkeletonContext } from '../skeleton-context';
 import { EditorConfig, PluginClassSet } from '@alilc/lowcode-types';
-import { Workspace } from '..';
+import { Workspace } from '../workspace';
+import SubTopArea from './sub-top-area';
 
 @observer
-export class Workbench extends Component<{ workspace: Workspace; config?: EditorConfig; components?: PluginClassSet; className?: string; topAreaItemClassName?: string }> {
+export class Workbench extends Component<{
+  workspace: Workspace;
+  config?: EditorConfig;
+  components?: PluginClassSet;
+  className?: string;
+  topAreaItemClassName?: string;
+}> {
   constructor(props: any) {
     super(props);
     const { config, components, workspace } = this.props;
@@ -34,8 +41,20 @@ export class Workbench extends Component<{ workspace: Workspace; config?: Editor
             <LeftFloatPane area={skeleton.leftFloatArea} />
             <LeftFixedPane area={skeleton.leftFixedArea} />
             <div className="lc-workspace-workbench-center">
-              {/* <Toolbar area={skeleton.toolbar} /> */}
-              <EditorWindowView editorWindow={workspace.window} />
+              <>
+                <SubTopArea area={skeleton.subTopArea} itemClassName={topAreaItemClassName} />
+                <div className="lc-workspace-workbench-window">
+                  {
+                    workspace.windows.map(d => (
+                      <EditorWindowView
+                        active={d.id === workspace.window.id}
+                        editorWindow={d}
+                        key={d.id}
+                      />
+                    ))
+                  }
+                </div>
+              </>
               <MainArea area={skeleton.mainArea} />
               <BottomArea area={skeleton.bottomArea} />
             </div>
