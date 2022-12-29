@@ -29,3 +29,4 @@ export const hotkeySymbol = Symbol('hotkey');
 export const pluginsSymbol = Symbol('plugins');
 export const workspaceSymbol = Symbol('workspace');
 export const windowSymbol = Symbol('window');
+export const pluginInstanceSymbol = Symbol('plugin-instance');
