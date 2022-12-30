@@ -1,5 +1,4 @@
 import '../../fixtures/window';
-import { Node } from '../../../src/document/node/node';
 import { Designer } from '../../../src/designer/designer';
 import divMeta from '../../fixtures/component-metadata/div';
 import div2Meta from '../../fixtures/component-metadata/div2';
@@ -19,22 +18,18 @@ import page2Meta from '../../fixtures/component-metadata/page2';
 import {
   ComponentMeta,
   isComponentMeta,
-  removeBuiltinComponentAction,
-  addBuiltinComponentAction,
-  modifyBuiltinComponentAction,
   ensureAList,
   buildFilter,
-  registerMetadataTransducer,
-  getRegisteredMetadataTransducers,
 } from '../../../src/component-meta';
-import { componentDefaults } from '../../../src/transducers';
 
-const mockCreateSettingEntry = jest.fn();
+
 jest.mock('../../../src/designer/designer', () => {
   return {
     Designer: jest.fn().mockImplementation(() => {
+      const { ComponentActions } = require('../../../src/component-actions');
       return {
         getGlobalComponentActions: () => [],
+        componentActions: new ComponentActions(),
       };
     }),
   };
@@ -126,12 +121,12 @@ describe('组件元数据处理', () => {
     expect(meta.availableActions[1].name).toBe('hide');
     expect(meta.availableActions[2].name).toBe('copy');
 
-    removeBuiltinComponentAction('remove');
+    designer.componentActions.removeBuiltinComponentAction('remove');
     expect(meta.availableActions).toHaveLength(4);
     expect(meta.availableActions[0].name).toBe('hide');
     expect(meta.availableActions[1].name).toBe('copy');
 
-    addBuiltinComponentAction({
+    designer.componentActions.addBuiltinComponentAction({
       name: 'new',
       content: {
         action() {},
@@ -227,17 +222,17 @@ describe('帮助函数', () => {
   });
 
   it('registerMetadataTransducer', () => {
-    expect(getRegisteredMetadataTransducers()).toHaveLength(2);
+    expect(designer.componentActions.getRegisteredMetadataTransducers()).toHaveLength(2);
     // 插入到 legacy-issues 和 component-defaults 的中间
-    registerMetadataTransducer((metadata) => metadata, 3, 'noop');
-    expect(getRegisteredMetadataTransducers()).toHaveLength(3);
+    designer.componentActions.registerMetadataTransducer((metadata) => metadata, 3, 'noop');
+    expect(designer.componentActions.getRegisteredMetadataTransducers()).toHaveLength(3);
 
-    registerMetadataTransducer((metadata) => metadata);
-    expect(getRegisteredMetadataTransducers()).toHaveLength(4);
+    designer.componentActions.registerMetadataTransducer((metadata) => metadata);
+    expect(designer.componentActions.getRegisteredMetadataTransducers()).toHaveLength(4);
   });
 
   it('modifyBuiltinComponentAction', () => {
-    modifyBuiltinComponentAction('copy', (action) => {
+    designer.componentActions.modifyBuiltinComponentAction('copy', (action) => {
       expect(action.name).toBe('copy');
     });
   });

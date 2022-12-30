@@ -4,7 +4,6 @@ import {
   IPublicTypeNpmInfo,
   IPublicTypeNodeData,
   IPublicTypeNodeSchema,
-  IPublicTypeComponentAction,
   IPublicTypeTitleContent,
   IPublicTypeTransformedComponentMetadata,
   IPublicTypeNestingFilter,
@@ -15,20 +14,13 @@ import {
   IPublicModelComponentMeta,
 } from '@alilc/lowcode-types';
 import { deprecate, isRegExp, isTitleConfig } from '@alilc/lowcode-utils';
-import { computed, engineConfig, createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
-import { componentDefaults, legacyIssues } from './transducers';
+import { computed, createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
 import { isNode, Node, INode } from './document';
 import { Designer } from './designer';
-import { intlNode } from './locale';
 import {
-  IconLock,
-  IconUnlock,
   IconContainer,
   IconPage,
   IconComponent,
-  IconRemove,
-  IconClone,
-  IconHidden,
 } from './icons';
 
 export function ensureAList(list?: string | string[]): string[] | null {
@@ -272,7 +264,7 @@ export class ComponentMeta implements IComponentMeta {
   }
 
   private transformMetadata(metadta: IPublicTypeComponentMetadata): IPublicTypeTransformedComponentMetadata {
-    const result = getRegisteredMetadataTransducers().reduce((prevMetadata, current) => {
+    const result = this.designer.componentActions.getRegisteredMetadataTransducers().reduce((prevMetadata, current) => {
       return current(prevMetadata);
     }, preprocessMetadata(metadta));
 
@@ -300,7 +292,7 @@ export class ComponentMeta implements IComponentMeta {
     const disabled =
       ensureAList(disableBehaviors) ||
       (this.isRootComponent(false) ? ['copy', 'remove', 'lock', 'unlock'] : null);
-    actions = builtinComponentActions.concat(
+    actions = this.designer.componentActions.actions.concat(
       this.designer.getGlobalComponentActions() || [],
       actions || [],
     );
@@ -382,142 +374,3 @@ function preprocessMetadata(metadata: IPublicTypeComponentMetadata): IPublicType
   };
 }
 
-
-const metadataTransducers: IPublicTypeMetadataTransducer[] = [];
-
-export function registerMetadataTransducer(
-  transducer: IPublicTypeMetadataTransducer,
-  level = 100,
-  id?: string,
-) {
-  transducer.level = level;
-  transducer.id = id;
-  const i = metadataTransducers.findIndex((item) => item.level != null && item.level > level);
-  if (i < 0) {
-    metadataTransducers.push(transducer);
-  } else {
-    metadataTransducers.splice(i, 0, transducer);
-  }
-}
-
-export function getRegisteredMetadataTransducers(): IPublicTypeMetadataTransducer[] {
-  return metadataTransducers;
-}
-
-const builtinComponentActions: IPublicTypeComponentAction[] = [
-  {
-    name: 'remove',
-    content: {
-      icon: IconRemove,
-      title: intlNode('remove'),
-      /* istanbul ignore next */
-      action(node: Node) {
-        node.remove();
-      },
-    },
-    important: true,
-  },
-  {
-    name: 'hide',
-    content: {
-      icon: IconHidden,
-      title: intlNode('hide'),
-      /* istanbul ignore next */
-      action(node: Node) {
-        node.setVisible(false);
-      },
-    },
-    /* istanbul ignore next */
-    condition: (node: Node) => {
-      return node.componentMeta.isModal;
-    },
-    important: true,
-  },
-  {
-    name: 'copy',
-    content: {
-      icon: IconClone,
-      title: intlNode('copy'),
-      /* istanbul ignore next */
-      action(node: Node) {
-        // node.remove();
-        const { document: doc, parent, index } = node;
-        if (parent) {
-          const newNode = doc.insertNode(parent, node, index + 1, true);
-          newNode.select();
-          const { isRGL, rglNode } = node.getRGL();
-          if (isRGL) {
-            // 复制 layout 信息
-            let layout = rglNode.getPropValue('layout') || [];
-            let curLayout = layout.filter((item) => item.i === node.getPropValue('fieldId'));
-            if (curLayout && curLayout[0]) {
-              layout.push({
-                ...curLayout[0],
-                i: newNode.getPropValue('fieldId'),
-              });
-              rglNode.setPropValue('layout', layout);
-              // 如果是磁贴块复制，则需要滚动到影响位置
-              setTimeout(() => newNode.document.simulator?.scrollToNode(newNode), 10);
-            }
-          }
-        }
-      },
-    },
-    important: true,
-  },
-  {
-    name: 'lock',
-    content: {
-      icon: IconLock, // 锁定 icon
-      title: intlNode('lock'),
-      /* istanbul ignore next */
-      action(node: Node) {
-        node.lock();
-      },
-    },
-    /* istanbul ignore next */
-    condition: (node: Node) => {
-      return engineConfig.get('enableCanvasLock', false) && node.isContainer() && !node.isLocked;
-    },
-    important: true,
-  },
-  {
-    name: 'unlock',
-    content: {
-      icon: IconUnlock, // 解锁 icon
-      title: intlNode('unlock'),
-      /* istanbul ignore next */
-      action(node: Node) {
-        node.lock(false);
-      },
-    },
-    /* istanbul ignore next */
-    condition: (node: Node) => {
-      return engineConfig.get('enableCanvasLock', false) && node.isContainer() && node.isLocked;
-    },
-    important: true,
-  },
-];
-
-export function removeBuiltinComponentAction(name: string) {
-  const i = builtinComponentActions.findIndex((action) => action.name === name);
-  if (i > -1) {
-    builtinComponentActions.splice(i, 1);
-  }
-}
-export function addBuiltinComponentAction(action: IPublicTypeComponentAction) {
-  builtinComponentActions.push(action);
-}
-
-export function modifyBuiltinComponentAction(
-  actionName: string,
-  handle: (action: IPublicTypeComponentAction) => void,
-) {
-  const builtinAction = builtinComponentActions.find((action) => action.name === actionName);
-  if (builtinAction) {
-    handle(builtinAction);
-  }
-}
-
-registerMetadataTransducer(legacyIssues, 2, 'legacy-issues'); // should use a high level priority, eg: 2
-registerMetadataTransducer(componentDefaults, 100, 'component-defaults');

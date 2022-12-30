@@ -59,8 +59,6 @@ export * from './modules/skeleton-types';
 export * from './modules/designer-types';
 export * from './modules/lowcode-types';
 
-registerDefaults();
-
 async function registryInnerPlugin(designer: Designer, editor: Editor, plugins: Plugins) {
   // 注册一批内置插件
   await plugins.register(OutlinePlugin, {}, { autoInit: true });
@@ -68,6 +66,7 @@ async function registryInnerPlugin(designer: Designer, editor: Editor, plugins: 
   await plugins.register(setterRegistry, {}, { autoInit: true });
   await plugins.register(defaultPanelRegistry(editor));
   await plugins.register(builtinHotkey);
+  await plugins.register(registerDefaults);
 }
 
 const innerWorkspace = new InnerWorkspace(registryInnerPlugin, shellModelFactory);
@@ -82,6 +81,7 @@ editor.set('skeleton' as any, innerSkeleton);
 
 const designer = new Designer({ editor, shellModelFactory });
 editor.set('designer' as any, designer);
+
 const { project: innerProject } = designer;
 
 const innerHotkey = new InnerHotkey();
@@ -195,6 +195,7 @@ export async function init(
       engineContainer,
     );
     innerWorkspace.setActive(true);
+    await innerWorkspace.plugins.init(pluginPreference);
     return;
   }
 

@@ -5,6 +5,22 @@ import { EditorWindow } from '@alilc/lowcode-workspace';
 export class Window implements IPublicModelWindow {
   private readonly [windowSymbol]: EditorWindow;
 
+  get id() {
+    return this[windowSymbol].id;
+  }
+
+  get title() {
+    return this[windowSymbol].title;
+  }
+
+  get icon() {
+    return this[windowSymbol].icon;
+  }
+
+  get resourceName() {
+    return this[windowSymbol].resourceName;
+  }
+
   constructor(editorWindow: EditorWindow) {
     this[windowSymbol] = editorWindow;
   }

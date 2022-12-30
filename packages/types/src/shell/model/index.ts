@@ -26,3 +26,4 @@ export * from './setting-target';
 export * from './engine-config';
 export * from './editor';
 export * from './preference';
+export * from './plugin-instance';

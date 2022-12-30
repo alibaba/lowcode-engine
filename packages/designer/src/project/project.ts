@@ -30,6 +30,8 @@ export class Project implements IProject {
 
   private _simulator?: ISimulatorHost;
 
+  private isRendererReady: boolean = false;
+
   /**
    * 模拟器
    */
@@ -318,6 +320,7 @@ export class Project implements IProject {
   }
 
   setRendererReady(renderer: any) {
+    this.isRendererReady = true;
     this.emitter.emit('lowcode_engine_renderer_ready', renderer);
   }
 
@@ -328,7 +331,10 @@ export class Project implements IProject {
     };
   }
 
-  onRendererReady(fn: (args: any) => void): () => void {
+  onRendererReady(fn: () => void): () => void {
+    if (this.isRendererReady) {
+      fn();
+    }
     this.emitter.on('lowcode_engine_renderer_ready', fn);
     return () => {
       this.emitter.removeListener('lowcode_engine_renderer_ready', fn);
