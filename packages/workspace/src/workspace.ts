@@ -6,10 +6,6 @@ import { BasicContext } from './base-context';
 import { EditorWindow } from './editor-window/context';
 import { Resource } from './resource';
 
-export { Resource } from './resource';
-export * from './editor-window/context';
-export * from './layouts/workbench';
-
 enum event {
   ChangeWindow = 'change_window',
 
