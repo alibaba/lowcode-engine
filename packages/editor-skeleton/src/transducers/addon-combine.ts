@@ -224,7 +224,7 @@ export default function (metadata: IPublicTypeTransformedComponentMetadata): IPu
               field.parent.setPropValue(item.name, {
                 type: 'JSFunction',
                 // 需要传下入参
-                value: `function(){this.${item.relatedEventName}.apply(this,Array.prototype.slice.call(arguments).concat([${item.paramStr ? item.paramStr : ''}])) }`,
+                value: `function(){return this.${item.relatedEventName}.apply(this,Array.prototype.slice.call(arguments).concat([${item.paramStr ? item.paramStr : ''}])) }`,
               });
               return item;
             });
