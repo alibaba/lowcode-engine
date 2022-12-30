@@ -11,7 +11,7 @@ export class Skeleton implements IPublicApiSkeleton {
   private readonly [innerSkeletonSymbol]: InnerSkeleton;
   private readonly pluginName: string;
 
-  get [skeletonSymbol]() {
+  get [skeletonSymbol](): InnerSkeleton {
     if (this.workspaceMode) {
       return this[innerSkeletonSymbol];
     }
