@@ -16,6 +16,7 @@ import {
   IPublicModelNode,
   IPublicModelExclusiveGroup,
   IPublicEnumTransformStage,
+  EDITOR_EVENT,
 } from '@alilc/lowcode-types';
 import { compatStage, isDOMText, isJSExpression } from '@alilc/lowcode-utils';
 import { SettingTopEntry } from '@alilc/lowcode-designer';
@@ -190,6 +191,13 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
 
     this.isInited = true;
     this.emitter = createModuleEventBus('Node');
+    const editor = this.document.designer.editor;
+    this.onVisibleChange((visible: boolean) => {
+      editor?.eventBus.emit(EDITOR_EVENT.NODE_VISIBLE_CHANGE, this, visible);
+    });
+    this.onChildrenChange((info?: { type: string; node: Node }) => {
+      editor?.eventBus.emit(EDITOR_EVENT.NODE_VISIBLE_CHANGE, info);
+    });
   }
 
   _settingEntry: SettingTopEntry;

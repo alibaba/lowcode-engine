@@ -139,7 +139,6 @@ export class Project implements IPublicApiProject {
    */
   importSchema(schema?: IPublicTypeProjectSchema): void {
     this[projectSymbol].load(schema, true);
-    // this[editorSymbol].emit(Events.IMPORT_SCHEMA, schema);
   }
 
   /**
