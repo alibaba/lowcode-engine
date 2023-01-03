@@ -101,10 +101,6 @@ export function getWindow(elem: Element | Document): Window {
 }
 export interface IDropLocation extends IPublicModelDropLocation {
 
-  readonly target: INode;
-
-  readonly event: ILocateEvent;
-
   readonly source: string;
 
   get document(): IPublicModelDocumentModel;
