@@ -27,6 +27,10 @@ export class DropLocation implements IPublicModelDropLocation {
     return this[dropLocationSymbol].detail;
   }
 
+  get event(): IPublicModelLocateEvent {
+    return this[dropLocationSymbol].event;
+  }
+
   clone(event: IPublicModelLocateEvent): IPublicModelDropLocation {
     return new DropLocation(this[dropLocationSymbol].clone(event));
   }
