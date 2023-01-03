@@ -29,6 +29,7 @@ import { Node } from './node';
 import { Selection } from './selection';
 import { Detecting } from './detecting';
 import { History } from './history';
+import { DropLocation } from './drop-location';
 import { Project } from '../api/project';
 import { Prop } from './prop';
 import { ModalNodesManager } from './modal-nodes-manager';
@@ -45,7 +46,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
   detecting: IPublicModelDetecting;
   history: IPublicModelHistory;
   /**
-   * @deprecated
+   * @deprecated use canvas API instead
    */
   canvas: IPublicApiCanvas;
 
@@ -89,12 +90,13 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * 获取当前文档所属的 project
    * @returns
    */
-  get project(): IPublicApiProject | null {
+  get project(): IPublicApiProject {
     return Project.create(this[documentSymbol].project);
   }
 
   /**
    * 获取文档的根节点
+   * root node of this documentModel
    * @returns
    */
   get root(): IPublicModelNode | null {
@@ -114,10 +116,10 @@ export class DocumentModel implements IPublicModelDocumentModel {
   }
 
   /**
-   * 获取文档下所有节点
-   * @returns
+   * 获取文档下所有节点 Map, key 为 nodeId
+   * get map of all nodes , using node.id as key
    */
-  get nodesMap(): any {
+  get nodesMap(): Map<string, IPublicModelNode> {
     const map = new Map<string, IPublicModelNode>();
     for (let id of this[documentSymbol].nodesMap.keys()) {
       map.set(id, this.getNodeById(id)!);
@@ -132,11 +134,8 @@ export class DocumentModel implements IPublicModelDocumentModel {
     return ModalNodesManager.create(this[documentSymbol].modalNodesManager);
   }
 
-  /**
-   * @TODO: 能不能直接暴露
-   */
-  get dropLocation(): IPublicModelDropLocation {
-    return this[documentSymbol].dropLocation;
+  get dropLocation(): IPublicModelDropLocation | null {
+    return DropLocation.create(this[documentSymbol].dropLocation);
   }
 
   set dropLocation(loc: IPublicModelDropLocation | null) {
@@ -144,8 +143,8 @@ export class DocumentModel implements IPublicModelDocumentModel {
   }
   /**
    * 根据 nodeId 返回 Node 实例
-   * @param nodeId
-   * @returns
+   * get node instance by nodeId
+   * @param {string} nodeId
    */
   getNodeById(nodeId: string): IPublicModelNode | null {
     return Node.create(this[documentSymbol].getNode(nodeId));

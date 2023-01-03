@@ -122,7 +122,7 @@ export default class TreeTitle extends Component<{
         data-id={treeNode.id}
         onClick={() => {
           if (isModal) {
-            if (node.getVisible()) {
+            if (node.visible) {
               node.document?.modalNodesManager?.setInvisible(node);
             } else {
               node.document?.modalNodesManager?.setVisible(node);
@@ -134,7 +134,7 @@ export default class TreeTitle extends Component<{
           }
         }}
       >
-        {isModal && node.getVisible() && (
+        {isModal && node.visible && (
           <div onClick={() => {
             node.document?.modalNodesManager?.setInvisible(node);
           }}
@@ -142,7 +142,7 @@ export default class TreeTitle extends Component<{
             <IconRadioActive className="tree-node-modal-radio-active" />
           </div>
         )}
-        {isModal && !node.getVisible() && (
+        {isModal && !node.visible && (
           <div onClick={() => {
             node.document?.modalNodesManager?.setVisible(node);
           }}
