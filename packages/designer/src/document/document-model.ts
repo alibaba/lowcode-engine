@@ -15,6 +15,8 @@ import {
   IPublicApiProject,
   IPublicModelDropLocation,
   IPublicEnumTransformStage,
+  IPublicOnChangeOptions,
+  EDITOR_EVENT,
 } from '@alilc/lowcode-types';
 import { Project } from '../project';
 import { ISimulatorHost } from '../simulator';
@@ -156,6 +158,22 @@ export class DocumentModel implements IDocumentModel {
     this.setupListenActiveNodes();
     this.modalNodesManager = new ModalNodesManager(this);
     this.inited = true;
+  }
+
+  onChangeNodeVisible(fn: (node: IPublicModelNode, visible: boolean) => void): () => void {
+    this.designer.editor?.eventBus.on(EDITOR_EVENT.NODE_CHILDREN_CHANGE, fn);
+
+    return () => {
+      this.designer.editor?.eventBus.off(EDITOR_EVENT.NODE_CHILDREN_CHANGE, fn);
+    };
+  }
+
+  onChangeNodeChildren(fn: (info: IPublicOnChangeOptions) => void): () => void {
+    this.designer.editor?.eventBus.on(EDITOR_EVENT.NODE_VISIBLE_CHANGE, fn);
+
+    return () => {
+      this.designer.editor?.eventBus.off(EDITOR_EVENT.NODE_VISIBLE_CHANGE, fn);
+    };
   }
 
   @obx.shallow private willPurgeSpace: Node[] = [];

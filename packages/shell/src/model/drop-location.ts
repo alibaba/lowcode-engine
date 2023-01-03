@@ -3,7 +3,7 @@ import {
 } from '@alilc/lowcode-designer';
 import { dropLocationSymbol } from '../symbols';
 import { Node } from './node';
-import { IPublicModelDropLocation } from '@alilc/lowcode-types';
+import { IPublicModelDropLocation, IPublicTypeLocationDetail, IPublicModelLocateEvent } from '@alilc/lowcode-types';
 
 export class DropLocation implements IPublicModelDropLocation {
   private readonly [dropLocationSymbol]: InnerDropLocation;
@@ -12,7 +12,7 @@ export class DropLocation implements IPublicModelDropLocation {
     this[dropLocationSymbol] = dropLocation;
   }
 
-  static create(dropLocation: InnerDropLocation | null): DropLocation | null {
+  static create(dropLocation: InnerDropLocation | null): IPublicModelDropLocation | null {
     if (!dropLocation) {
       return null;
     }
@@ -21,5 +21,17 @@ export class DropLocation implements IPublicModelDropLocation {
 
   get target() {
     return Node.create(this[dropLocationSymbol].target);
+  }
+
+  get detail(): IPublicTypeLocationDetail {
+    return this[dropLocationSymbol].detail;
+  }
+
+  get event(): IPublicModelLocateEvent {
+    return this[dropLocationSymbol].event;
+  }
+
+  clone(event: IPublicModelLocateEvent): IPublicModelDropLocation {
+    return new DropLocation(this[dropLocationSymbol].clone(event));
   }
 }

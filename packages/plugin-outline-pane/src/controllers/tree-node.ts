@@ -110,7 +110,7 @@ export default class TreeNode {
   get hidden(): boolean {
     const cv = this.node.isConditionalVisible();
     if (cv == null) {
-      return !this.node.getVisible();
+      return !this.node.visible;
     }
     return !cv;
   }
@@ -119,7 +119,7 @@ export default class TreeNode {
     if (this.node.conditionGroup) {
       return;
     }
-    this.node.setVisible(!flag);
+    this.node.visible = !flag;
     this.onHiddenChanged && this.onHiddenChanged(flag);
   }
 

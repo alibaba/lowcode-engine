@@ -16,6 +16,7 @@ import {
   IPublicModelNode,
   IPublicModelExclusiveGroup,
   IPublicEnumTransformStage,
+  EDITOR_EVENT,
 } from '@alilc/lowcode-types';
 import { compatStage, isDOMText, isJSExpression } from '@alilc/lowcode-utils';
 import { SettingTopEntry } from '@alilc/lowcode-designer';
@@ -32,6 +33,9 @@ import { NodeRemoveOptions } from '../../types';
 
 export interface INode extends IPublicModelNode {
 
+  setVisible(flag: boolean): void;
+
+  getVisible(): boolean;
 }
 
 /**
@@ -190,6 +194,13 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
 
     this.isInited = true;
     this.emitter = createModuleEventBus('Node');
+    const editor = this.document.designer.editor;
+    this.onVisibleChange((visible: boolean) => {
+      editor?.eventBus.emit(EDITOR_EVENT.NODE_VISIBLE_CHANGE, this, visible);
+    });
+    this.onChildrenChange((info?: { type: string; node: Node }) => {
+      editor?.eventBus.emit(EDITOR_EVENT.NODE_VISIBLE_CHANGE, info);
+    });
   }
 
   _settingEntry: SettingTopEntry;
@@ -261,27 +272,59 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     return !!this._isRGLContainer;
   }
 
+  set isRGLContainerNode(status: boolean) {
+    this._isRGLContainer = status;
+  }
+
+  get isRGLContainerNode(): boolean {
+    return !!this._isRGLContainer;
+  }
+
   isContainer(): boolean {
-    return this.isParental() && this.componentMeta.isContainer;
+    return this.isContainerNode;
+  }
+
+  get isContainerNode(): boolean {
+    return this.isParentalNode && this.componentMeta.isContainer;
   }
 
   isModal(): boolean {
+    return this.isModalNode;
+  }
+
+  get isModalNode(): boolean {
     return this.componentMeta.isModal;
   }
 
   isRoot(): boolean {
+    return this.isRootNode;
+  }
+
+  get isRootNode(): boolean {
     return this.document.rootNode === (this as any);
   }
 
   isPage(): boolean {
-    return this.isRoot() && this.componentName === 'Page';
+    return this.isPageNode;
+  }
+
+  get isPageNode(): boolean {
+    return this.isRootNode && this.componentName === 'Page';
   }
 
   isComponent(): boolean {
-    return this.isRoot() && this.componentName === 'Component';
+    return this.isComponentNode;
+  }
+
+  get isComponentNode(): boolean {
+    return this.isRootNode && this.componentName === 'Component';
   }
 
   isSlot(): boolean {
+    return this.isSlotNode;
+  }
+
+  get isSlotNode(): boolean {
     return this._slotFor != null && this.componentName === 'Slot';
   }
 
@@ -289,13 +332,20 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
    * 是否一个父亲类节点
    */
   isParental(): boolean {
-    return !this.isLeaf();
+    return this.isParentalNode;
+  }
+
+  get isParentalNode(): boolean {
+    return !this.isLeafNode;
   }
 
   /**
    * 终端节点，内容一般为 文字 或者 表达式
    */
-  isLeaf(): this is LeafNode {
+  isLeaf(): boolean {
+    return this.isLeafNode;
+  }
+  get isLeafNode(): boolean {
     return this.componentName === 'Leaf';
   }
 

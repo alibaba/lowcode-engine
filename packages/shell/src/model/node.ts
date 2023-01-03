@@ -1,5 +1,6 @@
 import {
-  DocumentModel as InnerDocumentModel,
+  IDocumentModel as InnerDocumentModel,
+  INode as InnerNode,
 } from '@alilc/lowcode-designer';
 import {
   IPublicTypeCompositeValue,
@@ -16,6 +17,7 @@ import {
   IPublicTypePropsMap,
   IPublicTypePropsList,
   IPublicModelSettingTopEntry,
+  IPublicModelExclusiveGroup,
 } from '@alilc/lowcode-types';
 import { Prop } from './prop';
 import { Props } from './props';
@@ -29,8 +31,8 @@ import { ReactElement } from 'react';
 const shellNodeSymbol = Symbol('shellNodeSymbol');
 
 export class Node implements IPublicModelNode {
-  private readonly [documentSymbol]: InnerDocumentModel;
-  private readonly [nodeSymbol]: IPublicModelNode;
+  private readonly [documentSymbol]: InnerDocumentModel | null;
+  private readonly [nodeSymbol]: InnerNode;
 
   private _id: string;
 
@@ -81,14 +83,14 @@ export class Node implements IPublicModelNode {
    * 是否为「容器型」节点
    */
   get isContainer(): boolean {
-    return this[nodeSymbol].isContainer();
+    return this[nodeSymbol].isContainerNode;
   }
 
   /**
    * 是否为「容器型」节点
    */
   get isContainerNode(): boolean {
-    return this[nodeSymbol].isContainer();
+    return this[nodeSymbol].isContainerNode;
   }
 
   /**
@@ -96,14 +98,14 @@ export class Node implements IPublicModelNode {
    * 是否为根节点
    */
   get isRoot(): boolean {
-    return this[nodeSymbol].isRoot();
+    return this[nodeSymbol].isRootNode;
   }
 
   /**
    * 是否为根节点
    */
   get isRootNode(): boolean {
-    return this[nodeSymbol].isRoot();
+    return this[nodeSymbol].isRootNode;
   }
 
   /**
@@ -111,14 +113,14 @@ export class Node implements IPublicModelNode {
    * 是否为空节点（无 children 或者 children 为空）
    */
   get isEmpty(): boolean {
-    return this[nodeSymbol].isEmpty();
+    return this[nodeSymbol].isEmptyNode;
   }
 
   /**
    * 是否为空节点（无 children 或者 children 为空）
    */
   get isEmptyNode(): boolean {
-    return this[nodeSymbol].isEmpty();
+    return this[nodeSymbol].isEmptyNode;
   }
 
   /**
@@ -126,14 +128,14 @@ export class Node implements IPublicModelNode {
    * 是否为 Page 节点
    */
   get isPage(): boolean {
-    return this[nodeSymbol].isPage();
+    return this[nodeSymbol].isPageNode;
   }
 
   /**
    * 是否为 Page 节点
    */
   get isPageNode(): boolean {
-    return this[nodeSymbol].isPage();
+    return this[nodeSymbol].isPageNode;
   }
 
   /**
@@ -141,14 +143,14 @@ export class Node implements IPublicModelNode {
    * 是否为 Component 节点
    */
   get isComponent(): boolean {
-    return this[nodeSymbol].isComponent();
+    return this[nodeSymbol].isComponentNode;
   }
 
   /**
    * 是否为 Component 节点
    */
   get isComponentNode(): boolean {
-    return this[nodeSymbol].isComponent();
+    return this[nodeSymbol].isComponentNode;
   }
 
   /**
@@ -156,14 +158,14 @@ export class Node implements IPublicModelNode {
    * 是否为「模态框」节点
    */
   get isModal(): boolean {
-    return this[nodeSymbol].isModal();
+    return this[nodeSymbol].isModalNode;
   }
 
   /**
    * 是否为「模态框」节点
    */
   get isModalNode(): boolean {
-    return this[nodeSymbol].isModal();
+    return this[nodeSymbol].isModalNode;
   }
 
   /**
@@ -171,14 +173,14 @@ export class Node implements IPublicModelNode {
    * 是否为插槽节点
    */
   get isSlot(): boolean {
-    return this[nodeSymbol].isSlot();
+    return this[nodeSymbol].isSlotNode;
   }
 
   /**
    * 是否为插槽节点
    */
   get isSlotNode(): boolean {
-    return this[nodeSymbol].isSlot();
+    return this[nodeSymbol].isSlotNode;
   }
 
   /**
@@ -186,14 +188,14 @@ export class Node implements IPublicModelNode {
    * 是否为父类/分支节点
    */
   get isParental(): boolean {
-    return this[nodeSymbol].isParental();
+    return this[nodeSymbol].isParentalNode;
   }
 
   /**
    * 是否为父类/分支节点
    */
   get isParentalNode(): boolean {
-    return this[nodeSymbol].isParental();
+    return this[nodeSymbol].isParentalNode;
   }
 
   /**
@@ -201,14 +203,14 @@ export class Node implements IPublicModelNode {
    * 是否为叶子节点
    */
   get isLeaf(): boolean {
-    return this[nodeSymbol].isLeaf();
+    return this[nodeSymbol].isLeafNode;
   }
 
   /**
    * 是否为叶子节点
    */
   get isLeafNode(): boolean {
-    return this[nodeSymbol].isLeaf();
+    return this[nodeSymbol].isLeafNode;
   }
 
   /**
@@ -396,6 +398,14 @@ export class Node implements IPublicModelNode {
    */
   hasLoop(): boolean {
     return this[nodeSymbol].hasLoop();
+  }
+
+  get visible(): boolean {
+    return this[nodeSymbol].getVisible();
+  }
+
+  set visible(value: boolean) {
+    this[nodeSymbol].setVisible(value);
   }
 
   getVisible(): boolean {
@@ -619,5 +629,21 @@ export class Node implements IPublicModelNode {
 
   canPerformAction(actionName: string): boolean {
     return this[nodeSymbol].canPerformAction(actionName);
+  }
+
+  /**
+   * get conditionGroup
+   * @since v1.1.0
+   */
+  get conditionGroup(): IPublicModelExclusiveGroup | null {
+    return this[nodeSymbol].conditionGroup;
+  }
+
+  /**
+   * set value for conditionalVisible
+   * @since v1.1.0
+   */
+  setConditionalVisible(): void {
+    this[nodeSymbol].setConditionalVisible();
   }
 }
