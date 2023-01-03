@@ -6,7 +6,6 @@ import { Node } from '../../../src/document/node/node';
 import { Designer } from '../../../src/designer/designer';
 import formSchema from '../../fixtures/schema/form';
 import { getIdsFromSchema, getNodeFromSchemaById } from '../../utils';
-import { EBADF } from 'constants';
 
 const mockCreateSettingEntry = jest.fn();
 jest.mock('../../../src/designer/designer', () => {

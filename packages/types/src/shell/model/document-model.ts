@@ -2,6 +2,7 @@ import { IPublicTypeRootSchema, IPublicTypeDragNodeDataObject, IPublicTypeDragNo
 import { IPublicEnumTransformStage } from '../enum';
 import { IPublicApiProject } from '../api';
 import { IPublicModelDropLocation, IPublicModelDetecting, IPublicModelNode, IPublicModelSelection, IPublicModelHistory, IPublicModelModalNodesManager } from './';
+import { IPublicOnChangeOptions } from '@alilc/lowcode-types';
 
 export interface IPublicModelDocumentModel {
 
@@ -167,6 +168,12 @@ export interface IPublicModelDocumentModel {
    */
   onChangeNodeVisible(fn: (node: IPublicModelNode, visible: boolean) => void): void;
 
+
+  /**
+   * 当前 document 的节点 children 变更事件
+   * @param fn
+   */
+  onChangeNodeChildren(fn: (info: IPublicOnChangeOptions) => void): void;
 
   /**
    * 当前 document 节点属性修改事件

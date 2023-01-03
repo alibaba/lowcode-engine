@@ -173,3 +173,9 @@ export interface PluginStatus {
 export interface PluginStatusSet {
   [key: string]: PluginStatus;
 }
+
+export enum EDITOR_EVENT {
+  NODE_CHILDREN_CHANGE = 'node.children.change',
+
+  NODE_VISIBLE_CHANGE = 'node.visible.change',
+}

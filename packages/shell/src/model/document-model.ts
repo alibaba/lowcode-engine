@@ -288,11 +288,8 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * @param fn
    */
   onChangeNodeVisible(fn: (node: IPublicModelNode, visible: boolean) => void): void {
-    // TODO: history 变化时需要重新绑定
-    this[documentSymbol].nodesMap?.forEach((node) => {
-      node.onVisibleChange((flag: boolean) => {
-        fn(Node.create(node)!, flag);
-      });
+    this[documentSymbol].onChangeNodeVisible((node: IPublicModelNode, visible: boolean) => {
+      fn(Node.create(node)!, visible);
     });
   }
 
@@ -300,16 +297,14 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * 当前 document 的节点 children 变更事件
    * @param fn
    */
-  onChangeNodeChildren(fn: (info?: IPublicOnChangeOptions) => void): void {
-    // TODO: history 变化时需要重新绑定
-    this[documentSymbol].nodesMap?.forEach((node) => {
-      node.onChildrenChange((info?: InnerOnChangeOptions) => {
-        return info
-          ? fn({
-              type: info.type,
-              node: Node.create(node)!,
-            })
-          : fn();
+  onChangeNodeChildren(fn: (info: IPublicOnChangeOptions) => void): void {
+    this[documentSymbol].onChangeNodeChildren((info?: IPublicOnChangeOptions) => {
+      if (!info) {
+        return;
+      }
+      fn({
+        type: info.type,
+        node: Node.create(info.node)!,
       });
     });
   }
