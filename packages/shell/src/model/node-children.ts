@@ -1,16 +1,16 @@
-import { Node as InnerNode } from '@alilc/lowcode-designer';
-import { IPublicTypeNodeSchema, IPublicTypeNodeData, IPublicEnumTransformStage, IPublicModelNodeChildren, IPublicModelNode } from '@alilc/lowcode-types';
+import { INode as InnerNode, INodeChildren } from '@alilc/lowcode-designer';
+import { IPublicTypeNodeData, IPublicEnumTransformStage, IPublicModelNodeChildren, IPublicModelNode } from '@alilc/lowcode-types';
 import { Node } from './node';
 import { nodeSymbol, nodeChildrenSymbol } from '../symbols';
 
 export class NodeChildren implements IPublicModelNodeChildren {
-  private readonly [nodeChildrenSymbol]: IPublicModelNodeChildren;
+  private readonly [nodeChildrenSymbol]: INodeChildren;
 
-  constructor(nodeChildren: IPublicModelNodeChildren) {
+  constructor(nodeChildren: INodeChildren) {
     this[nodeChildrenSymbol] = nodeChildren;
   }
 
-  static create(nodeChildren: IPublicModelNodeChildren | null): IPublicModelNodeChildren | null {
+  static create(nodeChildren: INodeChildren | null): IPublicModelNodeChildren | null {
     if (!nodeChildren) {
       return null;
     }
@@ -37,7 +37,7 @@ export class NodeChildren implements IPublicModelNodeChildren {
    * @returns
    */
   get isEmpty(): boolean {
-    return this[nodeChildrenSymbol].isEmpty();
+    return this[nodeChildrenSymbol].isEmptyNode;
   }
 
   /**
@@ -45,7 +45,7 @@ export class NodeChildren implements IPublicModelNodeChildren {
    * @returns
    */
   get isEmptyNode(): boolean {
-    return this[nodeChildrenSymbol].isEmpty();
+    return this[nodeChildrenSymbol].isEmptyNode;
   }
 
   /**
@@ -53,23 +53,23 @@ export class NodeChildren implements IPublicModelNodeChildren {
    * judge if it is not empty
    */
   get notEmpty(): boolean {
-    return this[nodeChildrenSymbol].notEmpty();
+    return this[nodeChildrenSymbol].notEmptyNode;
   }
 
   /**
    * judge if it is not empty
    */
   get notEmptyNode(): boolean {
-    return this[nodeChildrenSymbol].notEmpty();
+    return this[nodeChildrenSymbol].notEmptyNode;
   }
 
   /**
    * 删除指定节点
+   * delete the node
    * @param node
-   * @returns
    */
   delete(node: IPublicModelNode): boolean {
-    return this[nodeChildrenSymbol].delete((node as any));
+    return this[nodeChildrenSymbol].delete((node as any)?.[nodeSymbol]);
   }
 
   /**
@@ -79,7 +79,7 @@ export class NodeChildren implements IPublicModelNodeChildren {
    * @returns
    */
   insert(node: IPublicModelNode, at?: number | null): void {
-    return this[nodeChildrenSymbol].insert((node as any), at, true);
+    return this[nodeChildrenSymbol].insert((node as any)?.[nodeSymbol], at);
   }
 
   /**
@@ -88,7 +88,7 @@ export class NodeChildren implements IPublicModelNodeChildren {
    * @returns
    */
   indexOf(node: IPublicModelNode): number {
-    return this[nodeChildrenSymbol].indexOf((node as any));
+    return this[nodeChildrenSymbol].indexOf((node as any)?.[nodeSymbol]);
   }
 
   /**
@@ -106,7 +106,7 @@ export class NodeChildren implements IPublicModelNodeChildren {
    * @param index
    * @returns
    */
-  get(index: number): any {
+  get(index: number): IPublicModelNode | null {
     return Node.create(this[nodeChildrenSymbol].get(index));
   }
 
@@ -116,7 +116,7 @@ export class NodeChildren implements IPublicModelNodeChildren {
    * @returns
    */
   has(node: IPublicModelNode): boolean {
-    return this[nodeChildrenSymbol].has((node as any));
+    return this[nodeChildrenSymbol].has((node as any)?.[nodeSymbol]);
   }
 
   /**
@@ -124,7 +124,7 @@ export class NodeChildren implements IPublicModelNodeChildren {
    * @param fn
    */
   forEach(fn: (node: IPublicModelNode, index: number) => void): void {
-    this[nodeChildrenSymbol].forEach((item: InnerNode<IPublicTypeNodeSchema>, index: number) => {
+    this[nodeChildrenSymbol].forEach((item: InnerNode, index: number) => {
       fn(Node.create(item)!, index);
     });
   }
@@ -134,7 +134,7 @@ export class NodeChildren implements IPublicModelNodeChildren {
    * @param fn
    */
   map<T>(fn: (node: IPublicModelNode, index: number) => T[]): any[] | null {
-    return this[nodeChildrenSymbol].map((item: InnerNode<IPublicTypeNodeSchema>, index: number) => {
+    return this[nodeChildrenSymbol].map((item: InnerNode, index: number) => {
       return fn(Node.create(item)!, index);
     });
   }
@@ -144,7 +144,7 @@ export class NodeChildren implements IPublicModelNodeChildren {
    * @param fn
    */
   every(fn: (node: IPublicModelNode, index: number) => boolean): boolean {
-    return this[nodeChildrenSymbol].every((item: InnerNode<IPublicTypeNodeSchema>, index: number) => {
+    return this[nodeChildrenSymbol].every((item: InnerNode, index: number) => {
       return fn(Node.create(item)!, index);
     });
   }
@@ -154,7 +154,7 @@ export class NodeChildren implements IPublicModelNodeChildren {
    * @param fn
    */
   some(fn: (node: IPublicModelNode, index: number) => boolean): boolean {
-    return this[nodeChildrenSymbol].some((item: InnerNode<IPublicTypeNodeSchema>, index: number) => {
+    return this[nodeChildrenSymbol].some((item: InnerNode, index: number) => {
       return fn(Node.create(item)!, index);
     });
   }
@@ -165,10 +165,10 @@ export class NodeChildren implements IPublicModelNodeChildren {
    */
   filter(fn: (node: IPublicModelNode, index: number) => boolean): any {
     return this[nodeChildrenSymbol]
-      .filter((item: InnerNode<IPublicTypeNodeSchema>, index: number) => {
+      .filter((item: InnerNode, index: number) => {
         return fn(Node.create(item)!, index);
       })
-      .map((item: InnerNode<IPublicTypeNodeSchema>) => Node.create(item)!);
+      .map((item: InnerNode) => Node.create(item)!);
   }
 
   /**
@@ -177,7 +177,7 @@ export class NodeChildren implements IPublicModelNodeChildren {
    */
   find(fn: (node: IPublicModelNode, index: number) => boolean): IPublicModelNode | null {
     return Node.create(
-      this[nodeChildrenSymbol].find((item: InnerNode<IPublicTypeNodeSchema>, index: number) => {
+      this[nodeChildrenSymbol].find((item: InnerNode, index: number) => {
         return fn(Node.create(item)!, index);
       }),
     );
@@ -219,8 +219,9 @@ export class NodeChildren implements IPublicModelNodeChildren {
   mergeChildren(
     remover: (node: IPublicModelNode, idx: number) => boolean,
     adder: (children: IPublicModelNode[]) => any,
-    sorter: (firstNode: IPublicModelNode, secondNode: IPublicModelNode) => number,
+    originalSorter: (firstNode: IPublicModelNode, secondNode: IPublicModelNode) => number,
   ) {
+    let sorter = originalSorter;
     if (!sorter) {
       sorter = () => 0;
     }

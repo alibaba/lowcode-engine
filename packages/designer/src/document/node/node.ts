@@ -22,7 +22,7 @@ import { compatStage, isDOMText, isJSExpression } from '@alilc/lowcode-utils';
 import { SettingTopEntry } from '@alilc/lowcode-designer';
 import { Props, getConvertedExtraKey } from './props/props';
 import { DocumentModel } from '../document-model';
-import { NodeChildren } from './node-children';
+import { NodeChildren, INodeChildren } from './node-children';
 import { Prop } from './props/prop';
 import { ComponentMeta } from '../../component-meta';
 import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
@@ -36,6 +36,22 @@ export interface INode extends IPublicModelNode {
   setVisible(flag: boolean): void;
 
   getVisible(): boolean;
+
+  /**
+   * 内部方法，请勿使用
+   * @param useMutator 是否触发联动逻辑
+   */
+  internalSetParent(parent: INode | null, useMutator: boolean): void;
+
+  setConditionGroup(grp: IPublicModelExclusiveGroup | string | null): void;
+
+  internalToShellNode(): IPublicModelNode | null;
+
+  internalPurgeStart(): void;
+
+  unlinkSlot(slotNode: Node): void;
+
+  didDropOut(dragment: Node): void;
 }
 
 /**
@@ -116,7 +132,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
    */
   props: Props;
 
-  protected _children?: NodeChildren;
+  protected _children?: INodeChildren;
 
   /**
    * @deprecated
@@ -135,7 +151,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 当前节点子集
    */
-  get children(): NodeChildren | null {
+  get children(): INodeChildren | null {
     return this._children || null;
   }
 
@@ -390,7 +406,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
       if (this.isSlot()) {
         this._parent.unlinkSlot(this);
       } else {
-        this._parent.children.unlinkChild(this);
+        this._parent.children?.unlinkChild(this);
       }
     }
     if (useMutator) {
@@ -449,9 +465,9 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
       }
       if (this.isSlot()) {
         this.parent.removeSlot(this, purge);
-        this.parent.children.delete(this, purge, useMutator, { suppressRemoveEvent: true });
+        this.parent.children.internalDelete(this, purge, useMutator, { suppressRemoveEvent: true });
       } else {
-        this.parent.children.delete(this, purge, useMutator, { suppressRemoveEvent: true });
+        this.parent.children.internalDelete(this, purge, useMutator, { suppressRemoveEvent: true });
       }
     }
   }
@@ -965,12 +981,12 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
 
   insertBefore(node: Node, ref?: Node, useMutator = true) {
     const nodeInstance = ensureNode(node, this.document);
-    this.children?.insert(nodeInstance, ref ? ref.index : null, useMutator);
+    this.children?.internalInsert(nodeInstance, ref ? ref.index : null, useMutator);
   }
 
   insertAfter(node: any, ref?: Node, useMutator = true) {
     const nodeInstance = ensureNode(node, this.document);
-    this.children?.insert(nodeInstance, ref ? ref.index + 1 : null, useMutator);
+    this.children?.internalInsert(nodeInstance, ref ? ref.index + 1 : null, useMutator);
   }
 
   getParent() {
@@ -1337,7 +1353,7 @@ export function insertChild(
     node = container.document.createNode(thing);
   }
 
-  container.children.insert(node, at);
+  container.children.internalInsert(node, at);
 
   return node;
 }
