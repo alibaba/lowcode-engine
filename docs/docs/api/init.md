@@ -14,13 +14,13 @@ sidebar_position: 10
 
 **方法定义**
 ```typescript
-function init(container?: Element, options?: EngineOptions): void
+function init(container?: Element, options?: IPublicTypeEngineOptions): void
 ```
 
 **初始化引擎的参数**
 
 ```typescript
-interface EngineOptions {
+interface IPublicTypeEngineOptions {
   /**
    * 指定初始化的 device
    */
@@ -107,7 +107,7 @@ interface EngineOptions {
   [key: string]: any;
 }
 ```
-> 源码详见 [EngineOptions](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/engine-config.ts)
+> 源码详见 [IPublicTypeEngineOptions](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/engine-options.ts)
 
 
 ## 使用示例
