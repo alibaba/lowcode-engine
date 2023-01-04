@@ -1,6 +1,6 @@
 ---
 title: 插件扩展 - 编排扩展
-sidebar_position: 6
+sidebar_position: 7
 ---
 ## 场景一：扩展选中节点操作项
 ### 增加节点操作项

@@ -1,6 +1,6 @@
 ---
 title: 插件扩展 - 面板扩展
-sidebar_position: 5
+sidebar_position: 6
 ---
 ## 插件简述
 
