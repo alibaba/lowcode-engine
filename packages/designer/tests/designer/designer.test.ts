@@ -103,6 +103,7 @@ describe('Designer 测试', () => {
               return x;
             },
             insert() {},
+            internalInsert() {},
           },
         };
         const mockDetail = { type: 'Children', index: 1, near: { node: { x: 1 } } };
@@ -172,6 +173,7 @@ describe('Designer 测试', () => {
               return x;
             },
             insert() {},
+            internalInsert() {},
           },
         };
         const mockDetail = { type: 'Children', index: 1, near: { node: { x: 1 } } };
@@ -407,6 +409,7 @@ describe('Designer 测试', () => {
           return x;
         },
         insert() {},
+        internalInsert() {},
       },
     };
     const mockDetail = { type: 'Children', index: 1, near: { node: { x: 1 } } };
@@ -431,6 +434,7 @@ describe('Designer 测试', () => {
             return x;
           },
           insert() {},
+          internalInsert() {},
         },
       },
       detail: mockDetail,
