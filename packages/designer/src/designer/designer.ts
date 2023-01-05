@@ -59,7 +59,7 @@ export interface DesignerProps {
 
 
 export class Designer implements IDesigner {
-  readonly dragon = new Dragon(this);
+  dragon: Dragon;
 
   readonly componentActions = new ComponentActions();
 
@@ -99,6 +99,7 @@ export class Designer implements IDesigner {
 
     this.project = new Project(this, props.defaultSchema, viewName);
 
+    this.dragon = new Dragon(this);
     this.dragon.onDragstart((e) => {
       this.detecting.enable = false;
       const { dragObject } = e;
@@ -564,6 +565,10 @@ export class Designer implements IDesigner {
   }
 
   addPropsReducer(reducer: IPublicTypePropsTransducer, stage: IPublicEnumTransformStage) {
+    if (!reducer) {
+      logger.error('reducer is not available');
+      return;
+    }
     const reducers = this.propsReducers.get(stage);
     if (reducers) {
       reducers.push(reducer);

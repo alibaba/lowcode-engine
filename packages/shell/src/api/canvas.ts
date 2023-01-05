@@ -26,7 +26,7 @@ export class Canvas implements IPublicApiCanvas {
     return this[editorSymbol].get('designer') as IDesigner;
   }
 
-  constructor(editor: IPublicModelEditor) {
+  constructor(editor: IPublicModelEditor, readonly workspaceMode: boolean = false) {
     this[editorSymbol] = editor;
   }
 
@@ -49,7 +49,7 @@ export class Canvas implements IPublicApiCanvas {
   }
 
   get dragon(): IPublicModelDragon | null {
-    return Dragon.create(this[designerSymbol].dragon);
+    return Dragon.create(this[designerSymbol].dragon, this.workspaceMode);
   }
 
   get activeTracker(): IPublicModelActiveTracker | null {

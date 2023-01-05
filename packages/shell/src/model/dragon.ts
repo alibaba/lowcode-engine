@@ -19,11 +19,14 @@ export const innerDragonSymbol = Symbol('innerDragonSymbol');
 export class Dragon implements IPublicModelDragon {
   private readonly [innerDragonSymbol]: IPublicModelDragon;
 
-  constructor(innerDragon: IPublicModelDragon) {
+  constructor(innerDragon: IPublicModelDragon, readonly workspaceMode: boolean) {
     this[innerDragonSymbol] = innerDragon;
   }
 
   get [dragonSymbol](): any {
+    if (this.workspaceMode) {
+      return this[innerDragonSymbol];
+    }
     const workspace = globalContext.get('workspace');
     let editor = globalContext.get('editor');
 
@@ -35,11 +38,11 @@ export class Dragon implements IPublicModelDragon {
     return designer.dragon;
   }
 
-  static create(dragon: IPublicModelDragon | null): IPublicModelDragon | null {
+  static create(dragon: IPublicModelDragon | null, workspaceMode: boolean): IPublicModelDragon | null {
     if (!dragon) {
       return null;
     }
-    return new Dragon(dragon);
+    return new Dragon(dragon, workspaceMode);
   }
 
   /**
