@@ -1,13 +1,17 @@
 ---
-title: 利用 Parts 造物快速构建资产包
-sidebar_position: 4
+title: 资产包管理
+sidebar_position: 3
 ---
 
 ## 介绍
 
-大家在使用[低代码引擎](https://lowcode-engine.cn/)构建低代码应用平台时，如何快速批量地管理、接入低代码物料呢？
+通过前述介绍，相信大家已经了解如何使用 「[Parts·造物](https://parts.lowcode-engine.cn/)」 来将已有的 React 组件快速接入低代码引擎，以及生产低代码组件。
 
-我们的产品「[Parts·造物](https://parts.lowcode-engine.cn/)」可以通过 `资产包` 模块帮助大家解决这个问题![image.png](https://img.alicdn.com/imgextra/i3/O1CN01Fkaznh1zWj9wYKpcH_!!6000000006722-2-tps-1702-628.png)
+大家在使用的过程中，可能会希望构建出来的资产包可以后续随时访问下载，或者希望构建资产包时各个组件的版本等信息可以持久化起来并且能够多人维护。
+
+通过「[Parts·造物](https://parts.lowcode-engine.cn/)」的 `资产包` 管理功能帮助大家解决这个问题
+
+![image.png](https://img.alicdn.com/imgextra/i3/O1CN01Fkaznh1zWj9wYKpcH_!!6000000006722-2-tps-1702-628.png)
 
 ## 新建资产包
 
