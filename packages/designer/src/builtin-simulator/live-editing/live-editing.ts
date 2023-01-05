@@ -214,7 +214,6 @@ function selectRange(doc: Document, range: Range) {
   }
 }
 
-
 function queryPropElement(rootElement: HTMLElement, targetElement: HTMLElement, selector?: string) {
   if (!selector) {
     return null;

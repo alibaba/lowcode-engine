@@ -57,7 +57,7 @@ import {
   IPublicEnumTransitionType,
   IPublicEnumDragObjectType,
   IPublicTypeDragNodeObject,
-  NodeInstance,
+  IPublicTypeNodeInstance,
   IPublicTypeComponentInstance,
   IPublicTypeLocationChildrenDetail,
   IPublicTypeLocationDetailType,
@@ -172,7 +172,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   readonly scroller: Scroller;
 
   readonly emitter: IEventBus = createModuleEventBus('BuiltinSimulatorHost');
-
 
   readonly componentsConsumer: ResourceConsumer;
 
@@ -898,7 +897,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * @see ISimulator
    */
-  getComponentInstances(node: Node, context?: NodeInstance): IPublicTypeComponentInstance[] | null {
+  getComponentInstances(node: Node, context?: IPublicTypeNodeInstance): IPublicTypeComponentInstance[] | null {
     const docId = node.document.id;
 
     const instances = this.instancesMap[docId]?.get(node.id) || null;
@@ -925,7 +924,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   getClosestNodeInstance(
     from: IPublicTypeComponentInstance,
     specId?: string,
-  ): NodeInstance<IPublicTypeComponentInstance> | null {
+  ): IPublicTypeNodeInstance<IPublicTypeComponentInstance> | null {
     return this.renderer?.getClosestNodeInstance(from, specId) || null;
   }
 
@@ -1028,7 +1027,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * 通过 DOM 节点获取节点，依赖 simulator 的接口
    */
-  getNodeInstanceFromElement(target: Element | null): NodeInstance<IPublicTypeComponentInstance> | null {
+  getNodeInstanceFromElement(target: Element | null): IPublicTypeNodeInstance<IPublicTypeComponentInstance> | null {
     if (!target) {
       return null;
     }
@@ -1111,14 +1110,14 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   private _sensorAvailable = true;
 
   /**
-   * @see ISensor
+   * @see IPublicModelSensor
    */
   get sensorAvailable(): boolean {
     return this._sensorAvailable;
   }
 
   /**
-   * @see ISensor
+   * @see IPublicModelSensor
    */
   fixEvent(e: ILocateEvent): ILocateEvent {
     if (e.fixed) {
@@ -1149,7 +1148,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   /**
-   * @see ISensor
+   * @see IPublicModelSensor
    */
   isEnter(e: ILocateEvent): boolean {
     const rect = this.viewport.bounds;
@@ -1164,7 +1163,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   private sensing = false;
 
   /**
-   * @see ISensor
+   * @see IPublicModelSensor
    */
   deactiveSensor() {
     this.sensing = false;
@@ -1174,7 +1173,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   // ========= drag location logic: helper for locate ==========
 
   /**
-   * @see ISensor
+   * @see IPublicModelSensor
    */
   locate(e: ILocateEvent): any {
     const { dragObject } = e;
@@ -1372,7 +1371,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     const document = this.project.currentDocument!;
     const { currentRoot } = document;
     let container: INode;
-    let nodeInstance: NodeInstance<IPublicTypeComponentInstance> | undefined;
+    let nodeInstance: IPublicTypeNodeInstance<IPublicTypeComponentInstance> | undefined;
 
     if (target) {
       const ref = this.getNodeInstanceFromElement(target);

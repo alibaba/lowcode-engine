@@ -1,34 +1,6 @@
 import { ReactNode, ComponentType } from 'react';
 import { IPublicTypeNpmInfo, IPublicModelEditor } from './shell';
 
-export type KeyType = (new (...args: any[]) => any) | symbol | string;
-export type ClassType = new (...args: any[]) => any;
-export interface GetOptions {
-  forceNew?: boolean;
-  sourceCls?: ClassType;
-}
-export type GetReturnType<T, ClsType> = T extends undefined
-  ? ClsType extends {
-    prototype: infer R;
-  }
-    ? R
-    : any
-  : T;
-
-/**
- * duck-typed power-di
- *
- * @see https://www.npmjs.com/package/power-di
- */
-export interface PowerDIRegisterOptions {
-  /** default: true */
-  singleton?: boolean;
-  /** if data a class, auto new a instance.
-   *  if data a function, auto run(lazy).
-   *  default: true */
-  autoNew?: boolean;
-}
-
 export interface EditorConfig {
   skeleton?: SkeletonConfig;
   theme?: ThemeConfig;
@@ -172,10 +144,4 @@ export interface PluginStatus {
 
 export interface PluginStatusSet {
   [key: string]: PluginStatus;
-}
-
-export enum EDITOR_EVENT {
-  NODE_CHILDREN_CHANGE = 'node.children.change',
-
-  NODE_VISIBLE_CHANGE = 'node.visible.change',
 }

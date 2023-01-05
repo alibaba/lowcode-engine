@@ -6,7 +6,6 @@ import { getClosestNode } from '@alilc/lowcode-utils';
 import { intl } from '../../locale';
 import { BuiltinSimulatorHost } from '../host';
 
-
 export class BorderDetectingInstance extends PureComponent<{
   title: IPublicTypeTitleContent;
   rect: DOMRect | null;
@@ -77,10 +76,8 @@ export class BorderDetecting extends Component<{ host: BuiltinSimulatorHost }> {
     const { host } = this.props;
     const { current } = this;
 
-
     const canHoverHook = current?.componentMeta.getMetadata()?.configure.advanced?.callbacks?.onHoverHook;
     const canHover = (canHoverHook && typeof canHoverHook === 'function') ? canHoverHook(current.internalToShellNode()) : true;
-
 
     if (!canHover || !current || host.viewport.scrolling || host.liveEditing.editing) {
       return null;

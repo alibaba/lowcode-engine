@@ -3,14 +3,13 @@ import {
   DocumentModel as InnerDocumentModel,
   Node as InnerNode,
   isDragNodeObject,
-  IOnChangeOptions as InnerOnChangeOptions,
 } from '@alilc/lowcode-designer';
 import {
   IPublicEnumTransformStage,
   IPublicTypeRootSchema,
   GlobalEvent,
   IPublicModelDocumentModel,
-  IPublicOnChangeOptions,
+  IPublicTypeOnChangeOptions,
   IPublicModelDragObject,
   IPublicTypeDragNodeObject,
   IPublicTypeDragNodeDataObject,
@@ -45,6 +44,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
   selection: IPublicModelSelection;
   detecting: IPublicModelDetecting;
   history: IPublicModelHistory;
+
   /**
    * @deprecated use canvas API instead
    */
@@ -141,6 +141,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
   set dropLocation(loc: IPublicModelDropLocation | null) {
     this[documentSymbol].dropLocation = loc;
   }
+
   /**
    * 根据 nodeId 返回 Node 实例
    * get node instance by nodeId
@@ -297,8 +298,8 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * 当前 document 的节点 children 变更事件
    * @param fn
    */
-  onChangeNodeChildren(fn: (info: IPublicOnChangeOptions) => void): void {
-    this[documentSymbol].onChangeNodeChildren((info?: IPublicOnChangeOptions) => {
+  onChangeNodeChildren(fn: (info: IPublicTypeOnChangeOptions) => void): void {
+    this[documentSymbol].onChangeNodeChildren((info?: IPublicTypeOnChangeOptions) => {
       if (!info) {
         return;
       }

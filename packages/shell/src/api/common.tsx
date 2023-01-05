@@ -25,7 +25,6 @@ import {
   IPublicTypeLocationDetailType as InnerLocationDetailType,
   IPublicApiCommonEditorCabin,
   IPublicModelDragon,
-  IDesigner,
 } from '@alilc/lowcode-types';
 import {
   SettingField as InnerSettingField,
@@ -35,6 +34,7 @@ import {
   ScrollTarget as InnerScrollTarget,
   getConvertedExtraKey as innerGetConvertedExtraKey,
   getOriginalExtraKey as innerGetOriginalExtraKey,
+  IDesigner,
 } from '@alilc/lowcode-designer';
 import {
   Skeleton as InnerSkeleton,
@@ -63,6 +63,7 @@ import { ReactNode, Component } from 'react';
 
 class DesignerCabin implements IPublicApiCommonDesignerCabin {
   private readonly [editorSymbol]: Editor;
+
   /**
    * @deprecated
    */
@@ -240,6 +241,7 @@ class EditorCabin implements IPublicApiCommonEditorCabin {
   constructor(editor: Editor) {
     this[editorSymbol] = editor;
   }
+
   /**
    * Title 组件
    * @experimental unstable API, pay extra caution when trying to use this
@@ -334,7 +336,6 @@ class EditorCabin implements IPublicApiCommonEditorCabin {
     return innerObserver(component);
   }
 }
-
 
 export class Common implements IPublicApiCommon {
   private readonly __designerCabin: any;

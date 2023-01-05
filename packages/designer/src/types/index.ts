@@ -11,4 +11,10 @@ export const utils = {
   getNodeSchemaById,
 };
 
+export enum EDITOR_EVENT {
+  NODE_CHILDREN_CHANGE = 'node.children.change',
+
+  NODE_VISIBLE_CHANGE = 'node.visible.change',
+}
+
 export type Utils = typeof utils;

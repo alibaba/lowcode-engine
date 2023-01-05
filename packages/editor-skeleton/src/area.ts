@@ -1,12 +1,20 @@
 /* eslint-disable max-len */
 import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
 import { Logger } from '@alilc/lowcode-utils';
-import { IPublicTypeWidgetBaseConfig, IArea } from '@alilc/lowcode-types';
+import { IPublicTypeWidgetBaseConfig } from '@alilc/lowcode-types';
 import { WidgetContainer } from './widget/widget-container';
 import { Skeleton } from './skeleton';
 import { IWidget } from './widget/widget';
 
 const logger = new Logger({ level: 'warn', bizName: 'skeleton:area' });
+export interface IArea<C, T> {
+  isEmpty(): boolean;
+  add(config: T | C): T;
+  remove(config: T | string): number;
+  setVisible(flag: boolean): void;
+  hide(): void;
+  show(): void;
+}
 
 export class Area<C extends IPublicTypeWidgetBaseConfig = any, T extends IWidget = IWidget> implements IArea<C, T> {
   @obx private _visible = true;

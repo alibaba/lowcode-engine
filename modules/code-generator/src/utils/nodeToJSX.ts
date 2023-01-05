@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { pipe } from 'fp-ts/function';
-import { IPublicTypeNodeSchema, isNodeSchema, NodeDataType, IPublicTypeCompositeValue } from '@alilc/lowcode-types';
+import { IPublicTypeNodeSchema, isNodeSchema, IPublicTypeNodeDataType, IPublicTypeCompositeValue } from '@alilc/lowcode-types';
 
 import {
   IScope,
@@ -365,7 +365,7 @@ export function generateReactExprInJS(
 const handleChildren = (v: string[]) => v.join('');
 
 export function createNodeGenerator(cfg: NodeGeneratorConfig = {}): NodeGenerator<string> {
-  const generateNode = (nodeItem: NodeDataType, scope: IScope): string => {
+  const generateNode = (nodeItem: IPublicTypeNodeDataType, scope: IScope): string => {
     if (_.isArray(nodeItem)) {
       const resList = nodeItem.map((n) => generateNode(n, scope));
       return handleChildren(resList);
@@ -390,7 +390,7 @@ export function createNodeGenerator(cfg: NodeGeneratorConfig = {}): NodeGenerato
     return `{${valueStr}}`;
   };
 
-  return (nodeItem: NodeDataType, scope: IScope) => unwrapJsExprQuoteInJsx(generateNode(nodeItem, scope));
+  return (nodeItem: IPublicTypeNodeDataType, scope: IScope) => unwrapJsExprQuoteInJsx(generateNode(nodeItem, scope));
 }
 
 const defaultReactGeneratorConfig: NodeGeneratorConfig = {
