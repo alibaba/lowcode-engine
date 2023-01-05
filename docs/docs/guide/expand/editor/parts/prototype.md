@@ -1,6 +1,6 @@
 ---
-title: 利用Parts造物快速使用react组件
-sidebar_position: 3
+title: React 组件导入低代码引擎
+sidebar_position: 2
 ---
 ## 介绍
 大家在使用[低代码引擎](https://lowcode-engine.cn/)构建低代码应用平台时，遇到的一个主要问题是如何让已有的 React 组件能够快速低成本地接入进来。这个问题拆解下来主要包括两个子问题：1. 如何给已有组件[配置物料描述](https://lowcode-engine.cn/material)，2. 如何构建出一个低代码引擎能够识别的资产包(Assets)。
