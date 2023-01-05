@@ -6,17 +6,15 @@ import {
   IPublicTypePropsList,
   IPublicTypeNodeData,
   IPublicTypeI18nData,
-  SlotSchema,
+  IPublicTypeSlotSchema,
   IPublicTypePageSchema,
   IPublicTypeComponentSchema,
-  NodeStatus,
   IPublicTypeCompositeValue,
   GlobalEvent,
   IPublicTypeComponentAction,
   IPublicModelNode,
   IPublicModelExclusiveGroup,
   IPublicEnumTransformStage,
-  EDITOR_EVENT,
 } from '@alilc/lowcode-types';
 import { compatStage, isDOMText, isJSExpression } from '@alilc/lowcode-utils';
 import { SettingTopEntry } from '@alilc/lowcode-designer';
@@ -28,8 +26,13 @@ import { ComponentMeta } from '../../component-meta';
 import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
 import { includeSlot, removeSlot } from '../../utils/slot';
 import { foreachReverse } from '../../utils/tree';
-import { NodeRemoveOptions } from '../../types';
+import { NodeRemoveOptions, EDITOR_EVENT } from '../../types';
 
+export interface NodeStatus {
+  locking: boolean;
+  pseudo: boolean;
+  inPlaceEditing: boolean;
+}
 
 export interface INode extends IPublicModelNode {
 
@@ -1235,14 +1238,13 @@ function ensureNode(node: any, document: DocumentModel): Node {
   return nodeInstance;
 }
 
-
 export interface LeafNode extends Node {
   readonly children: null;
 }
 
 export type IPublicTypePropChangeOptions = Omit<GlobalEvent.Node.Prop.ChangeOptions, 'node'>;
 
-export type SlotNode = Node<SlotSchema>;
+export type SlotNode = Node<IPublicTypeSlotSchema>;
 export type PageNode = Node<IPublicTypePageSchema>;
 export type ComponentNode = Node<IPublicTypeComponentSchema>;
 export type RootNode = PageNode | ComponentNode;

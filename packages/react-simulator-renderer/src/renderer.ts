@@ -17,7 +17,7 @@ import {
   AssetLoader,
   getProjectUtils,
 } from '@alilc/lowcode-utils';
-import { IPublicTypeComponentSchema, IPublicEnumTransformStage, IPublicTypeNodeSchema, NodeInstance } from '@alilc/lowcode-types';
+import { IPublicTypeComponentSchema, IPublicEnumTransformStage, IPublicTypeNodeSchema, IPublicTypeNodeInstance } from '@alilc/lowcode-types';
 // just use types
 import { BuiltinSimulatorRenderer, Component, DocumentModel, Node } from '@alilc/lowcode-designer';
 import LowCodeRenderer from '@alilc/lowcode-react-renderer';
@@ -368,6 +368,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
    * 画布是否自动监听事件来重绘节点
    */
   autoRepaintNode = true;
+
   /**
    * 加载资源
    */
@@ -399,7 +400,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     }
   }
 
-  getClosestNodeInstance(from: ReactInstance, nodeId?: string): NodeInstance<ReactInstance> | null {
+  getClosestNodeInstance(from: ReactInstance, nodeId?: string): IPublicTypeNodeInstance<ReactInstance> | null {
     return getClosestNodeInstance(from, nodeId);
   }
 
@@ -557,7 +558,7 @@ const SYMBOL_VDID = Symbol('_LCDocId');
 function getClosestNodeInstance(
     from: ReactInstance,
     specId?: string,
-  ): NodeInstance<ReactInstance> | null {
+  ): IPublicTypeNodeInstance<ReactInstance> | null {
   let el: any = from;
   if (el) {
     if (isElement(el)) {
@@ -587,7 +588,7 @@ function getClosestNodeInstance(
   return null;
 }
 
-function getNodeInstance(fiberNode: any, specId?: string): NodeInstance<ReactInstance> | null {
+function getNodeInstance(fiberNode: any, specId?: string): IPublicTypeNodeInstance<ReactInstance> | null {
   const instance = fiberNode?.stateNode;
   if (instance && SYMBOL_VNID in instance) {
     const nodeId = instance[SYMBOL_VNID];

@@ -1,6 +1,6 @@
 // this folder contains all interfaces/types working as type definition
 //   - some exists as type TypeName
-//   - some althought exists as interfaces , but there won`t be a class implements them.
+//   - some althought exists as interfaces , but there won`t be any class implements them.
 // all of above cases will with prefix IPublicType, eg. IPublicTypeSomeName
 export * from './location';
 export * from './active-target';
@@ -75,3 +75,11 @@ export * from './hotkey-callback';
 export * from './plugin-register-options';
 export * from './resource-options';
 export * from './engine-options';
+export * from './on-change-options';
+export * from './slot-schema';
+export * from './node-data-type';
+export * from './node-instance';
+export * from './editor-value-key';
+export * from './editor-get-options';
+export * from './editor-get-result';
+export * from './editor-register-options';

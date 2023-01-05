@@ -15,8 +15,7 @@ import {
   IPublicApiProject,
   IPublicModelDropLocation,
   IPublicEnumTransformStage,
-  IPublicOnChangeOptions,
-  EDITOR_EVENT,
+  IPublicTypeOnChangeOptions,
 } from '@alilc/lowcode-types';
 import { Project } from '../project';
 import { ISimulatorHost } from '../simulator';
@@ -27,6 +26,7 @@ import { Selection } from './selection';
 import { History } from './history';
 import { ModalNodesManager } from './node';
 import { uniqueId, isPlainObject, compatStage, isJSExpression, isDOMText, isNodeSchema, isDragNodeObject, isDragNodeDataObject } from '@alilc/lowcode-utils';
+import { EDITOR_EVENT } from '../types';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
@@ -168,7 +168,7 @@ export class DocumentModel implements IDocumentModel {
     };
   }
 
-  onChangeNodeChildren(fn: (info: IPublicOnChangeOptions) => void): () => void {
+  onChangeNodeChildren(fn: (info: IPublicTypeOnChangeOptions) => void): () => void {
     this.designer.editor?.eventBus.on(EDITOR_EVENT.NODE_VISIBLE_CHANGE, fn);
 
     return () => {
@@ -337,7 +337,6 @@ export class DocumentModel implements IDocumentModel {
   }
 
   @obx.ref private _dropLocation: IDropLocation | null = null;
-
 
   set dropLocation(loc: IPublicModelDropLocation | null) {
     this._dropLocation = loc;

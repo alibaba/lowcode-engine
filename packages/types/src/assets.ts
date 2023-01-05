@@ -1,12 +1,3 @@
-
-export interface AssetItem {
-  type: AssetType;
-  content?: string | null;
-  device?: string;
-  level?: AssetLevel;
-  id?: string;
-}
-
 export enum AssetLevel {
   // 环境依赖库 比如 react, react-dom
   Environment = 1,
@@ -41,12 +32,20 @@ export enum AssetType {
   Bundle = 'bundle',
 }
 
+export interface AssetItem {
+  type: AssetType;
+  content?: string | null;
+  device?: string;
+  level?: AssetLevel;
+  id?: string;
+}
+
+export type AssetList = Array<Asset | undefined | null>;
+
+export type Asset = AssetList | AssetBundle | AssetItem | URL;
+
 export interface AssetBundle {
   type: AssetType.Bundle;
   level?: AssetLevel;
   assets?: Asset | AssetList | null;
 }
-
-export type Asset = AssetList | AssetBundle | AssetItem | URL;
-
-export type AssetList = Array<Asset | undefined | null>;

@@ -8,7 +8,7 @@ import {
   IPublicModelNode,
   IPublicModelDragon,
   IPublicModelLocateEvent,
-  ISensor,
+  IPublicModelSensor,
 } from '@alilc/lowcode-types';
 import { setNativeSelection, cursor } from '@alilc/lowcode-utils';
 import { Node } from '../document';
@@ -22,7 +22,7 @@ export interface ILocateEvent extends IPublicModelLocateEvent {
   /**
    * 激活的感应器
    */
-  sensor?: ISensor;
+  sensor?: IPublicModelSensor;
 
 }
 
@@ -52,6 +52,7 @@ export function isLocateEvent(e: any): e is ILocateEvent {
 }
 
 const SHAKE_DISTANCE = 4;
+
 /**
  * mouse shake check
  */
@@ -103,16 +104,16 @@ export interface IDragon extends IPublicModelDragon {
  * Drag-on 拖拽引擎
  */
 export class Dragon implements IDragon {
-  private sensors: ISensor[] = [];
+  private sensors: IPublicModelSensor[] = [];
 
   key = Math.random();
 
   /**
    * current active sensor, 可用于感应区高亮
    */
-  @obx.ref private _activeSensor: ISensor | undefined;
+  @obx.ref private _activeSensor: IPublicModelSensor | undefined;
 
-  get activeSensor(): ISensor | undefined {
+  get activeSensor(): IPublicModelSensor | undefined {
     return this._activeSensor;
   }
 
@@ -173,7 +174,7 @@ export class Dragon implements IDragon {
     const forceCopyState =
       isDragNodeObject(dragObject) && dragObject.nodes.some((node: Node | IPublicModelNode) => (typeof node.isSlot === 'function' ? node.isSlot() : node.isSlot));
     const isBoostFromDragAPI = isDragEvent(boostEvent);
-    let lastSensor: ISensor | undefined;
+    let lastSensor: IPublicModelSensor | undefined;
 
     this._dragging = false;
 
@@ -462,7 +463,7 @@ export class Dragon implements IDragon {
     /* istanbul ignore next */
     const chooseSensor = (e: ILocateEvent) => {
       // this.sensors will change on dragstart
-      const sensors: ISensor[] = this.sensors.concat(masterSensors as ISensor[]);
+      const sensors: IPublicModelSensor[] = this.sensors.concat(masterSensors as IPublicModelSensor[]);
       let sensor =
         e.sensor && e.sensor.isEnter(e)
           ? e.sensor

@@ -13,10 +13,12 @@ import {
   IShellModelFactory,
   IPublicModelDragObject,
   IPublicModelScrollable,
-  IDesigner,
   IPublicModelScroller,
   IPublicTypeLocationData,
   IPublicEnumTransformStage,
+  IPublicModelDragon,
+  IPublicModelActiveTracker,
+  IPublicModelDropLocation,
 } from '@alilc/lowcode-types';
 import { megreAssets, IPublicTypeAssetsJson, isNodeSchema, isDragNodeObject, isDragNodeDataObject, isLocationChildrenDetail, Logger } from '@alilc/lowcode-utils';
 import { Project } from '../project';
@@ -57,6 +59,16 @@ export interface DesignerProps {
   [key: string]: any;
 }
 
+export interface IDesigner {
+  get dragon(): IPublicModelDragon;
+  get activeTracker(): IPublicModelActiveTracker;
+  createScroller(scrollable: IPublicModelScrollable): IPublicModelScroller;
+
+  /**
+   * 创建插入位置，考虑放到 dragon 中
+   */
+  createLocation(locationData: IPublicTypeLocationData): IPublicModelDropLocation;
+}
 
 export class Designer implements IDesigner {
   dragon: Dragon;

@@ -1,5 +1,5 @@
 import { BuiltinSimulatorRenderer, Component, DocumentModel, Node } from '@alilc/lowcode-designer';
-import { IPublicTypeComponentSchema, IPublicTypeNodeSchema, IPublicTypeNpmInfo, IPublicEnumTransformStage, NodeInstance } from '@alilc/lowcode-types';
+import { IPublicTypeComponentSchema, IPublicTypeNodeSchema, IPublicTypeNpmInfo, IPublicEnumTransformStage, IPublicTypeNodeInstance } from '@alilc/lowcode-types';
 import { Asset, compatibleLegaoSchema, cursor, isElement, isESModule, isPlainObject, isReactComponent, setNativeSelection } from '@alilc/lowcode-utils';
 import LowCodeRenderer from '@alilc/lowcode-rax-renderer';
 import { computed, observable as obx, makeObservable, configure } from 'mobx';
@@ -94,7 +94,7 @@ function isValidDesignModeRaxComponentInstance(
   raxComponentInst: any,
 ): raxComponentInst is {
   props: {
-    _leaf: Exclude<NodeInstance<any>['node'], null | undefined>;
+    _leaf: Exclude<IPublicTypeNodeInstance<any>['node'], null | undefined>;
   };
 } {
   const leaf = raxComponentInst?.props?._leaf;
@@ -370,6 +370,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   @computed get componentsMap(): any {
     return this._componentsMap;
   }
+
   /**
    * 加载资源
    */
@@ -396,7 +397,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     }
   }
 
-  getNodeInstance(dom: HTMLElement): NodeInstance<any> | null {
+  getNodeInstance(dom: HTMLElement): IPublicTypeNodeInstance<any> | null {
     const INTERNAL = '_internal';
     let instance: any = dom;
     if (!isElement(instance)) {
@@ -429,7 +430,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     return null;
   }
 
-  getClosestNodeInstance(from: any, nodeId?: string): NodeInstance<any> | null {
+  getClosestNodeInstance(from: any, nodeId?: string): IPublicTypeNodeInstance<any> | null {
     const el: any = from;
     if (el) {
       // if (isElement(el)) {
@@ -509,7 +510,6 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       s.appendChild(doc.createTextNode((schema as IPublicTypeComponentSchema).css || ''));
       doc.getElementsByTagName('head')[0].appendChild(s);
     }
-
 
     const renderer = this;
     const { componentsMap: components } = renderer;

@@ -1,5 +1,5 @@
 import { untracked, computed, obx, engineConfig, action, makeObservable, mobx, runInAction } from '@alilc/lowcode-editor-core';
-import { IPublicTypeCompositeValue, GlobalEvent, IPublicTypeJSSlot, SlotSchema, IPublicEnumTransformStage } from '@alilc/lowcode-types';
+import { IPublicTypeCompositeValue, GlobalEvent, IPublicTypeJSSlot, IPublicTypeSlotSchema, IPublicEnumTransformStage } from '@alilc/lowcode-types';
 import { uniqueId, isPlainObject, hasOwnProperty, compatStage, isJSExpression, isJSSlot } from '@alilc/lowcode-utils';
 import { valueToSource } from './value-to-source';
 import { Props } from './props';
@@ -314,10 +314,10 @@ export class Prop implements IPropParent {
   @action
   setAsSlot(data: IPublicTypeJSSlot) {
     this._type = 'slot';
-    let slotSchema: SlotSchema;
+    let slotSchema: IPublicTypeSlotSchema;
     // 当 data.value 的结构为 { componentName: 'Slot' } 时，复用部分 slotSchema 数据
     if ((isPlainObject(data.value) && data.value?.componentName === 'Slot')) {
-      const value = data.value as SlotSchema;
+      const value = data.value as IPublicTypeSlotSchema;
       slotSchema = {
         componentName: 'Slot',
         title: value.title || value.props?.slotTitle,
@@ -325,7 +325,7 @@ export class Prop implements IPropParent {
         name: value.name || value.props?.slotName,
         params: value.params || value.props?.slotParams,
         children: data.value,
-      } as SlotSchema;
+      } as IPublicTypeSlotSchema;
     } else {
       slotSchema = {
         componentName: 'Slot',
