@@ -14,6 +14,7 @@ import {
 
 import { IParseResult } from './intermediate';
 import { IScopeBindings } from '../utils/ScopeBindings';
+import type { ProjectBuilderInitOptions } from '../generator/ProjectBuilder';
 
 export enum FileType {
   CSS = 'css',
@@ -162,6 +163,11 @@ export interface IProjectBuilderOptions {
    * - expr: 求值的表达式
    */
   evalErrorsHandler?: string;
+  /**
+   * Hook which is used to customize original options, we can reorder/add/remove plugins/processors
+   * of the existing solution.
+   */
+  customizeBuilderOptions?(originalOptions: ProjectBuilderInitOptions): ProjectBuilderInitOptions;
 }
 
 export interface IProjectBuilder {
