@@ -10,18 +10,68 @@ export interface IOnChangeOptions {
   node: Node;
 }
 
-export interface INodeChildren extends IPublicModelNodeChildren {
+export interface INodeChildren extends Omit<IPublicModelNodeChildren, 'forEach' | 'map' | 'every' | 'some' | 'filter' | 'find' | 'reduce' | 'mergeChildren' > {
+  unlinkChild(node: INode): void;
+  /**
+   * 删除一个节点
+   */
+  internalDelete(
+      node: INode,
+      purge: boolean,
+      useMutator: boolean,
+      options: NodeRemoveOptions
+    ): boolean;
 
+  /**
+   * 插入一个节点，返回新长度
+   */
+  internalInsert(node: INode, at?: number | null, useMutator?: boolean): void;
+
+  import(data?: IPublicTypeNodeData | IPublicTypeNodeData[], checkId?: boolean): void;
+
+  /**
+   * 导出 schema
+   */
+  export(stage: IPublicEnumTransformStage): IPublicTypeNodeData[];
+
+  /** following methods are overriding super interface, using different param types */
+  /** overriding methods start */
+
+  forEach(fn: (item: INode, index: number) => void): void;
+
+  map<T>(fn: (item: INode, index: number) => T): T[] | null;
+
+  every(fn: (item: INode, index: number) => any): boolean;
+
+  some(fn: (item: INode, index: number) => any): boolean;
+
+  filter(fn: (item: INode, index: number) => any): any;
+
+  find(fn: (item: INode, index: number) => boolean): any;
+
+  reduce(fn: (acc: any, cur: INode) => any, initialValue: any): void;
+
+  mergeChildren(
+    remover: (node: INode, idx: number) => boolean,
+    adder: (children: INode[]) => IPublicTypeNodeData[] | null,
+    sorter: (firstNode: INode, secondNode: INode) => number,
+  ): any;
+
+  /** overriding methods end */
 }
 export class NodeChildren implements INodeChildren {
   @obx.shallow private children: INode[];
 
   private emitter: IEventBus = createModuleEventBus('NodeChildren');
 
-  constructor(readonly owner: INode, data: IPublicTypeNodeData | IPublicTypeNodeData[], options: any = {}) {
+  constructor(
+      readonly owner: INode,
+      data: IPublicTypeNodeData | IPublicTypeNodeData[],
+      options: any = {},
+    ) {
     makeObservable(this);
     this.children = (Array.isArray(data) ? data : [data]).map((child) => {
-      return this.owner.document.createNode(child, options.checkId);
+      return this.owner.document?.createNode(child, options.checkId);
     });
   }
 
@@ -36,7 +86,7 @@ export class NodeChildren implements INodeChildren {
     stage = compatStage(stage);
     return this.children.map((node) => {
       const data = node.export(stage);
-      if (node.isLeaf() && IPublicEnumTransformStage.Save === stage) {
+      if (node.isLeafNode && IPublicEnumTransformStage.Save === stage) {
         // FIXME: filter empty
         return data.children as IPublicTypeNodeData;
       }
@@ -88,13 +138,21 @@ export class NodeChildren implements INodeChildren {
   }
 
   /**
-   * 是否空
+   *
    */
   isEmpty() {
+    return this.isEmptyNode;
+  }
+
+  get isEmptyNode(): boolean {
     return this.size < 1;
   }
 
   notEmpty() {
+    return this.notEmptyNode;
+  }
+
+  get notEmptyNode(): boolean {
     return this.size > 0;
   }
 
@@ -132,9 +190,16 @@ export class NodeChildren implements INodeChildren {
   /**
    * 删除一个节点
    */
-  delete(node: INode, purge = false, useMutator = true, options: NodeRemoveOptions = {}): boolean {
+  delete(node: INode): boolean {
+    return this.internalDelete(node);
+  }
+
+  /**
+   * 删除一个节点
+   */
+  internalDelete(node: INode, purge = false, useMutator = true, options: NodeRemoveOptions = {}): boolean {
     node.internalPurgeStart();
-    if (node.isParental()) {
+    if (node.isParentalNode) {
       foreachReverse(
         node.children,
         (subNode: Node) => {
@@ -168,9 +233,9 @@ export class NodeChildren implements INodeChildren {
       const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
       editor.eventBus.emit('node.remove', { node, index: i });
     }
-    document.unlinkNode(node);
-    document.selection.remove(node.id);
-    document.destroyNode(node);
+    document?.unlinkNode(node);
+    document?.selection.remove(node.id);
+    document?.destroyNode(node);
     this.emitter.emit('change', {
       type: 'delete',
       node,
@@ -191,10 +256,14 @@ export class NodeChildren implements INodeChildren {
     return false;
   }
 
+  insert(node: INode, at?: number | null): void {
+    this.internalInsert(node, at, true);
+  }
+
   /**
    * 插入一个节点，返回新长度
    */
-  insert(node: INode, at?: number | null, useMutator = true): void {
+  internalInsert(node: INode, at?: number | null, useMutator = true): void {
     const { children } = this;
     let index = at == null || at === -1 ? children.length : at;
 
@@ -349,7 +418,7 @@ export class NodeChildren implements INodeChildren {
     return this.children.some((child, index) => fn(child, index));
   }
 
-  filter(fn: (item: INode, index: number) => any) {
+  filter(fn: (item: INode, index: number) => any): any {
     return this.children.filter(fn);
   }
 
@@ -384,7 +453,7 @@ export class NodeChildren implements INodeChildren {
       const items = adder(this.children);
       if (items && items.length > 0) {
         items.forEach((child: IPublicTypeNodeData) => {
-          const node = this.owner.document.createNode(child);
+          const node = this.owner.document?.createNode(child);
           this.children.push(node);
           node.internalSetParent(this.owner);
         });
@@ -423,10 +492,10 @@ export class NodeChildren implements INodeChildren {
     if (!node) {
       return;
     }
-    if (node.isRoot()) {
+    if (node.isRootNode) {
       return;
     }
-    const callbacks = owner.componentMeta.getMetadata().configure.advanced?.callbacks;
+    const callbacks = owner.componentMeta?.getMetadata().configure.advanced?.callbacks;
     if (callbacks?.onSubtreeModified) {
       try {
         callbacks?.onSubtreeModified.call(
@@ -439,7 +508,7 @@ export class NodeChildren implements INodeChildren {
       }
     }
 
-    if (owner.parent && !owner.parent.isRoot()) {
+    if (owner.parent && !owner.parent.isRootNode) {
       this.reportModified(node, owner.parent, { ...options, propagated: true });
     }
   }

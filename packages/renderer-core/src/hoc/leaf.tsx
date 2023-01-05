@@ -1,5 +1,5 @@
 import { BuiltinSimulatorHost, Node, IPublicTypePropChangeOptions } from '@alilc/lowcode-designer';
-import { GlobalEvent, IPublicEnumTransformStage, IPublicTypeNodeSchema, EngineOptions } from '@alilc/lowcode-types';
+import { GlobalEvent, IPublicEnumTransformStage, IPublicTypeNodeSchema, IPublicTypeEngineOptions } from '@alilc/lowcode-types';
 import { isReactComponent, cloneEnumerableProperty } from '@alilc/lowcode-utils';
 import { debounce } from '../utils/common';
 import adapter from '../adapter';
@@ -30,7 +30,7 @@ export interface IComponentHocState {
   nodeProps: any;
 }
 
-type DesignMode = Pick<EngineOptions, 'designMode'>['designMode'];
+type DesignMode = Pick<IPublicTypeEngineOptions, 'designMode'>['designMode'];
 
 export interface IComponentHoc {
   designMode: DesignMode | DesignMode[];

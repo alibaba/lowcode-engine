@@ -11,7 +11,7 @@ import {
   Hotkey as InnerHotkey,
 } from '@alilc/lowcode-editor-core';
 import {
-  EngineOptions,
+  IPublicTypeEngineOptions,
   IPublicModelDocumentModel,
   IPublicTypePluginMeta,
 } from '@alilc/lowcode-types';
@@ -158,7 +158,7 @@ engineConfig.set('ENGINE_VERSION', version);
 
 export async function init(
   container?: HTMLElement,
-  options?: EngineOptions,
+  options?: IPublicTypeEngineOptions,
   pluginPreference?: PluginPreference,
   ) {
   await destroy();

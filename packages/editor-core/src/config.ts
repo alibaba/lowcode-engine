@@ -1,7 +1,7 @@
 import { get as lodashGet } from 'lodash';
 import { isPlainObject } from '@alilc/lowcode-utils';
 import {
-  EngineOptions,
+  IPublicTypeEngineOptions,
   IPublicModelEngineConfig,
   IPublicModelPreference,
 } from '@alilc/lowcode-types';
@@ -150,7 +150,7 @@ const VALID_ENGINE_OPTIONS = {
 };
 
 
-const getStrictModeValue = (engineOptions: EngineOptions, defaultValue: boolean): boolean => {
+const getStrictModeValue = (engineOptions: IPublicTypeEngineOptions, defaultValue: boolean): boolean => {
   if (!engineOptions || !isPlainObject(engineOptions)) {
     return defaultValue;
   }
@@ -165,10 +165,9 @@ export interface IEngineConfigPrivate {
   /**
    * if engineOptions.strictPluginMode === true, only accept propertied predefined in EngineOptions.
    *
-   * @param {EngineOptions} engineOptions
-   * @memberof EngineConfig
+   * @param {IPublicTypeEngineOptions} engineOptions
    */
-  setEngineOptions(engineOptions: EngineOptions): void;
+  setEngineOptions(engineOptions: IPublicTypeEngineOptions): void;
 
   notifyGot(key: string): void;
 
@@ -203,7 +202,6 @@ export class EngineConfig implements IPublicModelEngineConfig, IEngineConfigPriv
   /**
    * 判断指定 key 是否有值
    * @param key
-   * @returns
    */
   has(key: string): boolean {
     return this.config[key] !== undefined;
@@ -213,7 +211,6 @@ export class EngineConfig implements IPublicModelEngineConfig, IEngineConfigPriv
    * 获取指定 key 的值
    * @param key
    * @param defaultValue
-   * @returns
    */
   get(key: string, defaultValue?: any): any {
     return lodashGet(this.config, key, defaultValue);
@@ -244,10 +241,9 @@ export class EngineConfig implements IPublicModelEngineConfig, IEngineConfigPriv
   /**
    * if engineOptions.strictPluginMode === true, only accept propertied predefined in EngineOptions.
    *
-   * @param {EngineOptions} engineOptions
-   * @memberof EngineConfig
+   * @param {IPublicTypeEngineOptions} engineOptions
    */
-  setEngineOptions(engineOptions: EngineOptions) {
+  setEngineOptions(engineOptions: IPublicTypeEngineOptions) {
     if (!engineOptions || !isPlainObject(engineOptions)) {
       return;
     }
