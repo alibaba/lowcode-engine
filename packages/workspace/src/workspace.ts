@@ -101,7 +101,7 @@ export class Workspace implements IPublicApiWorkspace {
 
   private remove(index: number) {
     const window = this.windows[index];
-    this.windows = this.windows.splice(index - 1, 1);
+    this.windows.splice(index, 1);
     if (this.window === window) {
       this.window = this.windows[index] || this.windows[index + 1] || this.windows[index - 1];
       this.emitChangeActiveWindow();

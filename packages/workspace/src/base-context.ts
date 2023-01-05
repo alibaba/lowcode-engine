@@ -81,7 +81,7 @@ export class BasicContext {
     const event = new Event(commonEvent, { prefix: 'common' });
     const logger = getLogger({ level: 'warn', bizName: 'common' });
     const skeleton = new Skeleton(innerSkeleton, 'any', true);
-    const canvas = new Canvas(editor);
+    const canvas = new Canvas(editor, true);
     editor.set('setters', setters);
     editor.set('project', project);
     editor.set('material', material);
