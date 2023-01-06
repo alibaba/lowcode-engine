@@ -1,9 +1,9 @@
 import { untracked, computed, obx, engineConfig, action, makeObservable, mobx, runInAction } from '@alilc/lowcode-editor-core';
-import { IPublicTypeCompositeValue, GlobalEvent, IPublicTypeJSSlot, IPublicTypeSlotSchema, IPublicEnumTransformStage } from '@alilc/lowcode-types';
+import { IPublicTypeCompositeValue, GlobalEvent, IPublicTypeJSSlot, IPublicTypeSlotSchema, IPublicEnumTransformStage, IPublicModelProp } from '@alilc/lowcode-types';
 import { uniqueId, isPlainObject, hasOwnProperty, compatStage, isJSExpression, isJSSlot } from '@alilc/lowcode-utils';
 import { valueToSource } from './value-to-source';
 import { Props } from './props';
-import { SlotNode, Node } from '../node';
+import { SlotNode, INode } from '../node';
 // import { TransformStage } from '../transform-stage';
 
 const { set: mobxSet, isObservableArray } = mobx;
@@ -11,19 +11,25 @@ export const UNSET = Symbol.for('unset');
 // eslint-disable-next-line no-redeclare
 export type UNSET = typeof UNSET;
 
-export interface IPropParent {
+export interface IProp extends Omit<IPublicModelProp, 'exportSchema' | 'node'> {
+
   delete(prop: Prop): void;
+
   readonly props: Props;
-  readonly owner: Node;
-  readonly path: string[];
+
+  readonly owner: INode;
+
+  export(stage: IPublicEnumTransformStage): IPublicTypeCompositeValue;
+
+  getNode(): INode;
 }
 
 export type ValueTypes = 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot';
 
-export class Prop implements IPropParent {
+export class Prop implements IProp {
   readonly isProp = true;
 
-  readonly owner: Node;
+  readonly owner: INode;
 
   /**
    * 键值
@@ -40,7 +46,7 @@ export class Prop implements IPropParent {
   readonly options: any;
 
   constructor(
-    public parent: IPropParent,
+    public parent: IProp,
     value: IPublicTypeCompositeValue | UNSET = UNSET,
     key?: string | number,
     spread = false,
@@ -305,9 +311,9 @@ export class Prop implements IPropParent {
     }
   }
 
-  private _slotNode?: SlotNode;
+  private _slotNode?: INode;
 
-  get slotNode() {
+  get slotNode(): INode | undefined | null {
     return this._slotNode;
   }
 
@@ -342,8 +348,10 @@ export class Prop implements IPropParent {
     } else {
       const { owner } = this.props;
       this._slotNode = owner.document.createNode<SlotNode>(slotSchema);
-      owner.addSlot(this._slotNode);
-      this._slotNode.internalSetSlotFor(this);
+      if (this._slotNode) {
+        owner.addSlot(this._slotNode);
+        this._slotNode.internalSetSlotFor(this);
+      }
     }
   }
 
