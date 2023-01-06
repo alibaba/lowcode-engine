@@ -2,7 +2,7 @@ import { untracked, computed, obx, engineConfig, action, makeObservable, mobx, r
 import { IPublicTypeCompositeValue, GlobalEvent, IPublicTypeJSSlot, IPublicTypeSlotSchema, IPublicEnumTransformStage, IPublicModelProp } from '@alilc/lowcode-types';
 import { uniqueId, isPlainObject, hasOwnProperty, compatStage, isJSExpression, isJSSlot } from '@alilc/lowcode-utils';
 import { valueToSource } from './value-to-source';
-import { Props } from './props';
+import { Props, IProps, IPropParent } from './props';
 import { SlotNode, INode } from '../node';
 // import { TransformStage } from '../transform-stage';
 
@@ -13,11 +13,11 @@ export type UNSET = typeof UNSET;
 
 export interface IProp extends Omit<IPublicModelProp, 'exportSchema' | 'node'> {
 
-  delete(prop: Prop): void;
-
   readonly props: Props;
 
   readonly owner: INode;
+
+  delete(prop: Prop): void;
 
   export(stage: IPublicEnumTransformStage): IPublicTypeCompositeValue;
 
@@ -26,7 +26,7 @@ export interface IProp extends Omit<IPublicModelProp, 'exportSchema' | 'node'> {
 
 export type ValueTypes = 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot';
 
-export class Prop implements IProp {
+export class Prop implements IProp, IPropParent {
   readonly isProp = true;
 
   readonly owner: INode;
@@ -45,8 +45,152 @@ export class Prop implements IProp {
 
   readonly options: any;
 
+  readonly id = uniqueId('prop$');
+
+  @obx.ref private _type: ValueTypes = 'unset';
+
+  /**
+   * 属性类型
+   */
+  get type(): ValueTypes {
+    return this._type;
+  }
+
+  @obx private _value: any = UNSET;
+
+  /**
+   * 属性值
+   */
+  @computed get value(): IPublicTypeCompositeValue | UNSET {
+    return this.export(IPublicEnumTransformStage.Serilize);
+  }
+
+  private _code: string | null = null;
+
+  /**
+   * 获得表达式值
+   */
+  @computed get code() {
+    if (isJSExpression(this.value)) {
+      return this.value.value;
+    }
+    // todo: JSFunction ...
+    if (this.type === 'slot') {
+      return JSON.stringify(this._slotNode!.export(IPublicEnumTransformStage.Save));
+    }
+    return this._code != null ? this._code : JSON.stringify(this.value);
+  }
+
+  /**
+   * 设置表达式值
+   */
+  set code(code: string) {
+    if (isJSExpression(this._value)) {
+      this.setValue({
+        ...this._value,
+        value: code,
+      });
+      this._code = code;
+      return;
+    }
+
+    try {
+      const v = JSON.parse(code);
+      this.setValue(v);
+      this._code = code;
+      return;
+    } catch (e) {
+      // ignore
+    }
+
+    this.setValue({
+      type: 'JSExpression',
+      value: code,
+      mock: this._value,
+    });
+    this._code = code;
+  }
+
+  private _slotNode?: INode;
+
+  get slotNode(): INode | undefined | null {
+    return this._slotNode;
+  }
+
+  @obx.shallow private _items: Prop[] | null = null;
+
+  @obx.shallow private _maps: Map<string | number, Prop> | null = null;
+
+  /**
+   * 作为 _maps 的一层缓存机制，主要是复用部分已存在的 Prop，保持响应式关系，比如：
+   * 当前 Prop#_value 值为 { a: 1 }，当调用 setValue({ a: 2 }) 时，所有原来的子 Prop 均被销毁，
+   * 导致假如外部有 mobx reaction（常见于 observer），此时响应式链路会被打断，
+   * 因为 reaction 监听的是原 Prop(a) 的 _value，而不是新 Prop(a) 的 _value。
+   */
+  private _prevMaps: Map<string | number, Prop> | null = null;
+
+  /**
+   * 构造 items 属性，同时构造 maps 属性
+   */
+  private get items(): Prop[] | null {
+    if (this._items) return this._items;
+    return runInAction(() => {
+      let items: Prop[] | null = null;
+      if (this._type === 'list') {
+        const data = this._value;
+        data.forEach((item: any, idx: number) => {
+          items = items || [];
+          items.push(new Prop(this, item, idx));
+        });
+        this._maps = null;
+      } else if (this._type === 'map') {
+        const data = this._value;
+        const maps = new Map<string, Prop>();
+        const keys = Object.keys(data);
+        for (const key of keys) {
+          let prop: Prop;
+          if (this._prevMaps?.has(key)) {
+            prop = this._prevMaps.get(key)!;
+            prop.setValue(data[key]);
+          } else {
+            prop = new Prop(this, data[key], key);
+          }
+          items = items || [];
+          items.push(prop);
+          maps.set(key, prop);
+        }
+        this._maps = maps;
+      } else {
+        items = null;
+        this._maps = null;
+      }
+      this._items = items;
+      return this._items;
+    });
+  }
+
+  @computed private get maps(): Map<string | number, Prop> | null {
+    if (!this.items) {
+      return null;
+    }
+    return this._maps;
+  }
+
+  get path(): string[] {
+    return (this.parent.path || []).concat(this.key as string);
+  }
+
+  /**
+   * 元素个数
+   */
+  get size(): number {
+    return this.items?.length || 0;
+  }
+
+  private purged = false;
+
   constructor(
-    public parent: IProp,
+    public parent: IPropParent,
     value: IPublicTypeCompositeValue | UNSET = UNSET,
     key?: string | number,
     spread = false,
@@ -92,26 +236,6 @@ export class Prop implements IProp {
   @action
   clearPropValue(propName: string | number): void {
     this.get(propName, false)?.unset();
-  }
-
-  readonly id = uniqueId('prop$');
-
-  @obx.ref private _type: ValueTypes = 'unset';
-
-  /**
-   * 属性类型
-   */
-  get type(): ValueTypes {
-    return this._type;
-  }
-
-  @obx private _value: any = UNSET;
-
-  /**
-   * 属性值
-   */
-  @computed get value(): IPublicTypeCompositeValue | UNSET {
-    return this.export(IPublicEnumTransformStage.Serilize);
   }
 
   export(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Save): IPublicTypeCompositeValue {
@@ -184,52 +308,6 @@ export class Prop implements IProp {
       }
       return values;
     }
-  }
-
-  private _code: string | null = null;
-
-  /**
-   * 获得表达式值
-   */
-  @computed get code() {
-    if (isJSExpression(this.value)) {
-      return this.value.value;
-    }
-    // todo: JSFunction ...
-    if (this.type === 'slot') {
-      return JSON.stringify(this._slotNode!.export(IPublicEnumTransformStage.Save));
-    }
-    return this._code != null ? this._code : JSON.stringify(this.value);
-  }
-
-  /**
-   * 设置表达式值
-   */
-  set code(code: string) {
-    if (isJSExpression(this._value)) {
-      this.setValue({
-        ...this._value,
-        value: code,
-      });
-      this._code = code;
-      return;
-    }
-
-    try {
-      const v = JSON.parse(code);
-      this.setValue(v);
-      this._code = code;
-      return;
-    } catch (e) {
-      // ignore
-    }
-
-    this.setValue({
-      type: 'JSExpression',
-      value: code,
-      mock: this._value,
-    });
-    this._code = code;
   }
 
   getAsString(): string {
@@ -311,12 +389,6 @@ export class Prop implements IProp {
     }
   }
 
-  private _slotNode?: INode;
-
-  get slotNode(): INode | undefined | null {
-    return this._slotNode;
-  }
-
   @action
   setAsSlot(data: IPublicTypeJSSlot) {
     this._type = 'slot';
@@ -395,69 +467,6 @@ export class Prop implements IProp {
 
     // 'literal' | 'map' | 'expression' | 'slot'
     return this.code === other.code ? 0 : 2;
-  }
-
-  @obx.shallow private _items: Prop[] | null = null;
-
-  @obx.shallow private _maps: Map<string | number, Prop> | null = null;
-
-  /**
-   * 作为 _maps 的一层缓存机制，主要是复用部分已存在的 Prop，保持响应式关系，比如：
-   * 当前 Prop#_value 值为 { a: 1 }，当调用 setValue({ a: 2 }) 时，所有原来的子 Prop 均被销毁，
-   * 导致假如外部有 mobx reaction（常见于 observer），此时响应式链路会被打断，
-   * 因为 reaction 监听的是原 Prop(a) 的 _value，而不是新 Prop(a) 的 _value。
-   */
-  private _prevMaps: Map<string | number, Prop> | null = null;
-
-  get path(): string[] {
-    return (this.parent.path || []).concat(this.key as string);
-  }
-
-  /**
-   * 构造 items 属性，同时构造 maps 属性
-   */
-  private get items(): Prop[] | null {
-    if (this._items) return this._items;
-    return runInAction(() => {
-      let items: Prop[] | null = null;
-      if (this._type === 'list') {
-        const data = this._value;
-        data.forEach((item: any, idx: number) => {
-          items = items || [];
-          items.push(new Prop(this, item, idx));
-        });
-        this._maps = null;
-      } else if (this._type === 'map') {
-        const data = this._value;
-        const maps = new Map<string, Prop>();
-        const keys = Object.keys(data);
-        for (const key of keys) {
-          let prop: Prop;
-          if (this._prevMaps?.has(key)) {
-            prop = this._prevMaps.get(key)!;
-            prop.setValue(data[key]);
-          } else {
-            prop = new Prop(this, data[key], key);
-          }
-          items = items || [];
-          items.push(prop);
-          maps.set(key, prop);
-        }
-        this._maps = maps;
-      } else {
-        items = null;
-        this._maps = null;
-      }
-      this._items = items;
-      return this._items;
-    });
-  }
-
-  @computed private get maps(): Map<string | number, Prop> | null {
-    if (!this.items) {
-      return null;
-    }
-    return this._maps;
   }
 
   /**
@@ -553,13 +562,6 @@ export class Prop implements IProp {
   }
 
   /**
-   * 元素个数
-   */
-  get size(): number {
-    return this.items?.length || 0;
-  }
-
-  /**
    * 添加值到列表
    *
    * @param force 强制
@@ -647,8 +649,6 @@ export class Prop implements IProp {
     }
     return hasOwnProperty(this._value, key);
   }
-
-  private purged = false;
 
   /**
    * 回收销毁

@@ -48,5 +48,9 @@ module.exports = {
       "afterLineComment": false,
       "allowBlockStart": true,
     }],
+    "@typescript-eslint/member-ordering": [
+      "error",
+      { "default": ["signature", "field", "constructor", "method"] }
+    ],
   }
 };
