@@ -37,6 +37,8 @@ export type GetDataType<T, NodeType> = T extends undefined
   : T;
 export interface IDocumentModel extends IPublicModelDocumentModel {
 
+  readonly designer: Designer;
+
 }
 
 export class DocumentModel implements IDocumentModel {

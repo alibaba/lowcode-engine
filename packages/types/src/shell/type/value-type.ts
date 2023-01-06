@@ -7,16 +7,19 @@ import { IPublicTypeNodeData, IPublicTypeCompositeValue, IPublicTypeNodeSchema }
  */
 export interface IPublicTypeJSExpression {
   type: 'JSExpression';
+
   /**
    * 表达式字符串
    */
   value: string;
+
   /**
    * 模拟值
    *
    * @todo 待标准描述
    */
   mock?: any;
+
   /**
    * 源码
    *
@@ -33,6 +36,7 @@ export interface IPublicTypeJSExpression {
  */
 export interface IPublicTypeJSFunction {
   type: 'JSFunction';
+
   /**
    * 函数定义，或直接函数表达式
    */
@@ -66,21 +70,34 @@ export interface IPublicTypeJSFunction {
  * 通常用于描述组件的某一个属性为 ReactNode 或 Function return ReactNode 的场景。
  */
 export interface IPublicTypeJSSlot {
+
+  /**
+   * type
+   */
   type: 'JSSlot';
+
   /**
    * @todo 待标准描述
    */
   title?: string;
+
+  /**
+   * @todo 待标准描述
+   */
+  id?: string;
+
   /**
    * 组件的某一个属性为 Function return ReactNode 时，函数的入参
    *
    * 其子节点可以通过 this[参数名] 来获取对应的参数。
    */
   params?: string[];
+
   /**
    * 具体的值。
    */
   value?: IPublicTypeNodeData[] | IPublicTypeNodeData;
+
   /**
    * @todo 待标准描述
    */

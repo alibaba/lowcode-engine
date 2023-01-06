@@ -4,6 +4,7 @@ import { IPublicEnumTransformStage } from '../enum';
 import { IPublicModelNodeChildren, IPublicModelComponentMeta, IPublicModelProp, IPublicModelProps, IPublicModelSettingTopEntry, IPublicModelDocumentModel, IPublicModelExclusiveGroup } from './';
 
 export interface IPublicModelNode {
+
   /**
    * 节点 id
    * node id

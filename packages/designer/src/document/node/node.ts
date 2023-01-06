@@ -19,7 +19,7 @@ import {
 import { compatStage, isDOMText, isJSExpression } from '@alilc/lowcode-utils';
 import { SettingTopEntry } from '@alilc/lowcode-designer';
 import { Props, getConvertedExtraKey } from './props/props';
-import { DocumentModel } from '../document-model';
+import { DocumentModel, IDocumentModel } from '../document-model';
 import { NodeChildren, INodeChildren } from './node-children';
 import { Prop } from './props/prop';
 import { ComponentMeta } from '../../component-meta';
@@ -55,6 +55,21 @@ export interface INode extends IPublicModelNode {
   unlinkSlot(slotNode: Node): void;
 
   didDropOut(dragment: Node): void;
+
+  /**
+   * 导出 schema
+   */
+  export(stage: IPublicEnumTransformStage, options?: any): IPublicTypeNodeSchema;
+
+  get document(): IDocumentModel;
+
+  emitPropChange(val: IPublicTypePropChangeOptions): void;
+
+  import(data: IPublicTypeNodeSchema, checkId?: boolean): void;
+
+  internalSetSlotFor(slotFor: Prop | null | undefined): void;
+
+  addSlot(slotNode: INode): void;
 }
 
 /**
@@ -189,7 +204,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
 
   isInited = false;
 
-  constructor(readonly document: DocumentModel, nodeSchema: Schema, options: any = {}) {
+  constructor(readonly document: IDocumentModel, nodeSchema: Schema, options: any = {}) {
     makeObservable(this);
     const { componentName, id, children, props, ...extras } = nodeSchema;
     this.id = document.nextId(id);
@@ -521,7 +536,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     return this.props.export(IPublicEnumTransformStage.Serilize).props || null;
   }
 
-  @obx.shallow _slots: Node[] = [];
+  @obx.shallow _slots: INode[] = [];
 
   hasSlots() {
     return this._slots.length > 0;
@@ -885,7 +900,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     return false;
   }
 
-  addSlot(slotNode: Node) {
+  addSlot(slotNode: INode) {
     const slotName = slotNode?.getExtraProp('name')?.getAsString();
     // 一个组件下的所有 slot，相同 slotName 的 slot 应该是唯一的
     if (includeSlot(this, slotName)) {

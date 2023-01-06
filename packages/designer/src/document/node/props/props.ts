@@ -1,7 +1,7 @@
 import { computed, makeObservable, obx, action } from '@alilc/lowcode-editor-core';
 import { IPublicTypePropsMap, IPublicTypePropsList, IPublicTypeCompositeValue, IPublicEnumTransformStage } from '@alilc/lowcode-types';
 import { uniqueId, compatStage } from '@alilc/lowcode-utils';
-import { Prop, IPropParent, UNSET } from './prop';
+import { Prop, IProp, UNSET } from './prop';
 import { Node } from '../node';
 // import { TransformStage } from '../transform-stage';
 
@@ -23,7 +23,7 @@ export function getConvertedExtraKey(key: string): string {
 export function getOriginalExtraKey(key: string): string {
   return key.replace(new RegExp(`${EXTRA_KEY_PREFIX}`, 'g'), '');
 }
-export class Props implements IPropParent {
+export class Props implements IProp {
   readonly id = uniqueId('props');
 
   @obx.shallow private items: Prop[] = [];

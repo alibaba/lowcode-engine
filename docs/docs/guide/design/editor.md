@@ -313,7 +313,7 @@ simulator-renderer 通过调用 host 的方法，将 schema、components 等参�
 
 - 被拖拽对象 - `DragObject`
 - 拖拽到的目标位置 - `DropLocation`
-- 拖拽感应区 - `ISensor`
+- 拖拽感应区 - `IPublicModelSensor`
 - 定位事件 - `LocateEvent`
 
 ##### Sensor

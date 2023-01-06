@@ -1,4 +1,4 @@
-import { IPropParent as InnerProps, getConvertedExtraKey } from '@alilc/lowcode-designer';
+import { IProp as InnerProps, getConvertedExtraKey } from '@alilc/lowcode-designer';
 import { IPublicTypeCompositeValue, IPublicModelProps, IPublicModelNode, IPublicModelProp } from '@alilc/lowcode-types';
 import { propsSymbol } from '../symbols';
 import { Node } from './node';
