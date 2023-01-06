@@ -1,6 +1,6 @@
 ---
 title: 资产包管理
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 ## 介绍
@@ -52,3 +52,8 @@ sidebar_position: 3
 在 [**lowcode-demo**](https://github.com/alibaba/lowcode-demo)**中直接引用，可直接替换 demo 中原来的资产包文件：**
 
 例如，在 basic-fusion 或者 lowcode-component demo 中，直接用你的资产包文件替换文件[assets.json](https://github.com/alibaba/lowcode-demo/blob/main/demo-basic-fusion/src/services/assets.json)，即可快速使用自己的物料了。
+
+
+## 联系我们
+
+<img src="https://img.alicdn.com/imgextra/i2/O1CN01UF88Xi1jC5SZ6m4wt_!!6000000004511-2-tps-750-967.png" width="300" />

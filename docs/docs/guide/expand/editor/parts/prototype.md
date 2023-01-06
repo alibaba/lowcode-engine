@@ -1,6 +1,6 @@
 ---
 title: React 组件导入
-sidebar_position: 2
+sidebar_position: 3
 ---
 ## 介绍
 大家在使用[低代码引擎](https://lowcode-engine.cn/)构建低代码应用平台时，遇到的一个主要问题是如何让已有的 React 组件能够快速低成本地接入进来。这个问题拆解下来主要包括两个子问题：1. 如何给已有组件[配置物料描述](https://lowcode-engine.cn/material)，2. 如何构建出一个低代码引擎能够识别的资产包(Assets)。
@@ -98,3 +98,7 @@ sidebar_position: 2
 - components中是上面配置好的[物料描述](https://lowcode-engine.cn/material)，你也可以在基础上二次加工
 
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/12718919/1652434804944-860abc0c-057c-46d5-a6e5-8d33fde8a762.png#clientId=u0f780a28-b8dc-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=676&id=u5499b1c9&margin=%5Bobject%20Object%5D&name=image.png&originHeight=744&originWidth=1140&originalType=binary&ratio=1&rotation=0&showTitle=false&size=116233&status=done&style=stroke&taskId=u7be27934-77ce-4dd7-a406-1d402acef2c&title=&width=1036.36361390106)
+
+## 联系我们
+
+<img src="https://img.alicdn.com/imgextra/i2/O1CN01UF88Xi1jC5SZ6m4wt_!!6000000004511-2-tps-750-967.png" width="300" />
