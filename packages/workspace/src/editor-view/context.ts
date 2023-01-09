@@ -13,13 +13,13 @@ export class Context extends BasicContext {
 
   viewType: 'editor' | 'webview';
 
-  constructor(public workspace: InnerWorkspace, public editorWindow: EditorWindow, public editorView: IPublicEditorView) {
+  constructor(public workspace: InnerWorkspace, public editorWindow: EditorWindow, public editorView: IPublicEditorView, options: Object) {
     super(workspace, editorView.viewName, editorWindow);
     this.viewType = editorView.viewType || 'editor';
     this.viewName = editorView.viewName;
     this.instance = editorView(this.innerPlugins._getLowCodePluginContext({
       pluginName: 'any',
-    }));
+    }), options);
     makeObservable(this);
   }
 

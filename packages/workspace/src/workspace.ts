@@ -1,16 +1,19 @@
 import { Designer } from '@alilc/lowcode-designer';
 import { createModuleEventBus, Editor, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
 import { Plugins } from '@alilc/lowcode-shell';
-import { IPublicApiWorkspace, IPublicResourceOptions } from '@alilc/lowcode-types';
+import { IPublicApiWorkspace, IPublicResourceList, IPublicResourceOptions } from '@alilc/lowcode-types';
 import { BasicContext } from './base-context';
 import { EditorWindow } from './editor-window/context';
 import { Resource } from './resource';
+import { ResourceType } from './resource-type';
 
 enum event {
   ChangeWindow = 'change_window',
 
   ChangeActiveWindow = 'change_active_window',
 }
+
+const CHANGE_EVENT = 'resource.list.change';
 
 export class Workspace implements IPublicApiWorkspace {
   private context: BasicContext;
@@ -42,14 +45,13 @@ export class Workspace implements IPublicApiWorkspace {
     if (!this.defaultResource) {
       return;
     }
-    const title = this.defaultResource.title;
+    const title = this.defaultResource.description;
     this.window = new EditorWindow(this.defaultResource, this, title);
     this.editorWindowMap.set(this.window.id, this.window);
     this.windows.push(this.window);
     this.emitChangeWindow();
     this.emitChangeActiveWindow();
   }
-
 
   private _isActive = false;
 
@@ -67,12 +69,14 @@ export class Workspace implements IPublicApiWorkspace {
 
   @obx.ref window: EditorWindow;
 
-  private resources: Map<string, Resource> = new Map();
+  private resourceTypeMap: Map<string, ResourceType> = new Map();
 
-  async registerResourceType(resourceName: string, resourceType: 'editor' | 'webview', options: IPublicResourceOptions): Promise<void> {
-    if (resourceType === 'editor') {
-      const resource = new Resource(options);
-      this.resources.set(resourceName, resource);
+  private resourceList: Resource[] = [];
+
+  async registerResourceType(resourceName: string, type: 'editor' | 'webview', options: IPublicResourceOptions): Promise<void> {
+    if (type === 'editor') {
+      const resourceType = new ResourceType(resourceName, type, options);
+      this.resourceTypeMap.set(resourceName, resourceType);
 
       if (!this.window && this.defaultResource) {
         this.initWindow();
@@ -80,17 +84,37 @@ export class Workspace implements IPublicApiWorkspace {
     }
   }
 
-  get defaultResource(): Resource | null {
-    if (this.resources.size > 1) {
-      return this.resources.values().next().value;
+  getResourceList() {
+    return this.resourceList;
+  }
+
+  setResourceList(resourceList: IPublicResourceList) {
+    this.resourceList = resourceList.map(d => new Resource(d, this.getResourceType(d.resourceName)));
+    this.emitter.emit(CHANGE_EVENT, resourceList);
+  }
+
+  onResourceListChange(fn: (resourceList: IPublicResourceList) => void): () => void {
+    this.emitter.on(CHANGE_EVENT, fn);
+    return () => {
+      this.emitter.off(CHANGE_EVENT, fn);
+    };
+  }
+
+  getResourceType(resourceName: string): ResourceType {
+    return this.resourceTypeMap.get(resourceName)!;
+  }
+
+  get defaultResource(): ResourceType | null {
+    if (this.resourceTypeMap.size > 1) {
+      return this.resourceTypeMap.values().next().value;
     }
 
     return null;
   }
 
   removeResourceType(resourceName: string) {
-    if (this.resources.has(resourceName)) {
-      this.resources.delete(resourceName);
+    if (this.resourceTypeMap.has(resourceName)) {
+      this.resourceTypeMap.delete(resourceName);
     }
   }
 
@@ -110,7 +134,7 @@ export class Workspace implements IPublicApiWorkspace {
   }
 
   removeEditorWindow(resourceName: string, title: string) {
-    const index = this.windows.findIndex(d => (d.resourceName === resourceName && d.title));
+    const index = this.windows.findIndex(d => (d.resourceType.name === resourceName && d.title));
     this.remove(index);
   }
 
@@ -122,19 +146,19 @@ export class Workspace implements IPublicApiWorkspace {
     }
   }
 
-  openEditorWindow(resourceName: string, title: string, viewType?: string) {
-    const resource = this.resources.get(resourceName);
-    if (!resource) {
-      console.error(`${resourceName} is not available`);
+  openEditorWindow(name: string, title: string, options: Object, viewType?: string) {
+    const resourceType = this.resourceTypeMap.get(name);
+    if (!resourceType) {
+      console.error(`${name} is not available`);
       return;
     }
-    const filterWindows = this.windows.filter(d => (d.resourceName === resourceName && d.title == title));
+    const filterWindows = this.windows.filter(d => (d.resourceType.name === name && d.title == title));
     if (filterWindows && filterWindows.length) {
       this.window = filterWindows[0];
       this.emitChangeActiveWindow();
       return;
     }
-    this.window = new EditorWindow(resource, this, title);
+    this.window = new EditorWindow(resourceType, this, title, options);
     this.windows.push(this.window);
     this.editorWindowMap.set(this.window.id, this.window);
     this.emitChangeWindow();
