@@ -1,4 +1,5 @@
 export { Workspace } from './workspace';
-export { Resource } from './resource';
+export { ResourceType } from './resource-type';
 export * from './editor-window/context';
 export * from './layouts/workbench';
+export { Resource } from './resource';
