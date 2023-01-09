@@ -53,6 +53,11 @@ sidebar_position: 4
 
 例如，在 basic-fusion 或者 lowcode-component demo 中，直接用你的资产包文件替换文件[assets.json](https://github.com/alibaba/lowcode-demo/blob/main/demo-basic-fusion/src/services/assets.json)，即可快速使用自己的物料了。
 
+### 在编辑器中使用资产包
+在使用含有低代码组件的资产包注意 注意引擎版本必须大于等于 `1.1.0-beta.9`。
+### 在预览中使用资产包
+在预览中使用资产包的整体思路是从 `资产包` 中提取并转换出 `ReactRenderer` 渲染所需要的 react 组件列表(`components` 参数)，然后将 `schema` 以及 `components` 传入到 `ReactRenderer` 中进行渲染，需要注意的是，在 `资产包` 的转换过程中，我们也需要将 `低代码组件` 转换成 react 组件， 具体逻辑可以参考下 `demo-lowcode-component` 中 `src/parse-assets.ts` 文件的实现。
+
 
 ## 联系我们
 
