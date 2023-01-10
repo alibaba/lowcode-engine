@@ -48,17 +48,268 @@ sidebar_position: 4
 构建历史界面会显示当前资产包所有的构建历史记录，表格状态栏展示了构建的状态：`成功`,`失败`,`正在运行` 三种状态， 操作列可以在构建成功时复制或者下载资产包结果
 
 ## 使用资产包
-
-在 [**lowcode-demo**](https://github.com/alibaba/lowcode-demo)**中直接引用，可直接替换 demo 中原来的资产包文件：**
-
-例如，在 basic-fusion 或者 lowcode-component demo 中，直接用你的资产包文件替换文件[assets.json](https://github.com/alibaba/lowcode-demo/blob/main/demo-basic-fusion/src/services/assets.json)，即可快速使用自己的物料了。
+你可以在 [lowcode-demo](https://github.com/alibaba/lowcode-demo) 中直接引用，可直接替换demo中原来的资产包文件：
+例如，在 [demo-lowcode-component](https://github.com/alibaba/lowcode-demo/tree/main/demo-lowcode-component) 中，直接用你的资产包文件替换文件[assets.json](https://github.com/alibaba/lowcode-demo/blob/main/demo-lowcode-component/src/services/assets.json)，即可快速使用自己的物料了。
 
 ### 在编辑器中使用资产包
-在使用含有低代码组件的资产包注意 注意引擎版本必须大于等于 `1.1.0-beta.9`。
+在使用含有低代码组件的资产包注意 注意引擎版本必须大于等于 `1.1.0-beta.9`, 我们可以在设计器的初始化插件中完成资产包的注入，[详见](https://github.com/alibaba/lowcode-demo/blob/main/demo-lowcode-component/src/plugins/plugin-editor-init/index.tsx)， 示例如下：
+```ts
+import { ILowCodePluginContext } from '@alilc/lowcode-engine';
+import { injectAssets } from '@alilc/lowcode-plugin-inject';
+import assets from '../../services/assets.json';
+import { getPageSchema } from '../../services/mockService';
+const EditorInitPlugin = (ctx: ILowCodePluginContext, options: any) => {
+  return {
+    async init() {
+      const { material, project, config } = ctx;
+      const scenarioName = options['scenarioName'];
+      const scenarioDisplayName = options['displayName'] || scenarioName;
+      const scenarioInfo = options['info'] || {};
+      config.set('scenarioName', scenarioName);
+      config.set('scenarioDisplayName', scenarioDisplayName);
+      config.set('scenarioInfo', scenarioInfo);
+
+      // 注入资产包
+      await material.setAssets(await injectAssets(assets));
+
+      const schema = await getPageSchema(scenarioName);
+
+      // 加载 schema
+      project.openDocument(schema);
+    },
+  };
+}
+EditorInitPlugin.pluginName = 'EditorInitPlugin';
+EditorInitPlugin.meta = {
+  preferenceDeclaration: {
+    title: '保存插件配置',
+    properties: [
+      {
+        key: 'scenarioName',
+        type: 'string',
+        description: '用于localstorage存储key',
+      },
+      {
+        key: 'displayName',
+        type: 'string',
+        description: '用于显示的场景名',
+      },
+      {
+        key: 'info',
+        type: 'object',
+        description: '用于扩展信息',
+      }
+    ],
+  },
+};
+export default EditorInitPlugin;
+```
 ### 在预览中使用资产包
-在预览中使用资产包的整体思路是从 `资产包` 中提取并转换出 `ReactRenderer` 渲染所需要的 react 组件列表(`components` 参数)，然后将 `schema` 以及 `components` 传入到 `ReactRenderer` 中进行渲染，需要注意的是，在 `资产包` 的转换过程中，我们也需要将 `低代码组件` 转换成 react 组件， 具体逻辑可以参考下 `demo-lowcode-component` 中 `src/parse-assets.ts` 文件的实现。
+在预览中使用资产包的整体思路是从 `资产包` 中提取并转换出 `ReactRenderer` 渲染所需要的 react 组件列表(`components` 参数)，然后将 `schema` 以及 `components` 传入到 `ReactRenderer` 中进行渲染，需要注意的是，在 `资产包` 的转换过程中，我们也需要将 `低代码组件` 转换成 react 组件， 具体逻辑可以参考下 [demo-lowcode-component](https://github.com/alibaba/lowcode-demo/tree/main/demo-lowcode-component) 中 `src/parse-assets.ts` 文件的实现。
+基于资产包进行预览的整体逻辑如下： [详见](https://github.com/alibaba/lowcode-demo/blob/main/demo-lowcode-component/src/preview.tsx)：
+```ts
+import ReactDOM from 'react-dom';
+import React, { useState } from 'react';
+import { Loading } from '@alifd/next';
+import ReactRenderer from '@alilc/lowcode-react-renderer';
+import { createFetchHandler } from '@alilc/lowcode-datasource-fetch-handler';
+import {
+  getProjectSchemaFromLocalStorage,
+} from './services/mockService';
+import assets from './services/assets.json';
+import { parseAssets } from './parse-assets';
 
+const getScenarioName = function () {
+  if (location.search) {
+    return new URLSearchParams(location.search.slice(1)).get('scenarioName') || 'index';
+  }
+  return 'index';
+};
 
+const SamplePreview = () => {
+  const [data, setData] = useState({});
+  async function init() {
+    const scenarioName = getScenarioName();
+    const projectSchema = getProjectSchemaFromLocalStorage(scenarioName);
+    const { componentsMap: componentsMapArray, componentsTree } = projectSchema;
+    const schema = componentsTree[0];
+    const componentsMap: any = {};
+    componentsMapArray.forEach((component: any) => {
+      componentsMap[component.componentName] = component;
+    });
+    // 从资产包中解析出所有的 react 组件列表
+    const { components } = await parseAssets(assets);
+
+    setData({
+      schema,
+      components,
+    });
+  }
+
+  const { schema, components } = data;
+
+  if (!schema || !components) {
+    init();
+    return <Loading fullScreen />;
+  }
+
+  return (
+    <div className="lowcode-plugin-sample-preview">
+      <ReactRenderer
+        className="lowcode-plugin-sample-preview-content"
+        schema={schema}
+        // // 将 react 组件列表传入 ReactRenderer 进行渲染
+        components={components}
+        appHelper={{
+          requestHandlersMap: {
+            fetch: createFetchHandler(),
+          },
+        }}
+      />
+    </div>
+  );
+};
+
+ReactDOM.render(<SamplePreview />, document.getElementById('ice-container'));
+```
+
+从资产包中解析 react 组件列表的逻辑如下, [详见](https://github.com/alibaba/lowcode-demo/blob/main/demo-lowcode-component/src/parse-assets.ts)：
+```ts
+import { ComponentDescription, ComponentSchema, RemoteComponentDescription } from '@alilc/lowcode-types';
+import { buildComponents, AssetsJson, AssetLoader } from '@alilc/lowcode-utils';
+import ReactRenderer from '@alilc/lowcode-react-renderer';
+import { injectComponents } from '@alilc/lowcode-plugin-inject';
+import React, { createElement } from 'react';
+
+export async function parseAssets(assets: AssetsJson) {
+  const { components: rawComponents, packages } = assets;
+  const libraryAsset = [];
+  const libraryMap = {};
+  const packagesMap = {};
+  packages.forEach(pkg => {
+    const { package: _package, library, urls, renderUrls, id } = pkg;
+    if (_package) {
+      libraryMap[id || _package] = library;
+    }
+    packagesMap[id || _package] = pkg;
+    if (renderUrls) {
+      libraryAsset.push(renderUrls);
+    } else if (urls) {
+      libraryAsset.push(urls);
+    }
+  });
+  const assetLoader = new AssetLoader();
+  await assetLoader.load(libraryAsset);
+  let newComponents = rawComponents;
+  if (rawComponents && rawComponents.length) {
+    const componentDescriptions: ComponentDescription[] = [];
+    const remoteComponentDescriptions: RemoteComponentDescription[] = [];
+    rawComponents.forEach((component: any) => {
+      if (!component) {
+        return;
+      }
+      if (component.exportName && component.url) {
+        remoteComponentDescriptions.push(component);
+      } else {
+        componentDescriptions.push(component);
+      }
+    });
+    newComponents = [...componentDescriptions];
+
+    // 如果有远程组件描述协议，则自动加载并补充到资产包中，同时出发 designer.incrementalAssetsReady 通知组件面板更新数据
+    if (remoteComponentDescriptions && remoteComponentDescriptions.length) {
+      await Promise.all(
+        remoteComponentDescriptions.map(async (component: any) => {
+          const { exportName, url, npm } = component;
+          await (new AssetLoader()).load(url);
+          function setAssetsComponent(component: any, extraNpmInfo: any = {}) {
+            const components = component.components;
+            if (Array.isArray(components)) {
+              components.forEach(d => {
+                newComponents = newComponents.concat({
+                  npm: {
+                    ...npm,
+                    ...extraNpmInfo,
+                  },
+                  ...d,
+                } || []);
+              });
+              return;
+            }
+            newComponents = newComponents.concat({
+              npm: {
+                ...npm,
+                ...extraNpmInfo,
+              },
+              ...component.components,
+            } || []);
+          }
+
+          function setArrayAssets(value: any[], preExportName: string = '', preSubName: string = '') {
+            value.forEach((d: any, i: number) => {
+              const exportName = [preExportName, i.toString()].filter(d => !!d).join('.');
+              const subName = [preSubName, i.toString()].filter(d => !!d).join('.');
+              Array.isArray(d) ? setArrayAssets(d, exportName, subName) : setAssetsComponent(d, {
+                exportName,
+                subName,
+              });
+            });
+          }
+          if (window[exportName]) {
+            if (Array.isArray(window[exportName])) {
+              setArrayAssets(window[exportName] as any);
+            } else {
+              setAssetsComponent(window[exportName] as any);
+            }
+          }
+          return window[exportName];
+        }),
+      );
+    }
+  }
+  const lowcodeComponentsArray = [];
+  const proCodeComponentsMap = newComponents.reduce((acc, cur) => {
+    if ((cur.devMode || '').toLowerCase() === 'lowcode') {
+      lowcodeComponentsArray.push(cur);
+    } else {
+      acc[cur.componentName] = {
+        ...(cur.reference || cur.npm),
+        componentName: cur.componentName,
+      };
+    }
+    return acc;
+  }, {})
+
+  function genLowCodeComponentsMap(components) {
+    const lowcodeComponentsMap = {};
+    lowcodeComponentsArray.forEach((lowcode) => {
+      const id = lowcode.reference?.id;
+      const schema = packagesMap[id]?.schema;
+      const comp = genLowcodeComp(schema, {...components, ...lowcodeComponentsMap});
+      lowcodeComponentsMap[lowcode.componentName] = comp;
+    });
+    return lowcodeComponentsMap;
+  }
+  let components = await injectComponents(buildComponents(libraryMap, proCodeComponentsMap));
+  const lowCodeComponents = genLowCodeComponentsMap(components);
+  return {
+    components: { ...components, ...lowCodeComponents }
+  }
+}
+
+function genLowcodeComp(schema: ComponentSchema, components: any) {
+  return class LowcodeComp extends React.Component {
+    render(): React.ReactNode {
+      return createElement(ReactRenderer, {
+        ...this.props,
+        schema,
+        components,
+        designMode: '',
+      });
+    }
+  };
+}
+```
 ## 联系我们
 
 <img src="https://img.alicdn.com/imgextra/i2/O1CN01UF88Xi1jC5SZ6m4wt_!!6000000004511-2-tps-750-967.png" width="300" />
