@@ -2,7 +2,7 @@ import { IPublicTypeRootSchema, IPublicTypeDragNodeDataObject, IPublicTypeDragNo
 import { IPublicEnumTransformStage } from '../enum';
 import { IPublicApiProject } from '../api';
 import { IPublicModelDropLocation, IPublicModelDetecting, IPublicModelNode, IPublicModelSelection, IPublicModelHistory, IPublicModelModalNodesManager } from './';
-import { IPublicOnChangeOptions } from '@alilc/lowcode-types';
+import { IPublicTypeOnChangeOptions } from '@alilc/lowcode-types';
 
 export interface IPublicModelDocumentModel {
 
@@ -168,12 +168,11 @@ export interface IPublicModelDocumentModel {
    */
   onChangeNodeVisible(fn: (node: IPublicModelNode, visible: boolean) => void): void;
 
-
   /**
    * 当前 document 的节点 children 变更事件
    * @param fn
    */
-  onChangeNodeChildren(fn: (info: IPublicOnChangeOptions) => void): void;
+  onChangeNodeChildren(fn: (info: IPublicTypeOnChangeOptions) => void): void;
 
   /**
    * 当前 document 节点属性修改事件
@@ -209,7 +208,6 @@ export interface IPublicModelDocumentModel {
    * @since v1.1.0
    */
   set dropLocation(loc: IPublicModelDropLocation | null);
-
 
   /**
    * 设置聚焦节点变化的回调

@@ -119,6 +119,10 @@ function getNodeSchemaFromPropsById(props: any, nodeId: string): IPublicTypeNode
   }
 }
 
+/**
+ * TODO: not sure if this is used anywhere
+ * @deprecated
+ */
 export function applyActivities(pivotSchema: IPublicTypeRootSchema, activities: any, options?: any): IPublicTypeRootSchema {
   let schema = { ...pivotSchema };
   if (!Array.isArray(activities)) {

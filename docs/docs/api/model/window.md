@@ -3,6 +3,7 @@ title: Window
 sidebar_position: 12
 ---
 
+> **[@experimental](./#experimental)**<br/>
 > **@types** [IPublicModelWindow](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/window.ts)<br/>
 > **@since** v1.1.0
 
@@ -17,13 +18,25 @@ sidebar_position: 12
 
 窗口唯一 id
 
+`@type {string}`
+
 ### title
 
 窗口标题
 
-### resourceName
+`@type {string}`
 
-窗口资源名字
+### icon
+
+`@type {ReactElement}`
+
+### resource
+
+窗口对应资源
+
+`@type {IPublicModelResource}`
+
+关联模型 [IPublicModelResource](./resource)
 
 ## 方法签名
 

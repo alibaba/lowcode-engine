@@ -27,3 +27,5 @@ export * from './engine-config';
 export * from './editor';
 export * from './preference';
 export * from './plugin-instance';
+export * from './sensor';
+export * from './resource';

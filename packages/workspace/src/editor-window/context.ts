@@ -8,14 +8,14 @@ export class EditorWindow {
   id: string = uniqueId('window');
   icon: React.ReactElement | undefined;
 
-  constructor(readonly resource: Resource, readonly workspace: Workspace, public title: string | undefined = '') {
+  @obx.ref editorView: Context;
+
+  @obx editorViews: Map<string, Context> = new Map<string, Context>();
+
+  constructor(readonly resource: Resource, readonly workspace: Workspace, public title: string | undefined = '', private options: Object = {}) {
     makeObservable(this);
     this.init();
     this.icon = resource.icon;
-  }
-
-  get resourceName(): string {
-    return this.resource.options.name;
   }
 
   async importSchema(schema: any) {
@@ -72,16 +72,12 @@ export class EditorWindow {
     this.changeViewType(this.resource.defaultViewType);
   };
 
-  @obx.ref editorView: Context;
-
-  @obx editorViews: Map<string, Context> = new Map<string, Context>();
-
   initViewType = async (name: string) => {
     const viewInfo = this.resource.getEditorView(name);
     if (this.editorViews.get(name)) {
       return;
     }
-    const editorView = new Context(this.workspace, this, viewInfo as any);
+    const editorView = new Context(this.workspace, this, viewInfo as any, this.options);
     this.editorViews.set(name, editorView);
   };
 

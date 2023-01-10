@@ -4,7 +4,6 @@ import {
   IPublicModelScrollTarget,
   IPublicModelScrollable,
   IPublicModelScroller,
-  IDesigner,
   IPublicTypeLocationData,
   IPublicModelEditor,
   IPublicModelDragon,
@@ -12,12 +11,12 @@ import {
 } from '@alilc/lowcode-types';
 import {
   ScrollTarget as InnerScrollTarget,
+  IDesigner,
 } from '@alilc/lowcode-designer';
 import { editorSymbol, designerSymbol, nodeSymbol } from '../symbols';
 import { Dragon } from '../model';
 import { DropLocation } from '../model/drop-location';
 import { ActiveTracker } from '../model/active-tracker';
-
 
 export class Canvas implements IPublicApiCanvas {
   private readonly [editorSymbol]: IPublicModelEditor;

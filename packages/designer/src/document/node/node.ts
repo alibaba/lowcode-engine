@@ -6,30 +6,33 @@ import {
   IPublicTypePropsList,
   IPublicTypeNodeData,
   IPublicTypeI18nData,
-  SlotSchema,
+  IPublicTypeSlotSchema,
   IPublicTypePageSchema,
   IPublicTypeComponentSchema,
-  NodeStatus,
   IPublicTypeCompositeValue,
   GlobalEvent,
   IPublicTypeComponentAction,
   IPublicModelNode,
   IPublicModelExclusiveGroup,
   IPublicEnumTransformStage,
-  EDITOR_EVENT,
 } from '@alilc/lowcode-types';
 import { compatStage, isDOMText, isJSExpression } from '@alilc/lowcode-utils';
 import { SettingTopEntry } from '@alilc/lowcode-designer';
 import { Props, getConvertedExtraKey } from './props/props';
-import { DocumentModel } from '../document-model';
+import { DocumentModel, IDocumentModel } from '../document-model';
 import { NodeChildren, INodeChildren } from './node-children';
 import { Prop } from './props/prop';
 import { ComponentMeta } from '../../component-meta';
 import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
 import { includeSlot, removeSlot } from '../../utils/slot';
 import { foreachReverse } from '../../utils/tree';
-import { NodeRemoveOptions } from '../../types';
+import { NodeRemoveOptions, EDITOR_EVENT } from '../../types';
 
+export interface NodeStatus {
+  locking: boolean;
+  pseudo: boolean;
+  inPlaceEditing: boolean;
+}
 
 export interface INode extends IPublicModelNode {
 
@@ -52,6 +55,21 @@ export interface INode extends IPublicModelNode {
   unlinkSlot(slotNode: Node): void;
 
   didDropOut(dragment: Node): void;
+
+  /**
+   * 导出 schema
+   */
+  export(stage: IPublicEnumTransformStage, options?: any): IPublicTypeNodeSchema;
+
+  get document(): IDocumentModel;
+
+  emitPropChange(val: IPublicTypePropChangeOptions): void;
+
+  import(data: IPublicTypeNodeSchema, checkId?: boolean): void;
+
+  internalSetSlotFor(slotFor: Prop | null | undefined): void;
+
+  addSlot(slotNode: INode): void;
 }
 
 /**
@@ -186,7 +204,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
 
   isInited = false;
 
-  constructor(readonly document: DocumentModel, nodeSchema: Schema, options: any = {}) {
+  constructor(readonly document: IDocumentModel, nodeSchema: Schema, options: any = {}) {
     makeObservable(this);
     const { componentName, id, children, props, ...extras } = nodeSchema;
     this.id = document.nextId(id);
@@ -518,7 +536,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     return this.props.export(IPublicEnumTransformStage.Serilize).props || null;
   }
 
-  @obx.shallow _slots: Node[] = [];
+  @obx.shallow _slots: INode[] = [];
 
   hasSlots() {
     return this._slots.length > 0;
@@ -882,7 +900,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     return false;
   }
 
-  addSlot(slotNode: Node) {
+  addSlot(slotNode: INode) {
     const slotName = slotNode?.getExtraProp('name')?.getAsString();
     // 一个组件下的所有 slot，相同 slotName 的 slot 应该是唯一的
     if (includeSlot(this, slotName)) {
@@ -1235,14 +1253,13 @@ function ensureNode(node: any, document: DocumentModel): Node {
   return nodeInstance;
 }
 
-
 export interface LeafNode extends Node {
   readonly children: null;
 }
 
 export type IPublicTypePropChangeOptions = Omit<GlobalEvent.Node.Prop.ChangeOptions, 'node'>;
 
-export type SlotNode = Node<SlotSchema>;
+export type SlotNode = Node<IPublicTypeSlotSchema>;
 export type PageNode = Node<IPublicTypePageSchema>;
 export type ComponentNode = Node<IPublicTypeComponentSchema>;
 export type RootNode = PageNode | ComponentNode;

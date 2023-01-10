@@ -7,7 +7,7 @@ export enum ActivityType {
   'COMPOSITE' = 'composite',
 }
 
-export interface IActivityPayload {
+interface IActivityPayload {
   schema: IPublicTypeNodeSchema;
   location?: {
     parent: {
@@ -20,6 +20,10 @@ export interface IActivityPayload {
   newValue: any;
 }
 
+/**
+ * TODO: not sure if this is used anywhere
+ * @deprecated
+ */
 export type ActivityData = {
   type: ActivityType;
   payload: IActivityPayload;

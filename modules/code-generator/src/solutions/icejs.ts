@@ -91,6 +91,7 @@ export default function createIceJsProjectBuilder(
       packageJSON: [icejs.plugins.packageJSON()],
     },
     postProcessors: [prettier()],
+    customizeBuilderOptions: options?.customizeBuilderOptions,
   });
 }
 

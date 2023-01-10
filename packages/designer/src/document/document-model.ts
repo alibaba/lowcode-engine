@@ -8,25 +8,24 @@ import {
   IPublicTypeDragNodeObject,
   IPublicTypeDragNodeDataObject,
   IPublicModelDocumentModel,
-  IPublicModelSelection,
   IPublicModelHistory,
   IPublicModelModalNodesManager,
   IPublicModelNode,
   IPublicApiProject,
   IPublicModelDropLocation,
   IPublicEnumTransformStage,
-  IPublicOnChangeOptions,
-  EDITOR_EVENT,
+  IPublicTypeOnChangeOptions,
 } from '@alilc/lowcode-types';
 import { Project } from '../project';
 import { ISimulatorHost } from '../simulator';
 import { ComponentMeta } from '../component-meta';
 import { IDropLocation, Designer } from '../designer';
 import { Node, insertChildren, insertChild, isNode, RootNode, INode } from './node/node';
-import { Selection } from './selection';
+import { Selection, ISelection } from './selection';
 import { History } from './history';
 import { ModalNodesManager } from './node';
 import { uniqueId, isPlainObject, compatStage, isJSExpression, isDOMText, isNodeSchema, isDragNodeObject, isDragNodeDataObject } from '@alilc/lowcode-utils';
+import { EDITOR_EVENT } from '../types';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
@@ -35,8 +34,20 @@ export type GetDataType<T, NodeType> = T extends undefined
     ? R
     : any
   : T;
-export interface IDocumentModel extends IPublicModelDocumentModel {
 
+export interface IDocumentModel extends Omit< IPublicModelDocumentModel, 'selection' > {
+
+  readonly designer: Designer;
+
+  /**
+   * 选区控制
+   */
+  readonly selection: ISelection;
+
+  /**
+   * 根据 id 获取节点
+   */
+  getNode(id: string): INode | null;
 }
 
 export class DocumentModel implements IDocumentModel {
@@ -53,7 +64,7 @@ export class DocumentModel implements IDocumentModel {
   /**
    * 选区控制
    */
-  readonly selection: IPublicModelSelection = new Selection(this);
+  readonly selection: ISelection = new Selection(this);
 
   /**
    * 操作记录控制
@@ -116,15 +127,84 @@ export class DocumentModel implements IDocumentModel {
 
   @obx.ref private _drillDownNode: Node | null = null;
 
-  drillDown(node: Node | null) {
-    this._drillDownNode = node;
-  }
-
   private _modalNode?: INode;
 
   private _blank?: boolean;
 
   private inited = false;
+
+  @obx.shallow private willPurgeSpace: Node[] = [];
+
+  get modalNode() {
+    return this._modalNode;
+  }
+
+  get currentRoot() {
+    return this.modalNode || this.focusNode;
+  }
+
+  @obx.shallow private activeNodes?: Node[];
+
+  @obx.ref private _dropLocation: IDropLocation | null = null;
+
+  set dropLocation(loc: IPublicModelDropLocation | null) {
+    this._dropLocation = loc;
+    // pub event
+    this.designer.editor.eventBus.emit(
+      'document.dropLocation.changed',
+      { document: this, location: loc },
+    );
+  }
+
+  /**
+   * 投放插入位置标记
+   */
+  get dropLocation() {
+    return this._dropLocation;
+  }
+
+  /**
+   * 导出 schema 数据
+   */
+  get schema(): IPublicTypeRootSchema {
+    return this.rootNode?.schema as any;
+  }
+
+  @obx.ref private _opened = false;
+
+  @obx.ref private _suspensed = false;
+
+  /**
+   * 是否为非激活状态
+   */
+  get suspensed(): boolean {
+    return this._suspensed || !this._opened;
+  }
+
+  /**
+   * 与 suspensed 相反，是否为激活状态，这个函数可能用的更多一点
+   */
+  get active(): boolean {
+    return !this._suspensed;
+  }
+
+  /**
+   * @deprecated 兼容
+   */
+  get actived(): boolean {
+    return this.active;
+  }
+
+  /**
+   * 是否打开
+   */
+  get opened() {
+    return this._opened;
+  }
+
+  get root() {
+    return this.rootNode;
+  }
 
   constructor(project: Project, schema?: IPublicTypeRootSchema) {
     makeObservable(this);
@@ -160,6 +240,10 @@ export class DocumentModel implements IDocumentModel {
     this.inited = true;
   }
 
+  drillDown(node: Node | null) {
+    this._drillDownNode = node;
+  }
+
   onChangeNodeVisible(fn: (node: IPublicModelNode, visible: boolean) => void): () => void {
     this.designer.editor?.eventBus.on(EDITOR_EVENT.NODE_CHILDREN_CHANGE, fn);
 
@@ -168,22 +252,12 @@ export class DocumentModel implements IDocumentModel {
     };
   }
 
-  onChangeNodeChildren(fn: (info: IPublicOnChangeOptions) => void): () => void {
+  onChangeNodeChildren(fn: (info: IPublicTypeOnChangeOptions) => void): () => void {
     this.designer.editor?.eventBus.on(EDITOR_EVENT.NODE_VISIBLE_CHANGE, fn);
 
     return () => {
       this.designer.editor?.eventBus.off(EDITOR_EVENT.NODE_VISIBLE_CHANGE, fn);
     };
-  }
-
-  @obx.shallow private willPurgeSpace: Node[] = [];
-
-  get modalNode() {
-    return this._modalNode;
-  }
-
-  get currentRoot() {
-    return this.modalNode || this.focusNode;
   }
 
   addWillPurge(node: Node) {
@@ -202,7 +276,7 @@ export class DocumentModel implements IDocumentModel {
   }
 
   /**
-   * 生成唯一id
+   * 生成唯一 id
    */
   nextId(possibleId: string | undefined) {
     let id = possibleId;
@@ -216,7 +290,7 @@ export class DocumentModel implements IDocumentModel {
   /**
    * 根据 id 获取节点
    */
-  getNode(id: string): Node | null {
+  getNode(id: string): INode | null {
     return this._nodesMap.get(id) || null;
   }
 
@@ -234,8 +308,6 @@ export class DocumentModel implements IDocumentModel {
     const node = this.getNode(id);
     return node ? !node.isPurged : false;
   }
-
-  @obx.shallow private activeNodes?: Node[];
 
   /**
    * 根据 schema 创建一个节点
@@ -336,25 +408,6 @@ export class DocumentModel implements IDocumentModel {
     this._nodesMap.delete(node.id);
   }
 
-  @obx.ref private _dropLocation: IDropLocation | null = null;
-
-
-  set dropLocation(loc: IPublicModelDropLocation | null) {
-    this._dropLocation = loc;
-    // pub event
-    this.designer.editor.eventBus.emit(
-      'document.dropLocation.changed',
-      { document: this, location: loc },
-    );
-  }
-
-  /**
-   * 投放插入位置标记
-   */
-  get dropLocation() {
-    return this._dropLocation;
-  }
-
   /**
    * 包裹当前选区中的节点
    */
@@ -375,13 +428,6 @@ export class DocumentModel implements IDocumentModel {
 
     this.removeNode(wrapper);
     return null;
-  }
-
-  /**
-   * 导出 schema 数据
-   */
-  get schema(): IPublicTypeRootSchema {
-    return this.rootNode?.schema as any;
   }
 
   @action
@@ -446,38 +492,6 @@ export class DocumentModel implements IDocumentModel {
       componentName,
       () => this.simulator?.generateComponentMetadata(componentName) || null,
     );
-  }
-
-  @obx.ref private _opened = false;
-
-  @obx.ref private _suspensed = false;
-
-  /**
-   * 是否为非激活状态
-   */
-  get suspensed(): boolean {
-    return this._suspensed || !this._opened;
-  }
-
-  /**
-   * 与 suspensed 相反，是否为激活状态，这个函数可能用的更多一点
-   */
-  get active(): boolean {
-    return !this._suspensed;
-  }
-
-  /**
-   * @deprecated 兼容
-   */
-  get actived(): boolean {
-    return this.active;
-  }
-
-  /**
-   * 是否打开
-   */
-  get opened() {
-    return this._opened;
   }
 
   /**
@@ -614,10 +628,6 @@ export class DocumentModel implements IDocumentModel {
 
   getHistory(): History {
     return this.history;
-  }
-
-  get root() {
-    return this.rootNode;
   }
 
   /**

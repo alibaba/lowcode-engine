@@ -9,7 +9,7 @@ import {
 import {
   IPublicModelDragObject,
   IPublicModelScrollable,
-  ISensor,
+  IPublicModelSensor,
   IPublicTypeLocationChildrenDetail,
   IPublicTypeLocationDetailType,
   IPublicModelNode,
@@ -24,7 +24,7 @@ import { IndentTrack } from '../helper/indent-track';
 import DwellTimer from '../helper/dwell-timer';
 import { ITreeBoard, TreeMaster } from './tree-master';
 
-export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollable {
+export class PaneController implements IPublicModelSensor, ITreeBoard, IPublicModelScrollable {
   private pluginContext: IPublicModelPluginContext;
 
   private treeMaster?: TreeMaster;
@@ -50,12 +50,12 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
     setup();
   }
 
-  /** -------------------- ISensor begin -------------------- */
+  /** -------------------- IPublicModelSensor begin -------------------- */
 
   private indentTrack = new IndentTrack();
 
   /**
-   * @see ISensor
+   * @see IPublicModelSensor
    */
   fixEvent(e: IPublicModelLocateEvent): IPublicModelLocateEvent {
     if (e.fixed) {
@@ -77,7 +77,7 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
   }
 
   /**
-   * @see ISensor
+   * @see IPublicModelSensor
    */
   locate(e: IPublicModelLocateEvent): IPublicModelDropLocation | undefined | null {
     this.sensing = true;
@@ -213,7 +213,7 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
   }
 
   /**
-   * @see ISensor
+   * @see IPublicModelSensor
    */
   isEnter(e: IPublicModelLocateEvent): boolean {
     if (!this._shell) {
@@ -224,7 +224,7 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
   }
 
   /**
-   * @see ISensor
+   * @see IPublicModelSensor
    */
   deactiveSensor() {
     this.sensing = false;
@@ -234,15 +234,15 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
   }
 
   private _sensorAvailable = false;
+
   /**
-   * @see ISensor
+   * @see IPublicModelSensor
    */
   get sensorAvailable() {
     return this._sensorAvailable;
   }
 
-  /** -------------------- ISensor end -------------------- */
-
+  /** -------------------- IPublicModelSensor end -------------------- */
 
   /** -------------------- ITreeBoard begin -------------------- */
 
@@ -564,7 +564,6 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
     return this._scrollTarget;
   }
 
-
   private scroller?: IPublicModelScroller;
 
   purge() {
@@ -572,7 +571,6 @@ export class PaneController implements ISensor, ITreeBoard, IPublicModelScrollab
     canvas.dragon?.removeSensor(this);
     this.treeMaster?.removeBoard(this);
   }
-
 
   private _shell: HTMLDivElement | null = null;
 

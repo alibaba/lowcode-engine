@@ -1,5 +1,5 @@
 import { Component } from '../simulator';
-import { IPublicTypeNodeSchema, IPublicTypeComponentInstance, NodeInstance } from '@alilc/lowcode-types';
+import { IPublicTypeNodeSchema, IPublicTypeComponentInstance, IPublicTypeNodeInstance } from '@alilc/lowcode-types';
 
 export interface BuiltinSimulatorRenderer {
   readonly isSimulatorRenderer: true;
@@ -8,7 +8,7 @@ export interface BuiltinSimulatorRenderer {
   getClosestNodeInstance(
       from: IPublicTypeComponentInstance,
       nodeId?: string,
-    ): NodeInstance<IPublicTypeComponentInstance> | null;
+    ): IPublicTypeNodeInstance<IPublicTypeComponentInstance> | null;
   findDOMNodes(instance: IPublicTypeComponentInstance): Array<Element | Text> | null;
   getClientRects(element: Element | Text): DOMRect[];
   setNativeSelection(enableFlag: boolean): void;

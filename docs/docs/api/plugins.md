@@ -222,7 +222,7 @@ your-plugin/package.json
 }
 ```
 转换后的结构：
-```json
+```typescript
 const debug = (ctx: IPublicModelPluginContext, options: any) => {
 	return {};
 }

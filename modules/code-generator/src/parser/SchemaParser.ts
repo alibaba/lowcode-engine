@@ -5,7 +5,7 @@
 import changeCase from 'change-case';
 import {
   IPublicTypeUtilItem,
-  NodeDataType,
+  IPublicTypeNodeDataType,
   IPublicTypeNodeSchema,
   IPublicTypeContainerSchema,
   IPublicTypeProjectSchema,
@@ -81,7 +81,7 @@ function processChildren(schema: IPublicTypeNodeSchema): void {
       if (nodeProps.children) {
         if (!schema.children) {
           // eslint-disable-next-line no-param-reassign
-          schema.children = nodeProps.children as NodeDataType;
+          schema.children = nodeProps.children as IPublicTypeNodeDataType;
         } else {
           let _children: IPublicTypeNodeData[] = [];
 
@@ -331,7 +331,7 @@ export class SchemaParser implements ISchemaParser {
     };
   }
 
-  getComponentNames(children: NodeDataType): string[] {
+  getComponentNames(children: IPublicTypeNodeDataType): string[] {
     return handleSubNodes<string>(
       children,
       {

@@ -3,27 +3,26 @@ import { EventEmitter } from 'events';
 import StrictEventEmitter from 'strict-event-emitter-types';
 import * as GlobalEvent from '../../event';
 import { IPublicApiEvent } from '../api';
-import { GetOptions, GetReturnType, KeyType, PowerDIRegisterOptions } from '../../editor';
-
+import { IPublicTypeEditorValueKey, IPublicTypeEditorGetOptions, IPublicTypeEditorGetResult, IPublicTypeEditorRegisterOptions } from '../type';
 
 export interface IPublicModelEditor extends StrictEventEmitter<EventEmitter, GlobalEvent.EventConfig> {
   get: <T = undefined, KeyOrType = any>(
     keyOrType: KeyOrType,
-    opt?: GetOptions
-  ) => GetReturnType<T, KeyOrType> | undefined;
+    opt?: IPublicTypeEditorGetOptions
+  ) => IPublicTypeEditorGetResult<T, KeyOrType> | undefined;
 
-  has: (keyOrType: KeyType) => boolean;
+  has: (keyOrType: IPublicTypeEditorValueKey) => boolean;
 
-  set: (key: KeyType, data: any) => void | Promise<void>;
+  set: (key: IPublicTypeEditorValueKey, data: any) => void | Promise<void>;
 
-  onceGot: <T = undefined, KeyOrType extends KeyType = any>(keyOrType: KeyOrType) => Promise<GetReturnType<T, KeyOrType>>;
+  onceGot: <T = undefined, KeyOrType extends IPublicTypeEditorValueKey = any>(keyOrType: KeyOrType) => Promise<IPublicTypeEditorGetResult<T, KeyOrType>>;
 
-  onGot: <T = undefined, KeyOrType extends KeyType = any>(
+  onGot: <T = undefined, KeyOrType extends IPublicTypeEditorValueKey = any>(
     keyOrType: KeyOrType,
-    fn: (data: GetReturnType<T, KeyOrType>) => void
+    fn: (data: IPublicTypeEditorGetResult<T, KeyOrType>) => void
   ) => () => void;
 
-  register: (data: any, key?: KeyType, options?: PowerDIRegisterOptions) => void;
+  register: (data: any, key?: IPublicTypeEditorValueKey, options?: IPublicTypeEditorRegisterOptions) => void;
 
   get eventBus(): IPublicApiEvent;
 }

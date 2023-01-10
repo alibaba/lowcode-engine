@@ -13,10 +13,12 @@ import {
   IShellModelFactory,
   IPublicModelDragObject,
   IPublicModelScrollable,
-  IDesigner,
   IPublicModelScroller,
   IPublicTypeLocationData,
   IPublicEnumTransformStage,
+  IPublicModelDragon,
+  IPublicModelActiveTracker,
+  IPublicModelDropLocation,
 } from '@alilc/lowcode-types';
 import { megreAssets, IPublicTypeAssetsJson, isNodeSchema, isDragNodeObject, isDragNodeDataObject, isLocationChildrenDetail, Logger } from '@alilc/lowcode-utils';
 import { Project } from '../project';
@@ -37,12 +39,14 @@ import { ComponentActions } from '../component-actions';
 const logger = new Logger({ level: 'warn', bizName: 'designer' });
 
 export interface DesignerProps {
+  [key: string]: any;
   editor: IPublicModelEditor;
   shellModelFactory: IShellModelFactory;
   className?: string;
   style?: object;
   defaultSchema?: IPublicTypeProjectSchema;
   hotkeys?: object;
+  viewName?: string;
   simulatorProps?: object | ((document: DocumentModel) => object);
   simulatorComponent?: ComponentType<any>;
   dragGhostComponent?: ComponentType<any>;
@@ -53,13 +57,23 @@ export interface DesignerProps {
   onDragstart?: (e: ILocateEvent) => void;
   onDrag?: (e: ILocateEvent) => void;
   onDragend?: (e: { dragObject: IPublicModelDragObject; copy: boolean }, loc?: DropLocation) => void;
-  viewName?: string;
-  [key: string]: any;
 }
 
+export interface IDesigner {
+  get dragon(): IPublicModelDragon;
+  get activeTracker(): IPublicModelActiveTracker;
+  createScroller(scrollable: IPublicModelScrollable): IPublicModelScroller;
+
+  /**
+   * 创建插入位置，考虑放到 dragon 中
+   */
+  createLocation(locationData: IPublicTypeLocationData): IPublicModelDropLocation;
+}
 
 export class Designer implements IDesigner {
-  dragon: Dragon;
+  public dragon: Dragon;
+
+  public viewName: string | undefined;
 
   readonly componentActions = new ComponentActions();
 
@@ -75,6 +89,24 @@ export class Designer implements IDesigner {
 
   readonly shellModelFactory: IShellModelFactory;
 
+  private _dropLocation?: DropLocation;
+
+  private propsReducers = new Map<IPublicEnumTransformStage, IPublicTypePropsTransducer[]>();
+
+  private _lostComponentMetasMap = new Map<string, ComponentMeta>();
+
+  private props?: DesignerProps;
+
+  private oobxList: OffsetObserver[] = [];
+
+  @obx.ref private _componentMetasMap = new Map<string, ComponentMeta>();
+
+  @obx.ref private _simulatorComponent?: ComponentType<any>;
+
+  @obx.ref private _simulatorProps?: object | ((project: Project) => object);
+
+  @obx.ref private _suspensed = false;
+
   get currentDocument() {
     return this.project.currentDocument;
   }
@@ -86,8 +118,6 @@ export class Designer implements IDesigner {
   get currentSelection() {
     return this.currentDocument?.selection;
   }
-
-  viewName: string | undefined;
 
   constructor(props: DesignerProps) {
     makeObservable(this);
@@ -222,8 +252,6 @@ export class Designer implements IDesigner {
     this.editor.eventBus.emit(`designer.${event}`, ...args);
   }
 
-  private _dropLocation?: DropLocation;
-
   get dropLocation() {
     return this._dropLocation;
   }
@@ -257,8 +285,6 @@ export class Designer implements IDesigner {
   createScroller(scrollable: IPublicModelScrollable): IPublicModelScroller {
     return new Scroller(scrollable);
   }
-
-  private oobxList: OffsetObserver[] = [];
 
   createOffsetObserver(nodeInstance: INodeSelector): OffsetObserver | null {
     const oobx = createOffsetObserver(nodeInstance);
@@ -329,8 +355,6 @@ export class Designer implements IDesigner {
 
     return { target, index };
   }
-
-  private props?: DesignerProps;
 
   setProps(nextProps: DesignerProps) {
     const props = this.props ? { ...this.props, ...nextProps } : nextProps;
@@ -409,13 +433,9 @@ export class Designer implements IDesigner {
     return this.props?.[key];
   }
 
-  @obx.ref private _simulatorComponent?: ComponentType<any>;
-
   @computed get simulatorComponent(): ComponentType<any> | undefined {
     return this._simulatorComponent;
   }
-
-  @obx.ref private _simulatorProps?: object | ((project: Project) => object);
 
   @computed get simulatorProps(): object {
     if (typeof this._simulatorProps === 'function') {
@@ -439,8 +459,6 @@ export class Designer implements IDesigner {
     };
   }
 
-  @obx.ref private _suspensed = false;
-
   get suspensed(): boolean {
     return this._suspensed;
   }
@@ -461,16 +479,15 @@ export class Designer implements IDesigner {
     this.project.load(schema);
   }
 
-  @obx.ref private _componentMetasMap = new Map<string, ComponentMeta>();
-
-  private _lostComponentMetasMap = new Map<string, ComponentMeta>();
-
   buildComponentMetasMap(metas: IPublicTypeComponentMetadata[]) {
     metas.forEach((data) => this.createComponentMeta(data));
   }
 
-  createComponentMeta(data: IPublicTypeComponentMetadata): ComponentMeta {
+  createComponentMeta(data: IPublicTypeComponentMetadata): ComponentMeta | null {
     const key = data.componentName;
+    if (!key) {
+      return null;
+    }
     let meta = this._componentMetasMap.get(key);
     if (meta) {
       meta.setMetadata(data);
@@ -539,8 +556,6 @@ export class Designer implements IDesigner {
     });
     return maps;
   }
-
-  private propsReducers = new Map<IPublicEnumTransformStage, IPublicTypePropsTransducer[]>();
 
   transformProps(props: IPublicTypeCompositeObject | IPublicTypePropsList, node: Node, stage: IPublicEnumTransformStage) {
     if (Array.isArray(props)) {

@@ -7,8 +7,8 @@ import {
   IPublicModelEditor,
   EditorConfig,
   PluginClassSet,
-  KeyType,
-  GetReturnType,
+  IPublicTypeEditorValueKey,
+  IPublicTypeEditorGetResult,
   HookConfig,
   IPublicTypeComponentDescription,
   IPublicTypeRemoteComponentDescription,
@@ -61,10 +61,11 @@ export class Editor extends (EventEmitter as any) implements IPublicModelEditor 
     this.setMaxListeners(200);
     this.eventBus = new EventBus(this);
   }
+
   /**
    * Ioc Container
    */
-  @obx.shallow private context = new Map<KeyType, any>();
+  @obx.shallow private context = new Map<IPublicTypeEditorValueKey, any>();
 
   get locale() {
     return globalLocale.getLocale();
@@ -76,15 +77,15 @@ export class Editor extends (EventEmitter as any) implements IPublicModelEditor 
 
   get<T = undefined, KeyOrType = any>(
       keyOrType: KeyOrType,
-    ): GetReturnType<T, KeyOrType> | undefined {
+    ): IPublicTypeEditorGetResult<T, KeyOrType> | undefined {
     return this.context.get(keyOrType as any);
   }
 
-  has(keyOrType: KeyType): boolean {
+  has(keyOrType: IPublicTypeEditorValueKey): boolean {
     return this.context.has(keyOrType);
   }
 
-  set(key: KeyType, data: any): void | Promise<void> {
+  set(key: IPublicTypeEditorValueKey, data: any): void | Promise<void> {
     if (key === 'assets') {
       return this.setAssets(data);
     }
@@ -172,7 +173,7 @@ export class Editor extends (EventEmitter as any) implements IPublicModelEditor 
     this.notifyGot('assets');
   }
 
-  onceGot<T = undefined, KeyOrType extends KeyType = any>(keyOrType: KeyOrType): Promise<GetReturnType<T, KeyOrType>> {
+  onceGot<T = undefined, KeyOrType extends IPublicTypeEditorValueKey = any>(keyOrType: KeyOrType): Promise<IPublicTypeEditorGetResult<T, KeyOrType>> {
     const x = this.context.get(keyOrType);
     if (x !== undefined) {
       return Promise.resolve(x);
@@ -182,9 +183,9 @@ export class Editor extends (EventEmitter as any) implements IPublicModelEditor 
     });
   }
 
-  onGot<T = undefined, KeyOrType extends KeyType = any>(
+  onGot<T = undefined, KeyOrType extends IPublicTypeEditorValueKey = any>(
     keyOrType: KeyOrType,
-    fn: (data: GetReturnType<T, KeyOrType>) => void,
+    fn: (data: IPublicTypeEditorGetResult<T, KeyOrType>) => void,
   ): () => void {
     const x = this.context.get(keyOrType);
     if (x !== undefined) {
@@ -198,7 +199,7 @@ export class Editor extends (EventEmitter as any) implements IPublicModelEditor 
     }
   }
 
-  register(data: any, key?: KeyType): void {
+  register(data: any, key?: IPublicTypeEditorValueKey): void {
     this.context.set(key || data, data);
     this.notifyGot(key || data);
   }
@@ -273,7 +274,7 @@ export class Editor extends (EventEmitter as any) implements IPublicModelEditor 
 
   /* eslint-disable */
   private waits = new Map<
-    KeyType,
+    IPublicTypeEditorValueKey,
     Array<{
       once?: boolean;
       resolve: (data: any) => void;
@@ -281,7 +282,7 @@ export class Editor extends (EventEmitter as any) implements IPublicModelEditor 
   >();
   /* eslint-enable */
 
-  private notifyGot(key: KeyType) {
+  private notifyGot(key: IPublicTypeEditorValueKey) {
     let waits = this.waits.get(key);
     if (!waits) {
       return;
@@ -301,7 +302,7 @@ export class Editor extends (EventEmitter as any) implements IPublicModelEditor 
     }
   }
 
-  private setWait(key: KeyType, resolve: (data: any) => void, once?: boolean) {
+  private setWait(key: IPublicTypeEditorValueKey, resolve: (data: any) => void, once?: boolean) {
     const waits = this.waits.get(key);
     if (waits) {
       waits.push({ resolve, once });
@@ -310,7 +311,7 @@ export class Editor extends (EventEmitter as any) implements IPublicModelEditor 
     }
   }
 
-  private delWait(key: KeyType, fn: any) {
+  private delWait(key: IPublicTypeEditorValueKey, fn: any) {
     const waits = this.waits.get(key);
     if (!waits) {
       return;

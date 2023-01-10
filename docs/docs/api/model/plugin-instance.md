@@ -1,5 +1,5 @@
 ---
-title: plugin-instance
+title: PluginInstance
 sidebar_position: 12
 ---
 

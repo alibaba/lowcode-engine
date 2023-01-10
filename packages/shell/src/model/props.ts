@@ -1,8 +1,8 @@
-import { IPropParent as InnerProps, getConvertedExtraKey } from '@alilc/lowcode-designer';
+import { IProps as InnerProps, getConvertedExtraKey } from '@alilc/lowcode-designer';
 import { IPublicTypeCompositeValue, IPublicModelProps, IPublicModelNode, IPublicModelProp } from '@alilc/lowcode-types';
 import { propsSymbol } from '../symbols';
-import { Node } from './node';
-import { Prop } from './prop';
+import { Node as ShellNode } from './node';
+import { Prop as ShellProp } from './prop';
 
 export class Props implements IPublicModelProps {
   private readonly [propsSymbol]: InnerProps;
@@ -36,7 +36,7 @@ export class Props implements IPublicModelProps {
    * 返回所属的 node 实例
    */
   get node(): IPublicModelNode | null {
-    return Node.create(this[propsSymbol].getNode());
+    return ShellNode.create(this[propsSymbol].getNode());
   }
 
   /**
@@ -45,7 +45,7 @@ export class Props implements IPublicModelProps {
    * @returns
    */
   getProp(path: string): IPublicModelProp | null {
-    return Prop.create(this[propsSymbol].getProp(path));
+    return ShellProp.create(this[propsSymbol].getProp(path));
   }
 
   /**
@@ -64,7 +64,7 @@ export class Props implements IPublicModelProps {
    * @returns
    */
   getExtraProp(path: string): IPublicModelProp | null {
-    return Prop.create(this[propsSymbol].getProp(getConvertedExtraKey(path)));
+    return ShellProp.create(this[propsSymbol].getProp(getConvertedExtraKey(path)));
   }
 
   /**

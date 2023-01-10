@@ -334,7 +334,7 @@ onChangeNodeVisible(fn: (node: IPublicModelNode, visible: boolean) => void): voi
 
 ### onChangeNodeChildren
 
-onChangeNodeChildren(fn: (info?: IPublicOnChangeOptions) => void)
+onChangeNodeChildren(fn: (info?: IPublicTypeOnChangeOptions) => void)
 
 当前 document 的节点 children 变更事件
 

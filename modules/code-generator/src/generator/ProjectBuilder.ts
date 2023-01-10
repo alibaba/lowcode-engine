@@ -40,6 +40,11 @@ export interface ProjectBuilderInitOptions {
   inStrictMode?: boolean;
   /** 一些额外的上下文数据 */
   extraContextData?: Record<string, unknown>;
+  /**
+   * Hook which is used to customize original options, we can reorder/add/remove plugins/processors
+   * of the existing solution.
+   */
+  customizeBuilderOptions?(originalOptions: ProjectBuilderInitOptions): ProjectBuilderInitOptions;
 }
 
 export class ProjectBuilder implements IProjectBuilder {
@@ -67,16 +72,21 @@ export class ProjectBuilder implements IProjectBuilder {
   /** 一些额外的上下文数据 */
   readonly extraContextData: IContextData;
 
-  constructor({
-    template,
-    plugins,
-    postProcessors,
-    schemaParser = new SchemaParser(),
-    projectPreProcessors = [],
-    projectPostProcessors = [],
-    inStrictMode = false,
-    extraContextData = {},
-  }: ProjectBuilderInitOptions) {
+  constructor(builderOptions: ProjectBuilderInitOptions) {
+    let customBuilderOptions = builderOptions;
+    if (typeof builderOptions.customizeBuilderOptions === 'function') {
+      customBuilderOptions = builderOptions.customizeBuilderOptions(builderOptions);
+    }
+    const {
+      template,
+      plugins,
+      postProcessors,
+      schemaParser = new SchemaParser(),
+      projectPreProcessors = [],
+      projectPostProcessors = [],
+      inStrictMode = false,
+      extraContextData = {},
+    } = customBuilderOptions;
     this.template = template;
     this.plugins = plugins;
     this.postProcessors = postProcessors;

@@ -1,5 +1,5 @@
 import { ComponentType } from 'react';
-import { IPublicTypeComponentMetadata, IPublicTypeNodeSchema, IPublicModelScrollable, IPublicTypeComponentInstance, ISensor, NodeInstance } from '@alilc/lowcode-types';
+import { IPublicTypeComponentMetadata, IPublicTypeNodeSchema, IPublicModelScrollable, IPublicTypeComponentInstance, IPublicModelSensor, IPublicTypeNodeInstance } from '@alilc/lowcode-types';
 import { Point, ScrollTarget, ILocateEvent } from './designer';
 import { BuiltinSimulatorRenderer } from './builtin-simulator/renderer';
 import { Node, INode } from './document';
@@ -11,6 +11,7 @@ export const AutoFit = '100%';
 export interface IScrollable extends IPublicModelScrollable {
 }
 export interface IViewport extends IScrollable {
+
   /**
    * 视口大小
    */
@@ -32,22 +33,27 @@ export interface IViewport extends IScrollable {
    * 视口矩形维度
    */
   readonly bounds: DOMRect;
+
   /**
    * 内容矩形维度
    */
   readonly contentBounds: DOMRect;
+
   /**
    * 视口滚动对象
    */
   readonly scrollTarget?: ScrollTarget;
+
   /**
    * 是否滚动中
    */
   readonly scrolling: boolean;
+
   /**
    * 内容当前滚动 X
    */
   readonly scrollX: number;
+
   /**
    * 内容当前滚动 Y
    */
@@ -72,8 +78,9 @@ export interface DropContainer {
 /**
  * 模拟器控制进程协议
  */
-export interface ISimulatorHost<P = object> extends ISensor {
+export interface ISimulatorHost<P = object> extends IPublicModelSensor {
   readonly isSimulator: true;
+
   /**
    * 获得边界维度等信息
    */
@@ -104,14 +111,17 @@ export interface ISimulatorHost<P = object> extends ISensor {
    * 设置文字拖选
    */
   setNativeSelection(enableFlag: boolean): void;
+
   /**
    * 设置拖拽态
    */
   setDraggingState(state: boolean): void;
+
   /**
    * 设置拷贝态
    */
   setCopyState(state: boolean): void;
+
   /**
    * 清除所有态：拖拽态、拷贝态
    */
@@ -128,24 +138,28 @@ export interface ISimulatorHost<P = object> extends ISensor {
    * 描述组件
    */
   generateComponentMetadata(componentName: string): IPublicTypeComponentMetadata;
+
   /**
    * 根据组件信息获取组件类
    */
   getComponent(componentName: string): Component | any;
+
   /**
    * 根据节点获取节点的组件实例
    */
   getComponentInstances(node: Node): IPublicTypeComponentInstance[] | null;
+
   /**
    * 根据 schema 创建组件类
    */
   createComponent(schema: IPublicTypeNodeSchema): Component | null;
+
   /**
    * 根据节点获取节点的组件运行上下文
    */
   getComponentContext(node: Node): object | null;
 
-  getClosestNodeInstance(from: IPublicTypeComponentInstance, specId?: string): NodeInstance | null;
+  getClosestNodeInstance(from: IPublicTypeComponentInstance, specId?: string): IPublicTypeNodeInstance | null;
 
   computeRect(node: Node): DOMRect | null;
 
@@ -158,6 +172,7 @@ export interface ISimulatorHost<P = object> extends ISensor {
   postEvent(evtName: string, evtData: any): void;
 
   rerender(): void;
+
   /**
    * 销毁
    */

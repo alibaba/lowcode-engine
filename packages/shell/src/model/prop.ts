@@ -1,7 +1,7 @@
-import { IPropParent as InnerProp } from '@alilc/lowcode-designer';
+import { IProp as InnerProp } from '@alilc/lowcode-designer';
 import { IPublicTypeCompositeValue, IPublicEnumTransformStage, IPublicModelProp, IPublicModelNode } from '@alilc/lowcode-types';
 import { propSymbol } from '../symbols';
-import { Node } from './node';
+import { Node as ShellNode } from './node';
 
 export class Prop implements IPublicModelProp {
   private readonly [propSymbol]: InnerProp;
@@ -26,6 +26,7 @@ export class Prop implements IPublicModelProp {
 
   /**
    * key 值
+   * get key of prop
    */
   get key(): string | number | undefined {
     return this[propSymbol].key;
@@ -34,7 +35,7 @@ export class Prop implements IPublicModelProp {
   /**
    * 返回当前 prop 的路径
    */
-  get path(): any[] {
+  get path(): string[] {
     return this[propSymbol].path;
   }
 
@@ -42,14 +43,14 @@ export class Prop implements IPublicModelProp {
    * 返回所属的节点实例
    */
   get node(): IPublicModelNode | null {
-    return Node.create(this[propSymbol].getNode());
+    return ShellNode.create(this[propSymbol].getNode());
   }
 
   /**
    * return the slot node (only if the current prop represents a slot)
    */
   get slotNode(): IPublicModelNode | null {
-    return Node.create(this[propSymbol].slotNode);
+    return ShellNode.create(this[propSymbol].slotNode);
   }
 
   /**

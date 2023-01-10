@@ -2,8 +2,13 @@ import { makeObservable, obx, IEventBus, createModuleEventBus } from '@alilc/low
 import { IPublicModelDetecting, IPublicModelNode, IPublicModelDocumentModel } from '@alilc/lowcode-types';
 
 const DETECTING_CHANGE_EVENT = 'detectingChange';
-export interface IDetecting extends IPublicModelDetecting {
+export interface IDetecting extends Omit< IPublicModelDetecting, 'capture' | 'release' | 'leave' > {
 
+  capture(node: IPublicModelNode | null): void;
+
+  release(node: IPublicModelNode | null): void;
+
+  leave(document: IPublicModelDocumentModel | undefined): void;
 }
 
 export class Detecting implements IDetecting {
