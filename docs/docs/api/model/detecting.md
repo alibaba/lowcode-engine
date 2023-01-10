@@ -67,6 +67,7 @@ release(id: string): void;
 leave(): void;
 ```
 
+## 事件
 ### onDetectingChange
 hover 节点变化事件
 
@@ -81,6 +82,6 @@ onDetectingChange(fn: (node: IPublicModelNode) => void): IPublicTypeDisposable;
 
 相关类型：
 - [IPublicModelNode](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/node.ts)
-- [IPublicModelNode](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
+- [IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
 
 **@since v1.1.0**
