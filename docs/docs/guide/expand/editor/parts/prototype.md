@@ -40,7 +40,7 @@ sidebar_position: 3
 #### 给组件增加物料描述
 选中刚刚新增的BlockPicker组件，然后给它增加描述：
 
-- 打开左侧 Sette r面板
+- 打开左侧 Setter 面板
 - 按照组件的属性拖入需要 Setter 类型 （如图中组件的width属性，拖入数字Setter）
 - 各种 Setter 的介绍可以参看这篇文档：[https://www.yuque.com/lce/doc/grfylu](https://www.yuque.com/lce/doc/grfylu)
 - 配置属性的基本信息（如图所示）
@@ -78,26 +78,21 @@ sidebar_position: 3
 - 点击确定发布完成
 
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/12718919/1652434804305-276f03e2-4dd2-41e9-9375-1c3bd0c7092a.png#clientId=u0f780a28-b8dc-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=410&id=uf879e7fd&margin=%5Bobject%20Object%5D&name=image.png&originHeight=734&originWidth=1431&originalType=binary&ratio=1&rotation=0&showTitle=false&size=103858&status=done&style=stroke&taskId=udc267585-ffb7-4247-b1f5-b7aca386e10&title=&width=800)
-## 资产包构建
+## 资产包
 第三步：物料描述发布完成后，接下来我们就需要构建出可用的资产包用于低代码应用中。
 #### 资产包构建
+有两种方式可以构建资产包:
+- 一种是通过 [`我的资产包`] 资产包管理模块进行整个资产包生命周期的管理，当然也包括资产包的构建，可参考 [资产包管理](./partsassets)
+- 一种是通过 [`我的物料`] 组件物料管理模块的 `资产包构建` 进行构建, 具体操作如下：
 
-- 选择需要构建的组件
-- 点击构建资产包按钮
-- 选择刚刚的物料描述配置
-- 开始构建，构建完成后你将得到一份json文件（里面包含了物料描述和umd包），就可以到项目中使用了
+  - 选择需要构建的组件
+  - 点击构建资产包按钮
+  - 选择刚刚的物料描述配置
+  - 开始构建，构建完成后你将得到一份json文件（里面包含了物料描述和umd包），就可以到项目中使用了
 
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/12718919/1652434804769-6f6f60f1-9ee3-4561-972d-610f0616576e.png#clientId=u0f780a28-b8dc-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=430&id=ue119fa2b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=770&originWidth=1431&originalType=binary&ratio=1&rotation=0&showTitle=false&size=93492&status=done&style=stroke&taskId=ubfd97421-964b-4823-adc8-b056a588924&title=&width=800)
 #### 资产包使用
-**方式一、在 **[**lowcode-demo**](https://github.com/alibaba/lowcode-demo)**中直接引用，可直接替换demo中原来的资产包文件：**
-例如，在basic-fusion demo中，直接用你的资产包文件替换文件[assets.json](https://github.com/alibaba/lowcode-demo/blob/main/src/scenarios/basic-fusion/assets.json)，即可快速使用自己的物料了。
-**方式二、将新的资产包内容和现有的资产包内容融合：**
-将上面构建完成的资产包与你项目中的[assets.json文件](https://github.com/alibaba/lowcode-demo/blob/main/src/scenarios/basic-fusion/assets.json)合并，主要合并packages 和 components
-
-- packages中是构建好的umd包
-- components中是上面配置好的[物料描述](https://lowcode-engine.cn/material)，你也可以在基础上二次加工
-
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/12718919/1652434804944-860abc0c-057c-46d5-a6e5-8d33fde8a762.png#clientId=u0f780a28-b8dc-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=676&id=u5499b1c9&margin=%5Bobject%20Object%5D&name=image.png&originHeight=744&originWidth=1140&originalType=binary&ratio=1&rotation=0&showTitle=false&size=116233&status=done&style=stroke&taskId=u7be27934-77ce-4dd7-a406-1d402acef2c&title=&width=1036.36361390106)
+详情请参考 [资产包管理](./partsassets#使用资产包)
 
 ## 联系我们
 
