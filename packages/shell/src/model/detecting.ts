@@ -1,10 +1,10 @@
-import { Node } from './node';
+import { Node as ShellNode } from './node';
 import {
   Detecting as InnerDetecting,
-  DocumentModel as InnerDocumentModel,
+  IDocumentModel as InnerDocumentModel,
 } from '@alilc/lowcode-designer';
 import { documentSymbol, detectingSymbol } from '../symbols';
-import { IPublicModelDetecting, IPublicModelNode } from '@alilc/lowcode-types';
+import { IPublicModelDetecting, IPublicModelNode, IPublicTypeDisposable } from '@alilc/lowcode-types';
 
 export class Detecting implements IPublicModelDetecting {
   private readonly [documentSymbol]: InnerDocumentModel;
@@ -26,7 +26,7 @@ export class Detecting implements IPublicModelDetecting {
    * 当前 hover 的节点
    */
   get current() {
-    return Node.create(this[detectingSymbol].current);
+    return ShellNode.create(this[detectingSymbol].current);
   }
 
   /**
@@ -52,7 +52,7 @@ export class Detecting implements IPublicModelDetecting {
     this[detectingSymbol].leave(this[documentSymbol]);
   }
 
-  onDetectingChange(fn: (node: IPublicModelNode) => void): () => void {
+  onDetectingChange(fn: (node: IPublicModelNode) => void): IPublicTypeDisposable {
     return this[detectingSymbol].onDetectingChange(fn);
   }
 }
