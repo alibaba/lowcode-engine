@@ -8,7 +8,6 @@ import {
   IPublicTypeDragNodeObject,
   IPublicTypeDragNodeDataObject,
   IPublicModelDocumentModel,
-  IPublicModelSelection,
   IPublicModelHistory,
   IPublicModelModalNodesManager,
   IPublicModelNode,
@@ -22,7 +21,7 @@ import { ISimulatorHost } from '../simulator';
 import { ComponentMeta } from '../component-meta';
 import { IDropLocation, Designer } from '../designer';
 import { Node, insertChildren, insertChild, isNode, RootNode, INode } from './node/node';
-import { Selection } from './selection';
+import { Selection, ISelection } from './selection';
 import { History } from './history';
 import { ModalNodesManager } from './node';
 import { uniqueId, isPlainObject, compatStage, isJSExpression, isDOMText, isNodeSchema, isDragNodeObject, isDragNodeDataObject } from '@alilc/lowcode-utils';
@@ -35,9 +34,15 @@ export type GetDataType<T, NodeType> = T extends undefined
     ? R
     : any
   : T;
-export interface IDocumentModel extends IPublicModelDocumentModel {
+
+export interface IDocumentModel extends Omit< IPublicModelDocumentModel, 'selection' > {
 
   readonly designer: Designer;
+
+  /**
+   * 选区控制
+   */
+  readonly selection: ISelection;
 
   /**
    * 根据 id 获取节点
@@ -59,7 +64,7 @@ export class DocumentModel implements IDocumentModel {
   /**
    * 选区控制
    */
-  readonly selection: IPublicModelSelection = new Selection(this);
+  readonly selection: ISelection = new Selection(this);
 
   /**
    * 操作记录控制
@@ -488,7 +493,6 @@ export class DocumentModel implements IDocumentModel {
       () => this.simulator?.generateComponentMetadata(componentName) || null,
     );
   }
-
 
   /**
    * 切换激活，只有打开的才能激活

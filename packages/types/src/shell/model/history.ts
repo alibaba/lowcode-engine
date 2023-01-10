@@ -40,7 +40,7 @@ export interface IPublicModelHistory {
    *  |    1     |     1    |    1     |
    *  | -------- | -------- | -------- |
    *  | modified | redoable | undoable |
-   * eg:
+   * eg.
    *  7 means : modified && redoable && undoable
    *  5 means : modified && undoable
    */
