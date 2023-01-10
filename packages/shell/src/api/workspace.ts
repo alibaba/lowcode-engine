@@ -1,4 +1,4 @@
-import { IPublicApiWorkspace, IPublicResourceList, IPublicResourceOptions } from '@alilc/lowcode-types';
+import { IPublicApiWorkspace, IPublicResourceList, IPublicTypeResourceType } from '@alilc/lowcode-types';
 import { Workspace as InnerWorkSpace } from '@alilc/lowcode-workspace';
 import { Plugins } from '@alilc/lowcode-shell';
 import { Window } from '../model/window';
@@ -32,8 +32,8 @@ export class Workspace implements IPublicApiWorkspace {
     return new Window(this[workspaceSymbol].window);
   }
 
-  registerResourceType(name: string, type: 'editor', options: IPublicResourceOptions): void {
-    this[workspaceSymbol].registerResourceType(name, type, options);
+  registerResourceType(resourceTypeModel: IPublicTypeResourceType): void {
+    this[workspaceSymbol].registerResourceType(resourceTypeModel);
   }
 
   openEditorWindow(resourceName: string, title: string, extra: Object, viewName?: string) {

@@ -15,6 +15,24 @@ sidebar_position: 12
 
 `@type {string}`
 
+### name
+
+资源名字
+
+`@type {string}`
+
+### type
+
+资源类型
+
+`@type {string}`
+
+### category
+
+资源分类
+
+`@type {string}`
+
 ### icon
 
 资源 icon
@@ -26,11 +44,3 @@ sidebar_position: 12
 资源配置信息
 
 `@type {Object}`
-
-### resourceType
-
-资源所属的资源类型
-
-`@type {IPublicModelResourceType}`
-
-关联模型 [IPublicModelResourceType](./resource-type)

@@ -1,6 +1,5 @@
 import { IPublicModelWindow } from '../model';
-import { IPublicResourceOptions } from '../type';
-import { IPublicApiPlugins, IPublicModelResource, IPublicResourceList } from '@alilc/lowcode-types';
+import { IPublicApiPlugins, IPublicModelResource, IPublicResourceList, IPublicTypeResourceType } from '@alilc/lowcode-types';
 
 export interface IPublicApiWorkspace {
 
@@ -9,6 +8,11 @@ export interface IPublicApiWorkspace {
 
   /** 当前设计器窗口 */
   window: IPublicModelWindow;
+
+  plugins: IPublicApiPlugins;
+
+  /** 当前设计器的编辑窗口 */
+  windows: IPublicModelWindow[];
 
   /** 获取资源树列表 */
   get resourceList(): IPublicModelResource[];
@@ -20,7 +24,7 @@ export interface IPublicApiWorkspace {
   onResourceListChange(fn: (resourceList: IPublicResourceList) => void): () => void;
 
   /** 注册资源 */
-  registerResourceType(resourceName: string, type: 'editor', options: IPublicResourceOptions): void;
+  registerResourceType(resourceTypeModel: IPublicTypeResourceType): void;
 
   /** 打开视图窗口 */
   openEditorWindow(resourceName: string, title: string, extra: Object, viewName?: string): void;
@@ -34,14 +38,9 @@ export interface IPublicApiWorkspace {
   /** 通过视图 id 移除窗口 */
   removeEditorWindowById(id: string): void;
 
-  plugins: IPublicApiPlugins;
-
-  /** 当前设计器的编辑窗口 */
-  windows: IPublicModelWindow[];
-
   /** 窗口新增/删除的事件 */
-  onChangeWindows: (fn: () => void) => void;
+  onChangeWindows(fn: () => void): void;
 
   /** active 窗口变更事件 */
-  onChangeActiveWindow: (fn: () => void) => void;
+  onChangeActiveWindow(fn: () => void): void;
 }

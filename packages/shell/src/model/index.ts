@@ -15,4 +15,3 @@ export * from './selection';
 export * from './setting-prop-entry';
 export * from './setting-top-entry';
 export * from './resource';
-export * from './resource-type';

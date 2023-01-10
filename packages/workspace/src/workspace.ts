@@ -1,7 +1,7 @@
 import { Designer } from '@alilc/lowcode-designer';
 import { createModuleEventBus, Editor, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
 import { Plugins } from '@alilc/lowcode-shell';
-import { IPublicApiWorkspace, IPublicResourceList, IPublicResourceOptions } from '@alilc/lowcode-types';
+import { IPublicApiWorkspace, IPublicResourceList, IPublicTypeResourceType } from '@alilc/lowcode-types';
 import { BasicContext } from './base-context';
 import { EditorWindow } from './editor-window/context';
 import { Resource } from './resource';
@@ -16,7 +16,7 @@ enum event {
 const CHANGE_EVENT = 'resource.list.change';
 
 export class Workspace implements IPublicApiWorkspace {
-  private context: BasicContext;
+  context: BasicContext;
 
   private emitter: IEventBus = createModuleEventBus('workspace');
 
@@ -27,6 +27,18 @@ export class Workspace implements IPublicApiWorkspace {
   get plugins() {
     return this.context.innerPlugins;
   }
+
+  private _isActive = false;
+
+  windows: EditorWindow[] = [];
+
+  editorWindowMap: Map<string, EditorWindow> = new Map<string, EditorWindow>();
+
+  @obx.ref window: EditorWindow;
+
+  private resourceTypeMap: Map<string, ResourceType> = new Map();
+
+  private resourceList: Resource[] = [];
 
   constructor(
     readonly registryInnerPlugin: (designer: Designer, editor: Editor, plugins: Plugins) => Promise<void>,
@@ -42,18 +54,17 @@ export class Workspace implements IPublicApiWorkspace {
   }
 
   initWindow() {
-    if (!this.defaultResource) {
+    if (!this.defaultResourceType) {
       return;
     }
-    const title = this.defaultResource.description;
-    this.window = new EditorWindow(this.defaultResource, this, title);
+    const title = this.defaultResourceType.name;
+    const resource = new Resource({}, this.defaultResourceType, this);
+    this.window = new EditorWindow(resource, this, title);
     this.editorWindowMap.set(this.window.id, this.window);
     this.windows.push(this.window);
     this.emitChangeWindow();
     this.emitChangeActiveWindow();
   }
-
-  private _isActive = false;
 
   get isActive() {
     return this._isActive;
@@ -63,22 +74,12 @@ export class Workspace implements IPublicApiWorkspace {
     this._isActive = value;
   }
 
-  windows: EditorWindow[] = [];
+  async registerResourceType(resourceTypeModel: IPublicTypeResourceType): Promise<void> {
+    if (resourceTypeModel.resourceType === 'editor') {
+      const resourceType = new ResourceType(resourceTypeModel);
+      this.resourceTypeMap.set(resourceTypeModel.resourceName, resourceType);
 
-  editorWindowMap: Map<string, EditorWindow> = new Map<string, EditorWindow>();
-
-  @obx.ref window: EditorWindow;
-
-  private resourceTypeMap: Map<string, ResourceType> = new Map();
-
-  private resourceList: Resource[] = [];
-
-  async registerResourceType(resourceName: string, type: 'editor' | 'webview', options: IPublicResourceOptions): Promise<void> {
-    if (type === 'editor') {
-      const resourceType = new ResourceType(resourceName, type, options);
-      this.resourceTypeMap.set(resourceName, resourceType);
-
-      if (!this.window && this.defaultResource) {
+      if (!this.window && this.defaultResourceType) {
         this.initWindow();
       }
     }
@@ -89,7 +90,7 @@ export class Workspace implements IPublicApiWorkspace {
   }
 
   setResourceList(resourceList: IPublicResourceList) {
-    this.resourceList = resourceList.map(d => new Resource(d, this.getResourceType(d.resourceName)));
+    this.resourceList = resourceList.map(d => new Resource(d, this.getResourceType(d.resourceName), this));
     this.emitter.emit(CHANGE_EVENT, resourceList);
   }
 
@@ -104,9 +105,9 @@ export class Workspace implements IPublicApiWorkspace {
     return this.resourceTypeMap.get(resourceName)!;
   }
 
-  get defaultResource(): ResourceType | null {
-    if (this.resourceTypeMap.size > 1) {
-      return this.resourceTypeMap.values().next().value;
+  get defaultResourceType(): ResourceType | null {
+    if (this.resourceTypeMap.size >= 1) {
+      return Array.from(this.resourceTypeMap.values())[0];
     }
 
     return null;
@@ -134,7 +135,7 @@ export class Workspace implements IPublicApiWorkspace {
   }
 
   removeEditorWindow(resourceName: string, title: string) {
-    const index = this.windows.findIndex(d => (d.resourceType.name === resourceName && d.title));
+    const index = this.windows.findIndex(d => (d.resource.name === resourceName && d.title));
     this.remove(index);
   }
 
@@ -152,13 +153,14 @@ export class Workspace implements IPublicApiWorkspace {
       console.error(`${name} is not available`);
       return;
     }
-    const filterWindows = this.windows.filter(d => (d.resourceType.name === name && d.title == title));
+    const filterWindows = this.windows.filter(d => (d.resource.name === name && d.title == title));
     if (filterWindows && filterWindows.length) {
       this.window = filterWindows[0];
       this.emitChangeActiveWindow();
       return;
     }
-    this.window = new EditorWindow(resourceType, this, title, options);
+    const resource = new Resource({}, resourceType, this);
+    this.window = new EditorWindow(resource, this, title, options);
     this.windows.push(this.window);
     this.editorWindowMap.set(this.window.id, this.window);
     this.emitChangeWindow();

@@ -22,7 +22,15 @@ export class Resource implements IPublicModelResource {
     return this[resourceSymbol].options;
   }
 
-  get resourceType() {
-    return new ResourceType(this[resourceSymbol].resourceType);
+  get name() {
+    return this[resourceSymbol].resourceType.name;
+  }
+
+  get type() {
+    return this[resourceSymbol].resourceType.type;
+  }
+
+  get category() {
+    return this[resourceSymbol].category;
   }
 }
