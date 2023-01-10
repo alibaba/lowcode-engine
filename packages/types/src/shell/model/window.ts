@@ -1,17 +1,8 @@
 import { ReactElement } from 'react';
 import { IPublicTypeNodeSchema } from '../type';
-import { IPublicModelResourceType } from './resource-type';
+import { IPublicModelResource } from './resource';
 
 export interface IPublicModelWindow {
-
-  /** 当前窗口导入 schema */
-  importSchema(schema: IPublicTypeNodeSchema): void;
-
-  /** 修改当前窗口视图类型 */
-  changeViewType(viewName: string): void;
-
-  /** 调用当前窗口视图保存钩子 */
-  save(): Promise<any>;
 
   /** 窗口 id */
   id: string;
@@ -23,5 +14,14 @@ export interface IPublicModelWindow {
   icon?: ReactElement;
 
   /** 窗口资源类型 */
-  resourceType?: IPublicModelResourceType;
+  resource?: IPublicModelResource;
+
+  /** 当前窗口导入 schema */
+  importSchema(schema: IPublicTypeNodeSchema): void;
+
+  /** 修改当前窗口视图类型 */
+  changeViewType(viewName: string): void;
+
+  /** 调用当前窗口视图保存钩子 */
+  save(): Promise<any>;
 }

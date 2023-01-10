@@ -1,13 +1,13 @@
 import { windowSymbol } from '../symbols';
-import { IPublicModelWindow } from '@alilc/lowcode-types';
+import { IPublicModelResource, IPublicModelWindow } from '@alilc/lowcode-types';
 import { EditorWindow } from '@alilc/lowcode-workspace';
-import { ResourceType } from './resource-type';
+import { Resource } from './resource';
 
 export class Window implements IPublicModelWindow {
   private readonly [windowSymbol]: EditorWindow;
 
   get id() {
-    return this[windowSymbol].id;
+    return this[windowSymbol]?.id;
   }
 
   get title() {
@@ -18,8 +18,8 @@ export class Window implements IPublicModelWindow {
     return this[windowSymbol].icon;
   }
 
-  get resourceType(): ResourceType {
-    return new ResourceType(this[windowSymbol].resourceType);
+  get resource(): IPublicModelResource {
+    return new Resource(this[windowSymbol].resource);
   }
 
   constructor(editorWindow: EditorWindow) {

@@ -30,13 +30,13 @@ sidebar_position: 12
 
 `@type {ReactElement}`
 
-### resourceType
+### resource
 
-窗口资源类型
+窗口对应资源
 
-`@type {IPublicModelResourceType}`
+`@type {IPublicModelResource}`
 
-关联模型 [IPublicModelResourceType](./resource-type)
+关联模型 [IPublicModelResource](./resource)
 
 ## 方法签名
 

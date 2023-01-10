@@ -64,10 +64,10 @@ get resourceList(): IPublicModelResource;
 
 ```typescript
 /** 注册资源 */
-registerResourceType(name: string, type: 'editor', options: IPublicResourceOptions): void;
+registerResourceType(resourceTypeModel: IPublicTypeResourceType): void;
 ```
 
-相关类型：[IPublicResourceOptions](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/resource-options.ts)
+相关类型：[IPublicTypeResourceType](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/resource-type.ts)
 
 ### onChangeWindows
 

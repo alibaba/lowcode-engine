@@ -1,5 +1,5 @@
 import { makeObservable, obx } from '@alilc/lowcode-editor-core';
-import { IPublicEditorView, IPublicViewFunctions } from '@alilc/lowcode-types';
+import { IPublicEditorViewConfig, IPublicTypeEditorView } from '@alilc/lowcode-types';
 import { flow } from 'mobx';
 import { Workspace as InnerWorkspace } from '../workspace';
 import { BasicContext } from '../base-context';
@@ -9,30 +9,11 @@ import { getWebviewPlugin } from '../inner-plugins/webview';
 export class Context extends BasicContext {
   viewName = 'editor-view';
 
-  instance: IPublicViewFunctions;
+  instance: IPublicEditorViewConfig;
 
   viewType: 'editor' | 'webview';
 
-  constructor(public workspace: InnerWorkspace, public editorWindow: EditorWindow, public editorView: IPublicEditorView, options: Object) {
-    super(workspace, editorView.viewName, editorWindow);
-    this.viewType = editorView.viewType || 'editor';
-    this.viewName = editorView.viewName;
-    this.instance = editorView(this.innerPlugins._getLowCodePluginContext({
-      pluginName: 'any',
-    }), options);
-    makeObservable(this);
-  }
-
   @obx _activate = false;
-
-  setActivate = (_activate: boolean) => {
-    this._activate = _activate;
-    this.innerHotkey.activate(this._activate);
-  };
-
-  get active() {
-    return this._activate;
-  }
 
   @obx isInit: boolean = false;
 
@@ -47,6 +28,25 @@ export class Context extends BasicContext {
     yield this.innerPlugins.init();
     this.isInit = true;
   });
+
+  constructor(public workspace: InnerWorkspace, public editorWindow: EditorWindow, public editorView: IPublicTypeEditorView, options: Object) {
+    super(workspace, editorView.viewName, editorWindow);
+    this.viewType = editorView.viewType || 'editor';
+    this.viewName = editorView.viewName;
+    this.instance = editorView(this.innerPlugins._getLowCodePluginContext({
+      pluginName: 'any',
+    }), options);
+    makeObservable(this);
+  }
+
+  setActivate = (_activate: boolean) => {
+    this._activate = _activate;
+    this.innerHotkey.activate(this._activate);
+  };
+
+  get active() {
+    return this._activate;
+  }
 
   async save() {
     return await this.instance?.save?.();
