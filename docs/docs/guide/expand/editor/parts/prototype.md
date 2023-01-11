@@ -1,5 +1,5 @@
 ---
-title: 利用 Parts 造物快速使用 react 组件
+title: React 组件导入
 sidebar_position: 3
 ---
 ## 介绍
@@ -50,10 +50,8 @@ sidebar_position: 3
 ![image.png](https://img.alicdn.com/imgextra/i3/O1CN01klci7y1IUPflKpeVB_!!6000000000896-2-tps-1193-704.png)
 #### 给组件增加物料描述
 
-选中刚刚新增的 BlockPicker 组件，然后给它增加描述：
-
 - 打开左侧 Setter 面板
-- 按照组件的属性拖入需要 Setter 类型（如图中组件的 width 属性，拖入数字 Setter）
+- 按照组件的属性拖入需要 Setter 类型 （如图中组件的width属性，拖入数字Setter）
 - 各种 Setter 的介绍可以参看这篇文档：[预置设置器列表](/site/docs/guide/appendix/setters)
 - 配置属性的基本信息（如图所示）
 - 配置完成后点击右上角的保存
@@ -102,31 +100,22 @@ sidebar_position: 3
 - 点击确定发布完成
 
 ![image.png](https://img.alicdn.com/imgextra/i4/O1CN01uwa8RH1QDwM7FN31k_!!6000000001943-2-tps-1431-734.png)
-
-## 资产包构建
-
+## 资产包
 第三步：物料描述发布完成后，接下来我们就需要构建出可用的资产包用于低代码应用中。
 
 #### 资产包构建
+有两种方式可以构建资产包:
+- 一种是通过 [`我的资产包`] 资产包管理模块进行整个资产包生命周期的管理，当然也包括资产包的构建，可参考 [资产包管理](./partsassets)
+- 一种是通过 [`我的物料`] 组件物料管理模块的 `资产包构建` 进行构建, 具体操作如下：
 
-- 选择需要构建的组件
-- 点击构建资产包按钮
-- 选择刚刚的物料描述配置
-- 开始构建，构建完成后你将得到一份 json 文件（里面包含了物料描述和 umd 包），就可以到项目中使用了
-
-![image.png](https://img.alicdn.com/imgextra/i3/O1CN01Oc73aw1TH5vlJx9oj_!!6000000002356-2-tps-1431-770.png)
+  - 选择需要构建的组件
+  - 点击构建资产包按钮
+  - 选择刚刚的物料描述配置
+  - 开始构建，构建完成后你将得到一份json文件（里面包含了物料描述和umd包），就可以到项目中使用了
 
 #### 资产包使用
+详情请参考 [资产包管理](./partsassets#使用资产包)
 
-**方式一、在 **[**lowcode-demo**](https://github.com/alibaba/lowcode-demo)**中直接引用，可直接替换 demo 中原来的资产包文件：**
+## 联系我们
 
-例如，在 basic-fusion demo 中，直接用你的资产包文件替换文件[assets.json](https://github.com/alibaba/lowcode-demo/blob/main/demo-basic-fusion/src/services/assets.json)，即可快速使用自己的物料了。
-
-**方式二、将新的资产包内容和现有的资产包内容融合：**
-
-将上面构建完成的资产包与你项目中的[assets.json 文件](https://github.com/alibaba/lowcode-demo/blob/main/demo-basic-fusion/src/services/assets.json)合并，主要合并 packages 和 components。
-
-- packages 中是构建好的 umd 包；
-- components 中是上面配置好的[物料描述](https://lowcode-engine.cn/material)，你也可以在基础上二次加工；
-
-![image.png](https://img.alicdn.com/imgextra/i3/O1CN01m7QkDN1P7hL86mjyH_!!6000000001794-2-tps-1140-744.png)
+<img src="https://img.alicdn.com/imgextra/i2/O1CN01UF88Xi1jC5SZ6m4wt_!!6000000004511-2-tps-750-967.png" width="300" />

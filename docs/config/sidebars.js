@@ -39,7 +39,7 @@ module.exports = {
         type: 'category',
         label: '扩展编辑器',
         collapsed: false,
-        items: getDocsFromDir('guide/expand/editor'),
+        items: getDocsFromDir('guide/expand/editor', [{ dir: 'guide/expand/editor/parts', label: 'Parts·造物' }]),
       },
       {
         type: 'category',
