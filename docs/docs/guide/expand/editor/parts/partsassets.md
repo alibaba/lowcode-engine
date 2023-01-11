@@ -5,7 +5,7 @@ sidebar_position: 4
 
 ## 介绍
 
-通过前述介绍，相信大家已经了解如何使用 「[Parts·造物](https://parts.lowcode-engine.cn/)」 来将已有的 React 组件快速接入低代码引擎，以及生产低代码组件。
+通过前述介绍，相信大家已经了解如何使用「[Parts·造物](https://parts.lowcode-engine.cn/)」来将已有的 React 组件快速接入低代码引擎，以及生产低代码组件。
 
 大家在使用的过程中，可能会希望构建出来的资产包可以后续随时访问下载，或者希望构建资产包时各个组件的版本等信息可以持久化起来并且能够多人维护。
 
@@ -20,7 +20,7 @@ sidebar_position: 4
 
 - 填写资产包名称
 - 配置资产包管理员，管理员拥有该资产包的所有权限，初始默认为资产包的创建者，还可以添加其他人作为管理员，
-- 配置资产包描述(可选)
+- 配置资产包描述 (可选)
 - 点击 `确定`, 即可完成资产包的创建
 
 接下来需要为资产包添加一个或者多个组件。
@@ -43,12 +43,12 @@ sidebar_position: 4
 - `开启缓存` : 可充分利用之前的构建结果缓存来加速资产包的生成，我们会将每个组件的构建结果以 包名和版本号为 key 进行缓存。
 - `任务描述` : 当前构建任务的一些描述信息。
 
-点击 `确认` 按钮 会自动跳转到当前资产包的构建历史界面:
+点击 `确认` 按钮 会自动跳转到当前资产包的构建历史界面：
 ![image.png](https://img.alicdn.com/imgextra/i2/O1CN01krDaFc1TuTztMPssI_!!6000000002442-2-tps-1726-696.png)
-构建历史界面会显示当前资产包所有的构建历史记录，表格状态栏展示了构建的状态：`成功`,`失败`,`正在运行` 三种状态， 操作列可以在构建成功时复制或者下载资产包结果
+构建历史界面会显示当前资产包所有的构建历史记录，表格状态栏展示了构建的状态：`成功`,`失败`,`正在运行` 三种状态，操作列可以在构建成功时复制或者下载资产包结果
 
 ## 使用资产包
-你可以在 [lowcode-demo](https://github.com/alibaba/lowcode-demo) 中直接引用，可直接替换demo中原来的资产包文件：
+你可以在 [lowcode-demo](https://github.com/alibaba/lowcode-demo) 中直接引用，可直接替换 demo 中原来的资产包文件：
 例如，在 [demo-lowcode-component](https://github.com/alibaba/lowcode-demo/tree/main/demo-lowcode-component) 中，直接用你的资产包文件替换文件[assets.json](https://github.com/alibaba/lowcode-demo/blob/main/demo-lowcode-component/src/services/assets.json)，即可快速使用自己的物料了。
 
 ### 在编辑器中使用资产包
@@ -56,7 +56,7 @@ sidebar_position: 4
 然后直接替换 [lowcode-demo](https://github.com/alibaba/lowcode-demo) demo 中的 `assets.json` 文件即可。
 
 ### 在预览中使用资产包
-在预览中使用资产包的整体思路是从 `资产包` 中提取并转换出 `ReactRenderer` 渲染所需要的 react 组件列表(`components` 参数)，然后将 `schema` 以及 `components` 传入到 `ReactRenderer` 中进行渲染，需要注意的是，在 `资产包` 的转换过程中，我们也需要将 `低代码组件` 转换成 react 组件， 具体逻辑可以参考下 [demo-lowcode-component](https://github.com/alibaba/lowcode-demo/tree/main/demo-lowcode-component) 中 `src/parse-assets.ts` 文件的实现。
+在预览中使用资产包的整体思路是从 `资产包` 中提取并转换出 `ReactRenderer` 渲染所需要的 react 组件列表 (`components` 参数)，然后将 `schema` 以及 `components` 传入到 `ReactRenderer` 中进行渲染，需要注意的是，在 `资产包` 的转换过程中，我们也需要将 `低代码组件` 转换成 react 组件，具体逻辑可以参考下 [demo-lowcode-component](https://github.com/alibaba/lowcode-demo/tree/main/demo-lowcode-component) 中 `src/parse-assets.ts` 文件的实现。
 基于资产包进行预览的整体逻辑如下： [详见](https://github.com/alibaba/lowcode-demo/blob/main/demo-lowcode-component/src/preview.tsx)：
 ```ts
 import ReactDOM from 'react-dom';
@@ -125,7 +125,7 @@ const SamplePreview = () => {
 ReactDOM.render(<SamplePreview />, document.getElementById('ice-container'));
 ```
 
-从资产包中解析 react 组件列表的逻辑如下, [详见](https://github.com/alibaba/lowcode-demo/blob/main/demo-lowcode-component/src/parse-assets.ts)：
+从资产包中解析 react 组件列表的逻辑如下，[详见](https://github.com/alibaba/lowcode-demo/blob/main/demo-lowcode-component/src/parse-assets.ts)：
 ```ts
 import { ComponentDescription, ComponentSchema, RemoteComponentDescription } from '@alilc/lowcode-types';
 import { buildComponents, AssetsJson, AssetLoader } from '@alilc/lowcode-utils';

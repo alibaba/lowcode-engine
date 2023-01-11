@@ -5,17 +5,17 @@ sidebar_position: 2
 ## 什么是低代码组件
 我们先了解一下什么是低代码组件，为什么要用低代码组件。
 
-低代码组件是通过可视化的方式生产的组件，这些组件既可以用于低代码搭建体系，也可以用于ProCode开发体系（后续迭代）。
+低代码组件是通过可视化的方式生产的组件，这些组件既可以用于低代码搭建体系，也可以用于 ProCode 开发体系（后续迭代）。
 
 那么为什么我们要使用低代码的形式来开发组件：
-* <font color="red"><b>首先</b></font>：<b>轻快</b>，低代码组件只需通过浏览器秒级完成初始化工作，不需要ProCode繁重的环境准备；<b>环境一致（低代码环境）</b>，同时能够保证物料的开发环境和真实的运行环境是一致的，不会存在开发和运行环境不一致的问题。
+* <font color="red"><b>首先</b></font>：<b>轻快</b>，低代码组件只需通过浏览器秒级完成初始化工作，不需要 ProCode 繁重的环境准备；<b>环境一致（低代码环境）</b>，同时能够保证物料的开发环境和真实的运行环境是一致的，不会存在开发和运行环境不一致的问题。
 * <font color="red"><b>其次</b></font>：<b>通用能力可视化方式抽象，提升研发效能</b>，比如获取远程数据、视图开发、依赖管理、生命周期、事件绑定等功能。
   
-<font color="red">低代码组件不是用来替代 ProCode 的开发方式</font>，而是让开发者可以从ProCode中重复的工作脱离出来，抽象更多业务垂直的能力，从而起到提效的作用。
+<font color="red">低代码组件不是用来替代 ProCode 的开发方式</font>，而是让开发者可以从 ProCode 中重复的工作脱离出来，抽象更多业务垂直的能力，从而起到提效的作用。
 
 ## 创建组件
 
-环境准备：我们可以通过Parts提供的通用[低代码组件开发环境](https://parts.lowcode-engine.cn/material#/)开发。
+环境准备：我们可以通过 Parts 提供的通用[低代码组件开发环境](https://parts.lowcode-engine.cn/material#/)开发。
 
 点击开发新组件 --> 填写组件标题 --> 填写组件名称 --> 点击确定，完成组件创建工作。
 
@@ -29,13 +29,13 @@ sidebar_position: 2
 
 ### 依赖管理
 
-依赖管理用于管理低代码组件本身的依赖（类似于dependencies）。步骤：点击添加组件 -->  选择安装的组件 --> 保存并构建 (需要等待几分钟构建)。
+依赖管理用于管理低代码组件本身的依赖（类似于 dependencies）。步骤：点击添加组件 -->  选择安装的组件 --> 保存并构建 (需要等待几分钟构建)。
 
 ![](https://img.alicdn.com/imgextra/i4/O1CN01wC9JPK1J9dKLca9wK_!!6000000000986-2-tps-1438-819.png)
 
 ### 属性定义
 
-用于定义组件接收外部传入的propTypes，组件内部可以通过<font color="red">this.props.${属性名称}</font>的方式获取属性值。
+用于定义组件接收外部传入的 propTypes，组件内部可以通过<font color="red">this.props.${属性名称}</font>的方式获取属性值。
 
 属性定义前建议先阅读 [物料描述详解](https://lowcode-engine.cn/site/docs/guide/expand/editor/metaSpec)、[预置设置器](https://lowcode-engine.cn/site/docs/guide/appendix/setters)。
 
@@ -45,7 +45,7 @@ sidebar_position: 2
 
 ### 生命周期
 
-低代码组件的开发支持componentDidMount、componentDidUpdate、componentDidCatch、componentWillUnmount几个生命周期
+低代码组件的开发支持 componentDidMount、componentDidUpdate、componentDidCatch、componentWillUnmount 几个生命周期
 
 ![](https://img.alicdn.com/imgextra/i4/O1CN010bnrxJ1oLlujlfFqj_!!6000000005209-2-tps-1438-819.png)
 
@@ -55,7 +55,7 @@ sidebar_position: 2
 
 ![](https://img.alicdn.com/imgextra/i2/O1CN01Tk96vp1xrDeNeIUJD_!!6000000006496-2-tps-1438-820.png)
 
-在低代码应用中使用，组件面板 --> 低代码组件， 找到对应的低代码组件拖入画布即可。
+在低代码应用中使用，组件面板 --> 低代码组件，找到对应的低代码组件拖入画布即可。
 
 ![](https://img.alicdn.com/imgextra/i2/O1CN01oGHLea1lzDAhZQQVO_!!6000000004889-2-tps-1438-819.png)
 
