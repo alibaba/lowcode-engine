@@ -52,58 +52,9 @@ sidebar_position: 4
 例如，在 [demo-lowcode-component](https://github.com/alibaba/lowcode-demo/tree/main/demo-lowcode-component) 中，直接用你的资产包文件替换文件[assets.json](https://github.com/alibaba/lowcode-demo/blob/main/demo-lowcode-component/src/services/assets.json)，即可快速使用自己的物料了。
 
 ### 在编辑器中使用资产包
-在使用含有低代码组件的资产包注意 注意引擎版本必须大于等于 `1.1.0-beta.9`, 我们可以在设计器的初始化插件中完成资产包的注入，[详见](https://github.com/alibaba/lowcode-demo/blob/main/demo-lowcode-component/src/plugins/plugin-editor-init/index.tsx)， 示例如下：
-```ts
-import { ILowCodePluginContext } from '@alilc/lowcode-engine';
-import { injectAssets } from '@alilc/lowcode-plugin-inject';
-import assets from '../../services/assets.json';
-import { getPageSchema } from '../../services/mockService';
-const EditorInitPlugin = (ctx: ILowCodePluginContext, options: any) => {
-  return {
-    async init() {
-      const { material, project, config } = ctx;
-      const scenarioName = options['scenarioName'];
-      const scenarioDisplayName = options['displayName'] || scenarioName;
-      const scenarioInfo = options['info'] || {};
-      config.set('scenarioName', scenarioName);
-      config.set('scenarioDisplayName', scenarioDisplayName);
-      config.set('scenarioInfo', scenarioInfo);
+在使用含有低代码组件的资产包注意 注意引擎版本必须大于等于 `1.1.0-beta.9`。
+然后直接替换 [lowcode-demo](https://github.com/alibaba/lowcode-demo) demo 中的 `assets.json` 文件即可。
 
-      // 注入资产包
-      await material.setAssets(await injectAssets(assets));
-
-      const schema = await getPageSchema(scenarioName);
-
-      // 加载 schema
-      project.openDocument(schema);
-    },
-  };
-}
-EditorInitPlugin.pluginName = 'EditorInitPlugin';
-EditorInitPlugin.meta = {
-  preferenceDeclaration: {
-    title: '保存插件配置',
-    properties: [
-      {
-        key: 'scenarioName',
-        type: 'string',
-        description: '用于localstorage存储key',
-      },
-      {
-        key: 'displayName',
-        type: 'string',
-        description: '用于显示的场景名',
-      },
-      {
-        key: 'info',
-        type: 'object',
-        description: '用于扩展信息',
-      }
-    ],
-  },
-};
-export default EditorInitPlugin;
-```
 ### 在预览中使用资产包
 在预览中使用资产包的整体思路是从 `资产包` 中提取并转换出 `ReactRenderer` 渲染所需要的 react 组件列表(`components` 参数)，然后将 `schema` 以及 `components` 传入到 `ReactRenderer` 中进行渲染，需要注意的是，在 `资产包` 的转换过程中，我们也需要将 `低代码组件` 转换成 react 组件， 具体逻辑可以参考下 [demo-lowcode-component](https://github.com/alibaba/lowcode-demo/tree/main/demo-lowcode-component) 中 `src/parse-assets.ts` 文件的实现。
 基于资产包进行预览的整体逻辑如下： [详见](https://github.com/alibaba/lowcode-demo/blob/main/demo-lowcode-component/src/preview.tsx)：
@@ -137,7 +88,8 @@ const SamplePreview = () => {
     componentsMapArray.forEach((component: any) => {
       componentsMap[component.componentName] = component;
     });
-    // 从资产包中解析出所有的 react 组件列表
+
+    // 特别提醒重点注意！！！：从资产包中解析出所有的 react 组件列表
     const { components } = await parseAssets(assets);
 
     setData({
