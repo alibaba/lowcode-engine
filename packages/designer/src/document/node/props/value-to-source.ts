@@ -212,6 +212,8 @@ export function valueToSource(
     }
     case 'undefined':
       return `${indentString.repeat(indentLevel)}undefined`;
+    default:
+      return `${indentString.repeat(indentLevel)}undefined`;
   }
 }
 

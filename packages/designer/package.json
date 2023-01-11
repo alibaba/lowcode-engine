@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-designer",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "Designer for Ali LowCode Engine",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -15,24 +15,21 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@alilc/lowcode-editor-core": "1.0.17",
-    "@alilc/lowcode-shell": "1.0.17",
-    "@alilc/lowcode-types": "1.0.17",
-    "@alilc/lowcode-utils": "1.0.17",
+    "@alilc/lowcode-editor-core": "1.0.18",
+    "@alilc/lowcode-types": "1.0.18",
+    "@alilc/lowcode-utils": "1.0.18",
     "classnames": "^2.2.6",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.5",
     "react": "^16",
     "react-dom": "^16.7.0",
     "ric-shim": "^1.0.1",
-    "semver": "^7.3.5",
-    "zen-logger": "^1.1.0"
+    "semver": "^7.3.5"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.29",
-    "@alilc/lowcode-test-mate": "^1.0.1",
     "@testing-library/react": "^11.2.2",
     "@types/classnames": "^2.2.7",
+    "@types/enzyme": "^3.10.12",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^26.0.16",
     "@types/lodash": "^4.14.165",
     "@types/medium-editor": "^5.0.3",
@@ -40,9 +37,8 @@
     "@types/react": "^16",
     "@types/react-dom": "^16",
     "@types/semver": "7.3.9",
-    "babel-jest": "^26.5.2",
-    "build-plugin-component": "^0.2.10",
-    "build-scripts-config": "^0.1.8",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.5",
     "jest": "^26.6.3",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
@@ -51,9 +47,6 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
-  },
-  "resolutions": {
-    "@builder/babel-preset-ice": "1.0.1"
   },
   "repository": {
     "type": "http",

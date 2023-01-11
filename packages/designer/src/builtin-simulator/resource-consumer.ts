@@ -1,6 +1,5 @@
-import { autorun, makeObservable, obx } from '@alilc/lowcode-editor-core';
+import { autorun, makeObservable, obx, createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
 import { BuiltinSimulatorHost } from './host';
-import { EventEmitter } from 'events';
 import { BuiltinSimulatorRenderer, isSimulatorRenderer } from './renderer';
 
 const UNSET = Symbol('unset');
@@ -20,7 +19,7 @@ export type RendererConsumer<T> = (renderer: BuiltinSimulatorRenderer, data: T) 
 //  2. 消费机制（渲染进程自定 + 传递进入）
 
 export default class ResourceConsumer<T = any> {
-  private emitter = new EventEmitter();
+  private emitter: IEventBus = createModuleEventBus('ResourceConsumer');
 
   @obx.ref private _data: T | typeof UNSET = UNSET;
 

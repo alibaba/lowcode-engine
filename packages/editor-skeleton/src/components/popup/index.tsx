@@ -1,13 +1,13 @@
 import { createContext, ReactNode, Component, PureComponent } from 'react';
-import { EventEmitter } from 'events';
 import { Drawer, ConfigProvider } from '@alifd/next';
 import { uniqueId } from '@alilc/lowcode-utils';
+import { IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import './style.less';
 
 export const PopupContext = createContext<PopupPipe>({} as any);
 
 export class PopupPipe {
-  private emitter = new EventEmitter();
+  private emitter: IEventBus = createModuleEventBus('PopupPipe');
 
   private currentId?: string;
 

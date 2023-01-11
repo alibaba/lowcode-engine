@@ -1,4 +1,4 @@
-import { NodeSchema } from './schema';
+import { IPublicTypeNodeSchema } from './shell';
 
 export enum ActivityType {
   'ADDED' = 'added',
@@ -7,8 +7,8 @@ export enum ActivityType {
   'COMPOSITE' = 'composite',
 }
 
-export interface IActivityPayload {
-  schema: NodeSchema;
+interface IActivityPayload {
+  schema: IPublicTypeNodeSchema;
   location?: {
     parent: {
       nodeId: string;
@@ -20,6 +20,10 @@ export interface IActivityPayload {
   newValue: any;
 }
 
+/**
+ * TODO: not sure if this is used anywhere
+ * @deprecated
+ */
 export type ActivityData = {
   type: ActivityType;
   payload: IActivityPayload;

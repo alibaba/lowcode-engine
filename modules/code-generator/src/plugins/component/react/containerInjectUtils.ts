@@ -11,6 +11,7 @@ import {
   FileType,
   ICodeStruct,
   IContainerInfo,
+  IProjectTemplate,
 } from '../../../types';
 
 export interface PluginConfig {
@@ -31,6 +32,19 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     const ir = next.ir as IContainerInfo;
     next.contextData.useRefApi = true;
     const useRef = !!ir.analyzeResult?.isUsingRef;
+
+    // const isSingleComponent = next.contextData?.projectRemark?.isSingleComponent;
+    // const template = next.contextData?.template;
+
+    // function getRelativeUtilsPath(template: IProjectTemplate, isSingleComponent: boolean) {
+    //   let relativeUtilsPath = '../../utils';
+    //   const utilsPath = template.slots.utils.path;
+    //   if (ir.containerType === 'Component') {
+    //     // TODO: isSingleComponent
+    //     relativeUtilsPath = getRelativePath(template.slots.components.path.join('/'), utilsPath.join('/'));
+    //   }
+    //   return relativeUtilsPath;
+    // }
 
     next.chunks.push({
       type: ChunkType.STRING,
@@ -89,7 +103,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
         type: ChunkType.STRING,
         fileType: cfg.fileType,
         name: CLASS_DEFINE_CHUNK_NAME.InsMethod,
-        content: ` $ = () => null; `,
+        content: ' $ = () => null; ',
         linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsMethod]],
       });
 
@@ -97,7 +111,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
         type: ChunkType.STRING,
         fileType: cfg.fileType,
         name: CLASS_DEFINE_CHUNK_NAME.InsMethod,
-        content: ` $$ = () => [];        `,
+        content: ' $$ = () => [];        ',
         linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsMethod]],
       });
     }

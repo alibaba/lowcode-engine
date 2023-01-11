@@ -22,9 +22,10 @@ sidebar_position: 0
 3. 如果你修复了 bug 或者添加了代码，而这些内容需要测试，请添加测试！
 4. 确保通过测试套件（yarn test）。
 5. 请签订贡献者许可证协议（Contributor License Agreement）。
+   > 如已签署 CLA 仍被提示需要签署，[解决办法](/site/docs/faq/faq021)
 
 ### 核心贡献者交流
 如果你想长期参与到项目维护中，我们提供了一个核心贡献者交流群。
 
 1. 可以通过[填写问卷](https://survey.taobao.com/apps/zhiliao/4YEtu9gHF)的方式，参与到其中。
-2. 填写问卷后加微信号 `wxidvlalalalal` 说明一下
+2. 填写问卷后加微信号 `wxidvlalalalal` 说明一下。

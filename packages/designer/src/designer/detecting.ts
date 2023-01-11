@@ -1,10 +1,17 @@
-import { makeObservable, obx } from '@alilc/lowcode-editor-core';
-import { EventEmitter } from 'events';
-import { Node, DocumentModel } from '../document';
+import { makeObservable, obx, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
+import { IPublicModelDetecting, IPublicModelNode, IPublicModelDocumentModel } from '@alilc/lowcode-types';
 
 const DETECTING_CHANGE_EVENT = 'detectingChange';
+export interface IDetecting extends Omit< IPublicModelDetecting, 'capture' | 'release' | 'leave' > {
 
-export class Detecting {
+  capture(node: IPublicModelNode | null): void;
+
+  release(node: IPublicModelNode | null): void;
+
+  leave(document: IPublicModelDocumentModel | undefined): void;
+}
+
+export class Detecting implements IDetecting {
   @obx.ref private _enable = true;
 
   /**
@@ -24,9 +31,9 @@ export class Detecting {
 
   @obx.ref xRayMode = false;
 
-  @obx.ref private _current: Node | null = null;
+  @obx.ref private _current: IPublicModelNode | null = null;
 
-  private emitter: EventEmitter = new EventEmitter();
+  private emitter: IEventBus = createModuleEventBus('Detecting');
 
   constructor() {
     makeObservable(this);
@@ -36,27 +43,27 @@ export class Detecting {
     return this._current;
   }
 
-  capture(node: Node | null) {
+  capture(node: IPublicModelNode | null) {
     if (this._current !== node) {
       this._current = node;
       this.emitter.emit(DETECTING_CHANGE_EVENT, this.current);
     }
   }
 
-  release(node: Node | null) {
+  release(node: IPublicModelNode | null) {
     if (this._current === node) {
       this._current = null;
       this.emitter.emit(DETECTING_CHANGE_EVENT, this.current);
     }
   }
 
-  leave(document: DocumentModel | undefined) {
+  leave(document: IPublicModelDocumentModel | undefined) {
     if (this.current && this.current.document === document) {
       this._current = null;
     }
   }
 
-  onDetectingChange(fn: (node: Node) => void) {
+  onDetectingChange(fn: (node: IPublicModelNode) => void) {
     this.emitter.on(DETECTING_CHANGE_EVENT, fn);
     return () => {
       this.emitter.off(DETECTING_CHANGE_EVENT, fn);

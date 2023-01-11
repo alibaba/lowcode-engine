@@ -2,48 +2,79 @@
 title: logger - 日志 API
 sidebar_position: 9
 ---
-## 模块简介
-引擎日志模块，可以按照 **日志级别 **和** 业务类型 **两个维度来定制日志，基于 [zen-logger](https://web.npm.alibaba-inc.com/package/zen-logger) 封装。
-> 注：日志级别可以通过 url query 动态调整，详见下方使用示例。
 
-## 变量（variables）
-无
-## 方法签名（functions）
-### log / warn / error / info / debug
+> **@types** [IPublicApiLogger](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/api/logger.ts)<br/>
+> **@since** v1.0.0
+
+
+## 模块简介
+引擎日志模块，可以按照 **日志级别 **和** 业务类型 **两个维度来定制日志。
+> 注：日志级别可以通过 url query 动态调整，详见下方[查看示例](#查看示例)。<br/>
+> 参考 [zen-logger](https://web.npm.alibaba-inc.com/package/zen-logger) 实现进行封装
+
+## 方法
+
 日志记录方法
 
-**类型定义**
 ```typescript
-function log(args: any[]): void
-function warn(args: any[]): void
-function error(args: any[]): void
-function info(args: any[]): void
-function debug(args: any[]): void
-```
-**调用示例**
-```typescript
-import { logger } from '@alilc/lowcode-engine';
+/**
+ * debug info
+ */
+debug(...args: any | any[]): void;
 
+/**
+ * normal info output
+ */
+info(...args: any | any[]): void;
+
+/**
+ * warning info output
+ */
+warn(...args: any | any[]): void;
+
+/**
+ * error info output
+ */
+error(...args: any | any[]): void;
+
+/**
+ * log info output
+ */
+log(...args: any | any[]): void;
+```
+
+## 输出示例
+
+```typescript
+import { Logger } from '@alilc/lowcode-utils';
+const logger = new Logger({ level: 'warn', bizName: 'myPlugin:moduleA' });
 logger.log('Awesome Low-Code Engine');
 ```
-## 事件（events）
-无
 
-## 使用示例
-```typescript
-import { logger } from '@alilc/lowcode-engine';
+## 查看示例
 
-// 内部实现：logger = getLogger({ level: 'warn', bizName: 'designer:pluginManager' })
+开启查看方式：
 
-// 若在url query中增加 `__logConf__` 可改变打印日志级别和限定业务类型日志
-// 默认：__logConf__=warn:*
-logger.log('log');          // 不输出
-logger.warn('warn');        // 输出
-logger.error('error');      // 输出
+- 方式 1：所有 logger 创建时会有默认输出的 level, 默认为 warn , 即只展示 warn , error
+- 方式 2：url 上追加 __logConf__进行开启，示例如下
 
-// 比如：__logConf__=log:designer:pluginManager
-logger.log('log');          // 输出
-logger.warn('warn');        // 输出
-logger.error('error');      // 输出
+```
+https://lowcode-engine.cn/demo/demo-general/index.html?__logConf__=warn
+// 开启所有 bizName的 warn 和 error
+
+https://lowcode-engine.cn/demo/demo-general/index.html?__logConf__=debug
+// 开启所有 bizName的 debug, log, info, warn 和 error
+
+https://lowcode-engine.cn/demo/demo-general/index.html?__logConf__=log
+// 开启所有 bizName的 log, info, warn 和 error
+
+https://lowcode-engine.cn/demo/demo-general/index.html?__logConf__=warn|*
+// 同 __logConf__=warn
+
+https://lowcode-engine.cn/demo/demo-general/index.html?__logConf__=warn|bizName
+// 开启 bizName 的 debug, log, info, warn 和 error
+
+https://lowcode-engine.cn/demo/demo-general/index.html?__logConf__=warn|partOfBizName
+// 开启 bizName like '%partOfBizName%' 的 debug, log, info, warn 和 error
 
 ```

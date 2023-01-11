@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 /* eslint-disable no-new-func */
 import logger from './logger';
-import { isI18nData, RootSchema, NodeSchema, isJSExpression, JSSlot } from '@alilc/lowcode-types';
+import { IPublicTypeRootSchema, IPublicTypeNodeSchema, IPublicTypeJSSlot } from '@alilc/lowcode-types';
+import { isI18nData, isJSExpression } from '@alilc/lowcode-utils';
 import { isEmpty } from 'lodash';
 import IntlMessageFormat from 'intl-messageformat';
 import pkg from '../../package.json';
@@ -28,7 +29,7 @@ const EXPRESSION_TYPE = {
  * @name isSchema
  * @returns boolean
  */
-export function isSchema(schema: any): schema is NodeSchema {
+export function isSchema(schema: any): schema is IPublicTypeNodeSchema {
   if (isEmpty(schema)) {
     return false;
   }
@@ -57,7 +58,7 @@ export function isSchema(schema: any): schema is NodeSchema {
  * @param schema
  * @returns boolean
  */
-export function isFileSchema(schema: NodeSchema): schema is RootSchema {
+export function isFileSchema(schema: IPublicTypeNodeSchema): schema is IPublicTypeRootSchema {
   if (!isSchema(schema)) {
     return false;
   }
@@ -96,7 +97,7 @@ export function getFileCssName(fileName: string) {
  * check if a object is type of JSSlot
  * @returns string
  */
-export function isJSSlot(obj: any): obj is JSSlot {
+export function isJSSlot(obj: any): obj is IPublicTypeJSSlot {
   if (!obj) {
     return false;
   }

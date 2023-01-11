@@ -1,41 +1,20 @@
 import { ReactElement, ComponentType } from 'react';
-import { TitleContent, IconType, I18nData, TipContent } from '@alilc/lowcode-types';
+import {
+  IPublicTypeTitleContent,
+  IPublicTypeIconType,
+  IPublicTypeI18nData,
+  TipContent,
+  IPublicTypeWidgetConfigArea,
+  IPublicTypeWidgetBaseConfig,
+} from '@alilc/lowcode-types';
 import { IWidget } from './widget/widget';
 
-/**
- * 所有可能的停靠位置
- */
-export type IWidgetConfigArea =
-  | 'leftArea' | 'left' | 'rightArea'
-  | 'right' | 'topArea' | 'top'
-  | 'toolbar' | 'mainArea' | 'main'
-  | 'center' | 'centerArea' | 'bottomArea'
-  | 'bottom' | 'leftFixedArea'
-  | 'leftFloatArea' | 'stages';
-
-export interface IWidgetBaseConfig {
-  type: string;
-  name: string;
-  /**
-   * 停靠位置：
-   * - 当 type 为 'Panel' 时自动为 'leftFloatArea'；
-   * - 当 type 为 'Widget' 时自动为 'mainArea'；
-   * - 其他时候自动为 'leftArea'；
-   */
-  area?: IWidgetConfigArea;
-  props?: Record<string, any>;
-  content?: any;
-  contentProps?: Record<string, any>;
-  // index?: number;
-  [extra: string]: any;
-}
-
-export interface WidgetConfig extends IWidgetBaseConfig {
+export interface WidgetConfig extends IPublicTypeWidgetBaseConfig {
   type: 'Widget';
   props?: {
     align?: 'left' | 'right' | 'bottom' | 'center' | 'top';
     onInit?: (widget: IWidget) => void;
-    title?: TitleContent;
+    title?: IPublicTypeTitleContent;
   };
   content?: string | ReactElement | ComponentType<any>; // children
 }
@@ -45,15 +24,15 @@ export function isWidgetConfig(obj: any): obj is WidgetConfig {
 }
 
 export interface DockProps {
-  title?: TitleContent;
-  icon?: IconType;
+  title?: IPublicTypeTitleContent;
+  icon?: IPublicTypeIconType;
   size?: 'small' | 'medium' | 'large';
   className?: string;
   description?: TipContent;
   onClick?: () => void;
 }
 
-export interface DividerConfig extends IWidgetBaseConfig {
+export interface DividerConfig extends IPublicTypeWidgetBaseConfig {
   type: 'Divider';
   props?: {
     align?: 'left' | 'right' | 'center';
@@ -64,7 +43,7 @@ export function isDividerConfig(obj: any): obj is DividerConfig {
   return obj && obj.type === 'Divider';
 }
 
-export interface IDockBaseConfig extends IWidgetBaseConfig {
+export interface IDockBaseConfig extends IPublicTypeWidgetBaseConfig {
   props?: DockProps & {
     align?: 'left' | 'right' | 'bottom' | 'center' | 'top';
     onInit?: (widget: IWidget) => void;
@@ -84,7 +63,7 @@ export function isDockConfig(obj: any): obj is DockConfig {
 export interface DialogDockConfig extends IDockBaseConfig {
   type: 'DialogDock';
   dialogProps?: {
-    title?: TitleContent;
+    title?: IPublicTypeTitleContent;
     [key: string]: any;
   };
 }
@@ -94,7 +73,7 @@ export function isDialogDockConfig(obj: any): obj is DialogDockConfig {
 }
 
 // 窗格扩展
-export interface PanelConfig extends IWidgetBaseConfig {
+export interface PanelConfig extends IPublicTypeWidgetBaseConfig {
   type: 'Panel';
   content?: string | ReactElement | ComponentType<any> | PanelConfig[]; // as children
   props?: PanelProps;
@@ -107,15 +86,16 @@ export function isPanelConfig(obj: any): obj is PanelConfig {
 export type HelpTipConfig = string | { url?: string; content?: string | ReactElement };
 
 export interface PanelProps {
-  title?: TitleContent;
+  title?: IPublicTypeTitleContent;
   icon?: any; // 冗余字段
-  description?: string | I18nData;
+  description?: string | IPublicTypeI18nData;
   hideTitleBar?: boolean; // panel.props 兼容，不暴露
   help?: HelpTipConfig; // 显示问号帮助
   width?: number; // panel.props
   height?: number; // panel.props
   maxWidth?: number; // panel.props
   maxHeight?: number; // panel.props
+  hiddenWhenInit?: boolean; //  when this is true, by default will be hidden
   condition?: (widget: IWidget) => any;
   onInit?: (widget: IWidget) => any;
   onDestroy?: () => any;
@@ -128,7 +108,7 @@ export interface PanelDockConfig extends IDockBaseConfig {
   type: 'PanelDock';
   panelName?: string;
   panelProps?: PanelProps & {
-    area?: IWidgetConfigArea;
+    area?: IPublicTypeWidgetConfigArea;
   };
   content?: string | ReactElement | ComponentType<any> | PanelConfig[]; // content for pane
 }

@@ -1,12 +1,11 @@
-import { TitleContent, isDynamicSetter, SetterType, DynamicSetter, FieldExtraProps, FieldConfig, CustomView, isCustomView } from '@alilc/lowcode-types';
+import { IPublicTypeTitleContent, IPublicTypeSetterType, IPublicTypeDynamicSetter, IPublicTypeFieldExtraProps, IPublicTypeFieldConfig, IPublicTypeCustomView, IPublicTypeSetValueOptions } from '@alilc/lowcode-types';
 import { Transducer } from './utils';
 import { SettingPropEntry } from './setting-prop-entry';
 import { SettingEntry } from './setting-entry';
-import { computed, obx, makeObservable, action } from '@alilc/lowcode-editor-core';
-import { cloneDeep } from '@alilc/lowcode-utils';
-import type { ISetValueOptions } from '../../types';
+import { computed, obx, makeObservable, action, untracked } from '@alilc/lowcode-editor-core';
+import { cloneDeep, isCustomView, isDynamicSetter } from '@alilc/lowcode-utils';
 
-function getSettingFieldCollectorKey(parent: SettingEntry, config: FieldConfig) {
+function getSettingFieldCollectorKey(parent: SettingEntry, config: IPublicTypeFieldConfig) {
   let cur = parent;
   const path = [config.name];
   while (cur !== parent.top) {
@@ -25,27 +24,29 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   readonly transducer: Transducer;
 
-  private _config: FieldConfig;
+  private _config: IPublicTypeFieldConfig;
 
-  extraProps: FieldExtraProps;
+  extraProps: IPublicTypeFieldExtraProps;
 
   // ==== dynamic properties ====
-  private _title?: TitleContent;
+  private _title?: IPublicTypeTitleContent;
 
   get title() {
     // FIXME! intl
     return this._title || (typeof this.name === 'number' ? `项目 ${this.name}` : this.name);
   }
 
-  private _setter?: SetterType | DynamicSetter;
+  private _setter?: IPublicTypeSetterType | IPublicTypeDynamicSetter;
 
-  @computed get setter(): SetterType | null {
+  @computed get setter(): IPublicTypeSetterType | null {
     if (!this._setter) {
       return null;
     }
     if (isDynamicSetter(this._setter)) {
-      const shellThis = this.internalToShellPropEntry();
-      return this._setter.call(shellThis, shellThis);
+      return untracked(() => {
+        const shellThis = this.internalToShellPropEntry();
+        return this._setter.call(shellThis, shellThis);
+      });
     }
     return this._setter;
   }
@@ -62,7 +63,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   parent: SettingEntry;
 
-  constructor(parent: SettingEntry, config: FieldConfig, settingFieldCollector?: (name: string | number, field: SettingField) => void) {
+  constructor(parent: SettingEntry, config: IPublicTypeFieldConfig, settingFieldCollector?: (name: string | number, field: SettingField) => void) {
     super(parent, config.name, config.type);
     makeObservable(this);
     const { title, items, setter, extraProps, ...rest } = config;
@@ -89,17 +90,17 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     this.transducer = new Transducer(this, { setter });
   }
 
-  private _items: Array<SettingField | CustomView> = [];
+  private _items: Array<SettingField | IPublicTypeCustomView> = [];
 
-  get items(): Array<SettingField | CustomView> {
+  get items(): Array<SettingField | IPublicTypeCustomView> {
     return this._items;
   }
 
-  get config(): FieldConfig {
+  get config(): IPublicTypeFieldConfig {
     return this._config;
   }
 
-  private initItems(items: Array<FieldConfig | CustomView>, settingFieldCollector?: { (name: string | number, field: SettingField): void; (name: string, field: SettingField): void }) {
+  private initItems(items: Array<IPublicTypeFieldConfig | IPublicTypeCustomView>, settingFieldCollector?: { (name: string | number, field: SettingField): void; (name: string, field: SettingField): void }) {
     this._items = items.map((item) => {
       if (isCustomView(item)) {
         return item;
@@ -114,7 +115,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
   }
 
   // 创建子配置项，通常用于 object/array 类型数据
-  createField(config: FieldConfig): SettingField {
+  createField(config: IPublicTypeFieldConfig): SettingField {
     return new SettingField(this, config);
   }
 
@@ -124,14 +125,14 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   // ======= compatibles for vision ======
 
-  getConfig<K extends keyof FieldConfig>(configName?: K): FieldConfig[K] | FieldConfig {
+  getConfig<K extends keyof IPublicTypeFieldConfig>(configName?: K): IPublicTypeFieldConfig[K] | IPublicTypeFieldConfig {
     if (configName) {
       return this.config[configName];
     }
     return this._config;
   }
 
-  getItems(filter?: (item: SettingField | CustomView) => boolean): Array<SettingField | CustomView> {
+  getItems(filter?: (item: SettingField | IPublicTypeCustomView) => boolean): Array<SettingField | IPublicTypeCustomView> {
     return this._items.filter(item => {
       if (filter) {
         return filter(item);
@@ -143,7 +144,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
   private hotValue: any;
 
   @action
-  setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: ISetValueOptions) {
+  setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: IPublicTypeSetValueOptions) {
     if (isHotValue) {
       this.setHotValue(val, extraOptions);
       return;
@@ -178,7 +179,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
   }
 
   @action
-  setHotValue(data: any, options?: ISetValueOptions) {
+  setHotValue(data: any, options?: IPublicTypeSetValueOptions) {
     this.hotValue = data;
     const value = this.transducer.toNative(data);
     if (options) {
@@ -209,7 +210,9 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     return this.designer.autorun(action, true);
   }
 }
-
+/**
+ * @deprecated use same function from '@alilc/lowcode-utils' instead
+ */
 export function isSettingField(obj: any): obj is SettingField {
   return obj && obj.isSettingField;
 }

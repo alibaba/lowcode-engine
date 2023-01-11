@@ -1,8 +1,8 @@
-import { TransformedComponentMetadata, FieldConfig, SettingTarget } from '@alilc/lowcode-types';
+import { IPublicTypeTransformedComponentMetadata, IPublicTypeFieldConfig, IPublicModelSettingTarget } from '@alilc/lowcode-types';
 import { IconSlot } from '../icons/slot';
 import { getConvertedExtraKey } from '@alilc/lowcode-designer';
 
-export default function (metadata: TransformedComponentMetadata): TransformedComponentMetadata {
+export default function (metadata: IPublicTypeTransformedComponentMetadata): IPublicTypeTransformedComponentMetadata {
   const { componentName, configure = {} } = metadata;
 
   // 如果已经处理过，不再重新执行一遍
@@ -140,8 +140,8 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
     ],
   });
   */
-  const stylesGroup: FieldConfig[] = [];
-  const advancedGroup: FieldConfig[] = [];
+  const stylesGroup: IPublicTypeFieldConfig[] = [];
+  const advancedGroup: IPublicTypeFieldConfig[] = [];
   if (propsGroup) {
     let l = propsGroup.length;
     while (l-- > 0) {
@@ -164,7 +164,7 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
       }
     }
   }
-  const combined: FieldConfig[] = [
+  const combined: IPublicTypeFieldConfig[] = [
     {
       title: { type: 'i18n', 'zh-CN': '属性', 'en-US': 'Props' },
       name: '#props',
@@ -210,11 +210,11 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
               definition: eventsDefinition,
             },
           },
-          getValue(field: SettingTarget, val?: any[]) {
+          getValue(field: IPublicModelSettingTarget, val?: any[]) {
             return val;
           },
 
-          setValue(field: SettingTarget, eventData) {
+          setValue(field: IPublicModelSettingTarget, eventData) {
             const { eventDataList, eventList } = eventData;
             Array.isArray(eventList) && eventList.map((item) => {
               field.parent.clearPropValue(item.name);
@@ -224,7 +224,7 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
               field.parent.setPropValue(item.name, {
                 type: 'JSFunction',
                 // 需要传下入参
-                value: `function(){this.${item.relatedEventName}.apply(this,Array.prototype.slice.call(arguments).concat([${item.paramStr ? item.paramStr : ''}])) }`,
+                value: `function(){return this.${item.relatedEventName}.apply(this,Array.prototype.slice.call(arguments).concat([${item.paramStr ? item.paramStr : ''}])) }`,
               });
               return item;
             });
@@ -319,7 +319,7 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
         title: {
           label: '渲染唯一标识（key）',
           tip: '搭配「条件渲染」或「循环渲染」时使用，和 react 组件中的 key 原理相同，点击查看帮助',
-          docUrl: 'https://lowcode-engine.cn/docV2/qm75w3',
+          docUrl: 'https://www.yuque.com/lce/doc/qm75w3',
         },
         setter: [
           {

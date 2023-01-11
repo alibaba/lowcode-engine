@@ -4,25 +4,23 @@ import {
   reaction,
   computed,
   getPublicPath,
-  hotkey,
   focusTracker,
   engineConfig,
   IReactionPublic,
   IReactionOptions,
   IReactionDisposer,
   makeObservable,
+  createModuleEventBus,
+  IEventBus,
 } from '@alilc/lowcode-editor-core';
-import { EventEmitter } from 'events';
 import {
   ISimulatorHost,
   Component,
-  NodeInstance,
-  ComponentInstance,
   DropContainer,
 } from '../simulator';
 import Viewport from './viewport';
 import { createSimulator } from './create-simulator';
-import { Node, ParentalNode, contains, isRootNode, isLowCodeComponent } from '../document';
+import { Node, INode, contains, isRootNode, isLowCodeComponent } from '../document';
 import ResourceConsumer from './resource-consumer';
 import {
   AssetLevel,
@@ -37,46 +35,48 @@ import {
   UtilsMetadata,
   getClosestNode,
   transactionManager,
-} from '@alilc/lowcode-utils';
-import {
-  DragObjectType,
-  DragNodeObject,
-  isShaken,
-  LocateEvent,
   isDragAnyObject,
   isDragNodeObject,
   isLocationData,
-  LocationChildrenDetail,
-  LocationDetailType,
+} from '@alilc/lowcode-utils';
+import {
+  isShaken,
+  ILocateEvent,
   isChildInline,
   isRowContainer,
   getRectTarget,
-  Rect,
   CanvasPoint,
   Designer,
 } from '../designer';
 import { parseMetadata } from './utils/parse-metadata';
 import { getClosestClickableNode } from './utils/clickable';
 import {
-  ComponentMetadata,
-  ComponentSchema,
-  Package,
-  TransitionType,
+  IPublicTypeComponentMetadata,
+  IPublicTypeComponentSchema,
+  IPublicTypePackage,
+  IPublicEnumTransitionType,
+  IPublicEnumDragObjectType,
+  IPublicTypeDragNodeObject,
+  IPublicTypeNodeInstance,
+  IPublicTypeComponentInstance,
+  IPublicTypeLocationChildrenDetail,
+  IPublicTypeLocationDetailType,
+  IPublicTypeRect,
 } from '@alilc/lowcode-types';
 import { BuiltinSimulatorRenderer } from './renderer';
-import clipboard from '../designer/clipboard';
+import { clipboard } from '../designer/clipboard';
 import { LiveEditing } from './live-editing/live-editing';
 import { Project } from '../project';
 import { Scroller } from '../designer/scroller';
 import { isElementNode, isDOMNodeVisible } from '../utils/misc';
 import { debounce } from 'lodash';
 
-export interface LibraryItem extends Package{
+export type LibraryItem = IPublicTypePackage & {
   package: string;
   library: string;
   urls?: Asset;
   editUrls?: Asset;
-}
+};
 
 export interface DeviceStyleProps {
   canvas?: object;
@@ -171,7 +171,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   readonly scroller: Scroller;
 
-  readonly emitter: EventEmitter = new EventEmitter();
+  readonly emitter: IEventBus = createModuleEventBus('BuiltinSimulatorHost');
 
   readonly componentsConsumer: ResourceConsumer;
 
@@ -192,10 +192,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.renderer?.enableAutoRepaintNode();
   }
 
-  constructor(project: Project) {
+  constructor(project: Project, designer: Designer) {
     makeObservable(this);
     this.project = project;
-    this.designer = project?.designer;
+    this.designer = designer;
     this.scroller = this.designer.createScroller(this.viewport);
     this.autoRender = !engineConfig.get('disableAutoRender', false);
     this.componentsConsumer = new ResourceConsumer<Asset | undefined>(() => this.componentsAsset);
@@ -209,13 +209,13 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     transactionManager.onStartTransaction(() => {
       this.stopAutoRepaintNode();
-    }, TransitionType.REPAINT);
+    }, IPublicEnumTransitionType.REPAINT);
     // 防止批量调用 transaction 时，执行多次 rerender
     const rerender = debounce(this.rerender.bind(this), 28);
     transactionManager.onEndTransaction(() => {
       rerender();
       this.enableAutoRepaintNode();
-    }, TransitionType.REPAINT);
+    }, IPublicEnumTransitionType.REPAINT);
   }
 
   get currentDocument() {
@@ -372,11 +372,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    *   ],
    *   "library":"BizCharts"
    * }
-   * package：String 资源npm包名
-   * exportName：String umd包导出名字，用于适配部分物料包define name不一致的问题，例如把BizCharts改成bizcharts，用来兼容物料用define声明的bizcharts
+   * package：String 资源 npm 包名
+   * exportName：String umd 包导出名字，用于适配部分物料包 define name 不一致的问题，例如把 BizCharts 改成 bizcharts，用来兼容物料用 define 声明的 bizcharts
    * version：String 版本号
-   * urls：Array 资源cdn地址，必须是umd类型，可以是.js或者.css
-   * library：String umd包直接导出的name
+   * urls：Array 资源 cdn 地址，必须是 umd 类型，可以是.js 或者.css
+   * library：String umd 包直接导出的 name
    */
   buildLibrary(library?: LibraryItem[]) {
     const _library = library || (this.get('library') as LibraryItem[]);
@@ -418,7 +418,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.renderer?.rerender?.();
   }
 
-  async mountContentFrame(iframe: HTMLIFrameElement | null) {
+  async mountContentFrame(iframe: HTMLIFrameElement | null): Promise<void> {
     if (!iframe || this._iframe === iframe) {
       return;
     }
@@ -463,7 +463,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     await this.injectionConsumer.waitFirstConsume();
 
     if (Object.keys(this.asyncLibraryMap).length > 0) {
-      // 加载异步Library
+      // 加载异步 Library
       await renderer.loadAsyncLibrary(this.asyncLibraryMap);
       Object.keys(this.asyncLibraryMap).forEach(key => {
         delete this.asyncLibraryMap[key];
@@ -478,6 +478,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.setupEvents();
 
     // bind hotkey & clipboard
+    const hotkey = this.designer.editor.get('innerHotkey');
     hotkey.mount(this._contentWindow);
     focusTracker.mount(this._contentWindow);
     clipboard.injectCopyPaster(this._contentDocument);
@@ -489,7 +490,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     const libraryAsset: AssetList = this.buildLibrary(library);
     await this.renderer?.load(libraryAsset);
     if (Object.keys(this.asyncLibraryMap).length > 0) {
-      // 加载异步Library
+      // 加载异步 Library
       await this.renderer?.loadAsyncLibrary(this.asyncLibraryMap);
       Object.keys(this.asyncLibraryMap).forEach(key => {
         delete this.asyncLibraryMap[key];
@@ -536,16 +537,21 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         // FIXME: dirty fix remove label-for fro liveEditing
         (downEvent.target as HTMLElement).removeAttribute('for');
         const nodeInst = this.getNodeInstanceFromElement(downEvent.target as Element);
-        const focusNode = documentModel.focusNode;
+        const { focusNode } = documentModel;
         const node = getClosestClickableNode(nodeInst?.node || focusNode, downEvent);
-        // 如果找不到可点击的节点, 直接返回
+        // 如果找不到可点击的节点，直接返回
         if (!node) {
           return;
+        }
+        // 触发 onMouseDownHook 钩子
+        const onMouseDownHook = node.componentMeta?.getMetadata()?.configure.advanced?.callbacks?.onMouseDownHook;
+        if (onMouseDownHook) {
+          onMouseDownHook(downEvent, node.internalToShellNode());
         }
         const rglNode = node?.getParent();
         const isRGLNode = rglNode?.isRGLContainer;
         if (isRGLNode) {
-          // 如果拖拽的是磁铁块的右下角handle，则直接跳过
+          // 如果拖拽的是磁铁块的右下角 handle，则直接跳过
           if (downEvent.target.classList.contains('react-resizable-handle')) return;
           // 禁止多选
           isMulti = false;
@@ -571,7 +577,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
             action: 'end',
             rglNode,
           });
-          // 鼠标是否移动 ? - 鼠标抖动应该也需要支持选中事件，偶尔点击不能选中，磁帖块移除shaken检测
+          // 鼠标是否移动 ? - 鼠标抖动应该也需要支持选中事件，偶尔点击不能选中，磁帖块移除 shaken 检测
           if (!isShaken(downEvent, e) || isRGLNode) {
             let { id } = node;
             designer.activeTracker.track({ node, instance: nodeInst?.instance });
@@ -592,7 +598,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
                 [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
                 node?.componentMeta?.componentName ||
                 '';
-              editor?.emit('designer.builtinSimulator.select', {
+              editor?.eventBus.emit('designer.builtinSimulator.select', {
                 selected,
               });
             }
@@ -619,7 +625,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           }
           designer.dragon.boost(
             {
-              type: DragObjectType.Node,
+              type: IPublicEnumDragObjectType.Node,
               nodes,
             },
             downEvent,
@@ -699,7 +705,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       }
       const nodeInst = this.getNodeInstanceFromElement(e.target as Element);
       if (nodeInst?.node) {
-        let node = nodeInst.node;
+        let { node } = nodeInst;
         const focusNode = node.document?.focusNode;
         if (node.contains(focusNode)) {
           node = focusNode;
@@ -823,7 +829,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
         node?.componentMeta?.componentName ||
         '';
-      editor?.emit('designer.builtinSimulator.contextmenu', {
+      editor?.eventBus.emit('designer.builtinSimulator.contextmenu', {
         selected,
         ...nodeInst,
         instanceRect: this.computeComponentInstanceRect(nodeInst.instance),
@@ -835,7 +841,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * @see ISimulator
    */
-  generateComponentMetadata(componentName: string): ComponentMetadata {
+  generateComponentMetadata(componentName: string): IPublicTypeComponentMetadata {
     // if html tags
     if (isHTMLTag(componentName)) {
       return {
@@ -869,15 +875,15 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return this.renderer?.getComponent(componentName) || null;
   }
 
-  createComponent(schema: ComponentSchema): Component | null {
+  createComponent(schema: IPublicTypeComponentSchema): Component | null {
     return null;
     // return this.renderer?.createComponent(schema) || null;
   }
 
   @obx private instancesMap: {
-    [docId: string]: Map<string, ComponentInstance[]>;
+    [docId: string]: Map<string, IPublicTypeComponentInstance[]>;
   } = {};
-  setInstance(docId: string, id: string, instances: ComponentInstance[] | null) {
+  setInstance(docId: string, id: string, instances: IPublicTypeComponentInstance[] | null) {
     if (!hasOwnProperty(this.instancesMap, docId)) {
       this.instancesMap[docId] = new Map();
     }
@@ -891,7 +897,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * @see ISimulator
    */
-  getComponentInstances(node: Node, context?: NodeInstance): ComponentInstance[] | null {
+  getComponentInstances(node: Node, context?: IPublicTypeNodeInstance): IPublicTypeComponentInstance[] | null {
     const docId = node.document.id;
 
     const instances = this.instancesMap[docId]?.get(node.id) || null;
@@ -916,16 +922,16 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    * @see ISimulator
    */
   getClosestNodeInstance(
-    from: ComponentInstance,
+    from: IPublicTypeComponentInstance,
     specId?: string,
-  ): NodeInstance<ComponentInstance> | null {
+  ): IPublicTypeNodeInstance<IPublicTypeComponentInstance> | null {
     return this.renderer?.getClosestNodeInstance(from, specId) || null;
   }
 
   /**
    * @see ISimulator
    */
-  computeRect(node: Node): Rect | null {
+  computeRect(node: Node): IPublicTypeRect | null {
     const instances = this.getComponentInstances(node);
     if (!instances) {
       return null;
@@ -936,7 +942,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * @see ISimulator
    */
-  computeComponentInstanceRect(instance: ComponentInstance, selector?: string): Rect | null {
+  computeComponentInstanceRect(instance: IPublicTypeComponentInstance, selector?: string): IPublicTypeRect | null {
     const renderer = this.renderer!;
     const elements = this.findDOMNodes(instance, selector);
     if (!elements) {
@@ -1002,7 +1008,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * @see ISimulator
    */
-  findDOMNodes(instance: ComponentInstance, selector?: string): Array<Element | Text> | null {
+  findDOMNodes(instance: IPublicTypeComponentInstance, selector?: string): Array<Element | Text> | null {
     const elements = this._renderer?.findDOMNodes(instance);
     if (!elements) {
       return null;
@@ -1021,7 +1027,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * 通过 DOM 节点获取节点，依赖 simulator 的接口
    */
-  getNodeInstanceFromElement(target: Element | null): NodeInstance<ComponentInstance> | null {
+  getNodeInstanceFromElement(target: Element | null): IPublicTypeNodeInstance<IPublicTypeComponentInstance> | null {
     if (!target) {
       return null;
     }
@@ -1066,29 +1072,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       opt.top = top + scrollTop;
       scroll = true;
     }
-    /*
-    const rect = this.document.computeRect(node);
-    if (!rect || rect.width === 0 || rect.height === 0) {
-      if (!this.tryScrollAgain && tryTimes < 3) {
-        this.tryScrollAgain = requestAnimationFrame(() => this.scrollToNode(node, null, tryTimes + 1));
-      }
-      return;
-    }
-    const scrollTarget = this.viewport.scrollTarget!;
-    const st = scrollTarget.top;
-    const sl = scrollTarget.left;
-    const { scrollHeight, scrollWidth } = scrollTarget;
-    const { height, width, top, bottom, left, right } = this.viewport.contentBounds;
-
-    if (rect.height > height ? rect.top > bottom || rect.bottom < top : rect.top < top || rect.bottom > bottom) {
-      opt.top = Math.min(rect.top + rect.height / 2 + st - top - height / 2, scrollHeight - height);
-      scroll = true;
-    }
-
-    if (rect.width > width ? rect.left > right || rect.right < left : rect.left < left || rect.right > right) {
-      opt.left = Math.min(rect.left + rect.width / 2 + sl - left - width / 2, scrollWidth - width);
-      scroll = true;
-    } */
 
     if (scroll && this.scroller) {
       this.scroller.scrollTo(opt);
@@ -1127,16 +1110,16 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   private _sensorAvailable = true;
 
   /**
-   * @see ISensor
+   * @see IPublicModelSensor
    */
   get sensorAvailable(): boolean {
     return this._sensorAvailable;
   }
 
   /**
-   * @see ISensor
+   * @see IPublicModelSensor
    */
-  fixEvent(e: LocateEvent): LocateEvent {
+  fixEvent(e: ILocateEvent): ILocateEvent {
     if (e.fixed) {
       return e;
     }
@@ -1165,9 +1148,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   /**
-   * @see ISensor
+   * @see IPublicModelSensor
    */
-  isEnter(e: LocateEvent): boolean {
+  isEnter(e: ILocateEvent): boolean {
     const rect = this.viewport.bounds;
     return (
       e.globalY >= rect.top &&
@@ -1180,7 +1163,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   private sensing = false;
 
   /**
-   * @see ISensor
+   * @see IPublicModelSensor
    */
   deactiveSensor() {
     this.sensing = false;
@@ -1190,17 +1173,33 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   // ========= drag location logic: helper for locate ==========
 
   /**
-   * @see ISensor
+   * @see IPublicModelSensor
    */
-  locate(e: LocateEvent): any {
+  locate(e: ILocateEvent): any {
     const { dragObject } = e;
-    const { nodes } = dragObject as DragNodeObject;
+    const { nodes } = dragObject as IPublicTypeDragNodeObject;
 
     const operationalNodes = nodes?.filter((node) => {
       const onMoveHook = node.componentMeta?.getMetadata()?.configure.advanced?.callbacks?.onMoveHook;
       const canMove = onMoveHook && typeof onMoveHook === 'function' ? onMoveHook(node.internalToShellNode()) : true;
 
-      return canMove;
+      let parentContainerNode: Node | null = null;
+      let parentNode = node.parent;
+
+      while (parentNode) {
+        if (parentNode.isContainer()) {
+          parentContainerNode = parentNode;
+          break;
+        }
+
+        parentNode = parentNode.parent;
+      }
+
+      const onChildMoveHook = parentContainerNode?.componentMeta?.getMetadata()?.configure.advanced?.callbacks?.onChildMoveHook;
+
+      const childrenCanMove = onChildMoveHook && parentContainerNode && typeof onChildMoveHook === 'function' ? onChildMoveHook(node.internalToShellNode(), parentContainerNode.internalToShellNode()) : true;
+
+      return canMove && childrenCanMove;
     });
 
     if (nodes && (!operationalNodes || operationalNodes.length === 0)) {
@@ -1239,14 +1238,14 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     const { children } = container;
 
-    const detail: LocationChildrenDetail = {
-      type: LocationDetailType.Children,
+    const detail: IPublicTypeLocationChildrenDetail = {
+      type: IPublicTypeLocationDetailType.Children,
       index: 0,
       edge,
     };
 
     const locationData = {
-      target: container as ParentalNode,
+      target: container as INode,
       detail,
       source: `simulator${document.id}`,
       event: e,
@@ -1366,13 +1365,13 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * 查找合适的投放容器
    */
-  getDropContainer(e: LocateEvent): DropContainer | null {
+  getDropContainer(e: ILocateEvent): DropContainer | null {
     const { target, dragObject } = e;
     const isAny = isDragAnyObject(dragObject);
     const document = this.project.currentDocument!;
     const { currentRoot } = document;
-    let container: Node;
-    let nodeInstance: NodeInstance<ComponentInstance> | undefined;
+    let container: INode;
+    let nodeInstance: IPublicTypeNodeInstance<IPublicTypeComponentInstance> | undefined;
 
     if (target) {
       const ref = this.getNodeInstanceFromElement(target);
@@ -1456,49 +1455,25 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           container = container.parent;
           instance = this.getClosestNodeInstance(dropContainer.instance, container.id)?.instance;
           dropContainer = {
-            container: container as ParentalNode,
+            container: container as INode,
             instance,
           };
         } else {
           return null;
         }
-      } /* else if (res === DRILL_DOWN) {
-        if (!upward) {
-          container = container.parent;
-          instance = this.getClosestNodeInstance(dropContainer.instance, container.id)?.instance;
-          upward = {
-            container,
-            instance
-          };
-        }
-        dropContainer = this.getNearByContainer(dropContainer, drillDownExcludes, e);
-        if (!dropContainer) {
-          dropContainer = upward;
-          upward = null;
-        }
-      } else if (isNode(res)) {
-        // TODO:
-      } */
+      }
     }
     return null;
   }
 
-  isAcceptable(/* container: ParentalNode */): boolean {
+  isAcceptable(): boolean {
     return false;
-    /*
-    const meta = container.componentMeta;
-    const instance: any = this.document.getView(container);
-    if (instance && '$accept' in instance) {
-      return true;
-    }
-    return meta.acceptable;
-    */
   }
 
   /**
    * 控制接受
    */
-  handleAccept({ container, instance }: DropContainer, e: LocateEvent): boolean {
+  handleAccept({ container, instance }: DropContainer, e: ILocateEvent): boolean {
     const { dragObject } = e;
     const document = this.currentDocument!;
     const focusNode = document.focusNode;
@@ -1514,33 +1489,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       return false;
     }
 
-    // first use accept
-    if (acceptable) {
-      /*
-      const view: any = this.document.getView(container);
-      if (view && '$accept' in view) {
-        if (view.$accept === false) {
-          return false;
-        }
-        if (view.$accept === AT_CHILD || view.$accept === '@CHILD') {
-          return AT_CHILD;
-        }
-        if (typeof view.$accept === 'function') {
-          const ret = view.$accept(container, e);
-          if (ret || ret === false) {
-            return ret;
-          }
-        }
-      }
-      if (proto.acceptable) {
-        const ret = proto.accept(container, e);
-        if (ret || ret === false) {
-          return ret;
-        }
-      }
-      */
-    }
-
     // check nesting
     return document.checkNesting(container, dragObject as any);
   }
@@ -1551,7 +1499,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   getNearByContainer(
     { container, instance }: DropContainer,
     drillDownExcludes: Set<Node>,
-    e: LocateEvent,
+    e: ILocateEvent,
   ) {
     const { children } = container;
     const document = this.project.currentDocument!;
@@ -1582,17 +1530,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       if (!rect) {
         continue;
       }
-
-      /*
-      if (isPointInRect(e, rect)) {
-        return child;
-      }
-
-      const distance = distanceToRect(e, rect);
-      if (nearDistance === null || distance < nearDistance) {
-        nearDistance = distance;
-        nearBy = child;
-      } */
     }
 
     return nearBy;
@@ -1604,7 +1541,7 @@ function isHTMLTag(name: string) {
   return /^[a-z]\w*$/.test(name);
 }
 
-function isPointInRect(point: CanvasPoint, rect: Rect) {
+function isPointInRect(point: CanvasPoint, rect: IPublicTypeRect) {
   return (
     point.canvasY >= rect.top &&
     point.canvasY <= rect.bottom &&
@@ -1613,7 +1550,7 @@ function isPointInRect(point: CanvasPoint, rect: Rect) {
   );
 }
 
-function distanceToRect(point: CanvasPoint, rect: Rect) {
+function distanceToRect(point: CanvasPoint, rect: IPublicTypeRect) {
   let minX = Math.min(Math.abs(point.canvasX - rect.left), Math.abs(point.canvasX - rect.right));
   let minY = Math.min(Math.abs(point.canvasY - rect.top), Math.abs(point.canvasY - rect.bottom));
   if (point.canvasX >= rect.left && point.canvasX <= rect.right) {
@@ -1626,7 +1563,7 @@ function distanceToRect(point: CanvasPoint, rect: Rect) {
   return Math.sqrt(minX ** 2 + minY ** 2);
 }
 
-function distanceToEdge(point: CanvasPoint, rect: Rect) {
+function distanceToEdge(point: CanvasPoint, rect: IPublicTypeRect) {
   const distanceTop = Math.abs(point.canvasY - rect.top);
   const distanceBottom = Math.abs(point.canvasY - rect.bottom);
 
@@ -1636,7 +1573,7 @@ function distanceToEdge(point: CanvasPoint, rect: Rect) {
   };
 }
 
-function isNearAfter(point: CanvasPoint, rect: Rect, inline: boolean) {
+function isNearAfter(point: CanvasPoint, rect: IPublicTypeRect, inline: boolean) {
   if (inline) {
     return (
       Math.abs(point.canvasX - rect.left) + Math.abs(point.canvasY - rect.top) >

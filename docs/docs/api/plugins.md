@@ -2,32 +2,35 @@
 title: plugins - 插件 API
 sidebar_position: 4
 ---
+> **@types** [IPublicApiPlugins](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/api/plugins.ts)<br/>
+> **@since** v1.0.0
+
 ## 模块简介
 插件管理器，提供编排模块中管理插件的能力。
-## 变量（variables）
-无
-## 方法签名（functions）
+
+## 方法
 ### register
 注册插件
 
-#### 类型定义
 ```typescript
 async function register(
-  pluginConfigCreator: (ctx: ILowCodePluginContext) => ILowCodePluginConfig,
-  options?: ILowCodeRegisterOptions,
+  plugin: IPublicTypePlugin,
+  options?: IPublicTypePluginRegisterOptions,
 ): Promise<void>
 ```
-pluginConfigCreator 是一个 ILowCodePluginConfig 生成函数，ILowCodePluginConfig 中包含了该插件的 init / destroy 等钩子函数，以及 exports 函数用于返回插件对外暴露的值。
+相关 types:
+- [IPublicTypePlugin](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/plugin.ts)
+- [IPublicTypePluginRegisterOptions](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/plugin-register-options.ts)
 
-另外，pluginConfigCreator 还必须挂载 pluginName 字段，全局确保唯一，否则 register 时会报错，可以选择性挂载 meta 字段，用于描述插件的元数据信息，比如兼容的引擎版本、支持的参数配置、依赖插件声明等。
-> 注：pluginConfigCreator 挂载 pluginName / meta 可以通过低代码工具链的插件脚手架生成，写如 package.json 后将会自动注入到代码中，具体见 [插件元数据工程化示例](#RO9YY)
+其中第一个参数 plugin 通过低代码工具链的插件脚手架生成编写模板，开发者可以参考[这个章节](/site/docs/guide/expand/editor/cli)进行创建
 
 
 #### 简单示例
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
-const builtinPluginRegistry = (ctx: ILowCodePluginContext) => {
+const builtinPluginRegistry = (ctx: IPublicModelPluginContext) => {
   return {
     async init() {
       const { skeleton } = ctx;
@@ -58,58 +61,61 @@ await plugins.register(builtinPluginRegistry);
 #### 使用 exports 示例
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
-const pluginA = (ctx: ILowCodePluginContext) => {
+const PluginA = (ctx: IPublicModelPluginContext) => {
   return {
     async init() {},
     exports() { return { x: 1, } },
   };
 }
-pluginA.pluginName = 'pluginA';
+PluginA.pluginName = 'PluginA';
 
-const pluginB = (ctx: ILowCodePluginContext) => {
+const PluginB = (ctx: IPublicModelPluginContext) => {
   return {
     async init() {
       // 获取 pluginA 的导出值
-      console.log(ctx.plugins.pluginA.x); // => 1
+      console.log(ctx.plugins.PluginA.x); // => 1
     },
   };
 }
-pluginA.pluginName = 'pluginA';
-pluginB.pluginName = 'pluginB';
-pluginB.meta = {
-  dependencies: ['pluginA'],
+PluginA.pluginName = 'pluginA';
+PluginB.pluginName = 'PluginB';
+PluginB.meta = {
+  dependencies: ['PluginA'],
 }
-await plugins.register(pluginA);
-await plugins.register(pluginB);
+await plugins.register(PluginA);
+await plugins.register(PluginB);
 ```
-> 注：ctx 是在插件 creator 中获取引擎 API 的上下文，具体定义参见 [ILowCodePluginContext](#qEhTb)
+> 注：ctx 是在插件中获取引擎 API 的唯一渠道，具体定义参见 [IPublicModelPluginContext](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/plugin-context.ts)
 
-####
+
 #### 设置兼容引擎版本示例
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
-const builtinPluginRegistry = (ctx: ILowCodePluginContext) => {
+const BuiltinPluginRegistry = (ctx: IPublicModelPluginContext) => {
   return {
     async init() {
       ...
     },
   };
 }
-builtinPluginRegistry.pluginName = 'builtinPluginRegistry';
-builtinPluginRegistry.meta = {
+BuiltinPluginRegistry.pluginName = 'BuiltinPluginRegistry';
+BuiltinPluginRegistry.meta = {
   engines: {
     lowcodeEngine: '^1.0.0', // 插件需要配合 ^1.0.0 的引擎才可运行
   },
 }
-await plugins.register(builtinPluginRegistry);
+await plugins.register(BuiltinPluginRegistry);
 ```
 #### 设置插件参数版本示例
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
-const builtinPluginRegistry = (ctx: ILowCodePluginContext, options: any) => {
+const BuiltinPluginRegistry = (ctx: IPublicModelPluginContext, options: any) => {
   return {
     async init() {
       // 1.0.4 之后的传值方式，通过 register(xxx, options)
@@ -120,8 +126,8 @@ const builtinPluginRegistry = (ctx: ILowCodePluginContext, options: any) => {
     },
   };
 }
-builtinPluginRegistry.pluginName = 'builtinPluginRegistry';
-builtinPluginRegistry.meta = {
+BuiltinPluginRegistry.pluginName = 'BuiltinPluginRegistry';
+BuiltinPluginRegistry.meta = {
   preferenceDeclaration: {
     title: 'pluginA 的参数定义',
     properties: [
@@ -150,100 +156,55 @@ builtinPluginRegistry.meta = {
 }
 
 // 从 1.0.4 开始，支持直接在 pluginCreator 的第二个参数 options 获取入参
-await plugins.register(builtinPluginRegistry, { key1: 'abc', key5: 'willNotPassToPlugin' });
-
-// 1.0.4 之前，通过 preference 来传递 / 获取值
-const preference = new Map();
-preference.set('builtinPluginRegistry', {
-  key1: 'abc',
-  key5: 'willNotPassToPlugin', // 因为 key5 不在插件声明可接受的参数里
-});
-
-init(document.getElementById('lce'), engineOptions, preference);
-
+await plugins.register(BuiltinPluginRegistry, { key1: 'abc', key5: 'willNotPassToPlugin' });
 ```
 
 ### get
-获取插件实例
 
-**类型定义**
-```typescript
-function get(pluginName: string): ILowCodePlugin | undefined
-```
-**调用示例**
-```typescript
-import { plugins } from '@alilc/lowcode-engine';
+获取指定插件
 
-plugins.get(builtinPluginRegistry);
+```typescript
+function get(pluginName: string): IPublicModelPluginInstance;
+
 ```
-###
+
+关联模型 [IPublicModelPluginInstance](./model/plugin-instance)
+
 ### getAll
-获取所有插件实例
 
-**类型定义**
-```typescript
-function getAll(): ILowCodePlugin[]
-```
-**调用示例**
-```typescript
-import { plugins } from '@alilc/lowcode-engine';
+获取所有的插件实例
 
-plugins.getAll();
+```typescript
+function getAll(): IPublicModelPluginInstance[];
+
 ```
-###
+
+关联模型 [IPublicModelPluginInstance](./model/plugin-instance)
+
 ### has
-判断是否已经加载了指定插件
-**类型定义**
-```typescript
-function has(pluginName: string): boolean
-```
-**调用示例**
-```typescript
-import { plugins } from '@alilc/lowcode-engine';
 
-plugins.has('builtinPluginRegistry');
+判断是否有指定插件
+
+```typescript
+function has(pluginName: string): boolean;
+
 ```
+
 ### delete
-删除指定插件
-**类型定义**
-```typescript
-async function delete(pluginName: string): Promise<boolean>
-```
-**调用示例**
-```typescript
-import { plugins } from '@alilc/lowcode-engine';
 
-plugins.delete('builtinPluginRegistry');
-```
-##
-## 事件（events）
-无
-## 相关模块
-### ILowCodePluginContext
-**类型定义**
+删除指定插件
+
 ```typescript
-export interface ILowCodePluginContext {
-  skeleton: Skeleton;                // 参考面板 API
-  hotkey: Hotkey;                    // 参考快捷键 API
-  logger: Logger;                    // 参考日志 API
-  plugins: ILowCodePluginManager;    // 参考插件 API
-  setters: Setters;                  // 参考设置器 API
-  config: EngineConfig;              // 参考配置 API
-  material: Material;                // 参考物料 API
-  event: Event;                      // 参考事件 API
-  project: Project;                  // 参考模型 API
-  preference: IPluginPreferenceMananger;
-}
+function delete(pluginName: string): void;
+
 ```
-### ILowCodePluginConfig
-**类型定义**
-```typescript
-export interface ILowCodePluginConfig {
-  init?(): void;
-  destroy?(): void;
-  exports?(): any;
-}
-```
+
+## 相关类型定义
+
+- [IPublicModelPluginContext](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/plugin-context.ts)
+- [IPublicTypePluginConfig](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/plugin-config.ts)
+- [IPublicModelPluginInstance](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/plugin-instance.ts)
+
 ## 插件元数据工程转化示例
 your-plugin/package.json
 ```json
@@ -261,8 +222,8 @@ your-plugin/package.json
 }
 ```
 转换后的结构：
-```json
-const debug = (ctx: ILowCodePluginContext, options: any) => {
+```typescript
+const debug = (ctx: IPublicModelPluginContext, options: any) => {
 	return {};
 }
 
@@ -274,8 +235,3 @@ debug.meta = {
   preferenceDeclaration: { ... }
 };
 ```
-###
-
-## 使用示例
-
-更多示例参考：[https://github.com/alibaba/lowcode-demo/blob/058450edb584d92be6cb665b1f3a9646ba464ffa/src/universal/plugin.tsx#L36](https://github.com/alibaba/lowcode-demo/blob/058450edb584d92be6cb665b1f3a9646ba464ffa/src/universal/plugin.tsx#L36)

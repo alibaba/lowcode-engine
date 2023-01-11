@@ -3,29 +3,27 @@ import { observer } from '@alilc/lowcode-editor-core';
 import { BuiltinSimulatorHost } from '../host';
 import {
   DropLocation,
-  Rect,
-  isLocationChildrenDetail,
-  LocationChildrenDetail,
   isVertical,
 } from '../../designer';
 import { ISimulatorHost } from '../../simulator';
-import { ParentalNode } from '../../document';
+import { INode } from '../../document';
 import './insertion.less';
-import { NodeData, NodeSchema } from '@alilc/lowcode-types';
+import { IPublicTypeNodeData, IPublicTypeNodeSchema, IPublicTypeLocationChildrenDetail, IPublicTypeRect } from '@alilc/lowcode-types';
+import { isLocationChildrenDetail } from '@alilc/lowcode-utils';
 
 interface InsertionData {
   edge?: DOMRect;
   insertType?: string;
   vertical?: boolean;
-  nearRect?: Rect;
+  nearRect?: IPublicTypeRect;
   coverRect?: DOMRect;
-  nearNode?: NodeData;
+  nearNode?: IPublicTypeNodeData;
 }
 
 /**
  * 处理拖拽子节点(INode)情况
  */
-function processChildrenDetail(sim: ISimulatorHost, container: ParentalNode, detail: LocationChildrenDetail): InsertionData {
+function processChildrenDetail(sim: ISimulatorHost, container: INode, detail: IPublicTypeLocationChildrenDetail): InsertionData {
   let edge = detail.edge || null;
 
   if (!edge) {
@@ -161,7 +159,7 @@ export class InsertionView extends Component<{ host: BuiltinSimulatorHost }> {
         y = ((insertType === 'before' ? nearRect.top : nearRect.bottom) + scrollY) * scale;
         style.width = nearRect.width * scale;
       }
-      if (y === 0 && (nearNode as NodeSchema)?.componentMeta?.isTopFixed) {
+      if (y === 0 && (nearNode as IPublicTypeNodeSchema)?.componentMeta?.isTopFixed) {
         return null;
       }
     }

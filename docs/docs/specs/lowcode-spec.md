@@ -2,8 +2,6 @@
 title: 《低代码引擎搭建协议规范》
 sidebar_position: 0
 ---
-# 《低代码引擎搭建协议规范》
-
 
 ## 1 介绍
 
@@ -78,7 +76,7 @@ sidebar_position: 0
 
 ### 1.7 背景
 
-- **协议目标**： 通过约束低代码引擎的搭建协议规范，让上层低代码编辑器的产出物（低代码业务组件、区块、应用）保持一致性，可跨低代码研发平台进行流通而提效，亦不阻碍集团业务间融合的发展。 
+- **协议目标**：通过约束低代码引擎的搭建协议规范，让上层低代码编辑器的产出物（低代码业务组件、区块、应用）保持一致性，可跨低代码研发平台进行流通而提效，亦不阻碍集团业务间融合的发展。 
 - **协议通**：
   - 协议顶层结构统一
     - 协议 schema 具备有完整的描述能力，包含版本、国际化、组件树、组件映射关系等；
@@ -179,10 +177,10 @@ sidebar_position: 0
         "props": {
           "prop1": 1234,               // 简单 json 数据
           "prop2": [{                  // 简单 json 数据
-            "label": "选项1",
+            "label": "选项 1",
             "value": 1
           }, {
-            "label": "选项2",
+            "label": "选项 2",
             "value": 2
           }],
           "prop3": [{
@@ -232,8 +230,8 @@ sidebar_position: 0
       "primary": "#ff9966"
     }
   },
-  "meta": {                                           // 应用元数据信息, key 为业务自定义
-    "name": "demo 应用",                               // 应用中文名称,
+  "meta": {                                           // 应用元数据信息，key 为业务自定义
+    "name": "demo 应用",                               // 应用中文名称，
     "git_group": "appGroup",                          // 应用对应 git 分组名
     "project_name": "app_demo",                       // 应用对应 git 的 project 名称
     "description": "这是一个测试应用",                   // 应用描述
@@ -281,7 +279,7 @@ sidebar_position: 0
 
 | 参数            | 说明                   | 类型                      | 变量支持 | 默认值 |
 | --------------- | ---------------------- | ------------------------- | -------- | ------ |
-| componentsMap[] | 描述组件映射关系的集合 | Array\<**ComponentMap**\> | -        | null   |
+| componentsMap[] | 描述组件映射关系的集合 | **ComponentMap**[] | -        | null   |
 
 **ComponentMap 结构描述**如下：
 
@@ -343,7 +341,7 @@ sidebar_position: 0
 出码结果：
 
 ```javascript
-// 使用解构方式, destructuring is true.
+// 使用解构方式，destructuring is true.
 import { Button } from '@alifd/next';
 
 // 使用解构方式，且 exportName 和 componentName 不同
@@ -376,7 +374,7 @@ import { Input as CustomInput } from '@ali/custom/lib/input';
 与源码对应的转换关系如下：
 
 - 组件结构：转换成一个 .jsx 文件内 React Class 类 render 函数返回的 **jsx** 代码。
-- 容器结构：将转换成一个标准文件，如 React 的 jsx 文件， export 一个 React Class，包含生命周期定义、自定义方法、事件属性绑定、异步数据请求等。
+- 容器结构：将转换成一个标准文件，如 React 的 jsx 文件，export 一个 React Class，包含生命周期定义、自定义方法、事件属性绑定、异步数据请求等。
 
 #### 2.3.1 基础结构描述 (A)
 
@@ -413,7 +411,7 @@ import { Input as CustomInput } from '@ali/custom/lib/input';
 
 | 参数        | 说明                   | 类型                                   | 支持变量 | 默认值 | 备注                                                                                                        |
 | ----------- | ---------------------- | -------------------------------------- | -------- | ------ | ----------------------------------------------------------------------------------------------------------- |
-| list[]     | 数据源列表             | Array\<**ComponentDataSourceItem**\> | -        | -      | 成为为单个请求配置, 内容定义详见 [ComponentDataSourceItem 对象描述](#2314-componentdatasourceitem-对象描述) |
+| list[]     | 数据源列表             | **ComponentDataSourceItem**[] | -        | -      | 成为为单个请求配置, 内容定义详见 [ComponentDataSourceItem 对象描述](#2314-componentdatasourceitem-对象描述) |
 | dataHandler | 所有请求数据的处理函数 | Function                               | -        | -      | 详见 [dataHandler Function 描述](#2317-datahandler-function 描述)                                           |
 
 ##### 2.3.1.4 ComponentDataSourceItem 对象描述
@@ -427,9 +425,9 @@ import { Input as CustomInput } from '@ali/custom/lib/input';
 | shouldFetch    | 本次请求是否可以正常请求     | (options: ComponentDataSourceItemOptions) => boolean | -        | ```() => true```            | function 参数参考 [ComponentDataSourceItemOptions 对象描述](#2315-componentdatasourceitemoptions-对象描述)                                                           |
 | willFetch      | 单个数据结果请求参数处理函数 | Function                                             | -        | options => options          | 只接受一个参数（options），返回值作为请求的 options，当处理异常时，使用原 options。也可以返回一个 Promise，resolve 的值作为请求的 options，reject 时，使用原 options |
 | requestHandler | 自定义扩展的外部请求处理器   | Function                                             | -        | -                           | 仅 type='custom' 时生效                                                                                                                                               |
-| dataHandler    | request 成功后的回调函数     | Function                                             | -        | `response => response.data` | 参数: 请求成功后 promise 的 value 值                                                                                                                                 |
-| errorHandler   | request 失败后的回调函数     | Function                                             | -        | -                           | 参数: 请求出错 promise 的 error 内容                                                                                                                                 |
-| options {}     | 请求参数                     | **ComponentDataSourceItemOptions**                   | -        | -                           | 每种请求类型对应不同参数, 详见 [ComponentDataSourceItemOptions 对象描述](#2315-componentdatasourceitemoptions-对象描述)                                              |
+| dataHandler    | request 成功后的回调函数     | Function                                             | -        | `response => response.data`| 参数：请求成功后 promise 的 value 值                                                                                                                                 ||
+| errorHandler   | request 失败后的回调函数     | Function                                             | -        | -                           | 参数：请求出错 promise 的 error 内容                                                                                                                                 |
+| options {}     | 请求参数                     | **ComponentDataSourceItemOptions**| -        | -                           | 每种请求类型对应不同参数，详见 | 每种请求类型对应不同参数，详见 [ComponentDataSourceItemOptions 对象描述](#2315-componentdatasourceitemoptions-对象描述)                                              |
 
 **关于 dataHandler 于 errorHandler 的细节说明：**
 
@@ -518,7 +516,7 @@ try {
 | 参数         | 说明       | 类型           | 支持变量 | 默认值    | 备注                                                                                                              |
 | ------------ | ---------- | -------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------- |
 | name         | 属性名称   | String         | -        | -         |                                                                                                                   |
-| propType     | 属性类型   | String\|Object | -        | -         | 具体值内容结构，参考《低代码引擎物料协议规范》 内的 “2.2.2.3 组件属性信息”中描述的**基本类型**和**复合类型** |
+| propType     | 属性类型   | String\|Object | -        | -         | 具体值内容结构，参考《低代码引擎物料协议规范》内的“2.2.2.3 组件属性信息”中描述的**基本类型**和**复合类型** |
 | description  | 属性描述   | String         | -        | ''        |                                                                                                                   |
 | defaultValue | 属性默认值 | Any            | -        | undefined | 当 defaultValue 和 defaultProps 中存在同一个 prop 的默认值时，优先使用 defaultValue。                             |
 
@@ -544,9 +542,9 @@ try {
 
 | 参数          | 说明                   | 类型             | 支持变量 | 默认值            | 备注                                                                                                       |
 | ------------- | ---------------------- | ---------------- | -------- | ----------------- | ---------------------------------------------------------------------------------------------------------- |
-| id            | 组件唯一标识           | String           | -        |                   | 可选, 组件 id 由引擎随机生成（UUID），并保证唯一性，消费方为上层应用平台，在组件发生移动等场景需保持 id 不变 |
-| componentName | 组件名称               | String           | -        | Div               | 必填，首字母大写, 同 [componentsMap](#22-组件映射关系 a) 中的要求                                           |
-| props {}      | 组件属性对象           | **Props**        | -        | {}                | 必填, 详见 [Props 结构描述](#2311-props-结构描述)                                                          |
+| id            | 组件唯一标识           | String           | -        |                   | 可选，组件 id 由引擎随机生成（UUID），并保证唯一性，消费方为上层应用平台，在组件发生移动等场景需保持 id 不变 |
+| componentName | 组件名称               | String           | -        | Div               | 必填，首字母大写，同 [componentsMap](#22-组件映射关系 a) 中的要求                                           |
+| props {}      | 组件属性对象           | **Props**| -        | {}                | 必填，详见 | 必填，详见 [Props 结构描述](#2311-props-结构描述)                                                          |
 | condition     | 渲染条件               | Boolean          | ✅        | true              | 选填，根据表达式结果判断是否渲染物料；支持变量表达式                                                       |
 | loop          | 循环数据               | Array            | ✅        | -                 | 选填，默认不进行循环渲染；支持变量表达式                                                                   |
 | loopArgs      | 循环迭代对象、索引名称 | [String, String] |          | ["item", "index"] | 选填，仅支持字符串                                                                                         |
@@ -607,14 +605,14 @@ try {
 | props { }       | 组件属性对象               | **Props**                                                                                                  | -        | {}     | 必填，详见 [Props 结构描述](#2311-props-结构描述)                                                                             |
 | static          | 低代码业务组件类的静态对象 |                                                                                                            |          |        |                                                                                                                               |
 | defaultProps    | 低代码业务组件默认属性     | Object                                                                                                     | -        | -      | 选填，仅用于定义低代码业务组件的默认属性                                                                                      |
-| propDefinitions | 低代码业务组件属性类型定义 | **Array\<ComponentPropDefinition\>**                                                                       | -        | -      | 选填，仅用于定义低代码业务组件的属性数据类型。详见 [ComponentPropDefinition 对象描述](#2318-componentpropdefinition-对象描述) |
+| propDefinitions | 低代码业务组件属性类型定义 | **ComponentPropDefinition**[]                                                                       | -        | -      | 选填，仅用于定义低代码业务组件的属性数据类型。详见 [ComponentPropDefinition 对象描述](#2318-componentpropdefinition-对象描述) |
 | condition       | 渲染条件                   | Boolean                                                                                                    | ✅        | true   | 选填，根据表达式结果判断是否渲染物料；支持变量表达式                                                                          |
 | state           | 容器初始数据               | Object                                                                                                     | ✅        | -      | 选填，支持变量表达式                                                                                                          |
 | children        | 子组件                     | Array                                                                                                      | -        |        | 选填，支持变量表达式                                                                                                          |
-| css/less/scss   | 样式属性                   | String                                                                                                     | ✅        | -      | 选填， 详见 [css/less/scss 样式描述](#2312-csslessscss 样式描述)                                                               |
+| css/less/scss   | 样式属性                   | String                                                                                                     | ✅        | -      | 选填，详见 [css/less/scss 样式描述](#2312-csslessscss 样式描述)                                                               |
 | lifeCycles      | 生命周期对象               | **ComponentLifeCycles**                                                                                    | -        | -      | 详见 [ComponentLifeCycles 对象描述](#2316-componentlifecycles-对象描述)                                                       |
 | methods         | 自定义方法对象             | Object                                                                                                     | -        | -      | 选填，对象成员为函数类型                                                                                                      |
-| dataSource {}   | 数据源对象                 | **ComponentDataSource**                                                                                    | -        | -      | 选填，异步数据源, 详见 [ComponentDataSource 对象描述](#2313-componentdatasource-对象描述)                                     |
+| dataSource {}   | 数据源对象                 | **ComponentDataSource**| -        | -      | 选填，异步数据源，详见                                                  | -        | -      | 选填，异步数据源，详见 [ComponentDataSource 对象描述](#2313-componentdatasource-对象描述)                                     |
 
 
 
@@ -751,7 +749,7 @@ try {
 | 参数  | 说明       | 值类型                | 默认值   | 备注                                                           |
 | ----- | ---------- | --------------------- | -------- | -------------------------------------------------------------- |
 | type  | 值类型描述 | String                | 'JSSlot' | 固定值                                                         |
-| value | 具体的值   | Array\<NodeSchema\> | null     | 内容为 NodeSchema 类型，详见[组件结构描述](#232-组件结构描述（A）) |
+| value | 具体的值   | NodeSchema \| NodeSchema[] | null     | 内容为 NodeSchema 类型，详见[组件结构描述](#232-组件结构描述（A）) |
 
 
 举例描述：如 **Card** 的 **title** 属性
@@ -782,8 +780,8 @@ try {
 | 参数   | 说明       | 值类型                | 默认值   | 备注                                                           |
 | ------ | ---------- | --------------------- | -------- | -------------------------------------------------------------- |
 | type   | 值类型描述 | String                | 'JSSlot' | 固定值                                                         |
-| value  | 具体的值   | Array\<NodeSchema\> | null     | 内容为 NodeSchema 类型，详见[组件结构描述](#232-组件结构描述 a) |
-| params | 函数的参数 | Array\<String\>     | null     | 函数的入参，其子节点可以通过 `this[参数名]` 来获取对应的参数。 |
+| value  | 具体的值   | NodeSchema \| NodeSchema[] | null     | 内容为 NodeSchema 类型，详见[组件结构描述](#232-组件结构描述 a) |
+| params | 函数的参数 | String[]     | null     | 函数的入参，其子节点可以通过 `this[参数名]` 来获取对应的参数。 |
 
 
 举例描述：如 **Table.Column** 的 **cell** 属性
@@ -891,7 +889,7 @@ try {
     "value": "this.state.num - this.state.num2"
   }
   ```
-- return "8万" 字符串类型
+- return "8 万" 字符串类型
 
   ```json
   {
@@ -899,7 +897,7 @@ try {
     "value": "`${this.state.num}万`"
   }
   ```
-- return "8万" 字符串类型
+- return "8 万" 字符串类型
 
   ```json
   {
@@ -1056,7 +1054,7 @@ type Ti18n = {
 
 请将 `setState()` 视为请求而不是立即更新组件的命令。为了更好的感知性能，低代码引擎会延迟调用它，然后通过一次传递更新多个组件。低代码引擎并不会保证 state 的变更会立即生效。
 
-`setState()` 并不总是立即更新组件, 它会批量推迟更新。这使得在调用 `setState()` 后立即读取 `this.state` 成为了隐患。为了消除隐患，请使用 `setState` 的回调函数（`setState(updater, callback)`），`callback` 将在应用更新后触发。即，如下例所示：
+`setState()`并不总是立即更新组件，它会批量推迟更新。这使得在调用用 `setState()` 后立即读取 `this.state` 成为了隐患。为了消除隐患，请使用 `setState` 的回调函数（`setState(updater, callback)`），`callback` 将在应用更新后触发。即，如下例所示：
 
 ```js
 this.setState(newState, () => {
@@ -1087,7 +1085,7 @@ this.setState((prevState) => ({ count: prevState.count + 1 }));
 | data         | 获取上次请求成功后的数据   | Any       |                                                                                                                                |
 | error        | 获取上次请求失败的错误对象 | Error 对象 |                                                                                                                                |
 
-备注： 如果组件没有在区块容器内，而是直接在页面内，那么 `this === this.page`
+备注：如果组件没有在区块容器内，而是直接在页面内，那么 `this === this.page`
 
 
 ##### 2.3.5.2 循环数据 API
@@ -1106,9 +1104,9 @@ this.setState((prevState) => ({ count: prevState.count + 1 }));
 
 | 参数               | 说明               | 类型                                                                                                             | 支持变量 | 默认值 |
 | ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- | -------- | ------ |
-| utils[]           | 工具类扩展映射关系 | Array\<**UtilItem**\>                                                                                          | -        |        |
+| utils[]           | 工具类扩展映射关系 | **UtilItem**[]                                                                                          | -        |        |
 | *UtilItem*.name    | 工具类扩展项名称   | String                                                                                                           | -        |        |
-| *UtilItem*.type    | 工具类扩展项类型   | 枚举, `'npm'` （代表公网 npm 类型） / `'tnpm'` （代表阿里巴巴内部 npm 类型） / `'function'` （代表 Javascript 函数类型） | -        |        |
+| *UtilItem*.type    | 工具类扩展项类型   | 枚举， `'npm'` （代表公网 npm 类型） / `'tnpm'` （代表阿里巴巴内部 npm 类型） / `'function'` （代表 Javascript 函数类型） | -        |        |
 | *UtilItem*.content | 工具类扩展项内容   | [ComponentMap 类型](#22-组件映射关系 a) 或 [JSFunction](#2432事件函数类型 a)                                        | -        |        |
 
 描述示例：
@@ -1161,7 +1159,7 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
 ...
 ```
 
-扩展的工具类，用户可以通过统一的上下文 this.utils 方法获取所有扩展的工具类或自定义函数 ，例如：this.utils.moment、this.utils.clone。搭建协议中的使用方式如下所示：
+扩展的工具类，用户可以通过统一的上下文 this.utils 方法获取所有扩展的工具类或自定义函数，例如：this.utils.moment、this.utils.clone。搭建协议中的使用方式如下所示：
 
 ```javascript
 {
@@ -1202,7 +1200,7 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
 }
 ```
 
-使用举例:
+使用举例：
 
 ```json
 {
@@ -1303,11 +1301,11 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
 │   │   └── app.js                 # 应用配置文件
 │   ├── utils/                     # 工具库
 │   │   └── index.js               # 应用第三方扩展函数
-│   ├── locales/                   # [可选]国际化资源
+│   ├── locales/                   # [可选] 国际化资源
 │   │   ├── en-US
 │   │   └── zh-CN
 │   ├── global.scss                # 全局样式
-│   └── index.jsx                  # 应用入口脚本, 依赖 config/routes.js 的路由配置动态生成路由；
+│   └── index.jsx                  # 应用入口脚本，依赖 config/routes.js 的路由配置动态生成路由；
 ├── webpack.config.js              # 项目工程配置，包含插件配置及自定义 webpack 配置等
 ├── README.md
 ├── package.json

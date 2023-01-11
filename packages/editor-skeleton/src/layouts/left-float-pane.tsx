@@ -1,8 +1,8 @@
 import { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { observer, Focusable, focusTracker } from '@alilc/lowcode-editor-core';
-import Area from '../area';
-import Panel from '../widget/panel';
+import { Area } from '../area';
+import { Panel } from '../widget/panel';
 
 @observer
 export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }> {
@@ -24,7 +24,7 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
       if (panelElem) return;
       area.setVisible(false);
     };
-    area.skeleton.editor.on('designer.drag', triggerClose);
+    area.skeleton.editor.eventBus.on('designer.drag', triggerClose);
 
     this.dispose = () => {
       area.skeleton.editor.removeListener('designer.drag', triggerClose);
@@ -65,7 +65,6 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
         this.props.area.setVisible(false);
       },
       onBlur: () => {
-        // debugger
         this.props.area.setVisible(false);
       },
     });

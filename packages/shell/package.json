@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-shell",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "Shell Layer for AliLowCodeEngine",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -15,21 +15,20 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@alilc/lowcode-designer": "1.0.17",
-    "@alilc/lowcode-editor-core": "1.0.17",
-    "@alilc/lowcode-editor-skeleton": "1.0.17",
-    "@alilc/lowcode-types": "1.0.17",
-    "@alilc/lowcode-utils": "1.0.17",
+    "@alilc/lowcode-designer": "1.0.18",
+    "@alilc/lowcode-editor-core": "1.0.18",
+    "@alilc/lowcode-editor-skeleton": "1.0.18",
+    "@alilc/lowcode-types": "1.0.18",
+    "@alilc/lowcode-utils": "1.0.18",
+    "@alilc/lowcode-workspace": "1.0.18",
     "classnames": "^2.2.6",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
     "react": "^16",
-    "react-dom": "^16.7.0",
-    "zen-logger": "^1.1.0"
+    "react-dom": "^16.7.0"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.29",
-    "@alilc/lowcode-test-mate": "^1.0.1",
     "@testing-library/react": "^11.2.2",
     "@types/classnames": "^2.2.7",
     "@types/jest": "^26.0.16",
@@ -38,9 +37,6 @@
     "@types/node": "^13.7.1",
     "@types/react": "^16",
     "@types/react-dom": "^16",
-    "babel-jest": "^26.5.2",
-    "build-plugin-component": "^0.2.10",
-    "build-scripts-config": "^0.1.8",
     "jest": "^26.6.3",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
@@ -49,9 +45,6 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
-  },
-  "resolutions": {
-    "@builder/babel-preset-ice": "1.0.1"
   },
   "repository": {
     "type": "http",

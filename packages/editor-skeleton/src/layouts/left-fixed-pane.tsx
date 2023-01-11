@@ -1,9 +1,9 @@
 import { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { observer } from '@alilc/lowcode-editor-core';
-import Area from '../area';
+import { Area } from '../area';
 import { PanelConfig } from '../types';
-import Panel from '../widget/panel';
+import { Panel } from '../widget/panel';
 
 @observer
 export default class LeftFixedPane extends Component<{ area: Area<PanelConfig, Panel> }> {

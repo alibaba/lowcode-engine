@@ -1,29 +1,35 @@
 import { untracked, computed, obx, engineConfig, action, makeObservable, mobx, runInAction } from '@alilc/lowcode-editor-core';
-import { CompositeValue, GlobalEvent, isJSExpression, isJSSlot, JSSlot, SlotSchema } from '@alilc/lowcode-types';
-import { uniqueId, isPlainObject, hasOwnProperty, compatStage } from '@alilc/lowcode-utils';
+import { IPublicTypeCompositeValue, GlobalEvent, IPublicTypeJSSlot, IPublicTypeSlotSchema, IPublicEnumTransformStage, IPublicModelProp } from '@alilc/lowcode-types';
+import { uniqueId, isPlainObject, hasOwnProperty, compatStage, isJSExpression, isJSSlot } from '@alilc/lowcode-utils';
 import { valueToSource } from './value-to-source';
-import { Props } from './props';
-import { SlotNode, Node } from '../node';
-import { TransformStage } from '../transform-stage';
+import { Props, IProps, IPropParent } from './props';
+import { SlotNode, INode } from '../node';
+// import { TransformStage } from '../transform-stage';
 
 const { set: mobxSet, isObservableArray } = mobx;
 export const UNSET = Symbol.for('unset');
 // eslint-disable-next-line no-redeclare
 export type UNSET = typeof UNSET;
 
-export interface IPropParent {
-  delete(prop: Prop): void;
+export interface IProp extends Omit<IPublicModelProp, 'exportSchema' | 'node'> {
+
   readonly props: Props;
-  readonly owner: Node;
-  readonly path: string[];
+
+  readonly owner: INode;
+
+  delete(prop: Prop): void;
+
+  export(stage: IPublicEnumTransformStage): IPublicTypeCompositeValue;
+
+  getNode(): INode;
 }
 
 export type ValueTypes = 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot';
 
-export class Prop implements IPropParent {
+export class Prop implements IProp, IPropParent {
   readonly isProp = true;
 
-  readonly owner: Node;
+  readonly owner: INode;
 
   /**
    * 键值
@@ -38,55 +44,6 @@ export class Prop implements IPropParent {
   readonly props: Props;
 
   readonly options: any;
-
-  constructor(
-    public parent: IPropParent,
-    value: CompositeValue | UNSET = UNSET,
-    key?: string | number,
-    spread = false,
-    options = {},
-  ) {
-    makeObservable(this);
-    this.owner = parent.owner;
-    this.props = parent.props;
-    this.key = key;
-    this.spread = spread;
-    this.options = options;
-    if (value !== UNSET) {
-      this.setValue(value);
-    }
-    this.setupItems();
-  }
-
-  // TODO: 先用调用方式触发子 prop 的初始化，后续须重构
-  @action
-  setupItems() {
-    return this.items;
-  }
-
-  /**
-   * @see SettingTarget
-   */
-  @action
-  getPropValue(propName: string | number): any {
-    return this.get(propName)!.getValue();
-  }
-
-  /**
-   * @see SettingTarget
-   */
-  @action
-  setPropValue(propName: string | number, value: any): void {
-    this.set(propName, value);
-  }
-
-  /**
-   * @see SettingTarget
-   */
-  @action
-  clearPropValue(propName: string | number): void {
-    this.get(propName, false)?.unset();
-  }
 
   readonly id = uniqueId('prop$');
 
@@ -104,80 +61,8 @@ export class Prop implements IPropParent {
   /**
    * 属性值
    */
-  @computed get value(): CompositeValue | UNSET {
-    return this.export(TransformStage.Serilize);
-  }
-
-  export(stage: TransformStage = TransformStage.Save): CompositeValue {
-    stage = compatStage(stage);
-    const type = this._type;
-    if (stage === TransformStage.Render && this.key === '___condition___') {
-      // 在设计器里，所有组件默认需要展示，除非开启了 enableCondition 配置
-      if (engineConfig?.get('enableCondition') !== true) {
-        return true;
-      }
-      return this._value;
-    }
-
-    if (type === 'unset') {
-      return undefined;
-    }
-
-    if (type === 'literal' || type === 'expression') {
-      // TODO 后端改造之后删除此逻辑
-      if (this._value === null && stage === TransformStage.Save) {
-        return '';
-      }
-      return this._value;
-    }
-
-    if (type === 'slot') {
-      const schema = this._slotNode?.export(stage) || {} as any;
-      if (stage === TransformStage.Render) {
-        return {
-          type: 'JSSlot',
-          params: schema.params,
-          value: schema,
-        };
-      }
-      return {
-        type: 'JSSlot',
-        params: schema.params,
-        value: schema.children,
-        title: schema.title,
-        name: schema.name,
-      };
-    }
-
-    if (type === 'map') {
-      if (!this._items) {
-        return this._value;
-      }
-      let maps: any;
-      this.items!.forEach((prop, key) => {
-        if (!prop.isUnset()) {
-          const v = prop.export(stage);
-          if (v != null) {
-            maps = maps || {};
-            maps[prop.key || key] = v;
-          }
-        }
-      });
-      return maps;
-    }
-
-    if (type === 'list') {
-      if (!this._items) {
-        return this._value;
-      }
-      const values = this.items!.map((prop) => {
-        return prop.export(stage);
-      });
-      if (values.every((val) => val === undefined)) {
-        return undefined;
-      }
-      return values;
-    }
+  @computed get value(): IPublicTypeCompositeValue | UNSET {
+    return this.export(IPublicEnumTransformStage.Serilize);
   }
 
   private _code: string | null = null;
@@ -191,7 +76,7 @@ export class Prop implements IPropParent {
     }
     // todo: JSFunction ...
     if (this.type === 'slot') {
-      return JSON.stringify(this._slotNode!.export(TransformStage.Save));
+      return JSON.stringify(this._slotNode!.export(IPublicEnumTransformStage.Save));
     }
     return this._code != null ? this._code : JSON.stringify(this.value);
   }
@@ -226,159 +111,10 @@ export class Prop implements IPropParent {
     this._code = code;
   }
 
-  getAsString(): string {
-    if (this.type === 'literal') {
-      return this._value ? String(this._value) : '';
-    }
-    return '';
-  }
+  private _slotNode?: INode;
 
-  /**
-   * set value, val should be JSON Object
-   */
-  @action
-  setValue(val: CompositeValue) {
-    if (val === this._value) return;
-    const editor = this.owner.document?.designer.editor;
-    const oldValue = this._value;
-    this._value = val;
-    this._code = null;
-    const t = typeof val;
-    if (val == null) {
-      // this._value = undefined;
-      this._type = 'literal';
-    } else if (t === 'string' || t === 'number' || t === 'boolean') {
-      this._type = 'literal';
-    } else if (Array.isArray(val)) {
-      this._type = 'list';
-    } else if (isPlainObject(val)) {
-      if (isJSSlot(val)) {
-        this.setAsSlot(val);
-      } else if (isJSExpression(val)) {
-        this._type = 'expression';
-      } else {
-        this._type = 'map';
-      }
-    } else /* istanbul ignore next */ {
-      this._type = 'expression';
-      this._value = {
-        type: 'JSExpression',
-        value: valueToSource(val),
-      };
-    }
-
-    this.dispose();
-
-    if (oldValue !== this._value) {
-      const propsInfo = {
-        key: this.key,
-        prop: this,
-        oldValue,
-        newValue: this._value,
-      };
-
-      editor?.emit(GlobalEvent.Node.Prop.InnerChange, {
-        node: this.owner as any,
-        ...propsInfo,
-      });
-
-      this.owner?.emitPropChange?.(propsInfo);
-    }
-  }
-
-  getValue(): CompositeValue {
-    return this.export(TransformStage.Serilize);
-  }
-
-  @action
-  private dispose() {
-    const items = untracked(() => this._items);
-    if (items) {
-      items.forEach((prop) => prop.purge());
-    }
-    this._items = null;
-    this._prevMaps = this._maps;
-    this._maps = null;
-    if (this._type !== 'slot' && this._slotNode) {
-      this._slotNode.remove();
-      this._slotNode = undefined;
-    }
-  }
-
-  private _slotNode?: SlotNode;
-
-  get slotNode() {
+  get slotNode(): INode | undefined | null {
     return this._slotNode;
-  }
-
-  @action
-  setAsSlot(data: JSSlot) {
-    this._type = 'slot';
-    let slotSchema: SlotSchema;
-    // 当 data.value 的结构为 { componentName: 'Slot' } 时，直接当成 slotSchema 使用
-    if ((isPlainObject(data.value) && data.value?.componentName === 'Slot')) {
-      slotSchema = data.value as SlotSchema;
-    } else {
-      slotSchema = {
-        componentName: 'Slot',
-        title: data.title,
-        id: data.id,
-        name: data.name,
-        params: data.params,
-        children: data.value,
-      };
-    }
-
-    if (this._slotNode) {
-      this._slotNode.import(slotSchema);
-    } else {
-      const { owner } = this.props;
-      this._slotNode = owner.document.createNode<SlotNode>(slotSchema);
-      owner.addSlot(this._slotNode);
-      this._slotNode.internalSetSlotFor(this);
-    }
-  }
-
-  /**
-   * 取消设置值
-   */
-  @action
-  unset() {
-    this._type = 'unset';
-  }
-
-  /**
-   * 是否未设置值
-   */
-  @action
-  isUnset() {
-    return this._type === 'unset';
-  }
-
-  isVirtual() {
-    return typeof this.key === 'string' && this.key.charAt(0) === '!';
-  }
-
-  /**
-   * @returns  0: the same 1: maybe & like 2: not the same
-   */
-  compare(other: Prop | null): number {
-    if (!other || other.isUnset()) {
-      return this.isUnset() ? 0 : 2;
-    }
-    if (other.type !== this.type) {
-      return 2;
-    }
-    // list
-    if (this.type === 'list') {
-      return this.size === other.size ? 1 : 2;
-    }
-    if (this.type === 'map') {
-      return 1;
-    }
-
-    // 'literal' | 'map' | 'expression' | 'slot'
-    return this.code === other.code ? 0 : 2;
   }
 
   @obx.shallow private _items: Prop[] | null = null;
@@ -392,10 +128,6 @@ export class Prop implements IPropParent {
    * 因为 reaction 监听的是原 Prop(a) 的 _value，而不是新 Prop(a) 的 _value。
    */
   private _prevMaps: Map<string | number, Prop> | null = null;
-
-  get path(): string[] {
-    return (this.parent.path || []).concat(this.key as string);
-  }
 
   /**
    * 构造 items 属性，同时构造 maps 属性
@@ -442,6 +174,299 @@ export class Prop implements IPropParent {
       return null;
     }
     return this._maps;
+  }
+
+  get path(): string[] {
+    return (this.parent.path || []).concat(this.key as string);
+  }
+
+  /**
+   * 元素个数
+   */
+  get size(): number {
+    return this.items?.length || 0;
+  }
+
+  private purged = false;
+
+  constructor(
+    public parent: IPropParent,
+    value: IPublicTypeCompositeValue | UNSET = UNSET,
+    key?: string | number,
+    spread = false,
+    options = {},
+  ) {
+    makeObservable(this);
+    this.owner = parent.owner;
+    this.props = parent.props;
+    this.key = key;
+    this.spread = spread;
+    this.options = options;
+    if (value !== UNSET) {
+      this.setValue(value);
+    }
+    this.setupItems();
+  }
+
+  // TODO: 先用调用方式触发子 prop 的初始化，后续须重构
+  @action
+  setupItems() {
+    return this.items;
+  }
+
+  /**
+   * @see SettingTarget
+   */
+  @action
+  getPropValue(propName: string | number): any {
+    return this.get(propName)!.getValue();
+  }
+
+  /**
+   * @see SettingTarget
+   */
+  @action
+  setPropValue(propName: string | number, value: any): void {
+    this.set(propName, value);
+  }
+
+  /**
+   * @see SettingTarget
+   */
+  @action
+  clearPropValue(propName: string | number): void {
+    this.get(propName, false)?.unset();
+  }
+
+  export(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Save): IPublicTypeCompositeValue {
+    stage = compatStage(stage);
+    const type = this._type;
+    if (stage === IPublicEnumTransformStage.Render && this.key === '___condition___') {
+      // 在设计器里，所有组件默认需要展示，除非开启了 enableCondition 配置
+      if (engineConfig?.get('enableCondition') !== true) {
+        return true;
+      }
+      return this._value;
+    }
+
+    if (type === 'unset') {
+      return undefined;
+    }
+
+    if (type === 'literal' || type === 'expression') {
+      // TODO 后端改造之后删除此逻辑
+      if (this._value === null && stage === IPublicEnumTransformStage.Save) {
+        return '';
+      }
+      return this._value;
+    }
+
+    if (type === 'slot') {
+      const schema = this._slotNode?.export(stage) || {} as any;
+      if (stage === IPublicEnumTransformStage.Render) {
+        return {
+          type: 'JSSlot',
+          params: schema.params,
+          value: schema,
+        };
+      }
+      return {
+        type: 'JSSlot',
+        params: schema.params,
+        value: schema.children,
+        title: schema.title,
+        name: schema.name,
+      };
+    }
+
+    if (type === 'map') {
+      if (!this._items) {
+        return this._value;
+      }
+      let maps: any;
+      this.items!.forEach((prop, key) => {
+        if (!prop.isUnset()) {
+          const v = prop.export(stage);
+          if (v != null) {
+            maps = maps || {};
+            maps[prop.key || key] = v;
+          }
+        }
+      });
+      return maps;
+    }
+
+    if (type === 'list') {
+      if (!this._items) {
+        return this._value;
+      }
+      const values = this.items!.map((prop) => {
+        return prop.export(stage);
+      });
+      if (values.every((val) => val === undefined)) {
+        return undefined;
+      }
+      return values;
+    }
+  }
+
+  getAsString(): string {
+    if (this.type === 'literal') {
+      return this._value ? String(this._value) : '';
+    }
+    return '';
+  }
+
+  /**
+   * set value, val should be JSON Object
+   */
+  @action
+  setValue(val: IPublicTypeCompositeValue) {
+    if (val === this._value) return;
+    const editor = this.owner.document?.designer.editor;
+    const oldValue = this._value;
+    this._value = val;
+    this._code = null;
+    const t = typeof val;
+    if (val == null) {
+      // this._value = undefined;
+      this._type = 'literal';
+    } else if (t === 'string' || t === 'number' || t === 'boolean') {
+      this._type = 'literal';
+    } else if (Array.isArray(val)) {
+      this._type = 'list';
+    } else if (isPlainObject(val)) {
+      if (isJSSlot(val)) {
+        this.setAsSlot(val);
+      } else if (isJSExpression(val)) {
+        this._type = 'expression';
+      } else {
+        this._type = 'map';
+      }
+    } else /* istanbul ignore next */ {
+      this._type = 'expression';
+      this._value = {
+        type: 'JSExpression',
+        value: valueToSource(val),
+      };
+    }
+
+    this.dispose();
+
+    if (oldValue !== this._value) {
+      const propsInfo = {
+        key: this.key,
+        prop: this,
+        oldValue,
+        newValue: this._value,
+      };
+
+      editor?.eventBus.emit(GlobalEvent.Node.Prop.InnerChange, {
+        node: this.owner as any,
+        ...propsInfo,
+      });
+
+      this.owner?.emitPropChange?.(propsInfo);
+    }
+  }
+
+  getValue(): IPublicTypeCompositeValue {
+    return this.export(IPublicEnumTransformStage.Serilize);
+  }
+
+  @action
+  private dispose() {
+    const items = untracked(() => this._items);
+    if (items) {
+      items.forEach((prop) => prop.purge());
+    }
+    this._items = null;
+    this._prevMaps = this._maps;
+    this._maps = null;
+    if (this._type !== 'slot' && this._slotNode) {
+      this._slotNode.remove();
+      this._slotNode = undefined;
+    }
+  }
+
+  @action
+  setAsSlot(data: IPublicTypeJSSlot) {
+    this._type = 'slot';
+    let slotSchema: IPublicTypeSlotSchema;
+    // 当 data.value 的结构为 { componentName: 'Slot' } 时，复用部分 slotSchema 数据
+    if ((isPlainObject(data.value) && data.value?.componentName === 'Slot')) {
+      const value = data.value as IPublicTypeSlotSchema;
+      slotSchema = {
+        componentName: 'Slot',
+        title: value.title || value.props?.slotTitle,
+        id: data.id,
+        name: value.name || value.props?.slotName,
+        params: value.params || value.props?.slotParams,
+        children: data.value,
+      } as IPublicTypeSlotSchema;
+    } else {
+      slotSchema = {
+        componentName: 'Slot',
+        title: data.title,
+        id: data.id,
+        name: data.name,
+        params: data.params,
+        children: data.value,
+      };
+    }
+
+    if (this._slotNode) {
+      this._slotNode.import(slotSchema);
+    } else {
+      const { owner } = this.props;
+      this._slotNode = owner.document.createNode<SlotNode>(slotSchema);
+      if (this._slotNode) {
+        owner.addSlot(this._slotNode);
+        this._slotNode.internalSetSlotFor(this);
+      }
+    }
+  }
+
+  /**
+   * 取消设置值
+   */
+  @action
+  unset() {
+    this._type = 'unset';
+  }
+
+  /**
+   * 是否未设置值
+   */
+  @action
+  isUnset() {
+    return this._type === 'unset';
+  }
+
+  isVirtual() {
+    return typeof this.key === 'string' && this.key.charAt(0) === '!';
+  }
+
+  /**
+   * @returns  0: the same 1: maybe & like 2: not the same
+   */
+  compare(other: Prop | null): number {
+    if (!other || other.isUnset()) {
+      return this.isUnset() ? 0 : 2;
+    }
+    if (other.type !== this.type) {
+      return 2;
+    }
+    // list
+    if (this.type === 'list') {
+      return this.size === other.size ? 1 : 2;
+    }
+    if (this.type === 'map') {
+      return 1;
+    }
+
+    // 'literal' | 'map' | 'expression' | 'slot'
+    return this.code === other.code ? 0 : 2;
   }
 
   /**
@@ -537,19 +562,12 @@ export class Prop implements IPropParent {
   }
 
   /**
-   * 元素个数
-   */
-  get size(): number {
-    return this.items?.length || 0;
-  }
-
-  /**
    * 添加值到列表
    *
    * @param force 强制
    */
   @action
-  add(value: CompositeValue, force = false): Prop | null {
+  add(value: IPublicTypeCompositeValue, force = false): Prop | null {
     const type = this._type;
     if (type !== 'list' && type !== 'unset' && !force) {
       return null;
@@ -569,7 +587,7 @@ export class Prop implements IPropParent {
    * @param force 强制
    */
   @action
-  set(key: string | number, value: CompositeValue | Prop, force = false) {
+  set(key: string | number, value: IPublicTypeCompositeValue | Prop, force = false) {
     const type = this._type;
     if (type !== 'map' && type !== 'list' && type !== 'unset' && !force) {
       return null;
@@ -631,8 +649,6 @@ export class Prop implements IPropParent {
     }
     return hasOwnProperty(this._value, key);
   }
-
-  private purged = false;
 
   /**
    * 回收销毁

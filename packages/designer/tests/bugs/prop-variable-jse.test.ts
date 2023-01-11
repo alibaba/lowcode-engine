@@ -1,12 +1,12 @@
-// @ts-nocheck
 import { Editor } from '@alilc/lowcode-editor-core';
-import { isJSBlock, TransformStage } from '@alilc/lowcode-types';
-import { isPlainObject, isVariable } from '@alilc/lowcode-utils';
+import { IPublicEnumTransformStage } from '@alilc/lowcode-types';
+import { isPlainObject, isVariable, isJSBlock } from '@alilc/lowcode-utils';
 import '../fixtures/window';
 import { Designer } from '../../src/designer/designer';
 import { DocumentModel } from '../../src/document/document-model';
 import { Project } from '../../src/project/project';
 import formSchema from '../fixtures/schema/form';
+import { shellModelFactory } from '../../../engine/src/modules/shell-model-factory';
 
 /**
  * bug 背景：
@@ -58,8 +58,8 @@ describe('Node 方法测试', () => {
 
   it('原始 prop 值是 variable 结构，通过一个 propsReducer 转成了 JSExpression 结构', () => {
     editor = new Editor();
-    designer = new Designer({ editor });
-    designer.addPropsReducer(upgradePropsReducer, TransformStage.Upgrade);
+    designer = new Designer({ editor, shellModelFactory });
+    designer.addPropsReducer(upgradePropsReducer, IPublicEnumTransformStage.Upgrade);
     project = designer.project;
     doc = new DocumentModel(project, formSchema);
 

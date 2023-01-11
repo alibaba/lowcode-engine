@@ -1,9 +1,7 @@
-import { obx, computed, globalContext, makeObservable } from '@alilc/lowcode-editor-core';
-import { Node, ParentalNode } from './node';
-import { TransformStage } from './transform-stage';
-import { NodeData, isNodeSchema } from '@alilc/lowcode-types';
-import { shallowEqual, compatStage } from '@alilc/lowcode-utils';
-import { EventEmitter } from 'events';
+import { obx, computed, globalContext, makeObservable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
+import { Node, INode } from './node';
+import { IPublicTypeNodeData, IPublicModelNodeChildren, IPublicEnumTransformStage } from '@alilc/lowcode-types';
+import { shallowEqual, compatStage, isNodeSchema } from '@alilc/lowcode-utils';
 import { foreachReverse } from '../../utils/tree';
 import { NodeRemoveOptions } from '../../types';
 
@@ -12,15 +10,68 @@ export interface IOnChangeOptions {
   node: Node;
 }
 
-export class NodeChildren {
-  @obx.shallow private children: Node[];
+export interface INodeChildren extends Omit<IPublicModelNodeChildren, 'forEach' | 'map' | 'every' | 'some' | 'filter' | 'find' | 'reduce' | 'mergeChildren' > {
+  unlinkChild(node: INode): void;
+  /**
+   * 删除一个节点
+   */
+  internalDelete(
+      node: INode,
+      purge: boolean,
+      useMutator: boolean,
+      options: NodeRemoveOptions
+    ): boolean;
 
-  private emitter = new EventEmitter();
+  /**
+   * 插入一个节点，返回新长度
+   */
+  internalInsert(node: INode, at?: number | null, useMutator?: boolean): void;
 
-  constructor(readonly owner: ParentalNode, data: NodeData | NodeData[], options: any = {}) {
+  import(data?: IPublicTypeNodeData | IPublicTypeNodeData[], checkId?: boolean): void;
+
+  /**
+   * 导出 schema
+   */
+  export(stage: IPublicEnumTransformStage): IPublicTypeNodeData[];
+
+  /** following methods are overriding super interface, using different param types */
+  /** overriding methods start */
+
+  forEach(fn: (item: INode, index: number) => void): void;
+
+  map<T>(fn: (item: INode, index: number) => T): T[] | null;
+
+  every(fn: (item: INode, index: number) => any): boolean;
+
+  some(fn: (item: INode, index: number) => any): boolean;
+
+  filter(fn: (item: INode, index: number) => any): any;
+
+  find(fn: (item: INode, index: number) => boolean): any;
+
+  reduce(fn: (acc: any, cur: INode) => any, initialValue: any): void;
+
+  mergeChildren(
+    remover: (node: INode, idx: number) => boolean,
+    adder: (children: INode[]) => IPublicTypeNodeData[] | null,
+    sorter: (firstNode: INode, secondNode: INode) => number,
+  ): any;
+
+  /** overriding methods end */
+}
+export class NodeChildren implements INodeChildren {
+  @obx.shallow private children: INode[];
+
+  private emitter: IEventBus = createModuleEventBus('NodeChildren');
+
+  constructor(
+      readonly owner: INode,
+      data: IPublicTypeNodeData | IPublicTypeNodeData[],
+      options: any = {},
+    ) {
     makeObservable(this);
     this.children = (Array.isArray(data) ? data : [data]).map((child) => {
-      return this.owner.document.createNode(child, options.checkId);
+      return this.owner.document?.createNode(child, options.checkId);
     });
   }
 
@@ -31,19 +82,19 @@ export class NodeChildren {
   /**
    * 导出 schema
    */
-  export(stage: TransformStage = TransformStage.Save): NodeData[] {
+  export(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Save): IPublicTypeNodeData[] {
     stage = compatStage(stage);
     return this.children.map((node) => {
       const data = node.export(stage);
-      if (node.isLeaf() && TransformStage.Save === stage) {
+      if (node.isLeafNode && IPublicEnumTransformStage.Save === stage) {
         // FIXME: filter empty
-        return data.children as NodeData;
+        return data.children as IPublicTypeNodeData;
       }
       return data;
     });
   }
 
-  import(data?: NodeData | NodeData[], checkId = false) {
+  import(data?: IPublicTypeNodeData | IPublicTypeNodeData[], checkId = false) {
     data = data ? (Array.isArray(data) ? data : [data]) : [];
 
     const originChildren = this.children.slice();
@@ -75,7 +126,7 @@ export class NodeChildren {
    * @deprecated
    * @param nodes
    */
-  concat(nodes: Node[]) {
+  concat(nodes: INode[]) {
     return this.children.concat(nodes);
   }
 
@@ -87,13 +138,21 @@ export class NodeChildren {
   }
 
   /**
-   * 是否空
+   *
    */
   isEmpty() {
+    return this.isEmptyNode;
+  }
+
+  get isEmptyNode(): boolean {
     return this.size < 1;
   }
 
   notEmpty() {
+    return this.notEmptyNode;
+  }
+
+  get notEmptyNode(): boolean {
     return this.size > 0;
   }
 
@@ -116,8 +175,8 @@ export class NodeChildren {
     });
   }
 
-  unlinkChild(node: Node) {
-    const i = this.children.indexOf(node);
+  unlinkChild(node: INode) {
+    const i = this.children.map(d => d.id).indexOf(node.id);
     if (i < 0) {
       return false;
     }
@@ -131,9 +190,16 @@ export class NodeChildren {
   /**
    * 删除一个节点
    */
-  delete(node: Node, purge = false, useMutator = true, options: NodeRemoveOptions = {}): boolean {
+  delete(node: INode): boolean {
+    return this.internalDelete(node);
+  }
+
+  /**
+   * 删除一个节点
+   */
+  internalDelete(node: INode, purge = false, useMutator = true, options: NodeRemoveOptions = {}): boolean {
     node.internalPurgeStart();
-    if (node.isParental()) {
+    if (node.isParentalNode) {
       foreachReverse(
         node.children,
         (subNode: Node) => {
@@ -149,8 +215,8 @@ export class NodeChildren {
         (iterable, idx) => (iterable as [])[idx],
       );
     }
-    // 需要在从 children 中删除 node 前记录下 index，internalSetParent 中会执行删除(unlink)操作
-    const i = this.children.indexOf(node);
+    // 需要在从 children 中删除 node 前记录下 index，internalSetParent 中会执行删除 (unlink) 操作
+    const i = this.children.map(d => d.id).indexOf(node.id);
     if (purge) {
       // should set parent null
       node.internalSetParent(null, useMutator);
@@ -163,11 +229,13 @@ export class NodeChildren {
     const { document } = node;
     /* istanbul ignore next */
     if (globalContext.has('editor')) {
-      globalContext.get('editor').emit('node.remove', { node, index: i });
+      const workspace = globalContext.get('workspace');
+      const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
+      editor.eventBus.emit('node.remove', { node, index: i });
     }
-    document.unlinkNode(node);
-    document.selection.remove(node.id);
-    document.destroyNode(node);
+    document?.unlinkNode(node);
+    document?.selection.remove(node.id);
+    document?.destroyNode(node);
     this.emitter.emit('change', {
       type: 'delete',
       node,
@@ -188,22 +256,28 @@ export class NodeChildren {
     return false;
   }
 
+  insert(node: INode, at?: number | null): void {
+    this.internalInsert(node, at, true);
+  }
+
   /**
    * 插入一个节点，返回新长度
    */
-  insert(node: Node, at?: number | null, useMutator = true): void {
+  internalInsert(node: INode, at?: number | null, useMutator = true): void {
     const { children } = this;
     let index = at == null || at === -1 ? children.length : at;
 
-    const i = children.indexOf(node);
+    const i = children.map(d => d.id).indexOf(node.id);
 
     if (node.parent) {
-      /* istanbul ignore next */
-      globalContext.has('editor') &&
-        globalContext.get('editor').emit('node.remove.topLevel', {
+      if (globalContext.has('editor')) {
+        const workspace = globalContext.get('workspace');
+        const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
+        editor.eventBus.emit('node.remove.topLevel', {
           node,
           index: node.index,
         });
+      }
     }
 
     if (i < 0) {
@@ -233,7 +307,9 @@ export class NodeChildren {
     this.emitter.emit('insert', node);
     /* istanbul ignore next */
     if (globalContext.has('editor')) {
-      globalContext.get('editor').emit('node.add', { node });
+      const workspace = globalContext.get('workspace');
+      const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
+      editor.eventBus.emit('node.add', { node });
     }
     if (useMutator) {
       this.reportModified(node, this.owner, { type: 'insert' });
@@ -265,14 +341,14 @@ export class NodeChildren {
   /**
    * 取得节点索引编号
    */
-  indexOf(node: Node): number {
-    return this.children.indexOf(node);
+  indexOf(node: INode): number {
+    return this.children.map(d => d.id).indexOf(node.id);
   }
 
   /**
    *
    */
-  splice(start: number, deleteCount: number, node?: Node): Node[] {
+  splice(start: number, deleteCount: number, node?: INode): INode[] {
     if (node) {
       return this.children.splice(start, deleteCount, node);
     }
@@ -282,21 +358,21 @@ export class NodeChildren {
   /**
    * 根据索引获得节点
    */
-  get(index: number): Node | null {
+  get(index: number): INode | null {
     return this.children.length > index ? this.children[index] : null;
   }
 
   /**
    * 是否存在节点
    */
-  has(node: Node) {
+  has(node: INode) {
     return this.indexOf(node) > -1;
   }
 
   /**
    * 迭代器
    */
-  [Symbol.iterator](): { next(): { value: Node } } {
+  [Symbol.iterator](): { next(): { value: INode } } {
     let index = 0;
     const { children } = this;
     const length = children.length || 0;
@@ -319,7 +395,7 @@ export class NodeChildren {
   /**
    * 遍历
    */
-  forEach(fn: (item: Node, index: number) => void): void {
+  forEach(fn: (item: INode, index: number) => void): void {
     this.children.forEach((child, index) => {
       return fn(child, index);
     });
@@ -328,43 +404,43 @@ export class NodeChildren {
   /**
    * 遍历
    */
-  map<T>(fn: (item: Node, index: number) => T): T[] | null {
+  map<T>(fn: (item: INode, index: number) => T): T[] | null {
     return this.children.map((child, index) => {
       return fn(child, index);
     });
   }
 
-  every(fn: (item: Node, index: number) => any): boolean {
+  every(fn: (item: INode, index: number) => any): boolean {
     return this.children.every((child, index) => fn(child, index));
   }
 
-  some(fn: (item: Node, index: number) => any): boolean {
+  some(fn: (item: INode, index: number) => any): boolean {
     return this.children.some((child, index) => fn(child, index));
   }
 
-  filter(fn: (item: Node, index: number) => any) {
+  filter(fn: (item: INode, index: number) => any): any {
     return this.children.filter(fn);
   }
 
-  find(fn: (item: Node, index: number) => boolean) {
+  find(fn: (item: INode, index: number) => boolean) {
     return this.children.find(fn);
   }
 
-  reduce(fn: (acc: any, cur: Node) => any, initialValue: any) {
+  reduce(fn: (acc: any, cur: INode) => any, initialValue: any): void {
     return this.children.reduce(fn, initialValue);
   }
 
   mergeChildren(
-    remover: (node: Node, idx: number) => boolean,
-    adder: (children: Node[]) => NodeData[] | null,
-    sorter: (firstNode: Node, secondNode: Node) => number,
-  ) {
+    remover: (node: INode, idx: number) => boolean,
+    adder: (children: INode[]) => IPublicTypeNodeData[] | null,
+    sorter: (firstNode: INode, secondNode: INode) => number,
+  ): any {
     let changed = false;
     if (remover) {
       const willRemove = this.children.filter(remover);
       if (willRemove.length > 0) {
         willRemove.forEach((node) => {
-          const i = this.children.indexOf(node);
+          const i = this.children.map(d => d.id).indexOf(node.id);
           if (i > -1) {
             this.children.splice(i, 1);
             node.remove(false);
@@ -376,8 +452,8 @@ export class NodeChildren {
     if (adder) {
       const items = adder(this.children);
       if (items && items.length > 0) {
-        items.forEach((child: NodeData) => {
-          const node = this.owner.document.createNode(child);
+        items.forEach((child: IPublicTypeNodeData) => {
+          const node = this.owner.document?.createNode(child);
           this.children.push(node);
           node.internalSetParent(this.owner);
         });
@@ -400,7 +476,7 @@ export class NodeChildren {
     };
   }
 
-  onInsert(fn: (node: Node) => void) {
+  onInsert(fn: (node: INode) => void) {
     this.emitter.on('insert', fn);
     return () => {
       this.emitter.removeListener('insert', fn);
@@ -412,14 +488,14 @@ export class NodeChildren {
     return 'Array';
   }
 
-  private reportModified(node: Node, owner: Node, options = {}) {
+  private reportModified(node: INode, owner: INode, options = {}) {
     if (!node) {
       return;
     }
-    if (node.isRoot()) {
+    if (node.isRootNode) {
       return;
     }
-    const callbacks = owner.componentMeta.getMetadata().configure.advanced?.callbacks;
+    const callbacks = owner.componentMeta?.getMetadata().configure.advanced?.callbacks;
     if (callbacks?.onSubtreeModified) {
       try {
         callbacks?.onSubtreeModified.call(
@@ -432,7 +508,7 @@ export class NodeChildren {
       }
     }
 
-    if (owner.parent && !owner.parent.isRoot()) {
+    if (owner.parent && !owner.parent.isRootNode) {
       this.reportModified(node, owner.parent, { ...options, propagated: true });
     }
   }

@@ -10,7 +10,7 @@ import { IWidget } from './widget';
 /**
  * 带图标（主要）/标题（次要）的扩展
  */
-export default class Dock implements IWidget {
+export class Dock implements IWidget {
   readonly isWidget = true;
 
   readonly id = uniqueId('dock');

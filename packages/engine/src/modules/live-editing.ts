@@ -1,5 +1,5 @@
 import { EditingTarget, Node as DocNode, SaveHandler, LiveEditing } from '@alilc/lowcode-designer';
-import { isJSExpression } from '@alilc/lowcode-types';
+import { isJSExpression } from '@alilc/lowcode-utils';
 
 function getText(node: DocNode, prop: string) {
   const p = node.getProp(prop, false);
@@ -25,12 +25,12 @@ export function liveEditingRule(target: EditingTarget) {
 
   const targetElement = event.target as HTMLElement;
 
-  if (!Array.from(targetElement.childNodes).every(item => item.nodeType === Node.TEXT_NODE)) {
+  if (!Array.from(targetElement.childNodes).every((item) => item.nodeType === Node.TEXT_NODE)) {
     return null;
   }
 
   const { innerText } = targetElement;
-  const propTarget = ['title', 'label', 'text', 'content', 'children'].find(prop => {
+  const propTarget = ['title', 'label', 'text', 'content', 'children'].find((prop) => {
     return equalText(getText(node, prop), innerText);
   });
 
@@ -53,8 +53,7 @@ function equalText(v: any, innerText: string) {
 
 export const liveEditingSaveHander: SaveHandler = {
   condition: (prop) => {
-    // const v = prop.getValue();
-    return prop.type === 'expression'; // || isI18nData(v);
+    return prop.type === 'expression';
   },
   onSaveContent: (content, prop) => {
     const v = prop.getValue();

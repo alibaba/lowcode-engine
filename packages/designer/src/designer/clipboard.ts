@@ -18,23 +18,8 @@ function getDataFromPasteEvent(event: ClipboardEvent) {
       };
     }
   } catch (error) {
-    /*
-    const html = clipboardData.getData('text/html');
-    if (html !== '') {
-      // TODO: clear the html
-      return {
-        code: '<div dangerouslySetInnerHTML={ __html: html } />',
-        maps: {},
-      };
-    }
-    */
     // TODO: open the parser implement
     return { };
-    /*
-    return {
-      code: clipboardData.getData('text/plain'),
-      maps: {},
-    }; */
   }
 }
 
@@ -109,4 +94,4 @@ class Clipboard {
   }
 }
 
-export default new Clipboard();
+export const clipboard = new Clipboard();

@@ -2,6 +2,7 @@ import '../../fixtures/window';
 import { mobx, makeAutoObservable, globalContext, Editor } from '@alilc/lowcode-editor-core';
 import { History } from '../../../src/document/history';
 import { delay } from '../../utils/misc';
+import { Workspace } from '@alilc/lowcode-workspace';
 
 class Node {
   data: number;
@@ -36,7 +37,10 @@ afterEach(() => {
 
 describe('History', () => {
   beforeAll(() => {
-    globalContext.register(new Editor(), Editor);
+    const editor = new Editor();
+    globalContext.register(editor, Editor);
+    globalContext.register(editor, 'editor');
+    globalContext.register(new Workspace(), 'workspace');
   });
 
   it('data function & records', async () => {
@@ -270,20 +274,6 @@ describe('History', () => {
     history.destroy();
     // @ts-ignore
     expect(history.records).toHaveLength(0);
-  });
-
-  it('internalToShellHistory()', async () => {
-    const history = new History<Node>(
-      () => {
-        const data = tree.toObject();
-        return data;
-      },
-      (data) => {
-        mockRedoFn(data);
-      },
-    );
-
-    expect(history.internalToShellHistory().isModified).toBeUndefined();
   });
 
   it('sleep & wakeup', async () => {

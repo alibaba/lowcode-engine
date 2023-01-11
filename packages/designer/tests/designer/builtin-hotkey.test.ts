@@ -1,12 +1,21 @@
 import '../fixtures/window';
-import { Editor, globalContext } from '@alilc/lowcode-editor-core';
+import {
+  Editor,
+  globalContext,
+  Hotkey as InnerHotkey,
+} from '@alilc/lowcode-editor-core';
 import { Designer } from '../../src/designer/designer';
 import formSchema from '../fixtures/schema/form';
-import '../../src/designer/builtin-hotkey';
 import { fireEvent } from '@testing-library/react';
-import { isInLiveEditing } from '../../src/designer/builtin-hotkey';
+import { isInLiveEditing, builtinHotkey } from '../../../engine/src/inner-plugins/builtin-hotkey';
+import { shellModelFactory } from '../../../engine/src/modules/shell-model-factory';
+import { ILowCodePluginContextPrivate, LowCodePluginManager } from '@alilc/lowcode-designer';
+import { IPublicApiPlugins } from '@alilc/lowcode-types';
+import { Logger, Project } from '@alilc/lowcode-shell';
+import { Workspace } from '@alilc/lowcode-workspace';
 
 const editor = new Editor();
+const workspace = new Workspace();
 
 let designer: Designer;
 
@@ -19,13 +28,38 @@ describe('error scenarios', () => {
 // keyCode 对应表：https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
 // hotkey 模块底层用的 keyCode，所以还不能用 key / code 测试
 describe('快捷键测试', () => {
+  let pluginManager: LowCodePluginManager;
+  let project: any = {};
   beforeAll(() => {
-    globalContext.register(editor, Editor);
+    return new Promise((resolve, reject) => {
+      const hotkey: any = new InnerHotkey();
+      const logger = new Logger({ level: 'warn', bizName: 'common' });
+      const contextApiAssembler = {
+        assembleApis(context: ILowCodePluginContextPrivate){
+          context.plugins = pluginManager as IPublicApiPlugins;
+          context.hotkey = hotkey;
+          context.logger = logger;
+          context.project = project;
+        }
+      };
+      pluginManager = new LowCodePluginManager(contextApiAssembler).toProxy();
+      pluginManager.register(builtinHotkey);
+      globalContext.register(editor, Editor);
+      globalContext.register(editor, 'editor');
+      globalContext.register(workspace, 'workspace');
+      pluginManager.init().then(() => {
+        resolve({});
+      });
+    })
+  });
+  afterAll(() => {
+    pluginManager.dispose();
   });
   beforeEach(() => {
-    designer = new Designer({ editor });
+    designer = new Designer({ editor, shellModelFactory });
     editor.set('designer', designer);
     designer.project.open(formSchema);
+    project.__proto__ = new Project(designer.project);
   });
   afterEach(() => {
     designer = null;

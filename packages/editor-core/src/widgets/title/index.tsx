@@ -1,7 +1,7 @@
 import { Component, isValidElement, ReactNode } from 'react';
 import classNames from 'classnames';
-import { createIcon } from '@alilc/lowcode-utils';
-import { TitleContent, isI18nData, I18nData } from '@alilc/lowcode-types';
+import { createIcon, isI18nData } from '@alilc/lowcode-utils';
+import { IPublicTypeTitleContent, IPublicTypeI18nData } from '@alilc/lowcode-types';
 import { intl } from '../../intl';
 import { Tip } from '../tip';
 import './title.less';
@@ -37,7 +37,7 @@ import './title.less';
 }
 
 export class Title extends Component<{
-  title: TitleContent;
+  title: IPublicTypeTitleContent;
   className?: string;
   onClick?: () => void;
   match?: boolean;
@@ -60,7 +60,7 @@ export class Title extends Component<{
     onClick && onClick(e);
   }
 
-  renderLabel = (label: string | I18nData | ReactNode) => {
+  renderLabel = (label: string | IPublicTypeI18nData | ReactNode) => {
     let { match, keywords } = this.props;
 
     if (!label) {

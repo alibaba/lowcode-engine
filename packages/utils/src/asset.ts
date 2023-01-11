@@ -1,12 +1,12 @@
 import { AssetType, AssetLevels, AssetLevel } from '@alilc/lowcode-types';
-import type { AssetItem, Asset, AssetList, AssetBundle, AssetsJson } from '@alilc/lowcode-types';
+import type { AssetItem, Asset, AssetList, AssetBundle, IPublicTypeAssetsJson } from '@alilc/lowcode-types';
 import { isCSSUrl } from './is-css-url';
 import { createDefer } from './create-defer';
 import { load, evaluate } from './script';
 
 // API 向下兼容
 export { AssetType, AssetLevels, AssetLevel } from '@alilc/lowcode-types';
-export type { AssetItem, Asset, AssetList, AssetBundle, AssetsJson } from '@alilc/lowcode-types';
+export type { AssetItem, Asset, AssetList, AssetBundle, IPublicTypeAssetsJson } from '@alilc/lowcode-types';
 
 export function isAssetItem(obj: any): obj is AssetItem {
   return obj && obj.type;
@@ -16,7 +16,10 @@ export function isAssetBundle(obj: any): obj is AssetBundle {
   return obj && obj.type === AssetType.Bundle;
 }
 
-export function assetBundle(assets?: Asset | AssetList | null, level?: AssetLevel): AssetBundle | null {
+export function assetBundle(
+    assets?: Asset | AssetList | null,
+    level?: AssetLevel,
+  ): AssetBundle | null {
   if (!assets) {
     return null;
   }
@@ -47,15 +50,14 @@ export function assetItem(type: AssetType, content?: string | null, level?: Asse
   };
 }
 
-export function megreAssets(assets: AssetsJson, incrementalAssets: AssetsJson): AssetsJson {
+export function megreAssets(assets: IPublicTypeAssetsJson, incrementalAssets: IPublicTypeAssetsJson): IPublicTypeAssetsJson {
   if (incrementalAssets.packages) {
     assets.packages = [...(assets.packages || []), ...incrementalAssets.packages];
   }
 
   if (incrementalAssets.components) {
-    assets.components = [...assets.components, ...incrementalAssets.components];
+    assets.components = [...(assets.components || []), ...incrementalAssets.components];
   }
-
 
   megreAssetsComponentList(assets, incrementalAssets, 'componentList');
   megreAssetsComponentList(assets, incrementalAssets, 'bizComponentList');
@@ -63,7 +65,7 @@ export function megreAssets(assets: AssetsJson, incrementalAssets: AssetsJson): 
   return assets;
 }
 
-function megreAssetsComponentList(assets: AssetsJson, incrementalAssets: AssetsJson, listName: keyof AssetsJson): void {
+function megreAssetsComponentList(assets: IPublicTypeAssetsJson, incrementalAssets: IPublicTypeAssetsJson, listName: keyof IPublicTypeAssetsJson): void {
   if (incrementalAssets[listName]) {
     if (assets[listName]) {
       // 根据title进行合并

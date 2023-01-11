@@ -1,14 +1,22 @@
 import '../fixtures/window';
 import { Editor, engineConfig } from '@alilc/lowcode-editor-core';
 import { LowCodePluginManager } from '../../src/plugin/plugin-manager';
-import { ILowCodePluginContext, ILowCodePluginManager } from '../../src/plugin/plugin-types';
+import { IPublicModelPluginContext, IPublicApiPlugins } from '@alilc/lowcode-types';
+import { ILowCodePluginContextPrivate } from '../../src/plugin/plugin-types';
 
 const editor = new Editor();
+let contextApiAssembler;
 
 describe('plugin 测试', () => {
-  let pluginManager: ILowCodePluginManager;
+  let pluginManager: IPublicApiPlugins;
   beforeEach(() => {
-    pluginManager = new LowCodePluginManager(editor).toProxy();
+    contextApiAssembler = {
+      assembleApis(context: ILowCodePluginContextPrivate){
+        context.plugins = pluginManager as IPublicApiPlugins;
+        // mock set apis
+      }
+    };
+    pluginManager = new LowCodePluginManager(contextApiAssembler).toProxy();
   });
   afterEach(() => {
     pluginManager.dispose();
@@ -16,7 +24,7 @@ describe('plugin 测试', () => {
 
   it('注册插件，插件参数生成函数能被调用，且能拿到正确的 ctx ', () => {
     const mockFn = jest.fn();
-    const creator2 = (ctx: ILowCodePluginContext) => {
+    const creator2 = (ctx: IPublicModelPluginContext) => {
       mockFn(ctx);
       return {
         init: jest.fn(),
@@ -40,7 +48,7 @@ describe('plugin 测试', () => {
 
   it('注册插件，调用插件 init 方法', async () => {
     const mockFn = jest.fn();
-    const creator2 = (ctx: ILowCodePluginContext) => {
+    const creator2 = (ctx: IPublicModelPluginContext) => {
       return {
         init: mockFn,
         exports() {
@@ -66,7 +74,7 @@ describe('plugin 测试', () => {
 
   it('注册插件，调用 setDisabled 方法', async () => {
     const mockFn = jest.fn();
-    const creator2 = (ctx: ILowCodePluginContext) => {
+    const creator2 = (ctx: IPublicModelPluginContext) => {
       return {
         init: mockFn,
       };
@@ -82,7 +90,7 @@ describe('plugin 测试', () => {
 
   it('注册插件，调用 plugin.setDisabled 方法', async () => {
     const mockFn = jest.fn();
-    const creator2 = (ctx: ILowCodePluginContext) => {
+    const creator2 = (ctx: IPublicModelPluginContext) => {
       return {
         init: mockFn,
       };
@@ -98,7 +106,7 @@ describe('plugin 测试', () => {
 
   it('删除插件，调用插件 destroy 方法', async () => {
     const mockFn = jest.fn();
-    const creator2 = (ctx: ILowCodePluginContext) => {
+    const creator2 = (ctx: IPublicModelPluginContext) => {
       return {
         init: jest.fn(),
         destroy: mockFn,
@@ -116,7 +124,7 @@ describe('plugin 测试', () => {
   describe('dependencies 依赖', () => {
     it('dependencies 依赖', async () => {
       const mockFn = jest.fn();
-      const creator21 = (ctx: ILowCodePluginContext) => {
+      const creator21 = (ctx: IPublicModelPluginContext) => {
         return {
           init: () => mockFn('demo1'),
         };
@@ -126,7 +134,7 @@ describe('plugin 测试', () => {
         dependencies: ['demo2'],
       };
       pluginManager.register(creator21);
-      const creator22 = (ctx: ILowCodePluginContext) => {
+      const creator22 = (ctx: IPublicModelPluginContext) => {
         return {
           init: () => mockFn('demo2'),
         };
@@ -141,7 +149,7 @@ describe('plugin 测试', () => {
 
     it('dependencies 依赖 - string', async () => {
       const mockFn = jest.fn();
-      const creator21 = (ctx: ILowCodePluginContext) => {
+      const creator21 = (ctx: IPublicModelPluginContext) => {
         return {
           init: () => mockFn('demo1'),
         };
@@ -151,7 +159,7 @@ describe('plugin 测试', () => {
         dependencies: 'demo2',
       };
       pluginManager.register(creator21);
-      const creator22 = (ctx: ILowCodePluginContext) => {
+      const creator22 = (ctx: IPublicModelPluginContext) => {
         return {
           init: () => mockFn('demo2'),
         };
@@ -166,7 +174,7 @@ describe('plugin 测试', () => {
 
     it('dependencies 依赖 - 兼容 dep', async () => {
       const mockFn = jest.fn();
-      const creator21 = (ctx: ILowCodePluginContext) => {
+      const creator21 = (ctx: IPublicModelPluginContext) => {
         return {
           dep: ['demo4'],
           init: () => mockFn('demo3'),
@@ -174,7 +182,7 @@ describe('plugin 测试', () => {
       };
       creator21.pluginName = 'demo3';
       pluginManager.register(creator21);
-      const creator22 = (ctx: ILowCodePluginContext) => {
+      const creator22 = (ctx: IPublicModelPluginContext) => {
         return {
           init: () => mockFn('demo4'),
         };
@@ -189,7 +197,7 @@ describe('plugin 测试', () => {
 
     it('dependencies 依赖 - 兼容 dep & string', async () => {
       const mockFn = jest.fn();
-      const creator21 = (ctx: ILowCodePluginContext) => {
+      const creator21 = (ctx: IPublicModelPluginContext) => {
         return {
           dep: 'demo4',
           init: () => mockFn('demo3'),
@@ -197,7 +205,7 @@ describe('plugin 测试', () => {
       };
       creator21.pluginName = 'demo3';
       pluginManager.register(creator21);
-      const creator22 = (ctx: ILowCodePluginContext) => {
+      const creator22 = (ctx: IPublicModelPluginContext) => {
         return {
           init: () => mockFn('demo4'),
         };
@@ -213,7 +221,7 @@ describe('plugin 测试', () => {
 
   it('version 依赖', async () => {
     const mockFn = jest.fn();
-    const creator21 = (ctx: ILowCodePluginContext) => {
+    const creator21 = (ctx: IPublicModelPluginContext) => {
       return {
         init: () => mockFn('demo1'),
       };
@@ -238,7 +246,7 @@ describe('plugin 测试', () => {
 
     expect(pluginManager.plugins.length).toBe(0);
 
-    const creator22 = (ctx: ILowCodePluginContext) => {
+    const creator22 = (ctx: IPublicModelPluginContext) => {
       return {
         init: () => mockFn('demo2'),
       };
@@ -254,7 +262,7 @@ describe('plugin 测试', () => {
     pluginManager.register(creator22);
     expect(pluginManager.plugins.length).toBe(1);
 
-    const creator23 = (ctx: ILowCodePluginContext) => {
+    const creator23 = (ctx: IPublicModelPluginContext) => {
       return {
         init: () => mockFn('demo3'),
       };
@@ -272,7 +280,7 @@ describe('plugin 测试', () => {
 
   it('autoInit 功能', async () => {
     const mockFn = jest.fn();
-    const creator2 = (ctx: ILowCodePluginContext) => {
+    const creator2 = (ctx: IPublicModelPluginContext) => {
       return {
         init: mockFn,
       };
@@ -284,7 +292,7 @@ describe('plugin 测试', () => {
 
   it('插件不会重复 init，除非强制重新 init', async () => {
     const mockFn = jest.fn();
-    const creator2 = (ctx: ILowCodePluginContext) => {
+    const creator2 = (ctx: IPublicModelPluginContext) => {
       return {
         name: 'demo1',
         init: mockFn,
@@ -304,7 +312,7 @@ describe('plugin 测试', () => {
 
   it('默认情况不允许重复注册', async () => {
     const mockFn = jest.fn();
-    const mockPlugin = (ctx: ILowCodePluginContext) => {
+    const mockPlugin = (ctx: IPublicModelPluginContext) => {
       return {
         init: mockFn,
       };
@@ -319,7 +327,7 @@ describe('plugin 测试', () => {
 
   it('插件增加 override 参数时可以重复注册', async () => {
     const mockFn = jest.fn();
-    const mockPlugin = (ctx: ILowCodePluginContext) => {
+    const mockPlugin = (ctx: IPublicModelPluginContext) => {
       return {
         init: mockFn,
       };
@@ -333,7 +341,7 @@ describe('plugin 测试', () => {
   it('插件增加 override 参数时可以重复注册, 被覆盖的如果已初始化，会被销毁', async () => {
     const mockInitFn = jest.fn();
     const mockDestroyFn = jest.fn();
-    const mockPlugin = (ctx: ILowCodePluginContext) => {
+    const mockPlugin = (ctx: IPublicModelPluginContext) => {
       return {
         init: mockInitFn,
         destroy: mockDestroyFn,
@@ -347,33 +355,8 @@ describe('plugin 测试', () => {
     await pluginManager.init();
   });
 
-  it('内部事件机制', async () => {
-    const mockFn = jest.fn();
-    const creator2 = (ctx: ILowCodePluginContext) => {
-      return {};
-    };
-    creator2.pluginName = 'demo1';
-    pluginManager.register(creator2);
-    await pluginManager.init();
-    const plugin = pluginManager.get('demo1')!;
-
-    const off = plugin.on('haha', mockFn);
-    plugin.emit('haha', 1, 2, 3);
-
-    expect(mockFn).toHaveBeenCalledTimes(1);
-    expect(mockFn).toHaveBeenCalledWith(1, 2, 3);
-
-    off();
-    plugin.emit('haha', 1, 2, 3);
-    expect(mockFn).toHaveBeenCalledTimes(1);
-
-    plugin.removeAllListeners('haha');
-    plugin.emit('haha', 1, 2, 3);
-    expect(mockFn).toHaveBeenCalledTimes(1);
-  });
-
   it('dispose 方法', async () => {
-    const creator2 = (ctx: ILowCodePluginContext) => {
+    const creator2 = (ctx: IPublicModelPluginContext) => {
       return {};
     };
     creator2.pluginName = 'demo1';
@@ -386,7 +369,7 @@ describe('plugin 测试', () => {
   });
 
   it('getAll 方法', async () => {
-    const creator2 = (ctx: ILowCodePluginContext) => {
+    const creator2 = (ctx: IPublicModelPluginContext) => {
       return {};
     };
     creator2.pluginName = 'demo1';
@@ -397,7 +380,7 @@ describe('plugin 测试', () => {
   });
 
   it('getPluginPreference 方法 - null', async () => {
-    const creator2 = (ctx: ILowCodePluginContext) => {
+    const creator2 = (ctx: IPublicModelPluginContext) => {
       return {};
     };
     creator2.pluginName = 'demo1';
@@ -408,7 +391,7 @@ describe('plugin 测试', () => {
   });
 
   it('getPluginPreference 方法', async () => {
-    const creator2 = (ctx: ILowCodePluginContext) => {
+    const creator2 = (ctx: IPublicModelPluginContext) => {
       return {};
     };
     const preference = new Map();
@@ -432,7 +415,7 @@ describe('plugin 测试', () => {
       key5: 'value for key5, but declared, should not work',
     });
 
-    const creator2 = (ctx: ILowCodePluginContext) => {
+    const creator2 = (ctx: IPublicModelPluginContext) => {
       mockFnForCtx(ctx);
       return {
         init: jest.fn(),
@@ -466,7 +449,7 @@ describe('plugin 测试', () => {
         ],
       },
     };
-    const creator22 = (ctx: ILowCodePluginContext) => {
+    const creator22 = (ctx: IPublicModelPluginContext) => {
       mockFnForCtx2(ctx);
       return {
         init: jest.fn(),
@@ -515,7 +498,7 @@ describe('plugin 测试', () => {
   it('注册插件，没有填写 pluginName，默认值为 anonymous', async () => {
     const mockFn = jest.fn();
 
-    const creator2 = (ctx: ILowCodePluginContext) => {
+    const creator2 = (ctx: IPublicModelPluginContext) => {
       return {
         name: 'xxx',
         init: () => mockFn('anonymous'),
@@ -529,7 +512,7 @@ describe('plugin 测试', () => {
     const mockFn = jest.fn();
     const mockFn2 = jest.fn();
 
-    const creator2 = (ctx: ILowCodePluginContext) => {
+    const creator2 = (ctx: IPublicModelPluginContext) => {
       mockFn2(ctx);
       return {
         init: () => mockFn('anonymous'),

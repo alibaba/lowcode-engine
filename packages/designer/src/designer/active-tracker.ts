@@ -1,34 +1,35 @@
-import { EventEmitter } from 'events';
-import { LocationDetail } from './location';
-import { Node, isNode } from '../document/node/node';
-import { ComponentInstance } from '../simulator';
-import { obx } from '@alilc/lowcode-editor-core';
+import { INode } from '../document/node/node';
+import { obx, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
+import {
+  IPublicTypeActiveTarget,
+  IPublicModelActiveTracker,
+} from '@alilc/lowcode-types';
+import { isNode } from '@alilc/lowcode-utils';
 
-export interface ActiveTarget {
-  node: Node;
-  detail?: LocationDetail;
-  instance?: ComponentInstance;
+export interface IActiveTracker extends IPublicModelActiveTracker {
+  track(originalTarget: IPublicTypeActiveTarget | INode): void;
 }
 
-export class ActiveTracker {
-  private emitter = new EventEmitter();
+export class ActiveTracker implements IActiveTracker {
+  private emitter: IEventBus = createModuleEventBus('ActiveTracker');
 
-  @obx.ref private _target?: ActiveTarget;
+  @obx.ref private _target?: IPublicTypeActiveTarget | INode;
 
-  track(target: ActiveTarget | Node) {
-    if (isNode(target)) {
-      target = { node: target };
+  track(originalTarget: IPublicTypeActiveTarget | INode) {
+    let target = originalTarget;
+    if (isNode(originalTarget)) {
+      target = { node: originalTarget as INode };
     }
     this._target = target;
     this.emitter.emit('change', target);
   }
 
   get currentNode() {
-    return this._target?.node;
+    return (this._target as IPublicTypeActiveTarget)?.node;
   }
 
   get detail() {
-    return this._target?.detail;
+    return (this._target as IPublicTypeActiveTarget)?.detail;
   }
 
   /**
@@ -40,10 +41,10 @@ export class ActiveTracker {
   }
 
   get instance() {
-    return this._target?.instance;
+    return (this._target as IPublicTypeActiveTarget)?.instance;
   }
 
-  onChange(fn: (target: ActiveTarget) => void): () => void {
+  onChange(fn: (target: IPublicTypeActiveTarget) => void): () => void {
     this.emitter.addListener('change', fn);
     return () => {
       this.emitter.removeListener('change', fn);

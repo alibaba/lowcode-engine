@@ -1,7 +1,8 @@
-import { IconType, TitleContent, isI18nData, TipContent, isTitleConfig } from '@alilc/lowcode-types';
+import { IPublicTypeIconType, IPublicTypeTitleContent, TipContent } from '@alilc/lowcode-types';
+import { isI18nData, isTitleConfig } from '@alilc/lowcode-utils';
 import { isValidElement } from 'react';
 
-export function composeTitle(title?: TitleContent, icon?: IconType, tip?: TipContent, tipAsTitle?: boolean, noIcon?: boolean) {
+export function composeTitle(title?: IPublicTypeTitleContent, icon?: IPublicTypeIconType, tip?: TipContent, tipAsTitle?: boolean, noIcon?: boolean) {
   if (!title) {
     title = {};
     if (!icon || tipAsTitle) {

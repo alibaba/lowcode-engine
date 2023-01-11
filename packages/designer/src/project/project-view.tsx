@@ -4,7 +4,7 @@ import { Designer } from '../designer';
 import { BuiltinSimulatorHostView } from '../builtin-simulator';
 import './project.less';
 
-class BuiltinLoading extends Component {
+export class BuiltinLoading extends Component {
   render() {
     return (
       <div id="engine-loading-wrapper">
@@ -26,8 +26,7 @@ export class ProjectView extends Component<{ designer: Designer }> {
   }
   render() {
     const { designer } = this.props;
-    const { project } = designer;
-    const { simulatorProps } = project;
+    const { project, projectSimulatorProps: simulatorProps } = designer;
     const Simulator = designer.simulatorComponent || BuiltinSimulatorHostView;
     const Loading = engineConfig.get('loadingComponent', BuiltinLoading);
 

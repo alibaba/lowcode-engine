@@ -2,15 +2,13 @@ import '../../fixtures/window';
 import { DocumentModel, isDocumentModel, isPageSchema } from '../../../src/document/document-model';
 import { Editor } from '@alilc/lowcode-editor-core';
 import { Project } from '../../../src/project/project';
-import { Node } from '../../../src/document/node/node';
 import { Designer } from '../../../src/designer/designer';
 import formSchema from '../../fixtures/schema/form';
 import divMeta from '../../fixtures/component-metadata/div';
 import formMeta from '../../fixtures/component-metadata/form';
 import otherMeta from '../../fixtures/component-metadata/other';
 import pageMeta from '../../fixtures/component-metadata/page';
-// const { DocumentModel } = require('../../../src/document/document-model');
-// const { Node } = require('../__mocks__/node');
+import { shellModelFactory } from '../../../../engine/src/modules/shell-model-factory';
 
 describe('document-model 测试', () => {
   let editor: Editor;
@@ -19,7 +17,7 @@ describe('document-model 测试', () => {
 
   beforeEach(() => {
     editor = new Editor();
-    designer = new Designer({ editor });
+    designer = new Designer({ editor, shellModelFactory });
     project = designer.project;
   });
 
@@ -62,7 +60,7 @@ describe('document-model 测试', () => {
     doc.internalRemoveAndPurgeNode({ id: 'mockId' });
 
     // internalSetDropLocation
-    doc.internalSetDropLocation({ a: 1 });
+    doc.dropLocation = { a: 1 };
     expect(doc.dropLocation).toEqual({ a: 1 });
 
     // wrapWith

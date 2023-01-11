@@ -1,12 +1,9 @@
-import {
-  FieldConfig,
-  TransformedComponentMetadata,
-  isJSFunction,
-} from '@alilc/lowcode-types';
-import { isPlainObject } from '@alilc/lowcode-utils';
+import { IPublicTypeTransformedComponentMetadata } from '@alilc/lowcode-types';
+import { isPlainObject, isJSFunction, getLogger } from '@alilc/lowcode-utils';
 
 const leadingFnRe = /^function/;
 const leadingFnNameRe = /^\w+\s*\(/;
+const logger = getLogger({ level: 'warn', bizName: 'skeleton:transducers' });
 /**
  * 将函数字符串转成函数，支持几种类型
  *   类型一：() => {} / val => {}
@@ -28,7 +25,7 @@ function transformStringToFunction(str: string) {
       try {
         return (${str}).apply(self, arguments);
       } catch(e) {
-        console.log('call function which parsed by lowcode failed: ', e);
+        logger.warn('call function which parsed by lowcode failed: ', e);
         return e.message;
       }
     };
@@ -37,8 +34,8 @@ function transformStringToFunction(str: string) {
     // eslint-disable-next-line no-new-func
     fn = new Function(fnBody)();
   } catch (e) {
-    console.error(str);
-    console.error(e.message);
+    logger.error(str);
+    logger.error(e.message);
   }
   return fn;
 }
@@ -57,7 +54,7 @@ function parseJSFunc(obj: any, enableAllowedKeys = true) {
   });
 }
 
-export default function (metadata: TransformedComponentMetadata): TransformedComponentMetadata {
+export default function (metadata: IPublicTypeTransformedComponentMetadata): IPublicTypeTransformedComponentMetadata {
   parseJSFunc(metadata, false);
 
   return metadata;

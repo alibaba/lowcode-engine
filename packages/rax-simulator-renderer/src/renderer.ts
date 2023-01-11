@@ -1,10 +1,9 @@
-import { BuiltinSimulatorRenderer, Component, DocumentModel, Node, NodeInstance } from '@alilc/lowcode-designer';
-import { ComponentSchema, NodeSchema, NpmInfo, RootSchema, TransformStage } from '@alilc/lowcode-types';
+import { BuiltinSimulatorRenderer, Component, DocumentModel, Node } from '@alilc/lowcode-designer';
+import { IPublicTypeComponentSchema, IPublicTypeNodeSchema, IPublicTypeNpmInfo, IPublicEnumTransformStage, IPublicTypeNodeInstance } from '@alilc/lowcode-types';
 import { Asset, compatibleLegaoSchema, cursor, isElement, isESModule, isPlainObject, isReactComponent, setNativeSelection } from '@alilc/lowcode-utils';
 import LowCodeRenderer from '@alilc/lowcode-rax-renderer';
-import { computed, observable as obx, untracked, makeObservable, configure } from 'mobx';
+import { computed, observable as obx, makeObservable, configure } from 'mobx';
 import DriverUniversal from 'driver-universal';
-import { EventEmitter } from 'events';
 import { createMemoryHistory, MemoryHistory } from 'history';
 // @ts-ignore
 import Rax, { ComponentType, createElement, render as raxRender, shared } from 'rax';
@@ -16,6 +15,7 @@ import { raxFindDOMNodes } from './utils/find-dom-nodes';
 import { getClientRects } from './utils/get-client-rects';
 import loader from './utils/loader';
 import { parseQuery, withQueryParams } from './utils/url';
+import { IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 
 configure({ enforceActions: 'never' });
 const { Instance } = shared;
@@ -46,20 +46,20 @@ const builtinComponents = {
 
 function buildComponents(
   libraryMap: LibraryMap,
-  componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> | ComponentSchema },
-  createComponent: (schema: ComponentSchema) => Component | null,
+  componentsMap: { [componentName: string]: IPublicTypeNpmInfo | ComponentType<any> | IPublicTypeComponentSchema },
+  createComponent: (schema: IPublicTypeComponentSchema) => Component | null,
 ) {
   const components: any = {
     ...builtinComponents,
   };
   Object.keys(componentsMap).forEach((componentName) => {
     let component = componentsMap[componentName];
-    if (component && (component as ComponentSchema).componentName === 'Component') {
-      components[componentName] = createComponent(component as ComponentSchema);
+    if (component && (component as IPublicTypeComponentSchema).componentName === 'Component') {
+      components[componentName] = createComponent(component as IPublicTypeComponentSchema);
     } else if (isReactComponent(component)) {
       components[componentName] = component;
     } else {
-      component = findComponent(libraryMap, componentName, component as NpmInfo);
+      component = findComponent(libraryMap, componentName, component as IPublicTypeNpmInfo);
       if (component) {
         components[componentName] = component;
       }
@@ -94,7 +94,7 @@ function isValidDesignModeRaxComponentInstance(
   raxComponentInst: any,
 ): raxComponentInst is {
   props: {
-    _leaf: Exclude<NodeInstance<any>['node'], null | undefined>;
+    _leaf: Exclude<IPublicTypeNodeInstance<any>['node'], null | undefined>;
   };
 } {
   const leaf = raxComponentInst?.props?._leaf;
@@ -104,10 +104,10 @@ function isValidDesignModeRaxComponentInstance(
 export class DocumentInstance {
   private instancesMap = new Map<string, any[]>();
 
-  private emitter = new EventEmitter();
+  private emitter: IEventBus = createModuleEventBus('DocumentInstance');
 
   get schema(): any {
-    return this.document.export(TransformStage.Render);
+    return this.document.export(IPublicEnumTransformStage.Render);
   }
 
   constructor(readonly container: SimulatorRendererContainer, readonly document: DocumentModel) {
@@ -221,7 +221,7 @@ export class DocumentInstance {
     return this.instancesMap.get(id) || null;
   }
 
-  getNode(id: string): Node<NodeSchema> | null {
+  getNode(id: string): Node<IPublicTypeNodeSchema> | null {
     return this.document.getNode(id);
   }
 }
@@ -231,7 +231,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   private dispose?: () => void;
   readonly history: MemoryHistory;
 
-  private emitter = new EventEmitter();
+  private emitter: IEventBus = createModuleEventBus('SimulatorRendererContainer');
 
   @obx.ref private _documentInstances: DocumentInstance[] = [];
   get documentInstances() {
@@ -245,7 +245,6 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   constructor() {
     this.dispose = host.connect(this, () => {
       // sync layout config
-      // debugger;
       this._layout = host.project.get('config').layout;
       // todo: split with others, not all should recompute
       if (this._libraryMap !== host.libraryMap || this._componentsMap !== host.designer.componentsMap) {
@@ -371,6 +370,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   @computed get componentsMap(): any {
     return this._componentsMap;
   }
+
   /**
    * 加载资源
    */
@@ -397,7 +397,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     }
   }
 
-  getNodeInstance(dom: HTMLElement): NodeInstance<any> | null {
+  getNodeInstance(dom: HTMLElement): IPublicTypeNodeInstance<any> | null {
     const INTERNAL = '_internal';
     let instance: any = dom;
     if (!isElement(instance)) {
@@ -430,7 +430,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     return null;
   }
 
-  getClosestNodeInstance(from: any, nodeId?: string): NodeInstance<any> | null {
+  getClosestNodeInstance(from: any, nodeId?: string): IPublicTypeNodeInstance<any> | null {
     const el: any = from;
     if (el) {
       // if (isElement(el)) {
@@ -497,20 +497,19 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     this.currentDocumentInstance?.refresh();
   }
 
-  createComponent(schema: NodeSchema): Component | null {
+  createComponent(schema: IPublicTypeNodeSchema): Component | null {
     const _schema: any = {
       ...compatibleLegaoSchema(schema),
     };
 
-    if (schema.componentName === 'Component' && (schema as ComponentSchema).css) {
+    if (schema.componentName === 'Component' && (schema as IPublicTypeComponentSchema).css) {
       const doc = window.document;
       const s = doc.createElement('style');
       s.setAttribute('type', 'text/css');
       s.setAttribute('id', `Component-${schema.id || ''}`);
-      s.appendChild(doc.createTextNode((schema as ComponentSchema).css || ''));
+      s.appendChild(doc.createTextNode((schema as IPublicTypeComponentSchema).css || ''));
       doc.getElementsByTagName('head')[0].appendChild(s);
     }
-
 
     const renderer = this;
     const { componentsMap: components } = renderer;
@@ -607,7 +606,7 @@ function getSubComponent(library: any, paths: string[]) {
   return component;
 }
 
-function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmInfo) {
+function findComponent(libraryMap: LibraryMap, componentName: string, npm?: IPublicTypeNpmInfo) {
   if (!npm) {
     return accessLibrary(componentName);
   }

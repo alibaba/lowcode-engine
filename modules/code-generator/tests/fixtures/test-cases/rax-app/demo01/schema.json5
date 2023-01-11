@@ -1,6 +1,5 @@
 {
   // 本例是一个非常简单的 Hello world 页面
-  // Schema 参见：https://yuque.antfin-inc.com/mo/spec/spec-materials#eNCJr
   version: '1.0.0',
   componentsMap: [
     {

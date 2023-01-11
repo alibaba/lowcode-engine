@@ -1,15 +1,31 @@
-import { makeObservable, obx, engineConfig, action, runWithGlobalEventOff, wrapWithEventSwitch } from '@alilc/lowcode-editor-core';
-import { NodeData, isJSExpression, isDOMText, NodeSchema, isNodeSchema, RootSchema, PageSchema, ComponentsMap } from '@alilc/lowcode-types';
-import { EventEmitter } from 'events';
+import { makeObservable, obx, engineConfig, action, runWithGlobalEventOff, wrapWithEventSwitch, createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
+import {
+  IPublicTypeNodeData,
+  IPublicTypeNodeSchema,
+  IPublicTypeRootSchema,
+  IPublicTypePageSchema,
+  IPublicTypeComponentsMap,
+  IPublicTypeDragNodeObject,
+  IPublicTypeDragNodeDataObject,
+  IPublicModelDocumentModel,
+  IPublicModelHistory,
+  IPublicModelModalNodesManager,
+  IPublicModelNode,
+  IPublicApiProject,
+  IPublicModelDropLocation,
+  IPublicEnumTransformStage,
+  IPublicTypeOnChangeOptions,
+} from '@alilc/lowcode-types';
 import { Project } from '../project';
 import { ISimulatorHost } from '../simulator';
 import { ComponentMeta } from '../component-meta';
-import { isDragNodeDataObject, DragNodeObject, DragNodeDataObject, DropLocation, Designer, isDragNodeObject } from '../designer';
-import { Node, insertChildren, insertChild, isNode, RootNode, ParentalNode } from './node/node';
-import { Selection } from './selection';
+import { IDropLocation, Designer } from '../designer';
+import { Node, insertChildren, insertChild, isNode, RootNode, INode } from './node/node';
+import { Selection, ISelection } from './selection';
 import { History } from './history';
-import { TransformStage, ModalNodesManager } from './node';
-import { uniqueId, isPlainObject, compatStage } from '@alilc/lowcode-utils';
+import { ModalNodesManager } from './node';
+import { uniqueId, isPlainObject, compatStage, isJSExpression, isDOMText, isNodeSchema, isDragNodeObject, isDragNodeDataObject } from '@alilc/lowcode-utils';
+import { EDITOR_EVENT } from '../types';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
@@ -19,7 +35,22 @@ export type GetDataType<T, NodeType> = T extends undefined
     : any
   : T;
 
-export class DocumentModel {
+export interface IDocumentModel extends Omit< IPublicModelDocumentModel, 'selection' > {
+
+  readonly designer: Designer;
+
+  /**
+   * 选区控制
+   */
+  readonly selection: ISelection;
+
+  /**
+   * 根据 id 获取节点
+   */
+  getNode(id: string): INode | null;
+}
+
+export class DocumentModel implements IDocumentModel {
   /**
    * 根节点 类型有：Page/Component/Block
    */
@@ -33,29 +64,29 @@ export class DocumentModel {
   /**
    * 选区控制
    */
-  readonly selection: Selection = new Selection(this);
+  readonly selection: ISelection = new Selection(this);
 
   /**
    * 操作记录控制
    */
-  readonly history: History;
+  readonly history: IPublicModelHistory;
 
   /**
    * 模态节点管理
    */
-  readonly modalNodesManager: ModalNodesManager;
+  readonly modalNodesManager: IPublicModelModalNodesManager;
 
-  private _nodesMap = new Map<string, Node>();
+  private _nodesMap = new Map<string, IPublicModelNode>();
 
-  readonly project: Project;
+  readonly project: IPublicApiProject;
 
   readonly designer: Designer;
 
-  @obx.shallow private nodes = new Set<Node>();
+  @obx.shallow private nodes = new Set<IPublicModelNode>();
 
   private seqId = 0;
 
-  private emitter: EventEmitter;
+  private emitter: IEventBus;
 
   private rootNodeVisitorMap: { [visitorName: string]: any } = {};
 
@@ -96,21 +127,90 @@ export class DocumentModel {
 
   @obx.ref private _drillDownNode: Node | null = null;
 
-  drillDown(node: Node | null) {
-    this._drillDownNode = node;
-  }
-
-  private _modalNode?: ParentalNode;
+  private _modalNode?: INode;
 
   private _blank?: boolean;
 
   private inited = false;
 
-  constructor(project: Project, schema?: RootSchema) {
+  @obx.shallow private willPurgeSpace: Node[] = [];
+
+  get modalNode() {
+    return this._modalNode;
+  }
+
+  get currentRoot() {
+    return this.modalNode || this.focusNode;
+  }
+
+  @obx.shallow private activeNodes?: Node[];
+
+  @obx.ref private _dropLocation: IDropLocation | null = null;
+
+  set dropLocation(loc: IPublicModelDropLocation | null) {
+    this._dropLocation = loc;
+    // pub event
+    this.designer.editor.eventBus.emit(
+      'document.dropLocation.changed',
+      { document: this, location: loc },
+    );
+  }
+
+  /**
+   * 投放插入位置标记
+   */
+  get dropLocation() {
+    return this._dropLocation;
+  }
+
+  /**
+   * 导出 schema 数据
+   */
+  get schema(): IPublicTypeRootSchema {
+    return this.rootNode?.schema as any;
+  }
+
+  @obx.ref private _opened = false;
+
+  @obx.ref private _suspensed = false;
+
+  /**
+   * 是否为非激活状态
+   */
+  get suspensed(): boolean {
+    return this._suspensed || !this._opened;
+  }
+
+  /**
+   * 与 suspensed 相反，是否为激活状态，这个函数可能用的更多一点
+   */
+  get active(): boolean {
+    return !this._suspensed;
+  }
+
+  /**
+   * @deprecated 兼容
+   */
+  get actived(): boolean {
+    return this.active;
+  }
+
+  /**
+   * 是否打开
+   */
+  get opened() {
+    return this._opened;
+  }
+
+  get root() {
+    return this.rootNode;
+  }
+
+  constructor(project: Project, schema?: IPublicTypeRootSchema) {
     makeObservable(this);
     this.project = project;
     this.designer = this.project?.designer;
-    this.emitter = new EventEmitter();
+    this.emitter = createModuleEventBus('DocumentModel');
 
     if (!schema) {
       this._blank = true;
@@ -128,9 +228,9 @@ export class DocumentModel {
     );
 
     this.history = new History(
-      () => this.export(TransformStage.Serilize),
+      () => this.export(IPublicEnumTransformStage.Serilize),
       (schema) => {
-        this.import(schema as RootSchema, true);
+        this.import(schema as IPublicTypeRootSchema, true);
         this.simulator?.rerender();
       },
     );
@@ -140,14 +240,24 @@ export class DocumentModel {
     this.inited = true;
   }
 
-  @obx.shallow private willPurgeSpace: Node[] = [];
-
-  get modalNode() {
-    return this._modalNode;
+  drillDown(node: Node | null) {
+    this._drillDownNode = node;
   }
 
-  get currentRoot() {
-    return this.modalNode || this.focusNode;
+  onChangeNodeVisible(fn: (node: IPublicModelNode, visible: boolean) => void): () => void {
+    this.designer.editor?.eventBus.on(EDITOR_EVENT.NODE_CHILDREN_CHANGE, fn);
+
+    return () => {
+      this.designer.editor?.eventBus.off(EDITOR_EVENT.NODE_CHILDREN_CHANGE, fn);
+    };
+  }
+
+  onChangeNodeChildren(fn: (info: IPublicTypeOnChangeOptions) => void): () => void {
+    this.designer.editor?.eventBus.on(EDITOR_EVENT.NODE_VISIBLE_CHANGE, fn);
+
+    return () => {
+      this.designer.editor?.eventBus.off(EDITOR_EVENT.NODE_VISIBLE_CHANGE, fn);
+    };
   }
 
   addWillPurge(node: Node) {
@@ -166,7 +276,7 @@ export class DocumentModel {
   }
 
   /**
-   * 生成唯一id
+   * 生成唯一 id
    */
   nextId(possibleId: string | undefined) {
     let id = possibleId;
@@ -180,7 +290,7 @@ export class DocumentModel {
   /**
    * 根据 id 获取节点
    */
-  getNode(id: string): Node | null {
+  getNode(id: string): INode | null {
     return this._nodesMap.get(id) || null;
   }
 
@@ -198,8 +308,6 @@ export class DocumentModel {
     const node = this.getNode(id);
     return node ? !node.isPurged : false;
   }
-
-  @obx.shallow private activeNodes?: Node[];
 
   /**
    * 根据 schema 创建一个节点
@@ -255,14 +363,14 @@ export class DocumentModel {
   /**
    * 插入一个节点
    */
-  insertNode(parent: ParentalNode, thing: Node | NodeData, at?: number | null, copy?: boolean): Node {
+  insertNode(parent: INode, thing: Node | IPublicTypeNodeData, at?: number | null, copy?: boolean): Node {
     return insertChild(parent, thing, at, copy);
   }
 
   /**
    * 插入多个节点
    */
-  insertNodes(parent: ParentalNode, thing: Node[] | NodeData[], at?: number | null, copy?: boolean) {
+  insertNodes(parent: INode, thing: Node[] | IPublicTypeNodeData[], at?: number | null, copy?: boolean) {
     return insertChildren(parent, thing, at, copy);
   }
 
@@ -275,9 +383,9 @@ export class DocumentModel {
     if (typeof idOrNode === 'string') {
       id = idOrNode;
       node = this.getNode(id);
-    } else {
-      node = idOrNode;
-      id = node.id;
+    } else if (idOrNode.id) {
+      id = idOrNode.id;
+      node = this.getNode(id);
     }
     if (!node) {
       return;
@@ -300,26 +408,10 @@ export class DocumentModel {
     this._nodesMap.delete(node.id);
   }
 
-  @obx.ref private _dropLocation: DropLocation | null = null;
-
-  /**
-   * 内部方法，请勿调用
-   */
-  internalSetDropLocation(loc: DropLocation | null) {
-    this._dropLocation = loc;
-  }
-
-  /**
-   * 投放插入位置标记
-   */
-  get dropLocation() {
-    return this._dropLocation;
-  }
-
   /**
    * 包裹当前选区中的节点
    */
-  wrapWith(schema: NodeSchema): Node | null {
+  wrapWith(schema: IPublicTypeNodeSchema): Node | null {
     const nodes = this.selection.getTopNodes();
     if (nodes.length < 1) {
       return null;
@@ -338,15 +430,8 @@ export class DocumentModel {
     return null;
   }
 
-  /**
-   * 导出 schema 数据
-   */
-  get schema(): RootSchema {
-    return this.rootNode?.schema as any;
-  }
-
   @action
-  import(schema: RootSchema, checkId = false) {
+  import(schema: IPublicTypeRootSchema, checkId = false) {
     const drillDownNodeId = this._drillDownNode?.id;
     runWithGlobalEventOff(() => {
       // TODO: 暂时用饱和式删除，原因是 Slot 节点并不是树节点，无法正常递归删除
@@ -363,14 +448,14 @@ export class DocumentModel {
     });
   }
 
-  export(stage: TransformStage = TransformStage.Serilize) {
+  export(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Serilize) {
     stage = compatStage(stage);
     // 置顶只作用于 Page 的第一级子节点，目前还用不到里层的置顶；如果后面有需要可以考虑将这段写到 node-children 中的 export
     const currentSchema = this.rootNode?.export(stage);
     if (Array.isArray(currentSchema?.children) && currentSchema?.children.length > 0) {
       const FixedTopNodeIndex = currentSchema.children
         .filter(i => isPlainObject(i))
-        .findIndex((i => (i as NodeSchema).props?.__isTopFixed__));
+        .findIndex((i => (i as IPublicTypeNodeSchema).props?.__isTopFixed__));
       if (FixedTopNodeIndex > 0) {
         const FixedTopNode = currentSchema.children.splice(FixedTopNodeIndex, 1);
         currentSchema.children.unshift(FixedTopNode[0]);
@@ -382,7 +467,7 @@ export class DocumentModel {
   /**
    * 导出节点数据
    */
-  getNodeSchema(id: string): NodeData | null {
+  getNodeSchema(id: string): IPublicTypeNodeData | null {
     const node = this.getNode(id);
     if (node) {
       return node.schema;
@@ -407,38 +492,6 @@ export class DocumentModel {
       componentName,
       () => this.simulator?.generateComponentMetadata(componentName) || null,
     );
-  }
-
-  @obx.ref private _opened = false;
-
-  @obx.ref private _suspensed = false;
-
-  /**
-   * 是否为非激活状态
-   */
-  get suspensed(): boolean {
-    return this._suspensed || !this._opened;
-  }
-
-  /**
-   * 与 suspensed 相反，是否为激活状态，这个函数可能用的更多一点
-   */
-  get active(): boolean {
-    return !this._suspensed;
-  }
-
-  /**
-   * @deprecated 兼容
-   */
-  get actived(): boolean {
-    return this.active;
-  }
-
-  /**
-   * 是否打开
-   */
-  get opened() {
-    return this._opened;
   }
 
   /**
@@ -505,8 +558,8 @@ export class DocumentModel {
     this.rootNode = null;
   }
 
-  checkNesting(dropTarget: ParentalNode, dragObject: DragNodeObject | NodeSchema | Node | DragNodeDataObject): boolean {
-    let items: Array<Node | NodeSchema>;
+  checkNesting(dropTarget: INode, dragObject: IPublicTypeDragNodeObject | IPublicTypeNodeSchema | Node | IPublicTypeDragNodeDataObject): boolean {
+    let items: Array<Node | IPublicTypeNodeSchema>;
     if (isDragNodeDataObject(dragObject)) {
       items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
     } else if (isDragNodeObject(dragObject)) {
@@ -525,8 +578,8 @@ export class DocumentModel {
    * Will be deleted in version 2.0.0.
    * Use checkNesting method instead.
    */
-  checkDropTarget(dropTarget: ParentalNode, dragObject: DragNodeObject | DragNodeDataObject): boolean {
-    let items: Array<Node | NodeSchema>;
+  checkDropTarget(dropTarget: INode, dragObject: IPublicTypeDragNodeObject | IPublicTypeDragNodeDataObject): boolean {
+    let items: Array<Node | IPublicTypeNodeSchema>;
     if (isDragNodeDataObject(dragObject)) {
       items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
     } else {
@@ -538,7 +591,7 @@ export class DocumentModel {
   /**
    * 检查对象对父级的要求，涉及配置 parentWhitelist
    */
-  checkNestingUp(parent: ParentalNode, obj: NodeSchema | Node): boolean {
+  checkNestingUp(parent: INode, obj: IPublicTypeNodeSchema | Node): boolean {
     if (isNode(obj) || isNodeSchema(obj)) {
       const config = isNode(obj) ? obj.componentMeta : this.getComponentMeta(obj.componentName);
       if (config) {
@@ -552,7 +605,7 @@ export class DocumentModel {
   /**
    * 检查投放位置对子级的要求，涉及配置 childWhitelist
    */
-  checkNestingDown(parent: ParentalNode, obj: NodeSchema | Node): boolean {
+  checkNestingDown(parent: INode, obj: IPublicTypeNodeSchema | Node): boolean {
     const config = parent.componentMeta;
     return config.checkNestingDown(parent, obj);
   }
@@ -564,7 +617,7 @@ export class DocumentModel {
 
   // add toData
   toData(extraComps?: string[]) {
-    const node = this.export(TransformStage.Save);
+    const node = this.export(IPublicEnumTransformStage.Save);
     const data = {
       componentsMap: this.getComponentsMap(extraComps),
       utils: this.getUtilsMap(),
@@ -575,10 +628,6 @@ export class DocumentModel {
 
   getHistory(): History {
     return this.history;
-  }
-
-  get root() {
-    return this.rootNode;
   }
 
   /**
@@ -653,7 +702,7 @@ export class DocumentModel {
   }
 
   getComponentsMap(extraComps?: string[]) {
-    const componentsMap: ComponentsMap = [];
+    const componentsMap: IPublicTypeComponentsMap = [];
     // 组件去重
     const exsitingMap: { [componentName: string]: boolean } = {};
     for (const node of this._nodesMap.values()) {
@@ -704,7 +753,7 @@ export class DocumentModel {
     }));
   }
 
-  onNodeCreate(func: (node: Node) => void) {
+  onNodeCreate(func: (node: INode) => void) {
     const wrappedFunc = wrapWithEventSwitch(func);
     this.emitter.on('nodecreate', wrappedFunc);
     return () => {
@@ -712,7 +761,7 @@ export class DocumentModel {
     };
   }
 
-  onNodeDestroy(func: (node: Node) => void) {
+  onNodeDestroy(func: (node: INode) => void) {
     const wrappedFunc = wrapWithEventSwitch(func);
     this.emitter.on('nodedestroy', wrappedFunc);
     return () => {
@@ -735,7 +784,7 @@ export class DocumentModel {
   }
 
   onReady(fn: Function) {
-    this.designer.editor.on('document-open', fn);
+    this.designer.editor.eventBus.on('document-open', fn);
     return () => {
       this.designer.editor.removeListener('document-open', fn);
     };
@@ -750,6 +799,6 @@ export function isDocumentModel(obj: any): obj is DocumentModel {
   return obj && obj.rootNode;
 }
 
-export function isPageSchema(obj: any): obj is PageSchema {
+export function isPageSchema(obj: any): obj is IPublicTypePageSchema {
   return obj?.componentName === 'Page';
 }

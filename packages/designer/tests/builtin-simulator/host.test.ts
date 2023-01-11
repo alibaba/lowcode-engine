@@ -1,36 +1,27 @@
-// @ts-ignore
-import React from 'react';
-import set from 'lodash/set';
-import cloneDeep from 'lodash/cloneDeep';
 import '../fixtures/window';
-import { Editor, globalContext } from '@alilc/lowcode-editor-core';
 import {
-  AssetLevel,
-  Asset,
-  AssetList,
-  assetBundle,
-  assetItem,
+  Editor,
+  globalContext,
+  Hotkey as InnerHotkey,
+  Setters as InnerSetters,
+} from '@alilc/lowcode-editor-core';
+import { Workspace as InnerWorkspace } from '@alilc/lowcode-workspace';
+import {
   AssetType,
 } from '@alilc/lowcode-utils';
 import {
-  Dragon,
-  isDragNodeObject,
-  isDragNodeDataObject,
-  isDragAnyObject,
-  isLocateEvent,
-  DragObjectType,
-  isShaken,
-  setShaken,
-} from '../../src/designer/dragon';
+  IPublicEnumDragObjectType,
+} from '@alilc/lowcode-types';
 import { Project } from '../../src/project/project';
 import pageMetadata from '../fixtures/component-metadata/page';
-import { Node } from '../../src/document/node/node';
 import { Designer } from '../../src/designer/designer';
 import { DocumentModel } from '../../src/document/document-model';
 import formSchema from '../fixtures/schema/form';
 import { getMockDocument, getMockWindow, getMockEvent, delayObxTick } from '../utils';
 import { BuiltinSimulatorHost } from '../../src/builtin-simulator/host';
 import { fireEvent } from '@testing-library/react';
+import { shellModelFactory } from '../../../engine/src/modules/shell-model-factory';
+import { Setters, Workspace } from '@alilc/lowcode-shell';
 
 describe('Host 测试', () => {
   let editor: Editor;
@@ -41,15 +32,20 @@ describe('Host 测试', () => {
 
   beforeAll(() => {
     editor = new Editor();
+    const innerWorkspace = new InnerWorkspace();
+    const workspace = new Workspace(innerWorkspace);
+    editor.set('innerHotkey', new InnerHotkey())
+    editor.set('setters', new Setters(new InnerSetters()));
     !globalContext.has(Editor) && globalContext.register(editor, Editor);
+    !globalContext.has('workspace') && globalContext.register(innerWorkspace, 'workspace');
   });
 
   beforeEach(() => {
-    designer = new Designer({ editor });
+    designer = new Designer({ editor, shellModelFactory });
     project = designer.project;
     designer.createComponentMeta(pageMetadata);
     doc = project.createDocument(formSchema);
-    host = new BuiltinSimulatorHost(designer.project);
+    host = new BuiltinSimulatorHost(designer.project, designer);
   });
 
   afterEach(() => {
@@ -266,7 +262,7 @@ describe('Host 测试', () => {
       host.getDropContainer({
         target: {},
         dragObject: {
-          type: DragObjectType.Node,
+          type: IPublicEnumDragObjectType.Node,
           nodes: [doc.getNode('page')],
         },
       });
@@ -361,7 +357,7 @@ describe('Host 测试', () => {
     it('locate，没有 nodes', () => {
       expect(host.locate({
         dragObject: {
-          type: DragObjectType.Node,
+          type: IPublicEnumDragObjectType.Node,
           nodes: [],
         },
       })).toBeUndefined();
@@ -370,7 +366,7 @@ describe('Host 测试', () => {
       project.removeDocument(doc);
       expect(host.locate({
         dragObject: {
-          type: DragObjectType.Node,
+          type: IPublicEnumDragObjectType.Node,
           nodes: [doc.getNode('page')],
         },
       })).toBeNull();
@@ -378,7 +374,7 @@ describe('Host 测试', () => {
     it('notFoundComponent', () => {
       expect(host.locate({
         dragObject: {
-          type: DragObjectType.Node,
+          type: IPublicEnumDragObjectType.Node,
           nodes: [doc.getNode('form')],
         },
       })).toBeUndefined();
@@ -386,7 +382,7 @@ describe('Host 测试', () => {
     it('locate', () => {
       host.locate({
         dragObject: {
-          type: DragObjectType.Node,
+          type: IPublicEnumDragObjectType.Node,
           nodes: [doc.getNode('page')],
         },
       });

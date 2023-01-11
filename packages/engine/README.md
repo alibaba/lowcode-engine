@@ -97,26 +97,33 @@ init(document.getElementById('lce'));
 ### cdn optional method:
 #### Method 1: alifd cdn
 ```html
-https://alifd.alicdn.com/npm/@alilc/lowcode-engine@1.0.0/dist/js/engine-core.js
+https://alifd.alicdn.com/npm/@alilc/lowcode-engine@1.0.18/dist/js/engine-core.js
 
-https://alifd.alicdn.com/npm/@alilc/lowcode-react-simulator-renderer@1.0.0/dist/js/react-simulator-renderer.js
+https://alifd.alicdn.com/npm/@alilc/lowcode-react-simulator-renderer@1.0.18/dist/js/react-simulator-renderer.js
 ```
 
-#### Method 2: unpkg
+#### Method 2: uipaas cdn
 ```html
-https://unpkg.com/@alilc/lowcode-engine@1.0.0/dist/js/engine-core.js
+https://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/1.0.18/dist/js/engine-core.js
 
-https://unpkg.com/@alilc/lowcode-react-simulator-renderer@1.0.0/dist/js/react-simulator-renderer.js
+https://uipaas-assets.com/prod/npm/@alilc/lowcode-react-simulator-renderer/1.0.18/dist/js/react-simulator-renderer.js
 ```
 
-#### Method 3: jsdelivr
+#### Method 3: unpkg
 ```html
-https://cdn.jsdelivr.net/npm/@alilc/lowcode-engine@1.0.0/dist/js/engine-core.js
+https://unpkg.com/@alilc/lowcode-engine@1.0.18/dist/js/engine-core.js
 
-https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.0/dist/js/react-simulator-renderer.js
+https://unpkg.com/@alilc/lowcode-react-simulator-renderer@1.0.18/dist/js/react-simulator-renderer.js
 ```
 
-#### Method 4: Use your own cdn
+#### Method 4: jsdelivr
+```html
+https://cdn.jsdelivr.net/npm/@alilc/lowcode-engine@1.0.18/dist/js/engine-core.js
+
+https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.18/dist/js/react-simulator-renderer.js
+```
+
+#### Method 5: Use your own cdn
 Pass the files under packages/engine/dist and packages/(react|rax)-simulator-renderer/dist in the source code to your cdn provider
 
 ## 🔗 Related Links
@@ -126,9 +133,9 @@ Pass the files under packages/engine/dist and packages/(react|rax)-simulator-ren
 - [Official Materials](https://github.com/alibaba/lowcode-materials)
 - [official setter](https://github.com/alibaba/lowcode-engine-ext)
 - [Official plugin (plugin)](https://github.com/alibaba/lowcode-plugins)
-- [Ecological elements (materials, setters, plugins) toolchain](https://www.yuque.com/lce/doc/ulvlkz)
-- [User Documentation](http://lowcode-engine.cn/docV2)
-- [API](http://lowcode-engine.cn/docV2/vlmeme)
+- [Ecological elements (materials, setters, plugins) toolchain](https://lowcode-engine.cn/site/docs/guide/expand/editor/cli)
+- [User Documentation](http://lowcode-engine.cn/doc)
+- [API](https://lowcode-engine.cn/site/docs/api/)
 
 This [awesome-lowcode-engine](https://github.com/lowcode-workspace/awesome-lowcode-engine) page links to a repository which records all of the tools\materials\solutions that use or built for the lowcode-engine, PR is welcomed.
 
@@ -146,14 +153,14 @@ $ npm start
 >
 > 📢 Windows environment must use [WSL](https://docs.microsoft.com/en-us/windows/wsl/install), other terminals are not guaranteed to work normally
 
-After lowcode-engine is started, several umd files are provided, which can be debugged in combination with the [lowcode-demo](https://github.com/alibaba/lowcode-demo) project. Refer to the file proxy rules [here](https://www.yuque.com/lce/doc/glz0fx).
+After lowcode-engine is started, several umd files are provided, which can be debugged in combination with the [lowcode-demo](https://github.com/alibaba/lowcode-demo) project. Refer to the file proxy rules [here](https://lowcode-engine.cn/site/docs/participate/prepare).
 
 ## 🤝 Participation
 
 Please read first:
-1. [How to configure the engine debugging environment? ](https://www.yuque.com/lce/doc/glz0fx)
-2. [About the R&D collaboration process of the engine](https://www.yuque.com/lce/doc/contributing)
-3. [Engineering Configuration of Engine](https://www.yuque.com/lce/doc/gxwqg6)
+1. [How to configure the engine debugging environment? ](https://lowcode-engine.cn/site/docs/participate/prepare)
+2. [About the R&D collaboration process of the engine](https://lowcode-engine.cn/site/docs/participate/flow)
+3. [Engineering Configuration of Engine](https://lowcode-engine.cn/site/docs/participate/config)
 
 > Strongly recommend reading ["The Wisdom of Asking Questions"](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way), ["How to Ask Questions to the Open Source Community"](https: //github.com/seajs/seajs/issues/545) and [How to Report Bugs Effectively](http://www.chiark.greenend.org.uk/%7Esgtatham/bugs-cn.html), [ "How to Submit Unanswerable Questions to Open Source Projects"](https://zhuanlan.zhihu.com/p/25795393), better questions are easier to get help. (This paragraph refers to [antd](https://github.com/ant-design/ant-design))
 

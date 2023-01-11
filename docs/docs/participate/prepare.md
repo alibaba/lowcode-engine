@@ -9,7 +9,7 @@ sidebar_position: 1
 如果您需要对低代码编辑器进行定制，您可能只需要 clone [lowcode-demo 项目](https://github.com/alibaba/lowcode-demo)并进行修改，参考“[配置低代码扩展点](/site/docs/guide/expand/editor/summary)”章节。
 
 > 前置条件：
-> node >= 14
+> node 推荐使用 16.18.0（14.x 也可以）
 
 ### 1. 拉取代码，启动项目
 ```bash
@@ -32,27 +32,27 @@ npm install && npm start
 {
   "proxy": [
     [
-      "https://alifd.alicdn.com/npm/@alilc/lowcode-engine@(.*)/dist/js/engine-core.js",
+      "https://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/(.*)/dist/js/engine-core.js",
       "http://localhost:5555/js/engine-core.js"
     ],
     [
-      "https://alifd.alicdn.com/npm/@alilc/lowcode-engine@(.*)/dist/css/engine-core.css",
+      "https://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/(.*)/dist/css/engine-core.css",
       "http://localhost:5555/css/engine-core.css"
     ],
     [
-      "https?://alifd.alicdn.com/npm/@alilc/lowcode-engine@(.*)/dist/js/react-simulator-renderer.js",
+      "https?://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/(.*)/dist/js/react-simulator-renderer.js",
       "http://localhost:5555/js/react-simulator-renderer.js"
     ],
     [
-      "https?://alifd.alicdn.com/npm/@alilc/lowcode-engine@(.*)/dist/css/react-simulator-renderer.css",
+      "https?://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/(.*)/dist/css/react-simulator-renderer.css",
       "http://localhost:5555/css/react-simulator-renderer.css"
     ],
     [
-      "https?://alifd.alicdn.com/npm/@alilc/lowcode-engine@(.*)/dist/js/rax-simulator-renderer.js",
+      "https?://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/(.*)/dist/js/rax-simulator-renderer.js",
       "http://localhost:5555/js/rax-simulator-renderer.js"
     ],
     [
-      "https?://alifd.alicdn.com/npm/@alilc/lowcode-engine@(.*)/dist/css/rax-simulator-renderer.css",
+      "https?://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/(.*)/dist/css/rax-simulator-renderer.css",
       "http://localhost:5555/css/rax-simulator-renderer.css"
     ],
   ]

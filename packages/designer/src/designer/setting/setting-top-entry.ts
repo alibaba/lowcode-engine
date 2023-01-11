@@ -1,12 +1,13 @@
-import { EventEmitter } from 'events';
-import { CustomView, isCustomView, IEditor } from '@alilc/lowcode-types';
-import { computed } from '@alilc/lowcode-editor-core';
+import { IPublicTypeCustomView, IPublicModelEditor } from '@alilc/lowcode-types';
+import { isCustomView } from '@alilc/lowcode-utils';
+import { computed, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { SettingEntry } from './setting-entry';
 import { SettingField } from './setting-field';
 import { SettingPropEntry } from './setting-prop-entry';
 import { Node } from '../../document';
 import { ComponentMeta } from '../../component-meta';
 import { Designer } from '../designer';
+import { Setters } from '@alilc/lowcode-shell';
 
 function generateSessionId(nodes: Node[]) {
   return nodes
@@ -16,9 +17,9 @@ function generateSessionId(nodes: Node[]) {
 }
 
 export class SettingTopEntry implements SettingEntry {
-  private emitter = new EventEmitter();
+  private emitter: IEventBus = createModuleEventBus('SettingTopEntry');
 
-  private _items: Array<SettingField | CustomView> = [];
+  private _items: Array<SettingField | IPublicTypeCustomView> = [];
 
   private _componentMeta: ComponentMeta | null = null;
 
@@ -71,15 +72,18 @@ export class SettingTopEntry implements SettingEntry {
 
   readonly designer: Designer;
 
+  readonly setters: Setters;
+
   disposeFunctions: any[] = [];
 
-  constructor(readonly editor: IEditor, readonly nodes: Node[]) {
+  constructor(readonly editor: IPublicModelEditor, readonly nodes: Node[]) {
     if (!Array.isArray(nodes) || nodes.length < 1) {
       throw new ReferenceError('nodes should not be empty');
     }
     this.id = generateSessionId(nodes);
     this.first = nodes[0];
     this.designer = this.first.document.designer;
+    this.setters = editor.get('setters') as Setters;
 
     // setups
     this.setupComponentMeta();

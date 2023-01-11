@@ -1,5 +1,5 @@
-import { obx, globalContext, Editor } from '@alilc/lowcode-editor-core';
-import { LiveTextEditingConfig } from '@alilc/lowcode-types';
+import { obx, globalContext } from '@alilc/lowcode-editor-core';
+import { IPublicTypePluginConfig, IPublicTypeLiveTextEditingConfig } from '@alilc/lowcode-types';
 import { Node, Prop } from '../../document';
 
 const EDITOR_KEY = 'data-setter-prop';
@@ -52,17 +52,18 @@ export class LiveEditing {
     const targetElement = event.target as HTMLElement;
     const { liveTextEditing } = node.componentMeta;
 
-    const editor = globalContext.get(Editor);
+    const workspace = globalContext.get('workspace');
+    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
     const npm = node?.componentMeta?.npm;
     const selected =
       [npm?.package, npm?.componentName].filter((item) => !!item).join('-') || node?.componentMeta?.componentName || '';
-    editor?.emit('designer.builtinSimulator.liveEditing', {
+    editor?.eventBus.emit('designer.builtinSimulator.liveEditing', {
       selected,
     });
 
     let setterPropElement = getSetterPropElement(targetElement, rootElement);
     let propTarget = setterPropElement?.dataset.setterProp;
-    let matched: (LiveTextEditingConfig & { propElement?: HTMLElement }) | undefined | null;
+    let matched: (IPublicTypePluginConfig & { propElement?: HTMLElement }) | undefined | null;
     if (liveTextEditing) {
       if (propTarget) {
         // 已埋点命中 data-setter-prop="proptarget", 从 liveTextEditing 读取配置（mode|onSaveContent）
@@ -107,7 +108,7 @@ export class LiveEditing {
       }
 
       // 进入编辑
-      //  1. 设置contentEditable="plaintext|..."
+      //  1. 设置 contentEditable="plaintext|..."
       //  2. 添加类名
       //  3. focus & cursor locate
       //  4. 监听 blur 事件
@@ -186,7 +187,7 @@ export class LiveEditing {
   }
 }
 
-export type SpecificRule = (target: EditingTarget) => (LiveTextEditingConfig & {
+export type SpecificRule = (target: EditingTarget) => (IPublicTypeLiveTextEditingConfig & {
   propElement?: HTMLElement;
 }) | null;
 
@@ -212,7 +213,6 @@ function selectRange(doc: Document, range: Range) {
     selection.addRange(range);
   }
 }
-
 
 function queryPropElement(rootElement: HTMLElement, targetElement: HTMLElement, selector?: string) {
   if (!selector) {

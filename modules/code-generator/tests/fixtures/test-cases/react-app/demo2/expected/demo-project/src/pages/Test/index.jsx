@@ -1,16 +1,16 @@
 // 注意: 出码引擎注入的临时变量默认都以 "__$$" 开头，禁止在搭建的代码中直接访问。
 // 例外：react 框架的导出名和各种组件名除外。
-import React from "react";
+import React from 'react';
 
-import { Form, Input, NumberPicker, Select, Button } from "@alifd/next";
+import { Form, Input, NumberPicker, Select, Button } from '@alifd/next';
 
-import utils, { RefsManager } from "../../utils";
+import utils, { RefsManager } from '../../utils';
 
-import * as __$$i18n from "../../i18n";
+import * as __$$i18n from '../../i18n';
 
-import __$$constants from "../../constants";
+import __$$constants from '../../constants';
 
-import "./index.css";
+import './index.css';
 
 class Test$$Page extends React.Component {
   _context = this;
@@ -28,7 +28,7 @@ class Test$$Page extends React.Component {
 
     __$$i18n._inject2(this);
 
-    this.state = { text: "outter" };
+    this.state = { text: 'outter' };
   }
 
   $ = (refName) => {
@@ -40,21 +40,21 @@ class Test$$Page extends React.Component {
   };
 
   componentDidMount() {
-    console.log("componentDidMount");
+    console.log('componentDidMount');
   }
 
   render() {
     const __$$context = this._context || this;
     const { state } = __$$context;
     return (
-      <div ref={this._refsManager.linkRef("outterView")} autoLoading={true}>
+      <div ref={this._refsManager.linkRef('outterView')} autoLoading={true}>
         <Form
           labelCol={__$$eval(() => this.state.colNum)}
           style={{}}
-          ref={this._refsManager.linkRef("testForm")}
+          ref={this._refsManager.linkRef('testForm')}
         >
           <Form.Item
-            label={__$$eval(() => this.i18n("i18n-jwg27yo4"))}
+            label={__$$eval(() => this.i18n('i18n-jwg27yo4'))}
             name="name"
             initValue="李雷"
           >
@@ -66,24 +66,24 @@ class Test$$Page extends React.Component {
           <Form.Item label="职业：" name="profession">
             <Select
               dataSource={[
-                { label: "教师", value: "t" },
-                { label: "医生", value: "d" },
-                { label: "歌手", value: "s" },
+                { label: '教师', value: 't' },
+                { label: '医生', value: 'd' },
+                { label: '歌手', value: 's' },
               ]}
             />
           </Form.Item>
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: 'center' }}>
             <Button.Group>
               <Button
                 type="primary"
-                style={{ margin: "0 5px 0 5px" }}
+                style={{ margin: '0 5px 0 5px' }}
                 htmlType="submit"
               >
                 提交
               </Button>
               <Button
                 type="normal"
-                style={{ margin: "0 5px 0 5px" }}
+                style={{ margin: '0 5px 0 5px' }}
                 htmlType="reset"
               >
                 重置

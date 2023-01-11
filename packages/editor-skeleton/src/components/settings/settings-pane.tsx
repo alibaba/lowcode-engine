@@ -1,14 +1,14 @@
 import { Component, MouseEvent, Fragment } from 'react';
-import { shallowIntl, createSetterContent, observer, obx, engineConfig, runInAction, globalContext } from '@alilc/lowcode-editor-core';
-import { createContent } from '@alilc/lowcode-utils';
+import { shallowIntl, observer, obx, engineConfig, runInAction, globalContext } from '@alilc/lowcode-editor-core';
+import { createContent, isJSSlot, isSetterConfig, isSettingField } from '@alilc/lowcode-utils';
 import { Skeleton } from '@alilc/lowcode-editor-skeleton';
-import { isSetterConfig, CustomView, isJSSlot } from '@alilc/lowcode-types';
-import { SettingField, isSettingField, SettingTopEntry, SettingEntry, ComponentMeta } from '@alilc/lowcode-designer';
+import { IPublicTypeCustomView } from '@alilc/lowcode-types';
+import { SettingField, SettingTopEntry, SettingEntry, ComponentMeta } from '@alilc/lowcode-designer';
 import { createField } from '../field';
 import PopupService, { PopupPipe } from '../popup';
 import { SkeletonContext } from '../../context';
-// import { Icon } from '@alifd/next';
 import { intl } from '../../locale';
+import { Setters } from '@alilc/lowcode-shell';
 
 function isStandardComponent(componentMeta: ComponentMeta | null) {
   if (!componentMeta) return false;
@@ -39,6 +39,8 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
 
   stageName: string | undefined;
 
+  setters: Setters;
+
   constructor(props: SettingFieldViewProps) {
     super(props);
 
@@ -46,8 +48,10 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
     const { extraProps } = field;
     const { display } = extraProps;
 
-    const editor = globalContext.get('editor');
+    const workspace = globalContext.get('workspace');
+    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
     const { stages } = editor.get('skeleton') as Skeleton;
+    this.setters = editor.get('setters');
     let stageName;
     if (display === 'entry') {
       runInAction(() => {
@@ -193,7 +197,6 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
       setterProps = {},
       setterType,
       initialValue = null,
-
     } = this.setterInfo;
 
     const value = this.value;
@@ -216,7 +219,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
         ...extraProps,
       },
       !stageName &&
-      createSetterContent(setterType, {
+      this.setters.createSetterContent(setterType, {
         ...shallowIntl(setterProps),
         forceInline: extraProps.forceInline,
         key: field.id,
@@ -269,7 +272,8 @@ class SettingGroupView extends Component<SettingGroupViewProps> {
     const { field } = this.props;
     const { extraProps } = field;
     const { display } = extraProps;
-    const editor = globalContext.get('editor');
+    const workspace = globalContext.get('workspace');
+    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
     const { stages } = editor.get('skeleton') as Skeleton;
     // const items = field.items;
 
@@ -320,7 +324,7 @@ class SettingGroupView extends Component<SettingGroupViewProps> {
   }
 }
 
-export function createSettingFieldView(item: SettingField | CustomView, field: SettingEntry, index?: number) {
+export function createSettingFieldView(item: SettingField | IPublicTypeCustomView, field: SettingEntry, index?: number) {
   if (isSettingField(item)) {
     if (item.isGroup) {
       return <SettingGroupView field={item} key={item.id} />;

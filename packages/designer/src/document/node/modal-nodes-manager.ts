@@ -1,14 +1,15 @@
-import { EventEmitter } from 'events';
-import { Node } from './node';
+import { INode, Node } from './node';
 import { DocumentModel } from '../document-model';
+import { IPublicModelModalNodesManager } from '@alilc/lowcode-types';
+import { createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
 
-export function getModalNodes(node: Node) {
+export function getModalNodes(node: INode | Node) {
   if (!node) return [];
   let nodes: any = [];
   if (node.componentMeta.isModal) {
     nodes.push(node);
   }
-  const children = node.getChildren();
+  const { children } = node;
   if (children) {
     children.forEach((child) => {
       nodes = nodes.concat(getModalNodes(child));
@@ -17,20 +18,27 @@ export function getModalNodes(node: Node) {
   return nodes;
 }
 
-export class ModalNodesManager {
-  public willDestroy: any;
+export interface IModalNodesManager extends IPublicModelModalNodesManager {
+
+  getModalNodes(): INode[];
+
+  getVisibleModalNode(): INode | null;
+}
+
+export class ModalNodesManager implements IModalNodesManager {
+  willDestroy: any;
 
   private page: DocumentModel;
 
-  private modalNodes: Node[];
+  private modalNodes: INode[];
 
   private nodeRemoveEvents: any;
 
-  private emitter: EventEmitter;
+  private emitter: IEventBus;
 
   constructor(page: DocumentModel) {
     this.page = page;
-    this.emitter = new EventEmitter();
+    this.emitter = createModuleEventBus('ModalNodesManager');
     this.nodeRemoveEvents = {};
     this.setNodes();
     this.hideModalNodes();
@@ -40,26 +48,27 @@ export class ModalNodesManager {
     ];
   }
 
-  getModalNodes() {
+  getModalNodes(): INode[] {
     return this.modalNodes;
   }
 
-  getVisibleModalNode() {
-    return this.getModalNodes().find((node: Node) => node.getVisible());
+  getVisibleModalNode(): INode | null {
+    const visibleNode = this.getModalNodes().find((node: INode) => node.getVisible());
+    return visibleNode || null;
   }
 
   hideModalNodes() {
-    this.modalNodes.forEach((node: Node) => {
+    this.modalNodes.forEach((node: INode) => {
       node.setVisible(false);
     });
   }
 
-  setVisible(node: Node) {
+  setVisible(node: INode) {
     this.hideModalNodes();
     node.setVisible(true);
   }
 
-  setInvisible(node: Node) {
+  setInvisible(node: INode) {
     node.setVisible(false);
   }
 
@@ -77,7 +86,7 @@ export class ModalNodesManager {
     };
   }
 
-  private addNode(node: Node) {
+  private addNode(node: INode) {
     if (node.componentMeta.isModal) {
       this.hideModalNodes();
       this.modalNodes.push(node);
@@ -87,7 +96,7 @@ export class ModalNodesManager {
     }
   }
 
-  private removeNode(node: Node) {
+  private removeNode(node: INode) {
     if (node.componentMeta.isModal) {
       const index = this.modalNodes.indexOf(node);
       if (index >= 0) {
@@ -101,24 +110,24 @@ export class ModalNodesManager {
     }
   }
 
-  private addNodeEvent(node: Node) {
-    this.nodeRemoveEvents[node.getId()] =
+  private addNodeEvent(node: INode) {
+    this.nodeRemoveEvents[node.id] =
       node.onVisibleChange(() => {
         this.emitter.emit('visibleChange');
       });
   }
 
-  private removeNodeEvent(node: Node) {
-    if (this.nodeRemoveEvents[node.getId()]) {
-      this.nodeRemoveEvents[node.getId()]();
-      delete this.nodeRemoveEvents[node.getId()];
+  private removeNodeEvent(node: INode) {
+    if (this.nodeRemoveEvents[node.id]) {
+      this.nodeRemoveEvents[node.id]();
+      delete this.nodeRemoveEvents[node.id];
     }
   }
 
   setNodes() {
-    const nodes = getModalNodes(this.page.getRoot()!);
+    const nodes = getModalNodes(this.page.rootNode!);
     this.modalNodes = nodes;
-    this.modalNodes.forEach((node: Node) => {
+    this.modalNodes.forEach((node: INode) => {
       this.addNodeEvent(node);
     });
 

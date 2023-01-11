@@ -2,20 +2,25 @@
 title: init - 初始化 API
 sidebar_position: 10
 ---
+
+> **@since** v1.0.0
+
+
 ## 模块简介
 提供 init 等方法
-## 方法签名
+## 方法
 #### 1. init
 初始化引擎
 
 **方法定义**
 ```typescript
-function init(container?: Element, options?: EngineOptions): void
+function init(container?: Element, options?: IPublicTypeEngineOptions): void
 ```
 
 **初始化引擎的参数**
+
 ```typescript
-interface EngineOptions {
+interface IPublicTypeEngineOptions {
   /**
    * 指定初始化的 device
    */
@@ -41,7 +46,7 @@ interface EngineOptions {
    */
   enableCanvasLock?: boolean;
   /**
-   * 容器锁定后，容器本身是否可以设置属性，仅当画布锁定特性开启时生效， 默认值为：false
+   * 容器锁定后，容器本身是否可以设置属性，仅当画布锁定特性开启时生效，默认值为：false
    */
   enableLockedNodeSetting?: boolean;
   /**
@@ -102,6 +107,9 @@ interface EngineOptions {
   [key: string]: any;
 }
 ```
+> 源码详见 [IPublicTypeEngineOptions](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/engine-options.ts)
+
+
 ## 使用示例
 ```typescript
 import { init } from '@alilc/lowcode-engine';
@@ -135,4 +143,4 @@ init({
 ```
 
 在引擎中即可这样使用。
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/2622706/1657272220368-9ee4430e-9e42-4746-9de8-a233840b0950.png#clientId=u951c1fcc-9dab-4&crop=0&crop=0&crop=1&crop=1&errorMessage=unknown%20error&from=paste&height=292&id=uacb8d50d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1796&originWidth=3584&originalType=binary&ratio=1&rotation=0&showTitle=false&size=1641368&status=error&style=none&taskId=u559fb5cd-4a48-4732-b169-c9868a6d7b7&title=&width=582)
+![image.png](https://img.alicdn.com/imgextra/i4/O1CN01FWvu051OxAEYrHBy5_!!6000000001771-2-tps-3584-1796.png)

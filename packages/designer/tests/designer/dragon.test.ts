@@ -1,5 +1,4 @@
 import '../fixtures/window';
-import { set } from '../utils';
 import { Editor, globalContext } from '@alilc/lowcode-editor-core';
 import { Project } from '../../src/project/project';
 import { DocumentModel } from '../../src/document/document-model';
@@ -10,14 +9,15 @@ import {
   isDragNodeDataObject,
   isDragAnyObject,
   isLocateEvent,
-  DragObjectType,
   isShaken,
   setShaken,
   isInvalidPoint,
   isSameAs,
 } from '../../src/designer/dragon';
+import { IPublicEnumDragObjectType } from '@alilc/lowcode-types';
 import formSchema from '../fixtures/schema/form';
 import { fireEvent } from '@testing-library/react';
+import { shellModelFactory } from '../../../engine/src/modules/shell-model-factory';
 
 describe('Dragon 测试', () => {
   let editor: Editor;
@@ -32,7 +32,7 @@ describe('Dragon 测试', () => {
   });
 
   beforeEach(() => {
-    designer = new Designer({ editor });
+    designer = new Designer({ editor, shellModelFactory });
     project = designer.project;
     doc = project.createDocument(formSchema);
     dragon = new Dragon(designer);
@@ -66,7 +66,7 @@ describe('Dragon 测试', () => {
 
     dragon.boost(
       {
-        type: DragObjectType.NodeData,
+        type: IPublicEnumDragObjectType.NodeData,
         data: [{ componentName: 'Button' }],
       },
       new Event('dragstart', { clientX: 100, clientY: 100 }),
@@ -97,7 +97,7 @@ describe('Dragon 测试', () => {
 
     dragon.boost(
       {
-        type: DragObjectType.NodeData,
+        type: IPublicEnumDragObjectType.NodeData,
         data: [{ componentName: 'Button' }],
       },
       new MouseEvent('mousedown', { clientX: 100, clientY: 100 }),
@@ -123,7 +123,7 @@ describe('Dragon 测试', () => {
 
     dragon.boost(
       {
-        type: DragObjectType.Node,
+        type: IPublicEnumDragObjectType.Node,
         nodes: [doc.getNode('node_k1ow3cbn')],
       },
       new MouseEvent('mousedown', { clientX: 100, clientY: 100 }),
@@ -150,7 +150,7 @@ describe('Dragon 测试', () => {
 
     dragon.boost(
       {
-        type: DragObjectType.Node,
+        type: IPublicEnumDragObjectType.Node,
         nodes: [doc.getNode('node_k1ow3cbn')],
       },
       new MouseEvent('mousedown', { clientX: 100, clientY: 100 }),
@@ -172,7 +172,7 @@ describe('Dragon 测试', () => {
 
     dragon.boost(
       {
-        type: DragObjectType.Node,
+        type: IPublicEnumDragObjectType.Node,
         nodes: [doc.getNode('node_k1ow3cbn')],
       },
       new MouseEvent('mousedown', { clientX: 100, clientY: 100 }),
@@ -193,7 +193,7 @@ describe('Dragon 测试', () => {
 
     dragon.boost(
       {
-        type: DragObjectType.Node,
+        type: IPublicEnumDragObjectType.Node,
         nodes: [doc.getNode('node_k1ow3cbn')],
       },
       new MouseEvent('mousedown', { clientX: 100, clientY: 100 }),
@@ -217,7 +217,7 @@ describe('Dragon 测试', () => {
     const mockBoostFn = jest
       .fn((e) => {
         return {
-          type: DragObjectType.Node,
+          type: IPublicEnumDragObjectType.Node,
           nodes: [doc.getNode('node_k1ow3cbn')],
         };
       })
@@ -274,7 +274,7 @@ describe('Dragon 测试', () => {
     expect(dragon.activeSensor).toBeUndefined();
     dragon.boost(
       {
-        type: DragObjectType.NodeData,
+        type: IPublicEnumDragObjectType.NodeData,
         data: [{ componentName: 'Button' }],
       },
       new MouseEvent('mousedown', { clientX: 100, clientY: 100 }),
@@ -309,7 +309,7 @@ describe('Dragon 测试', () => {
     const mockBoostFn = jest
       .fn((e) => {
         return {
-          type: DragObjectType.Node,
+          type: IPublicEnumDragObjectType.Node,
           nodes: [doc.getNode('node_k1ow3cbn')],
         };
       })
@@ -324,15 +324,15 @@ describe('Dragon 测试', () => {
 
 describe('导出的其他函数', () => {
   it('isDragNodeObject', () => {
-    expect(isDragNodeObject({ type: DragObjectType.Node, nodes: [] })).toBeTruthy();
+    expect(isDragNodeObject({ type: IPublicEnumDragObjectType.Node, nodes: [] })).toBeTruthy();
   });
   it('isDragNodeDataObject', () => {
-    expect(isDragNodeDataObject({ type: DragObjectType.NodeData, data: [] })).toBeTruthy();
+    expect(isDragNodeDataObject({ type: IPublicEnumDragObjectType.NodeData, data: [] })).toBeTruthy();
   });
   it('isDragAnyObject', () => {
     expect(isDragAnyObject()).toBeFalsy();
-    expect(isDragAnyObject({ type: DragObjectType.Node, nodes: [] })).toBeFalsy();
-    expect(isDragAnyObject({ type: DragObjectType.NodeData, data: [] })).toBeFalsy();
+    expect(isDragAnyObject({ type: IPublicEnumDragObjectType.Node, nodes: [] })).toBeFalsy();
+    expect(isDragAnyObject({ type: IPublicEnumDragObjectType.NodeData, data: [] })).toBeFalsy();
     expect(isDragAnyObject({ type: 'others', data: [] })).toBeTruthy();
   });
   it('isLocateEvent', () => {

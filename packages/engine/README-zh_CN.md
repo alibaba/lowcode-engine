@@ -41,7 +41,7 @@
 - 🌈 提炼自企业级低代码平台的面向扩展设计的内核引擎，奉行最小内核，最强生态的设计理念
 - 📦 开箱即用的高质量生态元素，包括 物料体系、设置器、插件 等
 - ⚙️ 完善的工具链，支持 物料体系、设置器、插件 等生态元素的全链路研发周期
-- 🔌 强大的扩展能力，已支撑近 100 个各种垂直类低代码平台
+- 🔌 强大的扩展能力，已支撑 100+ 个各种类型低代码平台
 - 🛡 使用 TypeScript 开发，提供完整的类型定义文件
 
 ## 🎯 兼容环境
@@ -97,26 +97,33 @@ init(document.getElementById('lce'));
 ### cdn 可选方式：
 #### 方式 1（推荐）：alifd cdn
 ```html
-https://alifd.alicdn.com/npm/@alilc/lowcode-engine@1.0.0/dist/js/engine-core.js
+https://alifd.alicdn.com/npm/@alilc/lowcode-engine@1.0.18/dist/js/engine-core.js
 
-https://alifd.alicdn.com/npm/@alilc/lowcode-react-simulator-renderer@1.0.0/dist/js/react-simulator-renderer.js
+https://alifd.alicdn.com/npm/@alilc/lowcode-react-simulator-renderer@1.0.18/dist/js/react-simulator-renderer.js
 ```
 
-#### 方式 2：unpkg
+#### 方式 2（推荐）：uipaas cdn
 ```html
-https://unpkg.com/@alilc/lowcode-engine@1.0.0/dist/js/engine-core.js
+https://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/1.0.18/dist/js/engine-core.js
 
-https://unpkg.com/@alilc/lowcode-react-simulator-renderer@1.0.0/dist/js/react-simulator-renderer.js
+https://uipaas-assets.com/prod/npm/@alilc/lowcode-react-simulator-renderer/1.0.18/dist/js/react-simulator-renderer.js
 ```
 
-#### 方式 3：jsdelivr
+#### 方式 3：unpkg
 ```html
-https://cdn.jsdelivr.net/npm/@alilc/lowcode-engine@1.0.0/dist/js/engine-core.js
+https://unpkg.com/@alilc/lowcode-engine@1.0.18/dist/js/engine-core.js
 
-https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.0/dist/js/react-simulator-renderer.js
+https://unpkg.com/@alilc/lowcode-react-simulator-renderer@1.0.18/dist/js/react-simulator-renderer.js
 ```
 
-#### 方式 4：使用自有 cdn
+#### 方式 4：jsdelivr
+```html
+https://cdn.jsdelivr.net/npm/@alilc/lowcode-engine@1.0.18/dist/js/engine-core.js
+
+https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.18/dist/js/react-simulator-renderer.js
+```
+
+#### 方式 5：使用自有 cdn
 将源码中 packages/engine/dist 和 packages/(react|rax)-simulator-renderer/dist 下的文件传至你的 cdn 提供商
 
 ## 🔗 相关链接
@@ -126,9 +133,9 @@ https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.0/dist/
 - [官方物料](https://github.com/alibaba/lowcode-materials)
 - [官方设置器（setter）](https://github.com/alibaba/lowcode-engine-ext)
 - [官方插件（plugin）](https://github.com/alibaba/lowcode-plugins)
-- [生态元素（物料、setter、插件）工具链](https://www.yuque.com/lce/doc/ulvlkz)
-- [用户文档](https://lowcode-engine.cn/docV2)
-- [API](https://lowcode-engine.cn/docV2/vlmeme)
+- [生态元素（物料、setter、插件）工具链](https://lowcode-engine.cn/site/docs/guide/expand/editor/cli)
+- [用户文档](https://lowcode-engine.cn/doc)
+- [API](https://lowcode-engine.cn/site/docs/api/)
 
 [awesome-lowcode-engine](https://github.com/lowcode-workspace/awesome-lowcode-engine) 中包含了一系列围绕引擎建设的工具、解决方案等，如果你有类似的解决方案或者工具，欢迎提 PR 到该仓库，让更多人了解到
 
@@ -146,14 +153,14 @@ $ npm start
 >
 > 📢 windows 环境必须使用 [WSL](https://docs.microsoft.com/zh-cn/windows/wsl/install)，其他终端不保证能正常运行
 
-lowcode-engine 启动后，提供了几个 umd 文件，可以结合 [lowcode-demo](https://github.com/alibaba/lowcode-demo) 项目做调试，文件代理规则参考[这里](https://www.yuque.com/lce/doc/glz0fx)。
+lowcode-engine 启动后，提供了几个 umd 文件，可以结合 [lowcode-demo](https://github.com/alibaba/lowcode-demo) 项目做调试，文件代理规则参考[这里](https://lowcode-engine.cn/site/docs/participate/prepare#2-配置资源代理)。
 
 ## 🤝 参与共建
 
 请先阅读：
-1. [如何配置引擎调试环境？](https://www.yuque.com/lce/doc/glz0fx)
-2. [关于引擎的研发协作流程](https://www.yuque.com/lce/doc/contributing)
-3. [引擎的工程化配置](https://www.yuque.com/lce/doc/gxwqg6)
+1. [如何配置引擎调试环境？](https://lowcode-engine.cn/site/docs/participate/prepare)
+2. [关于引擎的研发协作流程](https://lowcode-engine.cn/site/docs/participate/flow)
+3. [引擎的工程化配置](https://lowcode-engine.cn/site/docs/participate/config)
 
 > 强烈推荐阅读 [《提问的智慧》](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way)、[《如何向开源社区提问题》](https://github.com/seajs/seajs/issues/545) 和 [《如何有效地报告 Bug》](http://www.chiark.greenend.org.uk/%7Esgtatham/bugs-cn.html)、[《如何向开源项目提交无法解答的问题》](https://zhuanlan.zhihu.com/p/25795393)，更好的问题更容易获得帮助。（此段参考 [antd](https://github.com/ant-design/ant-design)）
 
