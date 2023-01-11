@@ -753,7 +753,7 @@ export class DocumentModel implements IDocumentModel {
     }));
   }
 
-  onNodeCreate(func: (node: Node) => void) {
+  onNodeCreate(func: (node: INode) => void) {
     const wrappedFunc = wrapWithEventSwitch(func);
     this.emitter.on('nodecreate', wrappedFunc);
     return () => {
@@ -761,7 +761,7 @@ export class DocumentModel implements IDocumentModel {
     };
   }
 
-  onNodeDestroy(func: (node: Node) => void) {
+  onNodeDestroy(func: (node: INode) => void) {
     const wrappedFunc = wrapWithEventSwitch(func);
     this.emitter.on('nodedestroy', wrappedFunc);
     return () => {

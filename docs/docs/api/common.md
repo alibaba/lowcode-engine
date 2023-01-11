@@ -20,7 +20,7 @@ sidebar_position: 11
 #### skeletonCabin
 面板扩展相关，详见下方方法签名
 
-## 方法签名
+## 方法
 ### utils
 #### isNodeSchema
 是否为合法的 schema 结构

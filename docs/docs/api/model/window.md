@@ -12,7 +12,7 @@ sidebar_position: 12
 
 低代码设计器窗口模型
 
-## 变量
+## 属性
 
 ### id
 
@@ -38,7 +38,7 @@ sidebar_position: 12
 
 关联模型 [IPublicModelResource](./resource)
 
-## 方法签名
+## 方法
 
 ### importSchema
 当前窗口导入 schema, 会调用当前窗口对应资源的 import 钩子

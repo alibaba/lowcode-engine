@@ -9,7 +9,7 @@ sidebar_position: 3
 
 属性模型
 
-## 变量
+## 属性
 
 ### id
 
@@ -46,7 +46,7 @@ key 值
 相关类型：[IPublicModelNode](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/node.ts)
 
 
-## 方法签名
+## 方法
 
 ### setValue
 

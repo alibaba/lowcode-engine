@@ -12,7 +12,7 @@ sidebar_position: 9
 > 注：日志级别可以通过 url query 动态调整，详见下方[查看示例](#查看示例)。<br/>
 > 参考 [zen-logger](https://web.npm.alibaba-inc.com/package/zen-logger) 实现进行封装
 
-## 方法签名
+## 方法
 
 日志记录方法
 

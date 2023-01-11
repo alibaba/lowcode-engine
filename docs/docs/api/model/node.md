@@ -9,7 +9,7 @@ sidebar_position: 1
 
 节点模型
 
-## 变量
+## 属性
 ### id
 
 节点 id
@@ -263,7 +263,7 @@ sidebar_position: 1
 
 **@since v1.1.0**
 
-## 方法签名
+## 方法
 
 ### getRect
 

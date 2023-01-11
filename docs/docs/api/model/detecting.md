@@ -9,7 +9,7 @@ sidebar_position: 6
 
 画布节点悬停模型
 
-## 变量
+## 属性
 
 ### current
 
@@ -28,7 +28,7 @@ sidebar_position: 6
 `@type {boolean}`
 
 
-## 方法签名
+## 方法
 ### capture
 
 hover 指定节点
