@@ -69,7 +69,7 @@ get simulatorHost(): IPublicApiSimulatorHost | null;
 相关类型：[IPublicApiSimulatorHost](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/api/simulator-host.ts)
 
 
-## 方法签名
+## 方法
 ### openDocument
 
 打开一个 document

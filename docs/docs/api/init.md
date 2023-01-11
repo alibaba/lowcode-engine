@@ -8,7 +8,7 @@ sidebar_position: 10
 
 ## 模块简介
 提供 init 等方法
-## 方法签名
+## 方法
 #### 1. init
 初始化引擎
 

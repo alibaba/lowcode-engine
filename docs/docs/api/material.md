@@ -22,7 +22,7 @@ get componentsMap(): { [key: string]: IPublicTypeNpmInfo | ComponentType<any> | 
 ```
 相关类型：[IPublicTypeNpmInfo](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/npm-info.ts)
 
-## 方法签名
+## 方法
 
 ### 资产包
 #### setAssets

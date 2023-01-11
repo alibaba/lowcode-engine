@@ -36,6 +36,11 @@ export interface NodeStatus {
 
 export interface INode extends IPublicModelNode {
 
+  /**
+   * 当前节点子集
+   */
+  get children(): INodeChildren | null;
+
   setVisible(flag: boolean): void;
 
   getVisible(): boolean;
@@ -70,6 +75,10 @@ export interface INode extends IPublicModelNode {
   internalSetSlotFor(slotFor: Prop | null | undefined): void;
 
   addSlot(slotNode: INode): void;
+
+  get componentMeta(): ComponentMeta;
+
+  onVisibleChange(func: (flag: boolean) => any): () => void;
 }
 
 /**
@@ -204,6 +213,74 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
 
   isInited = false;
 
+  _settingEntry: SettingTopEntry;
+
+  get settingEntry(): SettingTopEntry {
+    if (this._settingEntry) return this._settingEntry;
+    this._settingEntry = this.document.designer.createSettingEntry([this]);
+    return this._settingEntry;
+  }
+
+  private autoruns?: Array<() => void>;
+
+  private _isRGLContainer = false;
+
+  set isRGLContainer(status: boolean) {
+    this._isRGLContainer = status;
+  }
+
+  get isRGLContainer(): boolean {
+    return !!this._isRGLContainer;
+  }
+
+  set isRGLContainerNode(status: boolean) {
+    this._isRGLContainer = status;
+  }
+
+  get isRGLContainerNode(): boolean {
+    return !!this._isRGLContainer;
+  }
+
+  private _slotFor?: Prop | null = null;
+
+  @obx.shallow _slots: INode[] = [];
+
+  get slots() {
+    return this._slots;
+  }
+
+  /* istanbul ignore next */
+  @obx.ref private _conditionGroup: IPublicModelExclusiveGroup | null = null;
+
+  /* istanbul ignore next */
+  get conditionGroup(): IPublicModelExclusiveGroup | null {
+    return this._conditionGroup;
+  }
+
+  private purged = false;
+
+  /**
+   * 是否已销毁
+   */
+  get isPurged() {
+    return this.purged;
+  }
+
+  private purging: boolean = false;
+
+  /**
+   * 是否正在销毁
+   */
+  get isPurging() {
+    return this.purging;
+  }
+
+  @obx.shallow status: NodeStatus = {
+    inPlaceEditing: false,
+    locking: false,
+    pseudo: false,
+  };
+
   constructor(readonly document: IDocumentModel, nodeSchema: Schema, options: any = {}) {
     makeObservable(this);
     const { componentName, id, children, props, ...extras } = nodeSchema;
@@ -237,14 +314,6 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     });
   }
 
-  _settingEntry: SettingTopEntry;
-
-  get settingEntry(): SettingTopEntry {
-    if (this._settingEntry) return this._settingEntry;
-    this._settingEntry = this.document.designer.createSettingEntry([this]);
-    return this._settingEntry;
-  }
-
   /**
    * 节点初始化期间就把内置的一些 prop 初始化好，避免后续不断构造实例导致 reaction 执行多次
    */
@@ -267,8 +336,6 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   private upgradeProps(props: any): any {
     return this.document.designer.transformProps(props, this, IPublicEnumTransformStage.Upgrade);
   }
-
-  private autoruns?: Array<() => void>;
 
   private setupAutoruns() {
     const autoruns = this.componentMeta.getMetadata().configure.advanced?.autoruns;
@@ -294,24 +361,6 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
       }
     }
     return children || [];
-  }
-
-  private _isRGLContainer = false;
-
-  set isRGLContainer(status: boolean) {
-    this._isRGLContainer = status;
-  }
-
-  get isRGLContainer(): boolean {
-    return !!this._isRGLContainer;
-  }
-
-  set isRGLContainerNode(status: boolean) {
-    this._isRGLContainer = status;
-  }
-
-  get isRGLContainerNode(): boolean {
-    return !!this._isRGLContainer;
   }
 
   isContainer(): boolean {
@@ -449,8 +498,6 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     }
   }
 
-  private _slotFor?: Prop | null = null;
-
   internalSetSlotFor(slotFor: Prop | null | undefined) {
     this._slotFor = slotFor;
   }
@@ -536,22 +583,8 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     return this.props.export(IPublicEnumTransformStage.Serilize).props || null;
   }
 
-  @obx.shallow _slots: INode[] = [];
-
   hasSlots() {
     return this._slots.length > 0;
-  }
-
-  get slots() {
-    return this._slots;
-  }
-
-  /* istanbul ignore next */
-  @obx.ref private _conditionGroup: IPublicModelExclusiveGroup | null = null;
-
-  /* istanbul ignore next */
-  get conditionGroup(): IPublicModelExclusiveGroup | null {
-    return this._conditionGroup;
   }
 
   /* istanbul ignore next */
@@ -929,15 +962,6 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     this.children?.delete(node);
   }
 
-  private purged = false;
-
-  /**
-   * 是否已销毁
-   */
-  get isPurged() {
-    return this.purged;
-  }
-
   /**
    * 销毁
    */
@@ -952,16 +976,8 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     // this.document.destroyNode(this);
   }
 
-  private purging: boolean = false;
   internalPurgeStart() {
     this.purging = true;
-  }
-
-  /**
-   * 是否正在销毁
-   */
-  get isPurging() {
-    return this.purging;
   }
 
   /**
@@ -1043,12 +1059,6 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   ) {
     this.children?.mergeChildren(remover, adder, sorter);
   }
-
-  @obx.shallow status: NodeStatus = {
-    inPlaceEditing: false,
-    locking: false,
-    pseudo: false,
-  };
 
   /**
    * @deprecated
