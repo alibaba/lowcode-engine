@@ -9,7 +9,7 @@ import {
   IPublicTypePluginRegisterOptions,
   IPublicTypePreferenceValueType,
 } from '@alilc/lowcode-types';
-import { PluginInstance } from '../model/plugin-instance';
+import { PluginInstance as ShellPluginInstance } from '../model';
 import { pluginsSymbol } from '../symbols';
 
 const innerPluginsSymbol = Symbol('plugin');
@@ -43,21 +43,23 @@ export class Plugins implements IPublicApiPlugins {
     await this[pluginsSymbol].init(registerOptions);
   }
 
-  getPluginPreference(pluginName: string): Record<string, IPublicTypePreferenceValueType> | null | undefined {
+  getPluginPreference(
+      pluginName: string,
+    ): Record<string, IPublicTypePreferenceValueType> | null | undefined {
     return this[pluginsSymbol].getPluginPreference(pluginName);
   }
 
   get(pluginName: string): IPublicModelPluginInstance | null {
     const instance = this[pluginsSymbol].get(pluginName);
     if (instance) {
-      return new PluginInstance(instance);
+      return new ShellPluginInstance(instance);
     }
 
     return null;
   }
 
   getAll() {
-    return this[pluginsSymbol].getAll()?.map(d => new PluginInstance(d));
+    return this[pluginsSymbol].getAll()?.map((d) => new ShellPluginInstance(d));
   }
 
   has(pluginName: string) {

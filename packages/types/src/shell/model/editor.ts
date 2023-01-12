@@ -3,7 +3,7 @@ import { EventEmitter } from 'events';
 import StrictEventEmitter from 'strict-event-emitter-types';
 import * as GlobalEvent from '../../event';
 import { IPublicApiEvent } from '../api';
-import { IPublicTypeEditorValueKey, IPublicTypeEditorGetOptions, IPublicTypeEditorGetResult, IPublicTypeEditorRegisterOptions } from '../type';
+import { IPublicTypeEditorValueKey, IPublicTypeEditorGetOptions, IPublicTypeEditorGetResult, IPublicTypeEditorRegisterOptions, IPublicTypeAssetsJson } from '../type';
 
 export interface IPublicModelEditor extends StrictEventEmitter<EventEmitter, GlobalEvent.EventConfig> {
   get: <T = undefined, KeyOrType = any>(
@@ -25,4 +25,6 @@ export interface IPublicModelEditor extends StrictEventEmitter<EventEmitter, Glo
   register: (data: any, key?: IPublicTypeEditorValueKey, options?: IPublicTypeEditorRegisterOptions) => void;
 
   get eventBus(): IPublicApiEvent;
+
+  setAssets(assets: IPublicTypeAssetsJson): void;
 }

@@ -9,40 +9,86 @@ sidebar_position: 7
 
 模态节点管理器模型
 
-## 方法签名
+## 方法
 
 ### setNodes
 
-setNodes()
-
 设置模态节点，触发内部事件
+
+```typescript
+/**
+ * 设置模态节点，触发内部事件
+ * set modal nodes, trigger internal events
+ */
+setNodes(): void;
+```
 
 ### getModalNodes
 
-getModalNodes()
-
 获取模态节点（们）
+
+```typescript
+/**
+ * 获取模态节点（们）
+ * get modal nodes
+ */
+getModalNodes(): IPublicModelNode[];
+```
+
+相关类型：[IPublicModelNode](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/node.ts)
 
 ### getVisibleModalNode
 
-getVisibleModalNode()
-
 获取当前可见的模态节点
+
+```typescript
+/**
+ * 获取当前可见的模态节点
+ * get current visible modal node
+ */
+getVisibleModalNode(): IPublicModelNode | null;
+```
+
+相关类型：[IPublicModelNode](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/node.ts)
 
 ### hideModalNodes
 
-hideModalNodes()
-
 隐藏模态节点（们）
+
+```typescript
+/**
+ * 隐藏模态节点（们）
+ * hide modal nodes
+ */
+hideModalNodes(): void;
+```
 
 ### setVisible
 
-setVisible(node: Node)
-
 设置指定节点为可见态
+
+```typescript
+/**
+ * 设置指定节点为可见态
+ * set specfic model node as visible
+ * @param node Node
+ */
+setVisible(node: IPublicModelNode): void;
+```
+
+相关类型：[IPublicModelNode](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/node.ts)
 
 ### setInvisible
 
-setInvisible(node: Node)
-
 设置指定节点为不可见态
+
+```typescript
+/**
+ * 设置指定节点为不可见态
+ * set specfic model node as invisible
+ * @param node Node
+ */
+setInvisible(node: IPublicModelNode): void;
+```
+
+相关类型：[IPublicModelNode](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/node.ts)

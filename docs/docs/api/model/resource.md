@@ -7,7 +7,7 @@ sidebar_position: 12
 > **@types** [IPublicModelWindow](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/resource.ts)<br/>
 > **@since** v1.1.0
 
-## 变量
+## 属性
 
 ### title
 

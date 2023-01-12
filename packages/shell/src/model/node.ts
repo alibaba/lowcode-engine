@@ -283,7 +283,7 @@ export class Node implements IPublicModelNode {
    * 节点上挂载的插槽节点们
    */
   get slots(): IPublicModelNode[] {
-    return this[nodeSymbol].slots.map((node: IPublicModelNode) => Node.create(node)!);
+    return this[nodeSymbol].slots.map((node: InnerNode) => Node.create(node)!);
   }
 
   /**
@@ -318,7 +318,7 @@ export class Node implements IPublicModelNode {
     return ShellSettingTopEntry.create(this[nodeSymbol].settingEntry as any);
   }
 
-  constructor(node: IPublicModelNode) {
+  constructor(node: InnerNode) {
     this[nodeSymbol] = node;
     this[documentSymbol] = node.document;
 
@@ -351,7 +351,7 @@ export class Node implements IPublicModelNode {
    * @deprecated
    */
   getDOMNode() {
-    return this[nodeSymbol].getDOMNode();
+    return (this[nodeSymbol] as any).getDOMNode();
   }
 
   /**
@@ -512,7 +512,10 @@ export class Node implements IPublicModelNode {
    * @param options
    * @returns
    */
-  exportSchema(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Render, options?: any): IPublicTypeNodeSchema {
+  exportSchema(
+      stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Render,
+      options?: any,
+    ): IPublicTypeNodeSchema {
     return this[nodeSymbol].export(stage, options);
   }
 

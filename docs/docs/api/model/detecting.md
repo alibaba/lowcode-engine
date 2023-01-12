@@ -9,7 +9,7 @@ sidebar_position: 6
 
 画布节点悬停模型
 
-## 变量
+## 属性
 
 ### current
 
@@ -28,7 +28,7 @@ sidebar_position: 6
 `@type {boolean}`
 
 
-## 方法签名
+## 方法
 ### capture
 
 hover 指定节点
@@ -77,7 +77,7 @@ hover 节点变化事件
  * set callback which will be called when hovering object changed.
  * @since v1.1.0
  */
-onDetectingChange(fn: (node: IPublicModelNode) => void): IPublicTypeDisposable;
+onDetectingChange(fn: (node: IPublicModelNode | null) => void): IPublicTypeDisposable;
 ```
 
 相关类型：

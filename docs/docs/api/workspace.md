@@ -57,7 +57,7 @@ get resourceList(): IPublicModelResource;
 
 关联模型 [IPublicModelResource](./model/resource)
 
-## 方法签名
+## 方法
 
 ### registerResourceType
 注册资源

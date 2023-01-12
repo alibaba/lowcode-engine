@@ -1,5 +1,5 @@
 import {
-  DropLocation as InnerDropLocation,
+  IDropLocation as InnerDropLocation,
 } from '@alilc/lowcode-designer';
 import { dropLocationSymbol } from '../symbols';
 import { Node } from './node';

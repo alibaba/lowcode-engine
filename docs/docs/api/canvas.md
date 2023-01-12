@@ -42,7 +42,7 @@ get dragon(): IPublicModelDragon | null;
 get activeTracker(): IPublicModelActiveTracker | null;
 ```
 
-## 方法签名
+## 方法
 
 ### createLocation
 创建一个文档插入位置对象，该对象用来描述一个即将插入的节点在文档中的位置

@@ -9,7 +9,7 @@ sidebar_position: 0
 
 文档模型
 
-## 变量
+## 属性
 
 ### id
 
@@ -95,7 +95,7 @@ sidebar_position: 0
 
 **@since v1.1.0**
 
-## 方法签名
+## 方法
 ### getNodeById
 
 根据 nodeId 返回 [Node](./node) 实例

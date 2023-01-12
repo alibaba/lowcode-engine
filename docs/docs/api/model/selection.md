@@ -9,7 +9,7 @@ sidebar_position: 6
 
 画布节点选中模型
 
-## 变量
+## 属性
 ### selected
 
 返回选中的节点 id
@@ -25,7 +25,7 @@ sidebar_position: 6
 
 **@since v1.1.0**
 
-## 方法签名
+## 方法
 ### select
 
 选中指定节点（覆盖方式）

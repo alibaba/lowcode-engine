@@ -18,11 +18,11 @@ import {
 } from '@alilc/lowcode-types';
 import { compatStage, isDOMText, isJSExpression } from '@alilc/lowcode-utils';
 import { SettingTopEntry } from '@alilc/lowcode-designer';
-import { Props, getConvertedExtraKey } from './props/props';
+import { Props, getConvertedExtraKey, IProps } from './props/props';
 import { DocumentModel, IDocumentModel } from '../document-model';
 import { NodeChildren, INodeChildren } from './node-children';
-import { Prop } from './props/prop';
-import { ComponentMeta } from '../../component-meta';
+import { IProp, Prop } from './props/prop';
+import { ComponentMeta, IComponentMeta } from '../../component-meta';
 import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
 import { includeSlot, removeSlot } from '../../utils/slot';
 import { foreachReverse } from '../../utils/tree';
@@ -35,6 +35,39 @@ export interface NodeStatus {
 }
 
 export interface INode extends IPublicModelNode {
+
+  /**
+   * 当前节点子集
+   */
+  get children(): INodeChildren | null;
+
+  /**
+   * 获取上一个兄弟节点
+   */
+  get prevSibling(): INode | null;
+
+  /**
+   * 获取下一个兄弟节点
+   */
+  get nextSibling(): INode | null;
+
+  /**
+   * 父级节点
+   */
+  get parent(): INode | null;
+
+  get slots(): INode[];
+
+  /**
+   * 关联属性
+   */
+  get slotFor(): IProp | null;
+
+  get props(): IProps;
+
+  get componentMeta(): IComponentMeta;
+
+  get document(): IDocumentModel;
 
   setVisible(flag: boolean): void;
 
@@ -61,8 +94,6 @@ export interface INode extends IPublicModelNode {
    */
   export(stage: IPublicEnumTransformStage, options?: any): IPublicTypeNodeSchema;
 
-  get document(): IDocumentModel;
-
   emitPropChange(val: IPublicTypePropChangeOptions): void;
 
   import(data: IPublicTypeNodeSchema, checkId?: boolean): void;
@@ -70,6 +101,14 @@ export interface INode extends IPublicModelNode {
   internalSetSlotFor(slotFor: Prop | null | undefined): void;
 
   addSlot(slotNode: INode): void;
+
+  onVisibleChange(func: (flag: boolean) => any): () => void;
+
+  getProp(path: string, createIfNone?: boolean): IProp | null;
+
+  getExtraProp(key: string, createIfNone?: boolean): IProp | null;
+
+  replaceChild(node: INode, data: any): INode;
 }
 
 /**
@@ -148,7 +187,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 属性抽象
    */
-  props: Props;
+  props: IProps;
 
   protected _children?: INodeChildren;
 
@@ -204,6 +243,74 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
 
   isInited = false;
 
+  _settingEntry: SettingTopEntry;
+
+  get settingEntry(): SettingTopEntry {
+    if (this._settingEntry) return this._settingEntry;
+    this._settingEntry = this.document.designer.createSettingEntry([this]);
+    return this._settingEntry;
+  }
+
+  private autoruns?: Array<() => void>;
+
+  private _isRGLContainer = false;
+
+  set isRGLContainer(status: boolean) {
+    this._isRGLContainer = status;
+  }
+
+  get isRGLContainer(): boolean {
+    return !!this._isRGLContainer;
+  }
+
+  set isRGLContainerNode(status: boolean) {
+    this._isRGLContainer = status;
+  }
+
+  get isRGLContainerNode(): boolean {
+    return !!this._isRGLContainer;
+  }
+
+  private _slotFor?: IProp | null = null;
+
+  @obx.shallow _slots: INode[] = [];
+
+  get slots(): INode[] {
+    return this._slots;
+  }
+
+  /* istanbul ignore next */
+  @obx.ref private _conditionGroup: IPublicModelExclusiveGroup | null = null;
+
+  /* istanbul ignore next */
+  get conditionGroup(): IPublicModelExclusiveGroup | null {
+    return this._conditionGroup;
+  }
+
+  private purged = false;
+
+  /**
+   * 是否已销毁
+   */
+  get isPurged() {
+    return this.purged;
+  }
+
+  private purging: boolean = false;
+
+  /**
+   * 是否正在销毁
+   */
+  get isPurging() {
+    return this.purging;
+  }
+
+  @obx.shallow status: NodeStatus = {
+    inPlaceEditing: false,
+    locking: false,
+    pseudo: false,
+  };
+
   constructor(readonly document: IDocumentModel, nodeSchema: Schema, options: any = {}) {
     makeObservable(this);
     const { componentName, id, children, props, ...extras } = nodeSchema;
@@ -237,14 +344,6 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     });
   }
 
-  _settingEntry: SettingTopEntry;
-
-  get settingEntry(): SettingTopEntry {
-    if (this._settingEntry) return this._settingEntry;
-    this._settingEntry = this.document.designer.createSettingEntry([this]);
-    return this._settingEntry;
-  }
-
   /**
    * 节点初始化期间就把内置的一些 prop 初始化好，避免后续不断构造实例导致 reaction 执行多次
    */
@@ -267,8 +366,6 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   private upgradeProps(props: any): any {
     return this.document.designer.transformProps(props, this, IPublicEnumTransformStage.Upgrade);
   }
-
-  private autoruns?: Array<() => void>;
 
   private setupAutoruns() {
     const autoruns = this.componentMeta.getMetadata().configure.advanced?.autoruns;
@@ -294,24 +391,6 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
       }
     }
     return children || [];
-  }
-
-  private _isRGLContainer = false;
-
-  set isRGLContainer(status: boolean) {
-    this._isRGLContainer = status;
-  }
-
-  get isRGLContainer(): boolean {
-    return !!this._isRGLContainer;
-  }
-
-  set isRGLContainerNode(status: boolean) {
-    this._isRGLContainer = status;
-  }
-
-  get isRGLContainerNode(): boolean {
-    return !!this._isRGLContainer;
   }
 
   isContainer(): boolean {
@@ -449,8 +528,6 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     }
   }
 
-  private _slotFor?: Prop | null = null;
-
   internalSetSlotFor(slotFor: Prop | null | undefined) {
     this._slotFor = slotFor;
   }
@@ -462,7 +539,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 关联属性
    */
-  get slotFor() {
+  get slotFor(): IProp | null {
     return this._slotFor;
   }
 
@@ -536,22 +613,8 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     return this.props.export(IPublicEnumTransformStage.Serilize).props || null;
   }
 
-  @obx.shallow _slots: INode[] = [];
-
   hasSlots() {
     return this._slots.length > 0;
-  }
-
-  get slots() {
-    return this._slots;
-  }
-
-  /* istanbul ignore next */
-  @obx.ref private _conditionGroup: IPublicModelExclusiveGroup | null = null;
-
-  /* istanbul ignore next */
-  get conditionGroup(): IPublicModelExclusiveGroup | null {
-    return this._conditionGroup;
   }
 
   /* istanbul ignore next */
@@ -632,10 +695,10 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 替换子节点
    *
-   * @param {Node} node
+   * @param {INode} node
    * @param {object} data
    */
-  replaceChild(node: Node, data: any): Node {
+  replaceChild(node: INode, data: any): INode {
     if (this.children?.has(node)) {
       const selected = this.document.selection.has(node.id);
 
@@ -670,11 +733,11 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     };
   }
 
-  getProp(path: string, createIfNone = true): Prop | null {
+  getProp(path: string, createIfNone = true): IProp | null {
     return this.props.query(path, createIfNone) || null;
   }
 
-  getExtraProp(key: string, createIfNone = true): Prop | null {
+  getExtraProp(key: string, createIfNone = true): IProp | null {
     return this.props.get(getConvertedExtraKey(key), createIfNone) || null;
   }
 
@@ -734,7 +797,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 获取下一个兄弟节点
    */
-  get nextSibling(): Node | null {
+  get nextSibling(): INode | null {
     if (!this.parent) {
       return null;
     }
@@ -748,7 +811,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 获取上一个兄弟节点
    */
-  get prevSibling(): Node | null {
+  get prevSibling(): INode | null {
     if (!this.parent) {
       return null;
     }
@@ -929,15 +992,6 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     this.children?.delete(node);
   }
 
-  private purged = false;
-
-  /**
-   * 是否已销毁
-   */
-  get isPurged() {
-    return this.purged;
-  }
-
   /**
    * 销毁
    */
@@ -952,16 +1006,8 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     // this.document.destroyNode(this);
   }
 
-  private purging: boolean = false;
   internalPurgeStart() {
     this.purging = true;
-  }
-
-  /**
-   * 是否正在销毁
-   */
-  get isPurging() {
-    return this.purging;
   }
 
   /**
@@ -1043,12 +1089,6 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   ) {
     this.children?.mergeChildren(remover, adder, sorter);
   }
-
-  @obx.shallow status: NodeStatus = {
-    inPlaceEditing: false,
-    locking: false,
-    pseudo: false,
-  };
 
   /**
    * @deprecated

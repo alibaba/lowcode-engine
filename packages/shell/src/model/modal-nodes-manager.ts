@@ -1,6 +1,9 @@
-import { ModalNodesManager as InnerModalNodesManager } from '@alilc/lowcode-designer';
+import {
+  IModalNodesManager as InnerModalNodesManager,
+  INode as InnerNode,
+} from '@alilc/lowcode-designer';
 import { IPublicModelModalNodesManager, IPublicModelNode } from '@alilc/lowcode-types';
-import { Node } from './node';
+import { Node as ShellNode } from './node';
 import { nodeSymbol, modalNodesManagerSymbol } from '../symbols';
 
 export class ModalNodesManager implements IPublicModelModalNodesManager {
@@ -28,18 +31,24 @@ export class ModalNodesManager implements IPublicModelModalNodesManager {
 
   /**
    * 获取模态节点（们）
-   * @returns
    */
-  getModalNodes(): any {
-    return this[modalNodesManagerSymbol].getModalNodes().map((node) => Node.create(node));
+  getModalNodes(): IPublicModelNode[] {
+    const innerNodes = this[modalNodesManagerSymbol].getModalNodes();
+    const shellNodes: IPublicModelNode[] = [];
+    innerNodes?.forEach((node: InnerNode) => {
+      const shellNode = ShellNode.create(node);
+      if (shellNode) {
+        shellNodes.push(shellNode);
+      }
+    });
+    return shellNodes;
   }
 
   /**
    * 获取当前可见的模态节点
-   * @returns
    */
-  getVisibleModalNode(): any {
-    return Node.create(this[modalNodesManagerSymbol].getVisibleModalNode());
+  getVisibleModalNode(): IPublicModelNode | null {
+    return ShellNode.create(this[modalNodesManagerSymbol].getVisibleModalNode());
   }
 
   /**
@@ -54,7 +63,7 @@ export class ModalNodesManager implements IPublicModelModalNodesManager {
    * @param node Node
    */
   setVisible(node: IPublicModelNode): void {
-    this[modalNodesManagerSymbol].setVisible(node[nodeSymbol]);
+    this[modalNodesManagerSymbol].setVisible((node as any)[nodeSymbol]);
   }
 
   /**
@@ -62,6 +71,6 @@ export class ModalNodesManager implements IPublicModelModalNodesManager {
    * @param node Node
    */
    setInvisible(node: IPublicModelNode): void {
-    this[modalNodesManagerSymbol].setInvisible(node[nodeSymbol]);
+    this[modalNodesManagerSymbol].setInvisible((node as any)[nodeSymbol]);
   }
 }
