@@ -1,5 +1,4 @@
 import { ReactElement } from 'react';
-import { IPublicModelResourceType } from './resource-type';
 
 export interface IPublicModelResource {
   get title(): string | undefined;
