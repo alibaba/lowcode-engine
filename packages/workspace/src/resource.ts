@@ -7,12 +7,16 @@ import { Workspace as InnerWorkSpace } from './workspace';
 const logger = new Logger({ level: 'warn', bizName: 'workspace:resource' });
 
 export class Resource implements IPublicModelResource {
+  private context: BasicContext;
+
   resourceTypeInstance: IPublicResourceTypeConfig;
 
   editorViewMap: Map<string, IPublicTypeEditorView> = new Map<string, IPublicTypeEditorView>();
 
   constructor(readonly resourceData: IPublicResourceData, readonly resourceType: ResourceType, workspace: InnerWorkSpace) {
-    this.resourceTypeInstance = resourceType.resourceTypeModel(new BasicContext(workspace, ''), {});
+    this.context = new BasicContext(workspace, '');
+    this.resourceTypeInstance = resourceType.resourceTypeModel(this.context, {});
+    this.init();
     if (this.resourceTypeInstance.editorViews) {
       this.resourceTypeInstance.editorViews.forEach((d: any) => {
         this.editorViewMap.set(d.viewName, d);
@@ -49,6 +53,11 @@ export class Resource implements IPublicModelResource {
 
   get category() {
     return this.resourceData?.category;
+  }
+
+  async init() {
+    await this.resourceTypeInstance.init?.();
+    await this.context.innerPlugins.init();
   }
 
   async import(schema: any) {
