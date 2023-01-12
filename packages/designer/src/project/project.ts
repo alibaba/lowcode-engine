@@ -1,6 +1,6 @@
 import { obx, computed, makeObservable, action, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
-import { Designer } from '../designer';
-import { DocumentModel, isDocumentModel } from '../document';
+import { IDesigner } from '../designer';
+import { DocumentModel, IDocumentModel, isDocumentModel } from '../document';
 import {
   IPublicTypeProjectSchema,
   IPublicTypeRootSchema,
@@ -12,14 +12,60 @@ import {
 import { isLowCodeComponentType, isProCodeComponentType } from '@alilc/lowcode-utils';
 import { ISimulatorHost } from '../simulator';
 
-export interface IProject extends IPublicApiProject {
+export interface IProject extends Omit< IPublicApiProject, 'simulatorHost' | 'importSchema' | 'exportSchema' | 'openDocument' | 'getDocumentById' | 'getCurrentDocument' | 'addPropsTransducer' | 'onRemoveDocument' | 'onChangeDocument' | 'onSimulatorHostReady' | 'onSimulatorRendererReady' | 'setI18n' > {
 
+  get designer(): IDesigner;
+
+  get simulator(): ISimulatorHost | null;
+
+  get currentDocument(): IDocumentModel | null;
+
+  get documents(): IDocumentModel[];
+
+  open(doc?: string | IDocumentModel | IPublicTypeRootSchema): IDocumentModel | null;
+
+  getDocumentByFileName(fileName: string): IDocumentModel | null;
+
+  createDocument(data?: IPublicTypeRootSchema): IDocumentModel;
+
+  load(schema?: IPublicTypeProjectSchema, autoOpen?: boolean | string): void;
+
+  getSchema(
+    stage: IPublicEnumTransformStage,
+  ): IPublicTypeProjectSchema;
+
+  getDocument(id: string): IDocumentModel | null;
+
+  onCurrentDocumentChange(fn: (doc: IDocumentModel) => void): () => void;
+
+  onSimulatorReady(fn: (args: any) => void): () => void;
+
+  onRendererReady(fn: () => void): () => void;
+
+  /**
+   * 分字段设置储存数据，不记录操作记录
+   */
+  set(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    key:
+      | 'version'
+      | 'componentsTree'
+      | 'componentsMap'
+      | 'utils'
+      | 'constants'
+      | 'i18n'
+      | 'css'
+      | 'dataSource'
+      | string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    value: any,
+  ): void;
 }
 
 export class Project implements IProject {
   private emitter: IEventBus = createModuleEventBus('Project');
 
-  @obx.shallow readonly documents: IPublicModelDocumentModel[] = [];
+  @obx.shallow readonly documents: IDocumentModel[] = [];
 
   private data: IPublicTypeProjectSchema = {
     version: '1.0.0',
@@ -41,14 +87,7 @@ export class Project implements IProject {
 
   key = Math.random();
 
-  // TODO: 考虑项目级别 History
-
-  constructor(readonly designer: Designer, schema?: IPublicTypeProjectSchema, readonly viewName = 'global') {
-    makeObservable(this);
-    this.load(schema);
-  }
-
-  @computed get currentDocument() {
+  @computed get currentDocument(): IDocumentModel | null {
     return this.documents.find((doc) => doc.active);
   }
 
@@ -67,6 +106,13 @@ export class Project implements IProject {
   }
   set i18n(value: any) {
     this._i18n = value || {};
+  }
+
+  private documentsMap = new Map<string, DocumentModel>();
+
+  constructor(readonly designer: IDesigner, schema?: IPublicTypeProjectSchema, readonly viewName = 'global') {
+    makeObservable(this);
+    this.load(schema);
   }
 
   private getComponentsMap(): IPublicTypeComponentsMap {
@@ -104,7 +150,9 @@ export class Project implements IProject {
   /**
    * 获取项目整体 schema
    */
-  getSchema(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Save): IPublicTypeProjectSchema {
+  getSchema(
+      stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Save,
+    ): IPublicTypeProjectSchema {
     return {
       ...this.data,
       componentsMap: this.getComponentsMap(),
@@ -240,26 +288,24 @@ export class Project implements IProject {
     return Reflect.get(this.data, key);
   }
 
-  private documentsMap = new Map<string, DocumentModel>();
-
-  getDocument(id: string): DocumentModel | null {
+  getDocument(id: string): IDocumentModel | null {
     // 此处不能使用 this.documentsMap.get(id)，因为在乐高 rollback 场景，document.id 会被改成其他值
     return this.documents.find((doc) => doc.id === id) || null;
   }
 
-  getDocumentByFileName(fileName: string): DocumentModel | null {
+  getDocumentByFileName(fileName: string): IDocumentModel | null {
     return this.documents.find((doc) => doc.fileName === fileName) || null;
   }
 
   @action
-  createDocument(data?: IPublicTypeRootSchema): DocumentModel {
+  createDocument(data?: IPublicTypeRootSchema): IDocumentModel {
     const doc = new DocumentModel(this, data || this?.data?.componentsTree?.[0]);
     this.documents.push(doc);
     this.documentsMap.set(doc.id, doc);
     return doc;
   }
 
-  open(doc?: string | DocumentModel | IPublicTypeRootSchema): DocumentModel | null {
+  open(doc?: string | IDocumentModel | IPublicTypeRootSchema): IDocumentModel | null {
     if (!doc) {
       const got = this.documents.find((item) => item.isBlank());
       if (got) {
@@ -341,7 +387,7 @@ export class Project implements IProject {
     };
   }
 
-  onCurrentDocumentChange(fn: (doc: DocumentModel) => void): () => void {
+  onCurrentDocumentChange(fn: (doc: IDocumentModel) => void): () => void {
     this.emitter.on('current-document.change', fn);
     return () => {
       this.emitter.removeListener('current-document.change', fn);

@@ -2,6 +2,7 @@ import { Node as ShellNode } from './node';
 import {
   Detecting as InnerDetecting,
   IDocumentModel as InnerDocumentModel,
+  INode as InnerNode,
 } from '@alilc/lowcode-designer';
 import { documentSymbol, detectingSymbol } from '../symbols';
 import { IPublicModelDetecting, IPublicModelNode, IPublicTypeDisposable } from '@alilc/lowcode-types';
@@ -52,7 +53,11 @@ export class Detecting implements IPublicModelDetecting {
     this[detectingSymbol].leave(this[documentSymbol]);
   }
 
-  onDetectingChange(fn: (node: IPublicModelNode) => void): IPublicTypeDisposable {
-    return this[detectingSymbol].onDetectingChange(fn);
+  onDetectingChange(fn: (node: IPublicModelNode | null) => void): IPublicTypeDisposable {
+    const innerFn = (innerNode: InnerNode) => {
+      const shellNode = ShellNode.create(innerNode);
+      fn(shellNode);
+    };
+    return this[detectingSymbol].onDetectingChange(innerFn);
   }
 }

@@ -1,9 +1,8 @@
 import { IPublicApiWorkspace, IPublicResourceList, IPublicTypeResourceType } from '@alilc/lowcode-types';
 import { Workspace as InnerWorkSpace } from '@alilc/lowcode-workspace';
 import { Plugins } from '@alilc/lowcode-shell';
-import { Window } from '../model/window';
 import { workspaceSymbol } from '../symbols';
-import { Resource } from '../model';
+import { Resource as ShellResource, Window as ShellWindow } from '../model';
 
 export class Workspace implements IPublicApiWorkspace {
   readonly [workspaceSymbol]: InnerWorkSpace;
@@ -13,7 +12,7 @@ export class Workspace implements IPublicApiWorkspace {
   }
 
   get resourceList() {
-    return this[workspaceSymbol].getResourceList().map(d => new Resource(d));
+    return this[workspaceSymbol].getResourceList().map((d) => new ShellResource(d));
   }
 
   setResourceList(resourceList: IPublicResourceList) {
@@ -29,14 +28,14 @@ export class Workspace implements IPublicApiWorkspace {
   }
 
   get window() {
-    return new Window(this[workspaceSymbol].window);
+    return new ShellWindow(this[workspaceSymbol].window);
   }
 
   registerResourceType(resourceTypeModel: IPublicTypeResourceType): void {
     this[workspaceSymbol].registerResourceType(resourceTypeModel);
   }
 
-  openEditorWindow(resourceName: string, title: string, extra: Object, viewName?: string) {
+  openEditorWindow(resourceName: string, title: string, extra: object, viewName?: string) {
     this[workspaceSymbol].openEditorWindow(resourceName, title, extra, viewName);
   }
 
@@ -57,7 +56,7 @@ export class Workspace implements IPublicApiWorkspace {
   }
 
   get windows() {
-    return this[workspaceSymbol].windows.map(d => new Window(d));
+    return this[workspaceSymbol].windows.map((d) => new ShellWindow(d));
   }
 
   onChangeWindows(fn: () => void) {

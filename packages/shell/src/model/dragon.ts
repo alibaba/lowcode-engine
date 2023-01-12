@@ -15,7 +15,6 @@ import {
 
 export const innerDragonSymbol = Symbol('innerDragonSymbol');
 
-
 export class Dragon implements IPublicModelDragon {
   private readonly [innerDragonSymbol]: IPublicModelDragon;
 
@@ -38,7 +37,10 @@ export class Dragon implements IPublicModelDragon {
     return designer.dragon;
   }
 
-  static create(dragon: IPublicModelDragon | null, workspaceMode: boolean): IPublicModelDragon | null {
+  static create(
+      dragon: IPublicModelDragon | null,
+      workspaceMode: boolean,
+    ): IPublicModelDragon | null {
     if (!dragon) {
       return null;
     }

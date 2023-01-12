@@ -11,7 +11,10 @@ export interface IOnChangeOptions {
 }
 
 export interface INodeChildren extends Omit<IPublicModelNodeChildren, 'forEach' | 'map' | 'every' | 'some' | 'filter' | 'find' | 'reduce' | 'mergeChildren' > {
+  get owner(): INode;
+
   unlinkChild(node: INode): void;
+
   /**
    * 删除一个节点
    */
@@ -57,12 +60,42 @@ export interface INodeChildren extends Omit<IPublicModelNodeChildren, 'forEach' 
     sorter: (firstNode: INode, secondNode: INode) => number,
   ): any;
 
+  /**
+   * 根据索引获得节点
+   */
+  get(index: number): INode | null;
+
   /** overriding methods end */
 }
 export class NodeChildren implements INodeChildren {
   @obx.shallow private children: INode[];
 
   private emitter: IEventBus = createModuleEventBus('NodeChildren');
+
+  /**
+   * 元素个数
+   */
+  @computed get size(): number {
+    return this.children.length;
+  }
+
+  get isEmptyNode(): boolean {
+    return this.size < 1;
+  }
+  get notEmptyNode(): boolean {
+    return this.size > 0;
+  }
+
+  @computed get length(): number {
+    return this.children.length;
+  }
+
+  private purged = false;
+
+  get [Symbol.toStringTag]() {
+    // 保证向前兼容性
+    return 'Array';
+  }
 
   constructor(
       readonly owner: INode,
@@ -131,36 +164,15 @@ export class NodeChildren implements INodeChildren {
   }
 
   /**
-   * 元素个数
-   */
-  @computed get size(): number {
-    return this.children.length;
-  }
-
-  /**
    *
    */
   isEmpty() {
     return this.isEmptyNode;
   }
 
-  get isEmptyNode(): boolean {
-    return this.size < 1;
-  }
-
   notEmpty() {
     return this.notEmptyNode;
   }
-
-  get notEmptyNode(): boolean {
-    return this.size > 0;
-  }
-
-  @computed get length(): number {
-    return this.children.length;
-  }
-
-  private purged = false;
 
   /**
    * 回收销毁
@@ -481,11 +493,6 @@ export class NodeChildren implements INodeChildren {
     return () => {
       this.emitter.removeListener('insert', fn);
     };
-  }
-
-  get [Symbol.toStringTag]() {
-    // 保证向前兼容性
-    return 'Array';
   }
 
   private reportModified(node: INode, owner: INode, options = {}) {

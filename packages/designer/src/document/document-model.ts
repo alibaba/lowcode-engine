@@ -9,21 +9,18 @@ import {
   IPublicTypeDragNodeDataObject,
   IPublicModelDocumentModel,
   IPublicModelHistory,
-  IPublicModelModalNodesManager,
   IPublicModelNode,
-  IPublicApiProject,
-  IPublicModelDropLocation,
   IPublicEnumTransformStage,
   IPublicTypeOnChangeOptions,
 } from '@alilc/lowcode-types';
-import { Project } from '../project';
+import { IProject, Project } from '../project';
 import { ISimulatorHost } from '../simulator';
 import { ComponentMeta } from '../component-meta';
-import { IDropLocation, Designer } from '../designer';
+import { IDropLocation, Designer, IHistory } from '../designer';
 import { Node, insertChildren, insertChild, isNode, RootNode, INode } from './node/node';
 import { Selection, ISelection } from './selection';
 import { History } from './history';
-import { ModalNodesManager } from './node';
+import { IModalNodesManager, ModalNodesManager } from './node';
 import { uniqueId, isPlainObject, compatStage, isJSExpression, isDOMText, isNodeSchema, isDragNodeObject, isDragNodeDataObject } from '@alilc/lowcode-utils';
 import { EDITOR_EVENT } from '../types';
 
@@ -44,17 +41,31 @@ export interface IDocumentModel extends Omit< IPublicModelDocumentModel, 'select
    */
   readonly selection: ISelection;
 
+  readonly project: IProject;
+
+  /**
+   * 模态节点管理
+   */
+  readonly modalNodesManager: IModalNodesManager;
+
   /**
    * 根据 id 获取节点
    */
   getNode(id: string): INode | null;
+
+  getHistory(): IHistory;
+
+  get focusNode(): INode | null;
+
+  get rootNode(): INode | null;
+
 }
 
 export class DocumentModel implements IDocumentModel {
   /**
    * 根节点 类型有：Page/Component/Block
    */
-  rootNode: RootNode | null;
+  rootNode: INode | null;
 
   /**
    * 文档编号
@@ -74,11 +85,11 @@ export class DocumentModel implements IDocumentModel {
   /**
    * 模态节点管理
    */
-  readonly modalNodesManager: IPublicModelModalNodesManager;
+  readonly modalNodesManager: IModalNodesManager;
 
   private _nodesMap = new Map<string, IPublicModelNode>();
 
-  readonly project: IPublicApiProject;
+  readonly project: IProject;
 
   readonly designer: Designer;
 
@@ -114,7 +125,7 @@ export class DocumentModel implements IDocumentModel {
     this.rootNode?.getExtraProp('fileName', true)?.setValue(fileName);
   }
 
-  get focusNode() {
+  get focusNode(): INode {
     if (this._drillDownNode) {
       return this._drillDownNode;
     }
@@ -147,7 +158,7 @@ export class DocumentModel implements IDocumentModel {
 
   @obx.ref private _dropLocation: IDropLocation | null = null;
 
-  set dropLocation(loc: IPublicModelDropLocation | null) {
+  set dropLocation(loc: IDropLocation | null) {
     this._dropLocation = loc;
     // pub event
     this.designer.editor.eventBus.emit(
@@ -626,7 +637,7 @@ export class DocumentModel implements IDocumentModel {
     return data;
   }
 
-  getHistory(): History {
+  getHistory(): IHistory {
     return this.history;
   }
 

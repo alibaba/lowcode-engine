@@ -3,6 +3,7 @@ import { ReactElement } from 'react';
 import { IPublicModelNode } from './node';
 
 export interface IPublicModelComponentMeta {
+
   /**
    * 组件名
    */
@@ -78,7 +79,6 @@ export interface IPublicModelComponentMeta {
       my: IPublicModelNode | IPublicTypeNodeData,
       target: IPublicTypeNodeSchema | IPublicModelNode | IPublicTypeNodeSchema[],
     ): boolean;
-
 
   refreshMetadata(): void;
 }

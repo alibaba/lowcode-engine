@@ -1,14 +1,18 @@
 import { makeObservable, obx, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
-import { IPublicModelDetecting, IPublicModelNode, IPublicModelDocumentModel } from '@alilc/lowcode-types';
+import { IPublicModelDetecting } from '@alilc/lowcode-types';
+import { IDocumentModel } from '../document/document-model';
+import { INode } from '../document/node/node';
 
 const DETECTING_CHANGE_EVENT = 'detectingChange';
 export interface IDetecting extends Omit< IPublicModelDetecting, 'capture' | 'release' | 'leave' > {
 
-  capture(node: IPublicModelNode | null): void;
+  capture(node: INode | null): void;
 
-  release(node: IPublicModelNode | null): void;
+  release(node: INode | null): void;
 
-  leave(document: IPublicModelDocumentModel | undefined): void;
+  leave(document: IDocumentModel | undefined): void;
+
+  get current(): INode | null;
 }
 
 export class Detecting implements IDetecting {
@@ -31,7 +35,7 @@ export class Detecting implements IDetecting {
 
   @obx.ref xRayMode = false;
 
-  @obx.ref private _current: IPublicModelNode | null = null;
+  @obx.ref private _current: INode | null = null;
 
   private emitter: IEventBus = createModuleEventBus('Detecting');
 
@@ -43,27 +47,27 @@ export class Detecting implements IDetecting {
     return this._current;
   }
 
-  capture(node: IPublicModelNode | null) {
+  capture(node: INode | null) {
     if (this._current !== node) {
       this._current = node;
       this.emitter.emit(DETECTING_CHANGE_EVENT, this.current);
     }
   }
 
-  release(node: IPublicModelNode | null) {
+  release(node: INode | null) {
     if (this._current === node) {
       this._current = null;
       this.emitter.emit(DETECTING_CHANGE_EVENT, this.current);
     }
   }
 
-  leave(document: IPublicModelDocumentModel | undefined) {
+  leave(document: IDocumentModel | undefined) {
     if (this.current && this.current.document === document) {
       this._current = null;
     }
   }
 
-  onDetectingChange(fn: (node: IPublicModelNode) => void) {
+  onDetectingChange(fn: (node: INode) => void) {
     this.emitter.on(DETECTING_CHANGE_EVENT, fn);
     return () => {
       this.emitter.off(DETECTING_CHANGE_EVENT, fn);
