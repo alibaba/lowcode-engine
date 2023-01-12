@@ -17,17 +17,16 @@ import {
   IPublicTypeLocationData,
   IPublicEnumTransformStage,
   IPublicModelDragon,
-  IPublicModelActiveTracker,
   IPublicModelDropLocation,
 } from '@alilc/lowcode-types';
 import { megreAssets, IPublicTypeAssetsJson, isNodeSchema, isDragNodeObject, isDragNodeDataObject, isLocationChildrenDetail, Logger } from '@alilc/lowcode-utils';
 import { Project } from '../project';
 import { Node, DocumentModel, insertChildren, INode } from '../document';
-import { ComponentMeta } from '../component-meta';
+import { ComponentMeta, IComponentMeta } from '../component-meta';
 import { INodeSelector, Component } from '../simulator';
 import { Scroller } from './scroller';
-import { Dragon, ILocateEvent } from './dragon';
-import { ActiveTracker } from './active-tracker';
+import { Dragon, IDragon, ILocateEvent } from './dragon';
+import { ActiveTracker, IActiveTracker } from './active-tracker';
 import { Detecting } from './detecting';
 import { DropLocation } from './location';
 import { OffsetObserver, createOffsetObserver } from './offset-observer';
@@ -56,24 +55,49 @@ export interface DesignerProps {
   onMount?: (designer: Designer) => void;
   onDragstart?: (e: ILocateEvent) => void;
   onDrag?: (e: ILocateEvent) => void;
-  onDragend?: (e: { dragObject: IPublicModelDragObject; copy: boolean }, loc?: DropLocation) => void;
+  onDragend?: (
+      e: { dragObject: IPublicModelDragObject; copy: boolean },
+      loc?: DropLocation,
+    ) => void;
 }
 
 export interface IDesigner {
+
   get dragon(): IPublicModelDragon;
-  get activeTracker(): IPublicModelActiveTracker;
+
+  get activeTracker(): IActiveTracker;
+
+  get componentActions(): ComponentActions;
+
+  get editor(): IPublicModelEditor;
+
   createScroller(scrollable: IPublicModelScrollable): IPublicModelScroller;
 
   /**
    * 创建插入位置，考虑放到 dragon 中
    */
   createLocation(locationData: IPublicTypeLocationData): IPublicModelDropLocation;
+
+  get componentsMap(): { [key: string]: IPublicTypeNpmInfo | Component };
+
+  loadIncrementalAssets(incrementalAssets: IPublicTypeAssetsJson): Promise<void>;
+
+  getComponentMeta(
+    componentName: string,
+    generateMetadata?: () => IPublicTypeComponentMetadata | null,
+  ): IComponentMeta;
+
+  createComponentMeta(data: IPublicTypeComponentMetadata): IComponentMeta | null;
+
+  getComponentMetasMap(): Map<string, IComponentMeta>;
+
+  addPropsReducer(reducer: IPublicTypePropsTransducer, stage: IPublicEnumTransformStage): void;
 }
 
 export class Designer implements IDesigner {
-  public dragon: Dragon;
+  dragon: IDragon;
 
-  public viewName: string | undefined;
+  viewName: string | undefined;
 
   readonly componentActions = new ComponentActions();
 
@@ -99,7 +123,7 @@ export class Designer implements IDesigner {
 
   private oobxList: OffsetObserver[] = [];
 
-  @obx.ref private _componentMetasMap = new Map<string, ComponentMeta>();
+  @obx.ref private _componentMetasMap = new Map<string, IComponentMeta>();
 
   @obx.ref private _simulatorComponent?: ComponentType<any>;
 
@@ -483,7 +507,7 @@ export class Designer implements IDesigner {
     metas.forEach((data) => this.createComponentMeta(data));
   }
 
-  createComponentMeta(data: IPublicTypeComponentMetadata): ComponentMeta | null {
+  createComponentMeta(data: IPublicTypeComponentMetadata): IComponentMeta | null {
     const key = data.componentName;
     if (!key) {
       return null;
@@ -515,7 +539,7 @@ export class Designer implements IDesigner {
   getComponentMeta(
     componentName: string,
     generateMetadata?: () => IPublicTypeComponentMetadata | null,
-  ) {
+  ): IComponentMeta {
     if (this._componentMetasMap.has(componentName)) {
       return this._componentMetasMap.get(componentName)!;
     }

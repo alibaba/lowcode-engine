@@ -1,11 +1,11 @@
-import { DocumentModel as InnerDocumentModel } from '@alilc/lowcode-designer';
+import { IDocumentModel as InnerDocumentModel, IHistory as InnerHistory } from '@alilc/lowcode-designer';
 import { historySymbol, documentSymbol } from '../symbols';
 import { IPublicModelHistory, IPublicTypeDisposable } from '@alilc/lowcode-types';
 
 export class History implements IPublicModelHistory {
   private readonly [documentSymbol]: InnerDocumentModel;
 
-  private get [historySymbol]() {
+  private get [historySymbol](): InnerHistory {
     return this[documentSymbol].getHistory();
   }
 
@@ -64,7 +64,7 @@ export class History implements IPublicModelHistory {
    * @returns
    */
   onChangeState(func: () => any): IPublicTypeDisposable {
-    return this[historySymbol].onStateChange(func);
+    return this[historySymbol].onChangeState(func);
   }
 
   /**
@@ -73,6 +73,6 @@ export class History implements IPublicModelHistory {
    * @returns
    */
   onChangeCursor(func: () => any): IPublicTypeDisposable {
-    return this[historySymbol].onCursor(func);
+    return this[historySymbol].onChangeCursor(func);
   }
 }

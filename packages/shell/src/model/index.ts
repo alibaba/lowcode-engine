@@ -15,3 +15,6 @@ export * from './selection';
 export * from './setting-prop-entry';
 export * from './setting-top-entry';
 export * from './resource';
+export * from './active-tracker';
+export * from './plugin-instance';
+export * from './window';

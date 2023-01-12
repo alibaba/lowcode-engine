@@ -9,7 +9,7 @@ export class DragObject implements IPublicModelDragObject {
     this[dragObjectSymbol] = dragObject;
   }
 
-  static create(dragObject: InnerDragObject): IPublicModelDragObject | null {
+  static create(dragObject: InnerDragObject | null): IPublicModelDragObject | null {
     if (!dragObject) {
       return null;
     }

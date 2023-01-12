@@ -1,8 +1,6 @@
-import { Editor } from '@alilc/lowcode-editor-core';
 import {
-  DocumentModel as InnerDocumentModel,
-  Node as InnerNode,
-  isDragNodeObject,
+  IDocumentModel as InnerDocumentModel,
+  INode as InnerNode,
 } from '@alilc/lowcode-designer';
 import {
   IPublicEnumTransformStage,
@@ -23,23 +21,24 @@ import {
   IPublicModelDropLocation,
   IPublicApiCanvas,
   IPublicTypeDisposable,
+  IPublicModelEditor,
 } from '@alilc/lowcode-types';
-import { Node } from './node';
-import { Selection } from './selection';
-import { Detecting } from './detecting';
-import { History } from './history';
-import { DropLocation } from './drop-location';
-import { Project } from '../api/project';
-import { Prop } from './prop';
+import { isDragNodeObject } from '@alilc/lowcode-utils';
+import { Node as ShellNode } from './node';
+import { Selection as ShellSelection } from './selection';
+import { Detecting as ShellDetecting } from './detecting';
+import { History as ShellHistory } from './history';
+import { DropLocation as ShellDropLocation } from './drop-location';
+import { Project as ShellProject, Canvas as ShellCanvas } from '../api';
+import { Prop as ShellProp } from './prop';
 import { ModalNodesManager } from './modal-nodes-manager';
 import { documentSymbol, editorSymbol, nodeSymbol } from '../symbols';
-import { Canvas } from '../api';
 
 const shellDocSymbol = Symbol('shellDocSymbol');
 
 export class DocumentModel implements IPublicModelDocumentModel {
   private readonly [documentSymbol]: InnerDocumentModel;
-  private readonly [editorSymbol]: Editor;
+  private readonly [editorSymbol]: IPublicModelEditor;
   private _focusNode: IPublicModelNode | null;
   selection: IPublicModelSelection;
   detecting: IPublicModelDetecting;
@@ -52,13 +51,13 @@ export class DocumentModel implements IPublicModelDocumentModel {
 
   constructor(document: InnerDocumentModel) {
     this[documentSymbol] = document;
-    this[editorSymbol] = document.designer?.editor as Editor;
-    this.selection = new Selection(document);
-    this.detecting = new Detecting(document);
-    this.history = new History(document);
-    this.canvas = new Canvas(this[editorSymbol]);
+    this[editorSymbol] = document.designer?.editor as IPublicModelEditor;
+    this.selection = new ShellSelection(document);
+    this.detecting = new ShellDetecting(document);
+    this.history = new ShellHistory(document);
+    this.canvas = new ShellCanvas(this[editorSymbol]);
 
-    this._focusNode = Node.create(this[documentSymbol].focusNode);
+    this._focusNode = ShellNode.create(this[documentSymbol].focusNode);
   }
 
   static create(document: InnerDocumentModel | undefined | null): IPublicModelDocumentModel | null {
@@ -91,7 +90,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * @returns
    */
   get project(): IPublicApiProject {
-    return Project.create(this[documentSymbol].project);
+    return ShellProject.create(this[documentSymbol].project);
   }
 
   /**
@@ -100,7 +99,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * @returns
    */
   get root(): IPublicModelNode | null {
-    return Node.create(this[documentSymbol].getRoot());
+    return ShellNode.create(this[documentSymbol].rootNode);
   }
 
   get focusNode(): IPublicModelNode | null {
@@ -135,7 +134,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
   }
 
   get dropLocation(): IPublicModelDropLocation | null {
-    return DropLocation.create(this[documentSymbol].dropLocation);
+    return ShellDropLocation.create(this[documentSymbol].dropLocation);
   }
 
   set dropLocation(loc: IPublicModelDropLocation | null) {
@@ -148,7 +147,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * @param {string} nodeId
    */
   getNodeById(nodeId: string): IPublicModelNode | null {
-    return Node.create(this[documentSymbol].getNode(nodeId));
+    return ShellNode.create(this[documentSymbol].getNode(nodeId));
   }
 
   /**
@@ -189,7 +188,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
       at,
       copy,
     );
-    return Node.create(node);
+    return ShellNode.create(node);
   }
 
   /**
@@ -198,7 +197,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * @returns
    */
   createNode(data: any): IPublicModelNode | null {
-    return Node.create(this[documentSymbol].createNode(data));
+    return ShellNode.create(this[documentSymbol].createNode(data));
   }
 
   /**
@@ -243,7 +242,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
    */
   onAddNode(fn: (node: IPublicModelNode) => void): IPublicTypeDisposable {
     return this[documentSymbol].onNodeCreate((node: InnerNode) => {
-      fn(Node.create(node)!);
+      fn(ShellNode.create(node)!);
     });
   }
 
@@ -262,7 +261,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
    */
   onRemoveNode(fn: (node: IPublicModelNode) => void): IPublicTypeDisposable {
     return this[documentSymbol].onNodeDestroy((node: InnerNode) => {
-      fn(Node.create(node)!);
+      fn(ShellNode.create(node)!);
     });
   }
 
@@ -271,7 +270,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
    */
   onChangeDetecting(fn: (node: IPublicModelNode) => void): IPublicTypeDisposable {
     return this[documentSymbol].designer.detecting.onDetectingChange((node: InnerNode) => {
-      fn(Node.create(node)!);
+      fn(ShellNode.create(node)!);
     });
   }
 
@@ -290,7 +289,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
    */
   onChangeNodeVisible(fn: (node: IPublicModelNode, visible: boolean) => void): void {
     this[documentSymbol].onChangeNodeVisible((node: IPublicModelNode, visible: boolean) => {
-      fn(Node.create(node)!, visible);
+      fn(ShellNode.create(node)!, visible);
     });
   }
 
@@ -305,7 +304,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
       }
       fn({
         type: info.type,
-        node: Node.create(info.node)!,
+        node: ShellNode.create(info.node)!,
       });
     });
   }
@@ -322,8 +321,8 @@ export class DocumentModel implements IPublicModelDocumentModel {
           key: info.key,
           oldValue: info.oldValue,
           newValue: info.newValue,
-          prop: Prop.create(info.prop)!,
-          node: Node.create(info.node as any)!,
+          prop: ShellProp.create(info.prop)!,
+          node: ShellNode.create(info.node as any)!,
         });
       },
     );

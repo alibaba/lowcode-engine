@@ -1,6 +1,6 @@
-import { Editor, globalContext } from '@alilc/lowcode-editor-core';
+import { globalContext } from '@alilc/lowcode-editor-core';
 import {
-  Designer,
+  IDesigner,
   isComponentMeta,
 } from '@alilc/lowcode-designer';
 import { IPublicTypeAssetsJson } from '@alilc/lowcode-utils';
@@ -11,21 +11,22 @@ import {
   IPublicTypeMetadataTransducer,
   IPublicModelComponentMeta,
   IPublicTypeNpmInfo,
+  IPublicModelEditor,
 } from '@alilc/lowcode-types';
-import { Workspace } from '@alilc/lowcode-workspace';
+import { Workspace as InnerWorkspace } from '@alilc/lowcode-workspace';
 import { editorSymbol, designerSymbol } from '../symbols';
-import { ComponentMeta } from '../model/component-meta';
+import { ComponentMeta as ShellComponentMeta } from '../model';
 import { ComponentType } from 'react';
 
 const innerEditorSymbol = Symbol('editor');
 export class Material implements IPublicApiMaterial {
-  private readonly [innerEditorSymbol]: Editor;
+  private readonly [innerEditorSymbol]: IPublicModelEditor;
 
-  get [editorSymbol](): Editor {
+  get [editorSymbol](): IPublicModelEditor {
     if (this.workspaceMode) {
       return this[innerEditorSymbol];
     }
-    const workspace: Workspace = globalContext.get('workspace');
+    const workspace: InnerWorkspace = globalContext.get('workspace');
     if (workspace.isActive) {
       return workspace.window.editor;
     }
@@ -33,11 +34,11 @@ export class Material implements IPublicApiMaterial {
     return this[innerEditorSymbol];
   }
 
-  get [designerSymbol](): Designer {
+  get [designerSymbol](): IDesigner {
     return this[editorSymbol].get('designer')!;
   }
 
-  constructor(editor: Editor, readonly workspaceMode: boolean = false) {
+  constructor(editor: IPublicModelEditor, readonly workspaceMode: boolean = false) {
     this[innerEditorSymbol] = editor;
   }
 
@@ -103,7 +104,7 @@ export class Material implements IPublicApiMaterial {
    */
   getComponentMeta(componentName: string): IPublicModelComponentMeta | null {
     const innerMeta = this[designerSymbol].getComponentMeta(componentName);
-    return ComponentMeta.create(innerMeta);
+    return ShellComponentMeta.create(innerMeta);
   }
 
   /**
@@ -112,7 +113,7 @@ export class Material implements IPublicApiMaterial {
    * @returns
    */
   createComponentMeta(metadata: IPublicTypeComponentMetadata) {
-    return ComponentMeta.create(this[designerSymbol].createComponentMeta(metadata));
+    return ShellComponentMeta.create(this[designerSymbol].createComponentMeta(metadata));
   }
 
   /**
@@ -158,7 +159,10 @@ export class Material implements IPublicApiMaterial {
    * @param actionName
    * @param handle
    */
-  modifyBuiltinComponentAction(actionName: string, handle: (action: IPublicTypeComponentAction) => void) {
+  modifyBuiltinComponentAction(
+      actionName: string,
+      handle: (action: IPublicTypeComponentAction) => void,
+    ) {
     this[designerSymbol].componentActions.modifyBuiltinComponentAction(actionName, handle);
   }
 

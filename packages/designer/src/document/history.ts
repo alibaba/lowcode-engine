@@ -193,7 +193,7 @@ export class History<T = IPublicTypeNodeSchema> implements IHistory {
     return this.onStateChange(func);
   }
 
-  onStateChange(func: () => any) {
+  onStateChange(func: () => any): () => void {
     this.emitter.on('statechange', func);
     return () => {
       this.emitter.removeListener('statechange', func);
@@ -208,7 +208,8 @@ export class History<T = IPublicTypeNodeSchema> implements IHistory {
   onChangeCursor(func: () => any): () => void {
     return this.onCursor(func);
   }
-  onCursor(func: () => any) {
+
+  onCursor(func: () => any): () => void {
     this.emitter.on('cursor', func);
     return () => {
       this.emitter.removeListener('cursor', func);

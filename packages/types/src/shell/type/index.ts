@@ -87,3 +87,5 @@ export * from './editor-view';
 export * from './resource-type';
 export * from './resource-type-config';
 export * from './editor-view-config';
+export * from './hotkey-callback-config';
+export * from './hotkey-callbacks';

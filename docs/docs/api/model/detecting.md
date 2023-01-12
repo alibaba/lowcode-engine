@@ -77,7 +77,7 @@ hover 节点变化事件
  * set callback which will be called when hovering object changed.
  * @since v1.1.0
  */
-onDetectingChange(fn: (node: IPublicModelNode) => void): IPublicTypeDisposable;
+onDetectingChange(fn: (node: IPublicModelNode | null) => void): IPublicTypeDisposable;
 ```
 
 相关类型：

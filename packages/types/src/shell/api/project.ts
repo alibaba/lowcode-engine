@@ -3,8 +3,8 @@ import { IPublicEnumTransformStage } from '../enum';
 import { IPublicApiSimulatorHost } from './';
 import { IPublicModelDocumentModel } from '../model';
 
-
 export interface IPublicApiProject {
+
   /**
    * 获取当前的 document
    * get current document
@@ -39,7 +39,6 @@ export interface IPublicApiProject {
    * @returns
    */
   createDocument(data?: IPublicTypeRootSchema): IPublicModelDocumentModel | null;
-
 
   /**
    * 删除一个 document

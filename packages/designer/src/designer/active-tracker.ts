@@ -6,7 +6,7 @@ import {
 } from '@alilc/lowcode-types';
 import { isNode } from '@alilc/lowcode-utils';
 
-export interface IActiveTracker extends IPublicModelActiveTracker {
+export interface IActiveTracker extends Omit< IPublicModelActiveTracker, 'track' > {
   track(originalTarget: IPublicTypeActiveTarget | INode): void;
 }
 

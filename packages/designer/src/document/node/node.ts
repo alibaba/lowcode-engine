@@ -18,11 +18,11 @@ import {
 } from '@alilc/lowcode-types';
 import { compatStage, isDOMText, isJSExpression } from '@alilc/lowcode-utils';
 import { SettingTopEntry } from '@alilc/lowcode-designer';
-import { Props, getConvertedExtraKey } from './props/props';
+import { Props, getConvertedExtraKey, IProps } from './props/props';
 import { DocumentModel, IDocumentModel } from '../document-model';
 import { NodeChildren, INodeChildren } from './node-children';
-import { Prop } from './props/prop';
-import { ComponentMeta } from '../../component-meta';
+import { IProp, Prop } from './props/prop';
+import { ComponentMeta, IComponentMeta } from '../../component-meta';
 import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
 import { includeSlot, removeSlot } from '../../utils/slot';
 import { foreachReverse } from '../../utils/tree';
@@ -40,6 +40,34 @@ export interface INode extends IPublicModelNode {
    * 当前节点子集
    */
   get children(): INodeChildren | null;
+
+  /**
+   * 获取上一个兄弟节点
+   */
+  get prevSibling(): INode | null;
+
+  /**
+   * 获取下一个兄弟节点
+   */
+  get nextSibling(): INode | null;
+
+  /**
+   * 父级节点
+   */
+  get parent(): INode | null;
+
+  get slots(): INode[];
+
+  /**
+   * 关联属性
+   */
+  get slotFor(): IProp | null;
+
+  get props(): IProps;
+
+  get componentMeta(): IComponentMeta;
+
+  get document(): IDocumentModel;
 
   setVisible(flag: boolean): void;
 
@@ -66,8 +94,6 @@ export interface INode extends IPublicModelNode {
    */
   export(stage: IPublicEnumTransformStage, options?: any): IPublicTypeNodeSchema;
 
-  get document(): IDocumentModel;
-
   emitPropChange(val: IPublicTypePropChangeOptions): void;
 
   import(data: IPublicTypeNodeSchema, checkId?: boolean): void;
@@ -76,9 +102,13 @@ export interface INode extends IPublicModelNode {
 
   addSlot(slotNode: INode): void;
 
-  get componentMeta(): ComponentMeta;
-
   onVisibleChange(func: (flag: boolean) => any): () => void;
+
+  getProp(path: string, createIfNone?: boolean): IProp | null;
+
+  getExtraProp(key: string, createIfNone?: boolean): IProp | null;
+
+  replaceChild(node: INode, data: any): INode;
 }
 
 /**
@@ -157,7 +187,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 属性抽象
    */
-  props: Props;
+  props: IProps;
 
   protected _children?: INodeChildren;
 
@@ -241,11 +271,11 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     return !!this._isRGLContainer;
   }
 
-  private _slotFor?: Prop | null = null;
+  private _slotFor?: IProp | null = null;
 
   @obx.shallow _slots: INode[] = [];
 
-  get slots() {
+  get slots(): INode[] {
     return this._slots;
   }
 
@@ -509,7 +539,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 关联属性
    */
-  get slotFor() {
+  get slotFor(): IProp | null {
     return this._slotFor;
   }
 
@@ -665,10 +695,10 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 替换子节点
    *
-   * @param {Node} node
+   * @param {INode} node
    * @param {object} data
    */
-  replaceChild(node: Node, data: any): Node {
+  replaceChild(node: INode, data: any): INode {
     if (this.children?.has(node)) {
       const selected = this.document.selection.has(node.id);
 
@@ -703,11 +733,11 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     };
   }
 
-  getProp(path: string, createIfNone = true): Prop | null {
+  getProp(path: string, createIfNone = true): IProp | null {
     return this.props.query(path, createIfNone) || null;
   }
 
-  getExtraProp(key: string, createIfNone = true): Prop | null {
+  getExtraProp(key: string, createIfNone = true): IProp | null {
     return this.props.get(getConvertedExtraKey(key), createIfNone) || null;
   }
 
@@ -767,7 +797,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 获取下一个兄弟节点
    */
-  get nextSibling(): Node | null {
+  get nextSibling(): INode | null {
     if (!this.parent) {
       return null;
     }
@@ -781,7 +811,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 获取上一个兄弟节点
    */
-  get prevSibling(): Node | null {
+  get prevSibling(): INode | null {
     if (!this.parent) {
       return null;
     }
