@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-import { Editor, globalContext } from '@alilc/lowcode-editor-core';
 import { isFormEvent } from '@alilc/lowcode-utils';
 import {
   focusing,
@@ -12,22 +11,8 @@ import {
   IPublicModelNode,
 } from '@alilc/lowcode-types';
 import symbols from '../modules/symbols';
+
 const { nodeSymbol, documentSymbol } = symbols;
-
-export function isInLiveEditing() {
-  const workspace = globalContext.has('workspace') && globalContext.get('workspace');
-  if (workspace?.isActive) {
-    return Boolean(
-      workspace.window.editor.get('designer')?.project?.simulator?.liveEditing?.editing,
-    );
-  }
-
-  if (globalContext.has(Editor)) {
-    return Boolean(
-      globalContext.get(Editor).get('designer')?.project?.simulator?.liveEditing?.editing,
-    );
-  }
-}
 
 /* istanbul ignore next */
 function getNextForSelect(next: IPublicModelNode | null, head?: any, parent?: IPublicModelNode | null): any {
@@ -95,12 +80,12 @@ function getPrevForSelect(prev: IPublicModelNode | null, head?: any, parent?: IP
 export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
   return {
     init() {
-      const { hotkey, project, logger } = ctx;
+      const { hotkey, project, logger, canvas } = ctx;
       // hotkey binding
       hotkey.bind(['backspace', 'del'], (e: KeyboardEvent, action) => {
         logger.info(`action ${action} is triggered`);
 
-        if (isInLiveEditing()) {
+        if (canvas.isInLiveEditing) {
           return;
         }
         // TODO: use focus-tracker
@@ -124,7 +109,7 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
       hotkey.bind('escape', (e: KeyboardEvent, action) => {
         logger.info(`action ${action} is triggered`);
         // const currentFocus = focusing.current;
-        if (isInLiveEditing()) {
+        if (canvas.isInLiveEditing) {
           return;
         }
         const sel = focusing.focusDesigner?.currentDocument?.selection;
@@ -140,7 +125,7 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
       // command + c copy  command + x cut
       hotkey.bind(['command+c', 'ctrl+c', 'command+x', 'ctrl+x'], (e, action) => {
         logger.info(`action ${action} is triggered`);
-        if (isInLiveEditing()) {
+        if (canvas.isInLiveEditing) {
           return;
         }
         const doc = project.currentDocument;
@@ -179,10 +164,9 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
       // command + v paste
       hotkey.bind(['command+v', 'ctrl+v'], (e, action) => {
         logger.info(`action ${action} is triggered`);
-        if (isInLiveEditing()) {
+        if (canvas.isInLiveEditing) {
           return;
         }
-        if (isInLiveEditing()) return;
         // TODO
         const designer = focusing.focusDesigner;
         const doc = project?.currentDocument;
@@ -212,7 +196,7 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
       // command + z undo
       hotkey.bind(['command+z', 'ctrl+z'], (e, action) => {
         logger.info(`action ${action} is triggered`);
-        if (isInLiveEditing()) {
+        if (canvas.isInLiveEditing) {
           return;
         }
         const history = project.currentDocument?.history;
@@ -230,7 +214,7 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
       // command + shift + z redo
       hotkey.bind(['command+y', 'ctrl+y', 'command+shift+z'], (e, action) => {
         logger.info(`action ${action} is triggered`);
-        if (isInLiveEditing()) {
+        if (canvas.isInLiveEditing) {
           return;
         }
         const history = project.currentDocument?.history;
@@ -247,7 +231,7 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
       // sibling selection
       hotkey.bind(['left', 'right'], (e, action) => {
         logger.info(`action ${action} is triggered`);
-        if (isInLiveEditing()) {
+        if (canvas.isInLiveEditing) {
           return;
         }
         const doc = project.currentDocument;
@@ -266,7 +250,7 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
 
       hotkey.bind(['up', 'down'], (e, action) => {
         logger.info(`action ${action} is triggered`);
-        if (isInLiveEditing()) {
+        if (canvas.isInLiveEditing) {
           return;
         }
         const doc = project.currentDocument;
@@ -291,7 +275,7 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
 
       hotkey.bind(['option+left', 'option+right'], (e, action) => {
         logger.info(`action ${action} is triggered`);
-        if (isInLiveEditing()) {
+        if (canvas.isInLiveEditing) {
           return;
         }
         const doc = project.currentDocument;
@@ -325,7 +309,7 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
 
       hotkey.bind(['option+up'], (e, action) => {
         logger.info(`action ${action} is triggered`);
-        if (isInLiveEditing()) {
+        if (canvas.isInLiveEditing) {
           return;
         }
         const doc = project.currentDocument;
@@ -367,7 +351,7 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
 
       hotkey.bind(['option+down'], (e, action) => {
         logger.info(`action ${action} is triggered`);
-        if (isInLiveEditing()) {
+        if (canvas.isInLiveEditing) {
           return;
         }
         const doc = project.getCurrentDocument();
