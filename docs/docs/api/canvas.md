@@ -1,5 +1,5 @@
 ---
-title: cavas - 画布 API
+title: canvas - 画布 API
 sidebar_position: 12
 ---
 
@@ -17,30 +17,25 @@ sidebar_position: 12
 
 获取拖拽操作对象的实例
 
-```typescript
-/**
- * 获取拖拽操作对象的实例
- * get dragon instance, you can use this to obtain draging related abilities and lifecycle hooks
- * @since v1.1.0
- */
-get dragon(): IPublicModelDragon | null;
-```
-关联模型 [IPublicModelDragon](./model/dragon)
+`@type {IPublicModelDragon | null}`
+
+
+相关类型：[IPublicModelDragon](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/dragon.ts)
 
 ### activeTracker
 
 获取活动追踪器实例
 
-```typescript
-/**
- * 获取活动追踪器实例
- * get activeTracker instance, which is a singleton running in engine.
- * it tracks document`s current focusing node/node[], and notify it`s subscribers that when
- * focusing node/node[] changed.
- * @since v1.1.0
- */
-get activeTracker(): IPublicModelActiveTracker | null;
-```
+`@type {IPublicModelActiveTracker | null}`
+
+相关类型：[IPublicModelActiveTracker](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/active-tracker.ts)
+
+### isInLiveEditing
+
+是否处于 LiveEditing 状态
+
+`@type {boolean}`
+
 
 ## 方法
 

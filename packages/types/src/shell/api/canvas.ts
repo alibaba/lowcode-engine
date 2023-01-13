@@ -1,8 +1,10 @@
 import { IPublicModelDragon, IPublicModelDropLocation, IPublicModelScrollTarget, IPublicModelScrollable, IPublicModelScroller, IPublicModelActiveTracker } from '../model';
 import { IPublicTypeLocationData } from '../type';
 
+/**
+ * @since v1.1.0
+ */
 export interface IPublicApiCanvas {
-
 
   /**
    * 创一个滚动控制器 Scroller，赋予一个视图滚动的基本能力，
@@ -45,4 +47,11 @@ export interface IPublicApiCanvas {
    * @since v1.1.0
    */
   get activeTracker(): IPublicModelActiveTracker | null;
+
+  /**
+   * 是否处于 LiveEditing 状态
+   * check if canvas is in liveEditing state
+   * @since v1.1.0
+   */
+  get isInLiveEditing(): boolean;
 }
