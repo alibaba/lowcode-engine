@@ -2,8 +2,8 @@ import { obx, computed, makeObservable, runInAction, IEventBus, createModuleEven
 import { GlobalEvent, IPublicModelEditor, IPublicTypeSetValueOptions } from '@alilc/lowcode-types';
 import { uniqueId, isJSExpression, isSettingField } from '@alilc/lowcode-utils';
 import { SettingEntry } from './setting-entry';
-import { Node } from '../../document';
-import { ComponentMeta } from '../../component-meta';
+import { INode } from '../../document';
+import { IComponentMeta } from '../../component-meta';
 import { Designer } from '../designer';
 import { Setters } from '@alilc/lowcode-shell';
 
@@ -19,9 +19,9 @@ export class SettingPropEntry implements SettingEntry {
 
   readonly setters: Setters;
 
-  readonly nodes: Node[];
+  readonly nodes: INode[];
 
-  readonly componentMeta: ComponentMeta | null;
+  readonly componentMeta: IComponentMeta | null;
 
   readonly designer: Designer;
 

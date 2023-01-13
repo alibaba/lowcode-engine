@@ -1,7 +1,6 @@
 import { IPublicModelResource } from '@alilc/lowcode-types';
 import { Resource as InnerResource } from '@alilc/lowcode-workspace';
 import { resourceSymbol } from '../symbols';
-import { ResourceType } from './resource-type';
 
 export class Resource implements IPublicModelResource {
   readonly [resourceSymbol]: InnerResource;

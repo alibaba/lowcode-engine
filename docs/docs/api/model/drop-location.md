@@ -17,7 +17,7 @@ sidebar_position: 13
 
 拖拽放置位置目标
 
-`@type {IPublicModelNode}`
+`@type {IPublicModelNode | null}`
 
 相关类型：[IPublicModelNode](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/node.ts)
 

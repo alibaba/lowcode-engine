@@ -11,11 +11,13 @@ export const UNSET = Symbol.for('unset');
 // eslint-disable-next-line no-redeclare
 export type UNSET = typeof UNSET;
 
-export interface IProp extends Omit<IPublicModelProp, 'exportSchema' | 'node'> {
+export interface IProp extends Omit<IPublicModelProp, 'exportSchema' | 'node' | 'slotNode' > {
 
   readonly props: Props;
 
   readonly owner: INode;
+
+  get slotNode(): INode | null;
 
   delete(prop: Prop): void;
 
@@ -113,8 +115,8 @@ export class Prop implements IProp, IPropParent {
 
   private _slotNode?: INode;
 
-  get slotNode(): INode | undefined | null {
-    return this._slotNode;
+  get slotNode(): INode | null {
+    return this._slotNode || null;
   }
 
   @obx.shallow private _items: Prop[] | null = null;

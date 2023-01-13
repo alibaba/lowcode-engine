@@ -12,9 +12,9 @@ import {
   IPublicTypeSetValueOptions,
 } from '@alilc/lowcode-types';
 import { settingPropEntrySymbol } from '../symbols';
-import { Node } from './node';
-import { SettingTopEntry } from './setting-top-entry';
-import { ComponentMeta } from './component-meta';
+import { Node as ShellNode } from './node';
+import { SettingTopEntry as ShellSettingTopEntry } from './setting-top-entry';
+import { ComponentMeta as ShellComponentMeta } from './component-meta';
 import { isCustomView } from '@alilc/lowcode-utils';
 
 export class SettingPropEntry implements IPublicModelSettingPropEntry {
@@ -92,14 +92,14 @@ export class SettingPropEntry implements IPublicModelSettingPropEntry {
   }
 
   get props(): IPublicModelSettingTopEntry {
-    return SettingTopEntry.create(this[settingPropEntrySymbol].props);
+    return ShellSettingTopEntry.create(this[settingPropEntrySymbol].props);
   }
 
   /**
    * 获取设置属性对应的节点实例
    */
   get node(): IPublicModelNode | null {
-    return Node.create(this[settingPropEntrySymbol].getNode());
+    return ShellNode.create(this[settingPropEntrySymbol].getNode());
   }
 
   /**
@@ -113,7 +113,7 @@ export class SettingPropEntry implements IPublicModelSettingPropEntry {
    * 获取顶级设置属性
    */
   get top(): IPublicModelSettingTopEntry {
-    return SettingTopEntry.create(this[settingPropEntrySymbol].top);
+    return ShellSettingTopEntry.create(this[settingPropEntrySymbol].top);
   }
 
   /**
@@ -127,7 +127,7 @@ export class SettingPropEntry implements IPublicModelSettingPropEntry {
    * componentMeta
    */
   get componentMeta(): IPublicModelComponentMeta | null {
-    return ComponentMeta.create(this[settingPropEntrySymbol].componentMeta);
+    return ShellComponentMeta.create(this[settingPropEntrySymbol].componentMeta);
   }
 
   /**
@@ -233,7 +233,7 @@ export class SettingPropEntry implements IPublicModelSettingPropEntry {
    * @returns
    */
   getProps(): IPublicModelSettingTopEntry {
-    return SettingTopEntry.create(this[settingPropEntrySymbol].getProps() as SettingEntry) as any;
+    return ShellSettingTopEntry.create(this[settingPropEntrySymbol].getProps() as SettingEntry);
   }
 
   /**

@@ -335,6 +335,7 @@ export class Node implements IPublicModelNode {
     }
     const shellNode = new Node(node);
     // @ts-ignore 挂载 shell node 实例
+    // eslint-disable-next-line no-param-reassign
     node[shellNodeSymbol] = shellNode;
     return shellNode;
   }
