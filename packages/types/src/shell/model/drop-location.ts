@@ -7,7 +7,7 @@ export interface IPublicModelDropLocation {
    * 拖拽位置目标
    * get target of dropLocation
    */
-  get target(): IPublicModelNode;
+  get target(): IPublicModelNode | null;
 
   /**
    * 拖拽放置位置详情

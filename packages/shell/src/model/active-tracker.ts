@@ -1,5 +1,5 @@
 import { IPublicModelActiveTracker, IPublicModelNode, IPublicTypeActiveTarget } from '@alilc/lowcode-types';
-import { IActiveTracker as InnerActiveTracker, INode as InnerNode } from '@alilc/lowcode-designer';
+import { IActiveTracker as InnerActiveTracker, ActiveTarget } from '@alilc/lowcode-designer';
 import { Node as ShellNode } from './node';
 import { nodeSymbol } from '../symbols';
 
@@ -16,9 +16,9 @@ export class ActiveTracker implements IPublicModelActiveTracker {
     if (!fn) {
       return () => {};
     }
-    return this[activeTrackerSymbol].onChange((t: IPublicTypeActiveTarget) => {
+    return this[activeTrackerSymbol].onChange((t: ActiveTarget) => {
       const { node: innerNode, detail, instance } = t;
-      const publicNode = ShellNode.create(innerNode as InnerNode);
+      const publicNode = ShellNode.create(innerNode);
       const publicActiveTarget = {
         node: publicNode!,
         detail,
