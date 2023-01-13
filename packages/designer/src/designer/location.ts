@@ -7,8 +7,8 @@ import {
   IPublicTypeRect,
   IPublicTypeLocationDetail,
   IPublicTypeLocationData,
+  IPublicModelLocateEvent,
 } from '@alilc/lowcode-types';
-
 
 export interface Point {
   clientX: number;
@@ -99,11 +99,15 @@ function isDocument(elem: any): elem is Document {
 export function getWindow(elem: Element | Document): Window {
   return (isDocument(elem) ? elem : elem.ownerDocument!).defaultView!;
 }
-export interface IDropLocation extends IPublicModelDropLocation {
+export interface IDropLocation extends Omit< IPublicModelDropLocation, 'target' | 'clone' > {
 
   readonly source: string;
 
+  get target(): INode;
+
   get document(): IPublicModelDocumentModel;
+
+  clone(event: IPublicModelLocateEvent): IDropLocation;
 }
 
 export class DropLocation implements IDropLocation {
@@ -126,7 +130,7 @@ export class DropLocation implements IDropLocation {
     this.event = event;
   }
 
-  clone(event: ILocateEvent): DropLocation {
+  clone(event: ILocateEvent): IDropLocation {
     return new DropLocation({
       target: this.target,
       detail: this.detail,

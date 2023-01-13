@@ -2,7 +2,7 @@ import {
   IDropLocation as InnerDropLocation,
 } from '@alilc/lowcode-designer';
 import { dropLocationSymbol } from '../symbols';
-import { Node } from './node';
+import { Node as ShellNode } from './node';
 import { IPublicModelDropLocation, IPublicTypeLocationDetail, IPublicModelLocateEvent } from '@alilc/lowcode-types';
 
 export class DropLocation implements IPublicModelDropLocation {
@@ -20,7 +20,7 @@ export class DropLocation implements IPublicModelDropLocation {
   }
 
   get target() {
-    return Node.create(this[dropLocationSymbol].target);
+    return ShellNode.create(this[dropLocationSymbol].target);
   }
 
   get detail(): IPublicTypeLocationDetail {
