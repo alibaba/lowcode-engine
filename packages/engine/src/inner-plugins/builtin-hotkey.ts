@@ -1,17 +1,55 @@
 /* eslint-disable max-len */
-import { isFormEvent, isNodeSchema } from '@alilc/lowcode-utils';
-import {
-  insertChildren,
-} from '@alilc/lowcode-designer';
+import { isFormEvent, isNodeSchema, isNode } from '@alilc/lowcode-utils';
 import {
   IPublicModelPluginContext,
   IPublicEnumTransformStage,
   IPublicModelNode,
   IPublicTypeNodeSchema,
+  IPublicTypeNodeData,
 } from '@alilc/lowcode-types';
 import symbols from '../modules/symbols';
 
 const { nodeSymbol, documentSymbol } = symbols;
+
+function insertChild(
+  container: IPublicModelNode,
+  originalChild: IPublicModelNode | IPublicTypeNodeData,
+  at?: number | null,
+): IPublicModelNode | null {
+  let child = originalChild;
+  if (isNode(child) && (child as IPublicModelNode).isSlotNode) {
+    child = (child as IPublicModelNode).exportSchema(IPublicEnumTransformStage.Clone);
+  }
+  let node = null;
+  if (isNode(child)) {
+    node = (child as IPublicModelNode);
+    container.children?.insert(node, at);
+  } else {
+    node = container.document?.createNode(child) || null;
+    if (node) {
+      container.children?.insert(node, at);
+    }
+  }
+
+  return (node as IPublicModelNode) || null;
+}
+
+function insertChildren(
+  container: IPublicModelNode,
+  nodes: IPublicModelNode[] | IPublicTypeNodeData[],
+  at?: number | null,
+): IPublicModelNode[] {
+  let index = at;
+  let node: any;
+  const results: IPublicModelNode[] = [];
+  // eslint-disable-next-line no-cond-assign
+  while ((node = nodes.pop())) {
+    node = insertChild(container, node, index);
+    results.push(node);
+    index = node.index;
+  }
+  return results;
+}
 
 /**
  * 获得合适的插入位置
