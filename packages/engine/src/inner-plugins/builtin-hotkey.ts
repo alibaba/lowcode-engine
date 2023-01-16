@@ -2,7 +2,6 @@
 import { isFormEvent, isNodeSchema } from '@alilc/lowcode-utils';
 import {
   insertChildren,
-  clipboard,
 } from '@alilc/lowcode-designer';
 import {
   IPublicModelPluginContext,
@@ -129,6 +128,7 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
   return {
     init() {
       const { hotkey, project, logger, canvas } = ctx;
+      const { clipboard } = canvas;
       // hotkey binding
       hotkey.bind(['backspace', 'del'], (e: KeyboardEvent, action) => {
         logger.info(`action ${action} is triggered`);
