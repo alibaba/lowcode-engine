@@ -30,7 +30,6 @@ import { ActiveTracker, IActiveTracker } from './active-tracker';
 import { Detecting } from './detecting';
 import { DropLocation } from './location';
 import { OffsetObserver, createOffsetObserver } from './offset-observer';
-import { focusing } from './focusing';
 import { SettingTopEntry } from './setting';
 import { BemToolsManager } from '../builtin-simulator/bem-tools/manager';
 import { ComponentActions } from '../component-actions';
@@ -241,9 +240,6 @@ export class Designer implements IDesigner {
     this.postEvent('init', this);
     this.setupSelection();
     setupHistory();
-
-    // TODO: 先简单实现，后期通过焦点赋值
-    focusing.focusDesigner = this;
   }
 
   setupSelection = () => {
@@ -341,6 +337,7 @@ export class Designer implements IDesigner {
 
   /**
    * 获得合适的插入位置
+   * @deprecated
    */
   getSuitableInsertion(
     insertNode?: INode | IPublicTypeNodeSchema | IPublicTypeNodeSchema[],

@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
-import { isFormEvent } from '@alilc/lowcode-utils';
+import { isFormEvent, isNodeSchema } from '@alilc/lowcode-utils';
 import {
-  focusing,
   insertChildren,
   clipboard,
 } from '@alilc/lowcode-designer';
@@ -9,10 +8,59 @@ import {
   IPublicModelPluginContext,
   IPublicEnumTransformStage,
   IPublicModelNode,
+  IPublicTypeNodeSchema,
 } from '@alilc/lowcode-types';
 import symbols from '../modules/symbols';
 
 const { nodeSymbol, documentSymbol } = symbols;
+
+/**
+ * 获得合适的插入位置
+ */
+function getSuitableInsertion(
+  pluginContext: IPublicModelPluginContext,
+  insertNode?: IPublicModelNode | IPublicTypeNodeSchema | IPublicTypeNodeSchema[],
+): { target: IPublicModelNode; index?: number } | null {
+  const { project, material } = pluginContext;
+  const activeDoc = project.currentDocument;
+  if (!activeDoc) {
+    return null;
+  }
+  if (
+    Array.isArray(insertNode) &&
+    isNodeSchema(insertNode[0]) &&
+    material.getComponentMeta(insertNode[0].componentName)?.isModal
+  ) {
+    if (!activeDoc.root) {
+      return null;
+    }
+
+    return {
+      target: activeDoc.root,
+    };
+  }
+
+  const focusNode = activeDoc.focusNode!;
+  const nodes = activeDoc.selection.getNodes();
+  const refNode = nodes.find((item) => focusNode.contains(item));
+  let target;
+  let index: number | undefined;
+  if (!refNode || refNode === focusNode) {
+    target = focusNode;
+  } else if (refNode.componentMeta?.isContainer) {
+    target = refNode;
+  } else {
+    // FIXME!!, parent maybe null
+    target = refNode.parent!;
+    index = refNode.index + 1;
+  }
+
+  if (target && insertNode && !target.componentMeta?.checkNestingDown(target, insertNode)) {
+    return null;
+  }
+
+  return { target, index };
+}
 
 /* istanbul ignore next */
 function getNextForSelect(next: IPublicModelNode | null, head?: any, parent?: IPublicModelNode | null): any {
@@ -108,11 +156,11 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
 
       hotkey.bind('escape', (e: KeyboardEvent, action) => {
         logger.info(`action ${action} is triggered`);
-        // const currentFocus = focusing.current;
+
         if (canvas.isInLiveEditing) {
           return;
         }
-        const sel = focusing.focusDesigner?.currentDocument?.selection;
+        const sel = project.currentDocument?.selection;
         if (isFormEvent(e) || !sel) {
           return;
         }
@@ -168,15 +216,14 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
           return;
         }
         // TODO
-        const designer = focusing.focusDesigner;
         const doc = project?.currentDocument;
-        if (isFormEvent(e) || !designer || !doc) {
+        if (isFormEvent(e) || !doc) {
           return;
         }
         /* istanbul ignore next */
         clipboard.waitPasteData(e, ({ componentsTree }) => {
           if (componentsTree) {
-            const { target, index } = designer.getSuitableInsertion(componentsTree) || {};
+            const { target, index } = getSuitableInsertion(ctx, componentsTree) || {};
             if (!target) {
               return;
             }
@@ -187,7 +234,7 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
             const nodes = insertChildren(target, canAddComponentsTree, index);
             if (nodes) {
               doc.selection.selectAll(nodes.map((o) => o.id));
-              setTimeout(() => designer.activeTracker.track(nodes[0]), 10);
+              setTimeout(() => canvas.activeTracker?.track(nodes[0]), 10);
             }
           }
         });
