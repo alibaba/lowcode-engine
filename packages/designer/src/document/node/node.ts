@@ -1396,11 +1396,11 @@ export function comparePosition(node1: Node, node2: Node): PositionNO {
 
 export function insertChild(
   container: INode,
-  thing: Node | IPublicTypeNodeData,
+  thing: INode | IPublicTypeNodeData,
   at?: number | null,
   copy?: boolean,
-): Node {
-  let node: Node;
+): INode {
+  let node: INode;
   if (isNode(thing) && (copy || thing.isSlot())) {
     thing = thing.export(IPublicEnumTransformStage.Clone);
   }
@@ -1410,20 +1410,20 @@ export function insertChild(
     node = container.document.createNode(thing);
   }
 
-  container.children.internalInsert(node, at);
+  container.children.insert(node, at);
 
   return node;
 }
 
 export function insertChildren(
   container: INode,
-  nodes: Node[] | IPublicTypeNodeData[],
+  nodes: INode[] | IPublicTypeNodeData[],
   at?: number | null,
   copy?: boolean,
-): Node[] {
+): INode[] {
   let index = at;
   let node: any;
-  const results: Node[] = [];
+  const results: INode[] = [];
   // eslint-disable-next-line no-cond-assign
   while ((node = nodes.pop())) {
     node = insertChild(container, node, index, copy);
