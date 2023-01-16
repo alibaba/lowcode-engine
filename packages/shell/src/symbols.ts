@@ -31,3 +31,4 @@ export const windowSymbol = Symbol('window');
 export const pluginInstanceSymbol = Symbol('plugin-instance');
 export const resourceTypeSymbol = Symbol('resourceType');
 export const resourceSymbol = Symbol('resource');
+export const clipboardSymbol = Symbol('clipboard');

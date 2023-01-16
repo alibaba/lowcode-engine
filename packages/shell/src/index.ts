@@ -9,6 +9,7 @@ import {
   Dragon,
   SettingPropEntry,
   SettingTopEntry,
+  Clipboard,
 } from './model';
 import {
   Project,
@@ -57,4 +58,5 @@ export {
   Logger,
   Canvas,
   Workspace,
+  Clipboard,
 };

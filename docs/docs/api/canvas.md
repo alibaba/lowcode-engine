@@ -36,6 +36,12 @@ sidebar_position: 12
 
 `@type {boolean}`
 
+### clipboard
+全局剪贴板实例
+
+`@type {IPublicModelClipboard}`
+
+相关类型：[IPublicModelClipboard](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/clipboard.ts)
 
 ## 方法
 

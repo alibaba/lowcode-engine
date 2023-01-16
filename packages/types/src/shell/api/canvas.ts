@@ -1,4 +1,4 @@
-import { IPublicModelDragon, IPublicModelDropLocation, IPublicModelScrollTarget, IPublicModelScrollable, IPublicModelScroller, IPublicModelActiveTracker } from '../model';
+import { IPublicModelDragon, IPublicModelDropLocation, IPublicModelScrollTarget, IPublicModelScrollable, IPublicModelScroller, IPublicModelActiveTracker, IPublicModelClipboard } from '../model';
 import { IPublicTypeLocationData } from '../type';
 
 /**
@@ -54,4 +54,12 @@ export interface IPublicApiCanvas {
    * @since v1.1.0
    */
   get isInLiveEditing(): boolean;
+
+  /**
+   * 获取全局剪贴板实例
+   * get clipboard instance
+   *
+   * @since v1.1.0
+   */
+  get clipboard(): IPublicModelClipboard;
 }
