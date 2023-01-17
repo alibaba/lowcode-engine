@@ -555,6 +555,7 @@ export default function parseTS(filePath: string, args: IParseArgs): ComponentDo
           subName: exportName ? name : '',
           exportName: exportName || name,
         };
+        /** 组件jsDoc注释标签中取值覆盖meta值 */
         // @ts-ignore
         if (sourceFile.resolvedModules?.length > 0) {
           // @ts-ignore
