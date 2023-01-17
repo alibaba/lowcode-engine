@@ -41,9 +41,9 @@ export async function genManifest(
 ): Promise<ComponentMeta> {
   const manifestObj: Partial<ComponentMeta> = {
     componentName: matParsedModel.componentName,
-    title: matScanModel.pkgName,
-    docUrl: '',
-    screenshot: '',
+    title: matParsedModel.meta?.title || matScanModel.pkgName,
+    docUrl: matParsedModel.meta?.docUrl || '',
+    screenshot: matParsedModel.meta?.screenshot || '',
     devMode: 'proCode', // 需要入料的组件都是源码模式，低代码组件在平台上即可直接生成描述
     npm: {
       package: matScanModel.pkgName,
