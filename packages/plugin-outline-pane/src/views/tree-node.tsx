@@ -38,7 +38,7 @@ class ModalTreeNodeView extends Component<{
     return (
       <div className="tree-node-modal">
         <div className="tree-node-modal-title">
-          <span>模态视图层</span>
+          <span>{this.pluginContext.intlNode('Modal View')}</span>
           <div
             className="tree-node-modal-title-visible-icon"
             onClick={this.hideAllNodes.bind(this)}
