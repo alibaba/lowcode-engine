@@ -18,5 +18,8 @@ export interface IMaterialParsedModel {
   meta?: {
     exportName?: string;
     subName?: string;
+    title?: string;
+    docUrl?: string;
+    screenshot?: string;
   };
 }
