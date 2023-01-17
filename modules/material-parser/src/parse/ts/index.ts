@@ -559,7 +559,7 @@ export default function parseTS(filePath: string, args: IParseArgs): ComponentDo
         if (sourceFile.resolvedModules?.length > 0) {
           // @ts-ignore
           sourceFile.resolvedModules.forEach((v: any) => {
-            /** Parse jsDoc tags (@screenshot/@docUrl/@subName/@displayName)*/
+            /** Parse jsDoc tags (@screenshot/@docUrl/@subName/@title)*/
             if (!isEmpty(v.resolvedFileName)) {
               if (v.extension.endsWith('.tsx')) {
                 const docComments = docgen.parse(v.resolvedFileName, {});
