@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { Parser, ComponentDoc } from 'react-docgen-typescript';
+import docgen, { Parser, ComponentDoc } from 'react-docgen-typescript';
 import ts, { SymbolFlags, TypeFlags, SyntaxKind } from 'typescript';
 import { isEmpty, isEqual } from 'lodash';
 import { existsSync, readFileSync } from 'fs-extra';
@@ -555,6 +555,25 @@ export default function parseTS(filePath: string, args: IParseArgs): ComponentDo
           subName: exportName ? name : '',
           exportName: exportName || name,
         };
+        // @ts-ignore
+        if (sourceFile.resolvedModules?.length > 0) {
+          // @ts-ignore
+          sourceFile.resolvedModules.forEach((v: any) => {
+            /** Parse jsDoc for .tsx/.jsx files*/
+            if (!isEmpty(v.resolvedFileName)) {
+              if (v.extension.endsWith('.tsx') ||
+                v.extension.endsWith('.jsx')) {
+                const docComments = docgen.parse(v.resolvedFileName, {});
+                if (docComments.length > 0) {
+                  /** docComments to meta */
+                  if (docComments[0] && docComments[0]?.tags) {
+                    Object.assign(meta, docComments[0].tags);
+                  }
+                }
+              }
+            }
+          });
+        }
         if (docs.find((x) => isEqual(x.meta, meta))) {
           continue;
         }
