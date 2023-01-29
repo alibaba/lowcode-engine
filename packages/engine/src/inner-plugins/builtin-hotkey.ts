@@ -9,9 +9,6 @@ import {
   IPublicEnumDragObjectType,
   IPublicTypeDragNodeObject,
 } from '@alilc/lowcode-types';
-import symbols from '../modules/symbols';
-
-const { nodeSymbol } = symbols;
 
 function insertChild(
   container: IPublicModelNode,
@@ -158,6 +155,67 @@ function getPrevForSelect(prev: IPublicModelNode | null, head?: any, parent?: IP
 
   if (parent) {
     return parent;
+  }
+
+  return null;
+}
+
+function getSuitablePlaceForNode(targetNode: IPublicModelNode, node: IPublicModelNode, ref: any): any {
+  const { document } = targetNode;
+  if (!document) {
+    return null;
+  }
+
+  const dragNodeObject: IPublicTypeDragNodeObject = {
+    type: IPublicEnumDragObjectType.Node,
+    nodes: [node],
+  };
+
+  const focusNode = document?.focusNode;
+  // 如果节点是模态框，插入到根节点下
+  if (node?.componentMeta?.isModal) {
+    return { container: focusNode, ref };
+  }
+  const canDropInFn = document.checkNesting;
+
+  if (!ref && focusNode && targetNode.contains(focusNode)) {
+    if (canDropInFn(focusNode, dragNodeObject)) {
+      return { container: focusNode };
+    }
+
+    return null;
+  }
+
+  if (targetNode.isRootNode && targetNode.children) {
+    const dropElement = targetNode.children.filter((c) => {
+      if (!c.isContainerNode) {
+        return false;
+      }
+      if (canDropInFn(c, dragNodeObject)) {
+        return true;
+      }
+      return false;
+    })[0];
+
+    if (dropElement) {
+      return { container: dropElement, ref };
+    }
+
+    if (canDropInFn(targetNode, dragNodeObject)) {
+      return { container: targetNode, ref };
+    }
+
+    return null;
+  }
+
+  if (targetNode.isContainerNode) {
+    if (canDropInFn(targetNode, dragNodeObject)) {
+      return { container: targetNode, ref };
+    }
+  }
+
+  if (targetNode.parent) {
+    return getSuitablePlaceForNode(targetNode.parent, node, { index: targetNode.index });
   }
 
   return null;
@@ -426,14 +484,14 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
         const silbing = firstNode.prevSibling;
         if (silbing) {
           if (silbing.isContainerNode) {
-            const place = (silbing as any)[nodeSymbol].getSuitablePlace(firstNode, null);
+            const place = getSuitablePlaceForNode(silbing, firstNode, null);
             silbing.insertAfter(firstNode, place.ref, true);
           } else {
             parent.insertBefore(firstNode, silbing, true);
           }
           firstNode?.select();
         } else {
-          const place = (parent as any)[nodeSymbol].getSuitablePlace(firstNode, null); // upwards
+          const place = getSuitablePlaceForNode(parent, firstNode, null); // upwards
           if (place) {
             const container = place.container.internalToShellNode();
             container.insertBefore(firstNode, place.ref);
@@ -474,7 +532,7 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
           }
           firstNode?.select();
         } else {
-          const place = (parent as any)[nodeSymbol].getSuitablePlace(firstNode, null); // upwards
+          const place = getSuitablePlaceForNode(parent, firstNode, null); // upwards
           if (place) {
             const container = place.container.internalToShellNode();
             container.insertAfter(firstNode, place.ref, true);
