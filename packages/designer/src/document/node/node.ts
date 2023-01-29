@@ -16,7 +16,7 @@ import {
   IPublicModelExclusiveGroup,
   IPublicEnumTransformStage,
 } from '@alilc/lowcode-types';
-import { compatStage, isDOMText, isJSExpression } from '@alilc/lowcode-utils';
+import { compatStage, isDOMText, isJSExpression, isNode } from '@alilc/lowcode-utils';
 import { SettingTopEntry } from '@alilc/lowcode-designer';
 import { Props, getConvertedExtraKey, IProps } from './props/props';
 import { DocumentModel, IDocumentModel } from '../document-model';
@@ -109,6 +109,8 @@ export interface INode extends IPublicModelNode {
   getExtraProp(key: string, createIfNone?: boolean): IProp | null;
 
   replaceChild(node: INode, data: any): INode;
+
+  getSuitablePlace(node: INode, ref: any): any;
 }
 
 /**
@@ -913,7 +915,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 判断是否包含特定节点
    */
-  contains(node: Node): boolean {
+  contains(node: INode): boolean {
     return contains(this, node);
   }
 
@@ -1149,14 +1151,14 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * TODO: replace non standard metas with standard ones.
    */
-  getSuitablePlace(node: Node, ref: any): any {
+  getSuitablePlace(node: INode, ref: any): any {
     const focusNode = this.document?.focusNode;
     // 如果节点是模态框，插入到根节点下
     if (node?.componentMeta?.isModal) {
       return { container: focusNode, ref };
     }
 
-    if (!ref && this.contains(focusNode)) {
+    if (!ref && focusNode && this.contains(focusNode)) {
       const rootCanDropIn = focusNode.componentMeta?.prototype?.options?.canDropIn;
       if (
         rootCanDropIn === undefined ||
@@ -1171,7 +1173,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
 
     if (this.isRoot() && this.children) {
       const dropElement = this.children.filter((c) => {
-        if (!c.isContainer()) {
+        if (!c.isContainerNode) {
           return false;
         }
         const canDropIn = c.componentMeta?.prototype?.options?.canDropIn;
@@ -1304,22 +1306,15 @@ export type PageNode = Node<IPublicTypePageSchema>;
 export type ComponentNode = Node<IPublicTypeComponentSchema>;
 export type RootNode = PageNode | ComponentNode;
 
-/**
- * @deprecated use same function from '@alilc/lowcode-utils' instead
- */
-export function isNode(node: any): node is Node {
-  return node && node.isNode;
+export function isRootNode(node: INode): node is INode {
+  return node && node.isRootNode;
 }
 
-export function isRootNode(node: Node): node is RootNode {
-  return node && node.isRoot();
-}
-
-export function isLowCodeComponent(node: Node): boolean {
+export function isLowCodeComponent(node: INode): node is INode {
   return node.componentMeta?.getMetadata().devMode === 'lowCode';
 }
 
-export function getZLevelTop(child: Node, zLevel: number): Node | null {
+export function getZLevelTop(child: INode, zLevel: number): INode | null {
   let l = child.zLevel;
   if (l < zLevel || zLevel < 0) {
     return null;
@@ -1340,12 +1335,12 @@ export function getZLevelTop(child: Node, zLevel: number): Node | null {
  * @param node2 测试的被包含节点
  * @returns 是否包含
  */
-export function contains(node1: Node, node2: Node): boolean {
+export function contains(node1: INode, node2: INode): boolean {
   if (node1 === node2) {
     return true;
   }
 
-  if (!node1.isParental() || !node2.parent) {
+  if (!node1.isParentalNode || !node2.parent) {
     return false;
   }
 
@@ -1367,7 +1362,7 @@ export enum PositionNO {
   BeforeOrAfter = 2,
   TheSame = 0,
 }
-export function comparePosition(node1: Node, node2: Node): PositionNO {
+export function comparePosition(node1: INode, node2: INode): PositionNO {
   if (node1 === node2) {
     return PositionNO.TheSame;
   }

@@ -7,7 +7,6 @@ import { DocumentModel } from '../../../src/document/document-model';
 import {
   isRootNode,
   Node,
-  isNode,
   comparePosition,
   contains,
   PositionNO,
@@ -23,6 +22,7 @@ import rootHeaderMetadata from '../../fixtures/component-metadata/root-header';
 import rootContentMetadata from '../../fixtures/component-metadata/root-content';
 import rootFooterMetadata from '../../fixtures/component-metadata/root-footer';
 import { shellModelFactory } from '../../../../engine/src/modules/shell-model-factory';
+import { isNode } from '@alilc/lowcode-utils';
 
 describe('Node 方法测试', () => {
   let editor: Editor;

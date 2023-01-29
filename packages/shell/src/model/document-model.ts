@@ -8,7 +8,6 @@ import {
   GlobalEvent,
   IPublicModelDocumentModel,
   IPublicTypeOnChangeOptions,
-  IPublicModelDragObject,
   IPublicTypeDragNodeObject,
   IPublicTypeDragNodeDataObject,
   IPublicModelNode,
@@ -227,9 +226,11 @@ export class DocumentModel implements IPublicModelDocumentModel {
       dropTarget: IPublicModelNode,
       dragObject: IPublicTypeDragNodeObject | IPublicTypeDragNodeDataObject,
     ): boolean {
-    let innerDragObject: IPublicModelDragObject = dragObject;
+    let innerDragObject = dragObject;
     if (isDragNodeObject(dragObject)) {
-      innerDragObject.nodes = innerDragObject.nodes.map((node: Node) => (node[nodeSymbol] || node));
+      innerDragObject.nodes = innerDragObject.nodes?.map(
+          (node: IPublicModelNode) => ((node as any)[nodeSymbol] || node),
+        );
     }
     return this[documentSymbol].checkNesting(
       ((dropTarget as any)[nodeSymbol] || dropTarget) as any,
