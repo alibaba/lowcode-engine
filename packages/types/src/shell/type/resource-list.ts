@@ -1,7 +1,7 @@
 export interface IPublicResourceData {
   resourceName: string;
   title: string;
-  category: string;
+  category?: string;
   options: {
     [key: string]: any;
   };

@@ -4,9 +4,9 @@ import {
   Workbench,
 } from '@alilc/lowcode-editor-skeleton';
 import { PureComponent } from 'react';
-import { Context } from './context';
+import { Context } from '../context/view-context';
 
-export * from '../base-context';
+export * from '../context/base-context';
 
 @observer
 export class EditorView extends PureComponent<{
@@ -23,13 +23,11 @@ export class EditorView extends PureComponent<{
     }
 
     return (
-      <>
-        <Workbench
-          skeleton={skeleton}
-          className={active ? 'active engine-editor-view' : 'engine-editor-view'}
-          topAreaItemClassName="engine-actionitem"
-        />
-      </>
+      <Workbench
+        skeleton={skeleton}
+        className={active ? 'active engine-editor-view' : 'engine-editor-view'}
+        topAreaItemClassName="engine-actionitem"
+      />
     );
   }
 }

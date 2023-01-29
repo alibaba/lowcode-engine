@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable max-len */
 import {
   Editor,
   engineConfig, Setters as InnerSetters,
@@ -33,8 +31,8 @@ import {
   IPublicTypePluginMeta,
 } from '@alilc/lowcode-types';
 import { getLogger } from '@alilc/lowcode-utils';
-import { Workspace as InnerWorkspace } from './workspace';
-import { EditorWindow } from './editor-window/context';
+import { Workspace as InnerWorkspace } from '../workspace';
+import { EditorWindow } from '../window';
 
 export class BasicContext {
   skeleton: Skeleton;

@@ -2,8 +2,8 @@ import { Designer } from '@alilc/lowcode-designer';
 import { createModuleEventBus, Editor, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
 import { Plugins } from '@alilc/lowcode-shell';
 import { IPublicApiWorkspace, IPublicResourceList, IPublicTypeResourceType } from '@alilc/lowcode-types';
-import { BasicContext } from './base-context';
-import { EditorWindow } from './editor-window/context';
+import { BasicContext } from './context/base-context';
+import { EditorWindow } from './window';
 import { Resource } from './resource';
 import { ResourceType } from './resource-type';
 
@@ -20,6 +20,12 @@ export class Workspace implements IPublicApiWorkspace {
 
   private emitter: IEventBus = createModuleEventBus('workspace');
 
+  private _isActive = false;
+
+  private resourceTypeMap: Map<string, ResourceType> = new Map();
+
+  private resourceList: Resource[] = [];
+
   get skeleton() {
     return this.context.innerSkeleton;
   }
@@ -28,17 +34,23 @@ export class Workspace implements IPublicApiWorkspace {
     return this.context.innerPlugins;
   }
 
-  private _isActive = false;
+  get isActive() {
+    return this._isActive;
+  }
+
+  get defaultResourceType(): ResourceType | null {
+    if (this.resourceTypeMap.size >= 1) {
+      return Array.from(this.resourceTypeMap.values())[0];
+    }
+
+    return null;
+  }
 
   windows: EditorWindow[] = [];
 
   editorWindowMap: Map<string, EditorWindow> = new Map<string, EditorWindow>();
 
   @obx.ref window: EditorWindow;
-
-  private resourceTypeMap: Map<string, ResourceType> = new Map();
-
-  private resourceList: Resource[] = [];
 
   constructor(
     readonly registryInnerPlugin: (designer: Designer, editor: Editor, plugins: Plugins) => Promise<void>,
@@ -64,10 +76,6 @@ export class Workspace implements IPublicApiWorkspace {
     this.windows.push(this.window);
     this.emitChangeWindow();
     this.emitChangeActiveWindow();
-  }
-
-  get isActive() {
-    return this._isActive;
   }
 
   setActive(value: boolean) {
@@ -103,14 +111,6 @@ export class Workspace implements IPublicApiWorkspace {
 
   getResourceType(resourceName: string): ResourceType {
     return this.resourceTypeMap.get(resourceName)!;
-  }
-
-  get defaultResourceType(): ResourceType | null {
-    if (this.resourceTypeMap.size >= 1) {
-      return Array.from(this.resourceTypeMap.values())[0];
-    }
-
-    return null;
   }
 
   removeResourceType(resourceName: string) {
@@ -153,13 +153,17 @@ export class Workspace implements IPublicApiWorkspace {
       console.error(`${name} is not available`);
       return;
     }
-    const filterWindows = this.windows.filter(d => (d.resource.name === name && d.title == title));
+    const filterWindows = this.windows.filter(d => (d.resource.name === name && d.resource.title == title));
     if (filterWindows && filterWindows.length) {
       this.window = filterWindows[0];
       this.emitChangeActiveWindow();
       return;
     }
-    const resource = new Resource({}, resourceType, this);
+    const resource = new Resource({
+      resourceName: name,
+      title,
+      options,
+    }, resourceType, this);
     this.window = new EditorWindow(resource, this, title, options);
     this.windows.push(this.window);
     this.editorWindowMap.set(this.window.id, this.window);
