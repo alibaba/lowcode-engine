@@ -1149,7 +1149,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   }
 
   /**
-   * TODO: replace non standard metas with standard ones.
+   * @deprecated no one is using this, will be removed in a future release
    */
   getSuitablePlace(node: INode, ref: any): any {
     const focusNode = this.document?.focusNode;
