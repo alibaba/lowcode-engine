@@ -6,10 +6,12 @@ import {
   IPublicModelNode,
   IPublicTypeNodeSchema,
   IPublicTypeNodeData,
+  IPublicEnumDragObjectType,
+  IPublicTypeDragNodeObject,
 } from '@alilc/lowcode-types';
 import symbols from '../modules/symbols';
 
-const { nodeSymbol, documentSymbol } = symbols;
+const { nodeSymbol } = symbols;
 
 function insertChild(
   container: IPublicModelNode,
@@ -265,10 +267,16 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
             if (!target) {
               return;
             }
-            let canAddComponentsTree = componentsTree.filter((i) => {
-              return (doc as any)[documentSymbol].checkNestingUp(target, i);
+            let canAddComponentsTree = componentsTree.filter((node: IPublicModelNode) => {
+              const dragNodeObject: IPublicTypeDragNodeObject = {
+                type: IPublicEnumDragObjectType.Node,
+                nodes: [node],
+              };
+              return doc.checkNesting(target, dragNodeObject);
             });
-            if (canAddComponentsTree.length === 0) return;
+            if (canAddComponentsTree.length === 0) {
+              return;
+            }
             const nodes = insertChildren(target, canAddComponentsTree, index);
             if (nodes) {
               doc.selection.selectAll(nodes.map((o) => o.id));

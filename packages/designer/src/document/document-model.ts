@@ -17,11 +17,11 @@ import { IProject, Project } from '../project';
 import { ISimulatorHost } from '../simulator';
 import { ComponentMeta } from '../component-meta';
 import { IDropLocation, Designer, IHistory } from '../designer';
-import { Node, insertChildren, insertChild, isNode, RootNode, INode } from './node/node';
+import { Node, insertChildren, insertChild, RootNode, INode } from './node/node';
 import { Selection, ISelection } from './selection';
 import { History } from './history';
 import { IModalNodesManager, ModalNodesManager } from './node';
-import { uniqueId, isPlainObject, compatStage, isJSExpression, isDOMText, isNodeSchema, isDragNodeObject, isDragNodeDataObject } from '@alilc/lowcode-utils';
+import { uniqueId, isPlainObject, compatStage, isJSExpression, isDOMText, isNodeSchema, isDragNodeObject, isDragNodeDataObject, isNode } from '@alilc/lowcode-utils';
 import { EDITOR_EVENT } from '../types';
 
 export type GetDataType<T, NodeType> = T extends undefined
@@ -32,7 +32,7 @@ export type GetDataType<T, NodeType> = T extends undefined
     : any
   : T;
 
-export interface IDocumentModel extends Omit< IPublicModelDocumentModel, 'selection' > {
+export interface IDocumentModel extends Omit< IPublicModelDocumentModel, 'selection' | 'checkNesting' > {
 
   readonly designer: Designer;
 
@@ -58,6 +58,11 @@ export interface IDocumentModel extends Omit< IPublicModelDocumentModel, 'select
   get focusNode(): INode | null;
 
   get rootNode(): INode | null;
+
+  checkNesting(
+    dropTarget: INode,
+    dragObject: IPublicTypeDragNodeObject | IPublicTypeNodeSchema | INode | IPublicTypeDragNodeDataObject,
+  ): boolean;
 
 }
 
@@ -569,7 +574,10 @@ export class DocumentModel implements IDocumentModel {
     this.rootNode = null;
   }
 
-  checkNesting(dropTarget: INode, dragObject: IPublicTypeDragNodeObject | IPublicTypeNodeSchema | Node | IPublicTypeDragNodeDataObject): boolean {
+  checkNesting(
+      dropTarget: INode,
+      dragObject: IPublicTypeDragNodeObject | IPublicTypeNodeSchema | INode | IPublicTypeDragNodeDataObject,
+    ): boolean {
     let items: Array<Node | IPublicTypeNodeSchema>;
     if (isDragNodeDataObject(dragObject)) {
       items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
