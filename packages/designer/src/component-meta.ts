@@ -13,9 +13,9 @@ import {
   IPublicTypeMetadataTransducer,
   IPublicModelComponentMeta,
 } from '@alilc/lowcode-types';
-import { deprecate, isRegExp, isTitleConfig } from '@alilc/lowcode-utils';
+import { deprecate, isRegExp, isTitleConfig, isNode } from '@alilc/lowcode-utils';
 import { computed, createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
-import { isNode, Node, INode } from './document';
+import { Node, INode } from './document';
 import { Designer } from './designer';
 import {
   IconContainer,
@@ -160,6 +160,9 @@ export class ComponentMeta implements IComponentMeta {
   get acceptable(): boolean {
     return this._acceptable!;
   }
+
+  // compatiable vision
+  prototype?: any;
 
   constructor(readonly designer: Designer, metadata: IPublicTypeComponentMetadata) {
     this.parseMetadata(metadata);
@@ -347,8 +350,6 @@ export class ComponentMeta implements IComponentMeta {
     };
   }
 
-  // compatiable vision
-  prototype?: any;
 }
 
 export function isComponentMeta(obj: any): obj is ComponentMeta {
@@ -373,4 +374,3 @@ function preprocessMetadata(metadata: IPublicTypeComponentMetadata): IPublicType
     configure: {},
   };
 }
-

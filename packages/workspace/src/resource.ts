@@ -1,6 +1,6 @@
 import { IPublicTypeEditorView, IPublicModelResource, IPublicResourceData, IPublicResourceTypeConfig } from '@alilc/lowcode-types';
 import { Logger } from '@alilc/lowcode-utils';
-import { BasicContext } from './base-context';
+import { BasicContext } from './context/base-context';
 import { ResourceType } from './resource-type';
 import { Workspace as InnerWorkSpace } from './workspace';
 
@@ -12,20 +12,6 @@ export class Resource implements IPublicModelResource {
   resourceTypeInstance: IPublicResourceTypeConfig;
 
   editorViewMap: Map<string, IPublicTypeEditorView> = new Map<string, IPublicTypeEditorView>();
-
-  constructor(readonly resourceData: IPublicResourceData, readonly resourceType: ResourceType, workspace: InnerWorkSpace) {
-    this.context = new BasicContext(workspace, '');
-    this.resourceTypeInstance = resourceType.resourceTypeModel(this.context, {});
-    this.init();
-    if (this.resourceTypeInstance.editorViews) {
-      this.resourceTypeInstance.editorViews.forEach((d: any) => {
-        this.editorViewMap.set(d.viewName, d);
-      });
-    }
-    if (!resourceType) {
-      logger.error(`resourceType[${resourceType}] is unValid.`);
-    }
-  }
 
   get name() {
     return this.resourceType.name;
@@ -55,6 +41,24 @@ export class Resource implements IPublicModelResource {
     return this.resourceData?.category;
   }
 
+  get skeleton() {
+    return this.context.innerSkeleton;
+  }
+
+  constructor(readonly resourceData: IPublicResourceData, readonly resourceType: ResourceType, workspace: InnerWorkSpace) {
+    this.context = new BasicContext(workspace, `resource-${resourceData.resourceName || resourceType.name}`);
+    this.resourceTypeInstance = resourceType.resourceTypeModel(this.context, {});
+    this.init();
+    if (this.resourceTypeInstance.editorViews) {
+      this.resourceTypeInstance.editorViews.forEach((d: any) => {
+        this.editorViewMap.set(d.viewName, d);
+      });
+    }
+    if (!resourceType) {
+      logger.error(`resourceType[${resourceType}] is unValid.`);
+    }
+  }
+
   async init() {
     await this.resourceTypeInstance.init?.();
     await this.context.innerPlugins.init();
@@ -63,6 +67,7 @@ export class Resource implements IPublicModelResource {
   async import(schema: any) {
     return await this.resourceTypeInstance.import?.(schema);
   }
+
   async save(value: any) {
     return await this.resourceTypeInstance.save?.(value);
   }

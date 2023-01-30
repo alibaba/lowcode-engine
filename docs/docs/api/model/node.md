@@ -160,7 +160,7 @@ sidebar_position: 1
 
 `@type {IPublicModelComponentMeta | null}`
 
-相关类型：[IPublicTypeIconType](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/component-meta.ts)
+相关类型：[IPublicModelComponentMeta](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/component-meta.ts)
 
 
 ### document

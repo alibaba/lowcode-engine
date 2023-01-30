@@ -1,18 +1,102 @@
 /* eslint-disable max-len */
-import { isFormEvent } from '@alilc/lowcode-utils';
-import {
-  focusing,
-  insertChildren,
-  clipboard,
-} from '@alilc/lowcode-designer';
+import { isFormEvent, isNodeSchema, isNode } from '@alilc/lowcode-utils';
 import {
   IPublicModelPluginContext,
   IPublicEnumTransformStage,
   IPublicModelNode,
+  IPublicTypeNodeSchema,
+  IPublicTypeNodeData,
+  IPublicEnumDragObjectType,
+  IPublicTypeDragNodeObject,
 } from '@alilc/lowcode-types';
-import symbols from '../modules/symbols';
 
-const { nodeSymbol, documentSymbol } = symbols;
+function insertChild(
+  container: IPublicModelNode,
+  originalChild: IPublicModelNode | IPublicTypeNodeData,
+  at?: number | null,
+): IPublicModelNode | null {
+  let child = originalChild;
+  if (isNode(child) && (child as IPublicModelNode).isSlotNode) {
+    child = (child as IPublicModelNode).exportSchema(IPublicEnumTransformStage.Clone);
+  }
+  let node = null;
+  if (isNode(child)) {
+    node = (child as IPublicModelNode);
+    container.children?.insert(node, at);
+  } else {
+    node = container.document?.createNode(child) || null;
+    if (node) {
+      container.children?.insert(node, at);
+    }
+  }
+
+  return (node as IPublicModelNode) || null;
+}
+
+function insertChildren(
+  container: IPublicModelNode,
+  nodes: IPublicModelNode[] | IPublicTypeNodeData[],
+  at?: number | null,
+): IPublicModelNode[] {
+  let index = at;
+  let node: any;
+  const results: IPublicModelNode[] = [];
+  // eslint-disable-next-line no-cond-assign
+  while ((node = nodes.pop())) {
+    node = insertChild(container, node, index);
+    results.push(node);
+    index = node.index;
+  }
+  return results;
+}
+
+/**
+ * 获得合适的插入位置
+ */
+function getSuitableInsertion(
+  pluginContext: IPublicModelPluginContext,
+  insertNode?: IPublicModelNode | IPublicTypeNodeSchema | IPublicTypeNodeSchema[],
+): { target: IPublicModelNode; index?: number } | null {
+  const { project, material } = pluginContext;
+  const activeDoc = project.currentDocument;
+  if (!activeDoc) {
+    return null;
+  }
+  if (
+    Array.isArray(insertNode) &&
+    isNodeSchema(insertNode[0]) &&
+    material.getComponentMeta(insertNode[0].componentName)?.isModal
+  ) {
+    if (!activeDoc.root) {
+      return null;
+    }
+
+    return {
+      target: activeDoc.root,
+    };
+  }
+
+  const focusNode = activeDoc.focusNode!;
+  const nodes = activeDoc.selection.getNodes();
+  const refNode = nodes.find((item) => focusNode.contains(item));
+  let target;
+  let index: number | undefined;
+  if (!refNode || refNode === focusNode) {
+    target = focusNode;
+  } else if (refNode.componentMeta?.isContainer) {
+    target = refNode;
+  } else {
+    // FIXME!!, parent maybe null
+    target = refNode.parent!;
+    index = refNode.index + 1;
+  }
+
+  if (target && insertNode && !target.componentMeta?.checkNestingDown(target, insertNode)) {
+    return null;
+  }
+
+  return { target, index };
+}
 
 /* istanbul ignore next */
 function getNextForSelect(next: IPublicModelNode | null, head?: any, parent?: IPublicModelNode | null): any {
@@ -76,11 +160,73 @@ function getPrevForSelect(prev: IPublicModelNode | null, head?: any, parent?: IP
   return null;
 }
 
+function getSuitablePlaceForNode(targetNode: IPublicModelNode, node: IPublicModelNode, ref: any): any {
+  const { document } = targetNode;
+  if (!document) {
+    return null;
+  }
+
+  const dragNodeObject: IPublicTypeDragNodeObject = {
+    type: IPublicEnumDragObjectType.Node,
+    nodes: [node],
+  };
+
+  const focusNode = document?.focusNode;
+  // 如果节点是模态框，插入到根节点下
+  if (node?.componentMeta?.isModal) {
+    return { container: focusNode, ref };
+  }
+  const canDropInFn = document.checkNesting;
+
+  if (!ref && focusNode && targetNode.contains(focusNode)) {
+    if (canDropInFn(focusNode, dragNodeObject)) {
+      return { container: focusNode };
+    }
+
+    return null;
+  }
+
+  if (targetNode.isRootNode && targetNode.children) {
+    const dropElement = targetNode.children.filter((c) => {
+      if (!c.isContainerNode) {
+        return false;
+      }
+      if (canDropInFn(c, dragNodeObject)) {
+        return true;
+      }
+      return false;
+    })[0];
+
+    if (dropElement) {
+      return { container: dropElement, ref };
+    }
+
+    if (canDropInFn(targetNode, dragNodeObject)) {
+      return { container: targetNode, ref };
+    }
+
+    return null;
+  }
+
+  if (targetNode.isContainerNode) {
+    if (canDropInFn(targetNode, dragNodeObject)) {
+      return { container: targetNode, ref };
+    }
+  }
+
+  if (targetNode.parent) {
+    return getSuitablePlaceForNode(targetNode.parent, node, { index: targetNode.index });
+  }
+
+  return null;
+}
+
 // 注册默认的 setters
 export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
   return {
     init() {
       const { hotkey, project, logger, canvas } = ctx;
+      const { clipboard } = canvas;
       // hotkey binding
       hotkey.bind(['backspace', 'del'], (e: KeyboardEvent, action) => {
         logger.info(`action ${action} is triggered`);
@@ -108,11 +254,11 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
 
       hotkey.bind('escape', (e: KeyboardEvent, action) => {
         logger.info(`action ${action} is triggered`);
-        // const currentFocus = focusing.current;
+
         if (canvas.isInLiveEditing) {
           return;
         }
-        const sel = focusing.focusDesigner?.currentDocument?.selection;
+        const sel = project.currentDocument?.selection;
         if (isFormEvent(e) || !sel) {
           return;
         }
@@ -168,26 +314,31 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
           return;
         }
         // TODO
-        const designer = focusing.focusDesigner;
         const doc = project?.currentDocument;
-        if (isFormEvent(e) || !designer || !doc) {
+        if (isFormEvent(e) || !doc) {
           return;
         }
         /* istanbul ignore next */
         clipboard.waitPasteData(e, ({ componentsTree }) => {
           if (componentsTree) {
-            const { target, index } = designer.getSuitableInsertion(componentsTree) || {};
+            const { target, index } = getSuitableInsertion(ctx, componentsTree) || {};
             if (!target) {
               return;
             }
-            let canAddComponentsTree = componentsTree.filter((i) => {
-              return (doc as any)[documentSymbol].checkNestingUp(target, i);
+            let canAddComponentsTree = componentsTree.filter((node: IPublicModelNode) => {
+              const dragNodeObject: IPublicTypeDragNodeObject = {
+                type: IPublicEnumDragObjectType.Node,
+                nodes: [node],
+              };
+              return doc.checkNesting(target, dragNodeObject);
             });
-            if (canAddComponentsTree.length === 0) return;
+            if (canAddComponentsTree.length === 0) {
+              return;
+            }
             const nodes = insertChildren(target, canAddComponentsTree, index);
             if (nodes) {
               doc.selection.selectAll(nodes.map((o) => o.id));
-              setTimeout(() => designer.activeTracker.track(nodes[0]), 10);
+              setTimeout(() => canvas.activeTracker?.track(nodes[0]), 10);
             }
           }
         });
@@ -333,14 +484,14 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
         const silbing = firstNode.prevSibling;
         if (silbing) {
           if (silbing.isContainerNode) {
-            const place = (silbing as any)[nodeSymbol].getSuitablePlace(firstNode, null);
+            const place = getSuitablePlaceForNode(silbing, firstNode, null);
             silbing.insertAfter(firstNode, place.ref, true);
           } else {
             parent.insertBefore(firstNode, silbing, true);
           }
           firstNode?.select();
         } else {
-          const place = (parent as any)[nodeSymbol].getSuitablePlace(firstNode, null); // upwards
+          const place = getSuitablePlaceForNode(parent, firstNode, null); // upwards
           if (place) {
             const container = place.container.internalToShellNode();
             container.insertBefore(firstNode, place.ref);
@@ -381,7 +532,7 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
           }
           firstNode?.select();
         } else {
-          const place = (parent as any)[nodeSymbol].getSuitablePlace(firstNode, null); // upwards
+          const place = getSuitablePlaceForNode(parent, firstNode, null); // upwards
           if (place) {
             const container = place.container.internalToShellNode();
             container.insertAfter(firstNode, place.ref, true);

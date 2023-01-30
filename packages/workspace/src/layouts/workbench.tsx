@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { TipContainer, observer } from '@alilc/lowcode-editor-core';
-import { EditorWindowView } from '../editor-window/view';
+import { WindowView } from '../view/window-view';
 import classNames from 'classnames';
 import TopArea from './top-area';
 import LeftArea from './left-area';
@@ -46,9 +46,9 @@ export class Workbench extends Component<{
                 <div className="lc-workspace-workbench-window">
                   {
                     workspace.windows.map(d => (
-                      <EditorWindowView
+                      <WindowView
                         active={d.id === workspace.window.id}
-                        editorWindow={d}
+                        window={d}
                         key={d.id}
                       />
                     ))

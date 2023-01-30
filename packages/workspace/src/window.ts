@@ -1,8 +1,8 @@
 import { uniqueId } from '@alilc/lowcode-utils';
 import { makeObservable, obx } from '@alilc/lowcode-editor-core';
-import { Context } from '../editor-view/context';
-import { Workspace } from '../workspace';
-import { Resource } from '../resource';
+import { Context } from './context/view-context';
+import { Workspace } from './workspace';
+import { Resource } from './resource';
 
 export class EditorWindow {
   id: string = uniqueId('window');
