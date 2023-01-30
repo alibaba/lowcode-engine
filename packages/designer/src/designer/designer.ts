@@ -567,7 +567,7 @@ export class Designer implements IDesigner {
       if (metaData.devMode === 'lowCode') {
         maps[key] = metaData.schema;
       } else {
-        const view = metaData.configure.advanced?.view;
+        const { view } = config.advanced;
         if (view) {
           maps[key] = view;
         } else {

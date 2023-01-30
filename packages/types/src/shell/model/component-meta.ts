@@ -1,4 +1,4 @@
-import { IPublicTypeNodeSchema, IPublicTypeNodeData, IPublicTypeIconType, IPublicTypeTransformedComponentMetadata, IPublicTypeI18nData, IPublicTypeNpmInfo } from '../type';
+import { IPublicTypeNodeSchema, IPublicTypeNodeData, IPublicTypeIconType, IPublicTypeTransformedComponentMetadata, IPublicTypeI18nData, IPublicTypeNpmInfo, IPublicTypeAdvanced } from '../type';
 import { ReactElement } from 'react';
 import { IPublicModelNode } from './node';
 
@@ -48,6 +48,12 @@ export interface IPublicModelComponentMeta {
   get npm(): IPublicTypeNpmInfo;
 
   get availableActions(): any;
+
+  /**
+   * configure.advanced
+   * @since v1.1.0
+   */
+  get advanced(): IPublicTypeAdvanced;
 
   /**
    * 设置 npm 信息

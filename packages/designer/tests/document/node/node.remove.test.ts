@@ -16,6 +16,9 @@ jest.mock('../../../src/designer/designer', () => {
             getMetadata() {
               return { configure: { advanced: null } };
             },
+            get advanced() {
+              return {};
+            },
           };
         },
         transformProps(props) { return props; },

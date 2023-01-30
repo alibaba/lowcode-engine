@@ -473,7 +473,7 @@ describe('Node 方法测试', () => {
     const form = doc.getNode('node_k1ow3cbo');
     designer.createComponentMeta(divMetadata);
     designer.createComponentMeta(formMetadata);
-    const callbacks = form.componentMeta.getMetadata().configure.advanced?.callbacks;
+    const callbacks = form.componentMeta.advanced.callbacks;
     const fn1 = callbacks.onNodeAdd = jest.fn();
     const fn2 = callbacks.onNodeRemove = jest.fn();
     const textField = doc.getNode('node_k1ow3cc9');

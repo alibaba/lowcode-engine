@@ -121,7 +121,7 @@ export class InsertionView extends Component<{ host: BuiltinSimulatorHost }> {
       return null;
     }
     // 如果是个绝对定位容器，不需要渲染插入标记
-    if (loc.target.componentMeta.getMetadata().configure.advanced?.isAbsoluteLayoutContainer) {
+    if (loc.target?.componentMeta?.advanced.isAbsoluteLayoutContainer) {
       return null;
     }
 

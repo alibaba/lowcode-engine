@@ -502,7 +502,7 @@ export class NodeChildren implements INodeChildren {
     if (node.isRootNode) {
       return;
     }
-    const callbacks = owner.componentMeta?.getMetadata().configure.advanced?.callbacks;
+    const callbacks = owner.componentMeta?.advanced.callbacks;
     if (callbacks?.onSubtreeModified) {
       try {
         callbacks?.onSubtreeModified.call(
