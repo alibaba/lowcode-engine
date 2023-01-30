@@ -17,6 +17,9 @@ jest.mock('../../../src/designer/designer', () => {
             getMetadata() {
               return { configure: { advanced: null } };
             },
+            get advanced() {
+              return {};
+            },
           };
         },
         transformProps(props) { return props; },
@@ -506,7 +509,7 @@ describe('schema 生成节点模型测试', () => {
         });
       });
 
-      it('场景二：插入 Node 实例，指定 index', () => {
+      it.only('场景二：插入 Node 实例，指定 index', () => {
         expect(project).toBeTruthy();
         const ids = getIdsFromSchema(formSchema);
         const { currentDocument } = project;

@@ -10,8 +10,8 @@ import {
   IPublicTypeI18nData,
   IPublicTypePluginConfig,
   IPublicTypeFieldConfig,
-  IPublicTypeMetadataTransducer,
   IPublicModelComponentMeta,
+  IPublicTypeAdvanced,
 } from '@alilc/lowcode-types';
 import { deprecate, isRegExp, isTitleConfig, isNode } from '@alilc/lowcode-utils';
 import { computed, createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
@@ -57,7 +57,6 @@ export function buildFilter(rule?: string | string[] | RegExp | IPublicTypeNesti
 }
 
 export interface IComponentMeta extends IPublicModelComponentMeta {
-
 }
 
 export class ComponentMeta implements IComponentMeta {
@@ -140,7 +139,7 @@ export class ComponentMeta implements IComponentMeta {
     // string | i18nData | ReactElement
     // TitleConfig title.label
     if (isTitleConfig(this._title)) {
-      return (this._title.label as any) || this.componentName;
+      return (this._title?.label as any) || this.componentName;
     }
     return this._title || this.componentName;
   }
@@ -161,7 +160,14 @@ export class ComponentMeta implements IComponentMeta {
     return this._acceptable!;
   }
 
-  // compatiable vision
+  get advanced(): IPublicTypeAdvanced {
+    return this.getMetadata().configure.advanced || {};
+  }
+
+  /**
+   * @legacy compatiable for vision
+   * @deprecated
+   */
   prototype?: any;
 
   constructor(readonly designer: Designer, metadata: IPublicTypeComponentMetadata) {
@@ -214,7 +220,7 @@ export class ComponentMeta implements IComponentMeta {
           : title;
     }
 
-    const liveTextEditing = this._transformedMetadata.configure.advanced?.liveTextEditing || [];
+    const liveTextEditing = this.advanced.liveTextEditing || [];
 
     function collectLiveTextEditing(items: IPublicTypeFieldConfig[]) {
       items.forEach((config) => {
@@ -234,7 +240,7 @@ export class ComponentMeta implements IComponentMeta {
     collectLiveTextEditing(this.configure);
     this._liveTextEditing = liveTextEditing.length > 0 ? liveTextEditing : undefined;
 
-    const isTopFixed = this._transformedMetadata.configure.advanced?.isTopFixed;
+    const isTopFixed = this.advanced.isTopFixed;
 
     if (isTopFixed) {
       this._isTopFixed = isTopFixed;

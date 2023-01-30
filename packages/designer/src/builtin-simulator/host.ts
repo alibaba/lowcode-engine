@@ -99,6 +99,7 @@ export interface BuiltinSimulatorProps {
   simulatorUrl?: Asset;
   theme?: Asset;
   componentsAsset?: Asset;
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   [key: string]: any;
 }
 
@@ -184,40 +185,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    */
   autoRender = true;
 
-  stopAutoRepaintNode() {
-    this.renderer?.stopAutoRepaintNode();
-  }
-
-  enableAutoRepaintNode() {
-    this.renderer?.enableAutoRepaintNode();
-  }
-
-  constructor(project: Project, designer: Designer) {
-    makeObservable(this);
-    this.project = project;
-    this.designer = designer;
-    this.scroller = this.designer.createScroller(this.viewport);
-    this.autoRender = !engineConfig.get('disableAutoRender', false);
-    this.componentsConsumer = new ResourceConsumer<Asset | undefined>(() => this.componentsAsset);
-    this.injectionConsumer = new ResourceConsumer(() => {
-      return {
-        appHelper: engineConfig.get('appHelper'),
-      };
-    });
-
-    this.i18nConsumer = new ResourceConsumer(() => this.project.i18n);
-
-    transactionManager.onStartTransaction(() => {
-      this.stopAutoRepaintNode();
-    }, IPublicEnumTransitionType.REPAINT);
-    // 防止批量调用 transaction 时，执行多次 rerender
-    const rerender = debounce(this.rerender.bind(this), 28);
-    transactionManager.onEndTransaction(() => {
-      rerender();
-      this.enableAutoRepaintNode();
-    }, IPublicEnumTransitionType.REPAINT);
-  }
-
   get currentDocument() {
     return this.project.currentDocument;
   }
@@ -285,6 +252,87 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   @obx.ref _props: BuiltinSimulatorProps = {};
 
+  @obx.ref private _contentWindow?: Window;
+
+  get contentWindow() {
+    return this._contentWindow;
+  }
+
+  @obx.ref private _contentDocument?: Document;
+
+  get contentDocument() {
+    return this._contentDocument;
+  }
+
+  private _renderer?: BuiltinSimulatorRenderer;
+
+  get renderer() {
+    return this._renderer;
+  }
+
+  readonly asyncLibraryMap: { [key: string]: {} } = {};
+
+  readonly libraryMap: { [key: string]: string } = {};
+
+  private _iframe?: HTMLIFrameElement;
+
+  private disableHovering?: () => void;
+
+  private disableDetecting?: () => void;
+
+  readonly liveEditing = new LiveEditing();
+
+  @obx private instancesMap: {
+    [docId: string]: Map<string, IPublicTypeComponentInstance[]>;
+  } = {};
+
+  private tryScrollAgain: number | null = null;
+
+  private _sensorAvailable = true;
+
+  /**
+   * @see IPublicModelSensor
+   */
+  get sensorAvailable(): boolean {
+    return this._sensorAvailable;
+  }
+
+  private sensing = false;
+
+  constructor(project: Project, designer: Designer) {
+    makeObservable(this);
+    this.project = project;
+    this.designer = designer;
+    this.scroller = this.designer.createScroller(this.viewport);
+    this.autoRender = !engineConfig.get('disableAutoRender', false);
+    this.componentsConsumer = new ResourceConsumer<Asset | undefined>(() => this.componentsAsset);
+    this.injectionConsumer = new ResourceConsumer(() => {
+      return {
+        appHelper: engineConfig.get('appHelper'),
+      };
+    });
+
+    this.i18nConsumer = new ResourceConsumer(() => this.project.i18n);
+
+    transactionManager.onStartTransaction(() => {
+      this.stopAutoRepaintNode();
+    }, IPublicEnumTransitionType.REPAINT);
+    // 防止批量调用 transaction 时，执行多次 rerender
+    const rerender = debounce(this.rerender.bind(this), 28);
+    transactionManager.onEndTransaction(() => {
+      rerender();
+      this.enableAutoRepaintNode();
+    }, IPublicEnumTransitionType.REPAINT);
+  }
+
+  stopAutoRepaintNode() {
+    this.renderer?.stopAutoRepaintNode();
+  }
+
+  enableAutoRepaintNode() {
+    this.renderer?.enableAutoRepaintNode();
+  }
+
   /**
    * @see ISimulator
    */
@@ -336,30 +384,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   mountViewport(viewport: Element | null) {
     this.viewport.mount(viewport);
   }
-
-  @obx.ref private _contentWindow?: Window;
-
-  get contentWindow() {
-    return this._contentWindow;
-  }
-
-  @obx.ref private _contentDocument?: Document;
-
-  get contentDocument() {
-    return this._contentDocument;
-  }
-
-  private _renderer?: BuiltinSimulatorRenderer;
-
-  get renderer() {
-    return this._renderer;
-  }
-
-  readonly asyncLibraryMap: { [key: string]: {} } = {};
-
-  readonly libraryMap: { [key: string]: string } = {};
-
-  private _iframe?: HTMLIFrameElement;
 
   /**
    * {
@@ -544,7 +568,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           return;
         }
         // 触发 onMouseDownHook 钩子
-        const onMouseDownHook = node.componentMeta?.getMetadata()?.configure.advanced?.callbacks?.onMouseDownHook;
+        const onMouseDownHook = node.componentMeta.advanced.callbacks?.onMouseDownHook;
         if (onMouseDownHook) {
           onMouseDownHook(downEvent, node.internalToShellNode());
         }
@@ -689,10 +713,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     );
   }
 
-  private disableHovering?: () => void;
-
-  private disableDetecting?: () => void;
-
   /**
    * 设置悬停处理
    */
@@ -741,8 +761,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     //   this.disableDetecting = undefined;
     // };
   }
-
-  readonly liveEditing = new LiveEditing();
 
   setupLiveEditing() {
     const doc = this.contentDocument!;
@@ -880,9 +898,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     // return this.renderer?.createComponent(schema) || null;
   }
 
-  @obx private instancesMap: {
-    [docId: string]: Map<string, IPublicTypeComponentInstance[]>;
-  } = {};
   setInstance(docId: string, id: string, instances: IPublicTypeComponentInstance[] | null) {
     if (!hasOwnProperty(this.instancesMap, docId)) {
       this.instancesMap[docId] = new Map();
@@ -1045,8 +1060,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     };
   }
 
-  private tryScrollAgain: number | null = null;
-
   /**
    * @see ISimulator
    */
@@ -1107,15 +1120,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.renderer?.clearState();
   }
 
-  private _sensorAvailable = true;
-
-  /**
-   * @see IPublicModelSensor
-   */
-  get sensorAvailable(): boolean {
-    return this._sensorAvailable;
-  }
-
   /**
    * @see IPublicModelSensor
    */
@@ -1160,8 +1164,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     );
   }
 
-  private sensing = false;
-
   /**
    * @see IPublicModelSensor
    */
@@ -1180,7 +1182,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     const { nodes } = dragObject as IPublicTypeDragNodeObject;
 
     const operationalNodes = nodes?.filter((node) => {
-      const onMoveHook = node.componentMeta?.getMetadata()?.configure.advanced?.callbacks?.onMoveHook;
+      const onMoveHook = node.componentMeta?.advanced.callbacks?.onMoveHook;
       const canMove = onMoveHook && typeof onMoveHook === 'function' ? onMoveHook(node.internalToShellNode()) : true;
 
       let parentContainerNode: Node | null = null;
@@ -1195,7 +1197,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         parentNode = parentNode.parent;
       }
 
-      const onChildMoveHook = parentContainerNode?.componentMeta?.getMetadata()?.configure.advanced?.callbacks?.onChildMoveHook;
+      const onChildMoveHook = parentContainerNode?.componentMeta?.advanced.callbacks?.onChildMoveHook;
 
       const childrenCanMove = onChildMoveHook && parentContainerNode && typeof onChildMoveHook === 'function' ? onChildMoveHook(node.internalToShellNode(), parentContainerNode.internalToShellNode()) : true;
 

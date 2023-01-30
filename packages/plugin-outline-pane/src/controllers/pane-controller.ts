@@ -31,6 +31,75 @@ export class PaneController implements IPublicModelSensor, ITreeBoard, IPublicMo
 
   readonly id = uniqueId('outline');
 
+  private indentTrack = new IndentTrack();
+
+  private _sensorAvailable = false;
+
+  /**
+   * @see IPublicModelSensor
+   */
+  get sensorAvailable() {
+    return this._sensorAvailable;
+  }
+
+  private dwell = new DwellTimer((target, event) => {
+    const { canvas, project } = this.pluginContext;
+    const document = project.getCurrentDocument();
+    let index: any;
+    let focus: any;
+    let valid = true;
+    if (target.hasSlots()) {
+      index = null;
+      focus = { type: 'slots' };
+    } else {
+      index = 0;
+      valid = !!document?.checkNesting(target, event.dragObject as any);
+    }
+    canvas.createLocation({
+      target,
+      source: this.id,
+      event,
+      detail: {
+        type: IPublicTypeLocationDetailType.Children,
+        index,
+        focus,
+        valid,
+      },
+    });
+  });
+
+  /**
+   * @see ITreeBoard
+   */
+  readonly at: string | symbol;
+
+  private tryScrollAgain: number | null = null;
+
+  private sensing = false;
+
+  /**
+   * @see IScrollable
+   */
+  get bounds(): DOMRect | null {
+    if (!this._shell) {
+      return null;
+    }
+    return this._shell.getBoundingClientRect();
+  }
+
+  private _scrollTarget?: IPublicModelScrollTarget;
+
+  /**
+   * @see IScrollable
+   */
+  get scrollTarget() {
+    return this._scrollTarget;
+  }
+
+  private scroller?: IPublicModelScroller;
+
+  private _shell: HTMLDivElement | null = null;
+
   constructor(at: string | symbol, pluginContext: IPublicModelPluginContext, treeMaster: TreeMaster) {
     this.pluginContext = pluginContext;
     this.treeMaster = treeMaster;
@@ -51,8 +120,6 @@ export class PaneController implements IPublicModelSensor, ITreeBoard, IPublicMo
   }
 
   /** -------------------- IPublicModelSensor begin -------------------- */
-
-  private indentTrack = new IndentTrack();
 
   /**
    * @see IPublicModelSensor
@@ -91,7 +158,7 @@ export class PaneController implements IPublicModelSensor, ITreeBoard, IPublicMo
     }
 
     const operationalNodes = nodes?.filter((node: any) => {
-      const onMoveHook = node.componentMeta?.getMetadata().configure?.advanced?.callbacks?.onMoveHook;
+      const onMoveHook = node.componentMeta?.advanced.callbacks?.onMoveHook;
       const canMove = onMoveHook && typeof onMoveHook === 'function' ? onMoveHook(node) : true;
 
       return canMove;
@@ -233,23 +300,9 @@ export class PaneController implements IPublicModelSensor, ITreeBoard, IPublicMo
     this.indentTrack.reset();
   }
 
-  private _sensorAvailable = false;
-
-  /**
-   * @see IPublicModelSensor
-   */
-  get sensorAvailable() {
-    return this._sensorAvailable;
-  }
-
   /** -------------------- IPublicModelSensor end -------------------- */
 
   /** -------------------- ITreeBoard begin -------------------- */
-
-  /**
-   * @see ITreeBoard
-   */
-  readonly at: string | symbol;
 
   /**
    * @see ITreeBoard
@@ -294,32 +347,6 @@ export class PaneController implements IPublicModelSensor, ITreeBoard, IPublicMo
   }
 
   /** -------------------- ITreeBoard end -------------------- */
-
-  private dwell = new DwellTimer((target, event) => {
-    const { canvas, project } = this.pluginContext;
-    const document = project.getCurrentDocument();
-    let index: any;
-    let focus: any;
-    let valid = true;
-    if (target.hasSlots()) {
-      index = null;
-      focus = { type: 'slots' };
-    } else {
-      index = 0;
-      valid = !!document?.checkNesting(target, event.dragObject as any);
-    }
-    canvas.createLocation({
-      target,
-      source: this.id,
-      event,
-      detail: {
-        type: IPublicTypeLocationDetailType.Children,
-        index,
-        focus,
-        valid,
-      },
-    });
-  });
 
   private getNear(treeNode: TreeNode, e: IPublicModelLocateEvent, originalIndex?: number, originalRect?: DOMRect) {
     const { canvas, project } = this.pluginContext;
@@ -541,38 +568,11 @@ export class PaneController implements IPublicModelSensor, ITreeBoard, IPublicMo
     return canvas.createLocation(locationData);
   }
 
-  private tryScrollAgain: number | null = null;
-
-  private sensing = false;
-
-  /**
-   * @see IScrollable
-   */
-  get bounds(): DOMRect | null {
-    if (!this._shell) {
-      return null;
-    }
-    return this._shell.getBoundingClientRect();
-  }
-
-  private _scrollTarget?: IPublicModelScrollTarget;
-
-  /**
-   * @see IScrollable
-   */
-  get scrollTarget() {
-    return this._scrollTarget;
-  }
-
-  private scroller?: IPublicModelScroller;
-
   purge() {
     const { canvas } = this.pluginContext;
     canvas.dragon?.removeSensor(this);
     this.treeMaster?.removeBoard(this);
   }
-
-  private _shell: HTMLDivElement | null = null;
 
   mount(shell: HTMLDivElement | null) {
     if (this._shell === shell) {
