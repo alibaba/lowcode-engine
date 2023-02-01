@@ -136,40 +136,40 @@ export class BoxResizingInstance extends Component<{
     this.willBind();
 
     const resize = (e: MouseEvent, direction: string, node: any, moveX: number, moveY: number) => {
-      const metadata = node.componentMeta.getMetadata();
+      const { advanced } = node.componentMeta;
       if (
-        metadata.configure?.advanced?.callbacks &&
-        typeof metadata.configure.advanced.callbacks.onResize === 'function'
+        advanced.callbacks &&
+        typeof advanced.callbacks.onResize === 'function'
       ) {
         (e as any).trigger = direction;
         (e as any).deltaX = moveX;
         (e as any).deltaY = moveY;
         const cbNode = node?.isNode ? node.internalToShellNode() : node;
-        metadata.configure.advanced.callbacks.onResize(e, cbNode);
+        advanced.callbacks.onResize(e, cbNode);
       }
     };
 
     const resizeStart = (e: MouseEvent, direction: string, node: any) => {
-      const metadata = node.componentMeta.getMetadata();
+      const { advanced } = node.componentMeta;
       if (
-        metadata.configure?.advanced?.callbacks &&
-        typeof metadata.configure.advanced.callbacks.onResizeStart === 'function'
+        advanced.callbacks &&
+        typeof advanced.callbacks.onResizeStart === 'function'
       ) {
         (e as any).trigger = direction;
         const cbNode = node?.isNode ? node.internalToShellNode() : node;
-        metadata.configure.advanced.callbacks.onResizeStart(e, cbNode);
+        advanced.callbacks.onResizeStart(e, cbNode);
       }
     };
 
     const resizeEnd = (e: MouseEvent, direction: string, node: any) => {
-      const metadata = node.componentMeta.getMetadata();
+      const { advanced } = node.componentMeta;
       if (
-        metadata.configure?.advanced?.callbacks &&
-        typeof metadata.configure.advanced.callbacks.onResizeEnd === 'function'
+        advanced.callbacks &&
+        typeof advanced.callbacks.onResizeEnd === 'function'
       ) {
         (e as any).trigger = direction;
         const cbNode = node?.isNode ? node.internalToShellNode() : node;
-        metadata.configure.advanced.callbacks.onResizeEnd(e, cbNode);
+        advanced.callbacks.onResizeEnd(e, cbNode);
       }
 
       const workspace = globalContext.get('workspace');
@@ -242,9 +242,9 @@ export class BoxResizingInstance extends Component<{
 
     const { node, offsetWidth, offsetHeight, offsetTop, offsetLeft } = observed;
     let triggerVisible: any = [];
-    const metadata = node.componentMeta.getMetadata();
-    if (metadata.configure?.advanced?.getResizingHandlers) {
-      triggerVisible = metadata.configure.advanced.getResizingHandlers(node.internalToShellNode());
+    const { advanced } = node.componentMeta;
+    if (advanced.getResizingHandlers) {
+      triggerVisible = advanced.getResizingHandlers(node.internalToShellNode());
     }
 
     triggerVisible = normalizeTriggers(triggerVisible);

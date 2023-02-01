@@ -27,6 +27,7 @@ import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
 import { includeSlot, removeSlot } from '../../utils/slot';
 import { foreachReverse } from '../../utils/tree';
 import { NodeRemoveOptions, EDITOR_EVENT } from '../../types';
+import { Prop as ShellProp } from '@alilc/lowcode-shell';
 
 export interface NodeStatus {
   locking: boolean;
@@ -370,13 +371,13 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   }
 
   private setupAutoruns() {
-    const autoruns = this.componentMeta.getMetadata().configure.advanced?.autoruns;
+    const { autoruns } = this.componentMeta.advanced;
     if (!autoruns || autoruns.length < 1) {
       return;
     }
     this.autoruns = autoruns.map((item) => {
       return autorun(() => {
-        item.autorun(this.props.get(item.name, true) as any);
+        item.autorun(ShellProp.create(this.props.get(item.name, true))!);
       });
     });
   }
@@ -384,7 +385,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   private initialChildren(children: any): IPublicTypeNodeData[] {
     // FIXME! this is dirty code
     if (children == null) {
-      const initialChildren = this.componentMeta.getMetadata().configure.advanced?.initialChildren;
+      const { initialChildren } = this.componentMeta.advanced;
       if (initialChildren) {
         if (typeof initialChildren === 'function') {
           return initialChildren(this as any) || [];
@@ -470,7 +471,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   }
 
   private didDropIn(dragment: Node) {
-    const callbacks = this.componentMeta.getMetadata().configure.advanced?.callbacks;
+    const { callbacks } = this.componentMeta.advanced;
     if (callbacks?.onNodeAdd) {
       const cbThis = this.internalToShellNode();
       callbacks?.onNodeAdd.call(cbThis, dragment.internalToShellNode(), cbThis);
@@ -481,7 +482,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   }
 
   private didDropOut(dragment: Node) {
-    const callbacks = this.componentMeta.getMetadata().configure.advanced?.callbacks;
+    const { callbacks } = this.componentMeta.advanced;
     if (callbacks?.onNodeRemove) {
       const cbThis = this.internalToShellNode();
       callbacks?.onNodeRemove.call(cbThis, dragment.internalToShellNode(), cbThis);

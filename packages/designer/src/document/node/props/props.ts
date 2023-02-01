@@ -44,6 +44,8 @@ export interface IProps extends Omit<IPublicModelProps, 'getProp' | 'getExtraPro
   getNode(): INode;
 
   getProp(path: string): IProp | null;
+
+  get(path: string, createIfNone: boolean): Prop;
 }
 
 export class Props implements IProps, IPropParent {

@@ -2,6 +2,7 @@ import { IPublicApiSetters } from '../api';
 import { IPublicModelEditor } from './';
 
 export interface IPublicModelSettingTarget {
+
   /**
    * 同样类型的节点
    */
@@ -38,7 +39,6 @@ export interface IPublicModelSettingTarget {
    * 父级
    */
   readonly parent: IPublicModelSettingTarget;
-
 
   /**
    * 获取当前值

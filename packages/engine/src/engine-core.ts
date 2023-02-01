@@ -66,7 +66,7 @@ async function registryInnerPlugin(designer: Designer, editor: Editor, plugins: 
   await plugins.register(setterRegistry, {}, { autoInit: true });
   await plugins.register(defaultPanelRegistry(editor));
   await plugins.register(builtinHotkey);
-  await plugins.register(registerDefaults);
+  await plugins.register(registerDefaults, {}, { autoInit: true });
 }
 
 const innerWorkspace = new InnerWorkspace(registryInnerPlugin, shellModelFactory);
