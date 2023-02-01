@@ -104,5 +104,5 @@ export interface IPublicApiMaterial {
    * add callback for assets changed event
    * @param fn
    */
-  onChangeAssets(fn: () => void): void;
+  onChangeAssets(fn: () => void): Function;
 }
