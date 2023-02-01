@@ -170,10 +170,16 @@ export class Material implements IPublicApiMaterial {
    * 监听 assets 变化的事件
    * @param fn
    */
-  onChangeAssets(fn: () => void) {
-    // 设置 assets，经过 setAssets 赋值
-    this[editorSymbol].onGot('assets', fn);
-    // 增量设置 assets，经过 loadIncrementalAssets 赋值
-    this[editorSymbol].eventBus.on('designer.incrementalAssetsReady', fn);
+  onChangeAssets(fn: () => void): Function {
+    const dispose = [
+      // 设置 assets，经过 setAssets 赋值
+      this[editorSymbol].onGot('assets', fn),
+      // 增量设置 assets，经过 loadIncrementalAssets 赋值
+      this[editorSymbol].eventBus.on('designer.incrementalAssetsReady', fn),
+    ];
+
+    return () => {
+      dispose.forEach(d => d && d());
+    };
   }
 }
