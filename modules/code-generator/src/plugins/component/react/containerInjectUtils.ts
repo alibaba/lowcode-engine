@@ -16,6 +16,9 @@ import {
 
 export interface PluginConfig {
   fileType: string;
+
+  /** prefer using class property to define utils */
+  preferClassProperty?: boolean;
 }
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
@@ -57,13 +60,25 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport],
     });
 
-    next.chunks.push({
-      type: ChunkType.STRING,
-      fileType: cfg.fileType,
-      name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
-      content: 'this.utils = utils;',
-      linkAfter: [CLASS_DEFINE_CHUNK_NAME.ConstructorStart],
-    });
+    if (cfg.preferClassProperty) {
+      // mode: class property
+      next.chunks.push({
+        type: ChunkType.STRING,
+        fileType: cfg.fileType,
+        name: CLASS_DEFINE_CHUNK_NAME.InsVar,
+        content: 'utils = utils;',
+        linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsVar]],
+      });
+    } else {
+      // mode: assign in constructor
+      next.chunks.push({
+        type: ChunkType.STRING,
+        fileType: cfg.fileType,
+        name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
+        content: 'this.utils = utils;',
+        linkAfter: [CLASS_DEFINE_CHUNK_NAME.ConstructorStart],
+      });
+    }
 
     if (useRef) {
       next.chunks.push({
