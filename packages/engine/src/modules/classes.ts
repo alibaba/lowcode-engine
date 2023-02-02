@@ -8,6 +8,7 @@ import {
   SettingPropEntry,
   SettingTopEntry,
   Selection,
+  Prop,
 } from '@alilc/lowcode-shell';
 import { Node as InnerNode } from '@alilc/lowcode-designer';
 
@@ -22,4 +23,5 @@ export default {
   SettingTopEntry,
   InnerNode,
   Selection,
+  Prop,
 };
