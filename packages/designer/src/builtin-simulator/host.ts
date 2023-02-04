@@ -1203,7 +1203,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     const operationalNodes = nodes?.filter((node) => {
       const onMoveHook = node.componentMeta?.getMetadata()?.configure.advanced?.callbacks?.onMoveHook;
-      const canMove = onMoveHook && typeof onMoveHook === 'function' ? onMoveHook(node.internalToShellNode(), e) : true;
+      const canMove = onMoveHook && typeof onMoveHook === 'function' ? onMoveHook(node.internalToShellNode(), e.originalEvent) : true;
 
       let parentContainerNode: Node | null = null;
       let parentNode = node.parent;

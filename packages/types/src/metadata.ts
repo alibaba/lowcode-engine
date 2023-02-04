@@ -435,7 +435,7 @@ export interface Callbacks {
   onClickHook?: (e: MouseEvent, currentNode: any) => any;
   // onLocateHook?: (e: any, currentNode: any) => any;
   // onAcceptHook?: (currentNode: any, locationData: any) => any;
-  onMoveHook?: (currentNode: any, LocateEvent: any) => boolean;
+  onMoveHook?: (currentNode: any, e: MouseEvent) => boolean;
   // thinkof 限制性拖拽
   onHoverHook?: (currentNode: any) => boolean;
   onChildMoveHook?: (childNode: any, currentNode: any) => boolean;
