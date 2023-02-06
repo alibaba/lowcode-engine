@@ -358,8 +358,11 @@ material.getRegisteredMetadataTransducers();
  * add callback for assets changed event
  * @param fn
  */
-onChangeAssets(fn: () => void): void;
+onChangeAssets(fn: () => void): IPublicTypeDisposable;
 ```
+
+相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
+
 ##### 示例
 ```typescript
 import { material } from '@alilc/lowcode-engine';

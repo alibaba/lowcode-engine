@@ -69,38 +69,12 @@ registerResourceType(resourceTypeModel: IPublicTypeResourceType): void;
 
 相关类型：[IPublicTypeResourceType](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/resource-type.ts)
 
-### onChangeWindows
-
-窗口新增/删除的事件
-
-```typescript
-function onChangeWindows(fn: () => void): void;
-```
-
-### onChangeActiveWindow
-
-active 窗口变更事件
-
-```typescript
-function onChangeActiveWindow(fn: () => void): void;
-```
-
 ### setResourceList
 
 设置设计器资源列表数据
 
 ```typescript
 setResourceList(resourceList: IPublicResourceList) {}
-```
-
-相关类型：[IPublicResourceOptions](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/resource-options.ts)
-
-### onResourceListChange
-
-设计器资源列表数据变更事件
-
-```typescript
-onResourceListChange(fn: (resourceList: IPublicResourceList): void): (): void;
 ```
 
 相关类型：[IPublicResourceOptions](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/resource-options.ts)
@@ -136,3 +110,37 @@ removeEditorWindow(resourceName: string, title: string): void;
 ```typescript
 removeEditorWindowById(id: string): void;
 ```
+
+## 事件
+
+### onChangeWindows
+
+窗口新增/删除的事件
+
+```typescript
+function onChangeWindows(fn: () => void): IPublicTypeDisposable;
+```
+
+相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
+
+### onChangeActiveWindow
+
+active 窗口变更事件
+
+```typescript
+function onChangeActiveWindow(fn: () => void): IPublicTypeDisposable;
+```
+
+相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
+
+
+### onResourceListChange
+
+设计器资源列表数据变更事件
+
+```typescript
+onResourceListChange(fn: (resourceList: IPublicResourceList): void): (): IPublicTypeDisposable;
+```
+
+- 相关类型：[IPublicResourceOptions](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/resource-options.ts)
+- 相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)

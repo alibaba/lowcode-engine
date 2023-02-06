@@ -85,8 +85,6 @@ export class Project implements IProject {
     return this._simulator || null;
   }
 
-  key = Math.random();
-
   @computed get currentDocument(): IDocumentModel | null {
     return this.documents.find((doc) => doc.active);
   }

@@ -4,7 +4,7 @@ import {
   SkeletonEvents,
 } from '@alilc/lowcode-editor-skeleton';
 import { skeletonSymbol } from '../symbols';
-import { IPublicApiSkeleton, IPublicTypeWidgetBaseConfig, IPublicTypeWidgetConfigArea } from '@alilc/lowcode-types';
+import { IPublicApiSkeleton, IPublicTypeDisposable, IPublicTypeWidgetBaseConfig, IPublicTypeWidgetConfigArea } from '@alilc/lowcode-types';
 
 const innerSkeletonSymbol = Symbol('skeleton');
 export class Skeleton implements IPublicApiSkeleton {
@@ -129,7 +129,7 @@ export class Skeleton implements IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onShowPanel(listener: (...args: any[]) => void) {
+  onShowPanel(listener: (...args: any[]) => void): IPublicTypeDisposable {
     const { editor } = this[skeletonSymbol];
     editor.eventBus.on(SkeletonEvents.PANEL_SHOW, (name: any, panel: any) => {
       // 不泄漏 skeleton
@@ -144,7 +144,7 @@ export class Skeleton implements IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onHidePanel(listener: (...args: any[]) => void) {
+  onHidePanel(listener: (...args: any[]) => void): IPublicTypeDisposable {
     const { editor } = this[skeletonSymbol];
     editor.eventBus.on(SkeletonEvents.PANEL_HIDE, (name: any, panel: any) => {
       // 不泄漏 skeleton
@@ -159,7 +159,7 @@ export class Skeleton implements IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onShowWidget(listener: (...args: any[]) => void) {
+  onShowWidget(listener: (...args: any[]) => void): IPublicTypeDisposable {
     const { editor } = this[skeletonSymbol];
     editor.eventBus.on(SkeletonEvents.WIDGET_SHOW, (name: any, panel: any) => {
       // 不泄漏 skeleton
@@ -174,7 +174,7 @@ export class Skeleton implements IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onHideWidget(listener: (...args: any[]) => void) {
+  onHideWidget(listener: (...args: any[]) => void): IPublicTypeDisposable {
     const { editor } = this[skeletonSymbol];
     editor.eventBus.on(SkeletonEvents.WIDGET_HIDE, (name: any, panel: any) => {
       // 不泄漏 skeleton
