@@ -110,7 +110,7 @@ export class ComponentMeta implements IComponentMeta {
 
   private _transformedMetadata?: IPublicTypeTransformedComponentMetadata;
 
-  get configure() {
+  get configure(): IPublicTypeFieldConfig[] {
     const config = this._transformedMetadata?.configure;
     return config?.combined || config?.props || [];
   }
@@ -272,8 +272,11 @@ export class ComponentMeta implements IComponentMeta {
     this.parseMetadata(this.getMetadata());
   }
 
-  private transformMetadata(metadta: IPublicTypeComponentMetadata): IPublicTypeTransformedComponentMetadata {
-    const result = this.designer.componentActions.getRegisteredMetadataTransducers().reduce((prevMetadata, current) => {
+  private transformMetadata(
+      metadta: IPublicTypeComponentMetadata,
+    ): IPublicTypeTransformedComponentMetadata {
+    const registeredTransducers = this.designer.componentActions.getRegisteredMetadataTransducers();
+    const result = registeredTransducers.reduce((prevMetadata, current) => {
       return current(prevMetadata);
     }, preprocessMetadata(metadta));
 

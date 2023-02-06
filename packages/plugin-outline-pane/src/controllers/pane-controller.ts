@@ -8,7 +8,7 @@ import {
 } from '@alilc/lowcode-utils';
 import {
   IPublicModelDragObject,
-  IPublicModelScrollable,
+  IPublicTypeScrollable,
   IPublicModelSensor,
   IPublicTypeLocationChildrenDetail,
   IPublicTypeLocationDetailType,
@@ -24,7 +24,7 @@ import { IndentTrack } from '../helper/indent-track';
 import DwellTimer from '../helper/dwell-timer';
 import { ITreeBoard, TreeMaster } from './tree-master';
 
-export class PaneController implements IPublicModelSensor, ITreeBoard, IPublicModelScrollable {
+export class PaneController implements IPublicModelSensor, ITreeBoard, IPublicTypeScrollable {
   private pluginContext: IPublicModelPluginContext;
 
   private treeMaster?: TreeMaster;

@@ -1,5 +1,5 @@
 import { ComponentType } from 'react';
-import { IPublicTypeComponentMetadata, IPublicTypeNodeSchema, IPublicModelScrollable, IPublicTypeComponentInstance, IPublicModelSensor, IPublicTypeNodeInstance } from '@alilc/lowcode-types';
+import { IPublicTypeComponentMetadata, IPublicTypeNodeSchema, IPublicTypeScrollable, IPublicTypeComponentInstance, IPublicModelSensor, IPublicTypeNodeInstance } from '@alilc/lowcode-types';
 import { Point, ScrollTarget, ILocateEvent } from './designer';
 import { BuiltinSimulatorRenderer } from './builtin-simulator/renderer';
 import { Node, INode } from './document';
@@ -8,7 +8,7 @@ export type AutoFit = '100%';
 // eslint-disable-next-line no-redeclare
 export const AutoFit = '100%';
 
-export interface IScrollable extends IPublicModelScrollable {
+export interface IScrollable extends IPublicTypeScrollable {
 }
 export interface IViewport extends IScrollable {
 

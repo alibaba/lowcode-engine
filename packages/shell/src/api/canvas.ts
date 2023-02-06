@@ -2,7 +2,7 @@ import {
   IPublicApiCanvas,
   IPublicModelDropLocation,
   IPublicModelScrollTarget,
-  IPublicModelScrollable,
+  IPublicTypeScrollable,
   IPublicModelScroller,
   IPublicTypeLocationData,
   IPublicModelEditor,
@@ -58,7 +58,7 @@ export class Canvas implements IPublicApiCanvas {
     return new InnerScrollTarget(shell);
   }
 
-  createScroller(scrollable: IPublicModelScrollable): IPublicModelScroller {
+  createScroller(scrollable: IPublicTypeScrollable): IPublicModelScroller {
     return this[designerSymbol].createScroller(scrollable);
   }
 

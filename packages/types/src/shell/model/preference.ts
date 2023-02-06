@@ -1,5 +1,6 @@
 
 export interface IPublicModelPreference {
+
   /**
    * set value from local storage by module and key
    */

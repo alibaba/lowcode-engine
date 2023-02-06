@@ -1,5 +1,5 @@
 import { isElement } from '@alilc/lowcode-utils';
-import { IPublicModelScrollTarget, IPublicModelScrollable, IPublicModelScroller } from '@alilc/lowcode-types';
+import { IPublicModelScrollTarget, IPublicTypeScrollable, IPublicModelScroller } from '@alilc/lowcode-types';
 
 export interface IScrollTarget extends IPublicModelScrollTarget {
 }
@@ -11,6 +11,14 @@ export class ScrollTarget implements IScrollTarget {
 
   get top() {
     return 'scrollY' in this.target ? this.target.scrollY : this.target.scrollTop;
+  }
+
+  private doc?: HTMLElement;
+
+  constructor(private target: Window | Element) {
+    if (isWindow(target)) {
+      this.doc = target.document.documentElement;
+    }
   }
 
   scrollTo(options: { left?: number; top?: number }) {
@@ -27,14 +35,6 @@ export class ScrollTarget implements IScrollTarget {
 
   get scrollWidth(): number {
     return ((this.doc || this.target) as any).scrollWidth;
-  }
-
-  private doc?: HTMLElement;
-
-  constructor(private target: Window | Element) {
-    if (isWindow(target)) {
-      this.doc = target.document.documentElement;
-    }
   }
 }
 
@@ -53,9 +53,9 @@ export interface IScroller extends IPublicModelScroller {
 }
 export class Scroller implements IScroller {
   private pid: number | undefined;
-  scrollable: IPublicModelScrollable;
+  scrollable: IPublicTypeScrollable;
 
-  constructor(scrollable: IPublicModelScrollable) {
+  constructor(scrollable: IPublicTypeScrollable) {
     this.scrollable = scrollable;
   }
 

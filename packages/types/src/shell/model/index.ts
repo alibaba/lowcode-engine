@@ -18,7 +18,6 @@ export * from '../type/plugin';
 export * from './window';
 export * from './scroll-target';
 export * from './scroller';
-export * from './scrollable';
 export * from './active-tracker';
 export * from './exclusive-group';
 export * from './plugin-context';
