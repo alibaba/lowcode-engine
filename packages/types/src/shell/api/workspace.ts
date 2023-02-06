@@ -1,5 +1,5 @@
 import { IPublicModelWindow } from '../model';
-import { IPublicApiPlugins, IPublicModelResource, IPublicResourceList, IPublicTypeResourceType } from '@alilc/lowcode-types';
+import { IPublicApiPlugins, IPublicModelResource, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType } from '@alilc/lowcode-types';
 
 export interface IPublicApiWorkspace {
 
@@ -21,7 +21,7 @@ export interface IPublicApiWorkspace {
   setResourceList(resourceList: IPublicResourceList): void;
 
   /** 资源树列表更新事件 */
-  onResourceListChange(fn: (resourceList: IPublicResourceList) => void): () => void;
+  onResourceListChange(fn: (resourceList: IPublicResourceList) => void): () => IPublicTypeDisposable;
 
   /** 注册资源 */
   registerResourceType(resourceTypeModel: IPublicTypeResourceType): void;
@@ -39,8 +39,8 @@ export interface IPublicApiWorkspace {
   removeEditorWindowById(id: string): void;
 
   /** 窗口新增/删除的事件 */
-  onChangeWindows(fn: () => void): void;
+  onChangeWindows(fn: () => void): IPublicTypeDisposable;
 
   /** active 窗口变更事件 */
-  onChangeActiveWindow(fn: () => void): void;
+  onChangeActiveWindow(fn: () => void): IPublicTypeDisposable;
 }

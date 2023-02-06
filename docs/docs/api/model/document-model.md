@@ -327,26 +327,30 @@ onChangeSelection(fn: (ids: string[]) => void): IPublicTypeDisposable;
  * set callback for event on visibility changed for certain node
  * @param fn
  */
-onChangeNodeVisible(fn: (node: IPublicModelNode, visible: boolean) => void): void;
+onChangeNodeVisible(fn: (node: IPublicModelNode, visible: boolean) => void): IPublicTypeDisposable;
 ```
 
-相关类型：[IPublicModelNode](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/node.ts)
+- 相关类型：[IPublicModelNode](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/node.ts)
+- 相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
 
 ### onChangeNodeChildren
-
-onChangeNodeChildren(fn: (info?: IPublicTypeOnChangeOptions) => void)
 
 当前 document 的节点 children 变更事件
 
 ```typescript
+onChangeNodeChildren(fn: (info?: IPublicTypeOnChangeOptions) => void): IPublicTypeDisposable;
 ```
+
+相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
 
 ### onChangeNodeProp
 当前 document 节点属性修改事件
 
 ```typescript
-onChangeNodeProp(fn: (info: IPublicTypePropChangeOptions) => void)
+onChangeNodeProp(fn: (info: IPublicTypePropChangeOptions) => void): IPublicTypeDisposable;
 ```
+
+相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
 
 ### onImportSchema
 当前 document 导入新的 schema 事件

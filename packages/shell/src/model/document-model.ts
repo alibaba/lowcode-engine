@@ -288,8 +288,8 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * 当前 document 的节点显隐状态变更事件
    * @param fn
    */
-  onChangeNodeVisible(fn: (node: IPublicModelNode, visible: boolean) => void): void {
-    this[documentSymbol].onChangeNodeVisible((node: IPublicModelNode, visible: boolean) => {
+  onChangeNodeVisible(fn: (node: IPublicModelNode, visible: boolean) => void): IPublicTypeDisposable {
+    return this[documentSymbol].onChangeNodeVisible((node: IPublicModelNode, visible: boolean) => {
       fn(ShellNode.create(node)!, visible);
     });
   }
@@ -298,8 +298,8 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * 当前 document 的节点 children 变更事件
    * @param fn
    */
-  onChangeNodeChildren(fn: (info: IPublicTypeOnChangeOptions) => void): void {
-    this[documentSymbol].onChangeNodeChildren((info?: IPublicTypeOnChangeOptions) => {
+  onChangeNodeChildren(fn: (info: IPublicTypeOnChangeOptions) => void): IPublicTypeDisposable {
+    return this[documentSymbol].onChangeNodeChildren((info?: IPublicTypeOnChangeOptions) => {
       if (!info) {
         return;
       }
@@ -314,19 +314,27 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * 当前 document 节点属性修改事件
    * @param fn
    */
-  onChangeNodeProp(fn: (info: IPublicTypePropChangeOptions) => void): void {
+  onChangeNodeProp(fn: (info: IPublicTypePropChangeOptions) => void): IPublicTypeDisposable {
+    const callback = (info: GlobalEvent.Node.Prop.ChangeOptions) => {
+      fn({
+        key: info.key,
+        oldValue: info.oldValue,
+        newValue: info.newValue,
+        prop: ShellProp.create(info.prop)!,
+        node: ShellNode.create(info.node as any)!,
+      });
+    };
     this[editorSymbol].on(
       GlobalEvent.Node.Prop.InnerChange,
-      (info: GlobalEvent.Node.Prop.ChangeOptions) => {
-        fn({
-          key: info.key,
-          oldValue: info.oldValue,
-          newValue: info.newValue,
-          prop: ShellProp.create(info.prop)!,
-          node: ShellNode.create(info.node as any)!,
-        });
-      },
+      callback,
     );
+
+    return () => {
+      this[editorSymbol].off(
+        GlobalEvent.Node.Prop.InnerChange,
+        callback,
+      );
+    };
   }
 
   /**
