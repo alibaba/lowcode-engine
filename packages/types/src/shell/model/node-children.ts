@@ -3,6 +3,7 @@ import { IPublicEnumTransformStage } from '../enum';
 import { IPublicModelNode } from './';
 
 export interface IPublicModelNodeChildren {
+
   /**
    * 返回当前 children 实例所属的节点实例
    * get owner node of this nodeChildren

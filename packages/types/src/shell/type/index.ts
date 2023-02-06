@@ -89,3 +89,4 @@ export * from './resource-type-config';
 export * from './editor-view-config';
 export * from './hotkey-callback-config';
 export * from './hotkey-callbacks';
+export * from './scrollable';

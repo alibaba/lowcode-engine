@@ -12,7 +12,7 @@ import {
   IPublicTypePropsTransducer,
   IShellModelFactory,
   IPublicModelDragObject,
-  IPublicModelScrollable,
+  IPublicTypeScrollable,
   IPublicModelScroller,
   IPublicTypeLocationData,
   IPublicEnumTransformStage,
@@ -70,7 +70,7 @@ export interface IDesigner {
 
   get editor(): IPublicModelEditor;
 
-  createScroller(scrollable: IPublicModelScrollable): IPublicModelScroller;
+  createScroller(scrollable: IPublicTypeScrollable): IPublicModelScroller;
 
   /**
    * 创建插入位置，考虑放到 dragon 中
@@ -302,7 +302,7 @@ export class Designer implements IDesigner {
     this._dropLocation = undefined;
   }
 
-  createScroller(scrollable: IPublicModelScrollable): IPublicModelScroller {
+  createScroller(scrollable: IPublicTypeScrollable): IPublicModelScroller {
     return new Scroller(scrollable);
   }
 
