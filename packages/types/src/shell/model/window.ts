@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { IPublicTypeNodeSchema } from '../type';
+import { IPublicTypeDisposable, IPublicTypeNodeSchema } from '../type';
 import { IPublicModelResource } from './resource';
 
 export interface IPublicModelWindow {
@@ -24,4 +24,7 @@ export interface IPublicModelWindow {
 
   /** 调用当前窗口视图保存钩子 */
   save(): Promise<any>;
+
+  /** 窗口视图变更事件 */
+  onChangeViewType(fn: (viewName: string) => void): IPublicTypeDisposable;
 }

@@ -1,5 +1,5 @@
 import { windowSymbol } from '../symbols';
-import { IPublicModelResource, IPublicModelWindow } from '@alilc/lowcode-types';
+import { IPublicModelResource, IPublicModelWindow, IPublicTypeDisposable } from '@alilc/lowcode-types';
 import { EditorWindow } from '@alilc/lowcode-workspace';
 import { Resource as ShellResource } from './resource';
 
@@ -31,7 +31,11 @@ export class Window implements IPublicModelWindow {
   }
 
   changeViewType(viewName: string) {
-    this[windowSymbol].changeViewType(viewName);
+    this[windowSymbol].changeViewType(viewName, false);
+  }
+
+  onChangeViewType(fun: (viewName: string) => void): IPublicTypeDisposable {
+    return this[windowSymbol].onChangeViewType(fun);
   }
 
   async save() {
