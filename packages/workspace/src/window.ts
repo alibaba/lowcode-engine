@@ -1,12 +1,15 @@
 import { uniqueId } from '@alilc/lowcode-utils';
-import { makeObservable, obx } from '@alilc/lowcode-editor-core';
+import { createModuleEventBus, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
 import { Context } from './context/view-context';
 import { Workspace } from './workspace';
 import { Resource } from './resource';
+import { IPublicTypeDisposable } from '../../types/es/shell/type/disposable';
 
 export class EditorWindow {
   id: string = uniqueId('window');
   icon: React.ReactElement | undefined;
+
+  private emitter: IEventBus = createModuleEventBus('Project');
 
   @obx.ref editorView: Context;
 
@@ -59,6 +62,14 @@ export class EditorWindow {
     }
   };
 
+  onChangeViewType(fn: (viewName: string) => void): IPublicTypeDisposable {
+    this.emitter.on('window.change.view.type', fn);
+
+    return () => {
+      this.emitter.off('window.change.view.type', fn);
+    };
+  }
+
   execViewTypesInit = async () => {
     const editorViews = this.resource.editorViews;
     for (let i = 0; i < editorViews.length; i++) {
@@ -81,10 +92,13 @@ export class EditorWindow {
     this.editorViews.set(name, editorView);
   };
 
-  changeViewType = (name: string) => {
+  changeViewType = (name: string, ignoreEmit: boolean = true) => {
     this.editorView?.setActivate(false);
     this.editorView = this.editorViews.get(name)!;
 
+    if (!ignoreEmit) {
+      this.emitter.emit('window.change.view.type', name);
+    }
     this.editorView.setActivate(true);
   };
 

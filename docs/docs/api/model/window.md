@@ -62,3 +62,15 @@ function changeViewType(viewName: string): void
 ```typescript
 function save(): Promise(void)
 ```
+
+## 事件
+
+### onChangeViewType
+
+窗口视图变更事件
+
+```
+onChangeViewType(fn: (viewName: string) => void): IPublicTypeDisposable;
+```
+
+相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
