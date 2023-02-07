@@ -1,4 +1,4 @@
-import { IPublicModelDragon, IPublicModelDropLocation, IPublicModelScrollTarget, IPublicModelScrollable, IPublicModelScroller, IPublicModelActiveTracker, IPublicModelClipboard } from '../model';
+import { IPublicModelDragon, IPublicModelDropLocation, IPublicModelScrollTarget, IPublicTypeScrollable, IPublicModelScroller, IPublicModelActiveTracker, IPublicModelClipboard } from '../model';
 import { IPublicTypeLocationData } from '../type';
 
 /**
@@ -8,7 +8,7 @@ export interface IPublicApiCanvas {
 
   /**
    * 创一个滚动控制器 Scroller，赋予一个视图滚动的基本能力，
-   * a Scroller is a controller that gives a view (IPublicModelScrollable) the ability scrolling
+   * a Scroller is a controller that gives a view (IPublicTypeScrollable) the ability scrolling
    * to some cordination by api scrollTo.
    *
    * when a scroller is inited, will need to pass is a scrollable, which has a scrollTarget.
@@ -16,7 +16,7 @@ export interface IPublicApiCanvas {
    * move scrollTarget`s top-left corner to (options.left, options.top) that passed in.
    * @since v1.1.0
    */
-  createScroller(scrollable: IPublicModelScrollable): IPublicModelScroller;
+  createScroller(scrollable: IPublicTypeScrollable): IPublicModelScroller;
 
   /**
    * 创建一个 ScrollTarget，与 Scroller 一起发挥作用，详见 createScroller 中的描述

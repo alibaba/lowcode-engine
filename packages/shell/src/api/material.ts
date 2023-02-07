@@ -12,6 +12,7 @@ import {
   IPublicModelComponentMeta,
   IPublicTypeNpmInfo,
   IPublicModelEditor,
+  IPublicTypeDisposable,
 } from '@alilc/lowcode-types';
 import { Workspace as InnerWorkspace } from '@alilc/lowcode-workspace';
 import { editorSymbol, designerSymbol } from '../symbols';
@@ -170,7 +171,7 @@ export class Material implements IPublicApiMaterial {
    * 监听 assets 变化的事件
    * @param fn
    */
-  onChangeAssets(fn: () => void): Function {
+  onChangeAssets(fn: () => void): IPublicTypeDisposable {
     const dispose = [
       // 设置 assets，经过 setAssets 赋值
       this[editorSymbol].onGot('assets', fn),

@@ -2,7 +2,7 @@ import {
   IComponentMeta as InnerComponentMeta,
   INode,
 } from '@alilc/lowcode-designer';
-import { IPublicTypeNodeData, IPublicTypeNodeSchema, IPublicModelComponentMeta, IPublicTypeI18nData, IPublicTypeIconType, IPublicTypeNpmInfo, IPublicTypeTransformedComponentMetadata, IPublicModelNode, IPublicTypeAdvanced } from '@alilc/lowcode-types';
+import { IPublicTypeNodeData, IPublicTypeNodeSchema, IPublicModelComponentMeta, IPublicTypeI18nData, IPublicTypeIconType, IPublicTypeNpmInfo, IPublicTypeTransformedComponentMetadata, IPublicModelNode, IPublicTypeAdvanced, IPublicTypeFieldConfig } from '@alilc/lowcode-types';
 import { componentMetaSymbol, nodeSymbol } from '../symbols';
 import { ReactElement } from 'react';
 
@@ -56,7 +56,7 @@ export class ComponentMeta implements IPublicModelComponentMeta {
   /**
    * 元数据配置
    */
-  get configure(): any {
+  get configure(): IPublicTypeFieldConfig[] {
     return this[componentMetaSymbol].configure;
   }
 

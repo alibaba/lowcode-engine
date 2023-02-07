@@ -7,16 +7,9 @@ import { IPublicTypeOnChangeOptions } from '@alilc/lowcode-types';
 export interface IPublicModelDocumentModel {
 
   /**
-   * id
-   */
-  get id(): string;
-
-  set id(id);
-
-  /**
-   * 节点选中区模型实例
-   * instance of selection
-   */
+     * 节点选中区模型实例
+     * instance of selection
+     */
   selection: IPublicModelSelection;
 
   /**
@@ -30,6 +23,13 @@ export interface IPublicModelDocumentModel {
    * instance of history
    */
   history: IPublicModelHistory;
+
+  /**
+   * id
+   */
+  get id(): string;
+
+  set id(id);
 
   /**
    * 获取当前文档所属的 project
@@ -166,19 +166,19 @@ export interface IPublicModelDocumentModel {
    * set callback for event on visibility changed for certain node
    * @param fn
    */
-  onChangeNodeVisible(fn: (node: IPublicModelNode, visible: boolean) => void): void;
+  onChangeNodeVisible(fn: (node: IPublicModelNode, visible: boolean) => void): IPublicTypeDisposable;
 
   /**
    * 当前 document 的节点 children 变更事件
    * @param fn
    */
-  onChangeNodeChildren(fn: (info: IPublicTypeOnChangeOptions) => void): void;
+  onChangeNodeChildren(fn: (info: IPublicTypeOnChangeOptions) => void): IPublicTypeDisposable;
 
   /**
    * 当前 document 节点属性修改事件
    * @param fn
    */
-  onChangeNodeProp(fn: (info: IPublicTypePropChangeOptions) => void): void;
+  onChangeNodeProp(fn: (info: IPublicTypePropChangeOptions) => void): IPublicTypeDisposable;
 
   /**
    * import schema event

@@ -1,4 +1,4 @@
-import { IPublicApiWorkspace, IPublicResourceList, IPublicTypeResourceType } from '@alilc/lowcode-types';
+import { IPublicApiWorkspace, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType } from '@alilc/lowcode-types';
 import { Workspace as InnerWorkSpace } from '@alilc/lowcode-workspace';
 import { Plugins } from '@alilc/lowcode-shell';
 import { workspaceSymbol } from '../symbols';
@@ -19,7 +19,7 @@ export class Workspace implements IPublicApiWorkspace {
     this[workspaceSymbol].setResourceList(resourceList);
   }
 
-  onResourceListChange(fn: (resourceList: IPublicResourceList) => void): () => void {
+  onResourceListChange(fn: (resourceList: IPublicResourceList) => void): IPublicTypeDisposable {
     return this[workspaceSymbol].onResourceListChange(fn);
   }
 
@@ -59,11 +59,11 @@ export class Workspace implements IPublicApiWorkspace {
     return this[workspaceSymbol].windows.map((d) => new ShellWindow(d));
   }
 
-  onChangeWindows(fn: () => void) {
+  onChangeWindows(fn: () => void): IPublicTypeDisposable {
     return this[workspaceSymbol].onChangeWindows(fn);
   }
 
-  onChangeActiveWindow(fn: () => void) {
+  onChangeActiveWindow(fn: () => void): IPublicTypeDisposable {
     return this[workspaceSymbol].onChangeActiveWindow(fn);
   }
 }

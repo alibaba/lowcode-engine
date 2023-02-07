@@ -1,6 +1,7 @@
-import { IPublicTypeWidgetBaseConfig } from '../type';
+import { IPublicTypeDisposable, IPublicTypeWidgetBaseConfig } from '../type';
 
 export interface IPublicApiSkeleton {
+
   /**
    * 增加一个面板实例
    * add a new panel
@@ -80,7 +81,7 @@ export interface IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onShowPanel(listener: (...args: any[]) => void): () => void;
+  onShowPanel(listener: (...args: any[]) => void): IPublicTypeDisposable;
 
   /**
    * 监听 Panel 实例隐藏事件
@@ -88,7 +89,7 @@ export interface IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onHidePanel(listener: (...args: any[]) => void): () => void;
+  onHidePanel(listener: (...args: any[]) => void): IPublicTypeDisposable;
 
   /**
    * 监听 Widget 显示事件
@@ -96,7 +97,7 @@ export interface IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onShowWidget(listener: (...args: any[]) => void): () => void;
+  onShowWidget(listener: (...args: any[]) => void): IPublicTypeDisposable;
 
   /**
    * 监听 Widget 隐藏事件
@@ -104,5 +105,5 @@ export interface IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onHideWidget(listener: (...args: any[]) => void): () => void;
+  onHideWidget(listener: (...args: any[]) => void): IPublicTypeDisposable;
 }

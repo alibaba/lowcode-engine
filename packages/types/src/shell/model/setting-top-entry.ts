@@ -1,6 +1,7 @@
 import { IPublicModelNode, IPublicModelSettingPropEntry } from './';
 
 export interface IPublicModelSettingTopEntry {
+
   /**
    * 返回所属的节点实例
    */

@@ -1,7 +1,7 @@
 import { IPublicModelPreference } from './';
 
-
 export interface IPublicModelEngineConfig {
+
   /**
    * 判断指定 key 是否有值
    * check if config has certain key configed

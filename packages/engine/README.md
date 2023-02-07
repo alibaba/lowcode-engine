@@ -16,6 +16,8 @@ An enterprise-class low-code technology stack with scale-out design
 
 [![codecov][codecov-image-url]][codecov-url]
 
+[![](https://img.shields.io/badge/LowCodeEngine-Check%20Your%20Contribution-orange)](https://opensource.alibaba.com/contribution_leaderboard/details?projectValue=lowcode-engine)
+
 [npm-image]: https://img.shields.io/npm/v/@alilc/lowcode-engine.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/@alilc/lowcode-engine
 

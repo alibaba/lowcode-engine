@@ -1,4 +1,4 @@
-import { IPublicTypeAssetsJson, IPublicTypeMetadataTransducer, IPublicTypeComponentAction, IPublicTypeNpmInfo } from '../type';
+import { IPublicTypeAssetsJson, IPublicTypeMetadataTransducer, IPublicTypeComponentAction, IPublicTypeNpmInfo, IPublicTypeDisposable } from '../type';
 import { IPublicModelComponentMeta } from '../model';
 import { ComponentType } from 'react';
 
@@ -104,5 +104,5 @@ export interface IPublicApiMaterial {
    * add callback for assets changed event
    * @param fn
    */
-  onChangeAssets(fn: () => void): Function;
+  onChangeAssets(fn: () => void): IPublicTypeDisposable;
 }
