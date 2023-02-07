@@ -64,6 +64,7 @@ export interface IDocumentModel extends Omit< IPublicModelDocumentModel, 'select
     dragObject: IPublicTypeDragNodeObject | IPublicTypeNodeSchema | INode | IPublicTypeDragNodeDataObject,
   ): boolean;
 
+  getNodeCount(): number;
 }
 
 export class DocumentModel implements IDocumentModel {

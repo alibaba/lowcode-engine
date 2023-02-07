@@ -324,6 +324,7 @@ describe('mini unit render', () => {
   it('change component leaf isRoot is true', () => {
     const TextNode = new Node(textSchema, {
       isRoot: true,
+      isRootNode: true,
     });
 
     nodeMap.set(textSchema.id, TextNode);
@@ -356,6 +357,7 @@ describe('mini unit render', () => {
           id: 'rootId',
         }, {
           isRoot: true,
+          isRootNode: true
         }),
       })
     });
