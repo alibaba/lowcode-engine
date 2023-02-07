@@ -3,6 +3,9 @@ import { IPublicTypeNodeSchema, IPublicTypeComponentInstance, IPublicTypeNodeIns
 
 export interface BuiltinSimulatorRenderer {
   readonly isSimulatorRenderer: true;
+  autoRepaintNode?: boolean;
+  components: Record<string, Component>;
+  rerender: () => void;
   createComponent(schema: IPublicTypeNodeSchema): Component | null;
   getComponent(componentName: string): Component;
   getClosestNodeInstance(

@@ -1,5 +1,5 @@
 
-import React, { Component, createElement, PureComponent, createContext } from 'react';
+import React, { Component, createElement, forwardRef, PureComponent, createContext } from 'react';
 const mockGetRenderers = jest.fn();
 const mockGetRuntime = jest.fn();
 const mockParseExpression = jest.fn();
@@ -59,6 +59,7 @@ describe('Base Render methods', () => {
       createElement,
       PureComponent,
       createContext,
+      forwardRef,
     });
     RendererClass = baseRendererFactory();
   })
