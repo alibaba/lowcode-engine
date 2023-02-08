@@ -13,6 +13,7 @@ import {
   isJSFunction,
 } from '@alilc/lowcode-types';
 import { CodeGeneratorError } from '../types/error';
+import { isJSExpressionFn } from './common';
 
 export function isContainerSchema(x: any): x is IPublicTypeContainerSchema {
   return (
@@ -128,6 +129,7 @@ export function handleSubNodes<T>(
     // IPublicTypeCompositeObject
     if (
       !isJSExpression(value) &&
+      !isJSExpressionFn(value) &&
       !isJSFunction(value) &&
       typeof value === 'object' &&
       value !== null

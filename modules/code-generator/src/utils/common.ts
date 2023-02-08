@@ -1,3 +1,4 @@
+import type { IPublicTypeJSExpression, IPublicTypeJSFunction } from '@alilc/lowcode-types';
 import changeCase from 'change-case';
 import short from 'short-uuid';
 
@@ -38,4 +39,8 @@ export function getStaticExprValue<T>(expr: string): T {
   // TODO: 需要安全性检查
   // eslint-disable-next-line no-new-func
   return Function(`"use strict";return (${expr})`)();
+}
+
+export function isJSExpressionFn(data: any): data is IPublicTypeJSFunction {
+  return data?.type === 'JSExpression' && data?.extType === 'function';
 }

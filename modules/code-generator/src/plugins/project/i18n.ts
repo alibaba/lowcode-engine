@@ -25,7 +25,8 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       content: `
         const i18nConfig = ${i18nStr};
 
-        let locale = typeof navigator === 'object' && typeof navigator.language === 'string' ? navigator.language : 'zh-CN';
+        // let locale = typeof navigator === 'object' && typeof navigator.language === 'string' ? navigator.language : 'zh-CN';
+        let locale = 'zh-CN';
 
         const getLocale = () => locale;
 
