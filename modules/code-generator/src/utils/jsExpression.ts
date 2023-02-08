@@ -135,5 +135,9 @@ export function generateFunction(
     return functionSource;
   }
 
+  if (isJSExpression(value)) {
+    return value.value;
+  }
+
   throw new CodeGeneratorError('Not a JSFunction or JSExpression');
 }
