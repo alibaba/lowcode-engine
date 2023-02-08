@@ -13,6 +13,7 @@ import {
   IContainerInfo,
 } from '../../../types';
 import { isJSFunction, isJSExpression } from '@alilc/lowcode-types';
+import { isJSExpressionFn } from '../../../utils/common';
 
 export interface PluginConfig {
   fileType: string;
@@ -41,6 +42,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
         // 过滤掉非法数据（有些场景下会误传入空字符串或 null)
         if (
           !isJSFunction(lifeCycles[lifeCycleName]) &&
+          !isJSExpressionFn(lifeCycles[lifeCycleName]) &&
           !isJSExpression(lifeCycles[lifeCycleName])
         ) {
           return null;
