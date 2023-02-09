@@ -24,6 +24,7 @@ import {
   Event,
   Canvas,
   Workspace,
+  SimulatorHost,
 } from './api';
 
 export * from './symbols';
@@ -59,4 +60,5 @@ export {
   Canvas,
   Workspace,
   Clipboard,
+  SimulatorHost,
 };
