@@ -1,4 +1,5 @@
 # project custom
+.history
 build
 dist
 packages/*/lib/

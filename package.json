@@ -1,67 +1,62 @@
 {
-  "private": true,
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ],
-    "nohoist": [
-      "**/css-modules-typescript-loader",
-      "**/@alifc/theme-lowcode-*",
-      "**/jest"
-    ]
-  },
+  "name": "@alilc/lowcode-demo",
+  "version": "1.1.7",
+  "description": "Low-Code Engine 低代码搭建引擎 Demo 项目",
+  "repository": "git@github.com:alibaba/lowcode-demo.git",
+  "license": "MIT",
+  "main": "index.js",
   "scripts": {
-    "build": "./scripts/build.sh",
-    "build:npm": "lerna run build --stream",
-    "build:umd": "lerna run build:umd --stream",
-    "clean": "rimraf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
-    "clean:lib": "rimraf ./node_modules",
-    "lint": "f2elint scan -q -i ./packages/*/src",
-    "lint:fix": "f2elint fix -i ./packages/*/src",
-    "lint:modules": "f2elint scan -q -i ./modules/*/src",
-    "lint:modules:fix": "f2elint fix -i ./modules/*/src",
-    "pub": "npm run watchdog:build && lerna publish patch --force-publish --exact --no-changelog",
-    "pub:premajor": "npm run watchdog:build && lerna publish premajor --force-publish --exact --dist-tag beta --preid beta --no-changelog",
-    "pub:preminor": "npm run watchdog:build && lerna publish preminor --force-publish --exact --dist-tag beta --preid beta --no-changelog",
-    "pub:prepatch": "npm run watchdog:build && lerna publish prepatch --force-publish --exact --dist-tag beta --preid beta --no-changelog",
-    "pub:prerelease": "npm run watchdog:build && lerna publish prerelease --force-publish --exact --dist-tag beta --preid beta --no-changelog",
-    "setup": "node ./scripts/setup.js",
-    "setup:test": "./scripts/setup-for-test.sh",
-    "setup:skip-build": "./scripts/setup-skip-build.sh",
-    "start": "node ./scripts/start.js",
-    "test": "lerna run test --stream",
-    "test:snapshot": "lerna run test:snapshot",
-    "watchdog:build": "node ./scripts/watchdog.js",
-    "sync": "./scripts/sync.sh"
+    "start": "build-scripts start --disable-reload --port 5556",
+    "build": "build-scripts build",
+    "prepublishOnly": "npm run build",
+    "pub": "node ./scripts/watchdog.js && npm pub",
+    "sync": "tnpm sync @alilc/lowcode-demo",
+    "syncOss": "node ./scripts/sync-oss.js"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "f2elint commit-file-scan",
-      "commit-msg": "f2elint commit-msg-scan"
-    }
+  "files": [
+    "build"
+  ],
+  "config": {},
+  "dependencies": {
+    "@alilc/lowcode-datasource-fetch-handler": "^1.0.1",
+    "@alilc/lowcode-plugin-code-editor": "^1.0.3",
+    "@alilc/lowcode-plugin-code-generator": "^1.0.4",
+    "@alilc/lowcode-plugin-components-pane": "^1.0.4",
+    "@alilc/lowcode-plugin-datasource-pane": "^1.0.9",
+    "@alilc/lowcode-plugin-inject": "^1.0.0",
+    "@alilc/lowcode-plugin-manual": "^1.0.4",
+    "@alilc/lowcode-plugin-schema": "^1.0.2",
+    "@alilc/lowcode-plugin-set-ref-prop": "^1.0.1",
+    "@alilc/lowcode-plugin-simulator-select": "^1.0.2",
+    "@alilc/lowcode-plugin-undo-redo": "^1.0.0",
+    "@alilc/lowcode-plugin-zh-en": "^1.0.0",
+    "@alilc/lowcode-react-renderer": "^1.0.0",
+    "@alilc/lowcode-setter-behavior": "^1.0.0",
+    "@alilc/lowcode-setter-title": "^1.0.2",
+    "@alilc/lowcode-utils": "^1.0.18",
+    "@formily/antd": "^2.1.9",
+    "@formily/core": "^2.1.9",
+    "@formily/react": "^2.1.9",
+    "@seada/antd-plugins": "^1.0.0-rc.27",
+    "antd": "^4.21.4",
+    "moment": "^2.29.3",
+    "regenerator-runtime": "^0.13.11",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "del": "^6.1.1",
-    "execa": "^5.1.1",
-    "f2elint": "^2.0.1",
-    "gulp": "^4.0.2",
-    "husky": "^7.0.4",
-    "lerna": "^4.0.0",
-    "typescript": "4.6.2",
-    "yarn": "^1.22.17",
-    "rimraf": "^3.0.2",
-    "@types/react-router": "5.1.18"
-  },
-  "engines": {
-    "node": ">=14.17.0 <18"
-  },
-  "tnpm": {
-    "mode": "yarn",
-    "lockfile": "enable"
-  },
-  "resolutions": {
-    "@builder/babel-preset-ice": "1.0.1",
-    "typescript": "4.6.2"
-  },
-  "repository": "git@github.com:alibaba/lowcode-engine.git"
+    "@alib/build-scripts": "^0.1.18",
+    "@alilc/lowcode-engine": "^1.0.0",
+    "@alilc/lowcode-engine-ext": "^1.0.0",
+    "@alilc/lowcode-types": "^1.0.0",
+    "@types/events": "^3.0.0",
+    "@types/react": "^16.8.3",
+    "@types/react-dom": "^16.8.2",
+    "@types/streamsaver": "^2.0.0",
+    "@types/uuid": "^8.3.4",
+    "build-plugin-fusion": "^0.1.0",
+    "build-plugin-moment-locales": "^0.1.0",
+    "build-plugin-react-app": "^1.1.2",
+    "fs-extra": "^10.0.1",
+    "tsconfig-paths-webpack-plugin": "^3.2.0"
+  }
 }
