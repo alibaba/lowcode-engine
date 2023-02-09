@@ -404,7 +404,7 @@ export class Prop implements IProp, IPropParent {
         id: data.id,
         name: value.name || value.props?.slotName,
         params: value.params || value.props?.slotParams,
-        children: data.value,
+        children: value.children,
       } as IPublicTypeSlotSchema;
     } else {
       slotSchema = {
