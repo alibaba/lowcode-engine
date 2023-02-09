@@ -9,6 +9,7 @@ import {
   SettingTopEntry,
   Selection,
   Prop,
+  SimulatorHost,
 } from '@alilc/lowcode-shell';
 import { Node as InnerNode } from '@alilc/lowcode-designer';
 
@@ -24,4 +25,5 @@ export default {
   InnerNode,
   Selection,
   Prop,
+  SimulatorHost,
 };

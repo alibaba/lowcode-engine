@@ -156,6 +156,8 @@ let engineContainer: HTMLElement;
 export const version = VERSION_PLACEHOLDER;
 engineConfig.set('ENGINE_VERSION', version);
 
+registryInnerPlugin(designer, editor, plugins);
+
 export async function init(
   container?: HTMLElement,
   options?: IPublicTypeEngineOptions,
@@ -178,8 +180,6 @@ export async function init(
     }
   }
   engineConfig.setEngineOptions(engineOptions as any);
-
-  await registryInnerPlugin(designer, editor, plugins);
 
   await plugins.init(pluginPreference as any);
 

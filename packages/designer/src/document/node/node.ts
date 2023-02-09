@@ -15,6 +15,7 @@ import {
   IPublicModelNode,
   IPublicModelExclusiveGroup,
   IPublicEnumTransformStage,
+  IPublicTypeDisposable,
 } from '@alilc/lowcode-types';
 import { compatStage, isDOMText, isJSExpression, isNode } from '@alilc/lowcode-utils';
 import { SettingTopEntry } from '@alilc/lowcode-designer';
@@ -112,6 +113,10 @@ export interface INode extends IPublicModelNode {
   replaceChild(node: INode, data: any): INode;
 
   getSuitablePlace(node: INode, ref: any): any;
+
+  onChildrenChange(fn: (param?: { type: string; node: INode }) => void): IPublicTypeDisposable;
+
+  onPropChange(func: (info: IPublicTypePropChangeOptions) => void): IPublicTypeDisposable;
 }
 
 /**
@@ -1080,7 +1085,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     return this.props;
   }
 
-  onChildrenChange(fn: (param?: { type: string; node: Node }) => void): (() => void) | undefined {
+  onChildrenChange(fn: (param?: { type: string; node: Node }) => void): IPublicTypeDisposable {
     const wrappedFunc = wrapWithEventSwitch(fn);
     return this.children?.onChange(wrappedFunc);
   }
@@ -1273,7 +1278,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     this.emitter?.emit('propChange', val);
   }
 
-  onPropChange(func: (info: IPublicTypePropChangeOptions) => void): Function {
+  onPropChange(func: (info: IPublicTypePropChangeOptions) => void): IPublicTypeDisposable {
     const wrappedFunc = wrapWithEventSwitch(func);
     this.emitter.on('propChange', wrappedFunc);
     return () => {

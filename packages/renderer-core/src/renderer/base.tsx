@@ -3,7 +3,7 @@
 /* eslint-disable react/prop-types */
 import classnames from 'classnames';
 import { create as createDataSourceEngine } from '@alilc/lowcode-datasource-engine/interpret';
-import { IPublicTypeNodeSchema, IPublicTypeNodeData, JSONValue, IPublicTypeCompositeValue } from '@alilc/lowcode-types';
+import { IPublicTypeNodeSchema, IPublicTypeNodeData, IPublicTypeJSONValue, IPublicTypeCompositeValue } from '@alilc/lowcode-types';
 import { isI18nData, isJSExpression, isJSFunction } from '@alilc/lowcode-utils';
 import adapter from '../adapter';
 import divFactory from '../components/Div';
@@ -121,6 +121,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
   let scopeIdx = 0;
 
   return class BaseRenderer extends Component<IBaseRendererProps, Record<string, any>> {
+    [key: string]: any;
+
     static displayName = 'BaseRenderer';
 
     static defaultProps = {
@@ -139,6 +141,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     __compScopes: Record<string, any> = {};
     __instanceMap: Record<string, any> = {};
     __dataHelper: any;
+
     /**
      * keep track of customMethods added to this context
      *
@@ -154,8 +157,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
      * @type {any}
      */
     __styleElement: any;
-
-    [key: string]: any;
 
     constructor(props: IBaseRendererProps, context: IBaseRendererContext) {
       super(props, context);
@@ -242,6 +243,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         super.forceUpdate();
       }
     }
+
     /**
      * execute method in schema.lifeCycles
      * @PRIVATE
@@ -490,6 +492,10 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         }
 
         const _children = getSchemaChildren(schema);
+        if (!schema.componentName) {
+          logger.error('The componentName in the schema is invalid, please check the schema: ', schema);
+          return;
+        }
         // 解析占位组件
         if (schema.componentName === 'Fragment' && _children) {
           const tarChildren = isJSExpression(_children) ? this.__parseExpression(_children, scope) : _children;
@@ -758,7 +764,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       const itemArg = (schema.loopArgs && schema.loopArgs[0]) || DEFAULT_LOOP_ARG_ITEM;
       const indexArg = (schema.loopArgs && schema.loopArgs[1]) || DEFAULT_LOOP_ARG_INDEX;
       const { loop } = schema;
-      return loop.map((item: JSONValue | IPublicTypeCompositeValue, i: number) => {
+      return loop.map((item: IPublicTypeJSONValue | IPublicTypeCompositeValue, i: number) => {
         const loopSelf: any = {
           [itemArg]: item,
           [indexArg]: i,

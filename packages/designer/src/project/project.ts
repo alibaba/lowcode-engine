@@ -369,6 +369,10 @@ export class Project implements IProject {
   }
 
   onSimulatorReady(fn: (args: any) => void): () => void {
+    if (this._simulator) {
+      fn(this._simulator);
+      return () => {};
+    }
     this.emitter.on('lowcode_engine_simulator_ready', fn);
     return () => {
       this.emitter.removeListener('lowcode_engine_simulator_ready', fn);

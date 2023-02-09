@@ -40,6 +40,10 @@ export default class Node {
 
   isRoot = () => this._isRoot;
 
+  get isRootNode () {
+    return this._isRoot;
+  };
+
   // componentMeta() {
   //   return this.componentMeta;
   // }

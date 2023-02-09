@@ -192,12 +192,8 @@ export class Project implements IPublicApiProject {
    */
   onSimulatorHostReady(fn: (host: IPublicApiSimulatorHost) => void): IPublicTypeDisposable {
     const offFn = this[projectSymbol].onSimulatorReady((simulator: BuiltinSimulatorHost) => {
-      this[simulatorHostSymbol] = simulator;
       fn(SimulatorHost.create(simulator)!);
     });
-    if (this[simulatorHostSymbol]) {
-      fn(SimulatorHost.create(this[simulatorHostSymbol])!);
-    }
     return offFn;
   }
 
