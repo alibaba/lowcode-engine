@@ -104,7 +104,7 @@ Demo 根据**不同的设计器所需要的物料不同**，分为了下面的 8
 ![image.png](https://img.alicdn.com/imgextra/i1/O1CN01A50oW522S5zg2eDUH_!!6000000007118-2-tps-732-1384.png)
 
 介绍下其中主要的内容
-- 设计器入口文件 `source/index.ts` 这个文件做了下述几个事情：
+- 设计器入口文件 `src/index.ts` 这个文件做了下述几个事情：
   - 通过 plugins.register 注册各种插件，包括官方插件 (已发布 npm 包形式的插件) 和 `plugins` 目录下内置的示例插件
   - 通过 init 初始化低代码设计器
 - plugins 目录，存放的都是示例插件，方便用户从中看到一个插件是如何实现的
