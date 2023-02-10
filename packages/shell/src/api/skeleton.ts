@@ -4,7 +4,7 @@ import {
   SkeletonEvents,
 } from '@alilc/lowcode-editor-skeleton';
 import { skeletonSymbol } from '../symbols';
-import { IPublicApiSkeleton, IPublicTypeDisposable, IPublicTypeWidgetBaseConfig, IPublicTypeWidgetConfigArea } from '@alilc/lowcode-types';
+import { IPublicApiSkeleton, IPublicTypeDisposable, IPublicTypeSkeletonConfig, IPublicTypeWidgetConfigArea } from '@alilc/lowcode-types';
 
 const innerSkeletonSymbol = Symbol('skeleton');
 export class Skeleton implements IPublicApiSkeleton {
@@ -38,7 +38,7 @@ export class Skeleton implements IPublicApiSkeleton {
    * @param extraConfig
    * @returns
    */
-  add(config: IPublicTypeWidgetBaseConfig, extraConfig?: Record<string, any>) {
+  add(config: IPublicTypeSkeletonConfig, extraConfig?: Record<string, any>) {
     const configWithName = {
       ...config,
       pluginName: this.pluginName,
@@ -51,7 +51,7 @@ export class Skeleton implements IPublicApiSkeleton {
    * @param config
    * @returns
    */
-  remove(config: IPublicTypeWidgetBaseConfig): number | undefined {
+  remove(config: IPublicTypeSkeletonConfig): number | undefined {
     const { area, name } = config;
     const skeleton = this[skeletonSymbol];
     if (!normalizeArea(area)) {
