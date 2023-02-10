@@ -1,4 +1,4 @@
-import { IPublicTypeDisposable, IPublicTypeWidgetBaseConfig } from '../type';
+import { IPublicTypeDisposable, IPublicTypeSkeletonConfig } from '../type';
 
 export interface IPublicApiSkeleton {
 
@@ -9,7 +9,7 @@ export interface IPublicApiSkeleton {
    * @param extraConfig
    * @returns
    */
-  add(config: IPublicTypeWidgetBaseConfig, extraConfig?: Record<string, any>): any;
+  add(config: IPublicTypeSkeletonConfig, extraConfig?: Record<string, any>): any;
 
   /**
    * 移除一个面板实例
@@ -17,7 +17,7 @@ export interface IPublicApiSkeleton {
    * @param config
    * @returns
    */
-  remove(config: IPublicTypeWidgetBaseConfig): number | undefined;
+  remove(config: IPublicTypeSkeletonConfig): number | undefined;
 
   /**
    * 展示指定 Panel 实例

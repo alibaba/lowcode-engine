@@ -26,6 +26,7 @@ import {
   PluginClassSet,
   IPublicTypeWidgetBaseConfig,
   IPublicTypeWidgetConfigArea,
+  IPublicTypeSkeletonConfig,
 } from '@alilc/lowcode-types';
 
 const logger = new Logger({ level: 'warn', bizName: 'skeleton' });
@@ -65,6 +66,8 @@ export class Skeleton {
   readonly bottomArea: Area<PanelConfig, Panel>;
 
   readonly stages: Area<StageConfig, Stage>;
+
+  readonly widgets: IWidget[] = [];
 
   constructor(readonly editor: Editor, readonly viewName: string = 'global') {
     makeObservable(this);
@@ -179,6 +182,7 @@ export class Skeleton {
     this.setupPlugins();
     this.setupEvents();
   }
+
   /**
    * setup events
    *
@@ -276,8 +280,6 @@ export class Skeleton {
   postEvent(event: SkeletonEvents, ...args: any[]) {
     this.editor.eventBus.emit(event, ...args);
   }
-
-  readonly widgets: IWidget[] = [];
 
   createWidget(config: IPublicTypeWidgetBaseConfig | IWidget) {
     if (isWidget(config)) {
@@ -377,7 +379,7 @@ export class Skeleton {
     return restConfig;
   }
 
-  add(config: IPublicTypeWidgetBaseConfig, extraConfig?: Record<string, any>) {
+  add(config: IPublicTypeSkeletonConfig, extraConfig?: Record<string, any>) {
     const parsedConfig = {
       ...this.parseConfig(config),
       ...extraConfig,
