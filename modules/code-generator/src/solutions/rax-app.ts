@@ -71,6 +71,7 @@ export default function createRaxProjectBuilder(
       packageJSON: [raxApp.plugins.packageJSON(options)],
     },
     postProcessors: [prettier()],
+    customizeBuilderOptions: options?.customizeBuilderOptions,
   });
 }
 

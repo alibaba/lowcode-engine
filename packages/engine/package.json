@@ -27,6 +27,7 @@
     "@alilc/lowcode-plugin-outline-pane": "1.0.18",
     "@alilc/lowcode-shell": "1.0.18",
     "@alilc/lowcode-utils": "1.0.18",
+    "@alilc/lowcode-workspace": "1.0.18",
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
   },
@@ -34,7 +35,6 @@
     "@alib/build-scripts": "^0.1.18",
     "@alifd/theme-lowcode-dark": "^0.2.0",
     "@alifd/theme-lowcode-light": "^0.2.0",
-    "@alilc/lowcode-test-mate": "^1.0.1",
     "@types/domready": "^1.0.0",
     "@types/react": "^16.8.3",
     "@types/react-dom": "^16.8.2",

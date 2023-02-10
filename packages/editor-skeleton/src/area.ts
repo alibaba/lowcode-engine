@@ -1,10 +1,22 @@
+/* eslint-disable max-len */
 import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
-import WidgetContainer from './widget/widget-container';
+import { Logger } from '@alilc/lowcode-utils';
+import { IPublicTypeWidgetBaseConfig } from '@alilc/lowcode-types';
+import { WidgetContainer } from './widget/widget-container';
 import { Skeleton } from './skeleton';
 import { IWidget } from './widget/widget';
-import { IWidgetBaseConfig } from './types';
 
-export default class Area<C extends IWidgetBaseConfig = any, T extends IWidget = IWidget> {
+const logger = new Logger({ level: 'warn', bizName: 'skeleton:area' });
+export interface IArea<C, T> {
+  isEmpty(): boolean;
+  add(config: T | C): T;
+  remove(config: T | string): number;
+  setVisible(flag: boolean): void;
+  hide(): void;
+  show(): void;
+}
+
+export class Area<C extends IPublicTypeWidgetBaseConfig = any, T extends IWidget = IWidget> implements IArea<C, T> {
   @obx private _visible = true;
 
   @computed get visible() {
@@ -35,6 +47,7 @@ export default class Area<C extends IWidgetBaseConfig = any, T extends IWidget =
   add(config: T | C): T {
     const item = this.container.get(config.name);
     if (item) {
+      logger.warn(`The ${config.name} has already been added to skeleton.`);
       return item;
     }
     return this.container.add(config);

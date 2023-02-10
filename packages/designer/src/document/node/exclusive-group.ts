@@ -1,12 +1,13 @@
 import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
 import { uniqueId } from '@alilc/lowcode-utils';
-import { TitleContent } from '@alilc/lowcode-types';
+import { IPublicTypeTitleContent, IPublicModelExclusiveGroup } from '@alilc/lowcode-types';
 import { Node } from './node';
 import { intl } from '../../locale';
 
 // modals assoc x-hide value, initial: check is Modal, yes will put it in modals, cross levels
-// if-else-if assoc conditionGroup value, should be the same level, and siblings, need renderEngine support
-export class ExclusiveGroup {
+// if-else-if assoc conditionGroup value, should be the same level,
+// and siblings, need renderEngine support
+export class ExclusiveGroup implements IPublicModelExclusiveGroup {
   readonly isExclusiveGroup = true;
 
   readonly id = uniqueId('exclusive');
@@ -72,9 +73,9 @@ export class ExclusiveGroup {
     return i === this.visibleIndex;
   }
 
-  readonly title: TitleContent;
+  readonly title: IPublicTypeTitleContent;
 
-  constructor(readonly name: string, title?: TitleContent) {
+  constructor(readonly name: string, title?: IPublicTypeTitleContent) {
     makeObservable(this);
     this.title = title || {
       type: 'i18n',

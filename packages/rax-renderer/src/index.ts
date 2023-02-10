@@ -41,8 +41,8 @@ function factory() {
   };
 }
 
-const RaxRenderer = factory();
-const Engine = RaxRenderer;
+const RaxRenderer: any = factory();
+const Engine: any = RaxRenderer;
 
 export {
   Engine,

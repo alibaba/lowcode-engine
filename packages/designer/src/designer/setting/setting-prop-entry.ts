@@ -1,16 +1,15 @@
-import { obx, computed, makeObservable, runInAction } from '@alilc/lowcode-editor-core';
-import { GlobalEvent, IEditor, ISetValueOptions } from '@alilc/lowcode-types';
-import { uniqueId, isJSExpression } from '@alilc/lowcode-utils';
+import { obx, computed, makeObservable, runInAction, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
+import { GlobalEvent, IPublicModelEditor, IPublicTypeSetValueOptions } from '@alilc/lowcode-types';
+import { uniqueId, isJSExpression, isSettingField } from '@alilc/lowcode-utils';
 import { SettingEntry } from './setting-entry';
-import { Node } from '../../document';
-import { ComponentMeta } from '../../component-meta';
+import { INode } from '../../document';
+import { IComponentMeta } from '../../component-meta';
 import { Designer } from '../designer';
-import { EventEmitter } from 'events';
-import { isSettingField } from './setting-field';
+import { Setters } from '@alilc/lowcode-shell';
 
 export class SettingPropEntry implements SettingEntry {
   // === static properties ===
-  readonly editor: IEditor;
+  readonly editor: IPublicModelEditor;
 
   readonly isSameComponent: boolean;
 
@@ -18,9 +17,11 @@ export class SettingPropEntry implements SettingEntry {
 
   readonly isSingle: boolean;
 
-  readonly nodes: Node[];
+  readonly setters: Setters;
 
-  readonly componentMeta: ComponentMeta | null;
+  readonly nodes: INode[];
+
+  readonly componentMeta: IComponentMeta | null;
 
   readonly designer: Designer;
 
@@ -32,7 +33,7 @@ export class SettingPropEntry implements SettingEntry {
 
   readonly id = uniqueId('entry');
 
-  readonly emitter = new EventEmitter();
+  readonly emitter: IEventBus = createModuleEventBus('SettingPropEntry');
 
   // ==== dynamic properties ====
   @obx.ref private _name: string | number;
@@ -70,6 +71,7 @@ export class SettingPropEntry implements SettingEntry {
     // copy parent static properties
     this.editor = parent.editor;
     this.nodes = parent.nodes;
+    this.setters = parent.setters;
     this.componentMeta = parent.componentMeta;
     this.isSameComponent = parent.isSameComponent;
     this.isMultiple = parent.isMultiple;
@@ -173,7 +175,7 @@ export class SettingPropEntry implements SettingEntry {
   /**
    * 设置当前属性值
    */
-  setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: ISetValueOptions) {
+  setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: IPublicTypeSetValueOptions) {
     const oldValue = this.getValue();
     if (this.type === 'field') {
       this.parent.setPropValue(this.name, val);
@@ -287,7 +289,7 @@ export class SettingPropEntry implements SettingEntry {
   /**
    * @deprecated
    */
-  valueChange(options: ISetValueOptions = {}) {
+  valueChange(options: IPublicTypeSetValueOptions = {}) {
     this.emitter.emit('valuechange', options);
 
     if (this.parent && isSettingField(this.parent)) {
@@ -296,7 +298,7 @@ export class SettingPropEntry implements SettingEntry {
   }
 
   notifyValueChange(oldValue: any, newValue: any) {
-    this.editor.emit(GlobalEvent.Node.Prop.Change, {
+    this.editor.eventBus.emit(GlobalEvent.Node.Prop.Change, {
       node: this.getNode(),
       prop: this,
       oldValue,

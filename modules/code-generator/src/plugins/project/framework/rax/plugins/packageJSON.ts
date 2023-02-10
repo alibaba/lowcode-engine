@@ -1,4 +1,4 @@
-import { NpmInfo, PackageJSON } from '@alilc/lowcode-types';
+import { IPublicTypeNpmInfo, PackageJSON } from '@alilc/lowcode-types';
 import { COMMON_CHUNK_NAME } from '../../../../../const/generator';
 
 import {
@@ -84,9 +84,9 @@ const pluginFactory: BuilderComponentPluginFactory<RaxFrameworkOptions> = (cfg) 
 
 export default pluginFactory;
 
-function getNpmDependencies(project: IProjectInfo): NpmInfo[] {
-  const npmDeps: NpmInfo[] = [];
-  const npmNameToPkgMap = new Map<string, NpmInfo>();
+function getNpmDependencies(project: IProjectInfo): IPublicTypeNpmInfo[] {
+  const npmDeps: IPublicTypeNpmInfo[] = [];
+  const npmNameToPkgMap = new Map<string, IPublicTypeNpmInfo>();
 
   const allDeps = project.packages;
 

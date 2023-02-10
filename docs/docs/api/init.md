@@ -2,20 +2,25 @@
 title: init - 初始化 API
 sidebar_position: 10
 ---
+
+> **@since** v1.0.0
+
+
 ## 模块简介
 提供 init 等方法
-## 方法签名
+## 方法
 #### 1. init
 初始化引擎
 
 **方法定义**
 ```typescript
-function init(container?: Element, options?: EngineOptions): void
+function init(container?: Element, options?: IPublicTypeEngineOptions): void
 ```
 
 **初始化引擎的参数**
+
 ```typescript
-interface EngineOptions {
+interface IPublicTypeEngineOptions {
   /**
    * 指定初始化的 device
    */
@@ -102,6 +107,9 @@ interface EngineOptions {
   [key: string]: any;
 }
 ```
+> 源码详见 [IPublicTypeEngineOptions](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/engine-options.ts)
+
+
 ## 使用示例
 ```typescript
 import { init } from '@alilc/lowcode-engine';

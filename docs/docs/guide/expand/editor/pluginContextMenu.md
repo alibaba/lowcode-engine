@@ -2,7 +2,9 @@
 title: 插件扩展 - 编排扩展
 sidebar_position: 6
 ---
+
 ## 场景一：扩展选中节点操作项
+
 ### 增加节点操作项
 ![image.png](https://img.alicdn.com/imgextra/i2/O1CN01J7PrJc1S86XNDBIFQ_!!6000000002201-2-tps-1240-292.png)
 
@@ -10,9 +12,10 @@ sidebar_position: 6
 
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 import { Icon, Message } from '@alifd/next';
 
-const addHelloAction = (ctx: ILowCodePluginContext) => {
+const addHelloAction = (ctx: IPublicModelPluginContext) => {
   return {
     async init() {
       const { addBuiltinComponentAction } = ctx.material;
@@ -30,7 +33,7 @@ const addHelloAction = (ctx: ILowCodePluginContext) => {
         },
         important: true,
       });
-    }
+    },
   };
 };
 addHelloAction.pluginName = 'addHelloAction';
@@ -46,8 +49,9 @@ await plugins.register(addHelloAction);
 
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
-const removeCopyAction = (ctx: ILowCodePluginContext) => {
+const removeCopyAction = (ctx: IPublicModelPluginContext) => {
   return {
     async init() {
       const { removeBuiltinComponentAction } = ctx.material;
@@ -66,6 +70,7 @@ await plugins.register(removeCopyAction);
 具体 API 参考：[API 文档](/site/docs/api/material#removebuiltincomponentaction)
 
 ## 实际案例
+
 ### 区块管理
 
 - 仓库地址：[https://github.com/alibaba/lowcode-plugins](https://github.com/alibaba/lowcode-plugins)

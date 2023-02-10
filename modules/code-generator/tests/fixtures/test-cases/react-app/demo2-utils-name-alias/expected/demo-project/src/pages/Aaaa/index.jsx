@@ -1,22 +1,22 @@
 // 注意: 出码引擎注入的临时变量默认都以 "__$$" 开头，禁止在搭建的代码中直接访问。
 // 例外：react 框架的导出名和各种组件名除外。
-import React from "react";
+import React from 'react';
 
-import { Page } from "@alilc/b6-page";
+import { Page } from '@alilc/b6-page';
 
-import { Text } from "@alilc/b6-text";
+import { Text } from '@alilc/b6-text';
 
-import { createUrlParamsHandler as __$$createUrlParamsRequestHandler } from "@alilc/lowcode-datasource-url-params-handler";
+import { createUrlParamsHandler as __$$createUrlParamsRequestHandler } from '@alilc/lowcode-datasource-url-params-handler';
 
-import { create as __$$createDataSourceEngine } from "@alilc/lowcode-datasource-engine/runtime";
+import { create as __$$createDataSourceEngine } from '@alilc/lowcode-datasource-engine/runtime';
 
-import utils from "../../utils";
+import utils from '../../utils';
 
-import * as __$$i18n from "../../i18n";
+import * as __$$i18n from '../../i18n';
 
-import __$$constants from "../../constants";
+import __$$constants from '../../constants';
 
-import "./index.css";
+import './index.css';
 
 class Aaaa$$Page extends React.Component {
   _context = this;
@@ -60,12 +60,12 @@ class Aaaa$$Page extends React.Component {
     return {
       list: [
         {
-          id: "urlParams",
-          type: "urlParams",
-          description: "URL参数",
+          id: 'urlParams',
+          type: 'urlParams',
+          description: 'URL参数',
           options: function () {
             return {
-              uri: "",
+              uri: '',
             };
           },
           isInit: function () {

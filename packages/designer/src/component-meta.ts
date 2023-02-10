@@ -1,34 +1,26 @@
 import { ReactElement } from 'react';
 import {
-  ComponentMetadata,
-  NpmInfo,
-  NodeData,
-  NodeSchema,
-  ComponentAction,
-  TitleContent,
-  TransformedComponentMetadata,
-  NestingFilter,
-  I18nData,
-  LiveTextEditingConfig,
-  FieldConfig,
-  MetadataTransducer,
+  IPublicTypeComponentMetadata,
+  IPublicTypeNpmInfo,
+  IPublicTypeNodeData,
+  IPublicTypeNodeSchema,
+  IPublicTypeTitleContent,
+  IPublicTypeTransformedComponentMetadata,
+  IPublicTypeNestingFilter,
+  IPublicTypeI18nData,
+  IPublicTypePluginConfig,
+  IPublicTypeFieldConfig,
+  IPublicModelComponentMeta,
+  IPublicTypeAdvanced,
 } from '@alilc/lowcode-types';
-import { deprecate, isRegExp, isTitleConfig } from '@alilc/lowcode-utils';
-import { computed, engineConfig } from '@alilc/lowcode-editor-core';
-import EventEmitter from 'events';
-import { componentDefaults, legacyIssues } from './transducers';
-import { isNode, Node, ParentalNode } from './document';
+import { deprecate, isRegExp, isTitleConfig, isNode } from '@alilc/lowcode-utils';
+import { computed, createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
+import { Node, INode } from './document';
 import { Designer } from './designer';
-import { intlNode } from './locale';
 import {
-  IconLock,
-  IconUnlock,
   IconContainer,
   IconPage,
   IconComponent,
-  IconRemove,
-  IconClone,
-  IconHidden,
 } from './icons';
 
 export function ensureAList(list?: string | string[]): string[] | null {
@@ -47,7 +39,7 @@ export function ensureAList(list?: string | string[]): string[] | null {
   return list;
 }
 
-export function buildFilter(rule?: string | string[] | RegExp | NestingFilter) {
+export function buildFilter(rule?: string | string[] | RegExp | IPublicTypeNestingFilter) {
   if (!rule) {
     return null;
   }
@@ -55,21 +47,24 @@ export function buildFilter(rule?: string | string[] | RegExp | NestingFilter) {
     return rule;
   }
   if (isRegExp(rule)) {
-    return (testNode: Node | NodeSchema) => rule.test(testNode.componentName);
+    return (testNode: Node | IPublicTypeNodeSchema) => rule.test(testNode.componentName);
   }
   const list = ensureAList(rule);
   if (!list) {
     return null;
   }
-  return (testNode: Node | NodeSchema) => list.includes(testNode.componentName);
+  return (testNode: Node | IPublicTypeNodeSchema) => list.includes(testNode.componentName);
 }
 
-export class ComponentMeta {
+export interface IComponentMeta extends IPublicModelComponentMeta {
+}
+
+export class ComponentMeta implements IComponentMeta {
   readonly isComponentMeta = true;
 
-  private _npm?: NpmInfo;
+  private _npm?: IPublicTypeNpmInfo;
 
-  private emitter: EventEmitter = new EventEmitter();
+  private emitter: IEventBus = createModuleEventBus('ComponentMeta');
 
   get npm() {
     return this._npm;
@@ -113,14 +108,14 @@ export class ComponentMeta {
     return this._rootSelector;
   }
 
-  private _transformedMetadata?: TransformedComponentMetadata;
+  private _transformedMetadata?: IPublicTypeTransformedComponentMetadata;
 
-  get configure() {
+  get configure(): IPublicTypeFieldConfig[] {
     const config = this._transformedMetadata?.configure;
     return config?.combined || config?.props || [];
   }
 
-  private _liveTextEditing?: LiveTextEditingConfig[];
+  private _liveTextEditing?: IPublicTypePluginConfig[];
 
   get liveTextEditing() {
     return this._liveTextEditing;
@@ -132,19 +127,19 @@ export class ComponentMeta {
     return !!(this._isTopFixed);
   }
 
-  private parentWhitelist?: NestingFilter | null;
+  private parentWhitelist?: IPublicTypeNestingFilter | null;
 
-  private childWhitelist?: NestingFilter | null;
+  private childWhitelist?: IPublicTypeNestingFilter | null;
 
-  private _title?: TitleContent;
+  private _title?: IPublicTypeTitleContent;
 
   private _isMinimalRenderUnit?: boolean;
 
-  get title(): string | I18nData | ReactElement {
+  get title(): string | IPublicTypeI18nData | ReactElement {
     // string | i18nData | ReactElement
     // TitleConfig title.label
     if (isTitleConfig(this._title)) {
-      return (this._title.label as any) || this.componentName;
+      return (this._title?.label as any) || this.componentName;
     }
     return this._title || this.componentName;
   }
@@ -165,19 +160,32 @@ export class ComponentMeta {
     return this._acceptable!;
   }
 
-  constructor(readonly designer: Designer, metadata: ComponentMetadata) {
+  get advanced(): IPublicTypeAdvanced {
+    return this.getMetadata().configure.advanced || {};
+  }
+
+  /**
+   * @legacy compatiable for vision
+   * @deprecated
+   */
+  prototype?: any;
+
+  constructor(readonly designer: Designer, metadata: IPublicTypeComponentMetadata) {
     this.parseMetadata(metadata);
   }
 
-  setNpm(info: NpmInfo) {
+  setNpm(info: IPublicTypeNpmInfo) {
     if (!this._npm) {
       this._npm = info;
     }
   }
 
-  private parseMetadata(metadata: ComponentMetadata) {
+  private parseMetadata(metadata: IPublicTypeComponentMetadata) {
     const { componentName, npm, ...others } = metadata;
     let _metadata = metadata;
+    if ((metadata as any).prototype) {
+      this.prototype = (metadata as any).prototype;
+    }
     if (!npm && !Object.keys(others).length) {
       // 没有注册的组件，只能删除，不支持复制、移动等操作
       _metadata = {
@@ -212,9 +220,9 @@ export class ComponentMeta {
           : title;
     }
 
-    const liveTextEditing = this._transformedMetadata.configure.advanced?.liveTextEditing || [];
+    const liveTextEditing = this.advanced.liveTextEditing || [];
 
-    function collectLiveTextEditing(items: FieldConfig[]) {
+    function collectLiveTextEditing(items: IPublicTypeFieldConfig[]) {
       items.forEach((config) => {
         if (config?.items) {
           collectLiveTextEditing(config.items);
@@ -232,7 +240,7 @@ export class ComponentMeta {
     collectLiveTextEditing(this.configure);
     this._liveTextEditing = liveTextEditing.length > 0 ? liveTextEditing : undefined;
 
-    const isTopFixed = this._transformedMetadata.configure.advanced?.isTopFixed;
+    const isTopFixed = this.advanced.isTopFixed;
 
     if (isTopFixed) {
       this._isTopFixed = isTopFixed;
@@ -264,8 +272,11 @@ export class ComponentMeta {
     this.parseMetadata(this.getMetadata());
   }
 
-  private transformMetadata(metadta: ComponentMetadata): TransformedComponentMetadata {
-    const result = getRegisteredMetadataTransducers().reduce((prevMetadata, current) => {
+  private transformMetadata(
+      metadta: IPublicTypeComponentMetadata,
+    ): IPublicTypeTransformedComponentMetadata {
+    const registeredTransducers = this.designer.componentActions.getRegisteredMetadataTransducers();
+    const result = registeredTransducers.reduce((prevMetadata, current) => {
       return current(prevMetadata);
     }, preprocessMetadata(metadta));
 
@@ -293,7 +304,7 @@ export class ComponentMeta {
     const disabled =
       ensureAList(disableBehaviors) ||
       (this.isRootComponent(false) ? ['copy', 'remove', 'lock', 'unlock'] : null);
-    actions = builtinComponentActions.concat(
+    actions = this.designer.componentActions.actions.concat(
       this.designer.getGlobalComponentActions() || [],
       actions || [],
     );
@@ -307,15 +318,15 @@ export class ComponentMeta {
     return actions;
   }
 
-  setMetadata(metadata: ComponentMetadata) {
+  setMetadata(metadata: IPublicTypeComponentMetadata) {
     this.parseMetadata(metadata);
   }
 
-  getMetadata(): TransformedComponentMetadata {
+  getMetadata(): IPublicTypeTransformedComponentMetadata {
     return this._transformedMetadata!;
   }
 
-  checkNestingUp(my: Node | NodeData, parent: ParentalNode) {
+  checkNestingUp(my: INode | IPublicTypeNodeData, parent: INode) {
     // 检查父子关系，直接约束型，在画布中拖拽直接掠过目标容器
     if (this.parentWhitelist) {
       return this.parentWhitelist(
@@ -326,11 +337,11 @@ export class ComponentMeta {
     return true;
   }
 
-  checkNestingDown(my: Node, target: Node | NodeSchema | NodeSchema[]): boolean {
+  checkNestingDown(my: INode, target: INode | IPublicTypeNodeSchema | IPublicTypeNodeSchema[]): boolean {
     // 检查父子关系，直接约束型，在画布中拖拽直接掠过目标容器
     if (this.childWhitelist) {
       const _target: any = !Array.isArray(target) ? [target] : target;
-      return _target.every((item: Node | NodeSchema) => {
+      return _target.every((item: Node | IPublicTypeNodeSchema) => {
         const _item = !isNode(item) ? new Node(my.document, item) : item;
         return (
           this.childWhitelist &&
@@ -348,15 +359,13 @@ export class ComponentMeta {
     };
   }
 
-  // compatiable vision
-  prototype?: any;
 }
 
 export function isComponentMeta(obj: any): obj is ComponentMeta {
   return obj && obj.isComponentMeta;
 }
 
-function preprocessMetadata(metadata: ComponentMetadata): TransformedComponentMetadata {
+function preprocessMetadata(metadata: IPublicTypeComponentMetadata): IPublicTypeTransformedComponentMetadata {
   if (metadata.configure) {
     if (Array.isArray(metadata.configure)) {
       return {
@@ -374,143 +383,3 @@ function preprocessMetadata(metadata: ComponentMetadata): TransformedComponentMe
     configure: {},
   };
 }
-
-
-const metadataTransducers: MetadataTransducer[] = [];
-
-export function registerMetadataTransducer(
-  transducer: MetadataTransducer,
-  level = 100,
-  id?: string,
-) {
-  transducer.level = level;
-  transducer.id = id;
-  const i = metadataTransducers.findIndex((item) => item.level != null && item.level > level);
-  if (i < 0) {
-    metadataTransducers.push(transducer);
-  } else {
-    metadataTransducers.splice(i, 0, transducer);
-  }
-}
-
-export function getRegisteredMetadataTransducers(): MetadataTransducer[] {
-  return metadataTransducers;
-}
-
-const builtinComponentActions: ComponentAction[] = [
-  {
-    name: 'remove',
-    content: {
-      icon: IconRemove,
-      title: intlNode('remove'),
-      /* istanbul ignore next */
-      action(node: Node) {
-        node.remove();
-      },
-    },
-    important: true,
-  },
-  {
-    name: 'hide',
-    content: {
-      icon: IconHidden,
-      title: intlNode('hide'),
-      /* istanbul ignore next */
-      action(node: Node) {
-        node.setVisible(false);
-      },
-    },
-    /* istanbul ignore next */
-    condition: (node: Node) => {
-      return node.componentMeta.isModal;
-    },
-    important: true,
-  },
-  {
-    name: 'copy',
-    content: {
-      icon: IconClone,
-      title: intlNode('copy'),
-      /* istanbul ignore next */
-      action(node: Node) {
-        // node.remove();
-        const { document: doc, parent, index } = node;
-        if (parent) {
-          const newNode = doc.insertNode(parent, node, index + 1, true);
-          newNode.select();
-          const { isRGL, rglNode } = node.getRGL();
-          if (isRGL) {
-            // 复制layout信息
-            let layout = rglNode.getPropValue('layout') || [];
-            let curLayout = layout.filter((item) => item.i === node.getPropValue('fieldId'));
-            if (curLayout && curLayout[0]) {
-              layout.push({
-                ...curLayout[0],
-                i: newNode.getPropValue('fieldId'),
-              });
-              rglNode.setPropValue('layout', layout);
-              // 如果是磁贴块复制，则需要滚动到影响位置
-              setTimeout(() => newNode.document.simulator?.scrollToNode(newNode), 10);
-            }
-          }
-        }
-      },
-    },
-    important: true,
-  },
-  {
-    name: 'lock',
-    content: {
-      icon: IconLock, // 锁定 icon
-      title: intlNode('lock'),
-      /* istanbul ignore next */
-      action(node: Node) {
-        node.lock();
-      },
-    },
-    /* istanbul ignore next */
-    condition: (node: Node) => {
-      return engineConfig.get('enableCanvasLock', false) && node.isContainer() && !node.isLocked;
-    },
-    important: true,
-  },
-  {
-    name: 'unlock',
-    content: {
-      icon: IconUnlock, // 解锁 icon
-      title: intlNode('unlock'),
-      /* istanbul ignore next */
-      action(node: Node) {
-        node.lock(false);
-      },
-    },
-    /* istanbul ignore next */
-    condition: (node: Node) => {
-      return engineConfig.get('enableCanvasLock', false) && node.isContainer() && node.isLocked;
-    },
-    important: true,
-  },
-];
-
-export function removeBuiltinComponentAction(name: string) {
-  const i = builtinComponentActions.findIndex((action) => action.name === name);
-  if (i > -1) {
-    builtinComponentActions.splice(i, 1);
-  }
-}
-export function addBuiltinComponentAction(action: ComponentAction) {
-  builtinComponentActions.push(action);
-}
-
-export function modifyBuiltinComponentAction(
-  actionName: string,
-  handle: (action: ComponentAction) => void,
-) {
-  const builtinAction = builtinComponentActions.find((action) => action.name === actionName);
-  if (builtinAction) {
-    handle(builtinAction);
-  }
-}
-
-registerMetadataTransducer(legacyIssues, 2, 'legacy-issues'); // should use a high level priority, eg: 2
-registerMetadataTransducer(componentDefaults, 100, 'component-defaults');

@@ -2,22 +2,22 @@
 /* eslint-disable max-len */
 import { StrictEventEmitter } from 'strict-event-emitter-types';
 import { EventEmitter } from 'events';
+import { EventBus } from './event-bus';
 import {
-  IEditor,
+  IPublicModelEditor,
   EditorConfig,
   PluginClassSet,
-  KeyType,
-  GetReturnType,
+  IPublicTypeEditorValueKey,
+  IPublicTypeEditorGetResult,
   HookConfig,
-  ComponentDescription,
-  RemoteComponentDescription,
+  IPublicTypeComponentDescription,
+  IPublicTypeRemoteComponentDescription,
   GlobalEvent,
 } from '@alilc/lowcode-types';
 import { engineConfig } from './config';
 import { globalLocale } from './intl';
-import Preference from './utils/preference';
 import { obx } from './utils';
-import { AssetsJson, AssetLoader } from '@alilc/lowcode-utils';
+import { IPublicTypeAssetsJson, AssetLoader } from '@alilc/lowcode-utils';
 import { assetsTransform } from './utils/assets-transform';
 
 EventEmitter.defaultMaxListeners = 100;
@@ -29,6 +29,10 @@ const keyBlacklist = [
   'currentDocument',
   'simulator',
   'plugins',
+  'setters',
+  'material',
+  'innerHotkey',
+  'innerPlugins',
 ];
 
 export declare interface Editor extends StrictEventEmitter<EventEmitter, GlobalEvent.EventConfig> {
@@ -46,41 +50,42 @@ export declare interface Editor extends StrictEventEmitter<EventEmitter, GlobalE
   prependListener(event: string | symbol, listener: (...args: any[]) => void): this;
   prependOnceListener(event: string | symbol, listener: (...args: any[]) => void): this;
   eventNames(): Array<string | symbol>;
-  getPreference(): Preference;
 }
 
 // eslint-disable-next-line no-redeclare
-export class Editor extends (EventEmitter as any) implements IEditor {
+export class Editor extends (EventEmitter as any) implements IPublicModelEditor {
+  constructor(readonly viewName: string = 'global', readonly workspaceMode: boolean = false) {
+    // eslint-disable-next-line constructor-super
+    super();
+    // set global emitter maxListeners
+    this.setMaxListeners(200);
+    this.eventBus = new EventBus(this);
+  }
+
   /**
    * Ioc Container
    */
-  @obx.shallow private context = new Map<KeyType, any>();
+  @obx.shallow private context = new Map<IPublicTypeEditorValueKey, any>();
 
   get locale() {
     return globalLocale.getLocale();
   }
 
   // readonly utils = utils;
-  /**
-   * used to store preferences
-   *
-   * @memberof Editor
-   */
-  readonly preference = new Preference();
 
   private hooks: HookConfig[] = [];
 
   get<T = undefined, KeyOrType = any>(
       keyOrType: KeyOrType,
-    ): GetReturnType<T, KeyOrType> | undefined {
+    ): IPublicTypeEditorGetResult<T, KeyOrType> | undefined {
     return this.context.get(keyOrType as any);
   }
 
-  has(keyOrType: KeyType): boolean {
+  has(keyOrType: IPublicTypeEditorValueKey): boolean {
     return this.context.has(keyOrType);
   }
 
-  set(key: KeyType, data: any): void | Promise<void> {
+  set(key: IPublicTypeEditorValueKey, data: any): void | Promise<void> {
     if (key === 'assets') {
       return this.setAssets(data);
     }
@@ -92,11 +97,11 @@ export class Editor extends (EventEmitter as any) implements IEditor {
     this.notifyGot(key);
   }
 
-  async setAssets(assets: AssetsJson) {
+  async setAssets(assets: IPublicTypeAssetsJson) {
     const { components } = assets;
     if (components && components.length) {
-      const componentDescriptions: ComponentDescription[] = [];
-      const remoteComponentDescriptions: RemoteComponentDescription[] = [];
+      const componentDescriptions: IPublicTypeComponentDescription[] = [];
+      const remoteComponentDescriptions: IPublicTypeRemoteComponentDescription[] = [];
       components.forEach((component: any) => {
         if (!component) {
           return;
@@ -114,11 +119,49 @@ export class Editor extends (EventEmitter as any) implements IEditor {
       if (remoteComponentDescriptions && remoteComponentDescriptions.length) {
         await Promise.all(
           remoteComponentDescriptions.map(async (component: any) => {
-            const { exportName, url } = component;
+            const { exportName, url, npm } = component;
             await (new AssetLoader()).load(url);
+            function setAssetsComponent(component: any, extraNpmInfo: any = {}) {
+              const components = component.components;
+              if (Array.isArray(components)) {
+                components.forEach(d => {
+                  assets.components = assets.components.concat({
+                    npm: {
+                      ...npm,
+                      ...extraNpmInfo,
+                    },
+                    ...d,
+                  } || []);
+                });
+                return;
+              }
+              if (component.components) {
+                assets.components = assets.components.concat({
+                  npm: {
+                    ...npm,
+                    ...extraNpmInfo,
+                  },
+                  ...component.components,
+                } || []);
+              }
+              // assets.componentList = assets.componentList.concat(component.componentList || []);
+            }
+            function setArrayAssets(value: any[], preExportName: string = '', preSubName: string = '') {
+              value.forEach((d: any, i: number) => {
+                const exportName = [preExportName, i.toString()].filter(d => !!d).join('.');
+                const subName = [preSubName, i.toString()].filter(d => !!d).join('.');
+                Array.isArray(d) ? setArrayAssets(d, exportName, subName) : setAssetsComponent(d, {
+                  exportName,
+                  subName,
+                });
+              });
+            }
             if (window[exportName]) {
-              assets.components = assets.components.concat((window[exportName] as any).components || []);
-              assets.componentList = assets.componentList?.concat((window[exportName] as any).componentList || []);
+              if (Array.isArray(window[exportName])) {
+                setArrayAssets(window[exportName] as any);
+              } else {
+                setAssetsComponent(window[exportName] as any);
+              }
             }
             return window[exportName];
           }),
@@ -130,7 +173,7 @@ export class Editor extends (EventEmitter as any) implements IEditor {
     this.notifyGot('assets');
   }
 
-  onceGot<T = undefined, KeyOrType extends KeyType = any>(keyOrType: KeyOrType): Promise<GetReturnType<T, KeyOrType>> {
+  onceGot<T = undefined, KeyOrType extends IPublicTypeEditorValueKey = any>(keyOrType: KeyOrType): Promise<IPublicTypeEditorGetResult<T, KeyOrType>> {
     const x = this.context.get(keyOrType);
     if (x !== undefined) {
       return Promise.resolve(x);
@@ -140,9 +183,9 @@ export class Editor extends (EventEmitter as any) implements IEditor {
     });
   }
 
-  onGot<T = undefined, KeyOrType extends KeyType = any>(
+  onGot<T = undefined, KeyOrType extends IPublicTypeEditorValueKey = any>(
     keyOrType: KeyOrType,
-    fn: (data: GetReturnType<T, KeyOrType>) => void,
+    fn: (data: IPublicTypeEditorGetResult<T, KeyOrType>) => void,
   ): () => void {
     const x = this.context.get(keyOrType);
     if (x !== undefined) {
@@ -156,12 +199,14 @@ export class Editor extends (EventEmitter as any) implements IEditor {
     }
   }
 
-  register(data: any, key?: KeyType): void {
+  register(data: any, key?: IPublicTypeEditorValueKey): void {
     this.context.set(key || data, data);
     this.notifyGot(key || data);
   }
 
   config?: EditorConfig;
+
+  eventBus: EventBus;
 
   components?: PluginClassSet;
 
@@ -203,10 +248,6 @@ export class Editor extends (EventEmitter as any) implements IEditor {
     }
   }
 
-  getPreference() {
-    return this.preference;
-  }
-
   initHooks = (hooks: HookConfig[]) => {
     this.hooks = hooks.map((hook) => ({
       ...hook,
@@ -233,7 +274,7 @@ export class Editor extends (EventEmitter as any) implements IEditor {
 
   /* eslint-disable */
   private waits = new Map<
-    KeyType,
+    IPublicTypeEditorValueKey,
     Array<{
       once?: boolean;
       resolve: (data: any) => void;
@@ -241,7 +282,7 @@ export class Editor extends (EventEmitter as any) implements IEditor {
   >();
   /* eslint-enable */
 
-  private notifyGot(key: KeyType) {
+  private notifyGot(key: IPublicTypeEditorValueKey) {
     let waits = this.waits.get(key);
     if (!waits) {
       return;
@@ -261,7 +302,7 @@ export class Editor extends (EventEmitter as any) implements IEditor {
     }
   }
 
-  private setWait(key: KeyType, resolve: (data: any) => void, once?: boolean) {
+  private setWait(key: IPublicTypeEditorValueKey, resolve: (data: any) => void, once?: boolean) {
     const waits = this.waits.get(key);
     if (waits) {
       waits.push({ resolve, once });
@@ -270,7 +311,7 @@ export class Editor extends (EventEmitter as any) implements IEditor {
     }
   }
 
-  private delWait(key: KeyType, fn: any) {
+  private delWait(key: IPublicTypeEditorValueKey, fn: any) {
     const waits = this.waits.get(key);
     if (!waits) {
       return;
@@ -286,3 +327,5 @@ export class Editor extends (EventEmitter as any) implements IEditor {
     }
   }
 }
+
+export const commonEvent = new EventBus(new EventEmitter());

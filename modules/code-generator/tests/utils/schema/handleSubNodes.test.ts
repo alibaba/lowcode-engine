@@ -1,10 +1,10 @@
-import { NodeData } from '@alilc/lowcode-types';
+import { IPublicTypeNodeData } from '@alilc/lowcode-types';
 import { handleSubNodes } from '../../../src/utils/schema';
 import SCHEMA_WITH_SLOT from './data/schema-with-slot.json';
 
 describe('utils/schema/handleSubNodes', () => {
   it('should be able to visit nodes in JSSlot(1)', () => {
-    const nodes: NodeData[] = [
+    const nodes: IPublicTypeNodeData[] = [
       {
         componentName: 'Foo',
         props: {
@@ -28,7 +28,7 @@ describe('utils/schema/handleSubNodes', () => {
   });
 
   it('should be able to visit nodes in JSSlot(2)', () => {
-    const nodes: NodeData[] = (SCHEMA_WITH_SLOT as any).componentsTree[0].children;
+    const nodes: IPublicTypeNodeData[] = (SCHEMA_WITH_SLOT as any).componentsTree[0].children;
 
     const result = handleSubNodes(nodes, {
       node: (node) => node.componentName,

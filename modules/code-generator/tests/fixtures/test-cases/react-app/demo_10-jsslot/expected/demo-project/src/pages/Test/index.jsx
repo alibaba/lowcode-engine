@@ -1,6 +1,6 @@
 // 注意: 出码引擎注入的临时变量默认都以 "__$$" 开头，禁止在搭建的代码中直接访问。
 // 例外：react 框架的导出名和各种组件名除外。
-import React from "react";
+import React from 'react';
 
 import {
   Modal,
@@ -12,26 +12,26 @@ import {
   ConfigProvider,
   Tooltip,
   Empty,
-} from "@alilc/antd-lowcode-materials/dist/antd-lowcode.esm.js";
+} from '@alilc/antd-lowcode-materials/dist/antd-lowcode.esm.js';
 
 import {
   AliAutoDiv,
   AliAutoSearchTable,
-} from "@alife/mc-assets-1935/build/lowcode/index.js";
+} from '@alife/mc-assets-1935/build/lowcode/index.js';
 
 import {
   Page as NextPage,
   Block as NextBlock,
   P as NextP,
-} from "@alife/container/lib/index.js";
+} from '@alife/container/lib/index.js';
 
-import utils, { RefsManager } from "../../utils";
+import utils, { RefsManager } from '../../utils';
 
-import * as __$$i18n from "../../i18n";
+import * as __$$i18n from '../../i18n';
 
-import __$$constants from "../../constants";
+import __$$constants from '../../constants';
 
-import "./index.css";
+import './index.css';
 
 const AliAutoDivDefault = AliAutoDiv.default;
 
@@ -65,11 +65,12 @@ class Test$$Page extends React.Component {
     };
 
     this.__jp__init();
+
     this.statusDesc = {
-      0: "失败",
-      1: "成功",
-      2: "构建中",
-      3: "构建超时",
+      0: '失败',
+      1: '成功',
+      2: '构建中',
+      3: '构建超时',
     };
     this.pageParams = {};
   }
@@ -133,7 +134,7 @@ class Test$$Page extends React.Component {
   }
 
   renderTime(time) {
-    return this.$utils.moment(time).format("YYYY-MM-DD HH:mm");
+    return this.$utils.moment(time).format('YYYY-MM-DD HH:mm');
   }
 
   renderUserName(user) {
@@ -160,10 +161,11 @@ class Test$$Page extends React.Component {
 
   formatResult(item) {
     if (!item) {
-      return "暂无结果";
+      return '暂无结果';
     }
+
     const { channel, plat, version, status } = item;
-    return [channel, plat, version, status].join("-");
+    return [channel, plat, version, status].join('-');
   }
 
   handleDownload() {
@@ -175,7 +177,7 @@ class Test$$Page extends React.Component {
   }
 
   componentDidMount() {
-    this.$ds.resolve("PROJECTS", {
+    this.$ds.resolve('PROJECTS', {
       params: {
         size: 5000,
       },
@@ -192,8 +194,8 @@ class Test$$Page extends React.Component {
     const { state } = __$$context;
     return (
       <div
-        ref={this._refsManager.linkRef("outterView")}
-        style={{ height: "100%" }}
+        ref={this._refsManager.linkRef('outterView')}
+        style={{ height: '100%' }}
       >
         <Modal
           title="查看结果"
@@ -204,12 +206,12 @@ class Test$$Page extends React.Component {
               __events={{
                 eventDataList: [
                   {
-                    type: "componentEvent",
-                    name: "onClick",
-                    relatedEventName: "onResultCancel",
+                    type: 'componentEvent',
+                    name: 'onClick',
+                    relatedEventName: 'onResultCancel',
                   },
                 ],
-                eventList: [{ name: "onClick", disabled: true }],
+                eventList: [{ name: 'onClick', disabled: true }],
               }}
               onClick={function () {
                 this.onResultCancel.apply(
@@ -224,14 +226,14 @@ class Test$$Page extends React.Component {
           __events={{
             eventDataList: [
               {
-                type: "componentEvent",
-                name: "onCancel",
-                relatedEventName: "onResultCancel",
+                type: 'componentEvent',
+                name: 'onCancel',
+                relatedEventName: 'onResultCancel',
               },
             ],
             eventList: [
-              { name: "onCancel", disabled: true },
-              { name: "onOk", disabled: false },
+              { name: 'onCancel', disabled: true },
+              { name: 'onOk', disabled: false },
             ],
           }}
           onCancel={function () {
@@ -245,7 +247,7 @@ class Test$$Page extends React.Component {
         >
           {__$$evalArray(() => this.state.results).map((item, index) =>
             ((__$$context) => (
-              <AliAutoDivDefault style={{ width: "100%" }}>
+              <AliAutoDivDefault style={{ width: '100%' }}>
                 {!!__$$eval(
                   () =>
                     __$$context.state.results &&
@@ -253,9 +255,9 @@ class Test$$Page extends React.Component {
                 ) && (
                   <AliAutoDivDefault
                     style={{
-                      width: "100%",
-                      textAlign: "left",
-                      marginBottom: "10px",
+                      width: '100%',
+                      textAlign: 'left',
+                      marginBottom: '10px',
                     }}
                   >
                     <Button
@@ -264,12 +266,12 @@ class Test$$Page extends React.Component {
                       __events={{
                         eventDataList: [
                           {
-                            type: "componentEvent",
-                            name: "onClick",
-                            relatedEventName: "handleDownload",
+                            type: 'componentEvent',
+                            name: 'onClick',
+                            relatedEventName: 'handleDownload',
                           },
                         ],
-                        eventList: [{ name: "onClick", disabled: true }],
+                        eventList: [{ name: 'onClick', disabled: true }],
                       }}
                       onClick={function () {
                         this.handleDownload.apply(
@@ -290,7 +292,7 @@ class Test$$Page extends React.Component {
                     href={__$$eval(() => item.download_link)}
                     target="_blank"
                   >
-                    {" "}
+                    {' '}
                     - 点击下载
                   </Typography.Link>
                 )}
@@ -299,7 +301,7 @@ class Test$$Page extends React.Component {
                     href={__$$eval(() => item.release_notes)}
                     target="_blank"
                   >
-                    {" "}
+                    {' '}
                     - 跳转发布节点
                   </Typography.Link>
                 )}
@@ -310,16 +312,16 @@ class Test$$Page extends React.Component {
         <NextPage
           columns={12}
           headerDivider={true}
-          placeholderStyle={{ gridRowEnd: "span 1", gridColumnEnd: "span 12" }}
+          placeholderStyle={{ gridRowEnd: 'span 1', gridColumnEnd: 'span 12' }}
           placeholder="页面主体内容：拖拽Block布局组件到这里"
           header={null}
-          headerProps={{ background: "surface" }}
+          headerProps={{ background: 'surface' }}
           footer={null}
           minHeight="100vh"
         >
           <NextBlock
             prefix="next-"
-            placeholderStyle={{ height: "100%" }}
+            placeholderStyle={{ height: '100%' }}
             noPadding={false}
             noBorder={false}
             background="surface"
@@ -331,7 +333,7 @@ class Test$$Page extends React.Component {
             <NextBlockCell
               title=""
               prefix="next-"
-              placeholderStyle={{ height: "100%" }}
+              placeholderStyle={{ height: '100%' }}
               layoutmode="O"
               childTotalColumns={12}
               isAutoContainer={true}
@@ -361,22 +363,22 @@ class Test$$Page extends React.Component {
                   __events={{
                     eventDataList: [
                       {
-                        type: "componentEvent",
-                        name: "onFinish",
-                        relatedEventName: "onFinish",
+                        type: 'componentEvent',
+                        name: 'onFinish',
+                        relatedEventName: 'onFinish',
                       },
                     ],
                     eventList: [
-                      { name: "onFinish", disabled: true },
-                      { name: "onFinishFailed", disabled: false },
-                      { name: "onFieldsChange", disabled: false },
-                      { name: "onValuesChange", disabled: false },
+                      { name: 'onFinish', disabled: true },
+                      { name: 'onFinishFailed', disabled: false },
+                      { name: 'onFieldsChange', disabled: false },
+                      { name: 'onValuesChange', disabled: false },
                     ],
                   }}
                 >
                   <Form.Item label="项目名称/渠道号" name="channel_id">
                     <Select
-                      style={{ width: "280px" }}
+                      style={{ width: '280px' }}
                       options={__$$eval(() => this.state.projects)}
                       showArrow={true}
                       tokenSeparators={[]}
@@ -386,7 +388,7 @@ class Test$$Page extends React.Component {
                   <Form.Item label="版本号" name="buildId">
                     <Input
                       placeholder="请输入"
-                      style={{ width: "280px" }}
+                      style={{ width: '280px' }}
                       size="middle"
                     />
                   </Form.Item>
@@ -394,15 +396,15 @@ class Test$$Page extends React.Component {
                     <Select
                       style={{ width: 200 }}
                       options={[
-                        { label: "A", value: "A" },
-                        { label: "B", value: "B" },
-                        { label: "C", value: "C" },
+                        { label: 'A', value: 'A' },
+                        { label: 'B', value: 'B' },
+                        { label: 'C', value: 'C' },
                       ]}
                       showSearch={true}
                     />
                   </Form.Item>
                   <Form.Item label="ID" name="id">
-                    <Input placeholder="请输入" style={{ width: "160px" }} />
+                    <Input placeholder="请输入" style={{ width: '160px' }} />
                   </Form.Item>
                   <Form.Item wrapperCol={{ offset: 6 }}>
                     <Button type="primary" htmlType="submit">
@@ -434,23 +436,23 @@ class Test$$Page extends React.Component {
                       dataSource={__$$eval(() => this.state.pkgs)}
                       columns={[
                         {
-                          title: "ID",
-                          dataIndex: "id",
-                          key: "name",
+                          title: 'ID',
+                          dataIndex: 'id',
+                          key: 'name',
                           width: 80,
                         },
                         {
-                          title: "渠道号",
-                          dataIndex: "channels",
-                          key: "age",
+                          title: '渠道号',
+                          dataIndex: 'channels',
+                          key: 'age',
                           width: 142,
                           render: (text, record, index) =>
                             ((__$$context) =>
-                              __$$evalArray(() => text.split(",")).map(
+                              __$$evalArray(() => text.split(',')).map(
                                 (item, index) =>
                                   ((__$$context) => (
                                     <Typography.Text
-                                      style={{ display: "block" }}
+                                      style={{ display: 'block' }}
                                     >
                                       {__$$eval(() => item)}
                                     </Typography.Text>
@@ -469,9 +471,9 @@ class Test$$Page extends React.Component {
                             ),
                         },
                         {
-                          title: "版本号",
-                          dataIndex: "dic_version",
-                          key: "address",
+                          title: '版本号',
+                          dataIndex: 'dic_version',
+                          key: 'address',
                           render: (text, record, index) =>
                             ((__$$context) => (
                               <Tooltip
@@ -480,14 +482,14 @@ class Test$$Page extends React.Component {
                                     ((__$$context) => (
                                       <Typography.Text
                                         style={{
-                                          display: "block",
-                                          color: "#FFFFFF",
+                                          display: 'block',
+                                          color: '#FFFFFF',
                                         }}
                                       >
                                         {__$$eval(
                                           () =>
                                             item.channelId +
-                                            " / " +
+                                            ' / ' +
                                             item.version
                                         )}
                                       </Typography.Text>
@@ -512,15 +514,15 @@ class Test$$Page extends React.Component {
                             ),
                           width: 120,
                         },
-                        { title: "构建Job", dataIndex: "job_name", width: 180 },
+                        { title: '构建Job', dataIndex: 'job_name', width: 180 },
                         {
-                          title: "构建类型",
-                          dataIndex: "packaging_type",
+                          title: '构建类型',
+                          dataIndex: 'packaging_type',
                           width: 94,
                         },
                         {
-                          title: "构建状态",
-                          dataIndex: "status",
+                          title: '构建状态',
+                          dataIndex: 'status',
                           render: (text, record, index) =>
                             ((__$$context) => [
                               <Typography.Text>
@@ -531,7 +533,7 @@ class Test$$Page extends React.Component {
                                   type="SyncOutlined"
                                   size={16}
                                   spin={true}
-                                  style={{ marginLeft: "10px" }}
+                                  style={{ marginLeft: '10px' }}
                                 />
                               ),
                             ])(
@@ -544,8 +546,8 @@ class Test$$Page extends React.Component {
                           width: 100,
                         },
                         {
-                          title: "构建时间",
-                          dataIndex: "start_time",
+                          title: '构建时间',
+                          dataIndex: 'start_time',
                           render: function () {
                             return this.renderTime.apply(
                               this,
@@ -555,8 +557,8 @@ class Test$$Page extends React.Component {
                           width: 148,
                         },
                         {
-                          title: "构建人",
-                          dataIndex: "user",
+                          title: '构建人',
+                          dataIndex: 'user',
                           render: function () {
                             return this.renderUserName.apply(
                               this,
@@ -566,8 +568,8 @@ class Test$$Page extends React.Component {
                           width: 80,
                         },
                         {
-                          title: "Jenkins 链接",
-                          dataIndex: "jenkins_link",
+                          title: 'Jenkins 链接',
+                          dataIndex: 'jenkins_link',
                           render: (text, record, index) =>
                             ((__$$context) => [
                               !!__$$eval(() => text) && (
@@ -591,8 +593,8 @@ class Test$$Page extends React.Component {
                           width: 120,
                         },
                         {
-                          title: "测试平台链接",
-                          dataIndex: "is_run_testing",
+                          title: '测试平台链接',
+                          dataIndex: 'is_run_testing',
                           width: 120,
                           render: (text, record, index) =>
                             ((__$$context) => [
@@ -615,26 +617,26 @@ class Test$$Page extends React.Component {
                               })
                             ),
                         },
-                        { title: "触发源", dataIndex: "source", width: 120 },
+                        { title: '触发源', dataIndex: 'source', width: 120 },
                         {
-                          title: "详情",
-                          dataIndex: "id",
+                          title: '详情',
+                          dataIndex: 'id',
                           render: (text, record, index) =>
                             ((__$$context) => (
                               <Button
                                 type="link"
                                 size="small"
-                                style={{ padding: "0px" }}
+                                style={{ padding: '0px' }}
                                 __events={{
                                   eventDataList: [
                                     {
-                                      type: "componentEvent",
-                                      name: "onClick",
-                                      relatedEventName: "handleDetail",
+                                      type: 'componentEvent',
+                                      name: 'onClick',
+                                      relatedEventName: 'handleDetail',
                                     },
                                   ],
                                   eventList: [
-                                    { name: "onClick", disabled: true },
+                                    { name: 'onClick', disabled: true },
                                   ],
                                 }}
                                 onClick={function () {
@@ -656,28 +658,28 @@ class Test$$Page extends React.Component {
                               })
                             ),
                           width: 80,
-                          fixed: "right",
+                          fixed: 'right',
                         },
                         {
-                          title: "结果",
-                          dataIndex: "id",
+                          title: '结果',
+                          dataIndex: 'id',
                           render: (text, record, index) =>
                             ((__$$context) => (
                               <Button
                                 type="link"
                                 size="small"
-                                style={{ padding: "0px" }}
+                                style={{ padding: '0px' }}
                                 __events={{
                                   eventDataList: [
                                     {
-                                      type: "componentEvent",
-                                      name: "onClick",
-                                      relatedEventName: "handleResult",
-                                      paramStr: "this.text",
+                                      type: 'componentEvent',
+                                      name: 'onClick',
+                                      relatedEventName: 'handleResult',
+                                      paramStr: 'this.text',
                                     },
                                   ],
                                   eventList: [
-                                    { name: "onClick", disabled: true },
+                                    { name: 'onClick', disabled: true },
                                   ],
                                 }}
                                 onClick={function () {
@@ -701,11 +703,11 @@ class Test$$Page extends React.Component {
                               })
                             ),
                           width: 80,
-                          fixed: "right",
+                          fixed: 'right',
                         },
                         {
-                          title: "重新执行",
-                          dataIndex: "id",
+                          title: '重新执行',
+                          dataIndex: 'id',
                           width: 92,
                           render: (text, record, index) =>
                             ((__$$context) => (
@@ -718,11 +720,11 @@ class Test$$Page extends React.Component {
                                     size={14}
                                     color="#0593d3"
                                     style={{
-                                      padding: "3px",
-                                      border: "1px solid #0593d3",
-                                      borderRadius: "14px",
-                                      cursor: "pointer",
-                                      height: "22px",
+                                      padding: '3px',
+                                      border: '1px solid #0593d3',
+                                      borderRadius: '14px',
+                                      cursor: 'pointer',
+                                      height: '22px',
                                     }}
                                     spin={false}
                                   />
@@ -731,13 +733,13 @@ class Test$$Page extends React.Component {
                                 __events={{
                                   eventDataList: [
                                     {
-                                      type: "componentEvent",
-                                      name: "onClick",
-                                      relatedEventName: "reload",
+                                      type: 'componentEvent',
+                                      name: 'onClick',
+                                      relatedEventName: 'reload',
                                     },
                                   ],
                                   eventList: [
-                                    { name: "onClick", disabled: true },
+                                    { name: 'onClick', disabled: true },
                                   ],
                                 }}
                                 onClick={function () {
@@ -756,7 +758,7 @@ class Test$$Page extends React.Component {
                                 index,
                               })
                             ),
-                          fixed: "right",
+                          fixed: 'right',
                         },
                       ]}
                       actions={[]}

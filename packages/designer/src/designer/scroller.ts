@@ -1,12 +1,24 @@
 import { isElement } from '@alilc/lowcode-utils';
+import { IPublicModelScrollTarget, IPublicTypeScrollable, IPublicModelScroller } from '@alilc/lowcode-types';
 
-export class ScrollTarget {
+export interface IScrollTarget extends IPublicModelScrollTarget {
+}
+
+export class ScrollTarget implements IScrollTarget {
   get left() {
     return 'scrollX' in this.target ? this.target.scrollX : this.target.scrollLeft;
   }
 
   get top() {
     return 'scrollY' in this.target ? this.target.scrollY : this.target.scrollTop;
+  }
+
+  private doc?: HTMLElement;
+
+  constructor(private target: Window | Element) {
+    if (isWindow(target)) {
+      this.doc = target.document.documentElement;
+    }
   }
 
   scrollTo(options: { left?: number; top?: number }) {
@@ -24,14 +36,6 @@ export class ScrollTarget {
   get scrollWidth(): number {
     return ((this.doc || this.target) as any).scrollWidth;
   }
-
-  private doc?: HTMLElement;
-
-  constructor(private target: Window | Element) {
-    if (isWindow(target)) {
-      this.doc = target.document.documentElement;
-    }
-  }
 }
 
 function isWindow(obj: any): obj is Window {
@@ -44,18 +48,18 @@ function easing(n: number) {
 
 const SCROLL_ACCURCY = 30;
 
-export interface IScrollable {
-  scrollTarget?: ScrollTarget | Element;
-  bounds?: DOMRect | null;
-  scale?: number;
+export interface IScroller extends IPublicModelScroller {
+
 }
-
-export class Scroller {
+export class Scroller implements IScroller {
   private pid: number | undefined;
+  scrollable: IPublicTypeScrollable;
 
-  constructor(private scrollable: IScrollable) {}
+  constructor(scrollable: IPublicTypeScrollable) {
+    this.scrollable = scrollable;
+  }
 
-  get scrollTarget(): ScrollTarget | null {
+  get scrollTarget(): IScrollTarget | null {
     let target = this.scrollable.scrollTarget;
     if (!target) {
       return null;

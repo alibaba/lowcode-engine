@@ -1,7 +1,7 @@
 import CodeGenerator from '../../src';
 import * as fs from 'fs';
 import * as path from 'path';
-import { ProjectSchema } from '@alilc/lowcode-types';
+import { IPublicTypeProjectSchema } from '@alilc/lowcode-types';
 import { createDiskPublisher } from '../helpers/solutionHelper';
 
 const testCaseBaseName = path.basename(__filename, '.test.ts');
@@ -27,7 +27,7 @@ describe(testCaseBaseName, () => {
     });
 
     const generatedPageFileContent = readOutputTextFile('demo-project/src/pages/Test/index.jsx');
-    expect(generatedPageFileContent).toContain(`import Foo from "example-package/lib/index.js";`);
+    expect(generatedPageFileContent).toContain('import Foo from \'example-package/lib/index.js\';');
   });
 
   test('named import with no alias', async () => {
@@ -47,7 +47,7 @@ describe(testCaseBaseName, () => {
 
     const generatedPageFileContent = readOutputTextFile('demo-project/src/pages/Test/index.jsx');
     expect(generatedPageFileContent).toContain(
-      `import { Foo } from "example-package/lib/index.js";`,
+      'import { Foo } from \'example-package/lib/index.js\';',
     );
   });
 
@@ -68,7 +68,7 @@ describe(testCaseBaseName, () => {
 
     const generatedPageFileContent = readOutputTextFile('demo-project/src/pages/Test/index.jsx');
     expect(generatedPageFileContent).toContain(
-      `import { Bar as Foo } from "example-package/lib/index.js";`,
+      'import { Bar as Foo } from \'example-package/lib/index.js\';',
     );
   });
 
@@ -88,7 +88,7 @@ describe(testCaseBaseName, () => {
     });
 
     const generatedPageFileContent = readOutputTextFile('demo-project/src/pages/Test/index.jsx');
-    expect(generatedPageFileContent).toContain(`import Foo from "example-package/lib/index.js";`);
+    expect(generatedPageFileContent).toContain('import Foo from \'example-package/lib/index.js\';');
   });
 
   test('default import with sub name and export name', async () => {
@@ -107,9 +107,9 @@ describe(testCaseBaseName, () => {
     });
 
     const generatedPageFileContent = readOutputTextFile('demo-project/src/pages/Test/index.jsx');
-    expect(generatedPageFileContent).toContain(`import Bar from "example-package/lib/index.js";`);
+    expect(generatedPageFileContent).toContain('import Bar from \'example-package/lib/index.js\';');
 
-    expect(generatedPageFileContent).toContain(`const Foo = Bar.Baz;`);
+    expect(generatedPageFileContent).toContain('const Foo = Bar.Baz;');
   });
 
   test('default import with sub name without export name', async () => {
@@ -129,10 +129,10 @@ describe(testCaseBaseName, () => {
 
     const generatedPageFileContent = readOutputTextFile('demo-project/src/pages/Test/index.jsx');
     expect(generatedPageFileContent).toContain(
-      `import __$examplePackage_default from "example-package/lib/index.js";`,
+      'import __$examplePackage_default from \'example-package/lib/index.js\';',
     );
 
-    expect(generatedPageFileContent).toContain(`const Foo = __$examplePackage_default.Baz;`);
+    expect(generatedPageFileContent).toContain('const Foo = __$examplePackage_default.Baz;');
   });
 
   test('named import with sub name', async () => {
@@ -152,10 +152,10 @@ describe(testCaseBaseName, () => {
 
     const generatedPageFileContent = readOutputTextFile('demo-project/src/pages/Test/index.jsx');
     expect(generatedPageFileContent).toContain(
-      `import { Bar } from "example-package/lib/index.js";`,
+      'import { Bar } from \'example-package/lib/index.js\';',
     );
 
-    expect(generatedPageFileContent).toContain(`const Foo = Bar.Baz;`);
+    expect(generatedPageFileContent).toContain('const Foo = Bar.Baz;');
   });
 
   test('default imports with different componentName', async () => {
@@ -187,18 +187,18 @@ describe(testCaseBaseName, () => {
     });
 
     const generatedPageFileContent = readOutputTextFile('demo-project/src/pages/Test/index.jsx');
-    expect(generatedPageFileContent).toContain(`import Foo from "example-package";`);
-    expect(generatedPageFileContent).toContain(`import Baz from "example-package";`);
+    expect(generatedPageFileContent).toContain('import Foo from \'example-package\';');
+    expect(generatedPageFileContent).toContain('import Baz from \'example-package\';');
 
-    expect(generatedPageFileContent).not.toContain(`const Foo =`);
-    expect(generatedPageFileContent).not.toContain(`const Baz =`);
+    expect(generatedPageFileContent).not.toContain('const Foo =');
+    expect(generatedPageFileContent).not.toContain('const Baz =');
   });
 });
 
 function exportProject(
   importPath: string,
   outputPath: string,
-  mergeSchema?: Partial<ProjectSchema>,
+  mergeSchema?: Partial<IPublicTypeProjectSchema>,
 ) {
   const schemaJsonStr = fs.readFileSync(importPath, { encoding: 'utf8' });
   const schema = { ...JSON.parse(schemaJsonStr), ...mergeSchema };

@@ -2,7 +2,6 @@
 title: 《低代码引擎物料协议规范》
 sidebar_position: 1
 ---
-# 《低代码引擎物料协议规范》
 
 ## 1 介绍
 
@@ -85,7 +84,7 @@ component                       //  组件名称, 比如 biz-button
 ```
 
 
-#### README.md
+##### README.md
 
 - README.md 应该包含业务组件的源信息、使用说明以及 API，示例如下：
 
@@ -127,7 +126,7 @@ npm install @alifd/ice-layout -S
 | type  | type        | String | `primray`、`normal` | normal  |
 ```
 
-#### package.json
+##### package.json
 `package.json` 中包含了一些依赖信息和配置信息，示例如下：
 
 ```json
@@ -160,7 +159,7 @@ npm install @alifd/ice-layout -S
 }
 ```
 
-#### src/index.js
+##### src/index.js
 
 包含组件的出口文件，示例如下：
 
@@ -179,7 +178,7 @@ export default Button;
 import Button, { Group } form '@scope/button';
 ```
 
-#### src/index.scss
+##### src/index.scss
 
 ```css
 /* 不引入依赖组件的样式，比如组件 import { Button } from '@alifd/next'; */
@@ -194,7 +193,7 @@ import Button, { Group } form '@scope/button';
 }
 ```
 
-#### demo
+##### demo
 demo 目录存放的是组件的文档，无文档的业务组件无法带来任何价值，因此 demo 是必选项。demo 目录下的文件采取 markdown 的写法，可以是多个文件，示例（demo/basic.md）如下：
 
 demo/basic.md
@@ -237,12 +236,12 @@ ReactDOM.render(<div className="test">
 
 API 是组件的属性解释，给开发者作为组件属性配置的参考。为了保持 API 的一致性，我们制定这个 API 命名规范。对于业界通用的，约定俗成的命名，我们遵循社区的约定。对于业界有多种规则难以确定的，我们确定其中一种，大家共同遵守。
 
-#### 通用规则
+##### 通用规则
 
 - 所有的 API 采用小驼峰的书写规则，如 `onChange`、`direction`、`defaultVisible`。
 - 标签名采用大驼峰书写规则，如 `Menu`、`Slider`、`DatePicker`。
 
-#### 通用命名
+##### 通用命名
 
 | API 名称        | 类型           | 描述                                                         | 常见变量                                              |
 | :------------- | :------------- | :----------------------------------------------------------- | :---------------------------------------------------- |
@@ -262,7 +261,7 @@ API 是组件的属性解释，给开发者作为组件属性配置的参考。�
 | has+'属性'     | boolean        | 拥有某个属性                                                 | 例如 `hasArrow`， `hasHeader`， `hasClose` 等等         |
 
 
-#### 多选枚举
+##### 多选枚举
 
 当某个 API 的接口，允许用户指定多个枚举值的时候，我们把这个接口定义为多选枚举。一个很典型的例子是某个弹层组件的 `closable` 属性，我们会允许：键盘 esc 按键、点击 mask、点击 close 按钮、点击组件以外的任何区域进行关闭。
 
@@ -281,11 +280,11 @@ true 表示触发规则都会关闭，false 表示触发规则不会关闭。
 - `<Dialog closable={false} />`，任何情况下都不关闭，只能通过受控设置 visible
 - `<Dialog closable closeMode={['close', 'esc']} />`，用户按 esc 或者点击关闭按钮会关闭
 
-#### 事件
+##### 事件
 
 - 标准事件或者自定义的符合 w3c 标准的事件，命名必须 on 开头， 即 `on` + 事件名，如 onExpand。
 
-#### 表单规范
+##### 表单规范
 
 - 支持[受控模式](https://reactjs.org/docs/forms.html#controlled-components)(value + onChange) （A)
    - value 控制组件数据展现
@@ -293,7 +292,7 @@ true 表示触发规则都会关闭，false 表示触发规则不会关闭。
 - `value={undefined}`的时候清空数据，field 的 reset 函数会给所有组件下发 undefined 数据 (AA))
 - 一次完整操作抛一次 onChange 事件 `建议` 比如有 Process 表示进展中的状态，建议增加 API `onProcess`；如果有 Start 表示启动状态，建议增加 API `onStart`  (AA)
 
-#### 属性的传递
+##### 属性的传递
 **1. 原子组件（Atomic Component）**
 > 最小粒子，不能再拆分的组件
 
@@ -355,7 +354,7 @@ $ iceworks sync
 
 文件命名采取 [bcp47](https://tools.ietf.org/html/bcp47) 规范
 
-#### 目录规范
+##### 目录规范
 
 在 `src` 目录新增 `locale` 目录用于管理不同语言的文案。
 
@@ -368,7 +367,7 @@ $ iceworks sync
 |------ ja-JP.js
 ```
 
-#### 定义不同的语言
+##### 定义不同的语言
 
 ```javascript
 // zh-CN.js
@@ -391,7 +390,7 @@ export default {
 };
 ```
 
-#### 组件支持多语言建议方案
+##### 组件支持多语言建议方案
 
 ```jsx
 // index.jsx
@@ -418,7 +417,7 @@ export default class BizHello extends Component {
 }
 ```
 
-#### 组件支持全局替换国际化文案
+##### 组件支持全局替换国际化文案
 
 配合 ConfigProvider 支持全局替换国际化文案。
 
@@ -452,7 +451,7 @@ export default ConfigProvider.config(BizHello, {
 
 业务组件中如果有自定义的需要跟随主题色的 UI，一定要引入变量的形式，增加组件的流通性。
 
-#### src/index.scss
+##### src/index.scss
 
 ```css
 /* 如果需要引入主题变量引入此段 */
@@ -504,7 +503,7 @@ api 属性标准参考 [https://fusion.design/help.html#/dev-biz](https://fusio
 无障碍需要符合 [WCAG 2.1 A 级标准](https://www.w3.org/TR/WCAG21/)，可参考 [W3C 无障碍最佳实践](https://www.w3.org/TR/wai-aria-practices-1.1/)、[Fusion 无障碍指引 2.3.1](https://alibaba-fusion.github.io/next/part1/basics.html) 章节等。
 
 
-#### 增加 a11y.md 无障碍 demo
+##### 增加 a11y.md 无障碍 demo
 
 必须借助 API 才能完成无障碍工作的组件必须为开发者提供无障碍的使用文档，请[参考](https://fusion.design/pc/component/select?themeid=2#accessibility-container)组件 API 中 `ARIA and Keyboard` ，建议在 `demo` 目录新增 `a11y.md` 文件用于演示组件的无障碍使用。
 
@@ -518,7 +517,7 @@ component
 详细指引查看无障碍开发指南 [https://alibaba-fusion.github.io/next/part1/basics.html](https://alibaba-fusion.github.io/next/part1/basics.html)。
 
 
-#### 通过键盘快速访问
+##### 通过键盘快速访问
 
 一般键盘事件有 Up Arrow/Down Arrow/Enter/Esc/Tab
 
@@ -532,7 +531,7 @@ component
 | Esc        | 关闭列表             |
 
 
-#### 对读屏软件友好
+##### 对读屏软件友好
 
 - 对于组件，我们为开发者内置 `role` 和特定 `aria-_属性`，开发者也可以对非组件 API 属性都可以透传至 DOM 元素，进行修改 `role` 和 `aria-_参数`，但是要注意对应关系，请[参考](https://alibaba-fusion.github.io/next/part1/WAI-ARIA.html)。
 - 对一些特殊的组件传递参数才能支持无障碍，设置 `id`，`autoFocus` 和传参数，如下：
@@ -926,18 +925,18 @@ props 数组下对象字段描述：
 |initialChildren	| 组件拖入“设计器”时根据此配置自动生成 children 节点 schema |NodeData[]/Function	NodeData[] | ((target: SettingTarget) => NodeData[]);|
 |getResizingHandlers|	用于配置设计器中组件 resize 操作工具的样式和内容 |	Function|	(currentNode: any) => Array<{ type: 'N' | 'W' | 'S' | 'E' | 'NW' | 'NE' | 'SE' | 'SW'; content?: ReactElement; propTarget?: string; appearOn?: 'mouse-enter' | 'mouse-hover' | 'selected' | 'always'; }> / ReactElement[];
 |callbacks|	配置 callbacks 可捕获引擎抛出的一些事件，例如 onNodeAdd、onResize 等 |	Callback|	-
-|callbacks.onNodeAdd|	在容器中拖入组件时触发的事件回调|	Function|	(e: MouseEvent, currentNode: any) => any
-|callbacks.onNodeRemove|	在容器中删除组件时触发的事件回调|	Function|	(e: MouseEvent, currentNode: any) => any
+|callbacks.onNodeAdd|	在容器中拖入组件时触发的事件回调 |	Function|	(e: MouseEvent, currentNode: any) => any
+|callbacks.onNodeRemove|	在容器中删除组件时触发的事件回调 |	Function|	(e: MouseEvent, currentNode: any) => any
 |callbacks.onResize|	调整容器尺寸时触发的事件回调，常常与 getResizingHandlers 搭配使用 |	Function|	详见 Types 定义
 |callbacks.onResizeStart|	调整容器尺寸开始时触发的事件回调，常常与 getResizingHandlers 搭配使用 |	Function|	详见 Types 定义
 |callbacks.onResizeEnd|	调整容器尺寸结束时触发的事件回调，常常与 getResizingHandlers 搭配使用 |	Function|	详见 Types 定义
-|callbacks.onSubtreeModified|	容器节点结构树发生变化时触发的回调|	Function|	(currentNode: any, options: any) => void;
-|callbacks.onMouseDownHook|	鼠标按下操作回调|	Function|	(e: MouseEvent, currentNode: any) => any;
-|callbacks.onClickHook|	鼠标单击操作回调|	Function|	(e: MouseEvent, currentNode: any) => any;
-|callbacks.onDblClickHook|	鼠标双击操作回调|	Function|	(e: MouseEvent, currentNode: any) => any;
+|callbacks.onSubtreeModified|	容器节点结构树发生变化时触发的回调 |	Function|	(currentNode: any, options: any) => void;
+|callbacks.onMouseDownHook|	鼠标按下操作回调 |	Function|	(e: MouseEvent, currentNode: any) => any;
+|callbacks.onClickHook|	鼠标单击操作回调 |	Function|	(e: MouseEvent, currentNode: any) => any;
+|callbacks.onDblClickHook|	鼠标双击操作回调 |	Function|	(e: MouseEvent, currentNode: any) => any;
 |callbacks.onMoveHook|	节点被拖动回调 |	Function|	(currentNode: any) => boolean;
 |callbacks.onHoverHook|	节点被 hover 回调 |	Function|	(currentNode: any) => boolean;
-|callbacks.onChildMoveHook|	容器节点的子节点被拖动回调|	Function|	(childNode: any, currentNode: any) => boolean;
+|callbacks.onChildMoveHook|	容器节点的子节点被拖动回调 |	Function|	(childNode: any, currentNode: any) => boolean;
 
 
 描述举例：
@@ -1544,7 +1543,7 @@ block/
 ```
 
 
-#### 入口文件
+##### 入口文件
 
 (/src/index.jsx)
 
@@ -1560,7 +1559,7 @@ const App = hot(router);
 ReactDOM.render(<App />, document.getElementById(pkg.config && pkg.config.targetRootID || 'root'));
 ```
 
-#### 应用参数配置文件
+##### 应用参数配置文件
 
 (/src/config/app.js)
 
@@ -1597,7 +1596,7 @@ export default {
 }
 ```
 
-#### 应用扩展配置规范：
+##### 应用扩展配置规范：
 
 (/src/utils/index.js)
 
@@ -1619,7 +1618,7 @@ export default {
 }
 ```
 
-#### 应用常量配置
+##### 应用常量配置
 
 (/src/config/constants.js)
 
@@ -1629,7 +1628,7 @@ export default {
 }
 ```
 
-#### 应用样式配置
+##### 应用样式配置
 
 (/src/global.scss)
 

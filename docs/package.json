@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-engine-docs",
-  "version": "1.0.8",
+  "version": "1.0.18",
   "description": "低代码引擎版本化文档",
   "license": "MIT",
   "files": [
@@ -16,7 +16,8 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "syncOss": "node ./scripts/sync-oss.js"
   },
   "dependencies": {
     "@docusaurus/core": "^2.2.0",

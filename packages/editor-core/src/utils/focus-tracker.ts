@@ -32,11 +32,11 @@ export class FocusTracker {
   }
 
   private checkModalOpen(): boolean {
-    return this.modals.some(item => item.checkOpen());
+    return this.modals.some((item) => item.checkOpen());
   }
 
   private checkModalDown(e: MouseEvent): boolean {
-    return this.modals.some(item => item.checkDown(e));
+    return this.modals.some((item) => item.checkDown(e));
   }
 
   execSave() {

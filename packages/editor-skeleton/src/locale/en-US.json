@@ -5,5 +5,11 @@
   "Multiple Value, Click to Clear": "Multiple Value, Click to Clear",
   "Required": "Required",
   "Setted Value, Click to Clear": "Setted Value, Click to Clear",
-  "Multiple Value": "Multiple Value"
+  "Multiple Value": "Multiple Value",
+  "Attribute: ": "Attribute: ",
+  "Description: ": "Description: ",
+  "Please select a node in canvas": "Please select a node in canvas",
+  "Current node is locked": "Current node is locked",
+  "No config found for this type of component": "No config found for this type of component",
+  "Please select same kind of components": "Please select same kind of components"
 }

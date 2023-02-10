@@ -5,7 +5,7 @@ sidebar_position: 0
 
 引擎提供的公开 API 分为`命名空间`和`模型`两类，其中`命名空间`用于聚合一大类的 API，`模型`为各 API 涉及到的对象模型。
 
-### 命名空间
+## 命名空间
 
 引擎直接提供以下几大类 API
 
@@ -21,7 +21,7 @@ sidebar_position: 0
 - logger 日志 API
 - init 初始化 API
 
-### 模型
+## 模型
 以下模型通过前面的 API 以返回值等形式间接透出。
 
 - document-model 文档
@@ -37,10 +37,14 @@ sidebar_position: 0
 - history 操作历史
 
 
-### API 设计约定
+## API 设计约定
 一些 API 设计约定：
 
 1. 所有 API 命名空间都按照 variables / functions / events 来组织
 2. 事件（events）的命名格式为：on[Will|Did]VerbNoun?，参考 [https://code.visualstudio.com/api/references/vscode-api#events](https://code.visualstudio.com/api/references/vscode-api#events)
 3. 基于 Disposable 模式，对于事件的绑定、快捷键的绑定函数，返回值则是解绑函数
 4. 对于属性的导出，统一用 .xxx 的 getter 模式，（尽量）不使用 .getXxx()
+
+## experimental
+
+说明此模块处于公测阶段, API 可能会发生改变.

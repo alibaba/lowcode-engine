@@ -9,7 +9,7 @@ import * as path from 'path';
 import { getErrorMessage } from '../utils/errors';
 import CodeGenerator from '..';
 import type { IProjectBuilder } from '..';
-import type { ProjectSchema } from '@alilc/lowcode-types';
+import type { IPublicTypeProjectSchema } from '@alilc/lowcode-types';
 
 /**
  * 执行出码 CLI 命令
@@ -25,6 +25,7 @@ export async function run(
     output?: string;
     quiet?: boolean;
     verbose?: boolean;
+    solutionOptions?: string;
   },
 ): Promise<number> {
   try {
@@ -41,6 +42,19 @@ export async function run(
       );
     }
 
+    let solutionOptions = {};
+
+    if (options.solutionOptions) {
+      try {
+        solutionOptions = JSON.parse(options.solutionOptions);
+      } catch (err: any) {
+        throw new Error(
+          `solution options parse error, error message is "${err.message}"`,
+        );
+      }
+    }
+
+
     // 读取 Schema
     const schema = await loadSchemaFile(schemaFile);
 
@@ -48,7 +62,7 @@ export async function run(
     const createProjectBuilder = await getProjectBuilderFactory(options.solution, {
       quiet: options.quiet,
     });
-    const builder = createProjectBuilder();
+    const builder = createProjectBuilder(solutionOptions);
 
     // 生成代码
     const generatedSourceCodes = await builder.generateProject(schema);
@@ -75,7 +89,7 @@ export async function run(
 async function getProjectBuilderFactory(
   solution: string,
   { quiet }: { quiet?: boolean },
-): Promise<() => IProjectBuilder> {
+): Promise<(options: {[prop: string]: any}) => IProjectBuilder> {
   if (solution in CodeGenerator.solutions) {
     return CodeGenerator.solutions[solution as 'icejs' | 'rax'];
   }
@@ -117,7 +131,7 @@ function isLocalSolution(solution: string) {
   return solution.startsWith('.') || solution.startsWith('/') || solution.startsWith('~');
 }
 
-async function loadSchemaFile(schemaFile: string): Promise<ProjectSchema> {
+async function loadSchemaFile(schemaFile: string): Promise<IPublicTypeProjectSchema> {
   if (!schemaFile) {
     throw new Error('invalid schema file name');
   }

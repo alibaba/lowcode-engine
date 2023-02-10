@@ -1,4 +1,4 @@
-import { ActivityType, NodeSchema, RootSchema } from '@alilc/lowcode-types';
+import { ActivityType, IPublicTypeNodeSchema, IPublicTypeRootSchema } from '@alilc/lowcode-types';
 import { isJSBlock, isJSSlot } from './check-types';
 import { isVariable } from './misc';
 import { isPlainObject } from './is-plain-object';
@@ -78,8 +78,8 @@ export function compatibleLegaoSchema(props: any): any {
   return newProps;
 }
 
-export function getNodeSchemaById(schema: NodeSchema, nodeId: string): NodeSchema | undefined {
-  let found: NodeSchema | undefined;
+export function getNodeSchemaById(schema: IPublicTypeNodeSchema, nodeId: string): IPublicTypeNodeSchema | undefined {
+  let found: NodeSIPublicTypeNodeSchemachema | undefined;
   if (schema.id === nodeId) {
     return schema;
   }
@@ -87,7 +87,7 @@ export function getNodeSchemaById(schema: NodeSchema, nodeId: string): NodeSchem
   // 查找 children
   if (Array.isArray(children)) {
     for (const child of children) {
-      found = getNodeSchemaById(child as NodeSchema, nodeId);
+      found = getNodeSchemaById(child as IPublicTypeNodeSchema, nodeId);
       if (found) return found;
     }
   }
@@ -98,19 +98,19 @@ export function getNodeSchemaById(schema: NodeSchema, nodeId: string): NodeSchem
   }
 }
 
-function getNodeSchemaFromPropsById(props: any, nodeId: string): NodeSchema | undefined {
-  let found: NodeSchema | undefined;
+function getNodeSchemaFromPropsById(props: any, nodeId: string): IPublicTypeNodeSchema | undefined {
+  let found: IPublicTypeNodeSchema | undefined;
   for (const [key, value] of Object.entries(props)) {
     if (isJSSlot(value)) {
-      // value 是数组类型 { type: 'JSSlot', value: NodeSchema[] }
+      // value 是数组类型 { type: 'JSSlot', value: IPublicTypeNodeSchema[] }
       if (Array.isArray(value.value)) {
         for (const child of value.value) {
-          found = getNodeSchemaById(child as NodeSchema, nodeId);
+          found = getNodeSchemaById(child as IPublicTypeNodeSchema, nodeId);
           if (found) return found;
         }
       }
-      // value 是对象类型 { type: 'JSSlot', value: NodeSchema }
-      found = getNodeSchemaById(value.value as NodeSchema, nodeId);
+      // value 是对象类型 { type: 'JSSlot', value: IPublicTypeNodeSchema }
+      found = getNodeSchemaById(value.value as IPublicTypeNodeSchema, nodeId);
       if (found) return found;
     } else if (isPlainObject(value)) {
       found = getNodeSchemaFromPropsById(value, nodeId);
@@ -119,12 +119,16 @@ function getNodeSchemaFromPropsById(props: any, nodeId: string): NodeSchema | un
   }
 }
 
-export function applyActivities(pivotSchema: RootSchema, activities: any, options?: any): RootSchema {
+/**
+ * TODO: not sure if this is used anywhere
+ * @deprecated
+ */
+export function applyActivities(pivotSchema: IPublicTypeRootSchema, activities: any, options?: any): IPublicTypeRootSchema {
   let schema = { ...pivotSchema };
   if (!Array.isArray(activities)) {
     activities = [activities];
   }
-  return activities.reduce((accSchema: RootSchema, activity: any) => {
+  return activities.reduce((accSchema: IPublicTypeRootSchema, activity: any) => {
     if (activity.type === ActivityType.MODIFIED) {
       const found = getNodeSchemaById(accSchema, activity.payload.schema.id);
       if (!found) return accSchema;

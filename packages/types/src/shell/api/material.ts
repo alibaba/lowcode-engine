@@ -1,50 +1,61 @@
-import { AssetsJson } from '../../assets';
-import { MetadataTransducer, ComponentAction } from '../../metadata';
-import { IPublicModelComponentMeta } from '../model/component-meta';
-
+import { IPublicTypeAssetsJson, IPublicTypeMetadataTransducer, IPublicTypeComponentAction, IPublicTypeNpmInfo, IPublicTypeDisposable } from '../type';
+import { IPublicModelComponentMeta } from '../model';
+import { ComponentType } from 'react';
 
 export interface IPublicApiMaterial {
 
   /**
-   * 设置「资产包」结构
-   * @param assets
-   * @returns
+   * 获取组件 map 结构
+   * get map of components
    */
-  setAssets(assets: AssetsJson): void;
+  get componentsMap(): { [key: string]: IPublicTypeNpmInfo | ComponentType<any> | object } ;
+
+  /**
+   * 设置「资产包」结构
+   * set data for Assets
+   * @returns void
+   */
+  setAssets(assets: IPublicTypeAssetsJson): void;
 
   /**
    * 获取「资产包」结构
-   * @returns
+   * get AssetsJson data
+   * @returns IPublicTypeAssetsJson
    */
-  getAssets(): any;
+  getAssets(): IPublicTypeAssetsJson;
 
   /**
    * 加载增量的「资产包」结构，该增量包会与原有的合并
+   * load Assets incrementally, and will merge this with exiting assets
    * @param incrementalAssets
    * @returns
    */
-  loadIncrementalAssets(incrementalAssets: AssetsJson): void;
+  loadIncrementalAssets(incrementalAssets: IPublicTypeAssetsJson): void;
 
   /**
-   * 注册物料元数据管道函数
+   * 注册物料元数据管道函数，在物料信息初始化时执行。
+   * register transducer to process component meta, which will be
+   * excuted during component meta`s initialization
    * @param transducer
    * @param level
    * @param id
    */
   registerMetadataTransducer(
-    transducer: MetadataTransducer,
+    transducer: IPublicTypeMetadataTransducer,
     level?: number,
     id?: string | undefined
   ): void;
 
   /**
    * 获取所有物料元数据管道函数
-   * @returns
+   * get all registered metadata transducers
+   * @returns {IPublicTypeMetadataTransducer[]}
    */
-  getRegisteredMetadataTransducers(): MetadataTransducer[];
+  getRegisteredMetadataTransducers(): IPublicTypeMetadataTransducer[];
 
   /**
    * 获取指定名称的物料元数据
+   * get component meta by component name
    * @param componentName
    * @returns
    */
@@ -53,38 +64,45 @@ export interface IPublicApiMaterial {
   /**
    * test if the given object is a ComponentMeta instance or not
    * @param obj
-   * @returns
+   * @experiemental unstable API, pay extra caution when trying to use it
    */
   isComponentMeta(obj: any): boolean;
 
   /**
    * 获取所有已注册的物料元数据
-   * @returns
+   * get map of all component metas
    */
   getComponentMetasMap(): Map<string, IPublicModelComponentMeta>;
 
   /**
    * 在设计器辅助层增加一个扩展 action
+   * add an action button in canvas context menu area
    * @param action
    */
-  addBuiltinComponentAction(action: ComponentAction): void;
+  addBuiltinComponentAction(action: IPublicTypeComponentAction): void;
 
   /**
    * 移除设计器辅助层的指定 action
+   * remove a builtin action button from canvas context menu area
    * @param name
    */
   removeBuiltinComponentAction(name: string): void;
 
   /**
    * 修改已有的设计器辅助层的指定 action
+   * modify a builtin action button in canvas context menu area
    * @param actionName
    * @param handle
    */
-  modifyBuiltinComponentAction(actionName: string, handle: (action: ComponentAction) => void): void;
+  modifyBuiltinComponentAction(
+      actionName: string,
+      handle: (action: IPublicTypeComponentAction) => void,
+    ): void;
 
   /**
    * 监听 assets 变化的事件
+   * add callback for assets changed event
    * @param fn
    */
-  onChangeAssets(fn: () => void): void;
+  onChangeAssets(fn: () => void): IPublicTypeDisposable;
 }

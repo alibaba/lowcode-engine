@@ -3,13 +3,13 @@ import { uniqueId } from '@alilc/lowcode-utils';
 import { createElement, ReactNode, ReactInstance } from 'react';
 import { Skeleton } from '../skeleton';
 import { PanelDockConfig } from '../types';
-import Panel from './panel';
+import { Panel } from './panel';
 import { PanelDockView, WidgetView } from '../components/widget-views';
 import { IWidget } from './widget';
 import { composeTitle } from './utils';
 import { findDOMNode } from 'react-dom';
 
-export default class PanelDock implements IWidget {
+export class PanelDock implements IWidget {
   readonly isWidget = true;
 
   readonly isPanelDock = true;

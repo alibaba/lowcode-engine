@@ -1,5 +1,5 @@
-import { NodeSchema } from '@alilc/lowcode-types';
+import { IPublicTypeNodeSchema } from '@alilc/lowcode-types';
 
-export function isNodeSchema(data: any): data is NodeSchema {
+export function isNodeSchema(data: any): data is IPublicTypeNodeSchema {
   return data && data.componentName;
 }

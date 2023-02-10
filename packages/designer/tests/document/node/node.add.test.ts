@@ -6,7 +6,6 @@ import { Node } from '../../../src/document/node/node';
 import { Designer } from '../../../src/designer/designer';
 import formSchema from '../../fixtures/schema/form';
 import { getIdsFromSchema, getNodeFromSchemaById } from '../../utils';
-import { EBADF } from 'constants';
 
 const mockCreateSettingEntry = jest.fn();
 jest.mock('../../../src/designer/designer', () => {
@@ -17,6 +16,9 @@ jest.mock('../../../src/designer/designer', () => {
           return {
             getMetadata() {
               return { configure: { advanced: null } };
+            },
+            get advanced() {
+              return {};
             },
           };
         },
@@ -507,7 +509,7 @@ describe('schema 生成节点模型测试', () => {
         });
       });
 
-      it('场景二：插入 Node 实例，指定 index', () => {
+      it.only('场景二：插入 Node 实例，指定 index', () => {
         expect(project).toBeTruthy();
         const ids = getIdsFromSchema(formSchema);
         const { currentDocument } = project;

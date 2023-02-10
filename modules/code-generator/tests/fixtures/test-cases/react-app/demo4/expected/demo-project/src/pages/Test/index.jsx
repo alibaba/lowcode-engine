@@ -1,27 +1,27 @@
 // 注意: 出码引擎注入的临时变量默认都以 "__$$" 开头，禁止在搭建的代码中直接访问。
 // 例外：react 框架的导出名和各种组件名除外。
-import React from "react";
+import React from 'react';
 
 import {
   Page as NextPage,
   Block as NextBlock,
   P as NextP,
   Text as NextText,
-} from "@alife/container/lib/index.js";
+} from '@alife/container/lib/index.js';
 
-import { AliSearchTable as AliSearchTableExport } from "@alife/mc-assets-1935/build/lowcode/index.js";
+import { AliSearchTable as AliSearchTableExport } from '@alife/mc-assets-1935/build/lowcode/index.js';
 
-import { createFetchHandler as __$$createFetchRequestHandler } from "@alilc/lowcode-datasource-fetch-handler";
+import { createFetchHandler as __$$createFetchRequestHandler } from '@alilc/lowcode-datasource-fetch-handler';
 
-import { create as __$$createDataSourceEngine } from "@alilc/lowcode-datasource-engine/runtime";
+import { create as __$$createDataSourceEngine } from '@alilc/lowcode-datasource-engine/runtime';
 
-import utils, { RefsManager } from "../../utils";
+import utils, { RefsManager } from '../../utils';
 
-import * as __$$i18n from "../../i18n";
+import * as __$$i18n from '../../i18n';
 
-import __$$constants from "../../constants";
+import __$$constants from '../../constants';
 
-import "./index.css";
+import './index.css';
 
 const NextBlockCell = NextBlock.Cell;
 
@@ -57,7 +57,7 @@ class Test$$Page extends React.Component {
 
     __$$i18n._inject2(this);
 
-    this.state = { text: "outter", isShowDialog: false };
+    this.state = { text: 'outter', isShowDialog: false };
   }
 
   $ = (refName) => {
@@ -73,28 +73,28 @@ class Test$$Page extends React.Component {
     return {
       list: [
         {
-          type: "fetch",
+          type: 'fetch',
           isInit: function () {
             return true;
           },
           options: function () {
             return {
               params: {},
-              method: "GET",
+              method: 'GET',
               isCors: true,
               timeout: 5000,
               headers: {},
-              uri: "https://mocks.xxx.com/mock/jjpin/user/list",
+              uri: 'https://mocks.xxx.com/mock/jjpin/user/list',
             };
           },
-          id: "users",
+          id: 'users',
         },
       ],
     };
   }
 
   componentWillUnmount() {
-    console.log("will umount");
+    console.log('will umount');
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -102,7 +102,7 @@ class Test$$Page extends React.Component {
   }
 
   testFunc() {
-    console.log("test func");
+    console.log('test func');
   }
 
   onClick() {
@@ -118,13 +118,13 @@ class Test$$Page extends React.Component {
   }
 
   onSearch(values) {
-    console.log("search form:", values);
+    console.log('search form:', values);
     console.log(this.dataSourceMap);
-    this.dataSourceMap["users"].load(values);
+    this.dataSourceMap['users'].load(values);
   }
 
   onClear() {
-    console.log("form reset");
+    console.log('form reset');
     this.setState({
       isShowDialog: true,
     });
@@ -137,7 +137,7 @@ class Test$$Page extends React.Component {
   componentDidMount() {
     this._dataSourceEngine.reloadDataSource();
 
-    console.log("did mount");
+    console.log('did mount');
   }
 
   render() {
@@ -145,12 +145,12 @@ class Test$$Page extends React.Component {
     const { state } = __$$context;
     return (
       <div
-        ref={this._refsManager.linkRef("outterView")}
-        style={{ height: "100%" }}
+        ref={this._refsManager.linkRef('outterView')}
+        style={{ height: '100%' }}
       >
         <NextPage
           columns={12}
-          placeholderStyle={{ gridRowEnd: "span 1", gridColumnEnd: "span 12" }}
+          placeholderStyle={{ gridRowEnd: 'span 1', gridColumnEnd: 'span 12' }}
           placeholder="页面主体内容：拖拽Block布局组件到这里"
           header={
             <NextP
@@ -165,13 +165,13 @@ class Test$$Page extends React.Component {
             </NextP>
           }
           headerTest={[]}
-          headerProps={{ background: "surface" }}
+          headerProps={{ background: 'surface' }}
           footer={null}
           minHeight="100vh"
         >
           <NextBlock
             prefix="next-"
-            placeholderStyle={{ height: "100%" }}
+            placeholderStyle={{ height: '100%' }}
             noPadding={false}
             noBorder={false}
             background="surface"
@@ -183,7 +183,7 @@ class Test$$Page extends React.Component {
               title=""
               primaryKey="732"
               prefix="next-"
-              placeholderStyle={{ height: "100%" }}
+              placeholderStyle={{ height: '100%' }}
               colSpan={1}
               rowSpan={1}
             >
@@ -199,13 +199,13 @@ class Test$$Page extends React.Component {
                   dataSource={__$$eval(() => this.state.users.data)}
                   rowKey="workid"
                   columns={[
-                    { title: "花名", dataIndex: "cname" },
-                    { title: "user_id", dataIndex: "workid" },
-                    { title: "部门", dataIndex: "dep" },
+                    { title: '花名', dataIndex: 'cname' },
+                    { title: 'user_id', dataIndex: 'workid' },
+                    { title: '部门', dataIndex: 'dep' },
                   ]}
                   searchItems={[
-                    { label: "姓名", name: "cname" },
-                    { label: "部门", name: "dep" },
+                    { label: '姓名', name: 'cname' },
+                    { label: '部门', name: 'dep' },
                   ]}
                   onSearch={function () {
                     return this.onSearch.apply(
@@ -220,7 +220,7 @@ class Test$$Page extends React.Component {
                     );
                   }.bind(this)}
                   pagination={{
-                    defaultPageSize: "",
+                    defaultPageSize: '',
                     onPageChange: function () {
                       return this.onPageChange.apply(
                         this,
@@ -237,16 +237,16 @@ class Test$$Page extends React.Component {
         <NextPage
           columns={12}
           headerDivider={true}
-          placeholderStyle={{ gridRowEnd: "span 1", gridColumnEnd: "span 12" }}
+          placeholderStyle={{ gridRowEnd: 'span 1', gridColumnEnd: 'span 12' }}
           placeholder="页面主体内容：拖拽Block布局组件到这里"
           header={null}
-          headerProps={{ background: "surface" }}
+          headerProps={{ background: 'surface' }}
           footer={null}
           minHeight="100vh"
         >
           <NextBlock
             prefix="next-"
-            placeholderStyle={{ height: "100%" }}
+            placeholderStyle={{ height: '100%' }}
             noPadding={false}
             noBorder={false}
             background="surface"
@@ -258,7 +258,7 @@ class Test$$Page extends React.Component {
               title=""
               primaryKey="472"
               prefix="next-"
-              placeholderStyle={{ height: "100%" }}
+              placeholderStyle={{ height: '100%' }}
               colSpan={1}
               rowSpan={1}
             />

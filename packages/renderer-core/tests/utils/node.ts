@@ -1,4 +1,4 @@
-import { PropChangeOptions } from "@ali/lowcode-designer";
+import { IPublicTypePropChangeOptions } from "@ali/lowcode-designer";
 import EventEmitter from "events";
 
 export default class Node {
@@ -40,6 +40,10 @@ export default class Node {
 
   isRoot = () => this._isRoot;
 
+  get isRootNode () {
+    return this._isRoot;
+  };
+
   // componentMeta() {
   //   return this.componentMeta;
   // }
@@ -66,7 +70,7 @@ export default class Node {
     }
   }
 
-  emitPropChange(val: PropChangeOptions, skip?: boolean) {
+  emitPropChange(val: IPublicTypePropChangeOptions, skip?: boolean) {
     if (!skip) {
       this.schema.props = {
         ...this.schema.props,

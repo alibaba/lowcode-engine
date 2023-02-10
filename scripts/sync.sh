@@ -15,3 +15,4 @@ tnpm sync @alilc/lowcode-rax-simulator-renderer
 tnpm sync @alilc/lowcode-react-renderer
 tnpm sync @alilc/lowcode-react-simulator-renderer
 tnpm sync @alilc/lowcode-engine
+tnpm sync @alilc/lowcode-workspace

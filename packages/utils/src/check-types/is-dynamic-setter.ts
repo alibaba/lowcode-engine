@@ -1,7 +1,7 @@
 import { isReactClass } from '../is-react';
-import { DynamicSetter } from '@alilc/lowcode-types';
+import { IPublicTypeDynamicSetter } from '@alilc/lowcode-types';
 
 
-export function isDynamicSetter(obj: any): obj is DynamicSetter {
+export function isDynamicSetter(obj: any): obj is IPublicTypeDynamicSetter {
   return obj && typeof obj === 'function' && !isReactClass(obj);
 }

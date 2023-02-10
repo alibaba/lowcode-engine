@@ -1,4 +1,4 @@
-import { ProjectSchema, ResultFile, ResultDir } from '@alilc/lowcode-types';
+import { IPublicTypeProjectSchema, ResultFile, ResultDir } from '@alilc/lowcode-types';
 
 import {
   BuilderComponentPlugin,
@@ -77,7 +77,7 @@ export function createModuleBuilder(
     };
   };
 
-  const generateModuleCode = async (schema: ProjectSchema | string): Promise<ResultDir> => {
+  const generateModuleCode = async (schema: IPublicTypeProjectSchema | string): Promise<ResultDir> => {
     // Init
     const schemaParser: ISchemaParser = new SchemaParser();
     const parseResult: IParseResult = schemaParser.parse(schema);

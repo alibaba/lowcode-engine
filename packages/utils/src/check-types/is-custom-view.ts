@@ -1,8 +1,8 @@
 import { isValidElement } from 'react';
 import { isReactComponent } from '../is-react';
-import { CustomView } from '@alilc/lowcode-types';
+import { IPublicTypeCustomView } from '@alilc/lowcode-types';
 
 
-export function isCustomView(obj: any): obj is CustomView {
+export function isCustomView(obj: any): obj is IPublicTypeCustomView {
   return obj && (isValidElement(obj) || isReactComponent(obj));
 }

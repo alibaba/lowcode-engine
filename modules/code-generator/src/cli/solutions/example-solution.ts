@@ -559,8 +559,8 @@ codealike.json
     "registry": "https://registry.npm.xxx.com"
   },
   "dependencies": {
-    "@alilc/lowcode-code-generator": "^1.0.0-beta.16",
-    "@alilc/lowcode-types": "^1.0.0-beta.21",
+    "@alilc/lowcode-code-generator": "^1.0.0",
+    "@alilc/lowcode-types": "^1.0.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {

@@ -1,7 +1,7 @@
-import { IPublicModelNode } from './node';
-import { IPublicModelSettingPropEntry } from './setting-prop-entry';
+import { IPublicModelNode, IPublicModelSettingPropEntry } from './';
 
 export interface IPublicModelSettingTopEntry {
+
   /**
    * 返回所属的节点实例
    */
