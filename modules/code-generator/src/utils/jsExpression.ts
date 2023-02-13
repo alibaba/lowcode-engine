@@ -79,7 +79,12 @@ function getBodyStatements(content: string) {
   throw new Error('Can not find Function Statement');
 }
 
-export function isJsCode(value: unknown): boolean {
+/**
+ * 是否是广义上的 JSFunction
+ * @param value
+ * @returns
+ */
+export function isBroadJSFunction(value: unknown): boolean {
   return isJSExpressionFn(value) || isJSFunction(value);
 }
 
@@ -117,7 +122,7 @@ export function generateFunction(
     isBindExpr: false,
   },
 ) {
-  if (isJsCode(value)) {
+  if (isBroadJSFunction(value)) {
     const functionCfg = value as IPublicTypeJSFunction;
     const functionSource = getFunctionSource(functionCfg);
     if (config.isMember) {
