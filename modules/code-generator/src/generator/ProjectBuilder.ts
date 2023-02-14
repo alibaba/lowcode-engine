@@ -16,6 +16,7 @@ import { createResultDir, addDirectory, addFile } from '../utils/resultHelper';
 import { createModuleBuilder } from './ModuleBuilder';
 import { ProjectPreProcessor, ProjectPostProcessor, IContextData } from '../types/core';
 import { CodeGeneratorError } from '../types/error';
+import { isBuiltinSlotName } from '../const';
 
 interface IModuleInfo {
   moduleName?: string;
@@ -272,17 +273,8 @@ export class ProjectBuilder implements IProjectBuilder {
       });
     }
 
-    // TODO: 更多 slots 的处理？？是不是可以考虑把 template 中所有的 slots 都处理下？
-    // const whitelistSlotNames = [
-    //   'router',
-    //   'entry',
-    //   'appConfig',
-    //   'buildConfig',
-    //   'router',
-    // ];
-    // Object.keys(this.template.slots).forEach((slotName: string) => {
-
-    // });
+    // handle extra slots
+    await this.generateExtraSlots(builders, parseResult, buildResult);
 
     // Post Process
     const isSingleComponent = parseResult?.project?.projectRemark?.isSingleComponent;
@@ -338,6 +330,22 @@ export class ProjectBuilder implements IProjectBuilder {
     });
 
     return builders;
+  }
+
+  private async generateExtraSlots(
+    builders: Record<string, IModuleBuilder>,
+    parseResult: IParseResult,
+    buildResult: IModuleInfo[],
+  ) {
+    for (const slotName in this.template.slots) {
+      if (!isBuiltinSlotName(slotName)) {
+        const { files } = await builders[slotName].generateModule(parseResult);
+        buildResult.push({
+          path: this.template.slots[slotName].path,
+          files,
+        });
+      }
+    }
   }
 }
 
