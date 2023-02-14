@@ -3,7 +3,7 @@ import { IconOutline } from './icons/outline';
 import { IPublicModelPluginContext, IPublicModelDocumentModel } from '@alilc/lowcode-types';
 import { enUS, zhCN } from './locale';
 import { MasterPaneName, BackupPaneName } from './helper/consts';
-import { getTreeMaster } from './controllers/tree-master';
+import { TreeMaster } from './controllers/tree-master';
 import { PaneController } from './controllers/pane-controller';
 
 export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
@@ -26,7 +26,7 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
     masterPane: false,
     backupPane: false,
   };
-  const treeMaster = getTreeMaster(ctx);
+  const treeMaster = new TreeMaster(ctx);
   let masterPaneController: PaneController | null = null;
   let backupPaneController: PaneController | null = null;
   return {
