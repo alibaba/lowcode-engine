@@ -1,9 +1,9 @@
 const i18nConfig = {};
 
 let locale =
-  typeof navigator === "object" && typeof navigator.language === "string"
+  typeof navigator === 'object' && typeof navigator.language === 'string'
     ? navigator.language
-    : "zh-CN";
+    : 'zh-CN';
 
 const getLocale = () => locale;
 
@@ -13,22 +13,22 @@ const setLocale = (target) => {
 
 const isEmptyVariables = (variables) =>
   (Array.isArray(variables) && variables.length === 0) ||
-  (typeof variables === "object" &&
+  (typeof variables === 'object' &&
     (!variables || Object.keys(variables).length === 0));
 
 // 按低代码规范里面的要求进行变量替换
 const format = (msg, variables) =>
-  typeof msg === "string"
-    ? msg.replace(/\$\{(\w+)\}/g, (match, key) => variables?.[key] ?? "")
+  typeof msg === 'string'
+    ? msg.replace(/\$\{(\w+)\}/g, (match, key) => variables?.[key] ?? '')
     : msg;
 
 const i18nFormat = ({ id, defaultMessage, fallback }, variables) => {
   const msg =
     i18nConfig[locale]?.[id] ??
-    i18nConfig[locale.replace("-", "_")]?.[id] ??
+    i18nConfig[locale.replace('-', '_')]?.[id] ??
     defaultMessage;
   if (msg == null) {
-    console.warn("[i18n]: unknown message id: %o (locale=%o)", id, locale);
+    console.warn('[i18n]: unknown message id: %o (locale=%o)', id, locale);
     return fallback === undefined ? `${id}` : fallback;
   }
 
@@ -49,7 +49,7 @@ const _inject2 = (target) => {
   };
   target._i18nText = (t) => {
     // 优先取直接传过来的语料
-    const localMsg = t[locale] ?? t[String(locale).replace("-", "_")];
+    const localMsg = t[locale] ?? t[String(locale).replace('-', '_')];
     if (localMsg != null) {
       return format(localMsg, t.params);
     }
@@ -61,7 +61,7 @@ const _inject2 = (target) => {
     }
 
     // 兜底用 use 指定的或默认语言的
-    return format(t[t.use || "zh-CN"] ?? t.en_US, t.params);
+    return format(t[t.use || 'zh-CN'] ?? t.en_US, t.params);
   };
 
   // 注入到上下文中去

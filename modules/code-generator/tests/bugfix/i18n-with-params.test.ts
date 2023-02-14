@@ -1,7 +1,7 @@
 import CodeGenerator from '../../src';
 import * as fs from 'fs';
 import * as path from 'path';
-import { ProjectSchema } from '@alilc/lowcode-types';
+import { IPublicTypeProjectSchema } from '@alilc/lowcode-types';
 import { createDiskPublisher } from '../helpers/solutionHelper';
 
 const testCaseBaseName = path.basename(__filename, '.test.ts');
@@ -19,7 +19,7 @@ describe(testCaseBaseName, () => {
       `
         <Greetings
           content={this._i18nText({
-            key: "greetings.hello",
+            key: 'greetings.hello',
             params: { name: this.state.name },
           })}
         />
@@ -31,7 +31,7 @@ describe(testCaseBaseName, () => {
 function exportProject(
   importPath: string,
   outputPath: string,
-  mergeSchema?: Partial<ProjectSchema>,
+  mergeSchema?: Partial<IPublicTypeProjectSchema>,
 ) {
   const schemaJsonStr = fs.readFileSync(importPath, { encoding: 'utf8' });
   const schema = { ...JSON.parse(schemaJsonStr), ...mergeSchema };

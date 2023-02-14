@@ -70,9 +70,10 @@ sidebar_position: 2
    ```bash
    npm run pub
    ```
-5. 同步到 tnpm 源 & alifd CDN（此步骤将发布在 npm 源的包同步到阿里内网源，因为 alifd cdn 将依赖内网 npm 源）
+5. 同步到 tnpm 源 & alifd CDN & uipaas CDN（此步骤将发布在 npm 源的包同步到阿里内网源，因为 alifd cdn 将依赖内网 npm 源）
    ```bash
    tnpm run sync
+   tnpm run syncOss
    ```
 6. 更新[发布日志](https://github.com/alibaba/lowcode-engine/releases)
 7. 合并 release/x.x.x 到 main 分支
@@ -102,9 +103,10 @@ sidebar_position: 2
    ```bash
    npm run pub:preminor
    ```
-5. 同步到 tnpm 源 & alifd CDN
+5. 同步到 tnpm 源 & alifd CDN & uipaas CDN
    ```bash
    tnpm run sync
+   tnpm run syncOss
    ```
 
 #### 发某 z 位版本首个 beta，如 1.0.1-beta.0
@@ -129,9 +131,10 @@ sidebar_position: 2
    ```bash
    npm run pub:prepatch
    ```
-5. 同步到 tnpm 源 & alifd CDN
+5. 同步到 tnpm 源 & alifd CDN & uipaas CDN
    ```bash
    tnpm run sync
+   tnpm run syncOss
    ```
 
 #### 发某版本非首个 beta，如 1.0.1-beta.0 -> 1.0.1-beta.1
@@ -151,9 +154,10 @@ sidebar_position: 2
    ```bash
    npm run pub:prerelease
    ```
-5. 同步到 tnpm 源 & alifd CDN
+5. 同步到 tnpm 源 & alifd CDN & uipaas CDN
    ```bash
    tnpm run sync
+   tnpm run syncOss
    ```
 
 
@@ -173,9 +177,10 @@ sidebar_position: 2
    ```bash
    npm publish --tag beta
    ```
-4. 同步到 tnpm 源 & alifd CDN
+4. 同步到 tnpm 源 & alifd CDN & uipaas CDN
    ```bash
    tnpm run sync
+   tnpm run syncOss
    ```
 
 **官网生效**

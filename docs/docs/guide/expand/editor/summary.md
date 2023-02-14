@@ -34,10 +34,11 @@ material.setAssets(assets);
 
 也可以通过异步加载物料中心上的物料。
 ```typescript
-import { ILowCodePluginContext, material, plugins } from '@alilc/lowcode-engine';
+import { material, plugins } from '@alilc/lowcode-engine';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
 // 动态加载 assets
-plugins.register((ctx: ILowCodePluginContext) => {
+plugins.register((ctx: IPublicModelPluginContext) => {
   return {
     name: 'ext-assets',
     async init() {
@@ -57,7 +58,8 @@ plugins.register((ctx: ILowCodePluginContext) => {
 ### 配置插件
 可以通过 npm 包的方式引入社区插件，配置如下所示：
 ```typescript
-import { ILowCodePluginContext, plugins } from '@alilc/lowcode-engine';
+import { plugins } from '@alilc/lowcode-engine';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 import PluginIssueTracker from '@alilc/lowcode-plugin-issue-tracker';
 
 // 注册一个提 issue 组件到您的编辑器中，方位默认在左栏下侧

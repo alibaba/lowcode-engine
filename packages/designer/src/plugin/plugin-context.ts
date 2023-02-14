@@ -1,6 +1,5 @@
 /* eslint-disable no-multi-assign */
-import { EngineConfig, engineConfig } from '@alilc/lowcode-editor-core';
-import { ILowCodePluginManager } from '@alilc/lowcode-designer';
+import { engineConfig, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import {
   IPublicApiHotkey,
   IPublicApiProject,
@@ -9,43 +8,45 @@ import {
   IPublicApiMaterial,
   IPublicApiEvent,
   IPublicApiCommon,
-} from '@alilc/lowcode-types';
-import { getLogger, Logger } from '@alilc/lowcode-utils';
-import {
-  ILowCodePluginContext,
-  IPluginContextOptions,
-  ILowCodePluginPreferenceDeclaration,
-  PreferenceValueType,
+  IPublicModelPluginContext,
   IPluginPreferenceMananger,
+  IPublicTypePreferenceValueType,
+  IPublicModelEngineConfig,
+  IPublicApiLogger,
+  IPublicApiPlugins,
+  IPublicTypePluginDeclaration,
+  IPublicApiCanvas,
+} from '@alilc/lowcode-types';
+import {
+  IPluginContextOptions,
   ILowCodePluginContextApiAssembler,
   ILowCodePluginContextPrivate,
 } from './plugin-types';
 import { isValidPreferenceKey } from './plugin-utils';
 
 
-export default class PluginContext implements ILowCodePluginContext, ILowCodePluginContextPrivate {
+export default class PluginContext implements IPublicModelPluginContext, ILowCodePluginContextPrivate {
   hotkey: IPublicApiHotkey;
   project: IPublicApiProject;
   skeleton: IPublicApiSkeleton;
   setters: IPublicApiSetters;
   material: IPublicApiMaterial;
   event: IPublicApiEvent;
-  config: EngineConfig;
+  config: IPublicModelEngineConfig;
   common: IPublicApiCommon;
-  logger: Logger;
-  plugins: ILowCodePluginManager;
+  logger: IPublicApiLogger;
+  plugins: IPublicApiPlugins;
   preference: IPluginPreferenceMananger;
+  pluginEvent: IPublicApiEvent;
+  canvas: IPublicApiCanvas;
 
   constructor(
-      plugins: ILowCodePluginManager,
       options: IPluginContextOptions,
       contextApiAssembler: ILowCodePluginContextApiAssembler,
     ) {
-    contextApiAssembler.assembleApis(this);
-    this.plugins = plugins;
-    const { pluginName = 'anonymous' } = options;
-    this.logger = getLogger({ level: 'warn', bizName: `designer:plugin:${pluginName}` });
-
+    const { pluginName = 'anonymous', meta = {} } = options;
+    contextApiAssembler.assembleApis(this, pluginName, meta);
+    this.pluginEvent = createModuleEventBus(pluginName, 200);
     const enhancePluginContextHook = engineConfig.get('enhancePluginContextHook');
     if (enhancePluginContextHook) {
       enhancePluginContextHook(this);
@@ -54,12 +55,12 @@ export default class PluginContext implements ILowCodePluginContext, ILowCodePlu
 
   setPreference(
     pluginName: string,
-    preferenceDeclaration: ILowCodePluginPreferenceDeclaration,
+    preferenceDeclaration: IPublicTypePluginDeclaration,
   ): void {
     const getPreferenceValue = (
       key: string,
-      defaultValue?: PreferenceValueType,
-      ): PreferenceValueType | undefined => {
+      defaultValue?: IPublicTypePreferenceValueType,
+      ): IPublicTypePreferenceValueType | undefined => {
       if (!isValidPreferenceKey(key, preferenceDeclaration)) {
         return undefined;
       }

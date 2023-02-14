@@ -1,20 +1,38 @@
-import { IPublicModelDragObject } from './drag-object';
+import { IPublicModelDocumentModel, IPublicModelDragObject } from './';
 
 export interface IPublicModelLocateEvent {
 
   get type(): string;
 
-  get globalX(): number;
+  /**
+   * 浏览器窗口坐标系
+   */
+  readonly globalX: number;
+  readonly globalY: number;
 
-  get globalY(): number;
+  /**
+   * 原始事件
+   */
+  readonly originalEvent: MouseEvent | DragEvent;
 
-  get originalEvent(): MouseEvent | DragEvent;
+  /**
+   * 浏览器事件响应目标
+   */
+  target?: Element | null;
 
-  get target(): Element | null | undefined;
+  canvasX?: number;
 
-  get canvasX(): number | undefined;
+  canvasY?: number;
 
-  get canvasY(): number | undefined;
+  /**
+   * 事件订正标识，初始构造时，从发起端构造，缺少 canvasX,canvasY, 需要经过订正才有
+   */
+  fixed?: true;
+
+  /**
+   * 激活或目标文档
+   */
+  documentModel?: IPublicModelDocumentModel | null;
 
   get dragObject(): IPublicModelDragObject | null;
 }

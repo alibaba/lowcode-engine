@@ -1,12 +1,15 @@
 import { isValidElement, ReactNode, createElement, cloneElement } from 'react';
 import { Icon } from '@alifd/next';
-import { IconType } from '@alilc/lowcode-types';
+import { IPublicTypeIconType } from '@alilc/lowcode-types';
 import { isReactComponent } from './is-react';
 import { isESModule } from './is-es-module';
 
 const URL_RE = /^(https?:)\/\//i;
 
-export function createIcon(icon?: IconType | null, props?: Record<string, unknown>): ReactNode {
+export function createIcon(
+    icon?: IPublicTypeIconType | null,
+    props?: Record<string, unknown>,
+  ): ReactNode {
   if (!icon) {
     return null;
   }

@@ -1,14 +1,13 @@
 import { Component, Fragment, PureComponent } from 'react';
 import classNames from 'classnames';
 import { computed, observer, Title } from '@alilc/lowcode-editor-core';
-import { TitleContent } from '@alilc/lowcode-types';
+import { IPublicTypeTitleContent } from '@alilc/lowcode-types';
 import { getClosestNode } from '@alilc/lowcode-utils';
-
+import { intl } from '../../locale';
 import { BuiltinSimulatorHost } from '../host';
 
-
 export class BorderDetectingInstance extends PureComponent<{
-  title: TitleContent;
+  title: IPublicTypeTitleContent;
   rect: DOMRect | null;
   scale: number;
   scrollX: number;
@@ -37,7 +36,7 @@ export class BorderDetectingInstance extends PureComponent<{
       <div className={className} style={style}>
         <Title title={title} className="lc-borders-title" />
         {
-          isLocked ? (<Title title="已锁定" className="lc-borders-status" />) : null
+          isLocked ? (<Title title={intl('locked')} className="lc-borders-status" />) : null
         }
       </div>
     );
@@ -77,10 +76,8 @@ export class BorderDetecting extends Component<{ host: BuiltinSimulatorHost }> {
     const { host } = this.props;
     const { current } = this;
 
-
-    const canHoverHook = current?.componentMeta.getMetadata()?.configure.advanced?.callbacks?.onHoverHook;
+    const canHoverHook = current?.componentMeta.advanced.callbacks?.onHoverHook;
     const canHover = (canHoverHook && typeof canHoverHook === 'function') ? canHoverHook(current.internalToShellNode()) : true;
-
 
     if (!canHover || !current || host.viewport.scrolling || host.liveEditing.editing) {
       return null;

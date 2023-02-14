@@ -1,8 +1,8 @@
-import { CompositeValue } from '../../value-type';
-import { IPublicModelNode } from './node';
-import { IPublicModelProp } from './prop';
+import { IPublicTypeCompositeValue } from '../type';
+import { IPublicModelNode, IPublicModelProp } from './';
 
 export interface IPublicModelProps {
+
   /**
    * id
    */
@@ -10,8 +10,9 @@ export interface IPublicModelProps {
 
   /**
    * 返回当前 props 的路径
+   * return path of current props
    */
-  get path(): any[];
+  get path(): string[];
 
   /**
    * 返回所属的 node 实例
@@ -20,63 +21,65 @@ export interface IPublicModelProps {
 
   /**
    * 获取指定 path 的属性模型实例
+   * get prop by path
    * @param path 属性路径，支持 a / a.b / a.0 等格式
-   * @returns
    */
   getProp(path: string): IPublicModelProp | null;
 
   /**
    * 获取指定 path 的属性模型实例值
+   * get value of prop by path
    * @param path 属性路径，支持 a / a.b / a.0 等格式
-   * @returns
    */
   getPropValue(path: string): any;
 
   /**
    * 获取指定 path 的属性模型实例，
    *  注：导出时，不同于普通属性，该属性并不挂载在 props 之下，而是与 props 同级
+   * get extra prop by path
    * @param path 属性路径，支持 a / a.b / a.0 等格式
-   * @returns
    */
   getExtraProp(path: string): IPublicModelProp | null;
 
   /**
    * 获取指定 path 的属性模型实例值
    *  注：导出时，不同于普通属性，该属性并不挂载在 props 之下，而是与 props 同级
+   * get value of extra prop by path
    * @param path 属性路径，支持 a / a.b / a.0 等格式
-   * @returns
    */
   getExtraPropValue(path: string): any;
 
   /**
    * 设置指定 path 的属性模型实例值
+   * set value of prop by path
    * @param path 属性路径，支持 a / a.b / a.0 等格式
    * @param value 值
-   * @returns
    */
-  setPropValue(path: string, value: CompositeValue): void;
+  setPropValue(path: string, value: IPublicTypeCompositeValue): void;
 
   /**
    * 设置指定 path 的属性模型实例值
+   * set value of extra prop by path
    * @param path 属性路径，支持 a / a.b / a.0 等格式
    * @param value 值
-   * @returns
    */
-  setExtraPropValue(path: string, value: CompositeValue): void;
+  setExtraPropValue(path: string, value: IPublicTypeCompositeValue): void;
 
   /**
-   * test if the specified key is existing or not.
+   * 当前 props 是否包含某 prop
+   * check if the specified key is existing or not.
    * @param key
-   * @returns
+   * @since v1.1.0
    */
   has(key: string): boolean;
 
   /**
+   * 添加一个 prop
    * add a key with given value
    * @param value
    * @param key
-   * @returns
+   * @since v1.1.0
    */
-  add(value: CompositeValue, key?: string | number | undefined): any;
+  add(value: IPublicTypeCompositeValue, key?: string | number | undefined): any;
 
 }

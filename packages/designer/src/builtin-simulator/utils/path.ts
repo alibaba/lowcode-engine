@@ -13,7 +13,7 @@ export function isPackagePath(path: string): boolean {
 export function toTitleCase(s: string): string {
   return s
     .split(/[-_ .]+/)
-    .map(token => token[0].toUpperCase() + token.substring(1))
+    .map((token) => token[0].toUpperCase() + token.substring(1))
     .join('');
 }
 

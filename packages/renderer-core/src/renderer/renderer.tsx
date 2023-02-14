@@ -5,7 +5,8 @@ import { isFileSchema, isEmpty } from '../utils';
 import baseRendererFactory from './base';
 import divFactory from '../components/Div';
 import { IRenderComponent, IRendererProps, IRendererState } from '../types';
-import { NodeSchema, RootSchema } from '@alilc/lowcode-types';
+import { IPublicTypeNodeSchema, IPublicTypeRootSchema } from '@alilc/lowcode-types';
+import logger from '../utils/logger';
 
 export default function rendererFactory(): IRenderComponent {
   const { PureComponent, Component, createElement, findDOMNode } = adapter.getRuntime();
@@ -18,7 +19,7 @@ export default function rendererFactory(): IRenderComponent {
 
   const debug = Debug('renderer:entry');
 
-  class FaultComponent extends PureComponent<NodeSchema> {
+  class FaultComponent extends PureComponent<IPublicTypeNodeSchema> {
     render() {
       // FIXME: errorlog
       console.error('render error', this.props);
@@ -59,7 +60,7 @@ export default function rendererFactory(): IRenderComponent {
       components: {},
       designMode: '',
       suspended: false,
-      schema: {} as RootSchema,
+      schema: {} as IPublicTypeRootSchema,
       onCompGetRef: () => { },
       onCompGetCtx: () => { },
       thisRequiredInJSE: true,
@@ -168,6 +169,7 @@ export default function rendererFactory(): IRenderComponent {
       }
       // 兼容乐高区块模板
       if (schema.componentName !== 'Div' && !isFileSchema(schema)) {
+        logger.error('The root component name needs to be one of Page、Block、Component, please check the schema: ', schema);
         return '模型结构异常';
       }
       debug('entry.render');

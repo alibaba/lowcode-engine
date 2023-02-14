@@ -3,7 +3,7 @@ import { Button, Icon } from '@alifd/next';
 import { action, makeObservable } from '@alilc/lowcode-editor-core';
 import { IconFix } from '../../icons/fix';
 import { IconFloat } from '../../icons/float';
-import Panel from '../../widget/panel';
+import { Panel } from '../../widget/panel';
 
 export default class PanelOperationRow extends Component<{ panel: Panel }> {
   constructor(props) {

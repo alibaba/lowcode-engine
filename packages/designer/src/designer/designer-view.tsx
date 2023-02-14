@@ -4,16 +4,20 @@ import BuiltinDragGhostComponent from './drag-ghost';
 import { Designer, DesignerProps } from './designer';
 import { ProjectView } from '../project';
 import './designer.less';
-import clipboard from './clipboard';
+import { clipboard } from './clipboard';
 
-export class DesignerView extends Component<DesignerProps & {
+type IProps = DesignerProps & {
   designer?: Designer;
-}> {
-  readonly designer: Designer;
+};
 
-  constructor(props: any) {
+export class DesignerView extends Component<IProps> {
+  readonly designer: Designer;
+  readonly viewName: string | undefined;
+
+  constructor(props: IProps) {
     super(props);
     const { designer, ...designerProps } = props;
+    this.viewName = designer?.viewName;
     if (designer) {
       this.designer = designer;
       designer.setProps(designerProps);

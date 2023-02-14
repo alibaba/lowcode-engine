@@ -9,6 +9,8 @@ import {
   settingPropEntrySymbol,
   settingTopEntrySymbol,
   designerCabinSymbol,
+  propSymbol,
+  simulatorHostSymbol,
 } from '@alilc/lowcode-shell';
 
 export default {
@@ -22,4 +24,6 @@ export default {
   settingPropEntrySymbol,
   settingTopEntrySymbol,
   designerCabinSymbol,
+  propSymbol,
+  simulatorHostSymbol,
 };

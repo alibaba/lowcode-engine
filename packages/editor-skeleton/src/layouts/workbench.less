@@ -133,11 +133,54 @@ body {
   }
 }
 
+.workspace-engine-main {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #edeff3;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+
+  &.active {
+    z-index: 999;
+  }
+
+  .lc-workbench {
+
+  }
+
+  .engine-editor-view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+
+    &.active {
+      z-index: 999;
+      background: #edeff3;
+    }
+  }
+}
+
 .lc-workbench {
   height: 100%;
   display: flex;
   flex-direction: column;
   background-color: #edeff3;
+
+  &.engine-main {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #edeff3;
+  }
   .lc-top-area {
     height: var(--top-area-height);
     background-color: var(--color-pane-background);
@@ -349,6 +392,7 @@ body {
       }
       .lc-main-area {
         flex: 1;
+        background-color: #edeff3;
       }
       .lc-bottom-area {
         height: var(--bottom-area-height);

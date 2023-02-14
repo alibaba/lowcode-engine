@@ -1,54 +1,104 @@
 import { ComponentType } from 'react';
 import { obx, computed, autorun, makeObservable, IReactionPublic, IReactionOptions, IReactionDisposer } from '@alilc/lowcode-editor-core';
 import {
-  ProjectSchema,
-  ComponentMetadata,
-  ComponentAction,
-  NpmInfo,
-  IEditor,
-  CompositeObject,
-  PropsList,
-  NodeSchema,
-  PropsTransducer,
+  IPublicTypeProjectSchema,
+  IPublicTypeComponentMetadata,
+  IPublicTypeComponentAction,
+  IPublicTypeNpmInfo,
+  IPublicModelEditor,
+  IPublicTypeCompositeObject,
+  IPublicTypePropsList,
+  IPublicTypeNodeSchema,
+  IPublicTypePropsTransducer,
   IShellModelFactory,
+  IPublicModelDragObject,
+  IPublicTypeScrollable,
+  IPublicModelScroller,
+  IPublicTypeLocationData,
+  IPublicEnumTransformStage,
+  IPublicModelDragon,
+  IPublicModelDropLocation,
 } from '@alilc/lowcode-types';
-import { megreAssets, AssetsJson, isNodeSchema } from '@alilc/lowcode-utils';
+import { megreAssets, IPublicTypeAssetsJson, isNodeSchema, isDragNodeObject, isDragNodeDataObject, isLocationChildrenDetail, Logger } from '@alilc/lowcode-utils';
 import { Project } from '../project';
-import { Node, DocumentModel, insertChildren, ParentalNode, TransformStage } from '../document';
-import { ComponentMeta } from '../component-meta';
+import { Node, DocumentModel, insertChildren, INode } from '../document';
+import { ComponentMeta, IComponentMeta } from '../component-meta';
 import { INodeSelector, Component } from '../simulator';
-import { Scroller, IScrollable } from './scroller';
-import { Dragon, isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './dragon';
-import { ActiveTracker } from './active-tracker';
+import { Scroller } from './scroller';
+import { Dragon, IDragon, ILocateEvent } from './dragon';
+import { ActiveTracker, IActiveTracker } from './active-tracker';
 import { Detecting } from './detecting';
-import { DropLocation, LocationData, isLocationChildrenDetail } from './location';
+import { DropLocation } from './location';
 import { OffsetObserver, createOffsetObserver } from './offset-observer';
-import { focusing } from './focusing';
 import { SettingTopEntry } from './setting';
 import { BemToolsManager } from '../builtin-simulator/bem-tools/manager';
+import { ComponentActions } from '../component-actions';
+
+const logger = new Logger({ level: 'warn', bizName: 'designer' });
 
 export interface DesignerProps {
-  editor: IEditor;
+  [key: string]: any;
+  editor: IPublicModelEditor;
   shellModelFactory: IShellModelFactory;
   className?: string;
   style?: object;
-  defaultSchema?: ProjectSchema;
+  defaultSchema?: IPublicTypeProjectSchema;
   hotkeys?: object;
+  viewName?: string;
   simulatorProps?: object | ((document: DocumentModel) => object);
   simulatorComponent?: ComponentType<any>;
   dragGhostComponent?: ComponentType<any>;
   suspensed?: boolean;
-  componentMetadatas?: ComponentMetadata[];
-  globalComponentActions?: ComponentAction[];
+  componentMetadatas?: IPublicTypeComponentMetadata[];
+  globalComponentActions?: IPublicTypeComponentAction[];
   onMount?: (designer: Designer) => void;
-  onDragstart?: (e: LocateEvent) => void;
-  onDrag?: (e: LocateEvent) => void;
-  onDragend?: (e: { dragObject: DragObject; copy: boolean }, loc?: DropLocation) => void;
-  [key: string]: any;
+  onDragstart?: (e: ILocateEvent) => void;
+  onDrag?: (e: ILocateEvent) => void;
+  onDragend?: (
+      e: { dragObject: IPublicModelDragObject; copy: boolean },
+      loc?: DropLocation,
+    ) => void;
 }
 
-export class Designer {
-  readonly dragon = new Dragon(this);
+export interface IDesigner {
+
+  get dragon(): IPublicModelDragon;
+
+  get activeTracker(): IActiveTracker;
+
+  get componentActions(): ComponentActions;
+
+  get editor(): IPublicModelEditor;
+
+  createScroller(scrollable: IPublicTypeScrollable): IPublicModelScroller;
+
+  /**
+   * 创建插入位置，考虑放到 dragon 中
+   */
+  createLocation(locationData: IPublicTypeLocationData): IPublicModelDropLocation;
+
+  get componentsMap(): { [key: string]: IPublicTypeNpmInfo | Component };
+
+  loadIncrementalAssets(incrementalAssets: IPublicTypeAssetsJson): Promise<void>;
+
+  getComponentMeta(
+    componentName: string,
+    generateMetadata?: () => IPublicTypeComponentMetadata | null,
+  ): IComponentMeta;
+
+  createComponentMeta(data: IPublicTypeComponentMetadata): IComponentMeta | null;
+
+  getComponentMetasMap(): Map<string, IComponentMeta>;
+
+  addPropsReducer(reducer: IPublicTypePropsTransducer, stage: IPublicEnumTransformStage): void;
+}
+
+export class Designer implements IDesigner {
+  dragon: IDragon;
+
+  viewName: string | undefined;
+
+  readonly componentActions = new ComponentActions();
 
   readonly activeTracker = new ActiveTracker();
 
@@ -56,11 +106,29 @@ export class Designer {
 
   readonly project: Project;
 
-  readonly editor: IEditor;
+  readonly editor: IPublicModelEditor;
 
   readonly bemToolsManager = new BemToolsManager(this);
 
   readonly shellModelFactory: IShellModelFactory;
+
+  private _dropLocation?: DropLocation;
+
+  private propsReducers = new Map<IPublicEnumTransformStage, IPublicTypePropsTransducer[]>();
+
+  private _lostComponentMetasMap = new Map<string, ComponentMeta>();
+
+  private props?: DesignerProps;
+
+  private oobxList: OffsetObserver[] = [];
+
+  @obx.ref private _componentMetasMap = new Map<string, IComponentMeta>();
+
+  @obx.ref private _simulatorComponent?: ComponentType<any>;
+
+  @obx.ref private _simulatorProps?: object | ((project: Project) => object);
+
+  @obx.ref private _suspensed = false;
 
   get currentDocument() {
     return this.project.currentDocument;
@@ -76,13 +144,15 @@ export class Designer {
 
   constructor(props: DesignerProps) {
     makeObservable(this);
-    const { editor, shellModelFactory } = props;
+    const { editor, viewName, shellModelFactory } = props;
     this.editor = editor;
+    this.viewName = viewName;
     this.shellModelFactory = shellModelFactory;
     this.setProps(props);
 
-    this.project = new Project(this, props.defaultSchema);
+    this.project = new Project(this, props.defaultSchema, viewName);
 
+    this.dragon = new Dragon(this);
     this.dragon.onDragstart((e) => {
       this.detecting.enable = false;
       const { dragObject } = e;
@@ -113,6 +183,7 @@ export class Designer {
 
     this.dragon.onDragend((e) => {
       const { dragObject, copy } = e;
+      logger.debug('onDragend: dragObject ', dragObject, ' copy ', copy);
       const loc = this._dropLocation;
       if (loc) {
         if (isLocationChildrenDetail(loc.detail) && loc.detail.valid !== false) {
@@ -169,9 +240,6 @@ export class Designer {
     this.postEvent('init', this);
     this.setupSelection();
     setupHistory();
-
-    // TODO: 先简单实现，后期通过焦点赋值
-    focusing.focusDesigner = this;
   }
 
   setupSelection = () => {
@@ -201,10 +269,8 @@ export class Designer {
   };
 
   postEvent(event: string, ...args: any[]) {
-    this.editor.emit(`designer.${event}`, ...args);
+    this.editor.eventBus.emit(`designer.${event}`, ...args);
   }
-
-  private _dropLocation?: DropLocation;
 
   get dropLocation() {
     return this._dropLocation;
@@ -213,14 +279,14 @@ export class Designer {
   /**
    * 创建插入位置，考虑放到 dragon 中
    */
-  createLocation(locationData: LocationData): DropLocation {
+  createLocation(locationData: IPublicTypeLocationData): DropLocation {
     const loc = new DropLocation(locationData);
     if (this._dropLocation && this._dropLocation.document !== loc.document) {
-      this._dropLocation.document.internalSetDropLocation(null);
+      this._dropLocation.document.dropLocation = null;
     }
     this._dropLocation = loc;
     this.postEvent('dropLocation.change', loc);
-    loc.document.internalSetDropLocation(loc);
+    loc.document.dropLocation = loc;
     this.activeTracker.track({ node: loc.target, detail: loc.detail });
     return loc;
   }
@@ -230,17 +296,15 @@ export class Designer {
    */
   clearLocation() {
     if (this._dropLocation) {
-      this._dropLocation.document.internalSetDropLocation(null);
+      this._dropLocation.document.dropLocation = null;
     }
     this.postEvent('dropLocation.change', undefined);
     this._dropLocation = undefined;
   }
 
-  createScroller(scrollable: IScrollable) {
+  createScroller(scrollable: IPublicTypeScrollable): IPublicModelScroller {
     return new Scroller(scrollable);
   }
-
-  private oobxList: OffsetObserver[] = [];
 
   createOffsetObserver(nodeInstance: INodeSelector): OffsetObserver | null {
     const oobx = createOffsetObserver(nodeInstance);
@@ -273,10 +337,11 @@ export class Designer {
 
   /**
    * 获得合适的插入位置
+   * @deprecated
    */
   getSuitableInsertion(
-    insertNode?: Node | NodeSchema | NodeSchema[],
-  ): { target: ParentalNode; index?: number } | null {
+    insertNode?: INode | IPublicTypeNodeSchema | IPublicTypeNodeSchema[],
+  ): { target: INode; index?: number } | null {
     const activeDoc = this.project.currentDocument;
     if (!activeDoc) {
       return null;
@@ -287,12 +352,12 @@ export class Designer {
       this.getComponentMeta(insertNode[0].componentName).isModal
     ) {
       return {
-        target: activeDoc.rootNode as ParentalNode,
+        target: activeDoc.rootNode as INode,
       };
     }
     const focusNode = activeDoc.focusNode!;
     const nodes = activeDoc.selection.getNodes();
-    const refNode = nodes.find(item => focusNode.contains(item));
+    const refNode = nodes.find((item) => focusNode.contains(item));
     let target;
     let index: number | undefined;
     if (!refNode || refNode === focusNode) {
@@ -311,8 +376,6 @@ export class Designer {
 
     return { target, index };
   }
-
-  private props?: DesignerProps;
 
   setProps(nextProps: DesignerProps) {
     const props = this.props ? { ...this.props, ...nextProps } : nextProps;
@@ -360,16 +423,16 @@ export class Designer {
     this.props = props;
   }
 
-  async loadIncrementalAssets(incrementalAssets: AssetsJson): Promise<void> {
+  async loadIncrementalAssets(incrementalAssets: IPublicTypeAssetsJson): Promise<void> {
     const { components, packages } = incrementalAssets;
     components && this.buildComponentMetasMap(components);
     if (packages) {
-      await this.project.simulator!.setupComponents(packages);
+      await this.project.simulator?.setupComponents(packages);
     }
 
     if (components) {
-      // 合并assets
-      let assets = this.editor.get('assets');
+      // 合并 assets
+      let assets = this.editor.get('assets') || {};
       let newAssets = megreAssets(assets, incrementalAssets);
       // 对于 assets 存在需要二次网络下载的过程，必须 await 等待结束之后，再进行事件触发
       await this.editor.set('assets', newAssets);
@@ -377,7 +440,7 @@ export class Designer {
     // TODO: 因为涉及修改 prototype.view，之后在 renderer 里修改了 vc 的 view 获取逻辑后，可删除
     this.refreshComponentMetasMap();
     // 完成加载增量资源后发送事件，方便插件监听并处理相关逻辑
-    this.editor.emit('designer.incrementalAssetsReady');
+    this.editor.eventBus.emit('designer.incrementalAssetsReady');
   }
 
   /**
@@ -391,19 +454,31 @@ export class Designer {
     return this.props?.[key];
   }
 
-  @obx.ref private _simulatorComponent?: ComponentType<any>;
-
   @computed get simulatorComponent(): ComponentType<any> | undefined {
     return this._simulatorComponent;
   }
 
-  @obx.ref private _simulatorProps?: object | ((document: DocumentModel) => object);
-
-  @computed get simulatorProps(): object | ((project: Project) => object) {
+  @computed get simulatorProps(): object {
+    if (typeof this._simulatorProps === 'function') {
+      return this._simulatorProps(this.project);
+    }
     return this._simulatorProps || {};
   }
 
-  @obx.ref private _suspensed = false;
+  /**
+   * 提供给模拟器的参数
+   */
+  @computed get projectSimulatorProps(): any {
+    return {
+      ...this.simulatorProps,
+      project: this.project,
+      designer: this,
+      onMount: (simulator: any) => {
+        this.project.mountSimulator(simulator);
+        this.editor.set('simulator', simulator);
+      },
+    };
+  }
 
   get suspensed(): boolean {
     return this._suspensed;
@@ -417,24 +492,23 @@ export class Designer {
     }
   }
 
-  get schema(): ProjectSchema {
+  get schema(): IPublicTypeProjectSchema {
     return this.project.getSchema();
   }
 
-  setSchema(schema?: ProjectSchema) {
+  setSchema(schema?: IPublicTypeProjectSchema) {
     this.project.load(schema);
   }
 
-  @obx.ref private _componentMetasMap = new Map<string, ComponentMeta>();
-
-  private _lostComponentMetasMap = new Map<string, ComponentMeta>();
-
-  buildComponentMetasMap(metas: ComponentMetadata[]) {
+  buildComponentMetasMap(metas: IPublicTypeComponentMetadata[]) {
     metas.forEach((data) => this.createComponentMeta(data));
   }
 
-  createComponentMeta(data: ComponentMetadata): ComponentMeta {
+  createComponentMeta(data: IPublicTypeComponentMetadata): IComponentMeta | null {
     const key = data.componentName;
+    if (!key) {
+      return null;
+    }
     let meta = this._componentMetasMap.get(key);
     if (meta) {
       meta.setMetadata(data);
@@ -455,14 +529,14 @@ export class Designer {
     return meta;
   }
 
-  getGlobalComponentActions(): ComponentAction[] | null {
+  getGlobalComponentActions(): IPublicTypeComponentAction[] | null {
     return this.props?.globalComponentActions || null;
   }
 
   getComponentMeta(
     componentName: string,
-    generateMetadata?: () => ComponentMetadata | null,
-  ) {
+    generateMetadata?: () => IPublicTypeComponentMetadata | null,
+  ): IComponentMeta {
     if (this._componentMetasMap.has(componentName)) {
       return this._componentMetasMap.get(componentName)!;
     }
@@ -485,7 +559,7 @@ export class Designer {
     return this._componentMetasMap;
   }
 
-  @computed get componentsMap(): { [key: string]: NpmInfo | Component } {
+  @computed get componentsMap(): { [key: string]: IPublicTypeNpmInfo | Component } {
     const maps: any = {};
     const designer = this;
     designer._componentMetasMap.forEach((config, key) => {
@@ -493,7 +567,7 @@ export class Designer {
       if (metaData.devMode === 'lowCode') {
         maps[key] = metaData.schema;
       } else {
-        const view = metaData.configure.advanced?.view;
+        const { view } = config.advanced;
         if (view) {
           maps[key] = view;
         } else {
@@ -504,9 +578,7 @@ export class Designer {
     return maps;
   }
 
-  private propsReducers = new Map<TransformStage, PropsTransducer[]>();
-
-  transformProps(props: CompositeObject | PropsList, node: Node, stage: TransformStage) {
+  transformProps(props: IPublicTypeCompositeObject | IPublicTypePropsList, node: Node, stage: IPublicEnumTransformStage) {
     if (Array.isArray(props)) {
       // current not support, make this future
       return props;
@@ -528,7 +600,11 @@ export class Designer {
     }, props);
   }
 
-  addPropsReducer(reducer: PropsTransducer, stage: TransformStage) {
+  addPropsReducer(reducer: IPublicTypePropsTransducer, stage: IPublicEnumTransformStage) {
+    if (!reducer) {
+      logger.error('reducer is not available');
+      return;
+    }
     const reducers = this.propsReducers.get(stage);
     if (reducers) {
       reducers.push(reducer);

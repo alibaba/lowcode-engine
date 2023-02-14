@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import DragResizeEngine from './drag-resize-engine';
-import { observer, computed, globalContext, Editor } from '@alilc/lowcode-editor-core';
+import { observer, computed, globalContext } from '@alilc/lowcode-editor-core';
 import classNames from 'classnames';
 import { SimulatorContext } from '../context';
 import { BuiltinSimulatorHost } from '../host';
@@ -136,49 +136,50 @@ export class BoxResizingInstance extends Component<{
     this.willBind();
 
     const resize = (e: MouseEvent, direction: string, node: any, moveX: number, moveY: number) => {
-      const metadata = node.componentMeta.getMetadata();
+      const { advanced } = node.componentMeta;
       if (
-        metadata.configure?.advanced?.callbacks &&
-        typeof metadata.configure.advanced.callbacks.onResize === 'function'
+        advanced.callbacks &&
+        typeof advanced.callbacks.onResize === 'function'
       ) {
         (e as any).trigger = direction;
         (e as any).deltaX = moveX;
         (e as any).deltaY = moveY;
         const cbNode = node?.isNode ? node.internalToShellNode() : node;
-        metadata.configure.advanced.callbacks.onResize(e, cbNode);
+        advanced.callbacks.onResize(e, cbNode);
       }
     };
 
     const resizeStart = (e: MouseEvent, direction: string, node: any) => {
-      const metadata = node.componentMeta.getMetadata();
+      const { advanced } = node.componentMeta;
       if (
-        metadata.configure?.advanced?.callbacks &&
-        typeof metadata.configure.advanced.callbacks.onResizeStart === 'function'
+        advanced.callbacks &&
+        typeof advanced.callbacks.onResizeStart === 'function'
       ) {
         (e as any).trigger = direction;
         const cbNode = node?.isNode ? node.internalToShellNode() : node;
-        metadata.configure.advanced.callbacks.onResizeStart(e, cbNode);
+        advanced.callbacks.onResizeStart(e, cbNode);
       }
     };
 
     const resizeEnd = (e: MouseEvent, direction: string, node: any) => {
-      const metadata = node.componentMeta.getMetadata();
+      const { advanced } = node.componentMeta;
       if (
-        metadata.configure?.advanced?.callbacks &&
-        typeof metadata.configure.advanced.callbacks.onResizeEnd === 'function'
+        advanced.callbacks &&
+        typeof advanced.callbacks.onResizeEnd === 'function'
       ) {
         (e as any).trigger = direction;
         const cbNode = node?.isNode ? node.internalToShellNode() : node;
-        metadata.configure.advanced.callbacks.onResizeEnd(e, cbNode);
+        advanced.callbacks.onResizeEnd(e, cbNode);
       }
 
-      const editor = globalContext.get(Editor);
+      const workspace = globalContext.get('workspace');
+      const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
       const npm = node?.componentMeta?.npm;
       const selected =
         [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
         node?.componentMeta?.componentName ||
         '';
-      editor?.emit('designer.border.resize', {
+      editor?.eventBus.emit('designer.border.resize', {
         selected,
         layout: node?.parent?.getPropValue('layout') || '',
       });
@@ -241,9 +242,9 @@ export class BoxResizingInstance extends Component<{
 
     const { node, offsetWidth, offsetHeight, offsetTop, offsetLeft } = observed;
     let triggerVisible: any = [];
-    const metadata = node.componentMeta.getMetadata();
-    if (metadata.configure?.advanced?.getResizingHandlers) {
-      triggerVisible = metadata.configure.advanced.getResizingHandlers(node.internalToShellNode());
+    const { advanced } = node.componentMeta;
+    if (advanced.getResizingHandlers) {
+      triggerVisible = advanced.getResizingHandlers(node.internalToShellNode());
     }
 
     triggerVisible = normalizeTriggers(triggerVisible);

@@ -1,10 +1,10 @@
 import { ComponentType, forwardRef, createElement, FunctionComponent } from 'react';
-import { NpmInfo, ComponentSchema } from '@alilc/lowcode-types';
-import { Component } from '@alilc/lowcode-designer';
+import { IPublicTypeNpmInfo, IPublicTypeComponentSchema } from '@alilc/lowcode-types';
 import { isESModule } from './is-es-module';
 import { isReactComponent, acceptsRef, wrapReactClass } from './is-react';
 import { isObject } from './is-object';
 
+type Component = ComponentType<any> | object;
 interface LibraryMap {
   [key: string]: string;
 }
@@ -51,11 +51,14 @@ export function getSubComponent(library: any, paths: string[]) {
     }
     library = component;
     i++;
+    if (isReactComponent(component)) {
+      break;
+    }
   }
   return component;
 }
 
-function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmInfo) {
+function findComponent(libraryMap: LibraryMap, componentName: string, npm?: IPublicTypeNpmInfo) {
   if (!npm) {
     return accessLibrary(componentName);
   }
@@ -94,13 +97,13 @@ function isMixinComponent(components: any) {
 }
 
 export function buildComponents(libraryMap: LibraryMap,
-  componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> | ComponentSchema },
-  createComponent: (schema: ComponentSchema) => Component | null) {
+  componentsMap: { [componentName: string]: IPublicTypeNpmInfo | ComponentType<any> | IPublicTypeComponentSchema },
+  createComponent: (schema: IPublicTypeComponentSchema) => Component | null) {
   const components: any = {};
   Object.keys(componentsMap).forEach((componentName) => {
     let component = componentsMap[componentName];
-    if (component && (component as ComponentSchema).componentName === 'Component') {
-      components[componentName] = createComponent(component as ComponentSchema);
+    if (component && (component as IPublicTypeComponentSchema).componentName === 'Component') {
+      components[componentName] = createComponent(component as IPublicTypeComponentSchema);
     } else if (isReactComponent(component)) {
       if (!acceptsRef(component)) {
         component = wrapReactClass(component as FunctionComponent);

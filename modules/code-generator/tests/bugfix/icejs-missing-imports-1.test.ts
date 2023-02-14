@@ -22,7 +22,7 @@ test(testCaseBaseName, async () => {
   Button,
   Typography,
   Tag,
-} from "@alilc/antd-lowcode-materials/dist/antd-lowcode.esm.js";`);
+} from '@alilc/antd-lowcode-materials/dist/antd-lowcode.esm.js';`);
 });
 
 function exportProject(inputPath: string, outputPath: string) {

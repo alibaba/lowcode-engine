@@ -1,4 +1,4 @@
-import { ComponentMetadata } from "@alilc/lowcode-types";
+import { IPublicTypeComponentMetadata } from "@alilc/lowcode-types";
 export default {
   componentName: 'Page',
   npm: {
@@ -276,4 +276,4 @@ export default {
     ],
     autoruns: [],
   },
-} as ComponentMetadata;
+} as IPublicTypeComponentMetadata;

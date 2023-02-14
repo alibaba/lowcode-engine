@@ -35,12 +35,6 @@ module.exports = {
     },
     {
       type: 'doc',
-      docId: 'participate/index',
-      position: 'left',
-      label: '参与贡献',
-    },
-    {
-      type: 'doc',
       docId: 'article/index',
       position: 'left',
       label: '文章',
@@ -50,16 +44,6 @@ module.exports = {
       docId: 'demoUsage/intro',
       position: 'left',
       label: 'Demo 使用文档',
-    },
-    {
-      position: 'left',
-      href: 'https://developer.aliyun.com/ebook/7507',
-      label: '技术白皮书',
-    },
-    {
-      position: 'left',
-      href: 'https://github.com/alibaba/lowcode-engine/releases',
-      label: '更新日志',
     },
     {
       to: '/community/issue',
@@ -79,6 +63,12 @@ module.exports = {
       position: 'right',
       className: 'header-github-link',
       'aria-label': 'GitHub repository',
+    },
+    {
+      type: 'doc',
+      docId: 'participate/index',
+      position: 'right',
+      label: '参与贡献',
     },
     {
       type: 'search',

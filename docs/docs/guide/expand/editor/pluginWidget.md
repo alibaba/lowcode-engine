@@ -2,6 +2,7 @@
 title: 插件扩展 - 面板扩展
 sidebar_position: 5
 ---
+
 ## 插件简述
 
 插件功能赋予低代码引擎更高的灵活性，低代码引擎的生态提供了一些官方的插件，但是无法满足所有人的需求，所以提供了强大的插件定制功能。
@@ -17,12 +18,13 @@ sidebar_position: 5
 ## 注册插件 API
 
 ```typescript
-import { plugins, ILowCodePluginContext } from '@alilc/lowcode-engine';
+import { plugins } from '@alilc/lowcode-engine';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
-const pluginA = (ctx: ILowCodePluginContext, options: any) => {
+const pluginA = (ctx: IPublicModelPluginContext, options: any) => {
 	return {
     init() {
-    	console.log(options.key);
+      console.log(options.key);
       // 往引擎增加面板
       ctx.skeleton.add({
         // area 配置见下方说明
@@ -35,9 +37,9 @@ const pluginA = (ctx: ILowCodePluginContext, options: any) => {
     },
     destroy() {
       console.log('我被销毁了~');
-    }
-  }
-}
+    },
+  };
+};
 
 pluginA.pluginName = 'pluginA';
 
@@ -55,6 +57,7 @@ plugins.register(pluginA, { key: 'test' });
 ![image.png](https://img.alicdn.com/imgextra/i3/O1CN01y05ZHC1Gix0p4nXxH_!!6000000000657-2-tps-3068-1648.png)
 
 ### 展示区域 area
+
 #### topArea
 
 展示在设计器的顶部区域，常见的相关区域的插件主要是：、
@@ -75,6 +78,7 @@ plugins.register(pluginA, { key: 'test' });
 4. JS 等代码面板。
 
 可以发现，这个区域的面板大多数操作时是不需要同时并存的，且交互比较复杂的，需要一个更整块的区域来进行操作。
+
 #### centerArea
 
 画布区域，由于画布大多数是展示作用，所以一般扩展的种类比较少。常见的扩展有：
@@ -105,12 +109,12 @@ PanelDock 是以面板的形式展示在设计器的左侧区域的。其中主�
 接入可以参考代码
 
 ```javascript
-import { skeleton } from "@alilc/lowcode-engine";
+import { skeleton } from '@alilc/lowcode-engine';
 
 skeleton.add({
-  area: "leftArea", // 插件区域
-  type: "PanelDock", // 插件类型，弹出面板
-  name: "sourceEditor",
+  area: 'leftArea', // 插件区域
+  type: 'PanelDock', // 插件类型，弹出面板
+  name: 'sourceEditor',
   content: SourceEditor, // 插件组件实例
   props: {
     align: "left",
@@ -138,12 +142,12 @@ Widget 形式是直接渲染在当前编辑器的对应位置上。如 demo 中�
 接入可以参考代码：
 
 ```javascript
-import {skeleton} from "@alilc/lowcode-engine";
+import { skeleton } from '@alilc/lowcode-engine';
 // 注册 logo 面板
 skeleton.add({
-  area: "topArea",
-  type: "Widget",
-  name: "logo",
+  area: 'topArea',
+  type: 'Widget',
+  name: 'logo',
   content: Logo, // Widget 组件实例
   contentProps: { // Widget 插件 props
     logo:
@@ -151,7 +155,7 @@ skeleton.add({
     href: "/",
   },
   props: {
-    align: "left",
+    align: 'left',
     width: 100,
   },
 });
@@ -162,7 +166,7 @@ skeleton.add({
 一个图标的表现形式，可以用于语言切换、跳转到外部链接、打开一个 widget 等场景。
 
 ```javascript
-import { skeleton } from "@alilc/lowcode-engine";
+import { skeleton } from '@alilc/lowcode-engine';
 
 skeleton.add({
   area: 'leftArea',
@@ -175,12 +179,12 @@ skeleton.add({
   props: {
     align: 'bottom',
   },
-  onClick: function() {
+  onClick: function () {
     // 打开外部链接
     window.open('https://lowcode-engine.cn');
     // 显示 widget
     skeleton.showWidget('xxx');
-  }
+  },
 });
 ```
 

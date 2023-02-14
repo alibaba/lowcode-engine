@@ -1,5 +1,8 @@
 import '../../fixtures/window';
-import { Editor } from '@alilc/lowcode-editor-core';
+import {
+  Editor,
+  Setters as InnerSetters,
+} from '@alilc/lowcode-editor-core';
 import { SettingTopEntry } from '../../../src/designer/setting/setting-top-entry';
 import { SettingPropEntry } from '../../../src/designer/setting/setting-prop-entry';
 import { Node } from '../../../src/document/node/node';
@@ -14,7 +17,10 @@ const editor = new Editor();
 describe('setting-prop-entry 测试', () => {
   let designer: Designer;
   let doc: DocumentModel;
+  let setters: any;
   beforeEach(() => {
+    setters = new InnerSetters();
+    editor.set('setters', setters);
     designer = new Designer({ editor, shellModelFactory });
     designer.createComponentMeta(divMeta);
     doc = designer.project.open(settingSchema);

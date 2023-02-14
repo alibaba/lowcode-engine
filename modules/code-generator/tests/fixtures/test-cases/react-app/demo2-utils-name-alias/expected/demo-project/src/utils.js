@@ -1,10 +1,10 @@
-import legaoBuiltin from "@alilc/b6-compact-legao-builtin";
+import legaoBuiltin from '@alilc/b6-compact-legao-builtin';
 
-import { message, Modal as modal } from "antd";
+import { message, Modal as modal } from 'antd';
 
-import { mocks } from "@alilc/b6-util-mocks";
+import { mocks } from '@alilc/b6-util-mocks';
 
-import { createRef } from "react";
+import { createRef } from 'react';
 
 export class RefsManager {
   constructor() {

@@ -1,6 +1,6 @@
 import { blockRendererFactory, types } from '@alilc/lowcode-renderer-core';
 
-export default function raxBlockRendererFactory() {
+const raxBlockRendererFactory: () => any = () => {
   const OriginBlock = blockRendererFactory();
   return class BlockRenderer extends OriginBlock {
     render() {
@@ -21,4 +21,5 @@ export default function raxBlockRendererFactory() {
       return that.__renderContextConsumer(children);
     }
   };
-}
+};
+export default raxBlockRendererFactory;

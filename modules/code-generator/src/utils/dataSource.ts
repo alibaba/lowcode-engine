@@ -1,7 +1,7 @@
 import changeCase from 'change-case';
 import type { IProjectInfo } from '../types/intermediate';
 
-export type DataSourceDependenciesConfig = {
+export interface DataSourceDependenciesConfig {
   /** 数据源引擎的版本 */
   engineVersion?: string;
   /** 数据源引擎的包名 */
@@ -14,7 +14,7 @@ export type DataSourceDependenciesConfig = {
   handlersPackages?: {
     [key: string]: string;
   };
-};
+}
 
 export function buildDataSourceDependencies(
   ir: IProjectInfo,
@@ -22,13 +22,13 @@ export function buildDataSourceDependencies(
 ): Record<string, string> {
   return {
     // 数据源引擎的依赖包
-    [cfg.enginePackage || '@alilc/lowcode-datasource-engine']: cfg.engineVersion || 'latest',
+    [cfg.enginePackage || '@alilc/lowcode-datasource-engine']: cfg.engineVersion || '^1.0.0',
 
     // 各种数据源的 handlers 的依赖包
     ...(ir.dataSourcesTypes || []).reduce(
       (acc, dsType) => ({
         ...acc,
-        [getDataSourceHandlerPackageName(dsType)]: cfg.handlersVersion?.[dsType] || 'latest',
+        [getDataSourceHandlerPackageName(dsType)]: cfg.handlersVersion?.[dsType] || '^1.0.0',
       }),
       {},
     ),

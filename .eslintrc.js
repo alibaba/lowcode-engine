@@ -40,5 +40,17 @@ module.exports = {
     "@typescript-eslint/no-useless-constructor": 0,
     '@typescript-eslint/dot-notation': 0, // for lint performance
     '@typescript-eslint/restrict-plus-operands': 0, // for lint performance
+    'no-unexpected-multiline': 1,
+    'no-multiple-empty-lines': ['error', { "max": 1 }],
+    'lines-around-comment': ['error', {
+      "beforeBlockComment": true,
+      "afterBlockComment": false,
+      "afterLineComment": false,
+      "allowBlockStart": true,
+    }],
+    "@typescript-eslint/member-ordering": [
+      "error",
+      { "default": ["signature", "field", "constructor", "method"] }
+    ],
   }
 };

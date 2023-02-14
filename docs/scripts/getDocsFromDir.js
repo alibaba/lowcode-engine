@@ -8,8 +8,14 @@ module.exports = function getDocsFromDir(dir, cateList) {
   const baseDir = path.join(__dirname, '../docs/');
   const docsDir = path.join(baseDir, dir);
 
+  function isNil(value) {
+    return value === undefined || value === null;
+  }
+
   function getMarkdownOrder(filepath) {
-    return (matter(fs.readFileSync(filepath, 'utf-8')).data || {}).order || 100;
+    const { data } = matter(fs.readFileSync(filepath, 'utf-8'));
+    const { sidebar_position } = data || {};
+    return isNil(sidebar_position) ? 100 : sidebar_position;
   }
 
   const docs = glob.sync('*.md?(x)', {
@@ -18,8 +24,8 @@ module.exports = function getDocsFromDir(dir, cateList) {
   });
 
   const result = docs
-    .filter(doc => !/^index.md(x)?$/.test(doc))
-    .map(doc => {
+    .filter((doc) => !/^index.md(x)?$/.test(doc))
+    .map((doc) => {
       return path.join(docsDir, doc);
     })
     .sort((a, b) => {
@@ -28,7 +34,7 @@ module.exports = function getDocsFromDir(dir, cateList) {
 
       return orderA - orderB;
     })
-    .map(filepath => {
+    .map((filepath) => {
       // /Users/xxx/site/docs/guide/basic/router.md => guide/basic/router
       const id = path
         .relative(baseDir, filepath)
@@ -37,7 +43,7 @@ module.exports = function getDocsFromDir(dir, cateList) {
       return id;
     });
 
-  (cateList || []).forEach(item => {
+  (cateList || []).forEach((item) => {
     const { dir, subCategory, ...otherConfig } = item;
     const indexList = glob.sync('index.md?(x)', {
       cwd: path.join(baseDir, dir),

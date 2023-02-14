@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import { Tab, Breadcrumb } from '@alifd/next';
 import { Title, observer, Editor, obx, globalContext, engineConfig, makeObservable } from '@alilc/lowcode-editor-core';
-import { Node, isSettingField, SettingField, Designer } from '@alilc/lowcode-designer';
+import { Node, SettingField } from '@alilc/lowcode-designer';
 import classNames from 'classnames';
 import { SettingsMain } from './main';
 import { SettingsPane } from './settings-pane';
 import { StageBox } from '../stage-box';
 import { SkeletonContext } from '../../context';
-import { createIcon } from '@alilc/lowcode-utils';
+import { intl } from '../../locale';
+import { createIcon, isSettingField } from '@alilc/lowcode-utils';
 
 @observer
-export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any }, { shouldIgnoreRoot: boolean }> {
+export class SettingsPrimaryPane extends Component<{ engineEditor: Editor; config: any }, { shouldIgnoreRoot: boolean }> {
   state = {
     shouldIgnoreRoot: false,
   };
-  private main = new SettingsMain(globalContext.get('editor'));
+  private main = new SettingsMain(this.props.engineEditor);
 
   @obx.ref private _activeKey?: any;
 
@@ -26,7 +27,9 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
   componentDidMount() {
     this.setShouldIgnoreRoot();
 
-    globalContext.get('editor').on('designer.selection.change', () => {
+    const editor = this.props.engineEditor;
+
+    editor.eventBus.on('designer.selection.change', () => {
       if (!engineConfig.get('stayOnTheSameSettingTab', false)) {
         this._activeKey = null;
       }
@@ -65,7 +68,8 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
       );
     }
 
-    const editor = globalContext.get('editor');
+    const workspace = globalContext.get('workspace');
+    const editor = this.props.engineEditor;
     const designer = editor.get('designer');
     const current = designer?.currentSelection?.getNodes()?.[0];
     let node: Node | null = settings.first;
@@ -101,7 +105,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
               };
               const selected = getName(current);
               const target = getName(_node);
-              editor?.emit('skeleton.settingsPane.Breadcrumb', {
+              editor?.eventBus.emit('skeleton.settingsPane.Breadcrumb', {
                 selected,
                 target,
               });
@@ -128,13 +132,13 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
 
   render() {
     const { settings } = this.main;
-    const editor = globalContext.get('editor');
+    const editor = this.props.engineEditor;
     if (!settings) {
       // 未选中节点，提示选中 或者 显示根节点设置
       return (
         <div className="lc-settings-main">
           <div className="lc-settings-notice">
-            <p>请在左侧画布选中节点</p>
+            <p>{intl('Please select a node in canvas')}</p>
           </div>
         </div>
       );
@@ -145,7 +149,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
       return (
         <div className="lc-settings-main">
           <div className="lc-settings-notice">
-            <p>该节点已被锁定，无法配置</p>
+            <p>{intl('Current node is locked')}</p>
           </div>
         </div>
       );
@@ -154,7 +158,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
       return (
         <div className="lc-settings-main">
           <div className="lc-settings-notice">
-            <p>该组件暂无配置</p>
+            <p>{intl('No config found for this type of component')}</p>
           </div>
         </div>
       );
@@ -165,7 +169,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
       return (
         <div className="lc-settings-main">
           <div className="lc-settings-notice">
-            <p>请选中同一类型节点编辑</p>
+            <p>{intl('Please select same kind of components')}</p>
           </div>
         </div>
       );
@@ -206,7 +210,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
           key={field.name}
           onClick={
             () => {
-              editor?.emit('skeleton.settingsPane.change', {
+              editor?.eventBus.emit('skeleton.settingsPane.change', {
                 name: field.name,
                 title: field.title,
               });

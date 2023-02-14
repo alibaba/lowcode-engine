@@ -1,5 +1,4 @@
-import { JSBlock } from '@alilc/lowcode-types';
 
-export function isJSBlock(data: any): data is JSBlock {
+export function isJSBlock(data: any): boolean {
   return data && data.type === 'JSBlock';
 }

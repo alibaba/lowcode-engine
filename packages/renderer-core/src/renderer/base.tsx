@@ -3,7 +3,7 @@
 /* eslint-disable react/prop-types */
 import classnames from 'classnames';
 import { create as createDataSourceEngine } from '@alilc/lowcode-datasource-engine/interpret';
-import { NodeSchema, NodeData, JSONValue, CompositeValue } from '@alilc/lowcode-types';
+import { IPublicTypeNodeSchema, IPublicTypeNodeData, IPublicTypeJSONValue, IPublicTypeCompositeValue } from '@alilc/lowcode-types';
 import { isI18nData, isJSExpression, isJSFunction } from '@alilc/lowcode-utils';
 import adapter from '../adapter';
 import divFactory from '../components/Div';
@@ -40,7 +40,7 @@ import isUseLoop from '../utils/is-use-loop';
  * execute method in schema.lifeCycles with context
  * @PRIVATE
  */
-export function excuteLifeCycleMethod(context: any, schema: NodeSchema, method: string, args: any, thisRequiredInJSE: boolean | undefined): any {
+export function excuteLifeCycleMethod(context: any, schema: IPublicTypeNodeSchema, method: string, args: any, thisRequiredInJSE: boolean | undefined): any {
   if (!context || !isSchema(schema) || !method) {
     return;
   }
@@ -72,7 +72,7 @@ export function excuteLifeCycleMethod(context: any, schema: NodeSchema, method: 
  * get children from a node schema
  * @PRIVATE
  */
-export function getSchemaChildren(schema: NodeSchema | undefined) {
+export function getSchemaChildren(schema: IPublicTypeNodeSchema | undefined) {
   if (!schema) {
     return;
   }
@@ -89,7 +89,7 @@ export function getSchemaChildren(schema: NodeSchema | undefined) {
     return schema.children;
   }
 
-  let result = ([] as NodeData[]).concat(schema.children);
+  let result = ([] as IPublicTypeNodeData[]).concat(schema.children);
   if (Array.isArray(schema.props.children)) {
     result = result.concat(schema.props.children);
   } else {
@@ -121,6 +121,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
   let scopeIdx = 0;
 
   return class BaseRenderer extends Component<IBaseRendererProps, Record<string, any>> {
+    [key: string]: any;
+
     static displayName = 'BaseRenderer';
 
     static defaultProps = {
@@ -139,6 +141,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     __compScopes: Record<string, any> = {};
     __instanceMap: Record<string, any> = {};
     __dataHelper: any;
+
     /**
      * keep track of customMethods added to this context
      *
@@ -154,8 +157,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
      * @type {any}
      */
     __styleElement: any;
-
-    [key: string]: any;
 
     constructor(props: IBaseRendererProps, context: IBaseRendererContext) {
       super(props, context);
@@ -242,6 +243,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         super.forceUpdate();
       }
     }
+
     /**
      * execute method in schema.lifeCycles
      * @PRIVATE
@@ -450,7 +452,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
      * @param parentInfo 父组件的信息，包含schema和Comp
      * @param idx 为循环渲染的循环Index
      */
-    __createVirtualDom = (originalSchema: NodeData | NodeData[] | undefined, originalScope: any, parentInfo: INodeInfo, idx: string | number = ''): any => {
+    __createVirtualDom = (originalSchema: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined, originalScope: any, parentInfo: INodeInfo, idx: string | number = ''): any => {
       if (!originalSchema) {
         return null;
       }
@@ -486,10 +488,14 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           if (schema.length === 1) {
             return this.__createVirtualDom(schema[0], scope, parentInfo);
           }
-          return schema.map((item, idy) => this.__createVirtualDom(item, scope, parentInfo, (item as NodeSchema)?.__ctx?.lceKey ? '' : String(idy)));
+          return schema.map((item, idy) => this.__createVirtualDom(item, scope, parentInfo, (item as IPublicTypeNodeSchema)?.__ctx?.lceKey ? '' : String(idy)));
         }
 
         const _children = getSchemaChildren(schema);
+        if (!schema.componentName) {
+          logger.error('The componentName in the schema is invalid, please check the schema: ', schema);
+          return;
+        }
         // 解析占位组件
         if (schema.componentName === 'Fragment' && _children) {
           const tarChildren = isJSExpression(_children) ? this.__parseExpression(_children, scope) : _children;
@@ -703,7 +709,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       return [];
     }
 
-    __getSchemaChildrenVirtualDom = (schema: NodeSchema | undefined, scope: any, Comp: any) => {
+    __getSchemaChildrenVirtualDom = (schema: IPublicTypeNodeSchema | undefined, scope: any, Comp: any) => {
       let children = getSchemaChildren(schema);
 
       // @todo 补完这里的 Element 定义 @承虎
@@ -733,7 +739,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       return null;
     };
 
-    __getComponentProps = (schema: NodeSchema | undefined, scope: any, Comp: any, componentInfo?: any) => {
+    __getComponentProps = (schema: IPublicTypeNodeSchema | undefined, scope: any, Comp: any, componentInfo?: any) => {
       if (!schema) {
         return {};
       }
@@ -747,7 +753,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       }) || {};
     };
 
-    __createLoopVirtualDom = (schema: NodeSchema, scope: any, parentInfo: INodeInfo, idx: number | string) => {
+    __createLoopVirtualDom = (schema: IPublicTypeNodeSchema, scope: any, parentInfo: INodeInfo, idx: number | string) => {
       if (isFileSchema(schema)) {
         console.warn('file type not support Loop');
         return null;
@@ -758,7 +764,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       const itemArg = (schema.loopArgs && schema.loopArgs[0]) || DEFAULT_LOOP_ARG_ITEM;
       const indexArg = (schema.loopArgs && schema.loopArgs[1]) || DEFAULT_LOOP_ARG_INDEX;
       const { loop } = schema;
-      return loop.map((item: JSONValue | CompositeValue, i: number) => {
+      return loop.map((item: IPublicTypeJSONValue | IPublicTypeCompositeValue, i: number) => {
         const loopSelf: any = {
           [itemArg]: item,
           [indexArg]: i,
@@ -913,7 +919,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       return this.__instanceMap[filedId];
     }
 
-    __debug = logger.log;
+    __debug = (...args: any[]) => { logger.debug(...args); };
 
     __renderContextProvider = (customProps?: object, children?: any) => {
       return createElement(AppContext.Provider, {
@@ -995,7 +1001,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       }, children);
     }
 
-    __checkSchema = (schema: NodeSchema | undefined, originalExtraComponents: string | string[] = []) => {
+    __checkSchema = (schema: IPublicTypeNodeSchema | undefined, originalExtraComponents: string | string[] = []) => {
       let extraComponents = originalExtraComponents;
       if (typeof extraComponents === 'string') {
         extraComponents = [extraComponents];

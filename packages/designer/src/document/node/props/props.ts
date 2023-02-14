@@ -1,9 +1,9 @@
 import { computed, makeObservable, obx, action } from '@alilc/lowcode-editor-core';
-import { PropsMap, PropsList, CompositeValue } from '@alilc/lowcode-types';
+import { IPublicTypePropsMap, IPublicTypePropsList, IPublicTypeCompositeValue, IPublicEnumTransformStage, IPublicModelProps } from '@alilc/lowcode-types';
 import { uniqueId, compatStage } from '@alilc/lowcode-utils';
-import { Prop, IPropParent, UNSET } from './prop';
-import { Node } from '../node';
-import { TransformStage } from '../transform-stage';
+import { Prop, IProp, UNSET } from './prop';
+import { INode, Node } from '../node';
+// import { TransformStage } from '../transform-stage';
 
 interface ExtrasObject {
   [key: string]: any;
@@ -23,7 +23,32 @@ export function getConvertedExtraKey(key: string): string {
 export function getOriginalExtraKey(key: string): string {
   return key.replace(new RegExp(`${EXTRA_KEY_PREFIX}`, 'g'), '');
 }
-export class Props implements IPropParent {
+
+export interface IPropParent {
+
+  readonly props: Props;
+
+  readonly owner: INode;
+
+  get path(): string[];
+
+  delete(prop: Prop): void;
+
+}
+
+export interface IProps extends Omit<IPublicModelProps, 'getProp' | 'getExtraProp' | 'getExtraPropValue' | 'setExtraPropValue' | 'node'> {
+
+  /**
+   * 获取 props 对应的 node
+   */
+  getNode(): INode;
+
+  getProp(path: string): IProp | null;
+
+  get(path: string, createIfNone: boolean): Prop;
+}
+
+export class Props implements IProps, IPropParent {
   readonly id = uniqueId('props');
 
   @obx.shallow private items: Prop[] = [];
@@ -46,7 +71,7 @@ export class Props implements IPropParent {
     return this;
   }
 
-  readonly owner: Node;
+  readonly owner: INode;
 
   /**
    * 元素个数
@@ -57,7 +82,9 @@ export class Props implements IPropParent {
 
   @obx type: 'map' | 'list' = 'map';
 
-  constructor(owner: Node, value?: PropsMap | PropsList | null, extras?: ExtrasObject) {
+  private purged = false;
+
+  constructor(owner: INode, value?: IPublicTypePropsMap | IPublicTypePropsList | null, extras?: ExtrasObject) {
     makeObservable(this);
     this.owner = owner;
     if (Array.isArray(value)) {
@@ -76,7 +103,7 @@ export class Props implements IPropParent {
   }
 
   @action
-  import(value?: PropsMap | PropsList | null, extras?: ExtrasObject) {
+  import(value?: IPublicTypePropsMap | IPublicTypePropsList | null, extras?: ExtrasObject) {
     const originItems = this.items;
     if (Array.isArray(value)) {
       this.type = 'list';
@@ -99,7 +126,7 @@ export class Props implements IPropParent {
   }
 
   @action
-  merge(value: PropsMap, extras?: PropsMap) {
+  merge(value: IPublicTypePropsMap, extras?: IPublicTypePropsMap) {
     Object.keys(value).forEach((key) => {
       this.query(key, true)!.setValue(value[key]);
       this.query(key, true)!.setupItems();
@@ -112,8 +139,8 @@ export class Props implements IPropParent {
     }
   }
 
-  export(stage: TransformStage = TransformStage.Save): {
-    props?: PropsMap | PropsList;
+  export(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Save): {
+    props?: IPublicTypePropsMap | IPublicTypePropsList;
     extras?: ExtrasObject;
   } {
     stage = compatStage(stage);
@@ -196,7 +223,7 @@ export class Props implements IPropParent {
   }
 
   /**
-   * 获取某个属性, 如果不存在，临时获取一个待写入
+   * 获取某个属性，如果不存在，临时获取一个待写入
    * @param createIfNone 当没有的时候，是否创建一个
    */
   @action
@@ -256,7 +283,7 @@ export class Props implements IPropParent {
    */
   @action
   add(
-    value: CompositeValue | null,
+    value: IPublicTypeCompositeValue | null,
     key?: string | number,
     spread = false,
     options: any = {},
@@ -322,8 +349,6 @@ export class Props implements IPropParent {
       return fn(item, item.key);
     });
   }
-
-  private purged = false;
 
   /**
    * 回收销毁

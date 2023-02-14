@@ -1,5 +1,10 @@
-import { JSFunction } from '@alilc/lowcode-types';
+/**
+ *  内部版本 的 { type: 'JSExpression', source: '', value: '', extType: 'function' } 能力上等同于 JSFunction
+ */
+export function isInnerJsFunction(data: any) {
+  return data && data.type === 'JSExpression' && data.extType === 'function';
+}
 
-export function isJSFunction(x: any): x is JSFunction {
-  return typeof x === 'object' && x && x.type === 'JSFunction';
+export function isJSFunction(data: any): boolean {
+  return typeof data === 'object' && data && data.type === 'JSFunction' || isInnerJsFunction(data);
 }

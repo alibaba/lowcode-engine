@@ -1,22 +1,22 @@
 // 注意: 出码引擎注入的临时变量默认都以 "__$$" 开头，禁止在搭建的代码中直接访问。
 // 例外：react 框架的导出名和各种组件名除外。
-import React from "react";
+import React from 'react';
 
-import { Form, Input, NumberPicker, Select, Button } from "@alifd/next";
+import { Form, Input, NumberPicker, Select, Button } from '@alifd/next';
 
-import { createUrlParamsHandler as __$$createUrlParamsRequestHandler } from "@alilc/lowcode-datasource-url-params-handler";
+import { createUrlParamsHandler as __$$createUrlParamsRequestHandler } from '@alilc/lowcode-datasource-url-params-handler';
 
-import { createFetchHandler as __$$createFetchRequestHandler } from "@alilc/lowcode-datasource-fetch-handler";
+import { createFetchHandler as __$$createFetchRequestHandler } from '@alilc/lowcode-datasource-fetch-handler';
 
-import { create as __$$createDataSourceEngine } from "@alilc/lowcode-datasource-engine/runtime";
+import { create as __$$createDataSourceEngine } from '@alilc/lowcode-datasource-engine/runtime';
 
-import utils, { RefsManager } from "../../utils";
+import utils, { RefsManager } from '../../utils';
 
-import * as __$$i18n from "../../i18n";
+import * as __$$i18n from '../../i18n';
 
-import __$$constants from "../../constants";
+import __$$constants from '../../constants';
 
-import "./index.css";
+import './index.css';
 
 class Test$$Page extends React.Component {
   _context = this;
@@ -51,7 +51,7 @@ class Test$$Page extends React.Component {
 
     __$$i18n._inject2(this);
 
-    this.state = { text: "outter" };
+    this.state = { text: 'outter' };
   }
 
   $ = (refName) => {
@@ -67,8 +67,8 @@ class Test$$Page extends React.Component {
     return {
       list: [
         {
-          id: "urlParams",
-          type: "urlParams",
+          id: 'urlParams',
+          type: 'urlParams',
           isInit: function () {
             return undefined;
           },
@@ -77,12 +77,12 @@ class Test$$Page extends React.Component {
           },
         },
         {
-          id: "user",
-          type: "fetch",
+          id: 'user',
+          type: 'fetch',
           options: function () {
             return {
-              method: "GET",
-              uri: "https://shs.xxx.com/mock/1458/demo/user",
+              method: 'GET',
+              uri: 'https://shs.xxx.com/mock/1458/demo/user',
               isSync: true,
             };
           },
@@ -90,6 +90,7 @@ class Test$$Page extends React.Component {
             if (!response.data.success) {
               throw new Error(response.data.message);
             }
+
             return response.data.data;
           },
           isInit: function () {
@@ -97,12 +98,12 @@ class Test$$Page extends React.Component {
           },
         },
         {
-          id: "orders",
-          type: "fetch",
+          id: 'orders',
+          type: 'fetch',
           options: function () {
             return {
-              method: "GET",
-              uri: "https://shs.xxx.com/mock/1458/demo/orders",
+              method: 'GET',
+              uri: 'https://shs.xxx.com/mock/1458/demo/orders',
               isSync: true,
             };
           },
@@ -110,6 +111,7 @@ class Test$$Page extends React.Component {
             if (!response.data.success) {
               throw new Error(response.data.message);
             }
+
             return response.data.data.result;
           },
           isInit: function () {
@@ -118,7 +120,7 @@ class Test$$Page extends React.Component {
         },
       ],
       dataHandler: function (dataMap) {
-        console.info("All datasources loaded:", dataMap);
+        console.info('All datasources loaded:', dataMap);
       },
     };
   }
@@ -126,18 +128,18 @@ class Test$$Page extends React.Component {
   componentDidMount() {
     this._dataSourceEngine.reloadDataSource();
 
-    console.log("componentDidMount");
+    console.log('componentDidMount');
   }
 
   render() {
     const __$$context = this._context || this;
     const { state } = __$$context;
     return (
-      <div ref={this._refsManager.linkRef("outterView")} autoLoading={true}>
+      <div ref={this._refsManager.linkRef('outterView')} autoLoading={true}>
         <Form
           labelCol={__$$eval(() => this.state.colNum)}
           style={{}}
-          ref={this._refsManager.linkRef("testForm")}
+          ref={this._refsManager.linkRef('testForm')}
         >
           <Form.Item label="姓名：" name="name" initValue="李雷">
             <Input placeholder="请输入" size="medium" style={{ width: 320 }} />
@@ -148,18 +150,18 @@ class Test$$Page extends React.Component {
           <Form.Item label="职业：" name="profession">
             <Select
               dataSource={[
-                { label: "教师", value: "t" },
-                { label: "医生", value: "d" },
-                { label: "歌手", value: "s" },
+                { label: '教师', value: 't' },
+                { label: '医生', value: 'd' },
+                { label: '歌手', value: 's' },
               ]}
             />
           </Form.Item>
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: 'center' }}>
             <Button.Group>
-              {__$$evalArray(() => ["a", "b", "c"]).map((item, index) =>
+              {__$$evalArray(() => ['a', 'b', 'c']).map((item, index) =>
                 ((__$$context) =>
                   !!false && (
-                    <Button type="primary" style={{ margin: "0 5px 0 5px" }}>
+                    <Button type="primary" style={{ margin: '0 5px 0 5px' }}>
                       {__$$eval(() => item)}
                     </Button>
                   ))(__$$createChildContext(__$$context, { item, index }))

@@ -1,41 +1,47 @@
 import React, { Component } from 'react';
-import { observer, globalContext } from '@alilc/lowcode-editor-core';
-import { intl } from '../locale';
-import { OutlineMain } from '../main';
+import { PaneController } from '../controllers/pane-controller';
 import TreeView from './tree';
 import './style.less';
-import { IEditor } from '@alilc/lowcode-types';
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 import Filter from './filter';
-import { registerTreeTitleExtra } from '../helper/tree-title-extra';
+import { TreeMaster } from '../controllers/tree-master';
 
-@observer
-export class OutlinePane extends Component<{ config: any; editor: IEditor }> {
-  private main = new OutlineMain(globalContext.get('editor'), this.props.config.name || this.props.config.pluginKey);
+export class Pane extends Component<{
+  config: any;
+  pluginContext: IPublicModelPluginContext;
+  treeMaster: TreeMaster;
+  controller: PaneController;
+}> {
+  private controller;
+  private treeMaster: TreeMaster;
 
-  componentWillUnmount() {
-    this.main.purge();
+  constructor(props: any) {
+    super(props);
+    const { controller, treeMaster } = props;
+    this.treeMaster = treeMaster;
+    this.controller = controller;
   }
 
-  componentDidMount() {
-    registerTreeTitleExtra(this.props?.config?.contentProps?.treeTitleExtra);
+  componentWillUnmount() {
+    this.controller.purge();
   }
 
   render() {
-    const tree = this.main.currentTree;
+    const tree = this.treeMaster.currentTree;
 
     if (!tree) {
       return (
         <div className="lc-outline-pane">
-          <p className="lc-outline-notice">{intl('Initializing')}</p>
+          <p className="lc-outline-notice">{this.props.pluginContext.intl('Initializing')}</p>
         </div>
       );
     }
 
     return (
       <div className="lc-outline-pane">
-        <Filter tree={tree} />
-        <div ref={(shell) => this.main.mount(shell)} className="lc-outline-tree-container">
-          <TreeView key={tree.id} tree={tree} />
+        <Filter tree={tree} pluginContext={this.props.pluginContext} />
+        <div ref={(shell) => this.controller.mount(shell)} className="lc-outline-tree-container">
+          <TreeView key={tree.id} tree={tree} pluginContext={this.props.pluginContext} />
         </div>
       </div>
     );

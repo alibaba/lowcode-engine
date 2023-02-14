@@ -2,13 +2,21 @@
 title: 工程化配置
 sidebar_position: 3
 ---
-目前引擎体系共包含 2 个 js 文件，即：
+目前引擎体系共包含 2 个 js 文件 (配套 2 个 css)，即：
+
+
 ```html
-<!-- engine-core 引擎的 core，负责引擎的基础模块 -->
-<script crossorigin="anonymous" src="//alifd.alicdn.com/npm/@alilc/lowcode-engine@1.0.0/dist/js/engine-core.js"></script>
-<!-- engine-ext 引擎的扩展包，负责收拢内置 setters / plugins，方便迭代 -->
-<script crossorigin="anonymous" src="//alifd.alicdn.com/npm/@alilc/lowcode-engine-ext@1.0.1/dist/js/engine-ext.js"></script>
+<!-- 低代码引擎的页面框架样式 -->
+<link rel="stylesheet" href="https://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/1.0.18/dist/css/engine-core.css" />
+<!-- 低代码引擎官方扩展的样式 -->
+<link rel="stylesheet" href="https://uipaas-assets.com/prod/npm/@alilc/lowcode-engine-ext/1.0.5/dist/css/engine-ext.css" />
+
+<!-- 低代码引擎的主包 -->
+<script crossorigin="anonymous" src="https://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/1.0.18/dist/js/engine-core.js"></script>
+<!-- 低代码引擎官方扩展的主包 -->
+<script crossorigin="anonymous" src="https://uipaas-assets.com/prod/npm/@alilc/lowcode-engine-ext/1.0.5/dist/js/engine-ext.js"></script>
 ```
+
 > 注，这里的版本号是示例，请尽量选用最新版
 
 工程化配置我们进行了统一，具体如下：
@@ -66,15 +74,15 @@ sidebar_position: 3
 #### 所有资源：
 ```html
 <link rel="stylesheet" href="//alifd.alicdn.com/npm/@alifd/next/1.20.25/next.min.css">
-<link rel="stylesheet" href="//alifd.alicdn.com/npm/@alilc/lowcode-engine@1.0.0/dist/css/engine-core.css"/>
-<link rel="stylesheet" href="//alifd.alicdn.com/npm/@alilc/lowcode-engine-ext@1.0.1/dist/css/engine-ext.css"/>
+<link rel="stylesheet" href="//uipaas-assets.com/prod/npm/@alilc/lowcode-engine/1.0.18/dist/css/engine-core.css"/>
+<link rel="stylesheet" href="//uipaas-assets.com/prod/npm/@alilc/lowcode-engine/1.0.5/dist/css/engine-ext.css"/>
 
 <script src="//polyfill.alicdn.com/s/polyfill.min.js?features=default,es2017,es6,fetch,RegeneratorRuntime"></script>
 <script src="//alifd.alicdn.com/npm/@alifd/next/1.20.25/next.min.js"></script>
 <script src="//g.alicdn.com/platform/c/lodash/4.6.1/lodash.min.js"></script>
 <script src="//g.alicdn.com/mylib/moment/2.24.0/min/moment.min.js"></script>
 <!-- engine-core 引擎的 core，负责引擎的基础模块 -->
-<script crossorigin="anonymous" src="//alifd.alicdn.com/npm/@alilc/lowcode-engine@1.0.0/dist/js/engine-core.js"></script>
+<script crossorigin="anonymous" src="//uipaas-assets.com/prod/npm/@alilc/lowcode-engine/1.0.18/dist/js/engine-core.js"></script>
 <!-- engine-ext 引擎的扩展包，负责收拢内置 setters / plugins，方便迭代 -->
-<script crossorigin="anonymous" src="//alifd.alicdn.com/npm/@alilc/lowcode-engine-ext@1.0.1/dist/js/engine-ext.js"></script>
+<script crossorigin="anonymous" src="//uipaas-assets.com/prod/npm/@alilc/lowcode-engine/1.0.5/dist/js/engine-ext.js"></script>
 ```
