@@ -11,6 +11,10 @@ export interface ITreeBoard {
 export class TreeMaster {
   readonly pluginContext: IPublicModelPluginContext;
 
+  private boards = new Set<ITreeBoard>();
+
+  private treeMap = new Map<string, Tree>();
+
   constructor(pluginContext: IPublicModelPluginContext) {
     this.pluginContext = pluginContext;
     let startTime: any;
@@ -70,8 +74,6 @@ export class TreeMaster {
     }
   }
 
-  private boards = new Set<ITreeBoard>();
-
   addBoard(board: ITreeBoard) {
     this.boards.add(board);
   }
@@ -83,8 +85,6 @@ export class TreeMaster {
   purge() {
     // todo others purge
   }
-
-  private treeMap = new Map<string, Tree>();
 
   get currentTree(): Tree | null {
     const doc = this.pluginContext.project.getCurrentDocument();
@@ -99,16 +99,4 @@ export class TreeMaster {
     }
     return null;
   }
-}
-
-const mastersMap = new Map<string, TreeMaster>();
-export function getTreeMaster(pluginContext: IPublicModelPluginContext): TreeMaster {
-  const key = pluginContext.project.currentDocument?.id || 'unknown';
-  let master = mastersMap.get(key);
-  if (!master) {
-    master = new TreeMaster(pluginContext);
-    pluginContext.logger.info('TreeMaster is created');
-    mastersMap.set(key, master);
-  }
-  return master;
 }
