@@ -70,7 +70,7 @@ hideModalNodes(): void;
 ```typescript
 /**
  * 设置指定节点为可见态
- * set specfic model node as visible
+ * set specific model node as visible
  * @param node Node
  */
 setVisible(node: IPublicModelNode): void;
@@ -85,7 +85,7 @@ setVisible(node: IPublicModelNode): void;
 ```typescript
 /**
  * 设置指定节点为不可见态
- * set specfic model node as invisible
+ * set specific model node as invisible
  * @param node Node
  */
 setInvisible(node: IPublicModelNode): void;
