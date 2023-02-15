@@ -1,5 +1,5 @@
-import { IPublicModelDragon, IPublicModelDropLocation, IPublicModelScrollTarget, IPublicTypeScrollable, IPublicModelScroller, IPublicModelActiveTracker, IPublicModelClipboard } from '../model';
-import { IPublicTypeLocationData } from '../type';
+import { IPublicModelDragon, IPublicModelDropLocation, IPublicModelScrollTarget, IPublicModelScroller, IPublicModelActiveTracker, IPublicModelClipboard } from '../model';
+import { IPublicTypeLocationData, IPublicTypeScrollable } from '../type';
 
 /**
  * @since v1.1.0
