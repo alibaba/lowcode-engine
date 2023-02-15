@@ -17,12 +17,16 @@ export class Resource implements IPublicModelResource {
     return this.resourceType.name;
   }
 
+  get viewType() {
+    return this.resourceData.viewType;
+  }
+
   get description() {
     return this.resourceTypeInstance?.description;
   }
 
   get icon() {
-    return this.resourceTypeInstance?.icon;
+    return this.resourceData.icon || this.resourceTypeInstance?.icon;
   }
 
   get type() {
@@ -45,9 +49,13 @@ export class Resource implements IPublicModelResource {
     return this.context.innerSkeleton;
   }
 
-  constructor(readonly resourceData: IPublicResourceData, readonly resourceType: ResourceType, workspace: InnerWorkSpace) {
+  get children(): Resource[] {
+    return this.resourceData?.children?.map(d => new Resource(d, this.resourceType, this.workspace)) || [];
+  }
+
+  constructor(readonly resourceData: IPublicResourceData, readonly resourceType: ResourceType, readonly workspace: InnerWorkSpace) {
     this.context = new BasicContext(workspace, `resource-${resourceData.resourceName || resourceType.name}`);
-    this.resourceTypeInstance = resourceType.resourceTypeModel(this.context, {});
+    this.resourceTypeInstance = resourceType.resourceTypeModel(this.context, this.options);
     this.init();
     if (this.resourceTypeInstance.editorViews) {
       this.resourceTypeInstance.editorViews.forEach((d: any) => {
@@ -66,6 +74,10 @@ export class Resource implements IPublicModelResource {
 
   async import(schema: any) {
     return await this.resourceTypeInstance.import?.(schema);
+  }
+
+  async url() {
+    return await this.resourceTypeInstance.url?.();
   }
 
   async save(value: any) {

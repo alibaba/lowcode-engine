@@ -1,6 +1,6 @@
 import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
-function DesignerView(props: {
+export function DesignerView(props: {
   url: string;
   viewName: string;
 }) {

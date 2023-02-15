@@ -1,8 +1,10 @@
 import { IPublicTypeWidgetConfigArea } from './';
 
 export interface IPublicTypeWidgetBaseConfig {
+  [extra: string]: any;
   type: string;
   name: string;
+
   /**
    * 停靠位置：
    * - 当 type 为 'Panel' 时自动为 'leftFloatArea'；
@@ -13,6 +15,29 @@ export interface IPublicTypeWidgetBaseConfig {
   props?: Record<string, any>;
   content?: any;
   contentProps?: Record<string, any>;
-  // index?: number;
-  [extra: string]: any;
 }
+
+export interface IPublicTypePanelDockConfig extends IPublicTypeWidgetBaseConfig {
+  type: 'PanelDock';
+
+  panelProps?: IPublicTypePanelDockPanelProps;
+}
+
+export interface IPublicTypePanelDockPanelProps {
+  [key: string]: any;
+
+  /** 是否隐藏面板顶部条 */
+  hideTitleBar?: boolean;
+
+  width?: number;
+
+  height?: number;
+
+  maxWidth?: number;
+
+  maxHeight?: number;
+
+  area?: IPublicTypeWidgetConfigArea;
+}
+
+export type IPublicTypeSkeletonConfig = IPublicTypePanelDockConfig | IPublicTypeWidgetBaseConfig;

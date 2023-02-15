@@ -63,7 +63,7 @@ async function registryInnerPlugin(designer: Designer, editor: Editor, plugins: 
   // 注册一批内置插件
   await plugins.register(OutlinePlugin, {}, { autoInit: true });
   await plugins.register(componentMetaParser(designer));
-  await plugins.register(setterRegistry, {}, { autoInit: true });
+  await plugins.register(setterRegistry, {});
   await plugins.register(defaultPanelRegistry(editor));
   await plugins.register(builtinHotkey);
   await plugins.register(registerDefaults, {}, { autoInit: true });
@@ -195,6 +195,7 @@ export async function init(
       engineContainer,
     );
     innerWorkspace.setActive(true);
+    innerHotkey.activate(false);
     await innerWorkspace.plugins.init(pluginPreference);
     return;
   }

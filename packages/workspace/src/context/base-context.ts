@@ -28,18 +28,22 @@ import {
   Canvas,
 } from '@alilc/lowcode-shell';
 import {
+  IPluginPreferenceMananger,
+  IPublicApiEvent,
+  IPublicModelPluginContext,
   IPublicTypePluginMeta,
 } from '@alilc/lowcode-types';
 import { getLogger } from '@alilc/lowcode-utils';
 import { Workspace as InnerWorkspace } from '../workspace';
 import { EditorWindow } from '../window';
 
-export class BasicContext {
+export class BasicContext implements IPublicModelPluginContext {
   skeleton: Skeleton;
   plugins: Plugins;
   project: Project;
   setters: Setters;
   material: Material;
+  common: Common;
   config;
   event;
   logger;
@@ -53,6 +57,8 @@ export class BasicContext {
   innerHotkey: InnerHotkey;
   innerPlugins: LowCodePluginManager;
   canvas: Canvas;
+  pluginEvent: IPublicApiEvent;
+  preference: IPluginPreferenceMananger;
 
   constructor(innerWorkspace: InnerWorkspace, viewName: string, public editorWindow?: EditorWindow) {
     const editor = new Editor(viewName, true);
@@ -101,6 +107,7 @@ export class BasicContext {
     this.designer = designer;
     this.canvas = canvas;
     const common = new Common(editor, innerSkeleton);
+    this.common = common;
     let plugins: any;
 
     const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
