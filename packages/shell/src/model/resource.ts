@@ -32,4 +32,12 @@ export class Resource implements IPublicModelResource {
   get category() {
     return this[resourceSymbol].category;
   }
+
+  get children() {
+    return this[resourceSymbol].children.map((child) => new Resource(child));
+  }
+
+  get viewType() {
+    return this[resourceSymbol].viewType;
+  }
 }

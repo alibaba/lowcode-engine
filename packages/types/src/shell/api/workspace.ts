@@ -21,7 +21,7 @@ export interface IPublicApiWorkspace {
   setResourceList(resourceList: IPublicResourceList): void;
 
   /** 资源树列表更新事件 */
-  onResourceListChange(fn: (resourceList: IPublicResourceList) => void): () => IPublicTypeDisposable;
+  onResourceListChange(fn: (resourceList: IPublicResourceList) => void): IPublicTypeDisposable;
 
   /** 注册资源 */
   registerResourceType(resourceTypeModel: IPublicTypeResourceType): void;

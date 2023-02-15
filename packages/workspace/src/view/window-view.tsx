@@ -3,6 +3,7 @@ import { ResourceView } from './resource-view';
 import { engineConfig, observer } from '@alilc/lowcode-editor-core';
 import { EditorWindow } from '../window';
 import { BuiltinLoading } from '@alilc/lowcode-designer';
+import { DesignerView } from '../inner-plugins/webview';
 
 @observer
 export class WindowView extends PureComponent<{
@@ -11,14 +12,19 @@ export class WindowView extends PureComponent<{
 }, any> {
   render() {
     const { active } = this.props;
-    const { editorView, resource } = this.props.window;
-    if (!editorView) {
+    const { resource, initReady, url } = this.props.window;
+
+    if (!initReady) {
       const Loading = engineConfig.get('loadingComponent', BuiltinLoading);
       return (
-        <div className={`workspace-engine-main ${active ? 'active' : ''}`}>
+        <div className={`workspace-engine-main 111 ${active ? 'active' : ''}`}>
           <Loading />
         </div>
       );
+    }
+
+    if (resource.type === 'webview' && url) {
+      return <DesignerView url={url} viewName={resource.name} />;
     }
 
     return (

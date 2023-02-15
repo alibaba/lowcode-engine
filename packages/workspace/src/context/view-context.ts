@@ -1,4 +1,4 @@
-import { makeObservable, obx } from '@alilc/lowcode-editor-core';
+import { computed, makeObservable, obx } from '@alilc/lowcode-editor-core';
 import { IPublicEditorViewConfig, IPublicTypeEditorView } from '@alilc/lowcode-types';
 import { flow } from 'mobx';
 import { Workspace as InnerWorkspace } from '../workspace';
@@ -17,7 +17,7 @@ export class Context extends BasicContext {
 
   @obx isInit: boolean = false;
 
-  get active() {
+  @computed get active() {
     return this._activate;
   }
 
@@ -33,7 +33,7 @@ export class Context extends BasicContext {
     this.isInit = true;
   });
 
-  constructor(public workspace: InnerWorkspace, public editorWindow: EditorWindow, public editorView: IPublicTypeEditorView, options: Object) {
+  constructor(public workspace: InnerWorkspace, public editorWindow: EditorWindow, public editorView: IPublicTypeEditorView, options: Object | undefined) {
     super(workspace, editorView.viewName, editorWindow);
     this.viewType = editorView.viewType || 'editor';
     this.viewName = editorView.viewName;
