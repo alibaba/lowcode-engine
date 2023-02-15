@@ -26,12 +26,12 @@ export interface ILowCodePluginRuntimeCore {
   disabled: boolean;
   config: IPublicTypePluginConfig;
   logger: IPublicApiLogger;
+  meta: IPublicTypePluginMeta;
   init(forceInit?: boolean): void;
   isInited(): boolean;
   destroy(): void;
   toProxy(): any;
   setDisabled(flag: boolean): void;
-  meta: IPublicTypePluginMeta;
 }
 
 interface ILowCodePluginRuntimeExportsAccessor {
