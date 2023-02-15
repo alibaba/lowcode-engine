@@ -46,7 +46,7 @@ export class Workspace implements IPublicApiWorkspace {
     return null;
   }
 
-  windows: EditorWindow[] = [];
+  @obx.ref windows: EditorWindow[] = [];
 
   editorWindowMap: Map<string, EditorWindow> = new Map<string, EditorWindow>();
 
@@ -71,7 +71,9 @@ export class Workspace implements IPublicApiWorkspace {
     }
     const title = this.defaultResourceType.name;
     const resource = new Resource({}, this.defaultResourceType, this);
-    this.window = new EditorWindow(resource, this, title);
+    this.window = new EditorWindow(resource, this, {
+      title,
+    });
     this.editorWindowMap.set(this.window.id, this.window);
     this.windows.push(this.window);
     this.emitChangeWindow();
@@ -83,13 +85,11 @@ export class Workspace implements IPublicApiWorkspace {
   }
 
   async registerResourceType(resourceTypeModel: IPublicTypeResourceType): Promise<void> {
-    if (resourceTypeModel.resourceType === 'editor') {
-      const resourceType = new ResourceType(resourceTypeModel);
-      this.resourceTypeMap.set(resourceTypeModel.resourceName, resourceType);
+    const resourceType = new ResourceType(resourceTypeModel);
+    this.resourceTypeMap.set(resourceTypeModel.resourceName, resourceType);
 
-      if (!this.window && this.defaultResourceType) {
-        this.initWindow();
-      }
+    if (!this.window && this.defaultResourceType) {
+      this.initWindow();
     }
   }
 
@@ -150,7 +150,7 @@ export class Workspace implements IPublicApiWorkspace {
   openEditorWindow(name: string, title: string, options: Object, viewType?: string) {
     const resourceType = this.resourceTypeMap.get(name);
     if (!resourceType) {
-      console.error(`${name} is not available`);
+      console.error(`${name} resourceType is not available`);
       return;
     }
     const filterWindows = this.windows.filter(d => (d.resource.name === name && d.resource.title == title));
@@ -164,8 +164,12 @@ export class Workspace implements IPublicApiWorkspace {
       title,
       options,
     }, resourceType, this);
-    this.window = new EditorWindow(resource, this, title, options);
-    this.windows.push(this.window);
+    this.window = new EditorWindow(resource, this, {
+      title,
+      options,
+      viewType,
+    });
+    this.windows = [...this.windows, this.window];
     this.editorWindowMap.set(this.window.id, this.window);
     this.emitChangeWindow();
     this.emitChangeActiveWindow();

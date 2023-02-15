@@ -5,19 +5,32 @@ import { Workspace } from './workspace';
 import { Resource } from './resource';
 import { IPublicTypeDisposable } from '../../types/es/shell/type/disposable';
 
+interface IWindowCOnfig {
+  title: string | undefined;
+  options?: Object;
+  viewType?: string | undefined;
+}
+
 export class EditorWindow {
   id: string = uniqueId('window');
   icon: React.ReactElement | undefined;
 
   private emitter: IEventBus = createModuleEventBus('Project');
 
+  title: string | undefined;
+
+  url: string | undefined;
+
   @obx.ref editorView: Context;
 
   @obx editorViews: Map<string, Context> = new Map<string, Context>();
 
-  constructor(readonly resource: Resource, readonly workspace: Workspace, public title: string | undefined = '', private options: Object = {}) {
+  @obx initReady = false;
+
+  constructor(readonly resource: Resource, readonly workspace: Workspace, private config: IWindowCOnfig) {
     makeObservable(this);
     this.init();
+    this.title = config.title;
     this.icon = resource.icon;
   }
 
@@ -48,11 +61,16 @@ export class EditorWindow {
   async init() {
     await this.initViewTypes();
     await this.execViewTypesInit();
+    this.url = await this.resource.url();
     this.setDefaultViewType();
+    this.initReady = true;
   }
 
   initViewTypes = async () => {
     const editorViews = this.resource.editorViews;
+    if (!editorViews) {
+      return;
+    }
     for (let i = 0; i < editorViews.length; i++) {
       const name = editorViews[i].viewName;
       await this.initViewType(name);
@@ -72,6 +90,9 @@ export class EditorWindow {
 
   execViewTypesInit = async () => {
     const editorViews = this.resource.editorViews;
+    if (!editorViews) {
+      return;
+    }
     for (let i = 0; i < editorViews.length; i++) {
       const name = editorViews[i].viewName;
       this.changeViewType(name);
@@ -80,21 +101,29 @@ export class EditorWindow {
   };
 
   setDefaultViewType = () => {
-    this.changeViewType(this.resource.defaultViewType);
+    this.changeViewType(this.config.viewType ?? this.resource.defaultViewType);
   };
+
+  get resourceType() {
+    return this.resource.resourceType.type;
+  }
 
   initViewType = async (name: string) => {
     const viewInfo = this.resource.getEditorView(name);
     if (this.editorViews.get(name)) {
       return;
     }
-    const editorView = new Context(this.workspace, this, viewInfo as any, this.options);
+    const editorView = new Context(this.workspace, this, viewInfo as any, this.config.options);
     this.editorViews.set(name, editorView);
   };
 
   changeViewType = (name: string, ignoreEmit: boolean = true) => {
     this.editorView?.setActivate(false);
     this.editorView = this.editorViews.get(name)!;
+
+    if (!this.editorView) {
+      return;
+    }
 
     if (!ignoreEmit) {
       this.emitter.emit('window.change.view.type', name);

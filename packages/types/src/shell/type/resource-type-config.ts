@@ -28,4 +28,7 @@ export interface IPublicResourceTypeConfig {
 
   /** 默认标题 */
   defaultTitle?: string;
+
+  /** resourceType 类型为 'webview' 时渲染的地址 */
+  url?: () => Promise<string>;
 }
