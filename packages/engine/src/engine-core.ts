@@ -195,6 +195,7 @@ export async function init(
       engineContainer,
     );
     innerWorkspace.setActive(true);
+    innerHotkey.activate(false);
     await innerWorkspace.plugins.init(pluginPreference);
     return;
   }
