@@ -115,13 +115,13 @@ export class Project implements IProject {
 
   private getComponentsMap(): IPublicTypeComponentsMap {
     return this.documents.reduce((
-      compomentsMap: IPublicTypeComponentsMap,
+      componentsMap: IPublicTypeComponentsMap,
       curDoc: DocumentModel,
       ) => {
       const curComponentsMap = curDoc.getComponentsMap();
       if (Array.isArray(curComponentsMap)) {
         curComponentsMap.forEach((item) => {
-          const found = compomentsMap.find((eItem) => {
+          const found = componentsMap.find((eItem) => {
             if (
               isProCodeComponentType(eItem) &&
               isProCodeComponentType(item) &&
@@ -138,10 +138,10 @@ export class Project implements IProject {
             return false;
           });
           if (found) return;
-          compomentsMap.push(item);
+          componentsMap.push(item);
         });
       }
-      return compomentsMap;
+      return componentsMap;
     }, [] as IPublicTypeComponentsMap);
   }
 
