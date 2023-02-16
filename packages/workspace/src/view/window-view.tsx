@@ -17,7 +17,7 @@ export class WindowView extends PureComponent<{
     if (!initReady) {
       const Loading = engineConfig.get('loadingComponent', BuiltinLoading);
       return (
-        <div className={`workspace-engine-main 111 ${active ? 'active' : ''}`}>
+        <div className={`workspace-engine-main ${active ? 'active' : ''}`}>
           <Loading />
         </div>
       );
