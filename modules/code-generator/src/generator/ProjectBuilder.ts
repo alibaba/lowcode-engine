@@ -320,7 +320,7 @@ export class ProjectBuilder implements IProjectBuilder {
             // template: this.template,
             inStrictMode: this.inStrictMode,
             tolerateEvalErrors: true,
-            evalErrorsHandler: '',
+            evalErrorsHandler: 'console.error(error)',
             ...this.extraContextData,
             ...extraContextData,
           },
