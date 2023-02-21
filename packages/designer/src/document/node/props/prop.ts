@@ -303,7 +303,7 @@ export class Prop implements IProp, IPropParent {
         return this._value;
       }
       const values = this.items!.map((prop) => {
-        return prop.export(stage);
+        return prop?.export(stage);
       });
       if (values.every((val) => val === undefined)) {
         return undefined;
