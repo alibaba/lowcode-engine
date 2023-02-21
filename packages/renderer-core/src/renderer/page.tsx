@@ -15,7 +15,7 @@ export default function pageRendererFactory(): IBaseRenderComponent {
       const schema = props.__schema || {};
       this.state = this.__parseData(schema.state || {});
       this.__initDataSource(props);
-      this.__excuteLifeCycleMethod('constructor', [props, ...rest]);
+      this.__executeLifeCycleMethod('constructor', [props, ...rest]);
     }
 
     async componentDidUpdate(prevProps: IBaseRendererProps, _prevState: {}, snapshot: unknown) {
@@ -43,7 +43,6 @@ export default function pageRendererFactory(): IBaseRenderComponent {
         page: this,
       });
       this.__render();
-
 
       const { Page } = __components;
       if (Page) {
