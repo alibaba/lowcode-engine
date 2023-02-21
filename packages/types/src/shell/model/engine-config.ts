@@ -1,3 +1,4 @@
+import { IPublicTypeDisposable } from '../type';
 import { IPublicModelPreference } from './';
 
 export interface IPublicModelEngineConfig {
@@ -52,7 +53,7 @@ export interface IPublicModelEngineConfig {
    * @param fn
    * @returns
    */
-  onGot(key: string, fn: (data: any) => void): () => void;
+  onGot(key: string, fn: (data: any) => void): IPublicTypeDisposable;
 
   /**
    * 获取全局 Preference, 用于管理全局浏览器侧用户 Preference，如 Panel 是否钉住

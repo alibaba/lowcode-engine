@@ -19,3 +19,4 @@ export * from './active-tracker';
 export * from './plugin-instance';
 export * from './window';
 export * from './clipboard';
+export * from './config';
