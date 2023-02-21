@@ -58,7 +58,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
   constructor(
     parent: SettingEntry,
     config: IPublicTypeFieldConfig,
-    settingFieldCollector?: (name: string | number, field: SettingField) => void,
+    private settingFieldCollector?: (name: string | number, field: SettingField) => void,
   ) {
     super(parent, config.name, config.type);
     makeObservable(this);
@@ -137,7 +137,8 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   // 创建子配置项，通常用于 object/array 类型数据
   createField(config: IPublicTypeFieldConfig): SettingField {
-    return new SettingField(this, config);
+    this.settingFieldCollector?.(getSettingFieldCollectorKey(this.parent, config), this);
+    return new SettingField(this, config, this.settingFieldCollector);
   }
 
   purge() {

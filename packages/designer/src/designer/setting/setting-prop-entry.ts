@@ -1,11 +1,12 @@
 import { obx, computed, makeObservable, runInAction, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { GlobalEvent, IPublicModelEditor, IPublicTypeSetValueOptions } from '@alilc/lowcode-types';
 import { uniqueId, isJSExpression, isSettingField } from '@alilc/lowcode-utils';
+import { Setters } from '@alilc/lowcode-shell';
 import { SettingEntry } from './setting-entry';
 import { INode } from '../../document';
 import { IComponentMeta } from '../../component-meta';
 import { Designer } from '../designer';
-import { Setters } from '@alilc/lowcode-shell';
+import { SettingField } from './setting-field';
 
 export class SettingPropEntry implements SettingEntry {
   // === static properties ===
@@ -52,7 +53,7 @@ export class SettingPropEntry implements SettingEntry {
 
   extraProps: any = {};
 
-  constructor(readonly parent: SettingEntry, name: string | number, type?: 'field' | 'group') {
+  constructor(readonly parent: SettingEntry | SettingField, name: string | number, type?: 'field' | 'group') {
     makeObservable(this);
     if (type == null) {
       const c = typeof name === 'string' ? name.slice(0, 1) : '';
