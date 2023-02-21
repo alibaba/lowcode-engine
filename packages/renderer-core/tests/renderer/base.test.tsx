@@ -121,7 +121,7 @@ describe('Base Render methods', () => {
   // it('should excute lifecycle.componentDidCatch when defined', () => {
   // });
 
-  // it('__excuteLifeCycleMethod should work', () => {
+  // it('__executeLifeCycleMethod should work', () => {
   // });
 
   // it('reloadDataSource should work', () => {
