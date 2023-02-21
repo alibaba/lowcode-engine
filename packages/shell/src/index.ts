@@ -10,6 +10,7 @@ import {
   SettingPropEntry,
   SettingTopEntry,
   Clipboard,
+  Config,
 } from './model';
 import {
   Project,
@@ -61,4 +62,5 @@ export {
   Workspace,
   Clipboard,
   SimulatorHost,
+  Config,
 };
