@@ -54,6 +54,8 @@ export interface INodeChildren extends Omit<IPublicModelNodeChildren, 'forEach' 
 
   reduce(fn: (acc: any, cur: INode) => any, initialValue: any): void;
 
+  reverse(): INode[];
+
   mergeChildren(
     remover: (node: INode, idx: number) => boolean,
     adder: (children: INode[]) => IPublicTypeNodeData[] | null,
@@ -440,6 +442,10 @@ export class NodeChildren implements INodeChildren {
 
   reduce(fn: (acc: any, cur: INode) => any, initialValue: any): void {
     return this.children.reduce(fn, initialValue);
+  }
+
+  reverse() {
+    return this.children.reverse();
   }
 
   mergeChildren(
