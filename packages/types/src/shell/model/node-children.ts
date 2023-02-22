@@ -97,6 +97,12 @@ export interface IPublicModelNodeChildren {
   forEach(fn: (node: IPublicModelNode, index: number) => void): void;
 
   /**
+   * 类似数组的 reverse
+   * provide the same function with {Array.prototype.reverse}
+   */
+  reverse(): IPublicModelNode[];
+
+  /**
    * 类似数组的 map
    * provide the same function with {Array.prototype.map}
    * @param fn
