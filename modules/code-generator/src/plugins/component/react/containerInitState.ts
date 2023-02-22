@@ -13,12 +13,12 @@ import {
 } from '../../../types';
 
 export interface PluginConfig {
-  fileType: string;
+  fileType?: string;
   implementType: 'inConstructor' | 'insMember' | 'hooks';
 }
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
-  const cfg: PluginConfig = {
+  const cfg: PluginConfig & { fileType: string } = {
     fileType: FileType.JSX,
     implementType: 'inConstructor',
     ...config,
