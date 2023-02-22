@@ -156,6 +156,21 @@ forEach(fn: (node: IPublicModelNode, index: number) => void): void;
 
 相关类型：[IPublicModelNode](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/node.ts)
 
+### reverse
+
+类似数组的 reverse
+
+```typescript
+/**
+ * 类似数组的 reverse
+ * provide the same function with {Array.prototype.reverse}
+ */
+reverse(): IPublicModelNode[];
+
+```
+
+相关类型：[IPublicModelNode](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/node.ts)
+
 
 ### map
 
