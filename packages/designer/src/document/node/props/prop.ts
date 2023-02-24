@@ -401,7 +401,7 @@ export class Prop implements IProp, IPropParent {
       slotSchema = {
         componentName: 'Slot',
         title: value.title || value.props?.slotTitle,
-        id: data.id,
+        id: value.id,
         name: value.name || value.props?.slotName,
         params: value.params || value.props?.slotParams,
         children: value.children,
