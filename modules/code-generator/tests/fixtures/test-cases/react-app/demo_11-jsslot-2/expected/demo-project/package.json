@@ -32,9 +32,16 @@
     "eslint": "eslint --cache --ext .js,.jsx ./",
     "stylelint": "stylelint ./**/*.scss"
   },
-  "ideMode": { "name": "ice-react" },
-  "iceworks": { "type": "react", "adapter": "adapter-react-v3" },
-  "engines": { "node": ">=8.0.0" },
+  "ideMode": {
+    "name": "ice-react"
+  },
+  "iceworks": {
+    "type": "react",
+    "adapter": "adapter-react-v3"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "http://gitlab.xxx.com/msd/leak-scan/tree/master"
