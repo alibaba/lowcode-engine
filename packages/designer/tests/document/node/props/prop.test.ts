@@ -518,6 +518,7 @@ describe('Prop 类测试', () => {
       type: 'JSSlot',
       value: {
         componentName: 'Slot',
+        id: 'node_oclei5rv2e2',
         props: {
           slotName: "content",
           slotTitle: "主内容"
@@ -534,6 +535,7 @@ describe('Prop 类测试', () => {
 
     expect(slotProp.slotNode?.title).toBe('主内容');
     expect(slotProp.slotNode?.getExtraProp('name')?.getValue()).toBe('content');
+    expect(slotProp.slotNode?.export()?.id).toBe('node_oclei5rv2e2');
 
     slotProp.export();
 
