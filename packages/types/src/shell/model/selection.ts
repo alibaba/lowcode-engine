@@ -1,7 +1,9 @@
 import { IPublicModelNode } from './';
 import { IPublicTypeDisposable } from '../type';
 
-export interface IPublicModelSelection {
+export interface IPublicModelSelection<
+  Node = IPublicModelNode
+> {
 
   /**
    * 返回选中的节点 id
@@ -14,7 +16,7 @@ export interface IPublicModelSelection {
    * return selected Node instance，return the first one if multiple nodes are selected
    * @since v1.1.0
    */
-  get node(): IPublicModelNode | null;
+  get node(): Node | null;
 
   /**
    * 选中指定节点（覆盖方式）
@@ -62,7 +64,7 @@ export interface IPublicModelSelection {
    * 获取选中的节点实例
    * get selected nodes
    */
-  getNodes(): IPublicModelNode[];
+  getNodes(): Node[];
 
   /**
    * 获取选区的顶层节点
@@ -72,7 +74,7 @@ export interface IPublicModelSelection {
    *  getTopNodes() will return [A, B], subA will be removed
    * @since v1.0.16
    */
-  getTopNodes(includeRoot?: boolean): IPublicModelNode[];
+  getTopNodes(includeRoot?: boolean): Node[];
 
   /**
    * 注册 selection 变化事件回调

@@ -1,7 +1,7 @@
 import { IPublicModelNode } from '..';
 import { IPublicEnumDragObjectType } from '../enum';
 
-export interface IPublicTypeDragNodeObject {
+export interface IPublicTypeDragNodeObject<Node = IPublicModelNode> {
   type: IPublicEnumDragObjectType.Node;
-  nodes: IPublicModelNode[];
+  nodes: Node[];
 }

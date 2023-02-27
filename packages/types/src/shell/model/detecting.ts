@@ -1,7 +1,7 @@
 import { IPublicModelNode } from './';
 import { IPublicTypeDisposable } from '../type';
 
-export interface IPublicModelDetecting {
+export interface IPublicModelDetecting<Node = IPublicModelNode> {
 
   /**
    * 是否启用
@@ -15,7 +15,7 @@ export interface IPublicModelDetecting {
    * get current hovering node
    * @since v1.0.16
    */
-  get current(): IPublicModelNode | null;
+  get current(): Node | null;
 
   /**
    * hover 指定节点
@@ -42,5 +42,5 @@ export interface IPublicModelDetecting {
    * set callback which will be called when hovering object changed.
    * @since v1.1.0
    */
-  onDetectingChange(fn: (node: IPublicModelNode | null) => void): IPublicTypeDisposable;
+  onDetectingChange(fn: (node: Node | null) => void): IPublicTypeDisposable;
 }

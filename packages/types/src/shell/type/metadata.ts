@@ -1,5 +1,5 @@
 import { IPublicTypePropType, IPublicTypeComponentAction } from './';
-import { IPublicModelProp, IPublicModelSettingTarget } from '../model';
+import { IPublicModelNode, IPublicModelProp, IPublicModelSettingTarget } from '../model';
 
 /**
  * 嵌套控制函数
@@ -184,20 +184,20 @@ export interface ConfigureSupport {
  */
 export interface IPublicTypeCallbacks {
   // hooks
-  onMouseDownHook?: (e: MouseEvent, currentNode: any) => any;
-  onDblClickHook?: (e: MouseEvent, currentNode: any) => any;
-  onClickHook?: (e: MouseEvent, currentNode: any) => any;
+  onMouseDownHook?: (e: MouseEvent, currentNode: IPublicModelNode) => any;
+  onDblClickHook?: (e: MouseEvent, currentNode: IPublicModelNode) => any;
+  onClickHook?: (e: MouseEvent, currentNode: IPublicModelNode) => any;
   // onLocateHook?: (e: any, currentNode: any) => any;
   // onAcceptHook?: (currentNode: any, locationData: any) => any;
-  onMoveHook?: (currentNode: any) => boolean;
+  onMoveHook?: (currentNode: IPublicModelNode) => boolean;
   // thinkof 限制性拖拽
-  onHoverHook?: (currentNode: any) => boolean;
-  onChildMoveHook?: (childNode: any, currentNode: any) => boolean;
+  onHoverHook?: (currentNode: IPublicModelNode) => boolean;
+  onChildMoveHook?: (childNode: IPublicModelNode, currentNode: IPublicModelNode) => boolean;
 
   // events
-  onNodeRemove?: (removedNode: any, currentNode: any) => void;
-  onNodeAdd?: (addedNode: any, currentNode: any) => void;
-  onSubtreeModified?: (currentNode: any, options: any) => void;
+  onNodeRemove?: (removedNode: IPublicModelNode, currentNode: IPublicModelNode) => void;
+  onNodeAdd?: (addedNode: IPublicModelNode, currentNode: IPublicModelNode) => void;
+  onSubtreeModified?: (currentNode: IPublicModelNode, options: any) => void;
   onResize?: (
     e: MouseEvent & {
       trigger: string;
@@ -220,6 +220,6 @@ export interface IPublicTypeCallbacks {
       deltaX?: number;
       deltaY?: number;
     },
-    currentNode: any,
+    currentNode: IPublicModelNode,
   ) => void;
 }
