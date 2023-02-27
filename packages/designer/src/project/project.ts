@@ -12,13 +12,31 @@ import {
 import { isLowCodeComponentType, isProCodeComponentType } from '@alilc/lowcode-utils';
 import { ISimulatorHost } from '../simulator';
 
-export interface IProject extends Omit< IPublicApiProject, 'simulatorHost' | 'importSchema' | 'exportSchema' | 'openDocument' | 'getDocumentById' | 'getCurrentDocument' | 'addPropsTransducer' | 'onRemoveDocument' | 'onChangeDocument' | 'onSimulatorHostReady' | 'onSimulatorRendererReady' | 'setI18n' > {
+export interface IProject extends Omit< IPublicApiProject,
+  'simulatorHost' |
+  'importSchema' |
+  'exportSchema' |
+  'openDocument' |
+  'getDocumentById' |
+  'getCurrentDocument' |
+  'addPropsTransducer' |
+  'onRemoveDocument' |
+  'onChangeDocument' |
+  'onSimulatorHostReady' |
+  'onSimulatorRendererReady' |
+  'setI18n' |
+  'currentDocument' |
+  'selection' |
+  'documents' |
+  'createDocument' |
+  'getDocumentByFileName'
+> {
 
   get designer(): IDesigner;
 
   get simulator(): ISimulatorHost | null;
 
-  get currentDocument(): IDocumentModel | null;
+  get currentDocument(): IDocumentModel | null | undefined;
 
   get documents(): IDocumentModel[];
 
@@ -60,6 +78,8 @@ export interface IProject extends Omit< IPublicApiProject, 'simulatorHost' | 'im
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     value: any,
   ): void;
+
+  checkExclusive(activeDoc: DocumentModel): void;
 }
 
 export class Project implements IProject {
@@ -85,7 +105,7 @@ export class Project implements IProject {
     return this._simulator || null;
   }
 
-  @computed get currentDocument(): IDocumentModel | null {
+  @computed get currentDocument(): IDocumentModel | null | undefined {
     return this.documents.find((doc) => doc.active);
   }
 

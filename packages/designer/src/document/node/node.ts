@@ -16,9 +16,10 @@ import {
   IPublicModelExclusiveGroup,
   IPublicEnumTransformStage,
   IPublicTypeDisposable,
+  IBaseModelNode,
 } from '@alilc/lowcode-types';
 import { compatStage, isDOMText, isJSExpression, isNode } from '@alilc/lowcode-utils';
-import { SettingTopEntry } from '@alilc/lowcode-designer';
+import { ISettingTopEntry, SettingTopEntry } from '@alilc/lowcode-designer';
 import { Props, getConvertedExtraKey, IProps } from './props/props';
 import { DocumentModel, IDocumentModel } from '../document-model';
 import { NodeChildren, INodeChildren } from './node-children';
@@ -36,28 +37,38 @@ export interface NodeStatus {
   inPlaceEditing: boolean;
 }
 
-export interface INode extends IPublicModelNode {
-
-  /**
-   * 当前节点子集
-   */
-  get children(): INodeChildren | null;
-
-  /**
-   * 获取上一个兄弟节点
-   */
-  get prevSibling(): INode | null;
-
-  /**
-   * 获取下一个兄弟节点
-   */
-  get nextSibling(): INode | null;
-
-  /**
-   * 父级节点
-   */
-  get parent(): INode | null;
-
+export interface INode extends Omit<IBaseModelNode<
+  IDocumentModel,
+  INode,
+  INodeChildren,
+  IComponentMeta,
+  ISettingTopEntry
+>,
+  'slots' |
+  'slotFor' |
+  'props' |
+  'getProp' |
+  'getExtraProp' |
+  'replaceChild' |
+  'isRoot' |
+  'isPage' |
+  'isComponent' |
+  'isModal' |
+  'isSlot' |
+  'isParental' |
+  'isLeaf' |
+  'settingEntry' |
+  // 在内部的 node 模型中不存在
+  'getExtraPropValue' |
+  'setExtraPropValue' |
+  'exportSchema' |
+  'visible' |
+  'importSchema' |
+  'isEmptyNode' |
+  // 内外实现有差异
+  'isContainer' |
+  'isEmpty'
+> {
   get slots(): INode[];
 
   /**
@@ -69,7 +80,9 @@ export interface INode extends IPublicModelNode {
 
   get componentMeta(): IComponentMeta;
 
-  get document(): IDocumentModel;
+  get settingEntry(): SettingTopEntry;
+
+  get isPurged(): boolean;
 
   setVisible(flag: boolean): void;
 
@@ -79,7 +92,7 @@ export interface INode extends IPublicModelNode {
    * 内部方法，请勿使用
    * @param useMutator 是否触发联动逻辑
    */
-  internalSetParent(parent: INode | null, useMutator: boolean): void;
+  internalSetParent(parent: INode | null, useMutator?: boolean): void;
 
   setConditionGroup(grp: IPublicModelExclusiveGroup | string | null): void;
 
@@ -89,12 +102,10 @@ export interface INode extends IPublicModelNode {
 
   unlinkSlot(slotNode: Node): void;
 
-  didDropOut(dragment: Node): void;
-
   /**
    * 导出 schema
    */
-  export(stage: IPublicEnumTransformStage, options?: any): IPublicTypeNodeSchema;
+  export<T = IPublicTypeNodeSchema>(stage: IPublicEnumTransformStage, options?: any): T;
 
   emitPropChange(val: IPublicTypePropChangeOptions): void;
 
@@ -117,6 +128,38 @@ export interface INode extends IPublicModelNode {
   onChildrenChange(fn: (param?: { type: string; node: INode }) => void): IPublicTypeDisposable;
 
   onPropChange(func: (info: IPublicTypePropChangeOptions) => void): IPublicTypeDisposable;
+
+  isModal(): boolean;
+
+  isRoot(): boolean;
+
+  isPage(): boolean;
+
+  isComponent(): boolean;
+
+  isSlot(): boolean;
+
+  isParental(): boolean;
+
+  isLeaf(): boolean;
+
+  isContainer(): boolean;
+
+  isEmpty(): boolean;
+
+  remove(
+    useMutator?: boolean,
+    purge?: boolean,
+    options?: NodeRemoveOptions,
+  ): void;
+
+  didDropIn(dragment: Node): void;
+
+  didDropOut(dragment: Node): void;
+
+  get isPurging(): boolean;
+
+  purge(): void;
 }
 
 /**
@@ -251,9 +294,9 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
 
   isInited = false;
 
-  _settingEntry: SettingTopEntry;
+  _settingEntry: ISettingTopEntry;
 
-  get settingEntry(): SettingTopEntry {
+  get settingEntry(): ISettingTopEntry {
     if (this._settingEntry) return this._settingEntry;
     this._settingEntry = this.document.designer.createSettingEntry([this]);
     return this._settingEntry;
@@ -319,7 +362,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     pseudo: false,
   };
 
-  constructor(readonly document: IDocumentModel, nodeSchema: Schema, options: any = {}) {
+  constructor(readonly document: IDocumentModel, nodeSchema: Schema) {
     makeObservable(this);
     const { componentName, id, children, props, ...extras } = nodeSchema;
     this.id = document.nextId(id);
@@ -347,7 +390,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     this.onVisibleChange((visible: boolean) => {
       editor?.eventBus.emit(EDITOR_EVENT.NODE_VISIBLE_CHANGE, this, visible);
     });
-    this.onChildrenChange((info?: { type: string; node: Node }) => {
+    this.onChildrenChange((info?: { type: string; node: INode }) => {
       editor?.eventBus.emit(EDITOR_EVENT.NODE_VISIBLE_CHANGE, info);
     });
   }
@@ -475,7 +518,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     this.document.addWillPurge(this);
   }
 
-  private didDropIn(dragment: Node) {
+  didDropIn(dragment: Node) {
     const { callbacks } = this.componentMeta.advanced;
     if (callbacks?.onNodeAdd) {
       const cbThis = this.internalToShellNode();
@@ -486,7 +529,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     }
   }
 
-  private didDropOut(dragment: Node) {
+  didDropOut(dragment: Node) {
     const { callbacks } = this.componentMeta.advanced;
     if (callbacks?.onNodeRemove) {
       const cbThis = this.internalToShellNode();
@@ -869,7 +912,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 导出 schema
    */
-  export(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Save, options: any = {}): Schema {
+  export<T = IPublicTypeNodeSchema>(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Save, options: any = {}): T {
     stage = compatStage(stage);
     const baseSchema: any = {
       componentName: this.componentName,
@@ -955,7 +998,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 删除一个Slot节点
    */
-  removeSlot(slotNode: Node, purge = false): boolean {
+  removeSlot(slotNode: Node): boolean {
     // if (purge) {
     //   // should set parent null
     //   slotNode?.internalSetParent(null, false);
@@ -1047,16 +1090,16 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     return this.componentName;
   }
 
-  insert(node: Node, ref?: Node, useMutator = true) {
+  insert(node: Node, ref?: INode, useMutator = true) {
     this.insertAfter(node, ref, useMutator);
   }
 
-  insertBefore(node: Node, ref?: Node, useMutator = true) {
+  insertBefore(node: INode, ref?: INode, useMutator = true) {
     const nodeInstance = ensureNode(node, this.document);
     this.children?.internalInsert(nodeInstance, ref ? ref.index : null, useMutator);
   }
 
-  insertAfter(node: any, ref?: Node, useMutator = true) {
+  insertAfter(node: any, ref?: INode, useMutator = true) {
     const nodeInstance = ensureNode(node, this.document);
     this.children?.internalInsert(nodeInstance, ref ? ref.index + 1 : null, useMutator);
   }
@@ -1085,15 +1128,15 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     return this.props;
   }
 
-  onChildrenChange(fn: (param?: { type: string; node: Node }) => void): IPublicTypeDisposable {
+  onChildrenChange(fn: (param?: { type: string; node: INode }) => void): IPublicTypeDisposable {
     const wrappedFunc = wrapWithEventSwitch(fn);
     return this.children?.onChange(wrappedFunc);
   }
 
   mergeChildren(
-    remover: () => any,
-    adder: (children: Node[]) => IPublicTypeNodeData[] | null,
-    sorter: () => any,
+    remover: (node: INode, idx: number) => any,
+    adder: (children: INode[]) => IPublicTypeNodeData[] | null,
+    sorter: (firstNode: INode, secondNode: INode) => any,
   ) {
     this.children?.mergeChildren(remover, adder, sorter);
   }

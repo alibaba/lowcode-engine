@@ -1,3 +1,5 @@
-export function isNode(node: any): boolean {
+import { IPublicModelNode } from '@alilc/lowcode-types';
+
+export function isNode<Node = IPublicModelNode>(node: any): node is Node {
   return node && node.isNode;
 }

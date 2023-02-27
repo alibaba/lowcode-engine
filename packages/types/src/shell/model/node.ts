@@ -3,7 +3,13 @@ import { IPublicTypeNodeSchema, IPublicTypeIconType, IPublicTypeI18nData, IPubli
 import { IPublicEnumTransformStage } from '../enum';
 import { IPublicModelNodeChildren, IPublicModelComponentMeta, IPublicModelProp, IPublicModelProps, IPublicModelSettingTopEntry, IPublicModelDocumentModel, IPublicModelExclusiveGroup } from './';
 
-export interface IPublicModelNode {
+export interface IBaseModelNode<
+  Document = IPublicModelDocumentModel,
+  Node = IPublicModelNode,
+  NodeChildren = IPublicModelNodeChildren,
+  ComponentMeta = IPublicModelComponentMeta,
+  SettingTopEntry = IPublicModelSettingTopEntry
+> {
 
   /**
    * 节点 id
@@ -185,43 +191,43 @@ export interface IPublicModelNode {
    * 节点的物料元数据
    * get component meta of this node
    */
-  get componentMeta(): IPublicModelComponentMeta | null;
+  get componentMeta(): ComponentMeta | null;
 
   /**
    * 获取节点所属的文档模型对象
    * get documentModel of this node
    */
-  get document(): IPublicModelDocumentModel | null;
+  get document(): Document | null;
 
   /**
    * 获取当前节点的前一个兄弟节点
    * get previous sibling of this node
    */
-  get prevSibling(): IPublicModelNode | null;
+  get prevSibling(): Node | null;
 
   /**
    * 获取当前节点的后一个兄弟节点
    * get next sibling of this node
    */
-  get nextSibling(): IPublicModelNode | null;
+  get nextSibling(): Node | null;
 
   /**
    * 获取当前节点的父亲节点
    * get parent of this node
    */
-  get parent(): IPublicModelNode | null;
+  get parent(): Node | null;
 
   /**
    * 获取当前节点的孩子节点模型
    * get children of this node
    */
-  get children(): IPublicModelNodeChildren | null;
+  get children(): NodeChildren | null;
 
   /**
    * 节点上挂载的插槽节点们
    * get slots of this node
    */
-  get slots(): IPublicModelNode[];
+  get slots(): Node[];
 
   /**
    * 当前节点为插槽节点时，返回节点对应的属性实例
@@ -258,7 +264,7 @@ export interface IPublicModelNode {
    * get setting entry of this node
    * @since v1.1.0
    */
-  get settingEntry(): IPublicModelSettingTopEntry;
+  get settingEntry(): SettingTopEntry;
 
   /**
    * 返回节点的尺寸、位置信息
@@ -359,8 +365,8 @@ export interface IPublicModelNode {
    * @param useMutator
    */
   insertBefore(
-      node: IPublicModelNode,
-      ref?: IPublicModelNode | undefined,
+      node: Node,
+      ref?: Node | undefined,
       useMutator?: boolean,
     ): void;
 
@@ -372,8 +378,8 @@ export interface IPublicModelNode {
    * @param useMutator
    */
   insertAfter(
-      node: IPublicModelNode,
-      ref?: IPublicModelNode | undefined,
+      node: Node,
+      ref?: Node | undefined,
       useMutator?: boolean,
     ): void;
 
@@ -384,7 +390,7 @@ export interface IPublicModelNode {
    * @param data 用作替换的节点对象或者节点描述
    * @returns
    */
-  replaceChild(node: IPublicModelNode, data: any): IPublicModelNode | null;
+  replaceChild(node: Node, data: any): Node | null;
 
   /**
    * 将当前节点替换成指定节点描述
@@ -427,9 +433,9 @@ export interface IPublicModelNode {
    * @since v1.1.0
    */
   mergeChildren(
-    remover: (node: IPublicModelNode, idx: number) => boolean,
-    adder: (children: IPublicModelNode[]) => any,
-    sorter: (firstNode: IPublicModelNode, secondNode: IPublicModelNode) => number
+    remover: (node: Node, idx: number) => boolean,
+    adder: (children: Node[]) => any,
+    sorter: (firstNode: Node, secondNode: Node) => number
   ): any;
 
   /**
@@ -438,7 +444,7 @@ export interface IPublicModelNode {
    * @param node
    * @since v1.1.0
    */
-  contains(node: IPublicModelNode): boolean;
+  contains(node: Node): boolean;
 
   /**
    * 是否可执行某 action
@@ -476,3 +482,5 @@ export interface IPublicModelNode {
    */
   setConditionalVisible(): void;
 }
+
+export interface IPublicModelNode extends IBaseModelNode<IPublicModelDocumentModel, IPublicModelNode> {}
