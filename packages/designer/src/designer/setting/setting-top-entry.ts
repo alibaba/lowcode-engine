@@ -4,19 +4,22 @@ import { computed, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor
 import { SettingEntry } from './setting-entry';
 import { SettingField } from './setting-field';
 import { SettingPropEntry } from './setting-prop-entry';
-import { Node } from '../../document';
+import { INode } from '../../document';
 import { ComponentMeta } from '../../component-meta';
-import { Designer } from '../designer';
+import { IDesigner } from '../designer';
 import { Setters } from '@alilc/lowcode-shell';
 
-function generateSessionId(nodes: Node[]) {
+function generateSessionId(nodes: INode[]) {
   return nodes
     .map((node) => node.id)
     .sort()
     .join(',');
 }
 
-export class SettingTopEntry implements SettingEntry {
+export interface ISettingTopEntry extends SettingEntry {
+}
+
+export class SettingTopEntry implements ISettingTopEntry {
   private emitter: IEventBus = createModuleEventBus('SettingTopEntry');
 
   private _items: Array<SettingField | IPublicTypeCustomView> = [];
@@ -68,21 +71,21 @@ export class SettingTopEntry implements SettingEntry {
 
   readonly id: string;
 
-  readonly first: Node;
+  readonly first: INode;
 
-  readonly designer: Designer;
+  readonly designer: IDesigner | undefined;
 
   readonly setters: Setters;
 
   disposeFunctions: any[] = [];
 
-  constructor(readonly editor: IPublicModelEditor, readonly nodes: Node[]) {
+  constructor(readonly editor: IPublicModelEditor, readonly nodes: INode[]) {
     if (!Array.isArray(nodes) || nodes.length < 1) {
       throw new ReferenceError('nodes should not be empty');
     }
     this.id = generateSessionId(nodes);
     this.first = nodes[0];
-    this.designer = this.first.document.designer;
+    this.designer = this.first.document?.designer;
     this.setters = editor.get('setters') as Setters;
 
     // setups
@@ -228,7 +231,6 @@ export class SettingTopEntry implements SettingEntry {
     this.disposeFunctions.forEach(f => f());
     this.disposeFunctions = [];
   }
-
 
   getProp(propName: string | number) {
     return this.get(propName);

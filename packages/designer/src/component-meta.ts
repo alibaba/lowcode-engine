@@ -56,7 +56,8 @@ export function buildFilter(rule?: string | string[] | RegExp | IPublicTypeNesti
   return (testNode: Node | IPublicTypeNodeSchema) => list.includes(testNode.componentName);
 }
 
-export interface IComponentMeta extends IPublicModelComponentMeta {
+export interface IComponentMeta extends IPublicModelComponentMeta<INode> {
+  prototype?: any;
 }
 
 export class ComponentMeta implements IComponentMeta {
