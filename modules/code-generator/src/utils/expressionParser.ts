@@ -271,7 +271,7 @@ export function parseExpressionConvertThis2Context(
 
     const localVariablesSet = new Set(localVariables);
 
-    let thisScopeLevel = -1;
+    let thisScopeLevel = CROSS_THIS_SCOPE_TYPE_NODE[exprAst.type] ? -1 : 0;
     traverse(fileAst, {
       enter(path) {
         if (CROSS_THIS_SCOPE_TYPE_NODE[path.node.type]) {
@@ -303,7 +303,7 @@ export function parseExpressionConvertThis2Context(
         }
 
         // 替换 this (只在顶层替换)
-        if (thisScopeLevel === 0) {
+        if (thisScopeLevel <= 0) {
           obj.replaceWith(t.identifier(contextName));
         }
       },
@@ -317,7 +317,7 @@ export function parseExpressionConvertThis2Context(
           return;
         }
 
-        if (thisScopeLevel === 0) {
+        if (thisScopeLevel <= 0) {
           path.replaceWith(t.identifier(contextName));
         }
       },

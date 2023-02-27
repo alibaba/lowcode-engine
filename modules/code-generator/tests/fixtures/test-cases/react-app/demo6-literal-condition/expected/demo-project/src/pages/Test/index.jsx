@@ -71,10 +71,10 @@ class Test$$Page extends React.Component {
           type: 'urlParams',
           isInit: function () {
             return undefined;
-          },
+          }.bind(_this),
           options: function () {
             return undefined;
-          },
+          }.bind(_this),
         },
         {
           id: 'user',
@@ -85,17 +85,16 @@ class Test$$Page extends React.Component {
               uri: 'https://shs.xxx.com/mock/1458/demo/user',
               isSync: true,
             };
-          },
+          }.bind(_this),
           dataHandler: function (response) {
             if (!response.data.success) {
               throw new Error(response.data.message);
             }
-
             return response.data.data;
           },
           isInit: function () {
             return undefined;
-          },
+          }.bind(_this),
         },
         {
           id: 'orders',
@@ -106,17 +105,16 @@ class Test$$Page extends React.Component {
               uri: 'https://shs.xxx.com/mock/1458/demo/orders',
               isSync: true,
             };
-          },
+          }.bind(_this),
           dataHandler: function (response) {
             if (!response.data.success) {
               throw new Error(response.data.message);
             }
-
             return response.data.data.result;
           },
           isInit: function () {
             return undefined;
-          },
+          }.bind(_this),
         },
       ],
       dataHandler: function (dataMap) {
