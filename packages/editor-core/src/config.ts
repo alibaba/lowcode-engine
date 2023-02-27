@@ -288,13 +288,11 @@ export class EngineConfig implements IEngineConfig {
     const val = this.config?.[key];
     if (val !== undefined) {
       fn(val);
-      return () => {};
-    } else {
-      this.setWait(key, fn);
-      return () => {
-        this.delWait(key, fn);
-      };
     }
+    this.setWait(key, fn);
+    return () => {
+      this.delWait(key, fn);
+    };
   }
 
   notifyGot(key: string): void {

@@ -190,13 +190,11 @@ export class Editor extends (EventEmitter as any) implements IPublicModelEditor 
     const x = this.context.get(keyOrType);
     if (x !== undefined) {
       fn(x);
-      return () => { };
-    } else {
-      this.setWait(keyOrType, fn);
-      return () => {
-        this.delWait(keyOrType, fn);
-      };
     }
+    this.setWait(keyOrType, fn);
+    return () => {
+      this.delWait(keyOrType, fn);
+    };
   }
 
   register(data: any, key?: IPublicTypeEditorValueKey): void {
