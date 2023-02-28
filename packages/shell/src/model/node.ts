@@ -362,9 +362,9 @@ export class Node implements IPublicModelNode {
    * @param sorter
    */
   mergeChildren(
-    remover: (node: IPublicModelNode, idx: number) => boolean,
-    adder: (children: IPublicModelNode[]) => any,
-    sorter: (firstNode: IPublicModelNode, secondNode: IPublicModelNode) => number,
+    remover: (node: Node, idx: number) => boolean,
+    adder: (children: Node[]) => any,
+    sorter: (firstNode: Node, secondNode: Node) => number,
   ): any {
     return this.children?.mergeChildren(remover, adder, sorter);
   }

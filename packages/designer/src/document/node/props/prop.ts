@@ -2,7 +2,7 @@ import { untracked, computed, obx, engineConfig, action, makeObservable, mobx, r
 import { IPublicTypeCompositeValue, GlobalEvent, IPublicTypeJSSlot, IPublicTypeSlotSchema, IPublicEnumTransformStage, IPublicModelProp } from '@alilc/lowcode-types';
 import { uniqueId, isPlainObject, hasOwnProperty, compatStage, isJSExpression, isJSSlot } from '@alilc/lowcode-utils';
 import { valueToSource } from './value-to-source';
-import { Props, IProps, IPropParent } from './props';
+import { IProps, IPropParent } from './props';
 import { SlotNode, INode } from '../node';
 // import { TransformStage } from '../transform-stage';
 
@@ -13,7 +13,7 @@ export type UNSET = typeof UNSET;
 
 export interface IProp extends Omit<IPublicModelProp, 'exportSchema' | 'node' | 'slotNode' > {
 
-  readonly props: Props;
+  readonly props: IProps;
 
   readonly owner: INode;
 
@@ -24,6 +24,8 @@ export interface IProp extends Omit<IPublicModelProp, 'exportSchema' | 'node' | 
   export(stage: IPublicEnumTransformStage): IPublicTypeCompositeValue;
 
   getNode(): INode;
+
+  getAsString(): string;
 }
 
 export type ValueTypes = 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot';
@@ -43,7 +45,7 @@ export class Prop implements IProp, IPropParent {
    */
   @obx spread: boolean;
 
-  readonly props: Props;
+  readonly props: IProps;
 
   readonly options: any;
 

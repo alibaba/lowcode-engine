@@ -21,6 +21,7 @@ import {
   IPublicApiCanvas,
   IPublicTypeDisposable,
   IPublicModelEditor,
+  IPublicTypeNodeSchema,
 } from '@alilc/lowcode-types';
 import { isDragNodeObject } from '@alilc/lowcode-utils';
 import { Node as ShellNode } from './node';
@@ -195,7 +196,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * @param data
    * @returns
    */
-  createNode(data: any): IPublicModelNode | null {
+  createNode(data: IPublicTypeNodeSchema): IPublicModelNode | null {
     return ShellNode.create(this[documentSymbol].createNode(data));
   }
 
@@ -289,7 +290,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * @param fn
    */
   onChangeNodeVisible(fn: (node: IPublicModelNode, visible: boolean) => void): IPublicTypeDisposable {
-    return this[documentSymbol].onChangeNodeVisible((node: IPublicModelNode, visible: boolean) => {
+    return this[documentSymbol].onChangeNodeVisible((node: InnerNode, visible: boolean) => {
       fn(ShellNode.create(node)!, visible);
     });
   }

@@ -19,12 +19,12 @@ export interface IPublicTypeFieldExtraProps {
   /**
    * get value for field
    */
-  getValue?: (target: IPublicModelSettingTarget, fieldValue: any) => any;
+  getValue?: (target: IPublicModelSettingPropEntry, fieldValue: any) => any;
 
   /**
    * set value for field
    */
-  setValue?: (target: IPublicModelSettingTarget, value: any) => void;
+  setValue?: (target: IPublicModelSettingPropEntry, value: any) => void;
 
   /**
    * the field conditional show, is not set always true
