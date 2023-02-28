@@ -33,8 +33,6 @@ export interface IPropParent {
   get path(): string[];
 
   delete(prop: Prop): void;
-
-  query(path: string, createIfNone: boolean): Prop | null;
 }
 
 export interface IProps extends Omit<IBaseModelProps<IProp>, | 'getExtraProp' | 'getExtraPropValue' | 'setExtraPropValue' | 'node'> {
@@ -52,6 +50,12 @@ export interface IProps extends Omit<IBaseModelProps<IProp>, | 'getExtraProp' | 
   };
 
   merge(value: IPublicTypePropsMap, extras?: IPublicTypePropsMap): void;
+
+  purge(): void;
+
+  query(path: string, createIfNone: boolean): Prop | null;
+
+  import(value?: IPublicTypePropsMap | IPublicTypePropsList | null, extras?: ExtrasObject): void;
 }
 
 export class Props implements IProps, IPropParent {

@@ -17,6 +17,7 @@ function generateSessionId(nodes: INode[]) {
 }
 
 export interface ISettingTopEntry extends ISettingEntry {
+  purge(): void;
 }
 
 export class SettingTopEntry implements ISettingTopEntry {

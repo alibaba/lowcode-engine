@@ -87,6 +87,8 @@ export interface IDocumentModel extends Omit< IPublicModelDocumentModel<
 
   get active(): boolean;
 
+  get nodesMap(): Map<string, INode>;
+
   /**
    * 根据 id 获取节点
    */
@@ -114,6 +116,12 @@ export interface IDocumentModel extends Omit< IPublicModelDocumentModel<
   onChangeNodeVisible(fn: (node: INode, visible: boolean) => void): IPublicTypeDisposable;
 
   addWillPurge(node: INode): void;
+
+  removeWillPurge(node: INode): void;
+
+  getComponentMeta(componentName: string): IComponentMeta;
+
+  insertNodes(parent: INode, thing: INode[] | IPublicTypeNodeData[], at?: number | null, copy?: boolean): INode[];
 }
 
 export class DocumentModel implements IDocumentModel {
@@ -379,7 +387,7 @@ export class DocumentModel implements IDocumentModel {
    * 根据 schema 创建一个节点
    */
   @action
-  createNode<T extends INode = INode, C = undefined>(data: GetDataType<C, T>, checkId: boolean = true): T {
+  createNode<T extends INode = INode, C = undefined>(data: GetDataType<C, T>): T {
     let schema: any;
     if (isDOMText(data) || isJSExpression(data)) {
       schema = {
@@ -410,7 +418,7 @@ export class DocumentModel implements IDocumentModel {
       }
     }
     if (!node) {
-      node = new Node(this, schema, { checkId });
+      node = new Node(this, schema);
       // will add
       // todo: this.activeNodes?.push(node);
     }
@@ -429,7 +437,7 @@ export class DocumentModel implements IDocumentModel {
   /**
    * 插入一个节点
    */
-  insertNode(parent: INode, thing: INode | IPublicTypeNodeData, at?: number | null, copy?: boolean): INode {
+  insertNode(parent: INode, thing: INode | IPublicTypeNodeData, at?: number | null, copy?: boolean): INode | null {
     return insertChild(parent, thing, at, copy);
   }
 
@@ -445,7 +453,7 @@ export class DocumentModel implements IDocumentModel {
    */
   removeNode(idOrNode: string | INode) {
     let id: string;
-    let node: INode | null;
+    let node: INode | null = null;
     if (typeof idOrNode === 'string') {
       id = idOrNode;
       node = this.getNode(id);
@@ -859,7 +867,7 @@ export class DocumentModel implements IDocumentModel {
   onReady(fn: Function) {
     this.designer.editor.eventBus.on('document-open', fn);
     return () => {
-      this.designer.editor.removeListener('document-open', fn);
+      this.designer.editor.eventBus.off('document-open', fn);
     };
   }
 

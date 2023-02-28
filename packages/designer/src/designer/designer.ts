@@ -71,6 +71,8 @@ export interface IDesigner {
 
   get editor(): IPublicModelEditor;
 
+  get detecting(): Detecting;
+
   createScroller(scrollable: IPublicTypeScrollable): IPublicModelScroller;
 
   /**
