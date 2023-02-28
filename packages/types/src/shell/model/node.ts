@@ -8,7 +8,10 @@ export interface IBaseModelNode<
   Node = IPublicModelNode,
   NodeChildren = IPublicModelNodeChildren,
   ComponentMeta = IPublicModelComponentMeta,
-  SettingTopEntry = IPublicModelSettingTopEntry
+  SettingTopEntry = IPublicModelSettingTopEntry,
+  Props = IPublicModelProps,
+  Prop = IPublicModelProp,
+  ExclusiveGroup = IPublicModelExclusiveGroup
 > {
 
   /**
@@ -167,7 +170,7 @@ export interface IBaseModelNode<
    * 下标
    * index
    */
-  get index(): number;
+  get index(): number | undefined;
 
   /**
    * 图标
@@ -203,13 +206,13 @@ export interface IBaseModelNode<
    * 获取当前节点的前一个兄弟节点
    * get previous sibling of this node
    */
-  get prevSibling(): Node | null;
+  get prevSibling(): Node | null | undefined;
 
   /**
    * 获取当前节点的后一个兄弟节点
    * get next sibling of this node
    */
-  get nextSibling(): Node | null;
+  get nextSibling(): Node | null | undefined;
 
   /**
    * 获取当前节点的父亲节点
@@ -233,13 +236,13 @@ export interface IBaseModelNode<
    * 当前节点为插槽节点时，返回节点对应的属性实例
    * return coresponding prop when this node is a slot node
    */
-  get slotFor(): IPublicModelProp | null;
+  get slotFor(): Prop | null | undefined;
 
   /**
    * 返回节点的属性集
    * get props
    */
-  get props(): IPublicModelProps | null;
+  get props(): Props | null;
 
   /**
    * 返回节点的属性集
@@ -250,7 +253,7 @@ export interface IBaseModelNode<
   /**
    * get conditionGroup
    */
-  get conditionGroup(): IPublicModelExclusiveGroup | null;
+  get conditionGroup(): ExclusiveGroup | null;
 
   /**
    * 获取符合搭建协议 - 节点 schema 结构
@@ -295,7 +298,7 @@ export interface IBaseModelNode<
    * get prop by path
    * @param path 属性路径，支持 a / a.b / a.0 等格式
    */
-  getProp(path: string, createIfNone: boolean): IPublicModelProp | null;
+  getProp(path: string, createIfNone: boolean): Prop | null;
 
   /**
    * 获取指定 path 的属性模型实例值
@@ -313,7 +316,7 @@ export interface IBaseModelNode<
    * @param path 属性路径，支持 a / a.b / a.0 等格式
    * @param createIfNone 当没有属性的时候，是否创建一个属性
    */
-  getExtraProp(path: string, createIfNone?: boolean): IPublicModelProp | null;
+  getExtraProp(path: string, createIfNone?: boolean): Prop | null;
 
   /**
    * 获取指定 path 的属性模型实例，
@@ -481,6 +484,11 @@ export interface IBaseModelNode<
    * @since v1.1.0
    */
   setConditionalVisible(): void;
+
+  /**
+   * 获取节点实例对应的 dom 节点
+   */
+  getDOMNode(): HTMLElement;
 }
 
 export interface IPublicModelNode extends IBaseModelNode<IPublicModelDocumentModel, IPublicModelNode> {}
