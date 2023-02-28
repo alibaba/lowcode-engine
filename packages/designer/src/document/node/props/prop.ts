@@ -11,13 +11,13 @@ export const UNSET = Symbol.for('unset');
 // eslint-disable-next-line no-redeclare
 export type UNSET = typeof UNSET;
 
-export interface IProp extends Omit<IPublicModelProp, 'exportSchema' | 'node' | 'slotNode' > {
+export interface IProp extends Omit<IPublicModelProp<
+  INode
+>, 'exportSchema' | 'node' > {
 
   readonly props: IProps;
 
   readonly owner: INode;
-
-  get slotNode(): INode | null;
 
   delete(prop: Prop): void;
 
@@ -26,6 +26,10 @@ export interface IProp extends Omit<IPublicModelProp, 'exportSchema' | 'node' | 
   getNode(): INode;
 
   getAsString(): string;
+
+  unset(): void;
+
+  get value(): IPublicTypeCompositeValue | UNSET;
 }
 
 export type ValueTypes = 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot';

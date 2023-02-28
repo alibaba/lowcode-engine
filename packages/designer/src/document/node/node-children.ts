@@ -1,6 +1,6 @@
 import { obx, computed, globalContext, makeObservable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { Node, INode } from './node';
-import { IPublicTypeNodeData, IPublicModelNodeChildren, IPublicEnumTransformStage } from '@alilc/lowcode-types';
+import { IPublicTypeNodeData, IPublicModelNodeChildren, IPublicEnumTransformStage, IPublicTypeDisposable } from '@alilc/lowcode-types';
 import { shallowEqual, compatStage, isNodeSchema } from '@alilc/lowcode-utils';
 import { foreachReverse } from '../../utils/tree';
 import { NodeRemoveOptions } from '../../types';
@@ -17,6 +17,8 @@ export interface INodeChildren extends Omit<IPublicModelNodeChildren<INode>,
   'notEmpty'
 > {
   get owner(): INode;
+
+  get length(): number;
 
   unlinkChild(node: INode): void;
 
@@ -57,6 +59,8 @@ export interface INodeChildren extends Omit<IPublicModelNodeChildren<INode>,
   notEmpty(): boolean;
 
   internalInitParent(): void;
+
+  onChange(fn: (info?: IOnChangeOptions) => void): IPublicTypeDisposable;
 
   /** overriding methods end */
 }
@@ -478,7 +482,7 @@ export class NodeChildren implements INodeChildren {
     }
   }
 
-  onChange(fn: (info?: IOnChangeOptions) => void): () => void {
+  onChange(fn: (info?: IOnChangeOptions) => void): IPublicTypeDisposable {
     this.emitter.on('change', fn);
     return () => {
       this.emitter.removeListener('change', fn);

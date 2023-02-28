@@ -27,6 +27,7 @@ import { ComponentMeta as ShellComponentMeta } from './component-meta';
 import { SettingTopEntry as ShellSettingTopEntry } from './setting-top-entry';
 import { documentSymbol, nodeSymbol } from '../symbols';
 import { ReactElement } from 'react';
+import { ConditionGroup } from './condition-group';
 
 const shellNodeSymbol = Symbol('shellNodeSymbol');
 
@@ -289,7 +290,7 @@ export class Node implements IPublicModelNode {
   /**
    * 当前节点为插槽节点时，返回节点对应的属性实例
    */
-  get slotFor(): IPublicModelProp | null {
+  get slotFor(): IPublicModelProp | null | undefined {
     return ShellProp.create(this[nodeSymbol].slotFor);
   }
 
@@ -349,7 +350,6 @@ export class Node implements IPublicModelNode {
 
   /**
    * 获取节点实例对应的 dom 节点
-   * @deprecated
    */
   getDOMNode() {
     return (this[nodeSymbol] as any).getDOMNode();
@@ -362,9 +362,9 @@ export class Node implements IPublicModelNode {
    * @param sorter
    */
   mergeChildren(
-    remover: (node: Node, idx: number) => boolean,
-    adder: (children: Node[]) => any,
-    sorter: (firstNode: Node, secondNode: Node) => number,
+    remover: (node: IPublicModelNode, idx: number) => boolean,
+    adder: (children: IPublicModelNode[]) => any,
+    sorter: (firstNode: IPublicModelNode, secondNode: IPublicModelNode) => number,
   ): any {
     return this.children?.mergeChildren(remover, adder, sorter);
   }
@@ -641,7 +641,7 @@ export class Node implements IPublicModelNode {
    * @since v1.1.0
    */
   get conditionGroup(): IPublicModelExclusiveGroup | null {
-    return this[nodeSymbol].conditionGroup;
+    return ConditionGroup.create(this[nodeSymbol].conditionGroup);
   }
 
   /**

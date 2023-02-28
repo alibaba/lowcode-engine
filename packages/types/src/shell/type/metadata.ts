@@ -195,8 +195,8 @@ export interface IPublicTypeCallbacks {
   onChildMoveHook?: (childNode: IPublicModelNode, currentNode: IPublicModelNode) => boolean;
 
   // events
-  onNodeRemove?: (removedNode: IPublicModelNode, currentNode: IPublicModelNode) => void;
-  onNodeAdd?: (addedNode: IPublicModelNode, currentNode: IPublicModelNode) => void;
+  onNodeRemove?: (removedNode: IPublicModelNode | null, currentNode: IPublicModelNode | null) => void;
+  onNodeAdd?: (addedNode: IPublicModelNode | null, currentNode: IPublicModelNode | null) => void;
   onSubtreeModified?: (currentNode: IPublicModelNode, options: any) => void;
   onResize?: (
     e: MouseEvent & {
