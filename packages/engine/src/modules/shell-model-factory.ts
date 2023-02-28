@@ -1,5 +1,5 @@
 import {
-  Node as InnerNode,
+  INode,
   SettingField as InnerSettingField,
 } from '@alilc/lowcode-designer';
 import { IShellModelFactory, IPublicModelNode, IPublicModelSettingPropEntry } from '@alilc/lowcode-types';
@@ -8,7 +8,7 @@ import {
   SettingPropEntry,
 } from '@alilc/lowcode-shell';
 class ShellModelFactory implements IShellModelFactory {
-  createNode(node: InnerNode | null | undefined): IPublicModelNode | null {
+  createNode(node: INode | null | undefined): IPublicModelNode | null {
     return Node.create(node);
   }
   createSettingPropEntry(prop: InnerSettingField): IPublicModelSettingPropEntry {

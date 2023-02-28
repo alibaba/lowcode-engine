@@ -1,4 +1,4 @@
-import { SettingField, SettingEntry } from '@alilc/lowcode-designer';
+import { SettingField, ISettingEntry } from '@alilc/lowcode-designer';
 import {
   IPublicTypeCompositeValue,
   IPublicTypeFieldConfig,
@@ -233,7 +233,7 @@ export class SettingPropEntry implements IPublicModelSettingPropEntry {
    * @returns
    */
   getProps(): IPublicModelSettingTopEntry {
-    return ShellSettingTopEntry.create(this[settingPropEntrySymbol].getProps() as SettingEntry);
+    return ShellSettingTopEntry.create(this[settingPropEntrySymbol].getProps() as ISettingEntry);
   }
 
   /**

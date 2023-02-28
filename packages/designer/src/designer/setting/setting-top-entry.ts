@@ -1,7 +1,7 @@
 import { IPublicTypeCustomView, IPublicModelEditor } from '@alilc/lowcode-types';
 import { isCustomView } from '@alilc/lowcode-utils';
 import { computed, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
-import { SettingEntry } from './setting-entry';
+import { ISettingEntry } from './setting-entry';
 import { SettingField } from './setting-field';
 import { SettingPropEntry } from './setting-prop-entry';
 import { INode } from '../../document';
@@ -16,7 +16,7 @@ function generateSessionId(nodes: INode[]) {
     .join(',');
 }
 
-export interface ISettingTopEntry extends SettingEntry {
+export interface ISettingTopEntry extends ISettingEntry {
 }
 
 export class SettingTopEntry implements ISettingTopEntry {
