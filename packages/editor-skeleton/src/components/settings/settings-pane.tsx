@@ -3,7 +3,7 @@ import { shallowIntl, observer, obx, engineConfig, runInAction, globalContext } 
 import { createContent, isJSSlot, isSetterConfig, isSettingField } from '@alilc/lowcode-utils';
 import { Skeleton } from '@alilc/lowcode-editor-skeleton';
 import { IPublicTypeCustomView } from '@alilc/lowcode-types';
-import { SettingField, SettingTopEntry, SettingEntry, ComponentMeta } from '@alilc/lowcode-designer';
+import { SettingField, SettingTopEntry, ISettingEntry, ComponentMeta } from '@alilc/lowcode-designer';
 import { createField } from '../field';
 import PopupService, { PopupPipe } from '../popup';
 import { SkeletonContext } from '../../context';
@@ -58,7 +58,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
         stageName = `${field.getNode().id}_${field.name.toString()}`;
         // 清除原 stage，不然 content 引用的一直是老的 field，导致数据无法得到更新
         stages.container.remove(stageName);
-        const stage = stages.add({
+        stages.add({
           type: 'Widget',
           name: stageName,
           content: <Fragment>{field.items.map((item, index) => createSettingFieldView(item, field, index))}</Fragment>,
@@ -324,7 +324,7 @@ class SettingGroupView extends Component<SettingGroupViewProps> {
   }
 }
 
-export function createSettingFieldView(item: SettingField | IPublicTypeCustomView, field: SettingEntry, index?: number) {
+export function createSettingFieldView(item: SettingField | IPublicTypeCustomView, field: ISettingEntry, index?: number) {
   if (isSettingField(item)) {
     if (item.isGroup) {
       return <SettingGroupView field={item} key={item.id} />;

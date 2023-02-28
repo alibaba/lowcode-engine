@@ -1,17 +1,17 @@
-import { SettingEntry } from '@alilc/lowcode-designer';
+import { ISettingEntry } from '@alilc/lowcode-designer';
 import { settingTopEntrySymbol } from '../symbols';
 import { Node as ShellNode } from './node';
 import { SettingPropEntry as ShellSettingPropEntry } from './setting-prop-entry';
 import { IPublicModelSettingTopEntry, IPublicModelNode, IPublicModelSettingPropEntry } from '@alilc/lowcode-types';
 
 export class SettingTopEntry implements IPublicModelSettingTopEntry {
-  private readonly [settingTopEntrySymbol]: SettingEntry;
+  private readonly [settingTopEntrySymbol]: ISettingEntry;
 
-  constructor(prop: SettingEntry) {
+  constructor(prop: ISettingEntry) {
     this[settingTopEntrySymbol] = prop;
   }
 
-  static create(prop: SettingEntry): IPublicModelSettingTopEntry {
+  static create(prop: ISettingEntry): IPublicModelSettingTopEntry {
     return new SettingTopEntry(prop);
   }
 
