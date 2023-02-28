@@ -2,13 +2,13 @@ import { obx, computed, makeObservable, runInAction, IEventBus, createModuleEven
 import { GlobalEvent, IPublicModelEditor, IPublicTypeSetValueOptions } from '@alilc/lowcode-types';
 import { uniqueId, isJSExpression, isSettingField } from '@alilc/lowcode-utils';
 import { Setters } from '@alilc/lowcode-shell';
-import { SettingEntry } from './setting-entry';
+import { ISettingEntry } from './setting-entry';
 import { INode } from '../../document';
 import { IComponentMeta } from '../../component-meta';
 import { Designer } from '../designer';
-import { SettingField } from './setting-field';
+import { ISettingField } from './setting-field';
 
-export class SettingPropEntry implements SettingEntry {
+export class SettingPropEntry implements ISettingEntry {
   // === static properties ===
   readonly editor: IPublicModelEditor;
 
@@ -26,7 +26,7 @@ export class SettingPropEntry implements SettingEntry {
 
   readonly designer: Designer;
 
-  readonly top: SettingEntry;
+  readonly top: ISettingEntry;
 
   readonly isGroup: boolean;
 
@@ -53,7 +53,7 @@ export class SettingPropEntry implements SettingEntry {
 
   extraProps: any = {};
 
-  constructor(readonly parent: SettingEntry | SettingField, name: string | number, type?: 'field' | 'group') {
+  constructor(readonly parent: ISettingEntry | ISettingField, name: string | number, type?: 'field' | 'group') {
     makeObservable(this);
     if (type == null) {
       const c = typeof name === 'string' ? name.slice(0, 1) : '';
