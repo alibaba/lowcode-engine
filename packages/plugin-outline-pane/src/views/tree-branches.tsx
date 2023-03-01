@@ -2,7 +2,7 @@ import { Component } from 'react';
 import classNames from 'classnames';
 import TreeNode from '../controllers/tree-node';
 import TreeNodeView from './tree-node';
-import { IPublicModelPluginContext, IPublicModelExclusiveGroup } from '@alilc/lowcode-types';
+import { IPublicModelPluginContext, IPublicModelExclusiveGroup, IPublicTypeDisposable } from '@alilc/lowcode-types';
 
 export default class TreeBranches extends Component<{
   treeNode: TreeNode;
@@ -73,7 +73,7 @@ class TreeNodeChildren extends Component<{
     keywords: null,
     dropDetail: null,
   };
-  offLocationChanged: () => void;
+  offLocationChanged: IPublicTypeDisposable;
   componentDidMount() {
     const { treeNode, pluginContext } = this.props;
     const { project } = pluginContext;

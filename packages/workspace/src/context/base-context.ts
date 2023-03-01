@@ -30,6 +30,7 @@ import {
 import {
   IPluginPreferenceMananger,
   IPublicApiEvent,
+  IPublicApiWorkspace,
   IPublicModelPluginContext,
   IPublicTypePluginMeta,
 } from '@alilc/lowcode-types';
@@ -59,6 +60,7 @@ export class BasicContext implements IPublicModelPluginContext {
   canvas: Canvas;
   pluginEvent: IPublicApiEvent;
   preference: IPluginPreferenceMananger;
+  workspace: IPublicApiWorkspace;
 
   constructor(innerWorkspace: InnerWorkspace, viewName: string, public editorWindow?: EditorWindow) {
     const editor = new Editor(viewName, true);
