@@ -254,90 +254,100 @@ export class BoxResizingInstance extends Component<{
 
     return (
       <div>
-        {triggerVisible.includes('N') && (
-          <div
-            ref={(ref) => { this.outlineN = ref; }}
-            className={classNames(baseSideClass, 'n')}
-            style={{
-              height: 20,
-              transform: `translate(${offsetLeft}px, ${offsetTop - 10}px)`,
-              width: offsetWidth,
-            }}
-          />
-        )}
-        {triggerVisible.includes('NE') && (
-          <div
-            ref={(ref) => { this.outlineNE = ref; }}
-            className={classNames(baseCornerClass, 'ne')}
-            style={{
-              transform: `translate(${offsetLeft + offsetWidth - 5}px, ${offsetTop - 3}px)`,
-              cursor: 'nesw-resize',
-            }}
-          />
-        )}
-        {triggerVisible.includes('E') && (
-          <div
-            className={classNames(baseSideClass, 'e')}
-            ref={(ref) => { this.outlineE = ref; }}
-            style={{
-              height: offsetHeight,
-              transform: `translate(${offsetLeft + offsetWidth - 10}px, ${offsetTop}px)`,
-              width: 20,
-            }}
-          />
-        )}
-        {triggerVisible.includes('SE') && (
-          <div
-            ref={(ref) => { this.outlineSE = ref; }}
-            className={classNames(baseCornerClass, 'se')}
-            style={{
-              transform: `translate(${offsetLeft + offsetWidth - 5}px, ${offsetTop + offsetHeight - 5}px)`,
-              cursor: 'nwse-resize',
-            }}
-          />
-        )}
-        {triggerVisible.includes('S') && (
-          <div
-            ref={(ref) => { this.outlineS = ref; }}
-            className={classNames(baseSideClass, 's')}
-            style={{
-              height: 20,
-              transform: `translate(${offsetLeft}px, ${offsetTop + offsetHeight - 10}px)`,
-              width: offsetWidth,
-            }}
-          />
-        )}
-        {triggerVisible.includes('SW') && (
-          <div
-            ref={(ref) => { this.outlineSW = ref; }}
-            className={classNames(baseCornerClass, 'sw')}
-            style={{
-              transform: `translate(${offsetLeft - 3}px, ${offsetTop + offsetHeight - 5}px)`,
-              cursor: 'nesw-resize',
-            }}
-          />
-        )}
-        {triggerVisible.includes('W') && (
-          <div
-            ref={(ref) => { this.outlineW = ref; }}
-            className={classNames(baseSideClass, 'w')}
-            style={{
-              height: offsetHeight,
-              transform: `translate(${offsetLeft - 10}px, ${offsetTop}px)`,
-              width: 20,
-            }}
-          />
-        )}
-        {triggerVisible.includes('NW') && (
-          <div
-            ref={(ref) => { this.outlineNW = ref; }}
-            className={classNames(baseCornerClass, 'nw')}
-            style={{
-              transform: `translate(${offsetLeft - 3}px, ${offsetTop - 3}px)`,
-              cursor: 'nwse-resize',
-            }}
-          />
-        )}
+        <div
+          ref={(ref) => {
+            this.outlineN = ref;
+          }}
+          className={classNames(baseSideClass, 'n')}
+          style={{
+            height: 20,
+            transform: `translate(${offsetLeft}px, ${offsetTop - 10}px)`,
+            width: offsetWidth,
+            display: triggerVisible.includes('N') ? 'flex' : 'none',
+          }}
+        />
+        <div
+          ref={(ref) => {
+            this.outlineNE = ref;
+          }}
+          className={classNames(baseCornerClass, 'ne')}
+          style={{
+            transform: `translate(${offsetLeft + offsetWidth - 5}px, ${offsetTop - 3}px)`,
+            cursor: 'nesw-resize',
+            display: triggerVisible.includes('NE') ? 'flex' : 'none',
+          }}
+        />
+        <div
+          className={classNames(baseSideClass, 'e')}
+          ref={(ref) => {
+            this.outlineE = ref;
+          }}
+          style={{
+            height: offsetHeight,
+            transform: `translate(${offsetLeft + offsetWidth - 10}px, ${offsetTop}px)`,
+            width: 20,
+            display: triggerVisible.includes('E') ? 'flex' : 'none',
+          }}
+        />
+        <div
+          ref={(ref) => {
+            this.outlineSE = ref;
+          }}
+          className={classNames(baseCornerClass, 'se')}
+          style={{
+            transform: `translate(${offsetLeft + offsetWidth - 5}px, ${
+              offsetTop + offsetHeight - 5
+            }px)`,
+            cursor: 'nwse-resize',
+            display: triggerVisible.includes('SE') ? 'flex' : 'none',
+          }}
+        />
+        <div
+          ref={(ref) => {
+            this.outlineS = ref;
+          }}
+          className={classNames(baseSideClass, 's')}
+          style={{
+            height: 20,
+            transform: `translate(${offsetLeft}px, ${offsetTop + offsetHeight - 10}px)`,
+            width: offsetWidth,
+            display: triggerVisible.includes('S') ? 'flex' : 'none',
+          }}
+        />
+        <div
+          ref={(ref) => {
+            this.outlineSW = ref;
+          }}
+          className={classNames(baseCornerClass, 'sw')}
+          style={{
+            transform: `translate(${offsetLeft - 3}px, ${offsetTop + offsetHeight - 5}px)`,
+            cursor: 'nesw-resize',
+            display: triggerVisible.includes('SW') ? 'flex' : 'none',
+          }}
+        />
+        <div
+          ref={(ref) => {
+            this.outlineW = ref;
+          }}
+          className={classNames(baseSideClass, 'w')}
+          style={{
+            height: offsetHeight,
+            transform: `translate(${offsetLeft - 10}px, ${offsetTop}px)`,
+            width: 20,
+            display: triggerVisible.includes('W') ? 'flex' : 'none',
+          }}
+        />
+        <div
+          ref={(ref) => {
+            this.outlineNW = ref;
+          }}
+          className={classNames(baseCornerClass, 'nw')}
+          style={{
+            transform: `translate(${offsetLeft - 3}px, ${offsetTop - 3}px)`,
+            cursor: 'nwse-resize',
+            display: triggerVisible.includes('NW') ? 'flex' : 'none',
+          }}
+        />
       </div>
     );
   }
