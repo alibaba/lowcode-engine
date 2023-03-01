@@ -79,7 +79,7 @@ export function compatibleLegaoSchema(props: any): any {
 }
 
 export function getNodeSchemaById(schema: IPublicTypeNodeSchema, nodeId: string): IPublicTypeNodeSchema | undefined {
-  let found: NodeSIPublicTypeNodeSchemachema | undefined;
+  let found: IPublicTypeNodeSchema | undefined;
   if (schema.id === nodeId) {
     return schema;
   }
@@ -100,7 +100,7 @@ export function getNodeSchemaById(schema: IPublicTypeNodeSchema, nodeId: string)
 
 function getNodeSchemaFromPropsById(props: any, nodeId: string): IPublicTypeNodeSchema | undefined {
   let found: IPublicTypeNodeSchema | undefined;
-  for (const [key, value] of Object.entries(props)) {
+  for (const [_key, value] of Object.entries(props)) {
     if (isJSSlot(value)) {
       // value 是数组类型 { type: 'JSSlot', value: IPublicTypeNodeSchema[] }
       if (Array.isArray(value.value)) {
@@ -123,7 +123,7 @@ function getNodeSchemaFromPropsById(props: any, nodeId: string): IPublicTypeNode
  * TODO: not sure if this is used anywhere
  * @deprecated
  */
-export function applyActivities(pivotSchema: IPublicTypeRootSchema, activities: any, options?: any): IPublicTypeRootSchema {
+export function applyActivities(pivotSchema: IPublicTypeRootSchema, activities: any): IPublicTypeRootSchema {
   let schema = { ...pivotSchema };
   if (!Array.isArray(activities)) {
     activities = [activities];

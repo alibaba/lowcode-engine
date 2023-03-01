@@ -48,6 +48,7 @@ module.exports = {
       "afterLineComment": false,
       "allowBlockStart": true,
     }],
+    "no-unused-vars": ['error', { "destructuredArrayIgnorePattern": "^_" }],
     "@typescript-eslint/member-ordering": [
       "error",
       { "default": ["signature", "field", "constructor", "method"] }
