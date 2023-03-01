@@ -86,8 +86,9 @@ export default function rendererFactory(): IRenderComponent {
       debug(`entry.componentWillUnmount - ${this.props?.schema?.componentName}`);
     }
 
-    async componentDidCatch(e: any) {
-      console.warn(e);
+    componentDidCatch(error: Error) {
+      this.state.engineRenderError = true;
+      this.state.error = error;
     }
 
     shouldComponentUpdate(nextProps: IRendererProps) {
@@ -180,6 +181,13 @@ export default function rendererFactory(): IRenderComponent {
         if (!(Comp.prototype instanceof BaseRenderer)) {
           Comp = RENDERER_COMPS[`${componentName}Renderer`];
         }
+      }
+
+      if (this.state && this.state.engineRenderError) {
+        return createElement(this.getFaultComponent(), {
+          ...this.props,
+          error: this.state.error,
+        });
       }
 
       if (Comp) {
