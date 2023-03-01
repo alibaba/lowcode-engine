@@ -236,17 +236,22 @@ export class BoxResizingInstance extends Component<{
 
   render() {
     const { observed } = this.props;
-    if (!observed.hasOffset) {
-      return null;
-    }
-
-    const { node, offsetWidth, offsetHeight, offsetTop, offsetLeft } = observed;
     let triggerVisible: any = [];
-    const { advanced } = node.componentMeta;
-    if (advanced.getResizingHandlers) {
-      triggerVisible = advanced.getResizingHandlers(node.internalToShellNode());
+    let offsetWidth = 0;
+    let offsetHeight = 0;
+    let offsetTop = 0;
+    let offsetLeft = 0;
+    if (observed.hasOffset) {
+      offsetWidth = observed.offsetWidth;
+      offsetHeight = observed.offsetHeight;
+      offsetTop = observed.offsetTop;
+      offsetLeft = observed.offsetLeft;
+      const { node } = observed;
+      const metadata = node.componentMeta.getMetadata();
+      if (metadata.configure?.advanced?.getResizingHandlers) {
+        triggerVisible = metadata.configure.advanced.getResizingHandlers(node.internalToShellNode());
+      }
     }
-
     triggerVisible = normalizeTriggers(triggerVisible);
 
     const baseSideClass = 'lc-borders lc-resize-side';
