@@ -161,7 +161,7 @@ export class SchemaParser implements ISchemaParser {
             ...subRoot,
             componentName: getRootComponentName(subRoot.componentName, compDeps),
             containerType: subRoot.componentName,
-            moduleName: ensureValidClassName(changeCase.pascalCase(subRoot.fileName)),
+            moduleName: subRoot.fileName,
           };
           return container;
         });
