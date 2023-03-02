@@ -71,7 +71,7 @@
 			},
 			"lifeCycles": {
 				"componentDidMount": {
-					"type": "JSExpression",
+					"type": "JSFunction",
 					"value": "function() { console.log('componentDidMount'); }"
 				}
 			},

@@ -63,10 +63,10 @@ class Example$$Page extends React.Component {
             return {
               uri: 'https://api.example.com/user/list',
             };
-          },
+          }.bind(_this),
           isInit: function () {
             return undefined;
-          },
+          }.bind(_this),
         },
       ],
     };

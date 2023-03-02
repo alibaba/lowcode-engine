@@ -136,6 +136,7 @@ export class ProjectBuilder implements IProjectBuilder {
     const builders = this.createModuleBuilders({
       extraContextData: {
         projectRemark: parseResult?.project?.projectRemark,
+        template: this.template,
       },
     });
     // Generator Code module
@@ -320,7 +321,7 @@ export class ProjectBuilder implements IProjectBuilder {
             // template: this.template,
             inStrictMode: this.inStrictMode,
             tolerateEvalErrors: true,
-            evalErrorsHandler: 'console.error(error)',
+            evalErrorsHandler: '',
             ...this.extraContextData,
             ...extraContextData,
           },
