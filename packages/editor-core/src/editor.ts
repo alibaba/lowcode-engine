@@ -123,6 +123,7 @@ export class Editor extends (EventEmitter as any) implements IPublicModelEditor 
             await (new AssetLoader()).load(url);
             function setAssetsComponent(component: any, extraNpmInfo: any = {}) {
               const components = component.components;
+              assets.componentList = assets.componentList?.concat(component.componentList || []);
               if (Array.isArray(components)) {
                 components.forEach(d => {
                   assets.components = assets.components.concat({
@@ -144,7 +145,6 @@ export class Editor extends (EventEmitter as any) implements IPublicModelEditor 
                   ...component.components,
                 } || []);
               }
-              // assets.componentList = assets.componentList.concat(component.componentList || []);
             }
             function setArrayAssets(value: any[], preExportName: string = '', preSubName: string = '') {
               value.forEach((d: any, i: number) => {
