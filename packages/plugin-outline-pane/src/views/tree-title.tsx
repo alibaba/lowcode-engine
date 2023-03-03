@@ -6,7 +6,6 @@ import { IPublicModelPluginContext, IPublicApiEvent } from '@alilc/lowcode-types
 import TreeNode from '../controllers/tree-node';
 import { IconLock, IconUnlock, IconArrowRight, IconEyeClose, IconEye, IconCond, IconLoop, IconRadioActive, IconRadio, IconSetting } from '../icons';
 
-
 function emitOutlineEvent(event: IPublicApiEvent, type: string, treeNode: TreeNode, rest?: Record<string, unknown>) {
   const node = treeNode?.node;
   const npm = node?.componentMeta?.npm;
@@ -34,6 +33,8 @@ export default class TreeTitle extends Component<{
     editing: false,
     title: '',
   };
+
+  private lastInput?: HTMLInputElement;
 
   private enableEdit = (e) => {
     e.preventDefault();
@@ -66,8 +67,6 @@ export default class TreeTitle extends Component<{
     }
   };
 
-  private lastInput?: HTMLInputElement;
-
   private setCaret = (input: HTMLInputElement | null) => {
     if (!input || this.lastInput === input) {
       return;
@@ -96,6 +95,8 @@ export default class TreeTitle extends Component<{
     const { editing } = this.state;
     const isCNode = !treeNode.isRoot();
     const { node } = treeNode;
+    const { componentMeta } = node;
+    const availableActions = componentMeta ? componentMeta.availableActions.map((availableAction) => availableAction.name) : [];
     const isNodeParent = node.isParentalNode;
     const isContainer = node.isContainerNode;
     let style: any;
@@ -112,8 +113,11 @@ export default class TreeTitle extends Component<{
     const { intlNode, common, config } = pluginContext;
     const Tip = common.editorCabin.Tip;
     const Title = common.editorCabin.Title;
-    const shouldShowHideBtn = isCNode && isNodeParent && !isModal;
-    const shouldShowLockBtn = config.get('enableCanvasLock', false) && isContainer && isCNode && isNodeParent;
+    const couldHide = availableActions.includes('hide');
+    const couldLock = availableActions.includes('lock');
+    const couldUnlock = availableActions.includes('unlock');
+    const shouldShowHideBtn = isCNode && isNodeParent && !isModal && couldHide;
+    const shouldShowLockBtn = config.get('enableCanvasLock', false) && isContainer && isCNode && isNodeParent && ((couldLock && !node.isLocked) || (couldUnlock && node.isLocked));
     const shouldEditBtn = isCNode && isNodeParent;
     return (
       <div
@@ -221,7 +225,6 @@ class RenameBtn extends Component<{
   }
 }
 
-
 class LockBtn extends Component<{
   treeNode: TreeNode;
   pluginContext: IPublicModelPluginContext;
@@ -272,7 +275,6 @@ class HideBtn extends Component<{
     );
   }
 }
-
 
 class ExpandBtn extends Component<{
   treeNode: TreeNode;
