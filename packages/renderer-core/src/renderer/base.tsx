@@ -774,6 +774,11 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           {
             ...schema,
             loop: undefined,
+            props: {
+              ...schema.props,
+              // 循环下 key 不能为常量，这样会造成 key 值重复，渲染异常
+              key: isJSExpression(schema.props?.key) ? schema.props?.key : null,
+            },
           },
           loopSelf,
           parentInfo,
