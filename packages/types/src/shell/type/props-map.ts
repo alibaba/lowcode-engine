@@ -1,3 +1,3 @@
-import { IPublicTypeCompositeObject } from './';
+import { IPublicTypeCompositeObject, IPublicTypeNodeData } from './';
 
-export type IPublicTypePropsMap = IPublicTypeCompositeObject;
+export type IPublicTypePropsMap = IPublicTypeCompositeObject<IPublicTypeNodeData | IPublicTypeNodeData[]>;
