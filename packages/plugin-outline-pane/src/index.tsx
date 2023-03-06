@@ -26,7 +26,8 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
     masterPane: false,
     backupPane: false,
   };
-  const treeMaster = new TreeMaster(ctx);
+  const leftTreeMaster = new TreeMaster(ctx);
+  const rightTreeMaster = new TreeMaster(ctx);
   let masterPaneController: PaneController | null = null;
   let backupPaneController: PaneController | null = null;
   return {
@@ -43,12 +44,12 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
             description: intlNode('Outline Tree'),
           },
           content: (props: any) => {
-            masterPaneController = new PaneController(MasterPaneName, ctx, treeMaster);
+            masterPaneController = new PaneController(MasterPaneName, ctx, leftTreeMaster);
             return (
               <Pane
                 config={config}
                 pluginContext={ctx}
-                treeMaster={treeMaster}
+                treeMaster={leftTreeMaster}
                 controller={masterPaneController}
                 {...props}
               />
@@ -73,11 +74,11 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
           hiddenWhenInit: true,
         },
         content: (props: any) => {
-          backupPaneController = new PaneController(BackupPaneName, ctx, treeMaster);
+          backupPaneController = new PaneController(BackupPaneName, ctx, rightTreeMaster);
           return (
             <Pane
               pluginContext={ctx}
-              treeMaster={treeMaster}
+              treeMaster={rightTreeMaster}
               controller={backupPaneController}
               {...props}
             />
@@ -132,7 +133,7 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
           if (!selectedNodes || selectedNodes.length === 0) {
             return;
           }
-          const tree = treeMaster.currentTree;
+          const tree = leftTreeMaster.currentTree;
           selectedNodes.forEach((node) => {
             const treeNode = tree?.getTreeNodeById(node.id);
             tree?.expandAllAncestors(treeNode);
