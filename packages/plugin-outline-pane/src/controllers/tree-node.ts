@@ -3,8 +3,10 @@ import {
   IPublicTypeLocationChildrenDetail,
   IPublicModelNode,
   IPublicModelPluginContext,
+  IPublicTypeDisposable,
 } from '@alilc/lowcode-types';
 import { isI18nData, isLocationChildrenDetail } from '@alilc/lowcode-utils';
+import EventEmitter from 'events';
 import { Tree } from './tree';
 
 /**
@@ -21,14 +23,61 @@ export interface FilterResult {
   keywords: string;
 }
 
+enum EVENT_NAMES {
+  filterResultChanged = 'filterResultChanged',
+
+  expandedChanged = 'expandedChanged',
+
+  hiddenChanged = 'hiddenChanged',
+
+  lockedChanged = 'lockedChanged',
+
+  titleLabelChanged = 'titleLabelChanged',
+
+  expandableChanged = 'expandableChanged',
+}
+
 export default class TreeNode {
   readonly pluginContext: IPublicModelPluginContext;
-  onFilterResultChanged: () => void;
-  onExpandedChanged: (expanded: boolean) => void;
-  onHiddenChanged: (hidden: boolean) => void;
-  onLockedChanged: (locked: boolean) => void;
-  onTitleLabelChanged: (treeNode: TreeNode) => void;
-  onExpandableChanged: (expandable: boolean) => void;
+  event = new EventEmitter();
+
+  onFilterResultChanged(fn: () => void): IPublicTypeDisposable {
+    this.event.on(EVENT_NAMES.filterResultChanged, fn);
+    return () => {
+      this.event.off(EVENT_NAMES.filterResultChanged, fn);
+    }
+  };
+  onExpandedChanged(fn: (expanded: boolean) => void): IPublicTypeDisposable {
+    this.event.on(EVENT_NAMES.expandedChanged, fn);
+    return () => {
+      this.event.off(EVENT_NAMES.expandedChanged, fn);
+    }
+  };
+  onHiddenChanged(fn: (hidden: boolean) => void): IPublicTypeDisposable {
+    this.event.on(EVENT_NAMES.hiddenChanged, fn);
+    return () => {
+      this.event.off(EVENT_NAMES.hiddenChanged, fn);
+    }
+  };
+  onLockedChanged(fn: (locked: boolean) => void): IPublicTypeDisposable {
+    this.event.on(EVENT_NAMES.lockedChanged, fn);
+    return () => {
+      this.event.off(EVENT_NAMES.lockedChanged, fn);
+    }
+  };
+  onTitleLabelChanged(fn: (treeNode: TreeNode) => void): IPublicTypeDisposable {
+    this.event.on(EVENT_NAMES.titleLabelChanged, fn);
+
+    return () => {
+      this.event.off(EVENT_NAMES.titleLabelChanged, fn);
+    }
+  };
+  onExpandableChanged(fn: (expandable: boolean) => void): IPublicTypeDisposable {
+    this.event.on(EVENT_NAMES.expandableChanged, fn);
+    return () => {
+      this.event.off(EVENT_NAMES.expandableChanged, fn);
+    }
+  }
 
   get id(): string {
     return this.node.id;
@@ -46,7 +95,7 @@ export default class TreeNode {
    * 触发 onExpandableChanged 回调
    */
   notifyExpandableChanged(): void {
-    this.onExpandableChanged && this.onExpandableChanged(this.expandable);
+    this.event.emit(EVENT_NAMES.expandableChanged, this.expandable);
   }
 
   /**
@@ -99,7 +148,7 @@ export default class TreeNode {
 
   setExpanded(value: boolean) {
     this._expanded = value;
-    this.onExpandedChanged && this.onExpandedChanged(value);
+    this.event.emit(EVENT_NAMES.expandedChanged, value);
   }
 
   get detecting() {
@@ -120,7 +169,7 @@ export default class TreeNode {
       return;
     }
     this.node.visible = !flag;
-    this.onHiddenChanged && this.onHiddenChanged(flag);
+    this.event.emit(EVENT_NAMES.hiddenChanged, flag);
   }
 
   get locked(): boolean {
@@ -129,7 +178,7 @@ export default class TreeNode {
 
   setLocked(flag: boolean) {
     this.node.lock(flag);
-    this.onLockedChanged && this.onLockedChanged(flag);
+    this.event.emit(EVENT_NAMES.lockedChanged, flag);
   }
 
   get selected(): boolean {
@@ -174,11 +223,11 @@ export default class TreeNode {
     } else {
       this.node.getExtraProp('title', true)?.setValue(label);
     }
-    this.onTitleLabelChanged && this.onTitleLabelChanged(this);
+    this.event.emit(EVENT_NAMES.titleLabelChanged, this);
   }
 
   get icon() {
-    return this.node.componentMeta.icon;
+    return this.node.componentMeta?.icon;
   }
 
   get parent(): TreeNode | null {
@@ -282,8 +331,6 @@ export default class TreeNode {
 
   setFilterReult(val: FilterResult) {
     this._filterResult = val;
-    if (this.onFilterResultChanged) {
-      this.onFilterResultChanged();
-    }
+    this.event.emit(EVENT_NAMES.filterResultChanged)
   }
 }

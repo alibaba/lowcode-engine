@@ -4,7 +4,7 @@ import TreeNode from '../controllers/tree-node';
 import TreeTitle from './tree-title';
 import TreeBranches from './tree-branches';
 import { IconEyeClose } from '../icons/eye-close';
-import { IPublicModelPluginContext, IPublicModelModalNodesManager, IPublicModelDocumentModel } from '@alilc/lowcode-types';
+import { IPublicModelPluginContext, IPublicModelModalNodesManager, IPublicModelDocumentModel, IPublicTypeDisposable } from '@alilc/lowcode-types';
 
 class ModalTreeNodeView extends Component<{
   treeNode: TreeNode;
@@ -78,7 +78,7 @@ export default class TreeNodeView extends Component<{
     expandable: false,
   };
 
-  eventOffCallbacks: Array<() => void> = [];
+  eventOffCallbacks: Array<IPublicTypeDisposable | undefined> = [];
   constructor(props: any) {
     super(props);
 
@@ -104,18 +104,18 @@ export default class TreeNodeView extends Component<{
 
     const doc = project.currentDocument;
 
-    treeNode.onExpandedChanged = ((expanded: boolean) => {
+    treeNode.onExpandedChanged(((expanded: boolean) => {
       this.setState({ expanded });
-    });
-    treeNode.onHiddenChanged = (hidden: boolean) => {
+    }));
+    treeNode.onHiddenChanged((hidden: boolean) => {
       this.setState({ hidden });
-    };
-    treeNode.onLockedChanged = (locked: boolean) => {
+    });
+    treeNode.onLockedChanged((locked: boolean) => {
       this.setState({ locked });
-    };
-    treeNode.onExpandableChanged = (expandable: boolean) => {
+    });
+    treeNode.onExpandableChanged((expandable: boolean) => {
       this.setState({ expandable });
-    };
+    });
 
     this.eventOffCallbacks.push(
       doc?.onDropLocationChanged((document: IPublicModelDocumentModel) => {
@@ -135,8 +135,8 @@ export default class TreeNodeView extends Component<{
     this.eventOffCallbacks.push(offDetectingChange!);
   }
   componentWillUnmount(): void {
-    this.eventOffCallbacks?.forEach((offFun: () => void) => {
-      offFun();
+    this.eventOffCallbacks?.forEach((offFun: IPublicTypeDisposable | undefined) => {
+      offFun && offFun();
     });
   }
 
