@@ -83,11 +83,11 @@ export default class TreeTitle extends Component<{
       editing: false,
       title: treeNode.titleLabel,
     });
-    treeNode.onTitleLabelChanged = () => {
+    treeNode.onTitleLabelChanged(() => {
       this.setState({
         title: treeNode.titleLabel,
       });
-    };
+    });
   }
 
   render() {
