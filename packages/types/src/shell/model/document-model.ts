@@ -179,13 +179,13 @@ export interface IPublicModelDocumentModel<
    * 当前 document 的节点 children 变更事件
    * @param fn
    */
-  onChangeNodeChildren(fn: (info: IPublicTypeOnChangeOptions) => void): IPublicTypeDisposable;
+  onChangeNodeChildren(fn: (info: IPublicTypeOnChangeOptions<Node>) => void): IPublicTypeDisposable;
 
   /**
    * 当前 document 节点属性修改事件
    * @param fn
    */
-  onChangeNodeProp(fn: (info: IPublicTypePropChangeOptions) => void): IPublicTypeDisposable;
+  onChangeNodeProp(fn: (info: IPublicTypePropChangeOptions<Node>) => void): IPublicTypeDisposable;
 
   /**
    * import schema event
