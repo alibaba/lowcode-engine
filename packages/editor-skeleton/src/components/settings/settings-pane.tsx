@@ -170,6 +170,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
     const { initialValue } = this.setterInfo;
     if (this.state?.fromOnChange ||
       !isInitialValueNotEmpty(initialValue) ||
+      !this.visible ||
       this.value !== undefined
     ) {
       return;
