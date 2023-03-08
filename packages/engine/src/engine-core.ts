@@ -119,6 +119,7 @@ const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
     context.canvas = canvas;
     context.plugins = plugins;
     context.logger = new Logger({ level: 'warn', bizName: `plugin:${pluginName}` });
+    context.workspace = workspace;
   },
 };
 
