@@ -44,7 +44,7 @@ off(event: string, listener: (...args: any[]) => void): void;
 ```typescript
 /**
  * 触发事件
- * emit a message fot a event
+ * emit a message for a event
  * @param event 事件名称
  * @param args 事件参数
  * @returns
