@@ -197,7 +197,7 @@ export type ProjectPostProcessor = (
 export type PostProcessorFactory<T> = (config?: T) => PostProcessor;
 
 /** 模块级别的后置处理器 */
-export type PostProcessor = (content: string, fileType: string, name: string) => string;
+export type PostProcessor = (content: string, fileType: string, name?: string) => string;
 
 // TODO: temp interface, need modify
 export interface IPluginOptions {
