@@ -4,7 +4,7 @@ import {
   SkeletonEvents,
 } from '@alilc/lowcode-editor-skeleton';
 import { skeletonSymbol } from '../symbols';
-import { IPublicApiSkeleton, IPublicTypeWidgetBaseConfig, IPublicTypeWidgetConfigArea } from '@alilc/lowcode-types';
+import { IPublicApiSkeleton, IPublicTypeDisposable, IPublicTypeSkeletonConfig, IPublicTypeWidgetConfigArea } from '@alilc/lowcode-types';
 
 const innerSkeletonSymbol = Symbol('skeleton');
 export class Skeleton implements IPublicApiSkeleton {
@@ -23,7 +23,11 @@ export class Skeleton implements IPublicApiSkeleton {
     return this[innerSkeletonSymbol];
   }
 
-  constructor(skeleton: InnerSkeleton, pluginName: string, readonly workspaceMode: boolean = false) {
+  constructor(
+      skeleton: InnerSkeleton,
+      pluginName: string,
+      readonly workspaceMode: boolean = false,
+    ) {
     this[innerSkeletonSymbol] = skeleton;
     this.pluginName = pluginName;
   }
@@ -34,7 +38,7 @@ export class Skeleton implements IPublicApiSkeleton {
    * @param extraConfig
    * @returns
    */
-  add(config: IPublicTypeWidgetBaseConfig, extraConfig?: Record<string, any>) {
+  add(config: IPublicTypeSkeletonConfig, extraConfig?: Record<string, any>) {
     const configWithName = {
       ...config,
       pluginName: this.pluginName,
@@ -47,7 +51,7 @@ export class Skeleton implements IPublicApiSkeleton {
    * @param config
    * @returns
    */
-  remove(config: IPublicTypeWidgetBaseConfig): number | undefined {
+  remove(config: IPublicTypeSkeletonConfig): number | undefined {
     const { area, name } = config;
     const skeleton = this[skeletonSymbol];
     if (!normalizeArea(area)) {
@@ -125,7 +129,7 @@ export class Skeleton implements IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onShowPanel(listener: (...args: any[]) => void) {
+  onShowPanel(listener: (...args: any[]) => void): IPublicTypeDisposable {
     const { editor } = this[skeletonSymbol];
     editor.eventBus.on(SkeletonEvents.PANEL_SHOW, (name: any, panel: any) => {
       // 不泄漏 skeleton
@@ -140,7 +144,7 @@ export class Skeleton implements IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onHidePanel(listener: (...args: any[]) => void) {
+  onHidePanel(listener: (...args: any[]) => void): IPublicTypeDisposable {
     const { editor } = this[skeletonSymbol];
     editor.eventBus.on(SkeletonEvents.PANEL_HIDE, (name: any, panel: any) => {
       // 不泄漏 skeleton
@@ -155,7 +159,7 @@ export class Skeleton implements IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onShowWidget(listener: (...args: any[]) => void) {
+  onShowWidget(listener: (...args: any[]) => void): IPublicTypeDisposable {
     const { editor } = this[skeletonSymbol];
     editor.eventBus.on(SkeletonEvents.WIDGET_SHOW, (name: any, panel: any) => {
       // 不泄漏 skeleton
@@ -170,7 +174,7 @@ export class Skeleton implements IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onHideWidget(listener: (...args: any[]) => void) {
+  onHideWidget(listener: (...args: any[]) => void): IPublicTypeDisposable {
     const { editor } = this[skeletonSymbol];
     editor.eventBus.on(SkeletonEvents.WIDGET_HIDE, (name: any, panel: any) => {
       // 不泄漏 skeleton

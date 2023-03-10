@@ -1,6 +1,6 @@
 import { globalContext, Hotkey as InnerHotkey } from '@alilc/lowcode-editor-core';
 import { hotkeySymbol } from '../symbols';
-import { IPublicTypeDisposable, IPublicTypeHotkeyCallback, IPublicApiHotkey } from '@alilc/lowcode-types';
+import { IPublicTypeDisposable, IPublicTypeHotkeyCallback, IPublicTypeHotkeyCallbacks, IPublicApiHotkey } from '@alilc/lowcode-types';
 
 const innerHotkeySymbol = Symbol('innerHotkey');
 
@@ -22,15 +22,17 @@ export class Hotkey implements IPublicApiHotkey {
     this[innerHotkeySymbol] = hotkey;
   }
 
-  get callbacks(): any {
+  get callbacks(): IPublicTypeHotkeyCallbacks {
     return this[hotkeySymbol].callBacks;
   }
+
   /**
    * @deprecated
    */
   get callBacks() {
     return this.callbacks;
   }
+
   /**
    * 绑定快捷键
    * @param combos 快捷键，格式如：['command + s'] 、['ctrl + shift + s'] 等
@@ -38,7 +40,11 @@ export class Hotkey implements IPublicApiHotkey {
    * @param action
    * @returns
    */
-  bind(combos: string[] | string, callback: IPublicTypeHotkeyCallback, action?: string): IPublicTypeDisposable {
+  bind(
+      combos: string[] | string,
+      callback: IPublicTypeHotkeyCallback,
+      action?: string,
+    ): IPublicTypeDisposable {
     this[hotkeySymbol].bind(combos, callback, action);
     return () => {
       this[hotkeySymbol].unbind(combos, callback, action);

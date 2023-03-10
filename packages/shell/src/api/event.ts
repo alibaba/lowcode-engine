@@ -14,12 +14,6 @@ export class Event implements IPublicApiEvent {
   private readonly [eventBusSymbol]: EventBus;
   private readonly options: EventOptions;
 
-  // TODO:
-  /**
-   * 内核触发的事件名
-   */
-  readonly names = [];
-
   constructor(eventBus: EventBus, options: EventOptions, public workspaceMode = false) {
     this[eventBusSymbol] = eventBus;
     this.options = options;

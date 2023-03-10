@@ -45,7 +45,7 @@ export default function addonRendererFactory(): IBaseRenderComponent {
       this.__initDataSource(props);
       this.open = this.open || (() => { });
       this.close = this.close || (() => { });
-      this.__excuteLifeCycleMethod('constructor', [...arguments]);
+      this.__executeLifeCycleMethod('constructor', [...arguments]);
     }
 
     async componentWillUnmount() {

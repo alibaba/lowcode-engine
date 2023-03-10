@@ -1,5 +1,5 @@
 ---
-title: plugin-instance
+title: PluginInstance
 sidebar_position: 12
 ---
 
@@ -17,38 +17,24 @@ sidebar_position: 12
 
 插件名字
 
-```typescript
-get name(): string;
-```
+`@type {string}`
 
 ### dep
 
 插件依赖
 
-```typescript
-get dep(): string[];
-```
+`@type {string[]}`
 
 ### disabled
 
 插件是否禁用
 
-```typescript
-get disabled(): boolean
-
-set disabled(disabled: boolean): void;
-
-```
+`@type {boolean}`
 
 ### meta
 
 插件 meta 信息
 
-```typescript
-get meta(): IPublicTypePluginMeta
+`@type {IPublicTypePluginMeta}`
 
-```
-
-- [IPublicTypePluginMeta](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/plugin-meta.ts)
-
-
+相关类型：[IPublicTypePluginMeta](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/plugin-meta.ts)

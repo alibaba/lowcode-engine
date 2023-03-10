@@ -1,19 +1,17 @@
 import {
-  DocumentModel as InnerDocumentModel,
-  Node as InnerNode,
-  Selection as InnerSelection,
+  IDocumentModel as InnerDocumentModel,
+  INode as InnerNode,
+  ISelection,
 } from '@alilc/lowcode-designer';
-import { Node } from './node';
-import { selectionSymbol, documentSymbol } from '../symbols';
-import { IPublicModelSelection, IPublicModelNode } from '@alilc/lowcode-types';
+import { Node as ShellNode } from './node';
+import { selectionSymbol } from '../symbols';
+import { IPublicModelSelection, IPublicModelNode, IPublicTypeDisposable } from '@alilc/lowcode-types';
 
 export class Selection implements IPublicModelSelection {
-  private readonly [selectionSymbol]: InnerSelection;
-  private readonly [documentSymbol]: InnerDocumentModel;
+  private readonly [selectionSymbol]: ISelection;
 
   constructor(document: InnerDocumentModel) {
     this[selectionSymbol] = document.selection;
-    this[documentSymbol] = document;
   }
 
   /**
@@ -83,8 +81,16 @@ export class Selection implements IPublicModelSelection {
    * 获取选中的节点实例
    * @returns
    */
-  getNodes(): Array<IPublicModelNode | null> {
-    return this[selectionSymbol].getNodes().map((node: InnerNode) => Node.create(node));
+  getNodes(): IPublicModelNode[] {
+    const innerNodes = this[selectionSymbol].getNodes();
+    const nodes: IPublicModelNode[] = [];
+    innerNodes.forEach((node: InnerNode) => {
+      const shellNode = ShellNode.create(node);
+      if (shellNode) {
+        nodes.push(shellNode);
+      }
+    });
+    return nodes;
   }
 
   /**
@@ -94,12 +100,19 @@ export class Selection implements IPublicModelSelection {
    *  getTopNodes() will return [A, B], subA will be removed
    * @returns
    */
-  getTopNodes(includeRoot: boolean = false): Array<IPublicModelNode | null> {
-    return this[selectionSymbol].getTopNodes(includeRoot).map((node: InnerNode) => Node.create(node));
+  getTopNodes(includeRoot: boolean = false): IPublicModelNode[] {
+    const innerNodes = this[selectionSymbol].getTopNodes(includeRoot);
+    const nodes: IPublicModelNode[] = [];
+    innerNodes.forEach((node: InnerNode) => {
+      const shellNode = ShellNode.create(node);
+      if (shellNode) {
+        nodes.push(shellNode);
+      }
+    });
+    return nodes;
   }
 
-
-  onSelectionChange(fn: (ids: string[]) => void): () => void {
+  onSelectionChange(fn: (ids: string[]) => void): IPublicTypeDisposable {
     return this[selectionSymbol].onSelectionChange(fn);
   }
 }

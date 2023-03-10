@@ -23,7 +23,7 @@ describe('document-model 测试', () => {
 
   it('empty schema', () => {
     const doc = new DocumentModel(project);
-    expect(doc.rootNode.id).toBe('root');
+    expect(doc.rootNode?.id).toBe('root');
     expect(doc.currentRoot).toBe(doc.rootNode);
     expect(doc.root).toBe(doc.rootNode);
     expect(doc.modalNode).toBeUndefined();

@@ -1,12 +1,13 @@
 import { windowSymbol } from '../symbols';
-import { IPublicModelWindow } from '@alilc/lowcode-types';
+import { IPublicModelResource, IPublicModelWindow, IPublicTypeDisposable } from '@alilc/lowcode-types';
 import { EditorWindow } from '@alilc/lowcode-workspace';
+import { Resource as ShellResource } from './resource';
 
 export class Window implements IPublicModelWindow {
   private readonly [windowSymbol]: EditorWindow;
 
   get id() {
-    return this[windowSymbol].id;
+    return this[windowSymbol]?.id;
   }
 
   get title() {
@@ -17,8 +18,8 @@ export class Window implements IPublicModelWindow {
     return this[windowSymbol].icon;
   }
 
-  get resourceName() {
-    return this[windowSymbol].resourceName;
+  get resource(): IPublicModelResource {
+    return new ShellResource(this[windowSymbol].resource);
   }
 
   constructor(editorWindow: EditorWindow) {
@@ -30,7 +31,11 @@ export class Window implements IPublicModelWindow {
   }
 
   changeViewType(viewName: string) {
-    this[windowSymbol].changeViewType(viewName);
+    this[windowSymbol].changeViewType(viewName, false);
+  }
+
+  onChangeViewType(fun: (viewName: string) => void): IPublicTypeDisposable {
+    return this[windowSymbol].onChangeViewType(fun);
   }
 
   async save() {

@@ -1,6 +1,6 @@
 import { obx, computed, globalContext, makeObservable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { Node, INode } from './node';
-import { IPublicTypeNodeData, IPublicModelNodeChildren, IPublicEnumTransformStage } from '@alilc/lowcode-types';
+import { IPublicTypeNodeData, IPublicModelNodeChildren, IPublicEnumTransformStage, IPublicTypeDisposable } from '@alilc/lowcode-types';
 import { shallowEqual, compatStage, isNodeSchema } from '@alilc/lowcode-utils';
 import { foreachReverse } from '../../utils/tree';
 import { NodeRemoveOptions } from '../../types';
@@ -10,8 +10,18 @@ export interface IOnChangeOptions {
   node: Node;
 }
 
-export interface INodeChildren extends Omit<IPublicModelNodeChildren, 'forEach' | 'map' | 'every' | 'some' | 'filter' | 'find' | 'reduce' | 'mergeChildren' > {
+export interface INodeChildren extends Omit<IPublicModelNodeChildren<INode>,
+  'importSchema' |
+  'exportSchema' |
+  'isEmpty' |
+  'notEmpty'
+> {
+  get owner(): INode;
+
+  get length(): number;
+
   unlinkChild(node: INode): void;
+
   /**
    * 删除一个节点
    */
@@ -39,23 +49,18 @@ export interface INodeChildren extends Omit<IPublicModelNodeChildren, 'forEach' 
 
   forEach(fn: (item: INode, index: number) => void): void;
 
-  map<T>(fn: (item: INode, index: number) => T): T[] | null;
+  /**
+   * 根据索引获得节点
+   */
+  get(index: number): INode | null;
 
-  every(fn: (item: INode, index: number) => any): boolean;
+  isEmpty(): boolean;
 
-  some(fn: (item: INode, index: number) => any): boolean;
+  notEmpty(): boolean;
 
-  filter(fn: (item: INode, index: number) => any): any;
+  internalInitParent(): void;
 
-  find(fn: (item: INode, index: number) => boolean): any;
-
-  reduce(fn: (acc: any, cur: INode) => any, initialValue: any): void;
-
-  mergeChildren(
-    remover: (node: INode, idx: number) => boolean,
-    adder: (children: INode[]) => IPublicTypeNodeData[] | null,
-    sorter: (firstNode: INode, secondNode: INode) => number,
-  ): any;
+  onChange(fn: (info?: IOnChangeOptions) => void): IPublicTypeDisposable;
 
   /** overriding methods end */
 }
@@ -63,6 +68,31 @@ export class NodeChildren implements INodeChildren {
   @obx.shallow private children: INode[];
 
   private emitter: IEventBus = createModuleEventBus('NodeChildren');
+
+  /**
+   * 元素个数
+   */
+  @computed get size(): number {
+    return this.children.length;
+  }
+
+  get isEmptyNode(): boolean {
+    return this.size < 1;
+  }
+  get notEmptyNode(): boolean {
+    return this.size > 0;
+  }
+
+  @computed get length(): number {
+    return this.children.length;
+  }
+
+  private purged = false;
+
+  get [Symbol.toStringTag]() {
+    // 保证向前兼容性
+    return 'Array';
+  }
 
   constructor(
       readonly owner: INode,
@@ -105,12 +135,12 @@ export class NodeChildren implements INodeChildren {
       const child = originChildren[i];
       const item = data[i];
 
-      let node: Node | undefined;
+      let node: INode | undefined | null;
       if (isNodeSchema(item) && !checkId && child && child.componentName === item.componentName) {
         node = child;
         node.import(item);
       } else {
-        node = this.owner.document.createNode(item, checkId);
+        node = this.owner.document?.createNode(item, checkId);
       }
       children[i] = node;
     }
@@ -131,36 +161,15 @@ export class NodeChildren implements INodeChildren {
   }
 
   /**
-   * 元素个数
-   */
-  @computed get size(): number {
-    return this.children.length;
-  }
-
-  /**
    *
    */
   isEmpty() {
     return this.isEmptyNode;
   }
 
-  get isEmptyNode(): boolean {
-    return this.size < 1;
-  }
-
   notEmpty() {
     return this.notEmptyNode;
   }
-
-  get notEmptyNode(): boolean {
-    return this.size > 0;
-  }
-
-  @computed get length(): number {
-    return this.children.length;
-  }
-
-  private purged = false;
 
   /**
    * 回收销毁
@@ -422,12 +431,16 @@ export class NodeChildren implements INodeChildren {
     return this.children.filter(fn);
   }
 
-  find(fn: (item: INode, index: number) => boolean) {
+  find(fn: (item: INode, index: number) => boolean): INode | undefined {
     return this.children.find(fn);
   }
 
   reduce(fn: (acc: any, cur: INode) => any, initialValue: any): void {
     return this.children.reduce(fn, initialValue);
+  }
+
+  reverse() {
+    return this.children.reverse();
   }
 
   mergeChildren(
@@ -453,7 +466,7 @@ export class NodeChildren implements INodeChildren {
       const items = adder(this.children);
       if (items && items.length > 0) {
         items.forEach((child: IPublicTypeNodeData) => {
-          const node = this.owner.document?.createNode(child);
+          const node: INode = this.owner.document?.createNode(child);
           this.children.push(node);
           node.internalSetParent(this.owner);
         });
@@ -469,7 +482,7 @@ export class NodeChildren implements INodeChildren {
     }
   }
 
-  onChange(fn: (info?: IOnChangeOptions) => void): () => void {
+  onChange(fn: (info?: IOnChangeOptions) => void): IPublicTypeDisposable {
     this.emitter.on('change', fn);
     return () => {
       this.emitter.removeListener('change', fn);
@@ -483,11 +496,6 @@ export class NodeChildren implements INodeChildren {
     };
   }
 
-  get [Symbol.toStringTag]() {
-    // 保证向前兼容性
-    return 'Array';
-  }
-
   private reportModified(node: INode, owner: INode, options = {}) {
     if (!node) {
       return;
@@ -495,7 +503,7 @@ export class NodeChildren implements INodeChildren {
     if (node.isRootNode) {
       return;
     }
-    const callbacks = owner.componentMeta?.getMetadata().configure.advanced?.callbacks;
+    const callbacks = owner.componentMeta?.advanced.callbacks;
     if (callbacks?.onSubtreeModified) {
       try {
         callbacks?.onSubtreeModified.call(

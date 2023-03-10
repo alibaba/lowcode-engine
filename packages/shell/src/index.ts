@@ -9,6 +9,8 @@ import {
   Dragon,
   SettingPropEntry,
   SettingTopEntry,
+  Clipboard,
+  Config,
 } from './model';
 import {
   Project,
@@ -23,6 +25,7 @@ import {
   Event,
   Canvas,
   Workspace,
+  SimulatorHost,
 } from './api';
 
 export * from './symbols';
@@ -57,4 +60,7 @@ export {
   Logger,
   Canvas,
   Workspace,
+  Clipboard,
+  SimulatorHost,
+  Config,
 };

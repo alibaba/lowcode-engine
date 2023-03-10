@@ -43,6 +43,7 @@ import {
   Logger,
   Canvas,
   Workspace,
+  Config,
 } from '@alilc/lowcode-shell';
 import { isPlainObject } from '@alilc/lowcode-utils';
 import './modules/live-editing';
@@ -63,10 +64,10 @@ async function registryInnerPlugin(designer: Designer, editor: Editor, plugins: 
   // 注册一批内置插件
   await plugins.register(OutlinePlugin, {}, { autoInit: true });
   await plugins.register(componentMetaParser(designer));
-  await plugins.register(setterRegistry, {}, { autoInit: true });
+  await plugins.register(setterRegistry, {});
   await plugins.register(defaultPanelRegistry(editor));
   await plugins.register(builtinHotkey);
-  await plugins.register(registerDefaults);
+  await plugins.register(registerDefaults, {}, { autoInit: true });
 }
 
 const innerWorkspace = new InnerWorkspace(registryInnerPlugin, shellModelFactory);
@@ -96,7 +97,7 @@ editor.set('project', project);
 editor.set('setters' as any, setters);
 editor.set('material', material);
 editor.set('innerHotkey', innerHotkey);
-const config = engineConfig;
+const config = new Config(engineConfig);
 const event = new Event(commonEvent, { prefix: 'common' });
 const logger = new Logger({ level: 'warn', bizName: 'common' });
 const common = new Common(editor, innerSkeleton);
@@ -118,6 +119,7 @@ const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
     context.canvas = canvas;
     context.plugins = plugins;
     context.logger = new Logger({ level: 'warn', bizName: `plugin:${pluginName}` });
+    context.workspace = workspace;
   },
 };
 
@@ -156,6 +158,8 @@ let engineContainer: HTMLElement;
 export const version = VERSION_PLACEHOLDER;
 engineConfig.set('ENGINE_VERSION', version);
 
+registryInnerPlugin(designer, editor, plugins);
+
 export async function init(
   container?: HTMLElement,
   options?: IPublicTypeEngineOptions,
@@ -179,8 +183,6 @@ export async function init(
   }
   engineConfig.setEngineOptions(engineOptions as any);
 
-  await registryInnerPlugin(designer, editor, plugins);
-
   await plugins.init(pluginPreference as any);
 
   const { Workbench } = common.skeletonCabin;
@@ -195,6 +197,7 @@ export async function init(
       engineContainer,
     );
     innerWorkspace.setActive(true);
+    innerHotkey.activate(false);
     await innerWorkspace.plugins.init(pluginPreference);
     return;
   }

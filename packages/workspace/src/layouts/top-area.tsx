@@ -48,9 +48,7 @@ class Contents extends Component<{ area: Area; itemClassName?: string }> {
         right.push(content);
       }
     });
-    if (!center || !center.length) {
-      return null;
-    }
+
     return (
       <Fragment>
         <div className="lc-top-area-left">{left}</div>

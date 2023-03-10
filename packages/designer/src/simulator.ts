@@ -1,14 +1,14 @@
 import { ComponentType } from 'react';
-import { IPublicTypeComponentMetadata, IPublicTypeNodeSchema, IPublicModelScrollable, IPublicTypeComponentInstance, IPublicModelSensor, IPublicTypeNodeInstance } from '@alilc/lowcode-types';
+import { IPublicTypeComponentMetadata, IPublicTypeNodeSchema, IPublicTypeScrollable, IPublicTypeComponentInstance, IPublicModelSensor, IPublicTypeNodeInstance } from '@alilc/lowcode-types';
 import { Point, ScrollTarget, ILocateEvent } from './designer';
 import { BuiltinSimulatorRenderer } from './builtin-simulator/renderer';
-import { Node, INode } from './document';
+import { INode } from './document';
 
 export type AutoFit = '100%';
 // eslint-disable-next-line no-redeclare
 export const AutoFit = '100%';
 
-export interface IScrollable extends IPublicModelScrollable {
+export interface IScrollable extends IPublicTypeScrollable {
 }
 export interface IViewport extends IScrollable {
 
@@ -132,7 +132,7 @@ export interface ISimulatorHost<P = object> extends IPublicModelSensor {
   /**
    * 滚动视口到节点
    */
-  scrollToNode(node: Node, detail?: any): void;
+  scrollToNode(node: INode, detail?: any): void;
 
   /**
    * 描述组件
@@ -147,7 +147,7 @@ export interface ISimulatorHost<P = object> extends IPublicModelSensor {
   /**
    * 根据节点获取节点的组件实例
    */
-  getComponentInstances(node: Node): IPublicTypeComponentInstance[] | null;
+  getComponentInstances(node: INode): IPublicTypeComponentInstance[] | null;
 
   /**
    * 根据 schema 创建组件类
@@ -157,11 +157,11 @@ export interface ISimulatorHost<P = object> extends IPublicModelSensor {
   /**
    * 根据节点获取节点的组件运行上下文
    */
-  getComponentContext(node: Node): object | null;
+  getComponentContext(node: INode): object | null;
 
   getClosestNodeInstance(from: IPublicTypeComponentInstance, specId?: string): IPublicTypeNodeInstance | null;
 
-  computeRect(node: Node): DOMRect | null;
+  computeRect(node: INode): DOMRect | null;
 
   computeComponentInstanceRect(instance: IPublicTypeComponentInstance, selector?: string): DOMRect | null;
 
@@ -189,6 +189,6 @@ export function isSimulatorHost(obj: any): obj is ISimulatorHost {
 export type Component = ComponentType<any> | object;
 
 export interface INodeSelector {
-  node: Node;
+  node: INode;
   instance?: IPublicTypeComponentInstance;
 }

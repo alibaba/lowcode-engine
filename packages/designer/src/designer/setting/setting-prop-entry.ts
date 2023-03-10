@@ -1,13 +1,14 @@
 import { obx, computed, makeObservable, runInAction, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { GlobalEvent, IPublicModelEditor, IPublicTypeSetValueOptions } from '@alilc/lowcode-types';
 import { uniqueId, isJSExpression, isSettingField } from '@alilc/lowcode-utils';
-import { SettingEntry } from './setting-entry';
-import { Node } from '../../document';
-import { ComponentMeta } from '../../component-meta';
-import { Designer } from '../designer';
 import { Setters } from '@alilc/lowcode-shell';
+import { ISettingEntry } from './setting-entry';
+import { INode } from '../../document';
+import { IComponentMeta } from '../../component-meta';
+import { Designer } from '../designer';
+import { ISettingField } from './setting-field';
 
-export class SettingPropEntry implements SettingEntry {
+export class SettingPropEntry implements ISettingEntry {
   // === static properties ===
   readonly editor: IPublicModelEditor;
 
@@ -19,13 +20,13 @@ export class SettingPropEntry implements SettingEntry {
 
   readonly setters: Setters;
 
-  readonly nodes: Node[];
+  readonly nodes: INode[];
 
-  readonly componentMeta: ComponentMeta | null;
+  readonly componentMeta: IComponentMeta | null;
 
   readonly designer: Designer;
 
-  readonly top: SettingEntry;
+  readonly top: ISettingEntry;
 
   readonly isGroup: boolean;
 
@@ -52,7 +53,7 @@ export class SettingPropEntry implements SettingEntry {
 
   extraProps: any = {};
 
-  constructor(readonly parent: SettingEntry, name: string | number, type?: 'field' | 'group') {
+  constructor(readonly parent: ISettingEntry | ISettingField, name: string | number, type?: 'field' | 'group') {
     makeObservable(this);
     if (type == null) {
       const c = typeof name === 'string' ? name.slice(0, 1) : '';

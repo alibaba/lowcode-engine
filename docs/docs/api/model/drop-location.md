@@ -11,13 +11,13 @@ sidebar_position: 13
 
 拖拽放置位置模型
 
-## 变量
+## 属性
 
 ### target
 
 拖拽放置位置目标
 
-`@type {IPublicModelNode}`
+`@type {IPublicModelNode | null}`
 
 相关类型：[IPublicModelNode](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/node.ts)
 
@@ -37,7 +37,7 @@ sidebar_position: 13
 
 相关类型：[IPublicModelLocateEvent](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/location-event.ts)
 
-## 方法签名
+## 方法
 
 ### clone
 

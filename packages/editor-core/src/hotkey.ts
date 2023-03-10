@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import { globalContext } from './di';
-import { IPublicTypeHotkeyCallback, IPublicApiHotkey } from '@alilc/lowcode-types';
+import { IPublicTypeHotkeyCallback, IPublicTypeHotkeyCallbackConfig, IPublicTypeHotkeyCallbacks, IPublicApiHotkey } from '@alilc/lowcode-types';
 
 interface KeyMap {
   [key: number]: string;
@@ -14,21 +14,8 @@ interface ActionEvent {
   type: string;
 }
 
-interface IPublicTypeHotkeyCallbacks {
-  [key: string]: IPublicTypeHotkeyCallbackCfg[];
-}
-
 interface HotkeyDirectMap {
   [key: string]: IPublicTypeHotkeyCallback;
-}
-
-interface IPublicTypeHotkeyCallbackCfg {
-  callback: IPublicTypeHotkeyCallback;
-  modifiers: string[];
-  action: string;
-  seq?: string;
-  level?: number;
-  combo?: string;
 }
 
 interface KeyInfo {
@@ -444,10 +431,10 @@ export class Hotkey implements IHotKey {
     sequenceName?: string,
     combination?: string,
     level?: number,
-  ): IPublicTypeHotkeyCallbackCfg[] {
+  ): IPublicTypeHotkeyCallbackConfig[] {
     let i: number;
-    let callback: IPublicTypeHotkeyCallbackCfg;
-    const matches: IPublicTypeHotkeyCallbackCfg[] = [];
+    let callback: IPublicTypeHotkeyCallbackConfig;
+    const matches: IPublicTypeHotkeyCallbackConfig[] = [];
     const action: string = e.type;
 
     // if there are no events related to this keycode
@@ -498,7 +485,7 @@ export class Hotkey implements IHotKey {
   }
 
   private handleKey(character: string, modifiers: string[], e: KeyboardEvent): void {
-    const callbacks: IPublicTypeHotkeyCallbackCfg[] = this.getMatches(character, modifiers, e);
+    const callbacks: IPublicTypeHotkeyCallbackConfig[] = this.getMatches(character, modifiers, e);
     let i: number;
     const doNotReset: SequenceLevels = {};
     let maxLevel = 0;

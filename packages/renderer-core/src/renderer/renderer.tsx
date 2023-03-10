@@ -6,6 +6,7 @@ import baseRendererFactory from './base';
 import divFactory from '../components/Div';
 import { IRenderComponent, IRendererProps, IRendererState } from '../types';
 import { IPublicTypeNodeSchema, IPublicTypeRootSchema } from '@alilc/lowcode-types';
+import logger from '../utils/logger';
 
 export default function rendererFactory(): IRenderComponent {
   const { PureComponent, Component, createElement, findDOMNode } = adapter.getRuntime();
@@ -18,10 +19,9 @@ export default function rendererFactory(): IRenderComponent {
 
   const debug = Debug('renderer:entry');
 
-  class FaultComponent extends PureComponent<IPublicTypeNodeSchema> {
+  class FaultComponent extends PureComponent<IPublicTypeNodeSchema | any> {
     render() {
-      // FIXME: errorlog
-      console.error('render error', this.props);
+      logger.error(`%c组件渲染异常, 异常原因: ${this.props.error?.message || this.props.error || '未知'}`, 'color: #ff0000;');
       return createElement(Div, {
         style: {
           width: '100%',
@@ -85,8 +85,9 @@ export default function rendererFactory(): IRenderComponent {
       debug(`entry.componentWillUnmount - ${this.props?.schema?.componentName}`);
     }
 
-    async componentDidCatch(e: any) {
-      console.warn(e);
+    componentDidCatch(error: Error) {
+      this.state.engineRenderError = true;
+      this.state.error = error;
     }
 
     shouldComponentUpdate(nextProps: IRendererProps) {
@@ -168,6 +169,7 @@ export default function rendererFactory(): IRenderComponent {
       }
       // 兼容乐高区块模板
       if (schema.componentName !== 'Div' && !isFileSchema(schema)) {
+        logger.error('The root component name needs to be one of Page、Block、Component, please check the schema: ', schema);
         return '模型结构异常';
       }
       debug('entry.render');
@@ -178,6 +180,13 @@ export default function rendererFactory(): IRenderComponent {
         if (!(Comp.prototype instanceof BaseRenderer)) {
           Comp = RENDERER_COMPS[`${componentName}Renderer`];
         }
+      }
+
+      if (this.state && this.state.engineRenderError) {
+        return createElement(this.getFaultComponent(), {
+          ...this.props,
+          error: this.state.error,
+        });
       }
 
       if (Comp) {

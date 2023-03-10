@@ -1,8 +1,8 @@
 import { IPublicTypeCustomView, IPublicTypeCompositeValue, IPublicTypeSetterType, IPublicTypeSetValueOptions, IPublicTypeFieldConfig, IPublicTypeFieldExtraProps } from '../type';
 import { IPublicModelNode, IPublicModelComponentMeta, IPublicModelSettingTopEntry } from './';
 
-
 export interface IPublicModelSettingPropEntry {
+
   /**
    * 获取设置属性的 isGroup
    */

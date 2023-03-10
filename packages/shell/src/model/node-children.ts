@@ -1,6 +1,6 @@
 import { INode as InnerNode, INodeChildren } from '@alilc/lowcode-designer';
 import { IPublicTypeNodeData, IPublicEnumTransformStage, IPublicModelNodeChildren, IPublicModelNode } from '@alilc/lowcode-types';
-import { Node } from './node';
+import { Node as ShellNode } from './node';
 import { nodeSymbol, nodeChildrenSymbol } from '../symbols';
 
 export class NodeChildren implements IPublicModelNodeChildren {
@@ -21,7 +21,7 @@ export class NodeChildren implements IPublicModelNodeChildren {
    * 返回当前 children 实例所属的节点实例
    */
   get owner(): IPublicModelNode | null {
-    return Node.create(this[nodeChildrenSymbol].owner);
+    return ShellNode.create(this[nodeChildrenSymbol].owner);
   }
 
   /**
@@ -107,7 +107,7 @@ export class NodeChildren implements IPublicModelNodeChildren {
    * @returns
    */
   get(index: number): IPublicModelNode | null {
-    return Node.create(this[nodeChildrenSymbol].get(index));
+    return ShellNode.create(this[nodeChildrenSymbol].get(index));
   }
 
   /**
@@ -125,7 +125,16 @@ export class NodeChildren implements IPublicModelNodeChildren {
    */
   forEach(fn: (node: IPublicModelNode, index: number) => void): void {
     this[nodeChildrenSymbol].forEach((item: InnerNode, index: number) => {
-      fn(Node.create(item)!, index);
+      fn(ShellNode.create(item)!, index);
+    });
+  }
+
+  /**
+   * 类似数组的 reverse
+   */
+  reverse(): IPublicModelNode[] {
+    return this[nodeChildrenSymbol].reverse().map(d => {
+      return ShellNode.create(d)!;
     });
   }
 
@@ -135,7 +144,7 @@ export class NodeChildren implements IPublicModelNodeChildren {
    */
   map<T>(fn: (node: IPublicModelNode, index: number) => T[]): any[] | null {
     return this[nodeChildrenSymbol].map((item: InnerNode, index: number) => {
-      return fn(Node.create(item)!, index);
+      return fn(ShellNode.create(item)!, index);
     });
   }
 
@@ -145,7 +154,7 @@ export class NodeChildren implements IPublicModelNodeChildren {
    */
   every(fn: (node: IPublicModelNode, index: number) => boolean): boolean {
     return this[nodeChildrenSymbol].every((item: InnerNode, index: number) => {
-      return fn(Node.create(item)!, index);
+      return fn(ShellNode.create(item)!, index);
     });
   }
 
@@ -155,7 +164,7 @@ export class NodeChildren implements IPublicModelNodeChildren {
    */
   some(fn: (node: IPublicModelNode, index: number) => boolean): boolean {
     return this[nodeChildrenSymbol].some((item: InnerNode, index: number) => {
-      return fn(Node.create(item)!, index);
+      return fn(ShellNode.create(item)!, index);
     });
   }
 
@@ -166,9 +175,9 @@ export class NodeChildren implements IPublicModelNodeChildren {
   filter(fn: (node: IPublicModelNode, index: number) => boolean): any {
     return this[nodeChildrenSymbol]
       .filter((item: InnerNode, index: number) => {
-        return fn(Node.create(item)!, index);
+        return fn(ShellNode.create(item)!, index);
       })
-      .map((item: InnerNode) => Node.create(item)!);
+      .map((item: InnerNode) => ShellNode.create(item)!);
   }
 
   /**
@@ -176,9 +185,9 @@ export class NodeChildren implements IPublicModelNodeChildren {
    * @param fn
    */
   find(fn: (node: IPublicModelNode, index: number) => boolean): IPublicModelNode | null {
-    return Node.create(
+    return ShellNode.create(
       this[nodeChildrenSymbol].find((item: InnerNode, index: number) => {
-        return fn(Node.create(item)!, index);
+        return fn(ShellNode.create(item)!, index);
       }),
     );
   }
@@ -189,7 +198,7 @@ export class NodeChildren implements IPublicModelNodeChildren {
    */
   reduce(fn: (acc: any, cur: IPublicModelNode) => any, initialValue: any): void {
     return this[nodeChildrenSymbol].reduce((acc: any, cur: InnerNode) => {
-      return fn(acc, Node.create(cur)!);
+      return fn(acc, ShellNode.create(cur)!);
     }, initialValue);
   }
 
@@ -226,10 +235,11 @@ export class NodeChildren implements IPublicModelNodeChildren {
       sorter = () => 0;
     }
     this[nodeChildrenSymbol].mergeChildren(
-      (node: InnerNode, idx: number) => remover(Node.create(node)!, idx),
-      (children: InnerNode[]) => adder(children.map((node) => Node.create(node)!)),
-      (firstNode: InnerNode, secondNode: InnerNode) =>
-        sorter(Node.create(firstNode)!, Node.create(secondNode)!),
+      (node: InnerNode, idx: number) => remover(ShellNode.create(node)!, idx),
+      (children: InnerNode[]) => adder(children.map((node) => ShellNode.create(node)!)),
+      (firstNode: InnerNode, secondNode: InnerNode) => {
+        return sorter(ShellNode.create(firstNode)!, ShellNode.create(secondNode)!);
+      },
     );
   }
 }

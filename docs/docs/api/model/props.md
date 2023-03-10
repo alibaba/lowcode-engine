@@ -9,7 +9,7 @@ sidebar_position: 4
 
 属性集模型
 
-## 变量
+## 属性
 ### id
 
 id
@@ -32,7 +32,7 @@ id
 
 相关类型：[IPublicModelNode](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/node.ts)
 
-## 方法签名
+## 方法
 ### getProp
 
 获取指定 path 的属性模型实例

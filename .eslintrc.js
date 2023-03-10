@@ -19,7 +19,7 @@ module.exports = {
     'no-await-in-loop': 0,
     'no-plusplus': 0,
     '@typescript-eslint/no-parameter-properties': 0,
-    '@typescript-eslint/no-unused-vars': 1,
+    'no-restricted-exports': ['error'],
     'no-multi-assign': 1,
     'no-dupe-class-members': 1,
     'react/no-deprecated': 1,
@@ -50,7 +50,8 @@ module.exports = {
     'comma-dangle': ['error', 'always-multiline'],
     '@typescript-eslint/member-ordering': [
       'error',
-      { default: ['signature', 'field', 'constructor', 'method'] },
+      { default: ['signature', 'field', 'constructor', 'method'] }
     ],
+    'no-unused-vars': ['error', { "destructuredArrayIgnorePattern": "^_" }]
   },
 };

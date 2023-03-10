@@ -6,6 +6,7 @@ import {
   TipContent,
   IPublicTypeWidgetConfigArea,
   IPublicTypeWidgetBaseConfig,
+  IPublicTypePanelDockPanelProps,
 } from '@alilc/lowcode-types';
 import { IWidget } from './widget/widget';
 
@@ -63,8 +64,8 @@ export function isDockConfig(obj: any): obj is DockConfig {
 export interface DialogDockConfig extends IDockBaseConfig {
   type: 'DialogDock';
   dialogProps?: {
-    title?: IPublicTypeTitleContent;
     [key: string]: any;
+    title?: IPublicTypeTitleContent;
   };
 }
 
@@ -85,16 +86,11 @@ export function isPanelConfig(obj: any): obj is PanelConfig {
 
 export type HelpTipConfig = string | { url?: string; content?: string | ReactElement };
 
-export interface PanelProps {
+export interface PanelProps extends IPublicTypePanelDockPanelProps {
   title?: IPublicTypeTitleContent;
   icon?: any; // 冗余字段
   description?: string | IPublicTypeI18nData;
-  hideTitleBar?: boolean; // panel.props 兼容，不暴露
   help?: HelpTipConfig; // 显示问号帮助
-  width?: number; // panel.props
-  height?: number; // panel.props
-  maxWidth?: number; // panel.props
-  maxHeight?: number; // panel.props
   hiddenWhenInit?: boolean; //  when this is true, by default will be hidden
   condition?: (widget: IWidget) => any;
   onInit?: (widget: IWidget) => any;

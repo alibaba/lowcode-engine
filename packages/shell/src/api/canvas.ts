@@ -2,38 +2,63 @@ import {
   IPublicApiCanvas,
   IPublicModelDropLocation,
   IPublicModelScrollTarget,
-  IPublicModelScrollable,
+  IPublicTypeScrollable,
   IPublicModelScroller,
   IPublicTypeLocationData,
   IPublicModelEditor,
   IPublicModelDragon,
   IPublicModelActiveTracker,
+  IPublicModelClipboard,
 } from '@alilc/lowcode-types';
 import {
   ScrollTarget as InnerScrollTarget,
   IDesigner,
 } from '@alilc/lowcode-designer';
 import { editorSymbol, designerSymbol, nodeSymbol } from '../symbols';
-import { Dragon } from '../model';
-import { DropLocation } from '../model/drop-location';
-import { ActiveTracker } from '../model/active-tracker';
+import {
+  Dragon as ShellDragon,
+  DropLocation as ShellDropLocation,
+  ActiveTracker as ShellActiveTracker,
+  Clipboard as ShellClipboard,
+} from '../model';
+
+const clipboardInstanceSymbol = Symbol('clipboardInstace');
 
 export class Canvas implements IPublicApiCanvas {
   private readonly [editorSymbol]: IPublicModelEditor;
+  private readonly [clipboardInstanceSymbol]: IPublicModelClipboard;
 
   private get [designerSymbol](): IDesigner {
     return this[editorSymbol].get('designer') as IDesigner;
   }
 
+  get dragon(): IPublicModelDragon | null {
+    return ShellDragon.create(this[designerSymbol].dragon, this.workspaceMode);
+  }
+
+  get activeTracker(): IPublicModelActiveTracker | null {
+    const activeTracker = new ShellActiveTracker(this[designerSymbol].activeTracker);
+    return activeTracker;
+  }
+
+  get isInLiveEditing(): boolean {
+    return Boolean(this[editorSymbol].get('designer')?.project?.simulator?.liveEditing?.editing);
+  }
+
+  get clipboard(): IPublicModelClipboard {
+    return this[clipboardInstanceSymbol];
+  }
+
   constructor(editor: IPublicModelEditor, readonly workspaceMode: boolean = false) {
     this[editorSymbol] = editor;
+    this[clipboardInstanceSymbol] = new ShellClipboard();
   }
 
   createScrollTarget(shell: HTMLDivElement): IPublicModelScrollTarget {
     return new InnerScrollTarget(shell);
   }
 
-  createScroller(scrollable: IPublicModelScrollable): IPublicModelScroller {
+  createScroller(scrollable: IPublicTypeScrollable): IPublicModelScroller {
     return this[designerSymbol].createScroller(scrollable);
   }
 
@@ -47,19 +72,10 @@ export class Canvas implements IPublicApiCanvas {
     });
   }
 
-  get dragon(): IPublicModelDragon | null {
-    return Dragon.create(this[designerSymbol].dragon, this.workspaceMode);
-  }
-
-  get activeTracker(): IPublicModelActiveTracker | null {
-    const activeTracker = new ActiveTracker(this[designerSymbol].activeTracker);
-    return activeTracker;
-  }
-
   /**
    * @deprecated
    */
   get dropLocation() {
-    return DropLocation.create((this[designerSymbol] as any).dropLocation || null);
+    return ShellDropLocation.create((this[designerSymbol] as any).dropLocation || null);
   }
 }

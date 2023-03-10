@@ -1,9 +1,9 @@
 import { obx, makeObservable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
-import { Node, comparePosition, PositionNO } from './node/node';
+import { INode, comparePosition, PositionNO } from './node/node';
 import { DocumentModel } from './document-model';
 import { IPublicModelSelection } from '@alilc/lowcode-types';
 
-export interface ISelection extends IPublicModelSelection {
+export interface ISelection extends Omit<IPublicModelSelection<INode>, 'node'> {
 
 }
 
@@ -105,7 +105,7 @@ export class Selection implements ISelection {
   /**
    * 选区是否包含节点
    */
-  containsNode(node: Node, excludeRoot = false) {
+  containsNode(node: INode, excludeRoot = false) {
     for (const id of this._selected) {
       const parent = this.doc.getNode(id);
       if (excludeRoot && parent?.contains(this.doc.focusNode)) {
@@ -121,8 +121,8 @@ export class Selection implements ISelection {
   /**
    * 获取选中的节点
    */
-  getNodes(): Node[] {
-    const nodes = [];
+  getNodes(): INode[] {
+    const nodes: INode[] = [];
     for (const id of this._selected) {
       const node = this.doc.getNode(id);
       if (node) {

@@ -58,7 +58,7 @@ import {
   computed as innerComputed,
   observer as innerObserver,
 } from '@alilc/lowcode-editor-core';
-import { Dragon } from '../model';
+import { Dragon as ShellDragon } from '../model';
 import { ReactNode, Component } from 'react';
 
 class DesignerCabin implements IPublicApiCommonDesignerCabin {
@@ -149,7 +149,7 @@ class DesignerCabin implements IPublicApiCommonDesignerCabin {
    * @deprecated please use canvas.dragon
    */
   get dragon(): IPublicModelDragon | null {
-    return Dragon.create(this[designerSymbol].dragon);
+    return ShellDragon.create(this[designerSymbol].dragon, false);
   }
 }
 

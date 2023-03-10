@@ -8,7 +8,7 @@ sidebar_position: 2
 ## 基本介绍
 节点孩子模型
 
-## 变量
+## 属性
 ### owner
 
 返回当前 children 实例所属的节点实例
@@ -41,7 +41,7 @@ children 内的节点实例数
 
 **@since v1.1.0**
 
-## 方法签名
+## 方法
 ### delete
 删除指定节点
 
@@ -151,6 +151,21 @@ has(node: IPublicModelNode): boolean;
  * @param fn
  */
 forEach(fn: (node: IPublicModelNode, index: number) => void): void;
+
+```
+
+相关类型：[IPublicModelNode](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/node.ts)
+
+### reverse
+
+类似数组的 reverse
+
+```typescript
+/**
+ * 类似数组的 reverse
+ * provide the same function with {Array.prototype.reverse}
+ */
+reverse(): IPublicModelNode[];
 
 ```
 

@@ -1,13 +1,15 @@
 import {
-  ComponentMeta as InnerComponentMeta,
+  IComponentMeta as InnerComponentMeta,
   INode,
 } from '@alilc/lowcode-designer';
-import { IPublicTypeNodeData, IPublicTypeNodeSchema, IPublicModelComponentMeta, IPublicTypeI18nData, IPublicTypeIconType, IPublicTypeNpmInfo, IPublicTypeTransformedComponentMetadata, IPublicModelNode } from '@alilc/lowcode-types';
+import { IPublicTypeNodeData, IPublicTypeNodeSchema, IPublicModelComponentMeta, IPublicTypeI18nData, IPublicTypeIconType, IPublicTypeNpmInfo, IPublicTypeTransformedComponentMetadata, IPublicModelNode, IPublicTypeAdvanced, IPublicTypeFieldConfig } from '@alilc/lowcode-types';
 import { componentMetaSymbol, nodeSymbol } from '../symbols';
 import { ReactElement } from 'react';
 
 export class ComponentMeta implements IPublicModelComponentMeta {
   private readonly [componentMetaSymbol]: InnerComponentMeta;
+
+  isComponentMeta = true;
 
   constructor(componentMeta: InnerComponentMeta) {
     this[componentMetaSymbol] = componentMeta;
@@ -54,7 +56,7 @@ export class ComponentMeta implements IPublicModelComponentMeta {
   /**
    * 元数据配置
    */
-  get configure(): any {
+  get configure(): IPublicTypeFieldConfig[] {
     return this[componentMetaSymbol].configure;
   }
 
@@ -83,11 +85,15 @@ export class ComponentMeta implements IPublicModelComponentMeta {
    * @deprecated
    */
   get prototype() {
-    return this[componentMetaSymbol].prototype;
+    return (this[componentMetaSymbol] as any).prototype;
   }
 
   get availableActions(): any {
     return this[componentMetaSymbol].availableActions;
+  }
+
+  get advanced(): IPublicTypeAdvanced {
+    return this[componentMetaSymbol].advanced;
   }
 
   /**
@@ -106,7 +112,6 @@ export class ComponentMeta implements IPublicModelComponentMeta {
     return this[componentMetaSymbol].getMetadata();
   }
 
-  isComponentMeta = true;
   /**
    * check if the current node could be placed in parent node
    * @param my
@@ -124,9 +129,15 @@ export class ComponentMeta implements IPublicModelComponentMeta {
    * @param parent
    * @returns
    */
-  checkNestingDown(my: IPublicModelNode | IPublicTypeNodeData, target: IPublicTypeNodeSchema | IPublicModelNode | IPublicTypeNodeSchema[]) {
+  checkNestingDown(
+      my: IPublicModelNode | IPublicTypeNodeData,
+      target: IPublicTypeNodeSchema | IPublicModelNode | IPublicTypeNodeSchema[],
+    ) {
     const curNode = (my as any)?.isNode ? (my as any)[nodeSymbol] : my;
-    return this[componentMetaSymbol].checkNestingDown(curNode as any, (target as any)[nodeSymbol] || target);
+    return this[componentMetaSymbol].checkNestingDown(
+        curNode as any,
+        (target as any)[nodeSymbol] || target,
+      );
   }
 
   refreshMetadata(): void {

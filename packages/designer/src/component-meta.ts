@@ -10,12 +10,12 @@ import {
   IPublicTypeI18nData,
   IPublicTypePluginConfig,
   IPublicTypeFieldConfig,
-  IPublicTypeMetadataTransducer,
   IPublicModelComponentMeta,
+  IPublicTypeAdvanced,
 } from '@alilc/lowcode-types';
-import { deprecate, isRegExp, isTitleConfig } from '@alilc/lowcode-utils';
+import { deprecate, isRegExp, isTitleConfig, isNode } from '@alilc/lowcode-utils';
 import { computed, createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
-import { isNode, Node, INode } from './document';
+import { Node, INode } from './document';
 import { Designer } from './designer';
 import {
   IconContainer,
@@ -56,8 +56,8 @@ export function buildFilter(rule?: string | string[] | RegExp | IPublicTypeNesti
   return (testNode: Node | IPublicTypeNodeSchema) => list.includes(testNode.componentName);
 }
 
-export interface IComponentMeta extends IPublicModelComponentMeta {
-
+export interface IComponentMeta extends IPublicModelComponentMeta<INode> {
+  prototype?: any;
 }
 
 export class ComponentMeta implements IComponentMeta {
@@ -111,7 +111,7 @@ export class ComponentMeta implements IComponentMeta {
 
   private _transformedMetadata?: IPublicTypeTransformedComponentMetadata;
 
-  get configure() {
+  get configure(): IPublicTypeFieldConfig[] {
     const config = this._transformedMetadata?.configure;
     return config?.combined || config?.props || [];
   }
@@ -140,7 +140,7 @@ export class ComponentMeta implements IComponentMeta {
     // string | i18nData | ReactElement
     // TitleConfig title.label
     if (isTitleConfig(this._title)) {
-      return (this._title.label as any) || this.componentName;
+      return (this._title?.label as any) || this.componentName;
     }
     return this._title || this.componentName;
   }
@@ -160,6 +160,16 @@ export class ComponentMeta implements IComponentMeta {
   get acceptable(): boolean {
     return this._acceptable!;
   }
+
+  get advanced(): IPublicTypeAdvanced {
+    return this.getMetadata().configure.advanced || {};
+  }
+
+  /**
+   * @legacy compatiable for vision
+   * @deprecated
+   */
+  prototype?: any;
 
   constructor(readonly designer: Designer, metadata: IPublicTypeComponentMetadata) {
     this.parseMetadata(metadata);
@@ -211,7 +221,7 @@ export class ComponentMeta implements IComponentMeta {
           : title;
     }
 
-    const liveTextEditing = this._transformedMetadata.configure.advanced?.liveTextEditing || [];
+    const liveTextEditing = this.advanced.liveTextEditing || [];
 
     function collectLiveTextEditing(items: IPublicTypeFieldConfig[]) {
       items.forEach((config) => {
@@ -231,7 +241,7 @@ export class ComponentMeta implements IComponentMeta {
     collectLiveTextEditing(this.configure);
     this._liveTextEditing = liveTextEditing.length > 0 ? liveTextEditing : undefined;
 
-    const isTopFixed = this._transformedMetadata.configure.advanced?.isTopFixed;
+    const isTopFixed = this.advanced.isTopFixed;
 
     if (isTopFixed) {
       this._isTopFixed = isTopFixed;
@@ -263,8 +273,11 @@ export class ComponentMeta implements IComponentMeta {
     this.parseMetadata(this.getMetadata());
   }
 
-  private transformMetadata(metadta: IPublicTypeComponentMetadata): IPublicTypeTransformedComponentMetadata {
-    const result = this.designer.componentActions.getRegisteredMetadataTransducers().reduce((prevMetadata, current) => {
+  private transformMetadata(
+      metadta: IPublicTypeComponentMetadata,
+    ): IPublicTypeTransformedComponentMetadata {
+    const registeredTransducers = this.designer.componentActions.getRegisteredMetadataTransducers();
+    const result = registeredTransducers.reduce((prevMetadata, current) => {
       return current(prevMetadata);
     }, preprocessMetadata(metadta));
 
@@ -347,8 +360,6 @@ export class ComponentMeta implements IComponentMeta {
     };
   }
 
-  // compatiable vision
-  prototype?: any;
 }
 
 export function isComponentMeta(obj: any): obj is ComponentMeta {
@@ -373,4 +384,3 @@ function preprocessMetadata(metadata: IPublicTypeComponentMetadata): IPublicType
     configure: {},
   };
 }
-

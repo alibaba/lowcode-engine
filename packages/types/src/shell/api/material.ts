@@ -1,4 +1,4 @@
-import { IPublicTypeAssetsJson, IPublicTypeMetadataTransducer, IPublicTypeComponentAction, IPublicTypeNpmInfo } from '../type';
+import { IPublicTypeAssetsJson, IPublicTypeMetadataTransducer, IPublicTypeComponentAction, IPublicTypeNpmInfo, IPublicTypeDisposable } from '../type';
 import { IPublicModelComponentMeta } from '../model';
 import { ComponentType } from 'react';
 
@@ -76,8 +76,25 @@ export interface IPublicApiMaterial {
 
   /**
    * 在设计器辅助层增加一个扩展 action
+   *
    * add an action button in canvas context menu area
    * @param action
+   * @example
+   * ```ts
+   * import { plugins } from '@alilc/lowcode-engine';
+   * import { IPublicModelPluginContext } from '@alilc/lowcode-types';
+   *
+   * const removeCopyAction = (ctx: IPublicModelPluginContext) => {
+   *   return {
+   *     async init() {
+   *       const { removeBuiltinComponentAction } = ctx.material;
+   *       removeBuiltinComponentAction('copy');
+   *     }
+   *   }
+   * };
+   * removeCopyAction.pluginName = 'removeCopyAction';
+   * await plugins.register(removeCopyAction);
+   * ```
    */
   addBuiltinComponentAction(action: IPublicTypeComponentAction): void;
 
@@ -104,5 +121,5 @@ export interface IPublicApiMaterial {
    * add callback for assets changed event
    * @param fn
    */
-  onChangeAssets(fn: () => void): void;
+  onChangeAssets(fn: () => void): IPublicTypeDisposable;
 }

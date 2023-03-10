@@ -1,31 +1,37 @@
 import { IPublicTypePropType, IPublicTypeComponentAction } from './';
-import { IPublicModelSettingTarget } from '../model';
+import { IPublicModelNode, IPublicModelProp, IPublicModelSettingTarget } from '../model';
 
 /**
  * 嵌套控制函数
  */
 export type IPublicTypeNestingFilter = (testNode: any, currentNode: any) => boolean;
+
 /**
  * 嵌套控制
  * 防止错误的节点嵌套，比如 a 嵌套 a, FormField 只能在 Form 容器下，Column 只能在 Table 下等
  */
 export interface IPublicTypeNestingRule {
+
   /**
    * 子级白名单
    */
   childWhitelist?: string[] | string | RegExp | IPublicTypeNestingFilter;
+
   /**
    * 父级白名单
    */
   parentWhitelist?: string[] | string | RegExp | IPublicTypeNestingFilter;
+
   /**
    * 后裔白名单
    */
   descendantWhitelist?: string[] | string | RegExp | IPublicTypeNestingFilter;
+
   /**
    * 后裔黑名单
    */
   descendantBlacklist?: string[] | string | RegExp | IPublicTypeNestingFilter;
+
   /**
    * 祖先白名单 可用来做区域高亮
    */
@@ -36,22 +42,27 @@ export interface IPublicTypeNestingRule {
  * 组件能力配置
  */
 export interface IPublicTypeComponentConfigure {
+
   /**
    * 是否容器组件
    */
   isContainer?: boolean;
+
   /**
    * 组件是否带浮层，浮层组件拖入设计器时会遮挡画布区域，此时应当辅助一些交互以防止阻挡
    */
   isModal?: boolean;
+
   /**
    * 是否存在渲染的根节点
    */
   isNullNode?: boolean;
+
   /**
    * 组件树描述信息
    */
   descriptor?: string;
+
   /**
    * 嵌套控制：防止错误的节点嵌套
    * 比如 a 嵌套 a, FormField 只能在 Form 容器下，Column 只能在 Table 下等
@@ -68,10 +79,12 @@ export interface IPublicTypeComponentConfigure {
    * 组件选中框的 cssSelector
    */
   rootSelector?: string;
+
   /**
    * 禁用的行为，可以为 `'copy'`, `'move'`, `'remove'` 或它们组成的数组
    */
   disableBehaviors?: string[] | string;
+
   /**
    * 用于详细配置上述操作项的内容
    */
@@ -88,7 +101,7 @@ export interface IPublicTypeFilterItem {
 }
 export interface IPublicTypeAutorunItem {
   name: string;
-  autorun: (target: IPublicModelSettingTarget) => any;
+  autorun: (prop: IPublicModelProp) => any;
 }
 
 // thinkof Array
@@ -96,19 +109,23 @@ export interface IPublicTypeAutorunItem {
  * Live Text Editing（如果 children 内容是纯文本，支持双击直接编辑）的可配置项目
  */
 export interface IPublicTypeLiveTextEditingConfig {
+
   /**
    * @todo 待补充文档
    */
   propTarget: string;
+
   /**
    * @todo 待补充文档
    */
   selector?: string;
+
   /**
    * 编辑模式 纯文本 | 段落编辑 | 文章编辑（默认纯文本，无跟随工具条）
    * @default 'plaintext'
    */
   mode?: 'plaintext' | 'paragraph' | 'article';
+
   /**
    * 从 contentEditable 获取内容并设置到属性
    */
@@ -125,27 +142,33 @@ export type ConfigureSupportEvent = string | {
  * 通用扩展面板支持性配置
  */
 export interface ConfigureSupport {
+
   /**
    * 支持事件列表
    */
   events?: ConfigureSupportEvent[];
+
   /**
    * 支持 className 设置
    */
   className?: boolean;
+
   /**
    * 支持样式设置
    */
   style?: boolean;
+
   /**
    * 支持生命周期设置
    */
   lifecycles?: any[];
+
   // general?: boolean;
   /**
    * 支持循环设置
    */
   loop?: boolean;
+
   /**
    * 支持条件式渲染设置
    */
@@ -161,20 +184,20 @@ export interface ConfigureSupport {
  */
 export interface IPublicTypeCallbacks {
   // hooks
-  onMouseDownHook?: (e: MouseEvent, currentNode: any) => any;
-  onDblClickHook?: (e: MouseEvent, currentNode: any) => any;
-  onClickHook?: (e: MouseEvent, currentNode: any) => any;
+  onMouseDownHook?: (e: MouseEvent, currentNode: IPublicModelNode) => any;
+  onDblClickHook?: (e: MouseEvent, currentNode: IPublicModelNode) => any;
+  onClickHook?: (e: MouseEvent, currentNode: IPublicModelNode) => any;
   // onLocateHook?: (e: any, currentNode: any) => any;
   // onAcceptHook?: (currentNode: any, locationData: any) => any;
-  onMoveHook?: (currentNode: any) => boolean;
+  onMoveHook?: (currentNode: IPublicModelNode) => boolean;
   // thinkof 限制性拖拽
-  onHoverHook?: (currentNode: any) => boolean;
-  onChildMoveHook?: (childNode: any, currentNode: any) => boolean;
+  onHoverHook?: (currentNode: IPublicModelNode) => boolean;
+  onChildMoveHook?: (childNode: IPublicModelNode, currentNode: IPublicModelNode) => boolean;
 
   // events
-  onNodeRemove?: (removedNode: any, currentNode: any) => void;
-  onNodeAdd?: (addedNode: any, currentNode: any) => void;
-  onSubtreeModified?: (currentNode: any, options: any) => void;
+  onNodeRemove?: (removedNode: IPublicModelNode | null, currentNode: IPublicModelNode | null) => void;
+  onNodeAdd?: (addedNode: IPublicModelNode | null, currentNode: IPublicModelNode | null) => void;
+  onSubtreeModified?: (currentNode: IPublicModelNode, options: any) => void;
   onResize?: (
     e: MouseEvent & {
       trigger: string;
@@ -197,6 +220,6 @@ export interface IPublicTypeCallbacks {
       deltaX?: number;
       deltaY?: number;
     },
-    currentNode: any,
+    currentNode: IPublicModelNode,
   ) => void;
 }

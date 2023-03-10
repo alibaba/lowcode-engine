@@ -1,6 +1,6 @@
 import {
   BuiltinSimulatorHost,
-  Project as InnerProject,
+  IProject as InnerProject,
 } from '@alilc/lowcode-designer';
 import { globalContext } from '@alilc/lowcode-editor-core';
 import {
@@ -14,9 +14,7 @@ import {
   IPublicEnumTransformStage,
   IPublicTypeDisposable,
 } from '@alilc/lowcode-types';
-
-
-import { DocumentModel } from '../model/document-model';
+import { DocumentModel as ShellDocumentModel } from '../model';
 import { SimulatorHost } from './simulator-host';
 import { editorSymbol, projectSymbol, simulatorHostSymbol, documentSymbol } from '../symbols';
 
@@ -61,7 +59,7 @@ export class Project implements IPublicApiProject {
    * @returns
    */
   get documents(): IPublicModelDocumentModel[] {
-    return this[projectSymbol].documents.map((doc) => DocumentModel.create(doc)!);
+    return this[projectSymbol].documents.map((doc) => ShellDocumentModel.create(doc)!);
   }
 
   /**
@@ -85,8 +83,10 @@ export class Project implements IPublicApiProject {
    */
   openDocument(doc?: string | IPublicTypeRootSchema | undefined) {
     const documentModel = this[projectSymbol].open(doc);
-    if (!documentModel) return null;
-    return DocumentModel.create(documentModel);
+    if (!documentModel) {
+      return null;
+    }
+    return ShellDocumentModel.create(documentModel);
   }
 
   /**
@@ -96,7 +96,7 @@ export class Project implements IPublicApiProject {
    */
   createDocument(data?: IPublicTypeRootSchema): IPublicModelDocumentModel | null {
     const doc = this[projectSymbol].createDocument(data);
-    return DocumentModel.create(doc);
+    return ShellDocumentModel.create(doc);
   }
 
   /**
@@ -113,7 +113,8 @@ export class Project implements IPublicApiProject {
    * @returns
    */
   getDocumentByFileName(fileName: string): IPublicModelDocumentModel | null {
-    return DocumentModel.create(this[projectSymbol].getDocumentByFileName(fileName));
+    const innerDocumentModel = this[projectSymbol].getDocumentByFileName(fileName);
+    return ShellDocumentModel.create(innerDocumentModel);
   }
 
   /**
@@ -122,7 +123,7 @@ export class Project implements IPublicApiProject {
    * @returns
    */
   getDocumentById(id: string): IPublicModelDocumentModel | null {
-    return DocumentModel.create(this[projectSymbol].getDocument(id));
+    return ShellDocumentModel.create(this[projectSymbol].getDocument(id));
   }
 
   /**
@@ -146,7 +147,7 @@ export class Project implements IPublicApiProject {
    * @returns
    */
   getCurrentDocument(): IPublicModelDocumentModel | null {
-    return DocumentModel.create(this[projectSymbol].currentDocument);
+    return ShellDocumentModel.create(this[projectSymbol].currentDocument);
   }
 
   /**
@@ -154,7 +155,10 @@ export class Project implements IPublicApiProject {
    * @param transducer
    * @param stage
    */
-  addPropsTransducer(transducer: IPublicTypePropsTransducer, stage: IPublicEnumTransformStage): void {
+  addPropsTransducer(
+      transducer: IPublicTypePropsTransducer,
+      stage: IPublicEnumTransformStage,
+    ): void {
     this[projectSymbol].designer.addPropsReducer(transducer, stage);
   }
 
@@ -175,10 +179,10 @@ export class Project implements IPublicApiProject {
    */
   onChangeDocument(fn: (doc: IPublicModelDocumentModel) => void): IPublicTypeDisposable {
     const offFn = this[projectSymbol].onCurrentDocumentChange((originalDoc) => {
-      fn(DocumentModel.create(originalDoc)!);
+      fn(ShellDocumentModel.create(originalDoc)!);
     });
     if (this[projectSymbol].currentDocument) {
-      fn(DocumentModel.create(this[projectSymbol].currentDocument)!);
+      fn(ShellDocumentModel.create(this[projectSymbol].currentDocument)!);
     }
     return offFn;
   }
@@ -188,12 +192,8 @@ export class Project implements IPublicApiProject {
    */
   onSimulatorHostReady(fn: (host: IPublicApiSimulatorHost) => void): IPublicTypeDisposable {
     const offFn = this[projectSymbol].onSimulatorReady((simulator: BuiltinSimulatorHost) => {
-      this[simulatorHostSymbol] = simulator;
       fn(SimulatorHost.create(simulator)!);
     });
-    if (this[simulatorHostSymbol]) {
-      fn(SimulatorHost.create(this[simulatorHostSymbol])!);
-    }
     return offFn;
   }
 

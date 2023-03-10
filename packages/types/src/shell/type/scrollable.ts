@@ -1,6 +1,6 @@
-import { IPublicModelScrollTarget } from './';
+import { IPublicModelScrollTarget } from '../model';
 
-export interface IPublicModelScrollable {
+export interface IPublicTypeScrollable {
   scrollTarget?: IPublicModelScrollTarget | Element;
   bounds?: DOMRect | null;
   scale?: number;

@@ -2,12 +2,15 @@ import { IPublicTypeNodeSchema, IPublicTypeNodeData } from '../type';
 import { IPublicEnumTransformStage } from '../enum';
 import { IPublicModelNode } from './';
 
-export interface IPublicModelNodeChildren {
+export interface IPublicModelNodeChildren<
+  Node = IPublicModelNode
+> {
+
   /**
    * 返回当前 children 实例所属的节点实例
    * get owner node of this nodeChildren
    */
-  get owner(): IPublicModelNode | null;
+  get owner(): Node | null;
 
   /**
    * children 内的节点实例数
@@ -24,6 +27,7 @@ export interface IPublicModelNodeChildren {
 
   /**
    * 是否为空
+   *
    * @returns
    */
   get isEmptyNode(): boolean;
@@ -41,104 +45,121 @@ export interface IPublicModelNodeChildren {
 
   /**
    * 删除指定节点
+   *
    * delete the node
    * @param node
    */
-  delete(node: IPublicModelNode): boolean;
+  delete(node: Node): boolean;
 
   /**
    * 插入一个节点
+   *
    * insert a node at specific position
    * @param node 待插入节点
    * @param at 插入下标
    * @returns
    */
-  insert(node: IPublicModelNode, at?: number | null): void;
+  insert(node: Node, at?: number | null): void;
 
   /**
    * 返回指定节点的下标
+   *
    * get index of node in current children
    * @param node
    * @returns
    */
-  indexOf(node: IPublicModelNode): number;
+  indexOf(node: Node): number;
 
   /**
    * 类似数组 splice 操作
+   *
    * provide the same function with {Array.prototype.splice}
    * @param start
    * @param deleteCount
    * @param node
    */
-  splice(start: number, deleteCount: number, node?: IPublicModelNode): any;
+  splice(start: number, deleteCount: number, node?: Node): any;
 
   /**
    * 返回指定下标的节点
+   *
    * get node with index
    * @param index
    * @returns
    */
-  get(index: number): IPublicModelNode | null;
+  get(index: number): Node | null;
 
   /**
    * 是否包含指定节点
+   *
    * check if node exists in current children
    * @param node
    * @returns
    */
-  has(node: IPublicModelNode): boolean;
+  has(node: Node): boolean;
 
   /**
    * 类似数组的 forEach
+   *
    * provide the same function with {Array.prototype.forEach}
    * @param fn
    */
-  forEach(fn: (node: IPublicModelNode, index: number) => void): void;
+  forEach(fn: (node: Node, index: number) => void): void;
+
+  /**
+   * 类似数组的 reverse
+   *
+   * provide the same function with {Array.prototype.reverse}
+   */
+  reverse(): Node[];
 
   /**
    * 类似数组的 map
+   *
    * provide the same function with {Array.prototype.map}
    * @param fn
    */
-  map<T>(fn: (node: IPublicModelNode, index: number) => T[]): any[] | null;
+  map<T = any>(fn: (node: Node, index: number) => T): T[] | null;
 
   /**
    * 类似数组的 every
    * provide the same function with {Array.prototype.every}
    * @param fn
    */
-  every(fn: (node: IPublicModelNode, index: number) => boolean): boolean;
+  every(fn: (node: Node, index: number) => boolean): boolean;
 
   /**
    * 类似数组的 some
    * provide the same function with {Array.prototype.some}
    * @param fn
    */
-  some(fn: (node: IPublicModelNode, index: number) => boolean): boolean;
+  some(fn: (node: Node, index: number) => boolean): boolean;
 
   /**
    * 类似数组的 filter
    * provide the same function with {Array.prototype.filter}
    * @param fn
    */
-  filter(fn: (node: IPublicModelNode, index: number) => boolean): any;
+  filter(fn: (node: Node, index: number) => boolean): any;
 
   /**
    * 类似数组的 find
    * provide the same function with {Array.prototype.find}
    * @param fn
    */
-  find(fn: (node: IPublicModelNode, index: number) => boolean): IPublicModelNode | null;
+  find(fn: (node: Node, index: number) => boolean): Node | null | undefined;
 
   /**
    * 类似数组的 reduce
+   *
    * provide the same function with {Array.prototype.reduce}
    * @param fn
    */
-  reduce(fn: (acc: any, cur: IPublicModelNode) => any, initialValue: any): void;
+  reduce(fn: (acc: any, cur: Node) => any, initialValue: any): void;
 
   /**
    * 导入 schema
+   *
    * import schema
    * @param data
    */
@@ -146,6 +167,7 @@ export interface IPublicModelNodeChildren {
 
   /**
    * 导出 schema
+   *
    * export schema
    * @param stage
    */
@@ -153,15 +175,16 @@ export interface IPublicModelNodeChildren {
 
   /**
    * 执行新增、删除、排序等操作
+   *
    * excute remove/add/sort operations
    * @param remover
    * @param adder
    * @param sorter
    */
   mergeChildren(
-    remover: (node: IPublicModelNode, idx: number) => boolean,
-    adder: (children: IPublicModelNode[]) => IPublicTypeNodeData[] | null,
-    sorter: (firstNode: IPublicModelNode, secondNode: IPublicModelNode) => number
+    remover: (node: Node, idx: number) => boolean,
+    adder: (children: Node[]) => IPublicTypeNodeData[] | null,
+    sorter: (firstNode: Node, secondNode: Node) => number
   ): any;
 
 }

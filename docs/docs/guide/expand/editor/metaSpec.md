@@ -10,7 +10,7 @@ sidebar_position: 2
 
 ## 可视化生成物料描述
 
-使用 Parts 造物平台：[使用文档](/site/docs/guide/expand/editor/partsIntro)
+使用 Parts 造物平台：[使用文档](/site/docs/guide/expand/editor/parts/partsIntro)
 
 ## 自动生成物料描述
 

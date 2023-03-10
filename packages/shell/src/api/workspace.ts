@@ -1,8 +1,8 @@
-import { IPublicApiWorkspace } from '@alilc/lowcode-types';
+import { IPublicApiWorkspace, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType } from '@alilc/lowcode-types';
 import { Workspace as InnerWorkSpace } from '@alilc/lowcode-workspace';
 import { Plugins } from '@alilc/lowcode-shell';
-import { Window } from '../model/window';
 import { workspaceSymbol } from '../symbols';
+import { Resource as ShellResource, Window as ShellWindow } from '../model';
 
 export class Workspace implements IPublicApiWorkspace {
   readonly [workspaceSymbol]: InnerWorkSpace;
@@ -11,20 +11,32 @@ export class Workspace implements IPublicApiWorkspace {
     this[workspaceSymbol] = innerWorkspace;
   }
 
+  get resourceList() {
+    return this[workspaceSymbol].getResourceList().map((d) => new ShellResource(d));
+  }
+
+  setResourceList(resourceList: IPublicResourceList) {
+    this[workspaceSymbol].setResourceList(resourceList);
+  }
+
+  onResourceListChange(fn: (resourceList: IPublicResourceList) => void): IPublicTypeDisposable {
+    return this[workspaceSymbol].onResourceListChange(fn);
+  }
+
   get isActive() {
     return this[workspaceSymbol].isActive;
   }
 
   get window() {
-    return new Window(this[workspaceSymbol].window);
+    return new ShellWindow(this[workspaceSymbol].window);
   }
 
-  registerResourceType(resourceName: string, resourceType: 'editor', options: any): void {
-    this[workspaceSymbol].registerResourceType(resourceName, resourceType, options);
+  registerResourceType(resourceTypeModel: IPublicTypeResourceType): void {
+    this[workspaceSymbol].registerResourceType(resourceTypeModel);
   }
 
-  openEditorWindow(resourceName: string, title: string, viewType?: string) {
-    this[workspaceSymbol].openEditorWindow(resourceName, title, viewType);
+  openEditorWindow(resourceName: string, title: string, extra: object, viewName?: string) {
+    this[workspaceSymbol].openEditorWindow(resourceName, title, extra, viewName);
   }
 
   openEditorWindowById(id: string) {
@@ -44,14 +56,14 @@ export class Workspace implements IPublicApiWorkspace {
   }
 
   get windows() {
-    return this[workspaceSymbol].windows.map(d => new Window(d));
+    return this[workspaceSymbol].windows.map((d) => new ShellWindow(d));
   }
 
-  onChangeWindows(fn: () => void) {
+  onChangeWindows(fn: () => void): IPublicTypeDisposable {
     return this[workspaceSymbol].onChangeWindows(fn);
   }
 
-  onChangeActiveWindow(fn: () => void) {
+  onChangeActiveWindow(fn: () => void): IPublicTypeDisposable {
     return this[workspaceSymbol].onChangeActiveWindow(fn);
   }
 }

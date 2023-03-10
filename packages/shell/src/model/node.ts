@@ -19,14 +19,15 @@ import {
   IPublicModelSettingTopEntry,
   IPublicModelExclusiveGroup,
 } from '@alilc/lowcode-types';
-import { Prop } from './prop';
-import { Props } from './props';
-import { DocumentModel } from './document-model';
-import { NodeChildren } from './node-children';
-import { ComponentMeta } from './component-meta';
-import { SettingTopEntry } from './setting-top-entry';
+import { Prop as ShellProp } from './prop';
+import { Props as ShellProps } from './props';
+import { DocumentModel as ShellDocumentModel } from './document-model';
+import { NodeChildren as ShellNodeChildren } from './node-children';
+import { ComponentMeta as ShellComponentMeta } from './component-meta';
+import { SettingTopEntry as ShellSettingTopEntry } from './setting-top-entry';
 import { documentSymbol, nodeSymbol } from '../symbols';
 import { ReactElement } from 'react';
+import { ConditionGroup } from './condition-group';
 
 const shellNodeSymbol = Symbol('shellNodeSymbol');
 
@@ -35,27 +36,6 @@ export class Node implements IPublicModelNode {
   private readonly [nodeSymbol]: InnerNode;
 
   private _id: string;
-
-  constructor(node: IPublicModelNode) {
-    this[nodeSymbol] = node;
-    this[documentSymbol] = node.document;
-
-    this._id = this[nodeSymbol].id;
-  }
-
-  static create(node: IPublicModelNode | null | undefined): IPublicModelNode | null {
-    if (!node) {
-      return null;
-    }
-    // @ts-ignore 直接返回已挂载的 shell node 实例
-    if (node[shellNodeSymbol]) {
-      return (node as any)[shellNodeSymbol];
-    }
-    const shellNode = new Node(node);
-    // @ts-ignore 挂载 shell node 实例
-    node[shellNodeSymbol] = shellNode;
-    return shellNode;
-  }
 
   /**
    * 节点 id
@@ -257,7 +237,7 @@ export class Node implements IPublicModelNode {
    * 节点的物料元数据
    */
   get componentMeta(): IPublicModelComponentMeta | null {
-    return ComponentMeta.create(this[nodeSymbol].componentMeta);
+    return ShellComponentMeta.create(this[nodeSymbol].componentMeta);
   }
 
   /**
@@ -265,7 +245,7 @@ export class Node implements IPublicModelNode {
    * @returns
    */
   get document(): IPublicModelDocumentModel | null {
-    return DocumentModel.create(this[documentSymbol]);
+    return ShellDocumentModel.create(this[documentSymbol]);
   }
 
   /**
@@ -297,28 +277,28 @@ export class Node implements IPublicModelNode {
    * @returns
    */
   get children(): IPublicModelNodeChildren | null {
-    return NodeChildren.create(this[nodeSymbol].children);
+    return ShellNodeChildren.create(this[nodeSymbol].children);
   }
 
   /**
    * 节点上挂载的插槽节点们
    */
   get slots(): IPublicModelNode[] {
-    return this[nodeSymbol].slots.map((node: IPublicModelNode) => Node.create(node)!);
+    return this[nodeSymbol].slots.map((node: InnerNode) => Node.create(node)!);
   }
 
   /**
    * 当前节点为插槽节点时，返回节点对应的属性实例
    */
-  get slotFor(): IPublicModelProp | null {
-    return Prop.create(this[nodeSymbol].slotFor);
+  get slotFor(): IPublicModelProp | null | undefined {
+    return ShellProp.create(this[nodeSymbol].slotFor);
   }
 
   /**
    * 返回节点的属性集
    */
   get props(): IPublicModelProps | null {
-    return Props.create(this[nodeSymbol].props);
+    return ShellProps.create(this[nodeSymbol].props);
   }
 
   /**
@@ -336,7 +316,29 @@ export class Node implements IPublicModelNode {
   }
 
   get settingEntry(): IPublicModelSettingTopEntry {
-    return SettingTopEntry.create(this[nodeSymbol].settingEntry as any);
+    return ShellSettingTopEntry.create(this[nodeSymbol].settingEntry as any);
+  }
+
+  constructor(node: InnerNode) {
+    this[nodeSymbol] = node;
+    this[documentSymbol] = node.document;
+
+    this._id = this[nodeSymbol].id;
+  }
+
+  static create(node: InnerNode | null | undefined): IPublicModelNode | null {
+    if (!node) {
+      return null;
+    }
+    // @ts-ignore 直接返回已挂载的 shell node 实例
+    if (node[shellNodeSymbol]) {
+      return (node as any)[shellNodeSymbol];
+    }
+    const shellNode = new Node(node);
+    // @ts-ignore 挂载 shell node 实例
+    // eslint-disable-next-line no-param-reassign
+    node[shellNodeSymbol] = shellNode;
+    return shellNode;
   }
 
   /**
@@ -348,10 +350,9 @@ export class Node implements IPublicModelNode {
 
   /**
    * 获取节点实例对应的 dom 节点
-   * @deprecated
    */
   getDOMNode() {
-    return this[nodeSymbol].getDOMNode();
+    return (this[nodeSymbol] as any).getDOMNode();
   }
 
   /**
@@ -445,7 +446,7 @@ export class Node implements IPublicModelNode {
    * @returns
    */
   getProp(path: string, createIfNone = true): IPublicModelProp | null {
-    return Prop.create(this[nodeSymbol].getProp(path, createIfNone));
+    return ShellProp.create(this[nodeSymbol].getProp(path, createIfNone));
   }
 
   /**
@@ -465,7 +466,7 @@ export class Node implements IPublicModelNode {
    * @returns
    */
   getExtraProp(path: string, createIfNone?: boolean): IPublicModelProp | null {
-    return Prop.create(this[nodeSymbol].getExtraProp(path, createIfNone));
+    return ShellProp.create(this[nodeSymbol].getExtraProp(path, createIfNone));
   }
 
   /**
@@ -512,7 +513,10 @@ export class Node implements IPublicModelNode {
    * @param options
    * @returns
    */
-  exportSchema(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Render, options?: any): IPublicTypeNodeSchema {
+  exportSchema(
+      stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Render,
+      options?: any,
+    ): IPublicTypeNodeSchema {
     return this[nodeSymbol].export(stage, options);
   }
 
@@ -591,12 +595,13 @@ export class Node implements IPublicModelNode {
   remove(): void {
     this[nodeSymbol].remove();
   }
+
   /**
    * @deprecated
    * 设置为磁贴布局节点
    */
   set isRGLContainer(flag: boolean) {
-    this[nodeSymbol].isRGLContainer = flag;
+    this[nodeSymbol].isRGLContainerNode = flag;
   }
 
   /**
@@ -605,14 +610,14 @@ export class Node implements IPublicModelNode {
    * @returns Boolean
    */
   get isRGLContainer() {
-    return this[nodeSymbol].isRGLContainer;
+    return this[nodeSymbol].isRGLContainerNode;
   }
 
   /**
    * 设置为磁贴布局节点
    */
   set isRGLContainerNode(flag: boolean) {
-    this[nodeSymbol].isRGLContainer = flag;
+    this[nodeSymbol].isRGLContainerNode = flag;
   }
 
   /**
@@ -620,7 +625,7 @@ export class Node implements IPublicModelNode {
    * @returns Boolean
    */
   get isRGLContainerNode() {
-    return this[nodeSymbol].isRGLContainer;
+    return this[nodeSymbol].isRGLContainerNode;
   }
 
   internalToShellNode() {
@@ -636,7 +641,7 @@ export class Node implements IPublicModelNode {
    * @since v1.1.0
    */
   get conditionGroup(): IPublicModelExclusiveGroup | null {
-    return this[nodeSymbol].conditionGroup;
+    return ConditionGroup.create(this[nodeSymbol].conditionGroup);
   }
 
   /**

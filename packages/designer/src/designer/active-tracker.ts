@@ -6,16 +6,22 @@ import {
 } from '@alilc/lowcode-types';
 import { isNode } from '@alilc/lowcode-utils';
 
-export interface IActiveTracker extends IPublicModelActiveTracker {
-  track(originalTarget: IPublicTypeActiveTarget | INode): void;
+export interface IActiveTracker extends Omit< IPublicModelActiveTracker, 'track' | 'onChange' > {
+  track(originalTarget: ActiveTarget | INode): void;
+
+  onChange(fn: (target: ActiveTarget) => void): () => void;
+}
+
+export interface ActiveTarget extends Omit< IPublicTypeActiveTarget, 'node' > {
+  node: INode;
 }
 
 export class ActiveTracker implements IActiveTracker {
   private emitter: IEventBus = createModuleEventBus('ActiveTracker');
 
-  @obx.ref private _target?: IPublicTypeActiveTarget | INode;
+  @obx.ref private _target?: ActiveTarget | INode;
 
-  track(originalTarget: IPublicTypeActiveTarget | INode) {
+  track(originalTarget: ActiveTarget | INode) {
     let target = originalTarget;
     if (isNode(originalTarget)) {
       target = { node: originalTarget as INode };
@@ -25,11 +31,11 @@ export class ActiveTracker implements IActiveTracker {
   }
 
   get currentNode() {
-    return (this._target as IPublicTypeActiveTarget)?.node;
+    return (this._target as ActiveTarget)?.node;
   }
 
   get detail() {
-    return (this._target as IPublicTypeActiveTarget)?.detail;
+    return (this._target as ActiveTarget)?.detail;
   }
 
   /**
@@ -41,10 +47,10 @@ export class ActiveTracker implements IActiveTracker {
   }
 
   get instance() {
-    return (this._target as IPublicTypeActiveTarget)?.instance;
+    return (this._target as ActiveTarget)?.instance;
   }
 
-  onChange(fn: (target: IPublicTypeActiveTarget) => void): () => void {
+  onChange(fn: (target: ActiveTarget) => void): () => void {
     this.emitter.addListener('change', fn);
     return () => {
       this.emitter.removeListener('change', fn);

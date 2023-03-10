@@ -7,7 +7,6 @@ import { DocumentModel } from '../../../src/document/document-model';
 import {
   isRootNode,
   Node,
-  isNode,
   comparePosition,
   contains,
   PositionNO,
@@ -23,6 +22,7 @@ import rootHeaderMetadata from '../../fixtures/component-metadata/root-header';
 import rootContentMetadata from '../../fixtures/component-metadata/root-content';
 import rootFooterMetadata from '../../fixtures/component-metadata/root-footer';
 import { shellModelFactory } from '../../../../engine/src/modules/shell-model-factory';
+import { isNode } from '@alilc/lowcode-utils';
 
 describe('Node 方法测试', () => {
   let editor: Editor;
@@ -473,7 +473,7 @@ describe('Node 方法测试', () => {
     const form = doc.getNode('node_k1ow3cbo');
     designer.createComponentMeta(divMetadata);
     designer.createComponentMeta(formMetadata);
-    const callbacks = form.componentMeta.getMetadata().configure.advanced?.callbacks;
+    const callbacks = form.componentMeta.advanced.callbacks;
     const fn1 = callbacks.onNodeAdd = jest.fn();
     const fn2 = callbacks.onNodeRemove = jest.fn();
     const textField = doc.getNode('node_k1ow3cc9');

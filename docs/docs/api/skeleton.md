@@ -135,7 +135,7 @@ skeleton.add({
 });
 ```
 
-## 方法签名
+## 方法
 
 ### add
 
@@ -295,8 +295,10 @@ hideArea(areaName: string): void;
  * @param listener
  * @returns
  */
-onShowPanel(listener: (...args: any[]) => void): () => void;
+onShowPanel(listener: (...args: any[]) => void): IPublicTypeDisposable;
 ```
+
+相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
 
 ### onHidePanel
 
@@ -309,8 +311,10 @@ onShowPanel(listener: (...args: any[]) => void): () => void;
  * @param listener
  * @returns
  */
-onHidePanel(listener: (...args: any[]) => void): () => void;
+onHidePanel(listener: (...args: any[]) => void): IPublicTypeDisposable;
 ```
+
+相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
 
 
 ### onShowWidget
@@ -324,9 +328,10 @@ onHidePanel(listener: (...args: any[]) => void): () => void;
  * @param listener
  * @returns
  */
-onShowWidget(listener: (...args: any[]) => void): () => void;
+onShowWidget(listener: (...args: any[]) => void): IPublicTypeDisposable;
 ```
 
+相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
 
 ### onHideWidget
 
@@ -339,8 +344,10 @@ onShowWidget(listener: (...args: any[]) => void): () => void;
  * @param listener
  * @returns
  */
-onHideWidget(listener: (...args: any[]) => void): () => void;
+onHideWidget(listener: (...args: any[]) => void): IPublicTypeDisposable;
 ```
+
+相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
 
 ## 使用示例
 

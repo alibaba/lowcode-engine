@@ -3,6 +3,7 @@ title: Window
 sidebar_position: 12
 ---
 
+> **[@experimental](./#experimental)**<br/>
 > **@types** [IPublicModelWindow](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/window.ts)<br/>
 > **@since** v1.1.0
 
@@ -11,21 +12,33 @@ sidebar_position: 12
 
 低代码设计器窗口模型
 
-## 变量
+## 属性
 
 ### id
 
 窗口唯一 id
 
+`@type {string}`
+
 ### title
 
 窗口标题
 
-### resourceName
+`@type {string}`
 
-窗口资源名字
+### icon
 
-## 方法签名
+`@type {ReactElement}`
+
+### resource
+
+窗口对应资源
+
+`@type {IPublicModelResource}`
+
+关联模型 [IPublicModelResource](./resource)
+
+## 方法
 
 ### importSchema
 当前窗口导入 schema, 会调用当前窗口对应资源的 import 钩子
@@ -49,3 +62,15 @@ function changeViewType(viewName: string): void
 ```typescript
 function save(): Promise(void)
 ```
+
+## 事件
+
+### onChangeViewType
+
+窗口视图变更事件
+
+```
+onChangeViewType(fn: (viewName: string) => void): IPublicTypeDisposable;
+```
+
+相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)

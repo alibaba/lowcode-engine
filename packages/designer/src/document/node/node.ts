@@ -15,18 +15,21 @@ import {
   IPublicModelNode,
   IPublicModelExclusiveGroup,
   IPublicEnumTransformStage,
+  IPublicTypeDisposable,
+  IBaseModelNode,
 } from '@alilc/lowcode-types';
-import { compatStage, isDOMText, isJSExpression } from '@alilc/lowcode-utils';
-import { SettingTopEntry } from '@alilc/lowcode-designer';
-import { Props, getConvertedExtraKey } from './props/props';
-import { DocumentModel, IDocumentModel } from '../document-model';
+import { compatStage, isDOMText, isJSExpression, isNode, isNodeSchema } from '@alilc/lowcode-utils';
+import { ISettingTopEntry } from '@alilc/lowcode-designer';
+import { Props, getConvertedExtraKey, IProps } from './props/props';
+import { IDocumentModel } from '../document-model';
 import { NodeChildren, INodeChildren } from './node-children';
-import { Prop } from './props/prop';
-import { ComponentMeta } from '../../component-meta';
-import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
+import { IProp, Prop } from './props/prop';
+import { IComponentMeta } from '../../component-meta';
+import { ExclusiveGroup, IExclusiveGroup, isExclusiveGroup } from './exclusive-group';
 import { includeSlot, removeSlot } from '../../utils/slot';
 import { foreachReverse } from '../../utils/tree';
 import { NodeRemoveOptions, EDITOR_EVENT } from '../../types';
+import { Prop as ShellProp } from '@alilc/lowcode-shell';
 
 export interface NodeStatus {
   locking: boolean;
@@ -34,17 +37,51 @@ export interface NodeStatus {
   inPlaceEditing: boolean;
 }
 
-export interface INode extends IPublicModelNode {
+export interface INode extends Omit<IBaseModelNode<
+  IDocumentModel,
+  INode,
+  INodeChildren,
+  IComponentMeta,
+  ISettingTopEntry,
+  IProps,
+  IProp,
+  IExclusiveGroup
+>,
+  'isRoot' |
+  'isPage' |
+  'isComponent' |
+  'isModal' |
+  'isSlot' |
+  'isParental' |
+  'isLeaf' |
+  'settingEntry' |
+  // 在内部的 node 模型中不存在
+  'getExtraPropValue' |
+  'setExtraPropValue' |
+  'exportSchema' |
+  'visible' |
+  'importSchema' |
+  // 内外实现有差异
+  'isContainer' |
+  'isEmpty'
+> {
+  isNode: boolean;
 
-  setVisible(flag: boolean): void;
+  get componentMeta(): IComponentMeta;
 
-  getVisible(): boolean;
+  get settingEntry(): ISettingTopEntry;
+
+  get isPurged(): boolean;
+
+  get index(): number | undefined;
+
+  get isPurging(): boolean;
 
   /**
    * 内部方法，请勿使用
    * @param useMutator 是否触发联动逻辑
    */
-  internalSetParent(parent: INode | null, useMutator: boolean): void;
+  internalSetParent(parent: INode | null, useMutator?: boolean): void;
 
   setConditionGroup(grp: IPublicModelExclusiveGroup | string | null): void;
 
@@ -52,16 +89,12 @@ export interface INode extends IPublicModelNode {
 
   internalPurgeStart(): void;
 
-  unlinkSlot(slotNode: Node): void;
-
-  didDropOut(dragment: Node): void;
+  unlinkSlot(slotNode: INode): void;
 
   /**
    * 导出 schema
    */
-  export(stage: IPublicEnumTransformStage, options?: any): IPublicTypeNodeSchema;
-
-  get document(): IDocumentModel;
+  export<T = IPublicTypeNodeSchema>(stage: IPublicEnumTransformStage, options?: any): T;
 
   emitPropChange(val: IPublicTypePropChangeOptions): void;
 
@@ -70,6 +103,50 @@ export interface INode extends IPublicModelNode {
   internalSetSlotFor(slotFor: Prop | null | undefined): void;
 
   addSlot(slotNode: INode): void;
+
+  onVisibleChange(func: (flag: boolean) => any): () => void;
+
+  getSuitablePlace(node: INode, ref: any): any;
+
+  onChildrenChange(fn: (param?: { type: string; node: INode }) => void): IPublicTypeDisposable | undefined;
+
+  onPropChange(func: (info: IPublicTypePropChangeOptions) => void): IPublicTypeDisposable;
+
+  isModal(): boolean;
+
+  isRoot(): boolean;
+
+  isPage(): boolean;
+
+  isComponent(): boolean;
+
+  isSlot(): boolean;
+
+  isParental(): boolean;
+
+  isLeaf(): boolean;
+
+  isContainer(): boolean;
+
+  isEmpty(): boolean;
+
+  remove(
+    useMutator?: boolean,
+    purge?: boolean,
+    options?: NodeRemoveOptions,
+  ): void;
+
+  didDropIn(dragment: INode): void;
+
+  didDropOut(dragment: INode): void;
+
+  purge(): void;
+
+  removeSlot(slotNode: INode): boolean;
+
+  setVisible(flag: boolean): void;
+
+  getVisible(): boolean;
 }
 
 /**
@@ -148,7 +225,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 属性抽象
    */
-  props: Props;
+  props: IProps;
 
   protected _children?: INodeChildren;
 
@@ -204,7 +281,79 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
 
   isInited = false;
 
-  constructor(readonly document: IDocumentModel, nodeSchema: Schema, options: any = {}) {
+  _settingEntry: ISettingTopEntry;
+
+  get settingEntry(): ISettingTopEntry {
+    if (this._settingEntry) return this._settingEntry;
+    this._settingEntry = this.document.designer.createSettingEntry([this]);
+    return this._settingEntry;
+  }
+
+  private autoruns?: Array<() => void>;
+
+  private _isRGLContainer = false;
+
+  set isRGLContainer(status: boolean) {
+    this._isRGLContainer = status;
+  }
+
+  get isRGLContainer(): boolean {
+    return !!this._isRGLContainer;
+  }
+
+  set isRGLContainerNode(status: boolean) {
+    this._isRGLContainer = status;
+  }
+
+  get isRGLContainerNode(): boolean {
+    return !!this._isRGLContainer;
+  }
+
+  get isEmptyNode() {
+    return this.isEmpty();
+  }
+
+  private _slotFor?: IProp | null | undefined = null;
+
+  @obx.shallow _slots: INode[] = [];
+
+  get slots(): INode[] {
+    return this._slots;
+  }
+
+  /* istanbul ignore next */
+  @obx.ref private _conditionGroup: IExclusiveGroup | null = null;
+
+  /* istanbul ignore next */
+  get conditionGroup(): IExclusiveGroup | null {
+    return this._conditionGroup;
+  }
+
+  private purged = false;
+
+  /**
+   * 是否已销毁
+   */
+  get isPurged() {
+    return this.purged;
+  }
+
+  private purging: boolean = false;
+
+  /**
+   * 是否正在销毁
+   */
+  get isPurging() {
+    return this.purging;
+  }
+
+  @obx.shallow status: NodeStatus = {
+    inPlaceEditing: false,
+    locking: false,
+    pseudo: false,
+  };
+
+  constructor(readonly document: IDocumentModel, nodeSchema: Schema) {
     makeObservable(this);
     const { componentName, id, children, props, ...extras } = nodeSchema;
     this.id = document.nextId(id);
@@ -232,17 +381,9 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     this.onVisibleChange((visible: boolean) => {
       editor?.eventBus.emit(EDITOR_EVENT.NODE_VISIBLE_CHANGE, this, visible);
     });
-    this.onChildrenChange((info?: { type: string; node: Node }) => {
+    this.onChildrenChange((info?: { type: string; node: INode }) => {
       editor?.eventBus.emit(EDITOR_EVENT.NODE_VISIBLE_CHANGE, info);
     });
-  }
-
-  _settingEntry: SettingTopEntry;
-
-  get settingEntry(): SettingTopEntry {
-    if (this._settingEntry) return this._settingEntry;
-    this._settingEntry = this.document.designer.createSettingEntry([this]);
-    return this._settingEntry;
   }
 
   /**
@@ -268,16 +409,14 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     return this.document.designer.transformProps(props, this, IPublicEnumTransformStage.Upgrade);
   }
 
-  private autoruns?: Array<() => void>;
-
   private setupAutoruns() {
-    const autoruns = this.componentMeta.getMetadata().configure.advanced?.autoruns;
+    const { autoruns } = this.componentMeta.advanced;
     if (!autoruns || autoruns.length < 1) {
       return;
     }
     this.autoruns = autoruns.map((item) => {
       return autorun(() => {
-        item.autorun(this.props.get(item.name, true) as any);
+        item.autorun(ShellProp.create(this.props.get(item.name, true))!);
       });
     });
   }
@@ -285,7 +424,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   private initialChildren(children: any): IPublicTypeNodeData[] {
     // FIXME! this is dirty code
     if (children == null) {
-      const initialChildren = this.componentMeta.getMetadata().configure.advanced?.initialChildren;
+      const { initialChildren } = this.componentMeta.advanced;
       if (initialChildren) {
         if (typeof initialChildren === 'function') {
           return initialChildren(this as any) || [];
@@ -294,24 +433,6 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
       }
     }
     return children || [];
-  }
-
-  private _isRGLContainer = false;
-
-  set isRGLContainer(status: boolean) {
-    this._isRGLContainer = status;
-  }
-
-  get isRGLContainer(): boolean {
-    return !!this._isRGLContainer;
-  }
-
-  set isRGLContainerNode(status: boolean) {
-    this._isRGLContainer = status;
-  }
-
-  get isRGLContainerNode(): boolean {
-    return !!this._isRGLContainer;
   }
 
   isContainer(): boolean {
@@ -388,8 +509,8 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     this.document.addWillPurge(this);
   }
 
-  private didDropIn(dragment: Node) {
-    const callbacks = this.componentMeta.getMetadata().configure.advanced?.callbacks;
+  didDropIn(dragment: INode) {
+    const { callbacks } = this.componentMeta.advanced;
     if (callbacks?.onNodeAdd) {
       const cbThis = this.internalToShellNode();
       callbacks?.onNodeAdd.call(cbThis, dragment.internalToShellNode(), cbThis);
@@ -399,8 +520,8 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     }
   }
 
-  private didDropOut(dragment: Node) {
-    const callbacks = this.componentMeta.getMetadata().configure.advanced?.callbacks;
+  didDropOut(dragment: INode) {
+    const { callbacks } = this.componentMeta.advanced;
     if (callbacks?.onNodeRemove) {
       const cbThis = this.internalToShellNode();
       callbacks?.onNodeRemove.call(cbThis, dragment.internalToShellNode(), cbThis);
@@ -449,8 +570,6 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     }
   }
 
-  private _slotFor?: Prop | null = null;
-
   internalSetSlotFor(slotFor: Prop | null | undefined) {
     this._slotFor = slotFor;
   }
@@ -462,7 +581,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 关联属性
    */
-  get slotFor() {
+  get slotFor(): IProp | null | undefined {
     return this._slotFor;
   }
 
@@ -482,10 +601,10 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
         });
       }
       if (this.isSlot()) {
-        this.parent.removeSlot(this, purge);
-        this.parent.children.internalDelete(this, purge, useMutator, { suppressRemoveEvent: true });
+        this.parent.removeSlot(this);
+        this.parent.children?.internalDelete(this, purge, useMutator, { suppressRemoveEvent: true });
       } else {
-        this.parent.children.internalDelete(this, purge, useMutator, { suppressRemoveEvent: true });
+        this.parent.children?.internalDelete(this, purge, useMutator, { suppressRemoveEvent: true });
       }
     }
   }
@@ -525,7 +644,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 节点组件描述
    */
-  @computed get componentMeta(): ComponentMeta {
+  @computed get componentMeta(): IComponentMeta {
     return this.document.getComponentMeta(this.componentName);
   }
 
@@ -536,26 +655,13 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     return this.props.export(IPublicEnumTransformStage.Serilize).props || null;
   }
 
-  @obx.shallow _slots: INode[] = [];
-
   hasSlots() {
     return this._slots.length > 0;
   }
 
-  get slots() {
-    return this._slots;
-  }
-
-  /* istanbul ignore next */
-  @obx.ref private _conditionGroup: IPublicModelExclusiveGroup | null = null;
-
-  /* istanbul ignore next */
-  get conditionGroup(): IPublicModelExclusiveGroup | null {
-    return this._conditionGroup;
-  }
-
   /* istanbul ignore next */
   setConditionGroup(grp: IPublicModelExclusiveGroup | string | null) {
+    let _grp: IExclusiveGroup | null = null;
     if (!grp) {
       this.getExtraProp('conditionGroup', false)?.remove();
       if (this._conditionGroup) {
@@ -566,20 +672,20 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     }
     if (!isExclusiveGroup(grp)) {
       if (this.prevSibling?.conditionGroup?.name === grp) {
-        grp = this.prevSibling.conditionGroup;
+        _grp = this.prevSibling.conditionGroup;
       } else if (this.nextSibling?.conditionGroup?.name === grp) {
-        grp = this.nextSibling.conditionGroup;
-      } else {
-        grp = new ExclusiveGroup(grp);
+        _grp = this.nextSibling.conditionGroup;
+      } else if (typeof grp === 'string') {
+        _grp = new ExclusiveGroup(grp);
       }
     }
-    if (this._conditionGroup !== grp) {
-      this.getExtraProp('conditionGroup', true)?.setValue(grp.name);
+    if (_grp && this._conditionGroup !== _grp) {
+      this.getExtraProp('conditionGroup', true)?.setValue(_grp.name);
       if (this._conditionGroup) {
         this._conditionGroup.remove(this);
       }
-      this._conditionGroup = grp;
-      grp.add(this);
+      this._conditionGroup = _grp;
+      _grp?.add(this);
     }
   }
 
@@ -632,15 +738,19 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 替换子节点
    *
-   * @param {Node} node
+   * @param {INode} node
    * @param {object} data
    */
-  replaceChild(node: Node, data: any): Node {
+  replaceChild(node: INode, data: any): INode | null {
     if (this.children?.has(node)) {
       const selected = this.document.selection.has(node.id);
 
       delete data.id;
       const newNode = this.document.createNode(data);
+
+      if (!isNode(newNode)) {
+        return null;
+      }
 
       this.insertBefore(newNode, node, false);
       node.remove(false);
@@ -670,11 +780,11 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     };
   }
 
-  getProp(path: string, createIfNone = true): Prop | null {
+  getProp(path: string, createIfNone = true): IProp | null {
     return this.props.query(path, createIfNone) || null;
   }
 
-  getExtraProp(key: string, createIfNone = true): Prop | null {
+  getExtraProp(key: string, createIfNone = true): IProp | null {
     return this.props.get(getConvertedExtraKey(key), createIfNone) || null;
   }
 
@@ -724,39 +834,45 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 获取节点在父容器中的索引
    */
-  @computed get index(): number {
+  @computed get index(): number | undefined {
     if (!this.parent) {
       return -1;
     }
-    return this.parent.children.indexOf(this);
+    return this.parent.children?.indexOf(this);
   }
 
   /**
    * 获取下一个兄弟节点
    */
-  get nextSibling(): Node | null {
+  get nextSibling(): INode | null | undefined {
     if (!this.parent) {
       return null;
     }
     const { index } = this;
+    if (typeof index !== 'number') {
+      return null;
+    }
     if (index < 0) {
       return null;
     }
-    return this.parent.children.get(index + 1);
+    return this.parent.children?.get(index + 1);
   }
 
   /**
    * 获取上一个兄弟节点
    */
-  get prevSibling(): Node | null {
+  get prevSibling(): INode | null | undefined {
     if (!this.parent) {
       return null;
     }
     const { index } = this;
+    if (typeof index !== 'number') {
+      return null;
+    }
     if (index < 1) {
       return null;
     }
-    return this.parent.children.get(index - 1);
+    return this.parent.children?.get(index - 1);
   }
 
   /**
@@ -775,7 +891,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     if (this.isSlot()) {
       foreachReverse(
         this.children!,
-        (subNode: Node) => {
+        (subNode: INode) => {
           subNode.remove(true, true);
         },
         (iterable, idx) => (iterable as NodeChildren).get(idx),
@@ -798,7 +914,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 导出 schema
    */
-  export(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Save, options: any = {}): Schema {
+  export<T = IPublicTypeNodeSchema>(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Save, options: any = {}): T {
     stage = compatStage(stage);
     const baseSchema: any = {
       componentName: this.componentName,
@@ -840,7 +956,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
       ...this.document.designer.transformProps(_extras_, this, stage),
     };
 
-    if (this.isParental() && this.children.size > 0 && !options.bypassChildren) {
+    if (this.isParental() && this.children && this.children.size > 0 && !options.bypassChildren) {
       schema.children = this.children.export(stage);
     }
 
@@ -850,14 +966,14 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 判断是否包含特定节点
    */
-  contains(node: Node): boolean {
+  contains(node: INode): boolean {
     return contains(this, node);
   }
 
   /**
    * 获取特定深度的父亲节点
    */
-  getZLevelTop(zLevel: number): Node | null {
+  getZLevelTop(zLevel: number): INode | null {
     return getZLevelTop(this, zLevel);
   }
 
@@ -869,11 +985,11 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
    *  2  thisNode before or after otherNode
    *  0  thisNode same as otherNode
    */
-  comparePosition(otherNode: Node): PositionNO {
+  comparePosition(otherNode: INode): PositionNO {
     return comparePosition(this, otherNode);
   }
 
-  unlinkSlot(slotNode: Node) {
+  unlinkSlot(slotNode: INode) {
     const i = this._slots.indexOf(slotNode);
     if (i < 0) {
       return false;
@@ -884,7 +1000,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 删除一个Slot节点
    */
-  removeSlot(slotNode: Node, purge = false): boolean {
+  removeSlot(slotNode: INode): boolean {
     // if (purge) {
     //   // should set parent null
     //   slotNode?.internalSetParent(null, false);
@@ -925,17 +1041,8 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
    * 删除一个节点
    * @param node
    */
-  removeChild(node: Node) {
+  removeChild(node: INode) {
     this.children?.delete(node);
-  }
-
-  private purged = false;
-
-  /**
-   * 是否已销毁
-   */
-  get isPurged() {
-    return this.purged;
   }
 
   /**
@@ -952,16 +1059,8 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     // this.document.destroyNode(this);
   }
 
-  private purging: boolean = false;
   internalPurgeStart() {
     this.purging = true;
-  }
-
-  /**
-   * 是否正在销毁
-   */
-  get isPurging() {
-    return this.purging;
   }
 
   /**
@@ -993,18 +1092,18 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     return this.componentName;
   }
 
-  insert(node: Node, ref?: Node, useMutator = true) {
+  insert(node: INode, ref?: INode, useMutator = true) {
     this.insertAfter(node, ref, useMutator);
   }
 
-  insertBefore(node: Node, ref?: Node, useMutator = true) {
+  insertBefore(node: INode, ref?: INode, useMutator = true) {
     const nodeInstance = ensureNode(node, this.document);
     this.children?.internalInsert(nodeInstance, ref ? ref.index : null, useMutator);
   }
 
-  insertAfter(node: any, ref?: Node, useMutator = true) {
+  insertAfter(node: any, ref?: INode, useMutator = true) {
     const nodeInstance = ensureNode(node, this.document);
-    this.children?.internalInsert(nodeInstance, ref ? ref.index + 1 : null, useMutator);
+    this.children?.internalInsert(nodeInstance, ref ? (ref.index || 0) + 1 : null, useMutator);
   }
 
   getParent() {
@@ -1031,24 +1130,18 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     return this.props;
   }
 
-  onChildrenChange(fn: (param?: { type: string; node: Node }) => void): (() => void) | undefined {
+  onChildrenChange(fn: (param?: { type: string; node: INode }) => void): IPublicTypeDisposable | undefined {
     const wrappedFunc = wrapWithEventSwitch(fn);
     return this.children?.onChange(wrappedFunc);
   }
 
   mergeChildren(
-    remover: () => any,
-    adder: (children: Node[]) => IPublicTypeNodeData[] | null,
-    sorter: () => any,
+    remover: (node: INode, idx: number) => any,
+    adder: (children: INode[]) => IPublicTypeNodeData[] | null,
+    sorter: (firstNode: INode, secondNode: INode) => any,
   ) {
     this.children?.mergeChildren(remover, adder, sorter);
   }
-
-  @obx.shallow status: NodeStatus = {
-    inPlaceEditing: false,
-    locking: false,
-    pseudo: false,
-  };
 
   /**
    * @deprecated
@@ -1107,16 +1200,16 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   }
 
   /**
-   * TODO: replace non standard metas with standard ones.
+   * @deprecated no one is using this, will be removed in a future release
    */
-  getSuitablePlace(node: Node, ref: any): any {
+  getSuitablePlace(node: INode, ref: any): any {
     const focusNode = this.document?.focusNode;
     // 如果节点是模态框，插入到根节点下
     if (node?.componentMeta?.isModal) {
       return { container: focusNode, ref };
     }
 
-    if (!ref && this.contains(focusNode)) {
+    if (!ref && focusNode && this.contains(focusNode)) {
       const rootCanDropIn = focusNode.componentMeta?.prototype?.options?.canDropIn;
       if (
         rootCanDropIn === undefined ||
@@ -1131,7 +1224,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
 
     if (this.isRoot() && this.children) {
       const dropElement = this.children.filter((c) => {
-        if (!c.isContainer()) {
+        if (!c.isContainerNode) {
           return false;
         }
         const canDropIn = c.componentMeta?.prototype?.options?.canDropIn;
@@ -1230,7 +1323,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     this.emitter?.emit('propChange', val);
   }
 
-  onPropChange(func: (info: IPublicTypePropChangeOptions) => void): Function {
+  onPropChange(func: (info: IPublicTypePropChangeOptions) => void): IPublicTypeDisposable {
     const wrappedFunc = wrapWithEventSwitch(func);
     this.emitter.on('propChange', wrappedFunc);
     return () => {
@@ -1239,7 +1332,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   }
 }
 
-function ensureNode(node: any, document: DocumentModel): Node {
+function ensureNode(node: any, document: IDocumentModel): INode {
   let nodeInstance = node;
   if (!isNode(node)) {
     if (node.getComponentName) {
@@ -1264,22 +1357,15 @@ export type PageNode = Node<IPublicTypePageSchema>;
 export type ComponentNode = Node<IPublicTypeComponentSchema>;
 export type RootNode = PageNode | ComponentNode;
 
-/**
- * @deprecated use same function from '@alilc/lowcode-utils' instead
- */
-export function isNode(node: any): node is Node {
-  return node && node.isNode;
+export function isRootNode(node: INode): node is INode {
+  return node && node.isRootNode;
 }
 
-export function isRootNode(node: Node): node is RootNode {
-  return node && node.isRoot();
-}
-
-export function isLowCodeComponent(node: Node): boolean {
+export function isLowCodeComponent(node: INode): node is INode {
   return node.componentMeta?.getMetadata().devMode === 'lowCode';
 }
 
-export function getZLevelTop(child: Node, zLevel: number): Node | null {
+export function getZLevelTop(child: INode, zLevel: number): INode | null {
   let l = child.zLevel;
   if (l < zLevel || zLevel < 0) {
     return null;
@@ -1300,12 +1386,12 @@ export function getZLevelTop(child: Node, zLevel: number): Node | null {
  * @param node2 测试的被包含节点
  * @returns 是否包含
  */
-export function contains(node1: Node, node2: Node): boolean {
+export function contains(node1: INode, node2: INode): boolean {
   if (node1 === node2) {
     return true;
   }
 
-  if (!node1.isParental() || !node2.parent) {
+  if (!node1.isParentalNode || !node2.parent) {
     return false;
   }
 
@@ -1327,7 +1413,7 @@ export enum PositionNO {
   BeforeOrAfter = 2,
   TheSame = 0,
 }
-export function comparePosition(node1: Node, node2: Node): PositionNO {
+export function comparePosition(node1: INode, node2: INode): PositionNO {
   if (node1 === node2) {
     return PositionNO.TheSame;
   }
@@ -1356,34 +1442,38 @@ export function comparePosition(node1: Node, node2: Node): PositionNO {
 
 export function insertChild(
   container: INode,
-  thing: Node | IPublicTypeNodeData,
+  thing: INode | IPublicTypeNodeData,
   at?: number | null,
   copy?: boolean,
-): Node {
-  let node: Node;
-  if (isNode(thing) && (copy || thing.isSlot())) {
-    thing = thing.export(IPublicEnumTransformStage.Clone);
-  }
-  if (isNode(thing)) {
+): INode | null {
+  let node: INode | null | RootNode | undefined;
+  let nodeSchema: IPublicTypeNodeSchema;
+  if (isNode<INode>(thing) && (copy || thing.isSlot())) {
+    nodeSchema = thing.export(IPublicEnumTransformStage.Clone);
+    node = container.document?.createNode(nodeSchema);
+  } else if (isNode<INode>(thing)) {
     node = thing;
-  } else {
-    node = container.document.createNode(thing);
+  } else if (isNodeSchema(thing)) {
+    node = container.document?.createNode(thing);
   }
 
-  container.children.internalInsert(node, at);
+  if (isNode<INode>(node)) {
+    container.children?.insert(node, at);
+    return node;
+  }
 
-  return node;
+  return null;
 }
 
 export function insertChildren(
   container: INode,
-  nodes: Node[] | IPublicTypeNodeData[],
+  nodes: INode[] | IPublicTypeNodeData[],
   at?: number | null,
   copy?: boolean,
-): Node[] {
+): INode[] {
   let index = at;
   let node: any;
-  const results: Node[] = [];
+  const results: INode[] = [];
   // eslint-disable-next-line no-cond-assign
   while ((node = nodes.pop())) {
     node = insertChild(container, node, index, copy);

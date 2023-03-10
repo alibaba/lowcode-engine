@@ -8,7 +8,7 @@ sidebar_position: 4
 ## 模块简介
 插件管理器，提供编排模块中管理插件的能力。
 
-## 方法签名
+## 方法
 ### register
 注册插件
 
@@ -118,11 +118,13 @@ import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 const BuiltinPluginRegistry = (ctx: IPublicModelPluginContext, options: any) => {
   return {
     async init() {
-      // 1.0.4 之后的传值方式，通过 register(xxx, options)
-      // 取值通过 options
+      // 直接传值方式：
+      //   通过 register(xxx, options) 传入
+      //   通过 options 取出
 
-      // 1.0.4 之前的传值方式，通过 init(..., preference)
-      // 取值通过 ctx.preference.getValue()
+      // 引擎初始化时也可以设置某插件的全局配置项：
+      //   通过 engine.init(..., preference) 传入
+      //   通过 ctx.preference.getValue() 取出
     },
   };
 }
@@ -155,7 +157,6 @@ BuiltinPluginRegistry.meta = {
   },
 }
 
-// 从 1.0.4 开始，支持直接在 pluginCreator 的第二个参数 options 获取入参
 await plugins.register(BuiltinPluginRegistry, { key1: 'abc', key5: 'willNotPassToPlugin' });
 ```
 
@@ -164,8 +165,11 @@ await plugins.register(BuiltinPluginRegistry, { key1: 'abc', key5: 'willNotPassT
 获取指定插件
 
 ```typescript
-function get(pluginName: string): IPublicModelPluginInstance;
-
+/**
+ * 获取指定插件
+ * get plugin instance by name
+ */
+get(pluginName: string): IPublicModelPluginInstance | null;
 ```
 
 关联模型 [IPublicModelPluginInstance](./model/plugin-instance)
@@ -175,8 +179,11 @@ function get(pluginName: string): IPublicModelPluginInstance;
 获取所有的插件实例
 
 ```typescript
-function getAll(): IPublicModelPluginInstance[];
-
+/**
+ * 获取所有的插件实例
+ * get all plugin instances
+ */
+getAll(): IPublicModelPluginInstance[];
 ```
 
 关联模型 [IPublicModelPluginInstance](./model/plugin-instance)
@@ -186,8 +193,11 @@ function getAll(): IPublicModelPluginInstance[];
 判断是否有指定插件
 
 ```typescript
-function has(pluginName: string): boolean;
-
+/**
+ * 判断是否有指定插件
+ * check if plugin with certain name exists
+ */
+has(pluginName: string): boolean;
 ```
 
 ### delete
@@ -195,8 +205,25 @@ function has(pluginName: string): boolean;
 删除指定插件
 
 ```typescript
-function delete(pluginName: string): void;
+/**
+ * 删除指定插件
+ * delete plugin instance by name
+ */
+delete(pluginName: string): void;
+```
 
+### getPluginPreference
+
+引擎初始化时可以提供全局配置给到各插件，通过这个方法可以获得本插件对应的配置
+
+```typescript
+/**
+ * 引擎初始化时可以提供全局配置给到各插件，通过这个方法可以获得本插件对应的配置
+ * use this to get preference config for this plugin when engine.init() called
+ */
+getPluginPreference(
+    pluginName: string,
+  ): Record<string, IPublicTypePreferenceValueType> | null | undefined;
 ```
 
 ## 相关类型定义
@@ -222,7 +249,7 @@ your-plugin/package.json
 }
 ```
 转换后的结构：
-```json
+```typescript
 const debug = (ctx: IPublicModelPluginContext, options: any) => {
 	return {};
 }

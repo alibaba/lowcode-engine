@@ -6,7 +6,6 @@ import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 import Filter from './filter';
 import { TreeMaster } from '../controllers/tree-master';
 
-
 export class Pane extends Component<{
   config: any;
   pluginContext: IPublicModelPluginContext;
@@ -40,7 +39,7 @@ export class Pane extends Component<{
 
     return (
       <div className="lc-outline-pane">
-        <Filter tree={tree} />
+        <Filter tree={tree} pluginContext={this.props.pluginContext} />
         <div ref={(shell) => this.controller.mount(shell)} className="lc-outline-tree-container">
           <TreeView key={tree.id} tree={tree} pluginContext={this.props.pluginContext} />
         </div>

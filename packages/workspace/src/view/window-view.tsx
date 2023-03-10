@@ -1,18 +1,20 @@
 import { PureComponent } from 'react';
-import { EditorView } from '../editor-view/view';
+import { ResourceView } from './resource-view';
 import { engineConfig, observer } from '@alilc/lowcode-editor-core';
-import { EditorWindow } from './context';
+import { EditorWindow } from '../window';
 import { BuiltinLoading } from '@alilc/lowcode-designer';
+import { DesignerView } from '../inner-plugins/webview';
 
 @observer
-export class EditorWindowView extends PureComponent<{
-  editorWindow: EditorWindow;
+export class WindowView extends PureComponent<{
+  window: EditorWindow;
   active: boolean;
 }, any> {
   render() {
     const { active } = this.props;
-    const { editorView, editorViews } = this.props.editorWindow;
-    if (!editorView) {
+    const { resource, initReady, url } = this.props.window;
+
+    if (!initReady) {
       const Loading = engineConfig.get('loadingComponent', BuiltinLoading);
       return (
         <div className={`workspace-engine-main ${active ? 'active' : ''}`}>
@@ -21,19 +23,16 @@ export class EditorWindowView extends PureComponent<{
       );
     }
 
+    if (resource.type === 'webview' && url) {
+      return <DesignerView url={url} viewName={resource.name} />;
+    }
+
     return (
       <div className={`workspace-engine-main ${active ? 'active' : ''}`}>
-        {
-          Array.from(editorViews.values()).map((editorView: any) => {
-            return (
-              <EditorView
-                key={editorView.name}
-                active={editorView.active}
-                editorView={editorView}
-              />
-            );
-          })
-        }
+        <ResourceView
+          resource={resource}
+          window={this.props.window}
+        />
       </div>
     );
   }

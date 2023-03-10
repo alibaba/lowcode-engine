@@ -7,23 +7,17 @@ import {
 import { Designer } from '../../src/designer/designer';
 import formSchema from '../fixtures/schema/form';
 import { fireEvent } from '@testing-library/react';
-import { isInLiveEditing, builtinHotkey } from '../../../engine/src/inner-plugins/builtin-hotkey';
+import { builtinHotkey } from '../../../engine/src/inner-plugins/builtin-hotkey';
 import { shellModelFactory } from '../../../engine/src/modules/shell-model-factory';
 import { ILowCodePluginContextPrivate, LowCodePluginManager } from '@alilc/lowcode-designer';
 import { IPublicApiPlugins } from '@alilc/lowcode-types';
-import { Logger, Project } from '@alilc/lowcode-shell';
+import { Logger, Project, Canvas } from '@alilc/lowcode-shell';
 import { Workspace } from '@alilc/lowcode-workspace';
 
 const editor = new Editor();
 const workspace = new Workspace();
 
 let designer: Designer;
-
-describe('error scenarios', () => {
-  it('edtior not registered', () => {
-    expect(isInLiveEditing()).toBeUndefined();
-  });
-});
 
 // keyCode 对应表：https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
 // hotkey 模块底层用的 keyCode，所以还不能用 key / code 测试
@@ -40,6 +34,7 @@ describe('快捷键测试', () => {
           context.hotkey = hotkey;
           context.logger = logger;
           context.project = project;
+          context.canvas = new Canvas(editor);
         }
       };
       pluginManager = new LowCodePluginManager(contextApiAssembler).toProxy();

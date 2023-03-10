@@ -1,4 +1,4 @@
-import { BuiltinSimulatorHost, Node, IPublicTypePropChangeOptions } from '@alilc/lowcode-designer';
+import { INode, IPublicTypePropChangeOptions } from '@alilc/lowcode-designer';
 import { GlobalEvent, IPublicEnumTransformStage, IPublicTypeNodeSchema, IPublicTypeEngineOptions } from '@alilc/lowcode-types';
 import { isReactComponent, cloneEnumerableProperty } from '@alilc/lowcode-utils';
 import { debounce } from '../utils/common';
@@ -16,15 +16,17 @@ export interface IComponentHocProps {
   __tag: any;
   componentId: any;
   _leaf: any;
-  forwardedRef: any;
+  forwardedRef?: any;
 }
 
 export interface IComponentHocState {
   childrenInState: boolean;
   nodeChildren: any;
   nodeCacheProps: any;
+
   /** 控制是否显示隐藏 */
   visible: boolean;
+
   /** 控制是否渲染 */
   condition: boolean;
   nodeProps: any;
@@ -40,15 +42,17 @@ export interface IComponentHoc {
 export type IComponentConstruct = (Comp: types.IBaseRenderComponent, info: IComponentHocInfo) => types.IGeneralConstructor;
 
 interface IProps {
-  _leaf: Node | undefined;
+  _leaf: INode | undefined;
 
   visible: boolean;
 
-  componentId?: number;
+  componentId: number;
 
-  children?: Node[];
+  children?: INode[];
 
-  __tag?: number;
+  __tag: number;
+
+  forwardedRef?: any;
 }
 
 enum RerenderType {
@@ -61,8 +65,7 @@ enum RerenderType {
 
 // 缓存 Leaf 层组件，防止重新渲染问题
 class LeafCache {
-  constructor(public documentId: string, public device: string) {
-  }
+
   /** 组件缓存 */
   component = new Map();
 
@@ -77,6 +80,9 @@ class LeafCache {
   event = new Map();
 
   ref = new Map();
+
+  constructor(public documentId: string, public device: string) {
+  }
 }
 
 let cache: LeafCache;
@@ -155,11 +161,11 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
   const curDocumentId = baseRenderer.props?.documentId ?? '';
   const curDevice = baseRenderer.props?.device ?? '';
   const getNode = baseRenderer.props?.getNode;
-  const container: BuiltinSimulatorHost = baseRenderer.props?.__container;
+  const container = baseRenderer.props?.__container;
   const setSchemaChangedSymbol = baseRenderer.props?.setSchemaChangedSymbol;
   const editor = host?.designer?.editor;
   const runtime = adapter.getRuntime();
-  const { forwardRef } = runtime;
+  const { forwardRef, createElement } = runtime;
   const Component = runtime.Component as types.IGeneralConstructor<
     IComponentHocProps, IComponentHocState
   >;
@@ -192,13 +198,63 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
     recordInfo: {
       startTime?: number | null;
       type?: string;
-      node?: Node;
+      node?: INode;
     } = {};
+
+    private curEventLeaf: INode | undefined;
+
     static displayName = schema.componentName;
 
     disposeFunctions: Array<((() => void) | Function)> = [];
 
     __component_tag = 'leafWrapper';
+
+    renderUnitInfo: {
+      minimalUnitId?: string;
+      minimalUnitName?: string;
+      singleRender?: boolean;
+    };
+
+    // 最小渲染单元做防抖处理
+    makeUnitRenderDebounced = debounce(() => {
+      this.beforeRender(RerenderType.MinimalRenderUnit);
+      const schema = this.leaf?.export?.(IPublicEnumTransformStage.Render);
+      if (!schema) {
+        return;
+      }
+      const nextProps = getProps(schema, scope, Comp, componentInfo);
+      const children = getChildren(schema, scope, Comp);
+      const nextState = {
+        nodeProps: nextProps,
+        nodeChildren: children,
+        childrenInState: true,
+      };
+      if ('children' in nextProps) {
+        nextState.nodeChildren = nextProps.children;
+      }
+
+      __debug(`${this.leaf?.componentName}(${this.props.componentId}) MinimalRenderUnit Render!`);
+      this.setState(nextState);
+    }, 20);
+
+    constructor(props: IProps, context: any) {
+      super(props, context);
+      // 监听以下事件，当变化时更新自己
+      __debug(`${schema.componentName}[${this.props.componentId}] leaf render in SimulatorRendererView`);
+      clearRerenderEvent(componentCacheId);
+      this.curEventLeaf = this.leaf;
+
+      cache.ref.set(componentCacheId, {
+        makeUnitRender: this.makeUnitRender,
+      });
+
+      let cacheState = cache.state.get(componentCacheId);
+      if (!cacheState || cacheState.__tag !== props.__tag) {
+        cacheState = this.getDefaultState(props);
+      }
+
+      this.state = cacheState;
+    }
 
     recordTime = () => {
       if (!this.recordInfo.startTime) {
@@ -215,6 +271,14 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
       });
       this.recordInfo.startTime = null;
     };
+
+    makeUnitRender = () => {
+      this.makeUnitRenderDebounced();
+    };
+
+    get autoRepaintNode() {
+      return container?.autoRepaintNode;
+    }
 
     componentDidUpdate() {
       this.recordTime();
@@ -243,27 +307,6 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
       };
     }
 
-    constructor(props: IProps, context: any) {
-      super(props, context);
-      // 监听以下事件，当变化时更新自己
-      __debug(`${schema.componentName}[${this.props.componentId}] leaf render in SimulatorRendererView`);
-      clearRerenderEvent(componentCacheId);
-      this.curEventLeaf = this.leaf;
-
-      cache.ref.set(componentCacheId, {
-        makeUnitRender: this.makeUnitRender,
-      });
-
-      let cacheState = cache.state.get(componentCacheId);
-      if (!cacheState || cacheState.__tag !== props.__tag) {
-        cacheState = this.getDefaultState(props);
-      }
-
-      this.state = cacheState;
-    }
-
-    private curEventLeaf: Node | undefined;
-
     setState(state: any) {
       cache.state.set(componentCacheId, {
         ...this.state,
@@ -274,21 +317,11 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
     }
 
     /** 由于内部属性变化，在触发渲染前，会执行该函数 */
-    beforeRender(type: string, node?: Node): void {
+    beforeRender(type: string, node?: INode): void {
       this.recordInfo.startTime = Date.now();
       this.recordInfo.type = type;
       this.recordInfo.node = node;
       setSchemaChangedSymbol?.(true);
-    }
-
-    renderUnitInfo: {
-      minimalUnitId?: string;
-      minimalUnitName?: string;
-      singleRender?: boolean;
-    };
-
-    get autoRepaintNode() {
-      return container.autoRepaintNode;
     }
 
     judgeMiniUnitRender() {
@@ -308,7 +341,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
 
       if (!ref) {
         __debug('Cant find minimalRenderUnit ref! This make rerender!');
-        container.rerender();
+        container?.rerender();
         return;
       }
       __debug(`${this.leaf?.componentName}(${this.props.componentId}) need render, make its minimalRenderUnit ${renderUnitInfo.minimalUnitName}(${renderUnitInfo.minimalUnitId})`);
@@ -321,7 +354,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
         return;
       }
 
-      if (leaf.isRoot()) {
+      if (leaf.isRootNode) {
         this.renderUnitInfo = {
           singleRender: true,
           ...(this.renderUnitInfo || {}),
@@ -346,32 +379,6 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
         this.getRenderUnitInfo(leaf.parent);
       }
     }
-
-    // 最小渲染单元做防抖处理
-    makeUnitRenderDebounced = debounce(() => {
-      this.beforeRender(RerenderType.MinimalRenderUnit);
-      const schema = this.leaf?.export?.(IPublicEnumTransformStage.Render);
-      if (!schema) {
-        return;
-      }
-      const nextProps = getProps(schema, scope, Comp, componentInfo);
-      const children = getChildren(schema, scope, Comp);
-      const nextState = {
-        nodeProps: nextProps,
-        nodeChildren: children,
-        childrenInState: true,
-      };
-      if ('children' in nextProps) {
-        nextState.nodeChildren = nextProps.children;
-      }
-
-      __debug(`${this.leaf?.componentName}(${this.props.componentId}) MinimalRenderUnit Render!`);
-      this.setState(nextState);
-    }, 20);
-
-    makeUnitRender = () => {
-      this.makeUnitRenderDebounced();
-    };
 
     componentWillReceiveProps(nextProps: any) {
       let { componentId } = nextProps;
@@ -420,7 +427,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
         // 目前多层循坏无法判断需要从哪一层开始渲染，故先粗暴解决
         if (key === '___loop___') {
           __debug('key is ___loop___, render a page!');
-          container.rerender();
+          container?.rerender();
           // 由于 scope 变化，需要清空缓存，使用新的 scope
           cache.component.delete(componentCacheId);
           return;
@@ -536,7 +543,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
       return [];
     }
 
-    get leaf(): Node | undefined {
+    get leaf(): INode | undefined {
       if (this.props._leaf?.isMock) {
         // 低代码组件作为一个整体更新，其内部的组件不需要监听相关事件
         return undefined;
@@ -570,13 +577,12 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
     }
   }
 
-  let LeafWrapper = forwardRef((props: any, ref: any) => (
-    // @ts-ignore
-    <LeafHoc
-      {...props}
-      forwardedRef={ref}
-    />
-  ));
+  let LeafWrapper = forwardRef((props: any, ref: any) => {
+    return createElement(LeafHoc, {
+      ...props,
+      forwardedRef: ref,
+    });
+  });
 
   LeafWrapper = cloneEnumerableProperty(LeafWrapper, Comp);
 

@@ -1,17 +1,17 @@
-import { SettingEntry } from '@alilc/lowcode-designer';
+import { ISettingEntry } from '@alilc/lowcode-designer';
 import { settingTopEntrySymbol } from '../symbols';
-import { Node } from './node';
-import { SettingPropEntry } from './setting-prop-entry';
+import { Node as ShellNode } from './node';
+import { SettingPropEntry as ShellSettingPropEntry } from './setting-prop-entry';
 import { IPublicModelSettingTopEntry, IPublicModelNode, IPublicModelSettingPropEntry } from '@alilc/lowcode-types';
 
 export class SettingTopEntry implements IPublicModelSettingTopEntry {
-  private readonly [settingTopEntrySymbol]: SettingEntry;
+  private readonly [settingTopEntrySymbol]: ISettingEntry;
 
-  constructor(prop: SettingEntry) {
+  constructor(prop: ISettingEntry) {
     this[settingTopEntrySymbol] = prop;
   }
 
-  static create(prop: SettingEntry): IPublicModelSettingTopEntry {
+  static create(prop: ISettingEntry): IPublicModelSettingTopEntry {
     return new SettingTopEntry(prop);
   }
 
@@ -19,7 +19,7 @@ export class SettingTopEntry implements IPublicModelSettingTopEntry {
    * 返回所属的节点实例
    */
   get node(): IPublicModelNode | null {
-    return Node.create(this[settingTopEntrySymbol].getNode());
+    return ShellNode.create(this[settingTopEntrySymbol].getNode());
   }
 
   /**
@@ -28,7 +28,7 @@ export class SettingTopEntry implements IPublicModelSettingTopEntry {
    * @returns
    */
   get(propName: string | number): IPublicModelSettingPropEntry {
-    return SettingPropEntry.create(this[settingTopEntrySymbol].get(propName) as any);
+    return ShellSettingPropEntry.create(this[settingTopEntrySymbol].get(propName) as any);
   }
 
   /**

@@ -36,7 +36,7 @@ export function getSubComponent(library: any, paths: string[]) {
     const key = paths[i]!;
     let ex: any;
     try {
-      component = library[key];
+      component = library[key] || component;
     } catch (e) {
       ex = e;
       component = null;
@@ -51,9 +51,6 @@ export function getSubComponent(library: any, paths: string[]) {
     }
     library = component;
     i++;
-    if (isReactComponent(component)) {
-      break;
-    }
   }
   return component;
 }

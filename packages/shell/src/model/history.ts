@@ -1,11 +1,11 @@
-import { DocumentModel as InnerDocumentModel } from '@alilc/lowcode-designer';
+import { IDocumentModel as InnerDocumentModel, IHistory as InnerHistory } from '@alilc/lowcode-designer';
 import { historySymbol, documentSymbol } from '../symbols';
-import { IPublicModelHistory } from '@alilc/lowcode-types';
+import { IPublicModelHistory, IPublicTypeDisposable } from '@alilc/lowcode-types';
 
 export class History implements IPublicModelHistory {
   private readonly [documentSymbol]: InnerDocumentModel;
 
-  private get [historySymbol]() {
+  private get [historySymbol](): InnerHistory {
     return this[documentSymbol].getHistory();
   }
 
@@ -54,7 +54,7 @@ export class History implements IPublicModelHistory {
    * 获取 state，判断当前是否为「可回退」、「可前进」的状态
    * @returns
    */
-  getState(): any {
+  getState(): number {
     return this[historySymbol].getState();
   }
 
@@ -63,8 +63,8 @@ export class History implements IPublicModelHistory {
    * @param func
    * @returns
    */
-  onChangeState(func: () => any): () => void {
-    return this[historySymbol].onStateChange(func);
+  onChangeState(func: () => any): IPublicTypeDisposable {
+    return this[historySymbol].onChangeState(func);
   }
 
   /**
@@ -72,7 +72,7 @@ export class History implements IPublicModelHistory {
    * @param func
    * @returns
    */
-  onChangeCursor(func: () => any): () => void {
-    return this[historySymbol].onCursor(func);
+  onChangeCursor(func: () => any): IPublicTypeDisposable {
+    return this[historySymbol].onChangeCursor(func);
   }
 }

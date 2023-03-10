@@ -1,17 +1,17 @@
 import { IPublicModelSettingTarget } from '@alilc/lowcode-types';
-import { ComponentMeta } from '../../component-meta';
+import { IComponentMeta } from '../../component-meta';
 import { Designer } from '../designer';
-import { Node } from '../../document';
+import { INode } from '../../document';
 
-export interface SettingEntry extends IPublicModelSettingTarget {
-  readonly nodes: Node[];
-  readonly componentMeta: ComponentMeta | null;
+export interface ISettingEntry extends IPublicModelSettingTarget {
+  readonly nodes: INode[];
+  readonly componentMeta: IComponentMeta | null;
   readonly designer: Designer;
 
   // 顶端
-  readonly top: SettingEntry;
+  readonly top: ISettingEntry;
   // 父级
-  readonly parent: SettingEntry;
+  readonly parent: ISettingEntry;
 
-  get: (propName: string | number) => SettingEntry | null;
+  get: (propName: string | number) => ISettingEntry | null;
 }

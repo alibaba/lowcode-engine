@@ -18,7 +18,7 @@ import { IPublicModelDragon } from '@alilc/lowcode-types';
 
 **@since** v1.1.0
 
-## 变量
+## 属性
 
 ### dragging
 
@@ -31,7 +31,7 @@ import { IPublicModelDragon } from '@alilc/lowcode-types';
 get dragging(): boolean;
 ```
 
-## 方法签名
+## 方法
 
 ### onDragstart
 

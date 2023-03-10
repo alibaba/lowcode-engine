@@ -5,10 +5,11 @@ import { Search, Checkbox, Balloon, Divider } from '@alifd/next';
 import TreeNode from '../controllers/tree-node';
 import { Tree } from '../controllers/tree';
 import { matchTreeNode, FILTER_OPTIONS } from './filter-tree';
-
+import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
 export default class Filter extends Component<{
   tree: Tree;
+  pluginContext: IPublicModelPluginContext;
 }, {
   keywords: string;
   filterOps: string[];
@@ -55,7 +56,7 @@ export default class Filter extends Component<{
         <Search
           hasClear
           shape="simple"
-          placeholder="过滤节点"
+          placeholder={this.props.pluginContext.intl('Filter Node')}
           className="lc-outline-filter-search-input"
           value={keywords}
           onChange={this.handleSearchChange}
@@ -76,7 +77,7 @@ export default class Filter extends Component<{
             indeterminate={indeterminate}
             onChange={this.handleCheckAll}
           >
-            全选
+            {this.props.pluginContext.intlNode('Check All')}
           </Checkbox>
           <Divider />
           <Checkbox.Group
@@ -90,7 +91,7 @@ export default class Filter extends Component<{
                 value={op.value}
                 key={op.value}
               >
-                {op.label}
+                {this.props.pluginContext.intlNode(op.label)}
               </Checkbox>
             ))}
           </Checkbox.Group>
