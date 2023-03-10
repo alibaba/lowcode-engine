@@ -90,7 +90,7 @@ Widget 形式是直接渲染在当前编辑器的对应位置上。如 demo 中�
 接入可以参考代码：
 
 ```javascript
-import {skeleton} from "@alilc/lowcode-engine";
+import { skeleton } from "@alilc/lowcode-engine";
 // 注册 logo 面板
 skeleton.add({
   area: "topArea",
@@ -122,13 +122,13 @@ skeleton.add({
   props: {
     icon: Icon, // Icon 组件实例
     align: "bottom",
-    onClick: function() {
-    // 打开外部链接
-    window.open('https://lowcode-engine.cn');
-    // 显示 widget
-    skeleton.showWidget('xxx');
+    onClick: function () {
+      // 打开外部链接
+      window.open('https://lowcode-engine.cn');
+      // 显示 widget
+      skeleton.showWidget('xxx');
+    }
   }
- }
 });
 ```
 
