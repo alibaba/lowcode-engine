@@ -119,19 +119,16 @@ skeleton.add({
   area: "leftArea",
   type: "Dock",
   name: "opener",
-  content: Opener, // Widget 组件实例
-  contentProps: {  // Widget 插件 props
-    xxx: "1",
-  },
   props: {
+    icon: Icon, // Icon 组件实例
     align: "bottom",
-  },
-  onClick: function() {
+    onClick: function() {
     // 打开外部链接
     window.open('https://lowcode-engine.cn');
     // 显示 widget
     skeleton.showWidget('xxx');
   }
+ }
 });
 ```
 
