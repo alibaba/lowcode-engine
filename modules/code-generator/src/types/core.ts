@@ -178,7 +178,8 @@ export interface IProjectBuilder {
 }
 
 /** 项目级别的前置处理器 */
-export type ProjectPreProcessor = (schema: IPublicTypeProjectSchema) => Promise<IPublicTypeProjectSchema> | IPublicTypeProjectSchema;
+export type ProjectPreProcessor = (schema: IPublicTypeProjectSchema) =>
+  Promise<IPublicTypeProjectSchema> | IPublicTypeProjectSchema;
 
 export interface ProjectPostProcessorOptions {
   parseResult?: IParseResult;

@@ -101,7 +101,7 @@ export function handleSubNodes<T>(
         });
       } else {
         Object.values(child.props).forEach((value) => {
-          const childRes = handleCompositeValueInProps(value);
+          const childRes = handleCompositeValueInProps(value as IPublicTypeCompositeValue);
           childrenRes.push(...childRes);
         });
       }
