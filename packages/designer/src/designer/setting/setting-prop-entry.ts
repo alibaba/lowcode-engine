@@ -1,13 +1,44 @@
 import { obx, computed, makeObservable, runInAction, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
-import { GlobalEvent, IPublicApiSetters, IPublicModelEditor, IPublicTypeSetValueOptions } from '@alilc/lowcode-types';
-import { uniqueId, isJSExpression, isSettingField } from '@alilc/lowcode-utils';
-import { ISettingEntry } from './setting-entry';
+import { GlobalEvent, IPublicApiSetters, IPublicModelEditor, IPublicModelSettingField, IPublicTypeFieldExtraProps, IPublicTypeSetValueOptions } from '@alilc/lowcode-types';
+import { uniqueId, isJSExpression } from '@alilc/lowcode-utils';
+import { ISettingEntry } from './setting-entry-type';
 import { INode } from '../../document';
 import { IComponentMeta } from '../../component-meta';
 import { IDesigner } from '../designer';
-import { ISettingField } from './setting-field';
+import { ISettingTopEntry } from './setting-top-entry';
+import { ISettingField, isSettingField } from './setting-field';
 
-export class SettingPropEntry implements ISettingEntry {
+export interface ISettingPropEntry extends ISettingEntry {
+  get props(): ISettingTopEntry;
+
+  readonly isGroup: boolean;
+
+  get name(): string | number | undefined;
+
+  valueChange(options: IPublicTypeSetValueOptions): void;
+
+  getKey(): string | number | undefined;
+
+  setKey(key: string | number): void;
+
+  getDefaultValue(): any;
+
+  setUseVariable(flag: boolean): void;
+
+  getProps(): ISettingTopEntry;
+
+  isUseVariable(): boolean;
+
+  getMockOrValue(): any;
+
+  remove(): void;
+
+  setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: IPublicTypeSetValueOptions): void;
+
+  internalToShell(): IPublicModelSettingField;
+}
+
+export class SettingPropEntry implements ISettingPropEntry {
   // === static properties ===
   readonly editor: IPublicModelEditor;
 
@@ -23,9 +54,9 @@ export class SettingPropEntry implements ISettingEntry {
 
   readonly componentMeta: IComponentMeta | null;
 
-  readonly designer: IDesigner;
+  readonly designer: IDesigner | undefined;
 
-  readonly top: ISettingEntry;
+  readonly top: ISettingTopEntry;
 
   readonly isGroup: boolean;
 
@@ -50,9 +81,9 @@ export class SettingPropEntry implements ISettingEntry {
     return path;
   }
 
-  extraProps: any = {};
+  extraProps: IPublicTypeFieldExtraProps = {};
 
-  constructor(readonly parent: ISettingEntry | ISettingField, name: string | number | undefined, type?: 'field' | 'group') {
+  constructor(readonly parent: ISettingTopEntry | ISettingField, name: string | number | undefined, type?: 'field' | 'group') {
     makeObservable(this);
     if (type == null) {
       const c = typeof name === 'string' ? name.slice(0, 1) : '';
@@ -126,7 +157,7 @@ export class SettingPropEntry implements ISettingEntry {
       if (this.type !== 'field') {
         const { getValue } = this.extraProps;
         return getValue
-          ? getValue(this.internalToShellPropEntry(), undefined) === undefined
+          ? getValue(this.internalToShell()!, undefined) === undefined
             ? 0
             : 1
           : 0;
@@ -165,7 +196,7 @@ export class SettingPropEntry implements ISettingEntry {
     }
     const { getValue } = this.extraProps;
     try {
-      return getValue ? getValue(this.internalToShellPropEntry(), val) : val;
+      return getValue ? getValue(this.internalToShell()!, val) : val;
     } catch (e) {
       console.warn(e);
       return val;
@@ -184,7 +215,7 @@ export class SettingPropEntry implements ISettingEntry {
     const { setValue } = this.extraProps;
     if (setValue && !extraOptions?.disableMutator) {
       try {
-        setValue(this.internalToShellPropEntry(), val);
+        setValue(this.internalToShell()!, val);
       } catch (e) {
         /* istanbul ignore next */
         console.warn(e);
@@ -207,7 +238,7 @@ export class SettingPropEntry implements ISettingEntry {
     const { setValue } = this.extraProps;
     if (setValue) {
       try {
-        setValue(this.internalToShellPropEntry(), undefined);
+        setValue(this.internalToShell()!, undefined);
       } catch (e) {
         /* istanbul ignore next */
         console.warn(e);
@@ -363,7 +394,7 @@ export class SettingPropEntry implements ISettingEntry {
     return v;
   }
 
-  internalToShellPropEntry() {
-    return this.designer.shellModelFactory.createSettingPropEntry(this);
+  internalToShell(): IPublicModelSettingField {
+    return this.designer!.shellModelFactory.createSettingField(this);;
   }
 }

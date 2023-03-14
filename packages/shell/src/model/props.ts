@@ -28,7 +28,7 @@ export class Props implements IPublicModelProps {
   /**
    * 返回当前 props 的路径
    */
-  get path(): any[] {
+  get path(): string[] {
     return this[propsSymbol].path;
   }
 

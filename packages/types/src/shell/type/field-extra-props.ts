@@ -1,4 +1,4 @@
-import { IPublicModelSettingPropEntry, IPublicModelSettingTarget } from '../model';
+import { IPublicModelSettingField } from '../model';
 import { IPublicTypeLiveTextEditingConfig } from './';
 
 /**
@@ -19,28 +19,28 @@ export interface IPublicTypeFieldExtraProps {
   /**
    * get value for field
    */
-  getValue?: (target: IPublicModelSettingPropEntry, fieldValue: any) => any;
+  getValue?: (target: IPublicModelSettingField, fieldValue: any) => any;
 
   /**
    * set value for field
    */
-  setValue?: (target: IPublicModelSettingPropEntry, value: any) => void;
+  setValue?: (target: IPublicModelSettingField, value: any) => void;
 
   /**
    * the field conditional show, is not set always true
    * @default undefined
    */
-  condition?: (target: IPublicModelSettingPropEntry) => boolean;
+  condition?: (target: IPublicModelSettingField) => boolean;
 
   /**
    * autorun when something change
    */
-  autorun?: (target: IPublicModelSettingTarget) => void;
+  autorun?: (target: IPublicModelSettingField) => void;
 
   /**
    * is this field is a virtual field that not save to schema
    */
-  virtual?: (target: IPublicModelSettingTarget) => boolean;
+  virtual?: (target: IPublicModelSettingField) => boolean;
 
   /**
    * default collapsed when display accordion

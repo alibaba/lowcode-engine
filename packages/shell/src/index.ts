@@ -7,10 +7,10 @@ import {
   Prop,
   Selection,
   Dragon,
-  SettingPropEntry,
   SettingTopEntry,
   Clipboard,
   Config,
+  SettingField,
 } from './model';
 import {
   Project,
@@ -51,7 +51,7 @@ export {
   Setters,
   Hotkey,
   Skeleton,
-  SettingPropEntry,
+  SettingField as SettingPropEntry,
   SettingTopEntry,
   Dragon,
   Common,
@@ -63,4 +63,5 @@ export {
   Clipboard,
   SimulatorHost,
   Config,
+  SettingField,
 };
