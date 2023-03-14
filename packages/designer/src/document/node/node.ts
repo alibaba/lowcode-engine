@@ -153,6 +153,12 @@ export interface IBaseNode<Schema extends IPublicTypeNodeSchema = IPublicTypeNod
   getVisible(): boolean;
 
   getChildren(): INodeChildren | null;
+
+  clearPropValue(path: string): void;
+
+  setProps(props?: IPublicTypePropsMap | IPublicTypePropsList | Props | null): void;
+
+  mergeProps(props: IPublicTypePropsMap): void;
 }
 
 /**
@@ -203,7 +209,7 @@ export interface IBaseNode<Schema extends IPublicTypeNodeSchema = IPublicTypeNod
  *  isLocked
  *  hidden
  */
-export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> implements INode {
+export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> implements IBaseNode {
   private emitter: IEventBus;
 
   /**
@@ -427,18 +433,24 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     });
   }
 
-  private initialChildren(children: any): IPublicTypeNodeData[] {
+  private initialChildren(children: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined): IPublicTypeNodeData[] {
     // FIXME! this is dirty code
     if (children == null) {
       const { initialChildren } = this.componentMeta.advanced;
       if (initialChildren) {
         if (typeof initialChildren === 'function') {
-          return initialChildren(this as any) || [];
+          return initialChildren(this.internalToShellNode()!) || [];
         }
         return initialChildren;
       }
     }
-    return children || [];
+    if (Array.isArray(children)) {
+      return children;
+    } else if (children) {
+      return [children];
+    } else {
+      return [];
+    }
   }
 
   isContainer(): boolean {
@@ -900,12 +912,12 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
         (subNode: INode) => {
           subNode.remove(true, true);
         },
-        (iterable, idx) => (iterable as NodeChildren).get(idx),
+        (iterable, idx) => (iterable as INodeChildren).get(idx),
       );
     }
     if (this.isParental()) {
       this.props.import(props, extras);
-      (this._children as NodeChildren).import(children, checkId);
+      this._children?.import(children, checkId);
     } else {
       this.props
         .get('children', true)!

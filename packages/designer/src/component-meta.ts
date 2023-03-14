@@ -8,10 +8,11 @@ import {
   IPublicTypeTransformedComponentMetadata,
   IPublicTypeNestingFilter,
   IPublicTypeI18nData,
-  IPublicTypePluginConfig,
   IPublicTypeFieldConfig,
   IPublicModelComponentMeta,
   IPublicTypeAdvanced,
+  IPublicTypeDisposable,
+  IPublicTypeLiveTextEditingConfig,
 } from '@alilc/lowcode-types';
 import { deprecate, isRegExp, isTitleConfig, isNode } from '@alilc/lowcode-utils';
 import { computed, createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
@@ -59,9 +60,11 @@ export function buildFilter(rule?: string | string[] | RegExp | IPublicTypeNesti
 export interface IComponentMeta extends IPublicModelComponentMeta<INode> {
   prototype?: any;
 
+  get rootSelector(): string | undefined;
+
   setMetadata(metadata: IPublicTypeComponentMetadata): void;
 
-  get rootSelector(): string | undefined;
+  onMetadataChange(fn: (args: any) => void): IPublicTypeDisposable;
 }
 
 export class ComponentMeta implements IComponentMeta {
@@ -120,7 +123,7 @@ export class ComponentMeta implements IComponentMeta {
     return config?.combined || config?.props || [];
   }
 
-  private _liveTextEditing?: IPublicTypePluginConfig[];
+  private _liveTextEditing?: IPublicTypeLiveTextEditingConfig[];
 
   get liveTextEditing() {
     return this._liveTextEditing;
@@ -357,7 +360,7 @@ export class ComponentMeta implements IComponentMeta {
     return true;
   }
 
-  onMetadataChange(fn: (args: any) => void): () => void {
+  onMetadataChange(fn: (args: any) => void): IPublicTypeDisposable {
     this.emitter.on('metadata_change', fn);
     return () => {
       this.emitter.removeListener('metadata_change', fn);

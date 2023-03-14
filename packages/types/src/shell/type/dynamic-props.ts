@@ -1,3 +1,3 @@
-import { IPublicModelSettingTarget } from '../model/setting-target';
+import { IPublicModelSettingField } from '../model';
 
-export type IPublicTypeDynamicProps = (target: IPublicModelSettingTarget) => Record<string, unknown>;
+export type IPublicTypeDynamicProps = (target: IPublicModelSettingField) => Record<string, unknown>;

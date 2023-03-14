@@ -1,6 +1,6 @@
 import { ComponentType, ReactElement } from 'react';
 import { IPublicTypeNodeData, IPublicTypeSnippet, IPublicTypeInitialItem, IPublicTypeFilterItem, IPublicTypeAutorunItem, IPublicTypeCallbacks, IPublicTypeLiveTextEditingConfig } from './';
-import { IPublicModelSettingTarget } from '../model';
+import { IPublicModelNode, IPublicModelSettingField } from '../model';
 
 /**
  * 高级特性配置
@@ -17,7 +17,7 @@ export interface IPublicTypeAdvanced {
   /**
    * 拖入容器时，自动带入 children 列表
    */
-  initialChildren?: IPublicTypeNodeData[] | ((target: IPublicModelSettingTarget) => IPublicTypeNodeData[]);
+  initialChildren?: IPublicTypeNodeData[] | ((target: IPublicModelNode) => IPublicTypeNodeData[]);
 
   /**
    * 样式 及 位置，handle 上必须有明确的标识以便事件路由判断，或者主动设置事件独占模式

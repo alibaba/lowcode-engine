@@ -140,7 +140,7 @@ export class Designer implements IDesigner {
 
   @obx.ref private _simulatorComponent?: ComponentType<any>;
 
-  @obx.ref private _simulatorProps?: object | ((project: Project) => object);
+  @obx.ref private _simulatorProps?: Record<string, any> | ((project: Project) => object);
 
   @obx.ref private _suspensed = false;
 

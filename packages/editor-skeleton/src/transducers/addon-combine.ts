@@ -1,7 +1,7 @@
 import {
   IPublicTypeTransformedComponentMetadata,
   IPublicTypeFieldConfig,
-  IPublicModelSettingTarget,
+  IPublicModelSettingField,
 } from '@alilc/lowcode-types';
 import { IconSlot } from '../icons/slot';
 import { getConvertedExtraKey } from '@alilc/lowcode-designer';
@@ -214,11 +214,11 @@ export default function (
               definition: eventsDefinition,
             },
           },
-          getValue(field: IPublicModelSettingTarget, val?: any[]) {
+          getValue(field: IPublicModelSettingField, val?: any[]) {
             return val;
           },
 
-          setValue(field: IPublicModelSettingTarget, eventData) {
+          setValue(field: IPublicModelSettingField, eventData) {
             const { eventDataList, eventList } = eventData;
             Array.isArray(eventList) &&
               eventList.map((item) => {

@@ -1,5 +1,4 @@
-import { IPublicModelSettingTarget } from '../model/setting-target';
-import { IPublicTypeCustomView, IPublicTypeCompositeValue, IPublicTypeTitleContent } from '..';
+import { IPublicTypeCustomView, IPublicTypeCompositeValue, IPublicTypeTitleContent, IPublicModelSettingField } from '..';
 import { IPublicTypeDynamicProps } from './dynamic-props';
 
 /**
@@ -37,7 +36,7 @@ export interface IPublicTypeSetterConfig {
    *
    * @todo initialValue 可能要和 defaultValue 二选一
    */
-  initialValue?: any | ((target: IPublicModelSettingTarget) => any);
+  initialValue?: any | ((target: IPublicModelSettingField) => any);
 
   defaultValue?: any;
 
@@ -51,7 +50,7 @@ export interface IPublicTypeSetterConfig {
   /**
    * 给 MixedSetter 用于判断优先选中哪个
    */
-  condition?: (target: IPublicModelSettingTarget) => boolean;
+  condition?: (target: IPublicModelSettingField) => boolean;
 
   /**
    * 给 MixedSetter，切换值时声明类型
