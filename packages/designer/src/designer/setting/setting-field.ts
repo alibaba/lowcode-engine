@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import {
   IPublicTypeTitleContent,
   IPublicTypeSetterType,
@@ -25,8 +26,29 @@ function getSettingFieldCollectorKey(parent: ISettingEntry, config: IPublicTypeF
   return path.join('.');
 }
 
-export interface ISettingField extends ISettingEntry {
+export interface ISettingField extends Omit<ISettingEntry, 'setValue'> {
+  get items(): Array<ISettingField | IPublicTypeCustomView>;
 
+  get title(): string | ReactNode | undefined;
+
+  purge(): void;
+
+  extraProps: IPublicTypeFieldExtraProps;
+
+  get setter(): IPublicTypeSetterType | null;
+
+  get expanded(): boolean;
+
+  readonly isRequired: boolean;
+
+  setExpanded(value: boolean): void;
+
+  setValue(
+    val: any,
+    isHotValue?: boolean,
+    force?: boolean,
+    extraOptions?: IPublicTypeSetValueOptions,
+  ): void;
 }
 
 export class SettingField extends SettingPropEntry implements ISettingField {
@@ -57,12 +79,12 @@ export class SettingField extends SettingPropEntry implements ISettingField {
 
   @obx.ref private _expanded = true;
 
-  private _items: Array<SettingField | IPublicTypeCustomView> = [];
+  private _items: Array<ISettingField | IPublicTypeCustomView> = [];
 
   constructor(
     parent: ISettingEntry,
     config: IPublicTypeFieldConfig,
-    private settingFieldCollector?: (name: string | number, field: SettingField) => void,
+    private settingFieldCollector?: (name: string | number, field: ISettingField) => void,
   ) {
     super(parent, config.name, config.type);
     makeObservable(this);
@@ -97,7 +119,7 @@ export class SettingField extends SettingPropEntry implements ISettingField {
     if (isDynamicSetter(this._setter)) {
       return untracked(() => {
         const shellThis = this.internalToShellPropEntry();
-        return this._setter.call(shellThis, shellThis);
+        return (this._setter as IPublicTypeDynamicSetter)?.call(shellThis, shellThis);
       });
     }
     return this._setter;
@@ -111,7 +133,7 @@ export class SettingField extends SettingPropEntry implements ISettingField {
     this._expanded = value;
   }
 
-  get items(): Array<SettingField | IPublicTypeCustomView> {
+  get items(): Array<ISettingField | IPublicTypeCustomView> {
     return this._items;
   }
 
@@ -122,8 +144,8 @@ export class SettingField extends SettingPropEntry implements ISettingField {
   private initItems(
     items: Array<IPublicTypeFieldConfig | IPublicTypeCustomView>,
     settingFieldCollector?: {
-      (name: string | number, field: SettingField): void;
-      (name: string, field: SettingField): void;
+      (name: string | number, field: ISettingField): void;
+      (name: string, field: ISettingField): void;
     },
   ) {
     this._items = items.map((item) => {
@@ -140,7 +162,7 @@ export class SettingField extends SettingPropEntry implements ISettingField {
   }
 
   // 创建子配置项，通常用于 object/array 类型数据
-  createField(config: IPublicTypeFieldConfig): SettingField {
+  createField(config: IPublicTypeFieldConfig): ISettingField {
     this.settingFieldCollector?.(getSettingFieldCollectorKey(this.parent, config), this);
     return new SettingField(this, config, this.settingFieldCollector);
   }
@@ -161,8 +183,8 @@ export class SettingField extends SettingPropEntry implements ISettingField {
   }
 
   getItems(
-    filter?: (item: SettingField | IPublicTypeCustomView) => boolean,
-  ): Array<SettingField | IPublicTypeCustomView> {
+    filter?: (item: ISettingField | IPublicTypeCustomView) => boolean,
+  ): Array<ISettingField | IPublicTypeCustomView> {
     return this._items.filter((item) => {
       if (filter) {
         return filter(item);
@@ -252,6 +274,6 @@ export class SettingField extends SettingPropEntry implements ISettingField {
 /**
  * @deprecated use same function from '@alilc/lowcode-utils' instead
  */
-export function isSettingField(obj: any): obj is SettingField {
+export function isSettingField(obj: any): obj is ISettingField {
   return obj && obj.isSettingField;
 }

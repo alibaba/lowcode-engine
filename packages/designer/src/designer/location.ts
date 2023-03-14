@@ -122,7 +122,7 @@ export class DropLocation implements IDropLocation {
     return this.target.document;
   }
 
-  constructor({ target, detail, source, event }: IPublicTypeLocationData) {
+  constructor({ target, detail, source, event }: IPublicTypeLocationData<INode>) {
     this.target = target;
     this.detail = detail;
     this.source = source;

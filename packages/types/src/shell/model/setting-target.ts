@@ -1,7 +1,9 @@
 import { IPublicApiSetters } from '../api';
 import { IPublicModelEditor } from './';
 
-export interface IPublicModelSettingTarget {
+export interface IBaseModelSettingTarget<
+  SettingTarget
+> {
 
   /**
    * 同样类型的节点
@@ -33,12 +35,12 @@ export interface IPublicModelSettingTarget {
   /**
    * 顶端
    */
-  readonly top: IPublicModelSettingTarget;
+  readonly top: SettingTarget;
 
   /**
    * 父级
    */
-  readonly parent: IPublicModelSettingTarget;
+  readonly parent: SettingTarget;
 
   /**
    * 获取当前值
@@ -53,12 +55,12 @@ export interface IPublicModelSettingTarget {
   /**
    * 取得子项
    */
-  get: (propName: string | number) => IPublicModelSettingTarget | null;
+  get: (propName: string | number) => SettingTarget | null;
 
   /**
    * 取得子项
    */
-  getProps?: () => IPublicModelSettingTarget;
+  getProps?: () => SettingTarget;
 
   /**
    * 获取子项属性值
@@ -90,4 +92,10 @@ export interface IPublicModelSettingTarget {
    * 获取 node 中的第一项
    */
   getNode: () => any;
+}
+
+export interface IPublicModelSettingTarget extends IBaseModelSettingTarget<
+  IPublicModelSettingTarget
+> {
+
 }

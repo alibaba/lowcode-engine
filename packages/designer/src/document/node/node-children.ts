@@ -20,6 +20,8 @@ export interface INodeChildren extends Omit<IPublicModelNodeChildren<INode>,
 
   get length(): number;
 
+  children: INode[];
+
   unlinkChild(node: INode): void;
 
   /**
@@ -65,7 +67,7 @@ export interface INodeChildren extends Omit<IPublicModelNodeChildren<INode>,
   /** overriding methods end */
 }
 export class NodeChildren implements INodeChildren {
-  @obx.shallow private children: INode[];
+  @obx.shallow children: INode[];
 
   private emitter: IEventBus = createModuleEventBus('NodeChildren');
 

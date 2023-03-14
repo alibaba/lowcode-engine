@@ -1,5 +1,5 @@
 import { reaction, untracked, globalContext, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
-import { IPublicTypeNodeSchema, IPublicModelHistory } from '@alilc/lowcode-types';
+import { IPublicTypeNodeSchema, IPublicModelHistory, IPublicTypeDisposable } from '@alilc/lowcode-types';
 import { Logger } from '@alilc/lowcode-utils';
 
 const logger = new Logger({ level: 'warn', bizName: 'history' });
@@ -10,7 +10,7 @@ export interface Serialization<K = IPublicTypeNodeSchema, T = string> {
 }
 
 export interface IHistory extends IPublicModelHistory {
-
+  onStateChange(func: () => any): IPublicTypeDisposable;
 }
 
 export class History<T = IPublicTypeNodeSchema> implements IHistory {
@@ -189,11 +189,11 @@ export class History<T = IPublicTypeNodeSchema> implements IHistory {
    * @param func
    * @returns
    */
-  onChangeState(func: () => any): () => void {
+  onChangeState(func: () => any): IPublicTypeDisposable {
     return this.onStateChange(func);
   }
 
-  onStateChange(func: () => any): () => void {
+  onStateChange(func: () => any): IPublicTypeDisposable {
     this.emitter.on('statechange', func);
     return () => {
       this.emitter.removeListener('statechange', func);
@@ -205,7 +205,7 @@ export class History<T = IPublicTypeNodeSchema> implements IHistory {
    * @param func
    * @returns
    */
-  onChangeCursor(func: () => any): () => void {
+  onChangeCursor(func: () => any): IPublicTypeDisposable {
     return this.onCursor(func);
   }
 

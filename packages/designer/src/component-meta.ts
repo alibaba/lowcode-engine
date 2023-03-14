@@ -58,6 +58,10 @@ export function buildFilter(rule?: string | string[] | RegExp | IPublicTypeNesti
 
 export interface IComponentMeta extends IPublicModelComponentMeta<INode> {
   prototype?: any;
+
+  setMetadata(metadata: IPublicTypeComponentMetadata): void;
+
+  get rootSelector(): string | undefined;
 }
 
 export class ComponentMeta implements IComponentMeta {
@@ -332,7 +336,7 @@ export class ComponentMeta implements IComponentMeta {
     if (this.parentWhitelist) {
       return this.parentWhitelist(
         parent.internalToShellNode(),
-        isNode(my) ? my.internalToShellNode() : my,
+        isNode<INode>(my) ? my.internalToShellNode() : my,
       );
     }
     return true;
@@ -343,7 +347,7 @@ export class ComponentMeta implements IComponentMeta {
     if (this.childWhitelist) {
       const _target: any = !Array.isArray(target) ? [target] : target;
       return _target.every((item: Node | IPublicTypeNodeSchema) => {
-        const _item = !isNode(item) ? new Node(my.document, item) : item;
+        const _item = !isNode<INode>(item) ? new Node(my.document, item) : item;
         return (
           this.childWhitelist &&
           this.childWhitelist(_item.internalToShellNode(), my.internalToShellNode())

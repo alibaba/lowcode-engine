@@ -184,9 +184,9 @@ export interface ConfigureSupport {
  */
 export interface IPublicTypeCallbacks {
   // hooks
-  onMouseDownHook?: (e: MouseEvent, currentNode: IPublicModelNode) => any;
-  onDblClickHook?: (e: MouseEvent, currentNode: IPublicModelNode) => any;
-  onClickHook?: (e: MouseEvent, currentNode: IPublicModelNode) => any;
+  onMouseDownHook?: (e: MouseEvent, currentNode: IPublicModelNode | null) => any;
+  onDblClickHook?: (e: MouseEvent, currentNode: IPublicModelNode | null) => any;
+  onClickHook?: (e: MouseEvent, currentNode: IPublicModelNode | null) => any;
   // onLocateHook?: (e: any, currentNode: any) => any;
   // onAcceptHook?: (currentNode: any, locationData: any) => any;
   onMoveHook?: (currentNode: IPublicModelNode) => boolean;

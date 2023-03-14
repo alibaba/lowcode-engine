@@ -1,16 +1,16 @@
 import { Component, MouseEvent, Fragment } from 'react';
 import { shallowIntl, observer, obx, engineConfig, runInAction, globalContext } from '@alilc/lowcode-editor-core';
-import { createContent, isJSSlot, isSetterConfig, isSettingField } from '@alilc/lowcode-utils';
-import { Skeleton } from '@alilc/lowcode-editor-skeleton';
+import { createContent, isJSSlot, isSetterConfig } from '@alilc/lowcode-utils';
+import { Skeleton, Stage } from '@alilc/lowcode-editor-skeleton';
 import { IPublicTypeCustomView } from '@alilc/lowcode-types';
-import { SettingField, SettingTopEntry, ISettingEntry, ComponentMeta } from '@alilc/lowcode-designer';
+import { SettingField, SettingTopEntry, ISettingEntry, IComponentMeta, ISettingField, isSettingField } from '@alilc/lowcode-designer';
 import { createField } from '../field';
 import PopupService, { PopupPipe } from '../popup';
 import { SkeletonContext } from '../../context';
 import { intl } from '../../locale';
 import { Setters } from '@alilc/lowcode-shell';
 
-function isStandardComponent(componentMeta: ComponentMeta | null) {
+function isStandardComponent(componentMeta: IComponentMeta | null) {
   if (!componentMeta) return false;
   const { prototype } = componentMeta;
   return prototype == null;
@@ -31,8 +31,9 @@ function isInitialValueNotEmpty(initialValue: any) {
   return (initialValue !== undefined && initialValue !== null);
 }
 
-type SettingFieldViewProps = { field: SettingField };
+type SettingFieldViewProps = { field: ISettingField };
 type SettingFieldViewState = { fromOnChange: boolean; value: any };
+
 @observer
 class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldViewState> {
   static contextType = SkeletonContext;
@@ -55,7 +56,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
     let stageName;
     if (display === 'entry') {
       runInAction(() => {
-        stageName = `${field.getNode().id}_${field.name.toString()}`;
+        stageName = `${field.getNode().id}_${field.name?.toString()}`;
         // 清除原 stage，不然 content 引用的一直是老的 field，导致数据无法得到更新
         stages.container.remove(stageName);
         stages.add({
@@ -252,7 +253,9 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
         },
 
         removeProp: () => {
-          field.parent.clearPropValue(field.name);
+          if (field.name) {
+            field.parent.clearPropValue(field.name);
+          }
         },
       }),
       extraProps.forceInline ? 'plain' : extraProps.display,
@@ -280,7 +283,7 @@ class SettingGroupView extends Component<SettingGroupViewProps> {
     let stageName;
     if (display === 'entry') {
       runInAction(() => {
-        stageName = `${field.getNode().id}_${field.name.toString()}`;
+        stageName = `${field.getNode().id}_${field.name?.toString()}`;
         // 清除原 stage，不然 content 引用的一直是老的 field，导致数据无法得到更新
         stages.container.remove(stageName);
         stages.add({
@@ -324,7 +327,7 @@ class SettingGroupView extends Component<SettingGroupViewProps> {
   }
 }
 
-export function createSettingFieldView(item: SettingField | IPublicTypeCustomView, field: ISettingEntry, index?: number) {
+export function createSettingFieldView(item: ISettingField | IPublicTypeCustomView, field: ISettingEntry, index?: number) {
   if (isSettingField(item)) {
     if (item.isGroup) {
       return <SettingGroupView field={item} key={item.id} />;

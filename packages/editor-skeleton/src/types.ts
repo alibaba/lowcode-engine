@@ -15,7 +15,7 @@ export interface WidgetConfig extends IPublicTypeWidgetBaseConfig {
   props?: {
     align?: 'left' | 'right' | 'bottom' | 'center' | 'top';
     onInit?: (widget: IWidget) => void;
-    title?: IPublicTypeTitleContent;
+    title?: IPublicTypeTitleContent | null;
   };
   content?: string | ReactElement | ComponentType<any>; // children
 }
