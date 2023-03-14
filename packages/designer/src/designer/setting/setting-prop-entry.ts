@@ -1,11 +1,10 @@
 import { obx, computed, makeObservable, runInAction, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
-import { GlobalEvent, IPublicModelEditor, IPublicTypeSetValueOptions } from '@alilc/lowcode-types';
+import { GlobalEvent, IPublicApiSetters, IPublicModelEditor, IPublicTypeSetValueOptions } from '@alilc/lowcode-types';
 import { uniqueId, isJSExpression, isSettingField } from '@alilc/lowcode-utils';
-import { Setters } from '@alilc/lowcode-shell';
 import { ISettingEntry } from './setting-entry';
 import { INode } from '../../document';
 import { IComponentMeta } from '../../component-meta';
-import { Designer } from '../designer';
+import { IDesigner } from '../designer';
 import { ISettingField } from './setting-field';
 
 export class SettingPropEntry implements ISettingEntry {
@@ -18,13 +17,13 @@ export class SettingPropEntry implements ISettingEntry {
 
   readonly isSingle: boolean;
 
-  readonly setters: Setters;
+  readonly setters: IPublicApiSetters;
 
   readonly nodes: INode[];
 
   readonly componentMeta: IComponentMeta | null;
 
-  readonly designer: Designer;
+  readonly designer: IDesigner;
 
   readonly top: ISettingEntry;
 
@@ -37,7 +36,7 @@ export class SettingPropEntry implements ISettingEntry {
   readonly emitter: IEventBus = createModuleEventBus('SettingPropEntry');
 
   // ==== dynamic properties ====
-  @obx.ref private _name: string | number;
+  @obx.ref private _name: string | number | undefined;
 
   get name() {
     return this._name;
@@ -45,7 +44,7 @@ export class SettingPropEntry implements ISettingEntry {
 
   @computed get path() {
     const path = this.parent.path.slice();
-    if (this.type === 'field') {
+    if (this.type === 'field' && this.name) {
       path.push(this.name);
     }
     return path;
@@ -53,7 +52,7 @@ export class SettingPropEntry implements ISettingEntry {
 
   extraProps: any = {};
 
-  constructor(readonly parent: ISettingEntry | ISettingField, name: string | number, type?: 'field' | 'group') {
+  constructor(readonly parent: ISettingEntry | ISettingField, name: string | number | undefined, type?: 'field' | 'group') {
     makeObservable(this);
     if (type == null) {
       const c = typeof name === 'string' ? name.slice(0, 1) : '';
@@ -161,7 +160,7 @@ export class SettingPropEntry implements ISettingEntry {
    */
   getValue(): any {
     let val: any;
-    if (this.type === 'field') {
+    if (this.type === 'field' && this.name) {
       val = this.parent.getPropValue(this.name);
     }
     const { getValue } = this.extraProps;
@@ -179,7 +178,7 @@ export class SettingPropEntry implements ISettingEntry {
   setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: IPublicTypeSetValueOptions) {
     const oldValue = this.getValue();
     if (this.type === 'field') {
-      this.parent.setPropValue(this.name, val);
+      this.name && this.parent.setPropValue(this.name, val);
     }
 
     const { setValue } = this.extraProps;
@@ -203,7 +202,7 @@ export class SettingPropEntry implements ISettingEntry {
    */
   clearValue() {
     if (this.type === 'field') {
-      this.parent.clearPropValue(this.name);
+      this.name && this.parent.clearPropValue(this.name);
     }
     const { setValue } = this.extraProps;
     if (setValue) {

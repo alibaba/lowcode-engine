@@ -2,7 +2,9 @@
 import { IPublicTypeDragNodeDataObject, IPublicTypeDragObject } from '../type';
 import { IPublicModelDragObject, IPublicModelLocateEvent, IPublicModelNode } from './';
 
-export interface IPublicModelDragon {
+export interface IPublicModelDragon<
+  Node = IPublicModelNode
+> {
 
   /**
    * 是否正在拖动
@@ -51,7 +53,7 @@ export interface IPublicModelDragon {
    * @param dragObject 拖拽对象
    * @param boostEvent 拖拽初始时事件
    */
-  boost(dragObject: IPublicTypeDragObject, boostEvent: MouseEvent | DragEvent, fromRglNode?: Node | IPublicModelNode): void;
+  boost(dragObject: IPublicTypeDragObject, boostEvent: MouseEvent | DragEvent, fromRglNode?: Node): void;
 
   /**
    * 添加投放感应区

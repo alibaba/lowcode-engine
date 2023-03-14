@@ -7,11 +7,17 @@ import { intl } from '../../locale';
 export interface IExclusiveGroup extends IPublicModelExclusiveGroup<INode> {
   readonly name: string;
 
+  get index(): number | undefined;
+
   remove(node: INode): void;
 
   add(node: INode): void;
 
   isVisible(node: INode): boolean;
+
+  get length(): number;
+
+  get visibleNode(): INode;
 }
 
 // modals assoc x-hide value, initial: check is Modal, yes will put it in modals, cross levels

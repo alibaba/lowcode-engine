@@ -37,9 +37,9 @@ export interface NodeStatus {
   inPlaceEditing: boolean;
 }
 
-export interface INode extends Omit<IBaseModelNode<
+export interface IBaseNode<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> extends Omit<IBaseModelNode<
   IDocumentModel,
-  INode,
+  IBaseNode,
   INodeChildren,
   IComponentMeta,
   ISettingTopEntry,
@@ -76,6 +76,10 @@ export interface INode extends Omit<IBaseModelNode<
   get index(): number | undefined;
 
   get isPurging(): boolean;
+
+  getId(): string;
+
+  getParent(): INode | null;
 
   /**
    * 内部方法，请勿使用
@@ -147,6 +151,8 @@ export interface INode extends Omit<IBaseModelNode<
   setVisible(flag: boolean): void;
 
   getVisible(): boolean;
+
+  getChildren(): INodeChildren | null;
 }
 
 /**
@@ -1352,16 +1358,17 @@ export interface LeafNode extends Node {
 
 export type IPublicTypePropChangeOptions = Omit<GlobalEvent.Node.Prop.ChangeOptions, 'node'>;
 
-export type SlotNode = Node<IPublicTypeSlotSchema>;
-export type PageNode = Node<IPublicTypePageSchema>;
-export type ComponentNode = Node<IPublicTypeComponentSchema>;
-export type RootNode = PageNode | ComponentNode;
+export type ISlotNode = IBaseNode<IPublicTypeSlotSchema>;
+export type IPageNode = IBaseNode<IPublicTypePageSchema>;
+export type IComponentNode = IBaseNode<IPublicTypeComponentSchema>;
+export type IRootNode = IPageNode | IComponentNode;
+export type INode = IPageNode | ISlotNode | IComponentNode | IRootNode;
 
-export function isRootNode(node: INode): node is INode {
+export function isRootNode(node: INode): node is IRootNode {
   return node && node.isRootNode;
 }
 
-export function isLowCodeComponent(node: INode): node is INode {
+export function isLowCodeComponent(node: INode): node is IComponentNode {
   return node.componentMeta?.getMetadata().devMode === 'lowCode';
 }
 
@@ -1446,7 +1453,7 @@ export function insertChild(
   at?: number | null,
   copy?: boolean,
 ): INode | null {
-  let node: INode | null | RootNode | undefined;
+  let node: INode | null | IRootNode | undefined;
   let nodeSchema: IPublicTypeNodeSchema;
   if (isNode<INode>(thing) && (copy || thing.isSlot())) {
     nodeSchema = thing.export(IPublicEnumTransformStage.Clone);

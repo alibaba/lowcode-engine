@@ -29,3 +29,5 @@ export * from './plugin-instance';
 export * from './sensor';
 export * from './resource';
 export * from './clipboard';
+export * from './setting-entry';
+export * from './setting-field';
