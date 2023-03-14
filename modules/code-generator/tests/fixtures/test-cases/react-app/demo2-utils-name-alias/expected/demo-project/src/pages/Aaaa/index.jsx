@@ -67,10 +67,10 @@ class Aaaa$$Page extends React.Component {
             return {
               uri: '',
             };
-          },
+          }.bind(_this),
           isInit: function () {
             return undefined;
-          },
+          }.bind(_this),
         },
       ],
     };

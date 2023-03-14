@@ -1,20 +1,15 @@
 import {
-  IPublicTypeJSONArray,
-  IPublicTypeJSONObject,
   IPublicTypeCompositeArray,
-  IPublicTypeCompositeObject,
-  ResultDir,
+  IPublicTypeCompositeObject, IPublicTypeJSExpression,
+  IPublicTypeJSFunction, IPublicTypeJSONArray,
+  IPublicTypeJSONObject, IPublicTypeJSSlot, IPublicTypeNodeDataType,
+  IPublicTypeProjectSchema, ResultDir,
   ResultFile,
-  IPublicTypeNodeDataType,
-  IPublicTypeProjectSchema,
-  IPublicTypeJSExpression,
-  IPublicTypeJSFunction,
-  IPublicTypeJSSlot,
 } from '@alilc/lowcode-types';
 
-import { IParseResult } from './intermediate';
-import { IScopeBindings } from '../utils/ScopeBindings';
 import type { ProjectBuilderInitOptions } from '../generator/ProjectBuilder';
+import { IScopeBindings } from '../utils/ScopeBindings';
+import { IParseResult } from './intermediate';
 
 export enum FileType {
   CSS = 'css',
@@ -22,8 +17,10 @@ export enum FileType {
   LESS = 'less',
   HTML = 'html',
   JS = 'js',
+  MJS = 'mjs',
   JSX = 'jsx',
   TS = 'ts',
+  MTS = 'mts',
   TSX = 'tsx',
   JSON = 'json',
   MD = 'md',
@@ -68,15 +65,15 @@ export interface ICodeStruct extends IBaseCodeStruct {
 export interface IContextData extends IProjectBuilderOptions {
 
   /**
-   * 是否使用了 Ref 的 API (this.$/this.$$)
-   * */
-  useRefApi?: boolean;
-
-  /**
    * 其他自定义数据
    * （三方自定义插件也可以在此放一些数据，建议起个长一点的名称，用自己的插件名做前缀，以防冲突）
    */
   [key: string]: any;
+
+  /**
+   * 是否使用了 Ref 的 API (this.$/this.$$)
+   * */
+  useRefApi?: boolean;
 }
 
 export type BuilderComponentPlugin = (initStruct: ICodeStruct) => Promise<ICodeStruct>;
@@ -168,6 +165,7 @@ export interface IProjectBuilderOptions {
    * - expr: 求值的表达式
    */
   evalErrorsHandler?: string;
+
   /**
    * Hook which is used to customize original options, we can reorder/add/remove plugins/processors
    * of the existing solution.
@@ -180,7 +178,8 @@ export interface IProjectBuilder {
 }
 
 /** 项目级别的前置处理器 */
-export type ProjectPreProcessor = (schema: IPublicTypeProjectSchema) => Promise<IPublicTypeProjectSchema> | IPublicTypeProjectSchema;
+export type ProjectPreProcessor = (schema: IPublicTypeProjectSchema) =>
+  Promise<IPublicTypeProjectSchema> | IPublicTypeProjectSchema;
 
 export interface ProjectPostProcessorOptions {
   parseResult?: IParseResult;
@@ -199,7 +198,7 @@ export type ProjectPostProcessor = (
 export type PostProcessorFactory<T> = (config?: T) => PostProcessor;
 
 /** 模块级别的后置处理器 */
-export type PostProcessor = (content: string, fileType: string) => string;
+export type PostProcessor = (content: string, fileType: string, name?: string) => string;
 
 // TODO: temp interface, need modify
 export interface IPluginOptions {

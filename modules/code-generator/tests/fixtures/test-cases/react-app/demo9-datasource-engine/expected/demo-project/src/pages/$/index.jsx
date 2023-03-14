@@ -59,14 +59,14 @@ class $$Page extends React.Component {
           id: 'todos',
           isInit: function () {
             return true;
-          },
+          }.bind(_this),
           type: 'jsonp',
           options: function () {
             return {
               method: 'GET',
               uri: 'https://a0ee9135-6a7f-4c0f-a215-f0f247ad907d.mock.pstmn.io',
             };
-          },
+          }.bind(_this),
           dataHandler: function dataHandler(data) {
             return data.data;
           },

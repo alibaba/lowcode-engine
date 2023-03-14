@@ -76,7 +76,7 @@ class Test$$Page extends React.Component {
           type: 'fetch',
           isInit: function () {
             return true;
-          },
+          }.bind(_this),
           options: function () {
             return {
               params: {},
@@ -86,7 +86,7 @@ class Test$$Page extends React.Component {
               headers: {},
               uri: 'https://mocks.xxx.com/mock/jjpin/user/list',
             };
-          },
+          }.bind(_this),
           id: 'users',
         },
       ],
