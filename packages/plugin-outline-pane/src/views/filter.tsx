@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import './style.less';
 import { IconFilter } from '../icons/filter';
 import { Search, Checkbox, Balloon, Divider } from '@alifd/next';
@@ -7,7 +7,7 @@ import { Tree } from '../controllers/tree';
 import { matchTreeNode, FILTER_OPTIONS } from './filter-tree';
 import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
-export default class Filter extends Component<{
+export default class Filter extends PureComponent<{
   tree: Tree;
   pluginContext: IPublicModelPluginContext;
 }, {

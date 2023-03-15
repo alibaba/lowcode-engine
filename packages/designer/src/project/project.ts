@@ -5,14 +5,13 @@ import {
   IPublicTypeProjectSchema,
   IPublicTypeRootSchema,
   IPublicTypeComponentsMap,
-  IPublicApiProject,
-  IPublicModelDocumentModel,
   IPublicEnumTransformStage,
+  IBaseApiProject,
 } from '@alilc/lowcode-types';
 import { isLowCodeComponentType, isProCodeComponentType } from '@alilc/lowcode-utils';
 import { ISimulatorHost } from '../simulator';
 
-export interface IProject extends Omit< IPublicApiProject<
+export interface IProject extends Omit< IBaseApiProject<
   IDocumentModel
 >,
   'simulatorHost' |

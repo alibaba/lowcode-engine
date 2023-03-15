@@ -3,8 +3,8 @@ import { IPublicEnumTransformStage } from '../enum';
 import { IPublicApiSimulatorHost } from './';
 import { IPublicModelDocumentModel } from '../model';
 
-export interface IPublicApiProject<
-  DocumentModel = IPublicModelDocumentModel
+export interface IBaseApiProject<
+  DocumentModel
 > {
 
   /**
@@ -133,3 +133,5 @@ export interface IPublicApiProject<
    */
   setI18n(value: object): void;
 }
+
+export interface IPublicApiProject extends IBaseApiProject<IPublicModelDocumentModel> {}
