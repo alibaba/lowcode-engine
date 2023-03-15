@@ -1,10 +1,10 @@
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import classNames from 'classnames';
 import TreeNode from '../controllers/tree-node';
 import TreeNodeView from './tree-node';
-import { IPublicModelPluginContext, IPublicModelExclusiveGroup, IPublicTypeDisposable } from '@alilc/lowcode-types';
+import { IPublicModelPluginContext, IPublicModelExclusiveGroup, IPublicTypeDisposable, IPublicTypeLocationChildrenDetail } from '@alilc/lowcode-types';
 
-export default class TreeBranches extends Component<{
+export default class TreeBranches extends PureComponent<{
   treeNode: TreeNode;
   isModal?: boolean;
   pluginContext: IPublicModelPluginContext;
@@ -62,12 +62,19 @@ export default class TreeBranches extends Component<{
   }
 }
 
-class TreeNodeChildren extends Component<{
+
+interface ITreeNodeChildrenState {
+  filterWorking: boolean;
+  matchSelf: boolean;
+  keywords: string | null;
+  dropDetail: IPublicTypeLocationChildrenDetail | undefined | null;
+}
+class TreeNodeChildren extends PureComponent<{
     treeNode: TreeNode;
     isModal?: boolean;
     pluginContext: IPublicModelPluginContext;
-  }> {
-  state = {
+  }, ITreeNodeChildrenState> {
+  state: ITreeNodeChildrenState = {
     filterWorking: false,
     matchSelf: false,
     keywords: null,
@@ -144,7 +151,7 @@ class TreeNodeChildren extends Component<{
       />
     );
     treeNode.children?.forEach((child, index) => {
-      const childIsModal = child.node.componentMeta.isModal || false;
+      const childIsModal = child.node.componentMeta?.isModal || false;
       if (isModal != childIsModal) {
         return;
       }
@@ -180,7 +187,7 @@ class TreeNodeChildren extends Component<{
   }
 }
 
-class TreeNodeSlots extends Component<{
+class TreeNodeSlots extends PureComponent<{
     treeNode: TreeNode;
     pluginContext: IPublicModelPluginContext;
   }> {

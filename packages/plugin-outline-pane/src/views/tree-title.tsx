@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-import { Component, KeyboardEvent, FocusEvent, Fragment } from 'react';
+import { KeyboardEvent, FocusEvent, Fragment, PureComponent } from 'react';
 import classNames from 'classnames';
 import { createIcon } from '@alilc/lowcode-utils';
 import { IPublicModelPluginContext, IPublicApiEvent } from '@alilc/lowcode-types';
@@ -17,7 +16,7 @@ function emitOutlineEvent(event: IPublicApiEvent, type: string, treeNode: TreeNo
   });
 }
 
-export default class TreeTitle extends Component<{
+export default class TreeTitle extends PureComponent<{
   treeNode: TreeNode;
   isModal?: boolean;
   expanded: boolean;
@@ -36,7 +35,7 @@ export default class TreeTitle extends Component<{
 
   private lastInput?: HTMLInputElement;
 
-  private enableEdit = (e) => {
+  private enableEdit = (e: MouseEvent) => {
     e.preventDefault();
     this.setState({
       editing: true,
@@ -205,7 +204,7 @@ export default class TreeTitle extends Component<{
   }
 }
 
-class RenameBtn extends Component<{
+class RenameBtn extends PureComponent<{
   treeNode: TreeNode;
   pluginContext: IPublicModelPluginContext;
   onClick: (e: any) => void;
@@ -225,7 +224,7 @@ class RenameBtn extends Component<{
   }
 }
 
-class LockBtn extends Component<{
+class LockBtn extends PureComponent<{
   treeNode: TreeNode;
   pluginContext: IPublicModelPluginContext;
   locked: boolean;
@@ -249,7 +248,7 @@ class LockBtn extends Component<{
   }
 }
 
-class HideBtn extends Component<{
+class HideBtn extends PureComponent<{
   treeNode: TreeNode;
   hidden: boolean;
   pluginContext: IPublicModelPluginContext;
@@ -276,7 +275,7 @@ class HideBtn extends Component<{
   }
 }
 
-class ExpandBtn extends Component<{
+class ExpandBtn extends PureComponent<{
   treeNode: TreeNode;
   pluginContext: IPublicModelPluginContext;
   expanded: boolean;

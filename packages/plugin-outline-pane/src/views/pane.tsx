@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { PaneController } from '../controllers/pane-controller';
 import TreeView from './tree';
 import './style.less';
@@ -6,7 +6,7 @@ import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 import Filter from './filter';
 import { TreeMaster } from '../controllers/tree-master';
 
-export class Pane extends Component<{
+export class Pane extends PureComponent<{
   config: any;
   pluginContext: IPublicModelPluginContext;
   treeMaster: TreeMaster;

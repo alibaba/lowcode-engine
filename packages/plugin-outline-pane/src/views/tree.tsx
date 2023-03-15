@@ -1,8 +1,9 @@
-import { Component, MouseEvent as ReactMouseEvent } from 'react';
+import { MouseEvent as ReactMouseEvent, PureComponent } from 'react';
 import { isFormEvent, canClickNode, isShaken } from '@alilc/lowcode-utils';
 import { Tree } from '../controllers/tree';
 import TreeNodeView from './tree-node';
 import { IPublicEnumDragObjectType, IPublicModelPluginContext, IPublicModelNode } from '@alilc/lowcode-types';
+import TreeNode from '../controllers/tree-node';
 
 function getTreeNodeIdByEvent(e: ReactMouseEvent, stop: Element): null | string {
   let target: Element | null = e.target as Element;
@@ -17,7 +18,7 @@ function getTreeNodeIdByEvent(e: ReactMouseEvent, stop: Element): null | string 
   return (target as HTMLDivElement).dataset.id || null;
 }
 
-export default class TreeView extends Component<{
+export default class TreeView extends PureComponent<{
   tree: Tree;
   pluginContext: IPublicModelPluginContext;
 }> {
@@ -60,12 +61,12 @@ export default class TreeView extends Component<{
     const { id } = node;
     const isMulti = e.metaKey || e.ctrlKey || e.shiftKey;
     canvas.activeTracker?.track(node);
-    if (isMulti && !node.contains(focusNode) && selection.has(id)) {
+    if (isMulti && focusNode && !node.contains(focusNode) && selection?.has(id)) {
       if (!isFormEvent(e.nativeEvent)) {
         selection.remove(id);
       }
     } else {
-      selection.select(id);
+      selection?.select(id);
       const selectedNode = selection?.getNodes()?.[0];
       const npm = selectedNode?.componentMeta?.npm;
       const selected =
@@ -134,21 +135,23 @@ export default class TreeView extends Component<{
     const isMulti = e.metaKey || e.ctrlKey || e.shiftKey;
     const isLeftButton = e.button === 0;
 
-    if (isLeftButton && !node.contains(focusNode)) {
+    if (isLeftButton && focusNode && !node.contains(focusNode)) {
       let nodes: IPublicModelNode[] = [node];
       this.ignoreUpSelected = false;
       if (isMulti) {
         // multi select mode, directily add
-        if (!selection.has(node.id)) {
+        if (!selection?.has(node.id)) {
           canvas.activeTracker?.track(node);
-          selection.add(node.id);
+          selection?.add(node.id);
           this.ignoreUpSelected = true;
         }
         // todo: remove rootNodes id
-        selection.remove(focusNode.id);
+        selection?.remove(focusNode.id);
         // 获得顶层 nodes
-        nodes = selection.getTopNodes();
-      } else if (selection.has(node.id)) {
+        if (selection) {
+          nodes = selection.getTopNodes();
+        }
+      } else if (selection?.has(node.id)) {
         nodes = selection.getTopNodes();
       }
       this.boostEvent = e.nativeEvent;
@@ -169,7 +172,9 @@ export default class TreeView extends Component<{
     doc?.detecting.leave();
   };
 
-  state = {
+  state: {
+    root: TreeNode | null
+  } = {
     root: null,
   };
 
