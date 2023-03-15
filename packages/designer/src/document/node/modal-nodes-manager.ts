@@ -1,9 +1,9 @@
-import { INode, Node } from './node';
+import { INode } from './node';
 import { DocumentModel } from '../document-model';
 import { IPublicModelModalNodesManager } from '@alilc/lowcode-types';
 import { createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
 
-export function getModalNodes(node: INode | Node) {
+export function getModalNodes(node: INode) {
   if (!node) return [];
   let nodes: any = [];
   if (node.componentMeta.isModal) {
@@ -18,11 +18,7 @@ export function getModalNodes(node: INode | Node) {
   return nodes;
 }
 
-export interface IModalNodesManager extends IPublicModelModalNodesManager {
-
-  getModalNodes(): INode[];
-
-  getVisibleModalNode(): INode | null;
+export interface IModalNodesManager extends IPublicModelModalNodesManager<INode> {
 }
 
 export class ModalNodesManager implements IModalNodesManager {
@@ -87,7 +83,7 @@ export class ModalNodesManager implements IModalNodesManager {
   }
 
   private addNode(node: INode) {
-    if (node.componentMeta.isModal) {
+    if (node?.componentMeta.isModal) {
       this.hideModalNodes();
       this.modalNodes.push(node);
       this.addNodeEvent(node);

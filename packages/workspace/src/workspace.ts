@@ -1,4 +1,4 @@
-import { Designer } from '@alilc/lowcode-designer';
+import { Designer, LowCodePluginManager } from '@alilc/lowcode-designer';
 import { createModuleEventBus, Editor, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
 import { Plugins } from '@alilc/lowcode-shell';
 import { IPublicApiWorkspace, IPublicResourceList, IPublicTypeResourceType } from '@alilc/lowcode-types';
@@ -15,7 +15,11 @@ enum event {
 
 const CHANGE_EVENT = 'resource.list.change';
 
-export class Workspace implements IPublicApiWorkspace {
+interface IWorkspace extends Omit<IPublicApiWorkspace<
+LowCodePluginManager
+>, 'resourceList'> {}
+
+export class Workspace implements IWorkspace {
   context: BasicContext;
 
   private emitter: IEventBus = createModuleEventBus('workspace');
@@ -134,7 +138,7 @@ export class Workspace implements IPublicApiWorkspace {
     this.emitChangeWindow();
   }
 
-  removeEditorWindow(resourceName: string, title: string) {
+  removeEditorWindow(resourceName: string) {
     const index = this.windows.findIndex(d => (d.resource.name === resourceName && d.title));
     this.remove(index);
   }

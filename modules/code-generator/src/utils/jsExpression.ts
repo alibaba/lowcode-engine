@@ -5,6 +5,7 @@ import * as t from '@babel/types';
 import { IPublicTypeJSExpression, IPublicTypeJSFunction, isJSExpression, isJSFunction } from '@alilc/lowcode-types';
 import { CodeGeneratorError, IScope } from '../types';
 import { transformExpressionLocalRef, ParseError } from './expressionParser';
+import { isJSExpressionFn } from './common';
 
 function parseFunction(content: string): t.FunctionExpression | null {
   try {
@@ -78,8 +79,13 @@ function getBodyStatements(content: string) {
   throw new Error('Can not find Function Statement');
 }
 
-export function isJsCode(value: unknown): boolean {
-  return isJSExpression(value) || isJSFunction(value);
+/**
+ * 是否是广义上的 JSFunction
+ * @param value
+ * @returns
+ */
+export function isBroadJSFunction(value: unknown): boolean {
+  return isJSExpressionFn(value) || isJSFunction(value);
 }
 
 export function generateExpression(value: any, scope: IScope): string {
@@ -94,6 +100,10 @@ export function generateExpression(value: any, scope: IScope): string {
   }
 
   throw new CodeGeneratorError('Not a JSExpression');
+}
+
+function getFunctionSource(cfg: IPublicTypeJSFunction): string {
+  return cfg.source || cfg.value || cfg.compiled;
 }
 
 export function generateFunction(
@@ -112,21 +122,26 @@ export function generateFunction(
     isBindExpr: false,
   },
 ) {
-  if (isJsCode(value)) {
+  if (isBroadJSFunction(value)) {
     const functionCfg = value as IPublicTypeJSFunction;
+    const functionSource = getFunctionSource(functionCfg);
     if (config.isMember) {
-      return transformFuncExpr2MethodMember(config.name || '', functionCfg.value);
+      return transformFuncExpr2MethodMember(config.name || '', functionSource);
     }
     if (config.isBlock) {
-      return getBodyStatements(functionCfg.value);
+      return getBodyStatements(functionSource);
     }
     if (config.isArrow) {
-      return getArrowFunction(functionCfg.value);
+      return getArrowFunction(functionSource);
     }
     if (config.isBindExpr) {
-      return `(${functionCfg.value}).bind(this)`;
+      return `(${functionSource}).bind(this)`;
     }
-    return functionCfg.value;
+    return functionSource;
+  }
+
+  if (isJSExpression(value)) {
+    return value.value;
   }
 
   throw new CodeGeneratorError('Not a JSFunction or JSExpression');

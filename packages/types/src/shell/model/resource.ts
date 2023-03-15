@@ -5,11 +5,15 @@ export interface IPublicModelResource {
 
   get icon(): ReactElement | undefined;
 
-  get options(): Object;
+  get options(): Record<string, any>;
 
   get name(): string | undefined;
 
   get type(): string | undefined;
 
   get category(): string | undefined;
+
+  get children(): IPublicModelResource[];
+
+  get viewName(): string | undefined;
 }

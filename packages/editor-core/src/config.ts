@@ -124,9 +124,7 @@ const VALID_ENGINE_OPTIONS = {
     type: 'array',
     description: '自定义 simulatorUrl 的地址',
   },
-  /**
-   * 与 react-renderer 的 appHelper 一致，https://lowcode-engine.cn/site/docs/guide/expand/runtime/renderer#apphelper
-   */
+  // 与 react-renderer 的 appHelper 一致，https://lowcode-engine.cn/site/docs/guide/expand/runtime/renderer#apphelper
   appHelper: {
     type: 'object',
     description: '定义 utils 和 constants 等对象',
@@ -149,7 +147,6 @@ const VALID_ENGINE_OPTIONS = {
   },
 };
 
-
 const getStrictModeValue = (engineOptions: IPublicTypeEngineOptions, defaultValue: boolean): boolean => {
   if (!engineOptions || !isPlainObject(engineOptions)) {
     return defaultValue;
@@ -161,7 +158,8 @@ const getStrictModeValue = (engineOptions: IPublicTypeEngineOptions, defaultValu
   return engineOptions.enableStrictPluginMode;
 };
 
-export interface IEngineConfigPrivate {
+export interface IEngineConfig extends IPublicModelEngineConfig {
+
   /**
    * if engineOptions.strictPluginMode === true, only accept propertied predefined in EngineOptions.
    *
@@ -176,8 +174,7 @@ export interface IEngineConfigPrivate {
   delWait(key: string, fn: any): void;
 }
 
-
-export class EngineConfig implements IPublicModelEngineConfig, IEngineConfigPrivate {
+export class EngineConfig implements IEngineConfig {
   private config: { [key: string]: any } = {};
 
   private waits = new Map<
@@ -291,13 +288,11 @@ export class EngineConfig implements IPublicModelEngineConfig, IEngineConfigPriv
     const val = this.config?.[key];
     if (val !== undefined) {
       fn(val);
-      return () => {};
-    } else {
-      this.setWait(key, fn);
-      return () => {
-        this.delWait(key, fn);
-      };
     }
+    this.setWait(key, fn);
+    return () => {
+      this.delWait(key, fn);
+    };
   }
 
   notifyGot(key: string): void {

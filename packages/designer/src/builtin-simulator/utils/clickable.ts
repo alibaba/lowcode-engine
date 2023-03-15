@@ -1,5 +1,5 @@
 import { getClosestNode, canClickNode } from '@alilc/lowcode-utils';
-import { Node } from '../../document';
+import { INode } from '../../document';
 
 /**
  * 获取离当前节点最近的可点击节点
@@ -7,7 +7,7 @@ import { Node } from '../../document';
  * @param event
  */
 export const getClosestClickableNode = (
-  currentNode: Node | undefined | null,
+  currentNode: INode | undefined | null,
   event: MouseEvent,
 ) => {
   let node = currentNode;

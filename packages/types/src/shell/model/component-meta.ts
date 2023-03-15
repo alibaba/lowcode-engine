@@ -2,7 +2,9 @@ import { IPublicTypeNodeSchema, IPublicTypeNodeData, IPublicTypeIconType, IPubli
 import { ReactElement } from 'react';
 import { IPublicModelNode } from './node';
 
-export interface IPublicModelComponentMeta {
+export interface IPublicModelComponentMeta<
+  Node = IPublicModelNode
+> {
 
   /**
    * 组件名
@@ -92,7 +94,7 @@ export interface IPublicModelComponentMeta {
    * @param my 当前节点
    * @param parent 父节点
    */
-  checkNestingUp(my: IPublicModelNode | IPublicTypeNodeData, parent: any): boolean;
+  checkNestingUp(my: Node | IPublicTypeNodeData, parent: any): boolean;
 
   /**
    * 检测目标节点是否可被放置在父节点中
@@ -101,8 +103,8 @@ export interface IPublicModelComponentMeta {
    * @param parent 父节点
    */
   checkNestingDown(
-      my: IPublicModelNode | IPublicTypeNodeData,
-      target: IPublicTypeNodeSchema | IPublicModelNode | IPublicTypeNodeSchema[],
+      my: Node | IPublicTypeNodeData,
+      target: IPublicTypeNodeSchema | Node | IPublicTypeNodeSchema[],
     ): boolean;
 
   /**

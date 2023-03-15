@@ -1,6 +1,6 @@
 /**
  * 低代码引擎的出码模块，负责将编排产出的 Schema 转换成实际可执行的代码。
- * 注意：为了保持 API 的稳定性, 这里所有导出的 API 均要显式命名方式导出
+ * 注意：为了保持 API 的稳定性，这里所有导出的 API 均要显式命名方式导出
  *     （即用 export { xxx } from 'xx' 的方式，不要直接 export * from 'xxx')
  *      而且所有导出的 API 务必在 tests/public 中编写单元测试
  */
@@ -51,6 +51,7 @@ export default {
   },
   plugins: {
     common: {
+
       /**
        * 处理 ES Module
        * @deprecated please use esModule

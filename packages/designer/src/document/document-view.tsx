@@ -1,11 +1,11 @@
 import { Component } from 'react';
 import classNames from 'classnames';
 import { observer } from '@alilc/lowcode-editor-core';
-import { DocumentModel } from './document-model';
+import { DocumentModel, IDocumentModel } from './document-model';
 import { BuiltinSimulatorHostView } from '../builtin-simulator';
 
 @observer
-export class DocumentView extends Component<{ document: DocumentModel }> {
+export class DocumentView extends Component<{ document: IDocumentModel }> {
   render() {
     const { document } = this.props;
     const { simulatorProps } = document;
@@ -26,7 +26,7 @@ export class DocumentView extends Component<{ document: DocumentModel }> {
   }
 }
 
-class DocumentInfoView extends Component<{ document: DocumentModel }> {
+class DocumentInfoView extends Component<{ document: IDocumentModel }> {
   render() {
     return null;
   }

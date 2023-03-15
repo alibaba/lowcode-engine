@@ -104,7 +104,7 @@ describe('setting-field 测试', () => {
 
       // group 类型的 field
       const groupField = settingEntry.get('groupkgzzeo41') as SettingField;
-      expect(groupField.items).toBeUndefined();
+      expect(groupField.items).toEqual([]);
 
       // 有子节点的 field
       const objField = settingEntry.get('obj') as SettingField;

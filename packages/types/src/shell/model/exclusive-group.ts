@@ -1,8 +1,10 @@
-import { IPublicModelNode } from '..';
+import { IPublicModelNode, IPublicTypeTitleContent } from '..';
 
-export interface IPublicModelExclusiveGroup {
-  readonly id: string;
-  readonly title: string;
-  get firstNode(): IPublicModelNode;
+export interface IPublicModelExclusiveGroup<
+  Node = IPublicModelNode,
+> {
+  readonly id: string | undefined;
+  readonly title: IPublicTypeTitleContent | undefined;
+  get firstNode(): Node | null;
   setVisible(node: Node): void;
 }

@@ -281,7 +281,7 @@ export type IBaseRendererInstance = IGeneralComponent<
     __beforeInit(props: IBaseRendererProps): void;
     __init(props: IBaseRendererProps): void;
     __afterInit(props: IBaseRendererProps): void;
-    __excuteLifeCycleMethod(method: string, args?: any[]): void;
+    __executeLifeCycleMethod(method: string, args?: any[]): void;
     __bindCustomMethods(props: IBaseRendererProps): void;
     __generateCtx(ctx: Record<string, any>): void;
     __parseData(data: any, ctx?: any): any;
@@ -323,10 +323,10 @@ export interface IRenderComponent {
   new(props: IRendererProps, context: any): IGeneralComponent<IRendererProps, IRendererState> & {
     [x: string]: any;
     __getRef: (ref: any) => void;
-    componentDidMount(): Promise<void>;
-    componentDidUpdate(): Promise<void>;
-    componentWillUnmount(): Promise<void>;
-    componentDidCatch(e: any): Promise<void>;
+    componentDidMount(): Promise<void> | void;
+    componentDidUpdate(): Promise<void> | void;
+    componentWillUnmount(): Promise<void> | void;
+    componentDidCatch(e: any): Promise<void> | void;
     shouldComponentUpdate(nextProps: IRendererProps): boolean;
     isValidComponent(SetComponent: any): any;
     patchDidCatch(SetComponent: any): void;

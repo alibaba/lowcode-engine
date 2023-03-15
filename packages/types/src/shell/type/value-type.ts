@@ -131,6 +131,6 @@ export interface IPublicTypeJSONObject {
 }
 
 export type IPublicTypeCompositeArray = IPublicTypeCompositeValue[];
-export interface IPublicTypeCompositeObject {
-  [key: string]: IPublicTypeCompositeValue;
+export interface IPublicTypeCompositeObject<T = IPublicTypeCompositeValue> {
+  [key: string]: IPublicTypeCompositeValue | T;
 }

@@ -126,7 +126,7 @@ function generateAttrs(
   if (props) {
     if (!Array.isArray(props)) {
       Object.keys(props).forEach((propName: string) => {
-        pieces = pieces.concat(generateAttr(propName, props[propName], scope, config));
+        pieces = pieces.concat(generateAttr(propName, props[propName] as IPublicTypeCompositeValue, scope, config));
       });
     } else {
       props.forEach((prop) => {

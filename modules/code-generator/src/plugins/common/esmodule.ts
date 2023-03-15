@@ -443,6 +443,7 @@ function buildPackageImport(
 export interface PluginConfig {
   fileType?: string; // 导出的文件类型
   useAliasName?: boolean; // 是否使用 componentName 重命名组件 identifier
+  filter?: (deps: IDependency[]) => IDependency[]; // 支持过滤能力
 }
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?: PluginConfig) => {
@@ -460,7 +461,8 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?: Plu
     const ir = next.ir as IWithDependency;
 
     if (ir && ir.deps && ir.deps.length > 0) {
-      const packs = groupDepsByPack(ir.deps);
+      const deps = cfg.filter ? cfg.filter(ir.deps) : ir.deps;
+      const packs = groupDepsByPack(deps);
 
       Object.keys(packs).forEach((pkg) => {
         const chunks = buildPackageImport(pkg, packs[pkg], cfg.fileType, cfg.useAliasName);

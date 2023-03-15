@@ -26,7 +26,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
     // 将模块名转换成 PascalCase 的格式，并添加特定后缀，防止命名冲突
     const componentClassName = ensureValidClassName(
-      `${changeCase.pascalCase(ir.moduleName)}$$Page`,
+      `${changeCase.pascalCase(ir.moduleName)}$$${ir.containerType}`,
     );
 
     next.chunks.push({
@@ -42,6 +42,18 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
         COMMON_CHUNK_NAME.FileUtilDefine,
       ],
     });
+
+    if (ir.containerType === 'Component') {
+      next.chunks.push({
+        type: ChunkType.STRING,
+        fileType: FileType.JSX,
+        name: CLASS_DEFINE_CHUNK_NAME.InsVar,
+        content: `static displayName = '${changeCase.pascalCase(ir.moduleName)}';`,
+        linkAfter: [
+          CLASS_DEFINE_CHUNK_NAME.Start,
+        ],
+      });
+    }
 
     next.chunks.push({
       type: ChunkType.STRING,

@@ -1,5 +1,5 @@
 import { IPublicTypePropType, IPublicTypeComponentAction } from './';
-import { IPublicModelProp, IPublicModelSettingTarget } from '../model';
+import { IPublicModelNode, IPublicModelProp, IPublicModelSettingField } from '../model';
 
 /**
  * 嵌套控制函数
@@ -93,11 +93,11 @@ export interface IPublicTypeComponentConfigure {
 
 export interface IPublicTypeInitialItem {
   name: string;
-  initial: (target: IPublicModelSettingTarget, currentValue: any) => any;
+  initial: (target: IPublicModelSettingField, currentValue: any) => any;
 }
 export interface IPublicTypeFilterItem {
   name: string;
-  filter: (target: IPublicModelSettingTarget | null, currentValue: any) => any;
+  filter: (target: IPublicModelSettingField | null, currentValue: any) => any;
 }
 export interface IPublicTypeAutorunItem {
   name: string;
@@ -184,20 +184,20 @@ export interface ConfigureSupport {
  */
 export interface IPublicTypeCallbacks {
   // hooks
-  onMouseDownHook?: (e: MouseEvent, currentNode: any) => any;
-  onDblClickHook?: (e: MouseEvent, currentNode: any) => any;
-  onClickHook?: (e: MouseEvent, currentNode: any) => any;
+  onMouseDownHook?: (e: MouseEvent, currentNode: IPublicModelNode | null) => any;
+  onDblClickHook?: (e: MouseEvent, currentNode: IPublicModelNode | null) => any;
+  onClickHook?: (e: MouseEvent, currentNode: IPublicModelNode | null) => any;
   // onLocateHook?: (e: any, currentNode: any) => any;
   // onAcceptHook?: (currentNode: any, locationData: any) => any;
-  onMoveHook?: (currentNode: any) => boolean;
+  onMoveHook?: (currentNode: IPublicModelNode) => boolean;
   // thinkof 限制性拖拽
-  onHoverHook?: (currentNode: any) => boolean;
-  onChildMoveHook?: (childNode: any, currentNode: any) => boolean;
+  onHoverHook?: (currentNode: IPublicModelNode) => boolean;
+  onChildMoveHook?: (childNode: IPublicModelNode, currentNode: IPublicModelNode) => boolean;
 
   // events
-  onNodeRemove?: (removedNode: any, currentNode: any) => void;
-  onNodeAdd?: (addedNode: any, currentNode: any) => void;
-  onSubtreeModified?: (currentNode: any, options: any) => void;
+  onNodeRemove?: (removedNode: IPublicModelNode | null, currentNode: IPublicModelNode | null) => void;
+  onNodeAdd?: (addedNode: IPublicModelNode | null, currentNode: IPublicModelNode | null) => void;
+  onSubtreeModified?: (currentNode: IPublicModelNode, options: any) => void;
   onResize?: (
     e: MouseEvent & {
       trigger: string;
@@ -220,6 +220,6 @@ export interface IPublicTypeCallbacks {
       deltaX?: number;
       deltaY?: number;
     },
-    currentNode: any,
+    currentNode: IPublicModelNode,
   ) => void;
 }

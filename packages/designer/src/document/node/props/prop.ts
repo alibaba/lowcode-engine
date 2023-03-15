@@ -1,9 +1,9 @@
 import { untracked, computed, obx, engineConfig, action, makeObservable, mobx, runInAction } from '@alilc/lowcode-editor-core';
 import { IPublicTypeCompositeValue, GlobalEvent, IPublicTypeJSSlot, IPublicTypeSlotSchema, IPublicEnumTransformStage, IPublicModelProp } from '@alilc/lowcode-types';
-import { uniqueId, isPlainObject, hasOwnProperty, compatStage, isJSExpression, isJSSlot } from '@alilc/lowcode-utils';
+import { uniqueId, isPlainObject, hasOwnProperty, compatStage, isJSExpression, isJSSlot, isNodeSchema } from '@alilc/lowcode-utils';
 import { valueToSource } from './value-to-source';
-import { Props, IProps, IPropParent } from './props';
-import { SlotNode, INode } from '../node';
+import { IProps, IPropParent } from './props';
+import { ISlotNode, INode } from '../node';
 // import { TransformStage } from '../transform-stage';
 
 const { set: mobxSet, isObservableArray } = mobx;
@@ -11,19 +11,31 @@ export const UNSET = Symbol.for('unset');
 // eslint-disable-next-line no-redeclare
 export type UNSET = typeof UNSET;
 
-export interface IProp extends Omit<IPublicModelProp, 'exportSchema' | 'node' | 'slotNode' > {
+export interface IProp extends Omit<IPublicModelProp<
+  INode
+>, 'exportSchema' | 'node' > {
 
-  readonly props: Props;
+  readonly props: IProps;
 
   readonly owner: INode;
-
-  get slotNode(): INode | null;
 
   delete(prop: Prop): void;
 
   export(stage: IPublicEnumTransformStage): IPublicTypeCompositeValue;
 
   getNode(): INode;
+
+  getAsString(): string;
+
+  unset(): void;
+
+  get value(): IPublicTypeCompositeValue | UNSET;
+
+  compare(other: IProp | null): number;
+
+  isUnset(): boolean;
+
+  key: string | number | undefined;
 }
 
 export type ValueTypes = 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot';
@@ -43,7 +55,7 @@ export class Prop implements IProp, IPropParent {
    */
   @obx spread: boolean;
 
-  readonly props: Props;
+  readonly props: IProps;
 
   readonly options: any;
 
@@ -303,7 +315,7 @@ export class Prop implements IProp, IPropParent {
         return this._value;
       }
       const values = this.items!.map((prop) => {
-        return prop.export(stage);
+        return prop?.export(stage);
       });
       if (values.every((val) => val === undefined)) {
         return undefined;
@@ -396,12 +408,12 @@ export class Prop implements IProp, IPropParent {
     this._type = 'slot';
     let slotSchema: IPublicTypeSlotSchema;
     // 当 data.value 的结构为 { componentName: 'Slot' } 时，复用部分 slotSchema 数据
-    if ((isPlainObject(data.value) && data.value?.componentName === 'Slot')) {
+    if ((isPlainObject(data.value) && isNodeSchema(data.value) && data.value?.componentName === 'Slot')) {
       const value = data.value as IPublicTypeSlotSchema;
       slotSchema = {
         componentName: 'Slot',
         title: value.title || value.props?.slotTitle,
-        id: data.id,
+        id: value.id,
         name: value.name || value.props?.slotName,
         params: value.params || value.props?.slotParams,
         children: value.children,
@@ -421,7 +433,7 @@ export class Prop implements IProp, IPropParent {
       this._slotNode.import(slotSchema);
     } else {
       const { owner } = this.props;
-      this._slotNode = owner.document.createNode<SlotNode>(slotSchema);
+      this._slotNode = owner.document.createNode<ISlotNode>(slotSchema);
       if (this._slotNode) {
         owner.addSlot(this._slotNode);
         this._slotNode.internalSetSlotFor(this);

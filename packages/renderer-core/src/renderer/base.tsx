@@ -40,7 +40,7 @@ import isUseLoop from '../utils/is-use-loop';
  * execute method in schema.lifeCycles with context
  * @PRIVATE
  */
-export function excuteLifeCycleMethod(context: any, schema: IPublicTypeNodeSchema, method: string, args: any, thisRequiredInJSE: boolean | undefined): any {
+export function executeLifeCycleMethod(context: any, schema: IPublicTypeNodeSchema, method: string, args: any, thisRequiredInJSE: boolean | undefined): any {
   if (!context || !isSchema(schema) || !method) {
     return;
   }
@@ -183,32 +183,32 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     __afterInit(_props: IBaseRendererProps) { }
 
     static getDerivedStateFromProps(props: IBaseRendererProps, state: any) {
-      return excuteLifeCycleMethod(this, props?.__schema, 'getDerivedStateFromProps', [props, state], props.thisRequiredInJSE);
+      return executeLifeCycleMethod(this, props?.__schema, 'getDerivedStateFromProps', [props, state], props.thisRequiredInJSE);
     }
 
     async getSnapshotBeforeUpdate(...args: any[]) {
-      this.__excuteLifeCycleMethod('getSnapshotBeforeUpdate', args);
+      this.__executeLifeCycleMethod('getSnapshotBeforeUpdate', args);
       this.__debug(`getSnapshotBeforeUpdate - ${this.props?.__schema?.fileName}`);
     }
 
     async componentDidMount(...args: any[]) {
       this.reloadDataSource();
-      this.__excuteLifeCycleMethod('componentDidMount', args);
+      this.__executeLifeCycleMethod('componentDidMount', args);
       this.__debug(`componentDidMount - ${this.props?.__schema?.fileName}`);
     }
 
     async componentDidUpdate(...args: any[]) {
-      this.__excuteLifeCycleMethod('componentDidUpdate', args);
+      this.__executeLifeCycleMethod('componentDidUpdate', args);
       this.__debug(`componentDidUpdate - ${this.props.__schema.fileName}`);
     }
 
     async componentWillUnmount(...args: any[]) {
-      this.__excuteLifeCycleMethod('componentWillUnmount', args);
+      this.__executeLifeCycleMethod('componentWillUnmount', args);
       this.__debug(`componentWillUnmount - ${this.props?.__schema?.fileName}`);
     }
 
     async componentDidCatch(...args: any[]) {
-      this.__excuteLifeCycleMethod('componentDidCatch', args);
+      this.__executeLifeCycleMethod('componentDidCatch', args);
       console.warn(args);
     }
 
@@ -248,8 +248,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
      * execute method in schema.lifeCycles
      * @PRIVATE
      */
-    __excuteLifeCycleMethod = (method: string, args?: any) => {
-      excuteLifeCycleMethod(this, this.props.__schema, method, args, this.props.thisRequiredInJSE);
+    __executeLifeCycleMethod = (method: string, args?: any) => {
+      executeLifeCycleMethod(this, this.props.__schema, method, args, this.props.thisRequiredInJSE);
     };
 
     /**
@@ -406,7 +406,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
     __render = () => {
       const schema = this.props.__schema;
-      this.__excuteLifeCycleMethod('render');
+      this.__executeLifeCycleMethod('render');
       this.__writeCss(this.props);
 
       const { engine } = this.context;
@@ -774,6 +774,11 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           {
             ...schema,
             loop: undefined,
+            props: {
+              ...schema.props,
+              // 循环下 key 不能为常量，这样会造成 key 值重复，渲染异常
+              key: isJSExpression(schema.props?.key) ? schema.props?.key : null,
+            },
           },
           loopSelf,
           parentInfo,

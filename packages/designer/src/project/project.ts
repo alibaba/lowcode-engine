@@ -12,13 +12,33 @@ import {
 import { isLowCodeComponentType, isProCodeComponentType } from '@alilc/lowcode-utils';
 import { ISimulatorHost } from '../simulator';
 
-export interface IProject extends Omit< IPublicApiProject, 'simulatorHost' | 'importSchema' | 'exportSchema' | 'openDocument' | 'getDocumentById' | 'getCurrentDocument' | 'addPropsTransducer' | 'onRemoveDocument' | 'onChangeDocument' | 'onSimulatorHostReady' | 'onSimulatorRendererReady' | 'setI18n' > {
+export interface IProject extends Omit< IPublicApiProject<
+  IDocumentModel
+>,
+  'simulatorHost' |
+  'importSchema' |
+  'exportSchema' |
+  'openDocument' |
+  'getDocumentById' |
+  'getCurrentDocument' |
+  'addPropsTransducer' |
+  'onRemoveDocument' |
+  'onChangeDocument' |
+  'onSimulatorHostReady' |
+  'onSimulatorRendererReady' |
+  'setI18n' |
+  'currentDocument' |
+  'selection' |
+  'documents' |
+  'createDocument' |
+  'getDocumentByFileName'
+> {
 
   get designer(): IDesigner;
 
   get simulator(): ISimulatorHost | null;
 
-  get currentDocument(): IDocumentModel | null;
+  get currentDocument(): IDocumentModel | null | undefined;
 
   get documents(): IDocumentModel[];
 
@@ -31,7 +51,7 @@ export interface IProject extends Omit< IPublicApiProject, 'simulatorHost' | 'im
   load(schema?: IPublicTypeProjectSchema, autoOpen?: boolean | string): void;
 
   getSchema(
-    stage: IPublicEnumTransformStage,
+    stage?: IPublicEnumTransformStage,
   ): IPublicTypeProjectSchema;
 
   getDocument(id: string): IDocumentModel | null;
@@ -60,6 +80,8 @@ export interface IProject extends Omit< IPublicApiProject, 'simulatorHost' | 'im
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     value: any,
   ): void;
+
+  checkExclusive(activeDoc: DocumentModel): void;
 }
 
 export class Project implements IProject {
@@ -85,7 +107,7 @@ export class Project implements IProject {
     return this._simulator || null;
   }
 
-  @computed get currentDocument(): IDocumentModel | null {
+  @computed get currentDocument(): IDocumentModel | null | undefined {
     return this.documents.find((doc) => doc.active);
   }
 
@@ -114,10 +136,10 @@ export class Project implements IProject {
   }
 
   private getComponentsMap(): IPublicTypeComponentsMap {
-    return this.documents.reduce((
+    return this.documents.reduce<IPublicTypeComponentsMap>((
       componentsMap: IPublicTypeComponentsMap,
-      curDoc: DocumentModel,
-      ) => {
+      curDoc: IDocumentModel,
+      ): IPublicTypeComponentsMap => {
       const curComponentsMap = curDoc.getComponentsMap();
       if (Array.isArray(curComponentsMap)) {
         curComponentsMap.forEach((item) => {
@@ -156,7 +178,7 @@ export class Project implements IProject {
       componentsMap: this.getComponentsMap(),
       componentsTree: this.documents
         .filter((doc) => !doc.isBlank())
-        .map((doc) => doc.export(stage)),
+        .map((doc) => doc.export(stage) || {} as IPublicTypeRootSchema),
       i18n: this.i18n,
     };
   }
@@ -168,7 +190,7 @@ export class Project implements IProject {
   setSchema(schema?: IPublicTypeProjectSchema) {
     // FIXME: 这里的行为和 getSchema 并不对等，感觉不太对
     const doc = this.documents.find((doc) => doc.active);
-    doc && doc.import(schema?.componentsTree[0]);
+    doc && schema?.componentsTree[0] && doc.import(schema?.componentsTree[0]);
     this.simulator?.rerender();
   }
 
@@ -224,7 +246,7 @@ export class Project implements IProject {
     }
   }
 
-  removeDocument(doc: IPublicModelDocumentModel) {
+  removeDocument(doc: IDocumentModel) {
     const index = this.documents.indexOf(doc);
     if (index < 0) {
       return;
