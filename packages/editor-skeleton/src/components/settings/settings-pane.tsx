@@ -88,6 +88,18 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
     return true;
   }
 
+  get ignoreDefaultValue(): boolean {
+    const { extraProps } = this.field;
+    const { ignoreDefaultValue } = extraProps;
+    try {
+      return typeof ignoreDefaultValue === 'function' ? ignoreDefaultValue(this.field.internalToShell()) : false;
+    } catch (error) {
+      console.error('exception when ignoreDefaultValue is excuted', error);
+    }
+
+    return false;
+  }
+
   get setterInfo(): {
     setterProps: any;
     initialValue: any;
@@ -171,6 +183,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
     const { initialValue } = this.setterInfo;
     if (this.state?.fromOnChange ||
       !isInitialValueNotEmpty(initialValue) ||
+      this.ignoreDefaultValue ||
       this.value !== undefined
     ) {
       return;

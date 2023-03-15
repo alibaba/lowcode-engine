@@ -33,6 +33,12 @@ export interface IPublicTypeFieldExtraProps {
   condition?: (target: IPublicModelSettingField) => boolean;
 
   /**
+   * 配置当前 prop 是否忽略默认值处理逻辑，如果返回值是 true 引擎不会处理默认值
+   * @returns boolean
+   */
+  ignoreDefaultValue?: (target: IPublicModelSettingField) => boolean;
+
+  /**
    * autorun when something change
    */
   autorun?: (target: IPublicModelSettingField) => void;

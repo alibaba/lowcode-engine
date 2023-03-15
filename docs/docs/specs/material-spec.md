@@ -834,6 +834,7 @@ props 数组下对象字段描述：
 | defaultValue | 默认值 | Any(视字段类型而定) | type = 'field' 生效 |
 | supportVariable | 是否支持配置变量 | Boolean | type = 'field' 生效 |
 | condition | 配置当前 prop 是否展示 | (target: IPublicModelSettingField) => boolean; | - |
+| ignoreDefaultValue | 配置当前 prop 是否忽略默认值处理逻辑，如果返回值是 true 引擎不会处理默认值 | (target: IPublicModelSettingField) => boolean; | - |
 | setter     | 单个控件 (setter) 描述，搭建基础协议组件的描述对象，支持 JSExpression / JSFunction / JSSlot | `String\|Object\|Function` | type = 'field' 生效 |
 | extraProps | 其他配置属性（不做流通要求）                                                           | Object            | 其他配置            |
 | extraProps.getValue | setter 渲染时被调用，setter 会根据该函数的返回值设置 setter 当前值 | Function            | (target: IPublicModelSettingField, value: any) => any;            |
