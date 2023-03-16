@@ -4,8 +4,11 @@ import { IDocumentModel } from '../document/document-model';
 import { INode } from '../document/node/node';
 
 const DETECTING_CHANGE_EVENT = 'detectingChange';
-export interface IDetecting extends Omit< IPublicModelDetecting, 'capture' | 'release' | 'leave' > {
-
+export interface IDetecting extends Omit< IPublicModelDetecting<INode>,
+  'capture' |
+  'release' |
+  'leave'
+> {
   capture(node: INode | null): void;
 
   release(node: INode | null): void;

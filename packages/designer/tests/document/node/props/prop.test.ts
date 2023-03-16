@@ -499,6 +499,59 @@ describe('Prop 类测试', () => {
     expect(slotProp.purged).toBeTruthy();
     slotProp.dispose();
   });
+
+  describe('slotNode-value / setAsSlot', () => {
+    const editor = new Editor();
+    const designer = new Designer({ editor, shellModelFactory });
+    const doc = new DocumentModel(designer.project, {
+      componentName: 'Page',
+      children: [
+        {
+          id: 'div',
+          componentName: 'Div',
+        },
+      ],
+    });
+    const div = doc.getNode('div');
+
+    const slotProp = new Prop(div?.getProps(), {
+      type: 'JSSlot',
+      value: {
+        componentName: 'Slot',
+        id: 'node_oclei5rv2e2',
+        props: {
+          slotName: "content",
+          slotTitle: "主内容"
+        },
+        children: [
+          {
+            componentName: 'Button',
+          }
+        ]
+      },
+    });
+
+    expect(slotProp.slotNode?.componentName).toBe('Slot');
+
+    expect(slotProp.slotNode?.title).toBe('主内容');
+    expect(slotProp.slotNode?.getExtraProp('name')?.getValue()).toBe('content');
+    expect(slotProp.slotNode?.export()?.id).toBe('node_oclei5rv2e2');
+
+    slotProp.export();
+
+    // Save
+    expect(slotProp.export()?.value[0].componentName).toBe('Button');
+    expect(slotProp.export()?.title).toBe('主内容');
+    expect(slotProp.export()?.name).toBe('content');
+
+    // Render
+    expect(slotProp.export(IPublicEnumTransformStage.Render)?.value.children[0].componentName).toBe('Button');
+    expect(slotProp.export(IPublicEnumTransformStage.Render)?.value.componentName).toBe('Slot');
+
+    slotProp.purge();
+    expect(slotProp.purged).toBeTruthy();
+    slotProp.dispose();
+  });
 });
 
 describe('其他导出函数', () => {

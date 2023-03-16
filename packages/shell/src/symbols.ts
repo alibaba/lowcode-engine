@@ -32,3 +32,5 @@ export const pluginInstanceSymbol = Symbol('plugin-instance');
 export const resourceTypeSymbol = Symbol('resourceType');
 export const resourceSymbol = Symbol('resource');
 export const clipboardSymbol = Symbol('clipboard');
+export const configSymbol = Symbol('configSymbol');
+export const conditionGroupSymbol = Symbol('conditionGroup');

@@ -17,8 +17,8 @@ export class Resource implements IPublicModelResource {
     return this.resourceType.name;
   }
 
-  get viewType() {
-    return this.resourceData.viewType;
+  get viewName() {
+    return this.resourceData.viewName || (this.resourceData as any).viewType;
   }
 
   get description() {

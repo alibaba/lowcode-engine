@@ -9,11 +9,11 @@ import {
 } from '@alilc/lowcode-types';
 import { Transducer } from './utils';
 import { SettingPropEntry } from './setting-prop-entry';
-import { SettingEntry } from './setting-entry';
+import { ISettingEntry } from './setting-entry';
 import { computed, obx, makeObservable, action, untracked, intl } from '@alilc/lowcode-editor-core';
 import { cloneDeep, isCustomView, isDynamicSetter } from '@alilc/lowcode-utils';
 
-function getSettingFieldCollectorKey(parent: SettingEntry, config: IPublicTypeFieldConfig) {
+function getSettingFieldCollectorKey(parent: ISettingEntry, config: IPublicTypeFieldConfig) {
   let cur = parent;
   const path = [config.name];
   while (cur !== parent.top) {
@@ -25,7 +25,11 @@ function getSettingFieldCollectorKey(parent: SettingEntry, config: IPublicTypeFi
   return path.join('.');
 }
 
-export class SettingField extends SettingPropEntry implements SettingEntry {
+export interface ISettingField extends ISettingEntry {
+
+}
+
+export class SettingField extends SettingPropEntry implements ISettingField {
   readonly isSettingField = true;
 
   readonly isRequired: boolean;
@@ -36,7 +40,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   private hotValue: any;
 
-  parent: SettingEntry;
+  parent: ISettingEntry;
 
   extraProps: IPublicTypeFieldExtraProps;
 
@@ -56,9 +60,9 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
   private _items: Array<SettingField | IPublicTypeCustomView> = [];
 
   constructor(
-    parent: SettingEntry,
+    parent: ISettingEntry,
     config: IPublicTypeFieldConfig,
-    settingFieldCollector?: (name: string | number, field: SettingField) => void,
+    private settingFieldCollector?: (name: string | number, field: SettingField) => void,
   ) {
     super(parent, config.name, config.type);
     makeObservable(this);
@@ -137,7 +141,8 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   // 创建子配置项，通常用于 object/array 类型数据
   createField(config: IPublicTypeFieldConfig): SettingField {
-    return new SettingField(this, config);
+    this.settingFieldCollector?.(getSettingFieldCollectorKey(this.parent, config), this);
+    return new SettingField(this, config, this.settingFieldCollector);
   }
 
   purge() {

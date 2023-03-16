@@ -30,7 +30,7 @@ import { ActiveTracker, IActiveTracker } from './active-tracker';
 import { Detecting } from './detecting';
 import { DropLocation } from './location';
 import { OffsetObserver, createOffsetObserver } from './offset-observer';
-import { SettingTopEntry } from './setting';
+import { ISettingTopEntry, SettingTopEntry } from './setting';
 import { BemToolsManager } from '../builtin-simulator/bem-tools/manager';
 import { ComponentActions } from '../component-actions';
 
@@ -61,6 +61,7 @@ export interface DesignerProps {
 }
 
 export interface IDesigner {
+  readonly shellModelFactory: IShellModelFactory;
 
   get dragon(): IPublicModelDragon;
 
@@ -69,6 +70,8 @@ export interface IDesigner {
   get componentActions(): ComponentActions;
 
   get editor(): IPublicModelEditor;
+
+  get detecting(): Detecting;
 
   createScroller(scrollable: IPublicTypeScrollable): IPublicModelScroller;
 
@@ -91,6 +94,12 @@ export interface IDesigner {
   getComponentMetasMap(): Map<string, IComponentMeta>;
 
   addPropsReducer(reducer: IPublicTypePropsTransducer, stage: IPublicEnumTransformStage): void;
+
+  postEvent(event: string, ...args: any[]): void;
+
+  transformProps(props: IPublicTypeCompositeObject | IPublicTypePropsList, node: Node, stage: IPublicEnumTransformStage): IPublicTypeCompositeObject | IPublicTypePropsList;
+
+  createSettingEntry(nodes: INode[]): ISettingTopEntry;
 }
 
 export class Designer implements IDesigner {
@@ -331,7 +340,7 @@ export class Designer implements IDesigner {
     this.oobxList.forEach((item) => item.compute());
   }
 
-  createSettingEntry(nodes: Node[]) {
+  createSettingEntry(nodes: INode[]): ISettingTopEntry {
     return new SettingTopEntry(this.editor, nodes);
   }
 

@@ -1,6 +1,6 @@
 import { obx, computed, globalContext, makeObservable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { Node, INode } from './node';
-import { IPublicTypeNodeData, IPublicModelNodeChildren, IPublicEnumTransformStage } from '@alilc/lowcode-types';
+import { IPublicTypeNodeData, IPublicModelNodeChildren, IPublicEnumTransformStage, IPublicTypeDisposable } from '@alilc/lowcode-types';
 import { shallowEqual, compatStage, isNodeSchema } from '@alilc/lowcode-utils';
 import { foreachReverse } from '../../utils/tree';
 import { NodeRemoveOptions } from '../../types';
@@ -10,8 +10,15 @@ export interface IOnChangeOptions {
   node: Node;
 }
 
-export interface INodeChildren extends Omit<IPublicModelNodeChildren, 'forEach' | 'map' | 'every' | 'some' | 'filter' | 'find' | 'reduce' | 'mergeChildren' > {
+export interface INodeChildren extends Omit<IPublicModelNodeChildren<INode>,
+  'importSchema' |
+  'exportSchema' |
+  'isEmpty' |
+  'notEmpty'
+> {
   get owner(): INode;
+
+  get length(): number;
 
   unlinkChild(node: INode): void;
 
@@ -42,28 +49,18 @@ export interface INodeChildren extends Omit<IPublicModelNodeChildren, 'forEach' 
 
   forEach(fn: (item: INode, index: number) => void): void;
 
-  map<T>(fn: (item: INode, index: number) => T): T[] | null;
-
-  every(fn: (item: INode, index: number) => any): boolean;
-
-  some(fn: (item: INode, index: number) => any): boolean;
-
-  filter(fn: (item: INode, index: number) => any): any;
-
-  find(fn: (item: INode, index: number) => boolean): any;
-
-  reduce(fn: (acc: any, cur: INode) => any, initialValue: any): void;
-
-  mergeChildren(
-    remover: (node: INode, idx: number) => boolean,
-    adder: (children: INode[]) => IPublicTypeNodeData[] | null,
-    sorter: (firstNode: INode, secondNode: INode) => number,
-  ): any;
-
   /**
    * 根据索引获得节点
    */
   get(index: number): INode | null;
+
+  isEmpty(): boolean;
+
+  notEmpty(): boolean;
+
+  internalInitParent(): void;
+
+  onChange(fn: (info?: IOnChangeOptions) => void): IPublicTypeDisposable;
 
   /** overriding methods end */
 }
@@ -138,12 +135,12 @@ export class NodeChildren implements INodeChildren {
       const child = originChildren[i];
       const item = data[i];
 
-      let node: Node | undefined;
+      let node: INode | undefined | null;
       if (isNodeSchema(item) && !checkId && child && child.componentName === item.componentName) {
         node = child;
         node.import(item);
       } else {
-        node = this.owner.document.createNode(item, checkId);
+        node = this.owner.document?.createNode(item, checkId);
       }
       children[i] = node;
     }
@@ -434,12 +431,16 @@ export class NodeChildren implements INodeChildren {
     return this.children.filter(fn);
   }
 
-  find(fn: (item: INode, index: number) => boolean) {
+  find(fn: (item: INode, index: number) => boolean): INode | undefined {
     return this.children.find(fn);
   }
 
   reduce(fn: (acc: any, cur: INode) => any, initialValue: any): void {
     return this.children.reduce(fn, initialValue);
+  }
+
+  reverse() {
+    return this.children.reverse();
   }
 
   mergeChildren(
@@ -465,7 +466,7 @@ export class NodeChildren implements INodeChildren {
       const items = adder(this.children);
       if (items && items.length > 0) {
         items.forEach((child: IPublicTypeNodeData) => {
-          const node = this.owner.document?.createNode(child);
+          const node: INode = this.owner.document?.createNode(child);
           this.children.push(node);
           node.internalSetParent(this.owner);
         });
@@ -481,7 +482,7 @@ export class NodeChildren implements INodeChildren {
     }
   }
 
-  onChange(fn: (info?: IOnChangeOptions) => void): () => void {
+  onChange(fn: (info?: IOnChangeOptions) => void): IPublicTypeDisposable {
     this.emitter.on('change', fn);
     return () => {
       this.emitter.removeListener('change', fn);

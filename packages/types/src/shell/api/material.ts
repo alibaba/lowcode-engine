@@ -76,8 +76,25 @@ export interface IPublicApiMaterial {
 
   /**
    * 在设计器辅助层增加一个扩展 action
+   *
    * add an action button in canvas context menu area
    * @param action
+   * @example
+   * ```ts
+   * import { plugins } from '@alilc/lowcode-engine';
+   * import { IPublicModelPluginContext } from '@alilc/lowcode-types';
+   *
+   * const removeCopyAction = (ctx: IPublicModelPluginContext) => {
+   *   return {
+   *     async init() {
+   *       const { removeBuiltinComponentAction } = ctx.material;
+   *       removeBuiltinComponentAction('copy');
+   *     }
+   *   }
+   * };
+   * removeCopyAction.pluginName = 'removeCopyAction';
+   * await plugins.register(removeCopyAction);
+   * ```
    */
   addBuiltinComponentAction(action: IPublicTypeComponentAction): void;
 

@@ -43,6 +43,7 @@ import {
   Logger,
   Canvas,
   Workspace,
+  Config,
 } from '@alilc/lowcode-shell';
 import { isPlainObject } from '@alilc/lowcode-utils';
 import './modules/live-editing';
@@ -96,7 +97,7 @@ editor.set('project', project);
 editor.set('setters' as any, setters);
 editor.set('material', material);
 editor.set('innerHotkey', innerHotkey);
-const config = engineConfig;
+const config = new Config(engineConfig);
 const event = new Event(commonEvent, { prefix: 'common' });
 const logger = new Logger({ level: 'warn', bizName: 'common' });
 const common = new Common(editor, innerSkeleton);
@@ -118,6 +119,7 @@ const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
     context.canvas = canvas;
     context.plugins = plugins;
     context.logger = new Logger({ level: 'warn', bizName: `plugin:${pluginName}` });
+    context.workspace = workspace;
   },
 };
 

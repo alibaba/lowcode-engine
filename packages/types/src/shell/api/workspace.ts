@@ -1,7 +1,9 @@
 import { IPublicModelWindow } from '../model';
 import { IPublicApiPlugins, IPublicModelResource, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType } from '@alilc/lowcode-types';
 
-export interface IPublicApiWorkspace {
+export interface IPublicApiWorkspace<
+  Plugins = IPublicApiPlugins
+> {
 
   /** 是否启用 workspace 模式 */
   isActive: boolean;
@@ -9,7 +11,7 @@ export interface IPublicApiWorkspace {
   /** 当前设计器窗口 */
   window: IPublicModelWindow;
 
-  plugins: IPublicApiPlugins;
+  plugins: Plugins;
 
   /** 当前设计器的编辑窗口 */
   windows: IPublicModelWindow[];

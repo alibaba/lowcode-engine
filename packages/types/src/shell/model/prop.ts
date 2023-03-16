@@ -2,7 +2,9 @@ import { IPublicEnumTransformStage } from '../enum';
 import { IPublicTypeCompositeValue } from '../type';
 import { IPublicModelNode } from './';
 
-export interface IPublicModelProp {
+export interface IPublicModelProp<
+  Node = IPublicModelNode
+> {
 
   /**
    * id
@@ -25,14 +27,14 @@ export interface IPublicModelProp {
    * 返回所属的节点实例
    * get node instance, which this prop belongs to
    */
-  get node(): IPublicModelNode | null;
+  get node(): Node | null;
 
   /**
    * 当本 prop 代表一个 Slot 时，返回对应的 slotNode
    * return the slot node (only if the current prop represents a slot)
    * @since v1.1.0
    */
-  get slotNode(): IPublicModelNode | undefined | null;
+  get slotNode(): Node | undefined | null;
 
   /**
    * 是否是 Prop , 固定返回 true

@@ -2,7 +2,7 @@ import { Component } from 'react';
 import classNames from 'classnames';
 import TreeNode from '../controllers/tree-node';
 import TreeNodeView from './tree-node';
-import { IPublicModelPluginContext, IPublicModelExclusiveGroup } from '@alilc/lowcode-types';
+import { IPublicModelPluginContext, IPublicModelExclusiveGroup, IPublicTypeDisposable } from '@alilc/lowcode-types';
 
 export default class TreeBranches extends Component<{
   treeNode: TreeNode;
@@ -25,10 +25,10 @@ export default class TreeBranches extends Component<{
 
   componentDidMount() {
     const { treeNode } = this.props;
-    treeNode.onFilterResultChanged = () => {
+    treeNode.onFilterResultChanged(() => {
       const { filterWorking: newFilterWorking, matchChild: newMatchChild } = treeNode.filterReult;
       this.setState({ filterWorking: newFilterWorking, matchChild: newMatchChild });
-    };
+    });
   }
 
   componentWillUnmount(): void {
@@ -73,7 +73,7 @@ class TreeNodeChildren extends Component<{
     keywords: null,
     dropDetail: null,
   };
-  offLocationChanged: () => void;
+  offLocationChanged: IPublicTypeDisposable | undefined;
   componentDidMount() {
     const { treeNode, pluginContext } = this.props;
     const { project } = pluginContext;
@@ -85,7 +85,7 @@ class TreeNodeChildren extends Component<{
       keywords,
       dropDetail,
     });
-    treeNode.onFilterResultChanged = () => {
+    treeNode.onFilterResultChanged(() => {
       const {
         filterWorking: newFilterWorking,
         matchSelf: newMatchChild,
@@ -96,7 +96,7 @@ class TreeNodeChildren extends Component<{
         matchSelf: newMatchChild,
         keywords: newKeywords,
       });
-    };
+    });
     this.offLocationChanged = project.currentDocument?.onDropLocationChanged(
         () => {
           this.setState({ dropDetail: treeNode.dropDetail });
@@ -118,7 +118,7 @@ class TreeNodeChildren extends Component<{
     const endGroup = () => {
       if (groupContents.length > 0) {
         children.push(
-          <div key={currentGrp.id} className="condition-group-container" data-id={currentGrp.firstNode.id}>
+          <div key={currentGrp.id} className="condition-group-container" data-id={currentGrp.firstNode?.id}>
             <div className="condition-group-title">
               <Title
                 title={currentGrp.title}

@@ -2,7 +2,7 @@ import { untracked, computed, obx, engineConfig, action, makeObservable, mobx, r
 import { IPublicTypeCompositeValue, GlobalEvent, IPublicTypeJSSlot, IPublicTypeSlotSchema, IPublicEnumTransformStage, IPublicModelProp } from '@alilc/lowcode-types';
 import { uniqueId, isPlainObject, hasOwnProperty, compatStage, isJSExpression, isJSSlot } from '@alilc/lowcode-utils';
 import { valueToSource } from './value-to-source';
-import { Props, IProps, IPropParent } from './props';
+import { IProps, IPropParent } from './props';
 import { SlotNode, INode } from '../node';
 // import { TransformStage } from '../transform-stage';
 
@@ -11,19 +11,25 @@ export const UNSET = Symbol.for('unset');
 // eslint-disable-next-line no-redeclare
 export type UNSET = typeof UNSET;
 
-export interface IProp extends Omit<IPublicModelProp, 'exportSchema' | 'node' | 'slotNode' > {
+export interface IProp extends Omit<IPublicModelProp<
+  INode
+>, 'exportSchema' | 'node' > {
 
-  readonly props: Props;
+  readonly props: IProps;
 
   readonly owner: INode;
-
-  get slotNode(): INode | null;
 
   delete(prop: Prop): void;
 
   export(stage: IPublicEnumTransformStage): IPublicTypeCompositeValue;
 
   getNode(): INode;
+
+  getAsString(): string;
+
+  unset(): void;
+
+  get value(): IPublicTypeCompositeValue | UNSET;
 }
 
 export type ValueTypes = 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot';
@@ -43,7 +49,7 @@ export class Prop implements IProp, IPropParent {
    */
   @obx spread: boolean;
 
-  readonly props: Props;
+  readonly props: IProps;
 
   readonly options: any;
 
@@ -303,7 +309,7 @@ export class Prop implements IProp, IPropParent {
         return this._value;
       }
       const values = this.items!.map((prop) => {
-        return prop.export(stage);
+        return prop?.export(stage);
       });
       if (values.every((val) => val === undefined)) {
         return undefined;
@@ -401,7 +407,7 @@ export class Prop implements IProp, IPropParent {
       slotSchema = {
         componentName: 'Slot',
         title: value.title || value.props?.slotTitle,
-        id: data.id,
+        id: value.id,
         name: value.name || value.props?.slotName,
         params: value.params || value.props?.slotParams,
         children: value.children,

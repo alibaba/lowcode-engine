@@ -1,8 +1,8 @@
 import { computed, makeObservable, obx, action } from '@alilc/lowcode-editor-core';
-import { IPublicTypePropsMap, IPublicTypePropsList, IPublicTypeCompositeValue, IPublicEnumTransformStage, IPublicModelProps } from '@alilc/lowcode-types';
+import { IPublicTypePropsMap, IPublicTypePropsList, IPublicTypeCompositeValue, IPublicEnumTransformStage, IBaseModelProps } from '@alilc/lowcode-types';
 import { uniqueId, compatStage } from '@alilc/lowcode-utils';
 import { Prop, IProp, UNSET } from './prop';
-import { INode, Node } from '../node';
+import { INode } from '../node';
 // import { TransformStage } from '../transform-stage';
 
 interface ExtrasObject {
@@ -33,19 +33,29 @@ export interface IPropParent {
   get path(): string[];
 
   delete(prop: Prop): void;
-
 }
 
-export interface IProps extends Omit<IPublicModelProps, 'getProp' | 'getExtraProp' | 'getExtraPropValue' | 'setExtraPropValue' | 'node'> {
+export interface IProps extends Omit<IBaseModelProps<IProp>, | 'getExtraProp' | 'getExtraPropValue' | 'setExtraPropValue' | 'node'> {
 
   /**
    * 获取 props 对应的 node
    */
   getNode(): INode;
 
-  getProp(path: string): IProp | null;
+  get(path: string, createIfNone?: boolean): Prop | null;
 
-  get(path: string, createIfNone: boolean): Prop;
+  export(stage?: IPublicEnumTransformStage): {
+    props?: IPublicTypePropsMap | IPublicTypePropsList;
+    extras?: ExtrasObject;
+  };
+
+  merge(value: IPublicTypePropsMap, extras?: IPublicTypePropsMap): void;
+
+  purge(): void;
+
+  query(path: string, createIfNone: boolean): Prop | null;
+
+  import(value?: IPublicTypePropsMap | IPublicTypePropsList | null, extras?: ExtrasObject): void;
 }
 
 export class Props implements IProps, IPropParent {

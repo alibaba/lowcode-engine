@@ -2,15 +2,22 @@ import { IPublicTypeRootSchema, IPublicTypeDragNodeDataObject, IPublicTypeDragNo
 import { IPublicEnumTransformStage } from '../enum';
 import { IPublicApiProject } from '../api';
 import { IPublicModelDropLocation, IPublicModelDetecting, IPublicModelNode, IPublicModelSelection, IPublicModelHistory, IPublicModelModalNodesManager } from './';
-import { IPublicTypeOnChangeOptions } from '@alilc/lowcode-types';
+import { IPublicTypeNodeData, IPublicTypeNodeSchema, IPublicTypeOnChangeOptions } from '@alilc/lowcode-types';
 
-export interface IPublicModelDocumentModel {
+export interface IPublicModelDocumentModel<
+  Selection = IPublicModelSelection,
+  History = IPublicModelHistory,
+  Node = IPublicModelNode,
+  DropLocation = IPublicModelDropLocation,
+  ModalNodesManager = IPublicModelModalNodesManager,
+  Project = IPublicApiProject
+> {
 
   /**
      * 节点选中区模型实例
      * instance of selection
      */
-  selection: IPublicModelSelection;
+  selection: Selection;
 
   /**
    * 画布节点 hover 区模型实例
@@ -22,7 +29,7 @@ export interface IPublicModelDocumentModel {
    * 操作历史模型实例
    * instance of history
    */
-  history: IPublicModelHistory;
+  history: History;
 
   /**
    * id
@@ -36,30 +43,30 @@ export interface IPublicModelDocumentModel {
    * get project which this documentModel belongs to
    * @returns
    */
-  get project(): IPublicApiProject;
+  get project(): Project;
 
   /**
    * 获取文档的根节点
    * root node of this documentModel
    * @returns
    */
-  get root(): IPublicModelNode | null;
+  get root(): Node | null;
 
-  get focusNode(): IPublicModelNode | null;
+  get focusNode(): Node | null;
 
-  set focusNode(node: IPublicModelNode | null);
+  set focusNode(node: Node | null);
 
   /**
    * 获取文档下所有节点
    * @returns
    */
-  get nodesMap(): Map<string, IPublicModelNode>;
+  get nodesMap(): Map<string, Node>;
 
   /**
    * 模态节点管理
    * get instance of modalNodesManager
    */
-  get modalNodesManager(): IPublicModelModalNodesManager | null;
+  get modalNodesManager(): ModalNodesManager | null;
 
   /**
    * 根据 nodeId 返回 Node 实例
@@ -67,7 +74,7 @@ export interface IPublicModelDocumentModel {
    * @param nodeId
    * @returns
    */
-  getNodeById(nodeId: string): IPublicModelNode | null;
+  getNodeById(nodeId: string): Node | null;
 
   /**
    * 导入 schema
@@ -89,11 +96,11 @@ export interface IPublicModelDocumentModel {
    * insert a node
    */
   insertNode(
-    parent: IPublicModelNode,
-    thing: IPublicModelNode,
+    parent: Node,
+    thing: Node | IPublicTypeNodeData,
     at?: number | null | undefined,
     copy?: boolean | undefined
-  ): IPublicModelNode | null;
+  ): Node | null;
 
   /**
    * 创建一个节点
@@ -101,14 +108,14 @@ export interface IPublicModelDocumentModel {
    * @param data
    * @returns
    */
-  createNode(data: any): IPublicModelNode | null;
+  createNode(data: IPublicTypeNodeSchema): Node | null;
 
   /**
    * 移除指定节点/节点id
    * remove a node by node instance or nodeId
    * @param idOrNode
    */
-  removeNode(idOrNode: string | IPublicModelNode): void;
+  removeNode(idOrNode: string | Node): void;
 
   /**
    * componentsMap of documentModel
@@ -126,7 +133,7 @@ export interface IPublicModelDocumentModel {
    * @since v1.0.16
    */
   checkNesting(
-    dropTarget: IPublicModelNode,
+    dropTarget: Node,
     dragObject: IPublicTypeDragNodeObject | IPublicTypeDragNodeDataObject
   ): boolean;
 
@@ -134,26 +141,26 @@ export interface IPublicModelDocumentModel {
    * 当前 document 新增节点事件
    * set callback for event on node is created for a document
    */
-  onAddNode(fn: (node: IPublicModelNode) => void): IPublicTypeDisposable;
+  onAddNode(fn: (node: Node) => void): IPublicTypeDisposable;
 
   /**
    * 当前 document 新增节点事件，此时节点已经挂载到 document 上
    * set callback for event on node is mounted to canvas
    */
-  onMountNode(fn: (payload: { node: IPublicModelNode }) => void): IPublicTypeDisposable;
+  onMountNode(fn: (payload: { node: Node }) => void): IPublicTypeDisposable;
 
   /**
    * 当前 document 删除节点事件
    * set callback for event on node is removed
    */
-  onRemoveNode(fn: (node: IPublicModelNode) => void): IPublicTypeDisposable;
+  onRemoveNode(fn: (node: Node) => void): IPublicTypeDisposable;
 
   /**
    * 当前 document 的 hover 变更事件
    *
    * set callback for event on detecting changed
    */
-  onChangeDetecting(fn: (node: IPublicModelNode) => void): IPublicTypeDisposable;
+  onChangeDetecting(fn: (node: Node) => void): IPublicTypeDisposable;
 
   /**
    * 当前 document 的选中变更事件
@@ -166,19 +173,19 @@ export interface IPublicModelDocumentModel {
    * set callback for event on visibility changed for certain node
    * @param fn
    */
-  onChangeNodeVisible(fn: (node: IPublicModelNode, visible: boolean) => void): IPublicTypeDisposable;
+  onChangeNodeVisible(fn: (node: Node, visible: boolean) => void): IPublicTypeDisposable;
 
   /**
    * 当前 document 的节点 children 变更事件
    * @param fn
    */
-  onChangeNodeChildren(fn: (info: IPublicTypeOnChangeOptions) => void): IPublicTypeDisposable;
+  onChangeNodeChildren(fn: (info: IPublicTypeOnChangeOptions<Node>) => void): IPublicTypeDisposable;
 
   /**
    * 当前 document 节点属性修改事件
    * @param fn
    */
-  onChangeNodeProp(fn: (info: IPublicTypePropChangeOptions) => void): IPublicTypeDisposable;
+  onChangeNodeProp(fn: (info: IPublicTypePropChangeOptions<Node>) => void): IPublicTypeDisposable;
 
   /**
    * import schema event
@@ -193,21 +200,21 @@ export interface IPublicModelDocumentModel {
    * @param node
    * @since v1.1.0
    */
-  isDetectingNode(node: IPublicModelNode): boolean;
+  isDetectingNode(node: Node): boolean;
 
   /**
    * 获取当前的 DropLocation 信息
    * get current drop location
    * @since v1.1.0
    */
-  get dropLocation(): IPublicModelDropLocation | null;
+  get dropLocation(): DropLocation | null;
 
   /**
    * 设置当前的 DropLocation 信息
    * set current drop location
    * @since v1.1.0
    */
-  set dropLocation(loc: IPublicModelDropLocation | null);
+  set dropLocation(loc: DropLocation | null);
 
   /**
    * 设置聚焦节点变化的回调
@@ -216,7 +223,7 @@ export interface IPublicModelDocumentModel {
    * @since v1.1.0
    */
   onFocusNodeChanged(
-    fn: (doc: IPublicModelDocumentModel, focusNode: IPublicModelNode) => void,
+    fn: (doc: IPublicModelDocumentModel, focusNode: Node) => void,
   ): IPublicTypeDisposable;
 
   /**

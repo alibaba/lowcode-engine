@@ -170,7 +170,9 @@ class Renderer extends Component<{
     this.startTime = Date.now();
     this.schemaChangedSymbol = false;
 
-    if (!container.autoRender || isRendererDetached()) return null;
+    if (!container.autoRender || isRendererDetached()) {
+      return null;
+    }
 
     const { intl } = createIntl(locale);
 
