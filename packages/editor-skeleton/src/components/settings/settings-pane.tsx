@@ -80,7 +80,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
     const { extraProps } = this.field;
     const { condition } = extraProps;
     try {
-      return typeof condition === 'function' ? condition(this.field.internalToShell()) !== false : true;
+      return typeof condition === 'function' ? condition(this.field.internalToShellField()) !== false : true;
     } catch (error) {
       console.error('exception when condition (hidden) is excuted', error);
     }
@@ -111,7 +111,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
       if (setter.props) {
         setterProps = setter.props;
         if (typeof setterProps === 'function') {
-          setterProps = setterProps(this.field.internalToShell());
+          setterProps = setterProps(this.field.internalToShellField());
         }
       }
       if (setter.initialValue != null) {
@@ -177,7 +177,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
     }
     // 当前 field 没有 value 值时，将 initialValue 写入 field
     // 之所以用 initialValue，而不是 defaultValue 是为了保持跟 props.onInitial 的逻辑一致
-    const _initialValue = typeof initialValue === 'function' ? initialValue(this.field.internalToShell()) : initialValue;
+    const _initialValue = typeof initialValue === 'function' ? initialValue(this.field.internalToShellField()) : initialValue;
     this.field.setValue(_initialValue);
   }
 
@@ -225,9 +225,9 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
         forceInline: extraProps.forceInline,
         key: field.id,
         // === injection
-        prop: field.internalToShell(), // for compatible vision
+        prop: field.internalToShellField(), // for compatible vision
         selected: field.top?.getNode()?.internalToShellNode(),
-        field: field.internalToShell(),
+        field: field.internalToShellField(),
         // === IO
         value, // reaction point
         initialValue,
@@ -244,7 +244,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
           if (initialValue == null) {
             return;
           }
-          const value = typeof initialValue === 'function' ? initialValue(field.internalToShell()) : initialValue;
+          const value = typeof initialValue === 'function' ? initialValue(field.internalToShellField()) : initialValue;
           this.setState({
             // eslint-disable-next-line react/no-unused-state
             value,
@@ -303,7 +303,7 @@ class SettingGroupView extends Component<SettingGroupViewProps> {
     const { field } = this.props;
     const { extraProps } = field;
     const { condition, display } = extraProps;
-    const visible = field.isSingle && typeof condition === 'function' ? condition(field.internalToShell()) !== false : true;
+    const visible = field.isSingle && typeof condition === 'function' ? condition(field.internalToShellField()) !== false : true;
 
     if (!visible) {
       return null;

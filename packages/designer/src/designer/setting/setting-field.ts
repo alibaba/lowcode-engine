@@ -73,7 +73,7 @@ INode
 
   onEffect(action: () => void): IPublicTypeDisposable;
 
-  internalToShell(): IPublicModelSettingField;
+  internalToShellField(): IPublicModelSettingField;
 }
 
 export class SettingField extends SettingPropEntry implements ISettingField {
@@ -143,7 +143,7 @@ export class SettingField extends SettingPropEntry implements ISettingField {
     }
     if (isDynamicSetter(this._setter)) {
       return untracked(() => {
-        const shellThis = this.internalToShell();
+        const shellThis = this.internalToShellField();
         return (this._setter as IPublicTypeDynamicSetter)?.call(shellThis, shellThis!);
       });
     }
@@ -296,7 +296,7 @@ export class SettingField extends SettingPropEntry implements ISettingField {
   }
 
 
-  internalToShell() {
+  internalToShellField() {
     return this.designer!.shellModelFactory.createSettingField(this);
   }
 }
