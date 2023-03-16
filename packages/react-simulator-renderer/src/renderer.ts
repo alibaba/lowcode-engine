@@ -4,7 +4,7 @@ import { host } from './host';
 import SimulatorRendererView from './renderer-view';
 import { computed, observable as obx, untracked, makeObservable, configure } from 'mobx';
 import { getClientRects } from './utils/get-client-rects';
-import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
+import { reactFindDOMNodes, getReactInternalFiber } from './utils/react-find-dom-nodes';
 import {
   Asset,
   isElement,
@@ -565,7 +565,7 @@ function getClosestNodeInstance(
     if (isElement(el)) {
       el = cacheReactKey(el);
     } else {
-      return getNodeInstance(el[FIBER_KEY], specId);
+      return getNodeInstance(getReactInternalFiber(el), specId);
     }
   }
   while (el) {
