@@ -143,7 +143,7 @@ export class SettingField implements IPublicModelSettingField {
       if (isCustomView(item)) {
         return item;
       }
-      return item.internalToShell();
+      return item.internalToShellField();
     });
   }
 

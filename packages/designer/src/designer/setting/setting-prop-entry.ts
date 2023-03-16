@@ -35,7 +35,7 @@ export interface ISettingPropEntry extends ISettingEntry {
 
   setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: IPublicTypeSetValueOptions): void;
 
-  internalToShell(): IPublicModelSettingField;
+  internalToShellField(): IPublicModelSettingField;
 }
 
 export class SettingPropEntry implements ISettingPropEntry {
@@ -157,7 +157,7 @@ export class SettingPropEntry implements ISettingPropEntry {
       if (this.type !== 'field') {
         const { getValue } = this.extraProps;
         return getValue
-          ? getValue(this.internalToShell()!, undefined) === undefined
+          ? getValue(this.internalToShellField()!, undefined) === undefined
             ? 0
             : 1
           : 0;
@@ -196,7 +196,7 @@ export class SettingPropEntry implements ISettingPropEntry {
     }
     const { getValue } = this.extraProps;
     try {
-      return getValue ? getValue(this.internalToShell()!, val) : val;
+      return getValue ? getValue(this.internalToShellField()!, val) : val;
     } catch (e) {
       console.warn(e);
       return val;
@@ -215,7 +215,7 @@ export class SettingPropEntry implements ISettingPropEntry {
     const { setValue } = this.extraProps;
     if (setValue && !extraOptions?.disableMutator) {
       try {
-        setValue(this.internalToShell()!, val);
+        setValue(this.internalToShellField()!, val);
       } catch (e) {
         /* istanbul ignore next */
         console.warn(e);
@@ -238,7 +238,7 @@ export class SettingPropEntry implements ISettingPropEntry {
     const { setValue } = this.extraProps;
     if (setValue) {
       try {
-        setValue(this.internalToShell()!, undefined);
+        setValue(this.internalToShellField()!, undefined);
       } catch (e) {
         /* istanbul ignore next */
         console.warn(e);
@@ -394,7 +394,7 @@ export class SettingPropEntry implements ISettingPropEntry {
     return v;
   }
 
-  internalToShell(): IPublicModelSettingField {
+  internalToShellField(): IPublicModelSettingField {
     return this.designer!.shellModelFactory.createSettingField(this);;
   }
 }
