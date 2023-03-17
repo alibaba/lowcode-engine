@@ -1,5 +1,5 @@
 import { EitherOr } from '../../utils';
-import { IPublicTypeComponentSchema } from './';
+import { IPublicTypeComponentSchema, IPublicTypeProjectSchema } from './';
 
 /**
  * 定义组件大包及 external 资源的信息
@@ -51,5 +51,5 @@ export type IPublicTypePackage = EitherOr<{
   /**
    * 低代码组件 schema 内容
    */
-  schema?: IPublicTypeComponentSchema;
+  schema?: IPublicTypeProjectSchema<IPublicTypeComponentSchema>;
 }, 'package', 'id'>;

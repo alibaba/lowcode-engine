@@ -1,6 +1,6 @@
-import { BuiltinSimulatorRenderer, Component, DocumentModel, Node } from '@alilc/lowcode-designer';
-import { IPublicTypeComponentSchema, IPublicTypeNodeSchema, IPublicTypeNpmInfo, IPublicEnumTransformStage, IPublicTypeNodeInstance } from '@alilc/lowcode-types';
-import { Asset, compatibleLegaoSchema, cursor, isElement, isESModule, isPlainObject, isReactComponent, setNativeSelection } from '@alilc/lowcode-utils';
+import { BuiltinSimulatorRenderer, Component, IBaseNode, IDocumentModel } from '@alilc/lowcode-designer';
+import { IPublicTypeComponentSchema, IPublicTypeNodeSchema, IPublicTypeNpmInfo, IPublicEnumTransformStage, IPublicTypeNodeInstance, IPublicTypeProjectSchema } from '@alilc/lowcode-types';
+import { Asset, compatibleLegaoSchema, cursor, isElement, isESModule, isLowcodeProjectSchema, isComponentSchema, isPlainObject, isReactComponent, setNativeSelection } from '@alilc/lowcode-utils';
 import LowCodeRenderer from '@alilc/lowcode-rax-renderer';
 import { computed, observable as obx, makeObservable, configure } from 'mobx';
 import DriverUniversal from 'driver-universal';
@@ -47,15 +47,23 @@ const builtinComponents = {
 function buildComponents(
   libraryMap: LibraryMap,
   componentsMap: { [componentName: string]: IPublicTypeNpmInfo | ComponentType<any> | IPublicTypeComponentSchema },
-  createComponent: (schema: IPublicTypeComponentSchema) => Component | null,
+  createComponent: (schema: IPublicTypeProjectSchema<IPublicTypeComponentSchema>) => Component | null,
 ) {
   const components: any = {
     ...builtinComponents,
   };
   Object.keys(componentsMap).forEach((componentName) => {
     let component = componentsMap[componentName];
-    if (component && (component as IPublicTypeComponentSchema).componentName === 'Component') {
-      components[componentName] = createComponent(component as IPublicTypeComponentSchema);
+    if (component && (isLowcodeProjectSchema(component) || isComponentSchema(component))) {
+      if (isComponentSchema(component)) {
+        components[componentName] = createComponent({
+          version: '',
+          componentsMap: [],
+          componentsTree: [component],
+        });
+      } else {
+        components[componentName] = createComponent(component);
+      }
     } else if (isReactComponent(component)) {
       components[componentName] = component;
     } else {
@@ -110,7 +118,7 @@ export class DocumentInstance {
     return this.document.export(IPublicEnumTransformStage.Render);
   }
 
-  constructor(readonly container: SimulatorRendererContainer, readonly document: DocumentModel) {
+  constructor(readonly container: SimulatorRendererContainer, readonly document: IDocumentModel) {
     makeObservable(this);
   }
 
@@ -221,7 +229,7 @@ export class DocumentInstance {
     return this.instancesMap.get(id) || null;
   }
 
-  getNode(id: string): Node<IPublicTypeNodeSchema> | null {
+  getNode(id: string): IBaseNode<IPublicTypeNodeSchema> | null {
     return this.document.getNode(id);
   }
 }
@@ -255,6 +263,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
       // sync designMode
       this._designMode = host.designMode;
+
+      this._locale = host.locale;
 
       // sync requestHandlersMap
       this._requestHandlersMap = host.requestHandlersMap;
@@ -343,11 +353,11 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     // TODO: remove this.createComponent
     this._components = buildComponents(this._libraryMap, this._componentsMap, this.createComponent.bind(this));
   }
-  @obx.ref private _components: any = {};
-  @computed get components(): object {
+  @obx.ref private _components: Record<string, React.FC | React.ComponentClass> | null = {};
+  @computed get components(): Record<string, React.FC | React.ComponentClass> {
     // 根据 device 选择不同组件，进行响应式
     // 更好的做法是，根据 device 选择加载不同的组件资源，甚至是 simulatorUrl
-    return this._components;
+    return this._components || {};
   }
   // context from: utils、constants、history、location、match
   @obx.ref private _appContext = {};
@@ -361,6 +371,10 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   @obx.ref private _device: string = 'default';
   @computed get device() {
     return this._device;
+  }
+  @obx.ref private _locale: string | undefined = undefined;
+  @computed get locale() {
+    return this._locale;
   }
   @obx.ref private _requestHandlersMap = null;
   @computed get requestHandlersMap(): any {
@@ -378,12 +392,15 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     return loader.load(asset);
   }
 
+  async loadAsyncLibrary(asyncLibraryMap: Record<string, any>) {
+  }
+
   getComponent(componentName: string) {
     const paths = componentName.split('.');
     const subs: string[] = [];
 
     while (true) {
-      const component = this._components[componentName];
+      const component = this._components?.[componentName];
       if (component) {
         return getSubComponent(component, subs);
       }
@@ -416,7 +433,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       // if (instance && SYMBOL_VNID in instance) {
         // const docId = (instance.props as any).schema.docId;
         return {
-          docId: instance.props._leaf.document.id,
+          docId: instance.props._leaf.document?.id || '',
           nodeId: instance.props._leaf.getId(),
           instance,
           node: instance.props._leaf,
@@ -497,17 +514,26 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     this.currentDocumentInstance?.refresh();
   }
 
-  createComponent(schema: IPublicTypeNodeSchema): Component | null {
-    const _schema: any = {
-      ...compatibleLegaoSchema(schema),
+  stopAutoRepaintNode() {
+  }
+
+  enableAutoRepaintNode() {
+  }
+
+  createComponent(schema: IPublicTypeProjectSchema<IPublicTypeComponentSchema>): Component | null {
+    const _schema: IPublicTypeProjectSchema<IPublicTypeComponentSchema> = {
+      ...schema,
+      componentsTree: schema.componentsTree.map(compatibleLegaoSchema),
     };
 
-    if (schema.componentName === 'Component' && (schema as IPublicTypeComponentSchema).css) {
+    const componentsTreeSchema = _schema.componentsTree[0];
+
+    if (componentsTreeSchema.componentName === 'Component' && componentsTreeSchema.css) {
       const doc = window.document;
       const s = doc.createElement('style');
       s.setAttribute('type', 'text/css');
-      s.setAttribute('id', `Component-${schema.id || ''}`);
-      s.appendChild(doc.createTextNode((schema as IPublicTypeComponentSchema).css || ''));
+      s.setAttribute('id', `Component-${componentsTreeSchema.id || ''}`);
+      s.appendChild(doc.createTextNode(componentsTreeSchema.css || ''));
       doc.getElementsByTagName('head')[0].appendChild(s);
     }
 
@@ -520,9 +546,11 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         // @ts-ignore
         return createElement(LowCodeRenderer, {
           ...extraProps,
-          schema: _schema,
+          schema: componentsTreeSchema,
           components,
           designMode: '',
+          locale: renderer.locale,
+          messages: _schema.i18n || {},
           device: renderer.device,
           appHelper: renderer.context,
           rendererName: 'LowCodeRenderer',
