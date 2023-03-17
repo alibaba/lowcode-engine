@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import { configure } from 'mobx';
 
-configure({ enforceActions: 'never' });
+configure({ enforceActions: 'never', isolateGlobalState: true });
 
 // 常用的直接导出，其他的以 mobx 命名空间导出
 export {
