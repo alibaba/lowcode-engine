@@ -456,6 +456,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
           components: renderer.components,
           designMode: '',
           device: renderer.device,
+          locale: renderer.locale,
           appHelper: renderer.context,
           rendererName: 'LowCodeRenderer',
           thisRequiredInJSE: host.thisRequiredInJSE,

@@ -6,6 +6,7 @@ import {
   getPublicPath,
   focusTracker,
   engineConfig,
+  globalLocale,
   IReactionPublic,
   IReactionOptions,
   IReactionDisposer,
@@ -198,7 +199,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   @computed get locale(): string {
-    return this.get('locale');
+    return this.get('locale') || globalLocale.getLocale();
   }
 
   @computed get deviceClassName(): string | undefined {
