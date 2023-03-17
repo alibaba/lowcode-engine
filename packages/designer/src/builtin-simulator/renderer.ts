@@ -1,12 +1,12 @@
 import { Component } from '../simulator';
-import { IPublicTypeNodeSchema, IPublicTypeComponentInstance, IPublicTypeNodeInstance, Asset } from '@alilc/lowcode-types';
+import { IPublicTypeComponentInstance, IPublicTypeNodeInstance, Asset, IPublicTypeComponentSchema, IPublicTypeProjectSchema, IPublicTypeLowCodeComponent } from '@alilc/lowcode-types';
 
 export interface BuiltinSimulatorRenderer {
   readonly isSimulatorRenderer: true;
   autoRepaintNode?: boolean;
   components: Record<string, Component>;
   rerender: () => void;
-  createComponent(schema: IPublicTypeNodeSchema): Component | null;
+  createComponent(schema: IPublicTypeProjectSchema<IPublicTypeComponentSchema>): Component | null;
   getComponent(componentName: string): Component;
   getClosestNodeInstance(
       from: IPublicTypeComponentInstance,

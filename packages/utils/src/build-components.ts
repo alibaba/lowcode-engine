@@ -1,8 +1,10 @@
 import { ComponentType, forwardRef, createElement, FunctionComponent } from 'react';
-import { IPublicTypeNpmInfo, IPublicTypeComponentSchema } from '@alilc/lowcode-types';
+import { IPublicTypeNpmInfo, IPublicTypeComponentSchema, IPublicTypeProjectSchema } from '@alilc/lowcode-types';
 import { isESModule } from './is-es-module';
 import { isReactComponent, acceptsRef, wrapReactClass } from './is-react';
 import { isObject } from './is-object';
+import { isLowcodeProjectSchema } from './check-types';
+import { isComponentSchema } from './check-types/is-component-schema';
 
 type Component = ComponentType<any> | object;
 interface LibraryMap {
@@ -95,12 +97,20 @@ function isMixinComponent(components: any) {
 
 export function buildComponents(libraryMap: LibraryMap,
   componentsMap: { [componentName: string]: IPublicTypeNpmInfo | ComponentType<any> | IPublicTypeComponentSchema },
-  createComponent: (schema: IPublicTypeComponentSchema) => Component | null) {
+  createComponent: (schema: IPublicTypeProjectSchema<IPublicTypeComponentSchema>) => Component | null) {
   const components: any = {};
   Object.keys(componentsMap).forEach((componentName) => {
     let component = componentsMap[componentName];
-    if (component && (component as IPublicTypeComponentSchema).componentName === 'Component') {
-      components[componentName] = createComponent(component as IPublicTypeComponentSchema);
+    if (component && (isLowcodeProjectSchema(component) || isComponentSchema(component))) {
+      if (isComponentSchema(component)) {
+        components[componentName] = createComponent({
+          version: '',
+          componentsMap: [],
+          componentsTree: [component],
+        });
+      } else {
+        components[componentName] = createComponent(component);
+      }
     } else if (isReactComponent(component)) {
       if (!acceptsRef(component)) {
         component = wrapReactClass(component as FunctionComponent);
