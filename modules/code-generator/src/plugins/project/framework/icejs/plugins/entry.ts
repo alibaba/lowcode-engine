@@ -34,7 +34,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
             rootId: 'app',
           },
           router: {
-            type: 'hash',
+            type: ${JSON.stringify(next.ir?.config?.historyMode || 'hash')},
           },
         };
         createApp(appConfig);
