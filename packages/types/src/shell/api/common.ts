@@ -1,6 +1,6 @@
 
 import { Component, ReactNode } from 'react';
-import { IPublicTypeNodeSchema } from '../type';
+import { IPublicTypeNodeSchema, IPublicTypeTitleContent } from '../type';
 import { IPublicEnumTransitionType } from '../enum';
 
 export interface IPublicApiCommonUtils {
@@ -82,12 +82,16 @@ export interface IPublicApiCommonEditorCabin {
    * Title 组件
    * @experimental unstable API, pay extra caution when trying to use this
    */
-  get Tip(): Component;
+  get Tip(): React.FC<{}>;
   /**
    * Tip 组件
    * @experimental unstable API, pay extra caution when trying to use this
    */
-  get Title(): Component;
+  get Title(): React.FC<{
+    title: IPublicTypeTitleContent | undefined;
+    match?: boolean;
+    keywords?: string | null;
+  }>;
 }
 
 export interface IPublicApiCommonDesignerCabin {

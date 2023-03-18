@@ -46,8 +46,10 @@ export interface IPublicTypeLocationPropDetail {
 // eslint-disable-next-line max-len
 export type IPublicTypeLocationDetail = IPublicTypeLocationChildrenDetail | IPublicTypeLocationPropDetail | { type: string; [key: string]: any };
 
-export interface IPublicTypeLocationData {
-  target: IPublicModelNode; // shadowNode | ConditionFlow | ElementNode | RootNode
+export interface IPublicTypeLocationData<
+  Node = IPublicModelNode
+> {
+  target: Node; // shadowNode | ConditionFlow | ElementNode | RootNode
   detail: IPublicTypeLocationDetail;
   source: string;
   event: IPublicModelLocateEvent;

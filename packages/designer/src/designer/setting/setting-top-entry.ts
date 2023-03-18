@@ -1,11 +1,10 @@
-import { IPublicTypeCustomView, IPublicModelEditor } from '@alilc/lowcode-types';
+import { IPublicTypeCustomView, IPublicModelEditor, IPublicModelSettingTopEntry } from '@alilc/lowcode-types';
 import { isCustomView } from '@alilc/lowcode-utils';
 import { computed, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
-import { ISettingEntry } from './setting-entry';
-import { SettingField } from './setting-field';
-import { SettingPropEntry } from './setting-prop-entry';
+import { ISettingEntry } from './setting-entry-type';
+import { ISettingField, SettingField } from './setting-field';
 import { INode } from '../../document';
-import { ComponentMeta } from '../../component-meta';
+import { IComponentMeta } from '../../component-meta';
 import { IDesigner } from '../designer';
 import { Setters } from '@alilc/lowcode-shell';
 
@@ -16,7 +15,25 @@ function generateSessionId(nodes: INode[]) {
     .join(',');
 }
 
-export interface ISettingTopEntry extends ISettingEntry {
+export interface ISettingTopEntry extends ISettingEntry, IPublicModelSettingTopEntry<
+  INode,
+  ISettingField
+> {
+  purge(): void;
+
+  items: Array<ISettingField | IPublicTypeCustomView>;
+
+  readonly top: ISettingTopEntry;
+
+  readonly parent: ISettingTopEntry;
+
+  readonly path: never[];
+
+  componentMeta: IComponentMeta | null;
+
+  getExtraPropValue(propName: string): void;
+
+  setExtraPropValue(propName: string, value: any): void;
 }
 
 export class SettingTopEntry implements ISettingTopEntry {
@@ -24,11 +41,11 @@ export class SettingTopEntry implements ISettingTopEntry {
 
   private _items: Array<SettingField | IPublicTypeCustomView> = [];
 
-  private _componentMeta: ComponentMeta | null = null;
+  private _componentMeta: IComponentMeta | null = null;
 
   private _isSame = true;
 
-  private _settingFieldMap: { [prop: string]: SettingField } = {};
+  private _settingFieldMap: { [prop: string]: ISettingField } = {};
 
   readonly path = [];
 
@@ -121,8 +138,8 @@ export class SettingTopEntry implements ISettingTopEntry {
 
   private setupItems() {
     if (this.componentMeta) {
-      const settingFieldMap: { [prop: string]: SettingField } = {};
-      const settingFieldCollector = (name: string | number, field: SettingField) => {
+      const settingFieldMap: { [prop: string]: ISettingField } = {};
+      const settingFieldCollector = (name: string | number, field: ISettingField) => {
         settingFieldMap[name] = field;
       };
       this._items = this.componentMeta.configure.map((item) => {
@@ -159,34 +176,34 @@ export class SettingTopEntry implements ISettingTopEntry {
   /**
    * 获取子项
    */
-  get(propName: string | number): SettingPropEntry | null {
+  get(propName: string | number): ISettingField | null {
     if (!propName) return null;
-    return this._settingFieldMap[propName] || (new SettingPropEntry(this, propName));
+    return this._settingFieldMap[propName] || (new SettingField(this, { name: propName }));
   }
 
   /**
    * 设置子级属性值
    */
-  setPropValue(propName: string, value: any) {
+  setPropValue(propName: string | number, value: any) {
     this.nodes.forEach((node) => {
-      node.setPropValue(propName, value);
+      node.setPropValue(propName.toString(), value);
     });
   }
 
   /**
    * 清除已设置值
    */
-  clearPropValue(propName: string) {
+  clearPropValue(propName: string | number) {
     this.nodes.forEach((node) => {
-      node.clearPropValue(propName);
+      node.clearPropValue(propName.toString());
     });
   }
 
   /**
    * 获取子级属性值
    */
-  getPropValue(propName: string): any {
-    return this.first.getProp(propName, true)?.getValue();
+  getPropValue(propName: string | number): any {
+    return this.first.getProp(propName.toString(), true)?.getValue();
   }
 
   /**

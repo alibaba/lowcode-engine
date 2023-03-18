@@ -11,15 +11,18 @@ import {
   FileType,
   ICodeStruct,
   IContainerInfo,
-  IProjectTemplate,
 } from '../../../types';
+import { getSlotRelativePath } from '../../../utils/pathHelper';
 
 export interface PluginConfig {
-  fileType: string;
+  fileType?: string;
+
+  /** prefer using class property to define utils */
+  preferClassProperty?: boolean;
 }
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
-  const cfg: PluginConfig = {
+  const cfg: PluginConfig & { fileType: string } = {
     fileType: FileType.JSX,
     ...config,
   };
@@ -33,37 +36,35 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     next.contextData.useRefApi = true;
     const useRef = !!ir.analyzeResult?.isUsingRef;
 
-    // const isSingleComponent = next.contextData?.projectRemark?.isSingleComponent;
-    // const template = next.contextData?.template;
-
-    // function getRelativeUtilsPath(template: IProjectTemplate, isSingleComponent: boolean) {
-    //   let relativeUtilsPath = '../../utils';
-    //   const utilsPath = template.slots.utils.path;
-    //   if (ir.containerType === 'Component') {
-    //     // TODO: isSingleComponent
-    //     relativeUtilsPath = getRelativePath(template.slots.components.path.join('/'), utilsPath.join('/'));
-    //   }
-    //   return relativeUtilsPath;
-    // }
-
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: COMMON_CHUNK_NAME.InternalDepsImport,
-      // TODO: 下面这个路径有没有更好的方式来获取？而非写死
       content: `
-        import utils${useRef ? ', { RefsManager }' : ''} from '../../utils';
+        import utils${useRef ? ', { RefsManager }' : ''} from '${getSlotRelativePath({ contextData: next.contextData, from: 'components', to: 'utils' })}';
       `,
       linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport],
     });
 
-    next.chunks.push({
-      type: ChunkType.STRING,
-      fileType: cfg.fileType,
-      name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
-      content: 'this.utils = utils;',
-      linkAfter: [CLASS_DEFINE_CHUNK_NAME.ConstructorStart],
-    });
+    if (cfg.preferClassProperty) {
+      // mode: class property
+      next.chunks.push({
+        type: ChunkType.STRING,
+        fileType: cfg.fileType,
+        name: CLASS_DEFINE_CHUNK_NAME.InsVar,
+        content: 'utils = utils;',
+        linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsVar]],
+      });
+    } else {
+      // mode: assign in constructor
+      next.chunks.push({
+        type: ChunkType.STRING,
+        fileType: cfg.fileType,
+        name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
+        content: 'this.utils = utils;',
+        linkAfter: [CLASS_DEFINE_CHUNK_NAME.ConstructorStart],
+      });
+    }
 
     if (useRef) {
       next.chunks.push({

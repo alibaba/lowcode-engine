@@ -1,5 +1,5 @@
 import { ComponentType } from 'react';
-import { IPublicTypeComponentMetadata, IPublicTypeNodeSchema, IPublicTypeScrollable, IPublicTypeComponentInstance, IPublicModelSensor, IPublicTypeNodeInstance } from '@alilc/lowcode-types';
+import { IPublicTypeComponentMetadata, IPublicTypeNodeSchema, IPublicTypeScrollable, IPublicTypeComponentInstance, IPublicModelSensor, IPublicTypeNodeInstance, IPublicTypePackage } from '@alilc/lowcode-types';
 import { Point, ScrollTarget, ILocateEvent } from './designer';
 import { BuiltinSimulatorRenderer } from './builtin-simulator/renderer';
 import { INode } from './document';
@@ -78,7 +78,7 @@ export interface DropContainer {
 /**
  * 模拟器控制进程协议
  */
-export interface ISimulatorHost<P = object> extends IPublicModelSensor {
+export interface ISimulatorHost<P = object> extends IPublicModelSensor<INode> {
   readonly isSimulator: true;
 
   /**
@@ -177,6 +177,8 @@ export interface ISimulatorHost<P = object> extends IPublicModelSensor {
    * 销毁
    */
   purge(): void;
+
+  setupComponents(library: IPublicTypePackage[]): Promise<void>;
 }
 
 export function isSimulatorHost(obj: any): obj is ISimulatorHost {

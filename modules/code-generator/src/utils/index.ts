@@ -12,6 +12,7 @@ import * as version from './version';
 import * as scope from './Scope';
 import * as expressionParser from './expressionParser';
 import * as dataSource from './dataSource';
+import * as pathHelper from './pathHelper';
 
 export {
   common,
@@ -27,4 +28,5 @@ export {
   scope,
   expressionParser,
   dataSource,
+  pathHelper,
 };

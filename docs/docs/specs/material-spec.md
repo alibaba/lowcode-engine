@@ -833,11 +833,12 @@ props 数组下对象字段描述：
 | name       | 属性名                                                                                 | String            | type = 'field' 生效 |
 | defaultValue | 默认值 | Any(视字段类型而定) | type = 'field' 生效 |
 | supportVariable | 是否支持配置变量 | Boolean | type = 'field' 生效 |
-| condition | 配置当前 prop 是否展示 | (target: SettingTarget) => boolean; | - |
+| condition | 配置当前 prop 是否展示 | (target: IPublicModelSettingField) => boolean; | - |
+| ignoreDefaultValue | 配置当前 prop 是否忽略默认值处理逻辑，如果返回值是 true 引擎不会处理默认值 | (target: IPublicModelSettingField) => boolean; | - |
 | setter     | 单个控件 (setter) 描述，搭建基础协议组件的描述对象，支持 JSExpression / JSFunction / JSSlot | `String\|Object\|Function` | type = 'field' 生效 |
 | extraProps | 其他配置属性（不做流通要求）                                                           | Object            | 其他配置            |
-| extraProps.getValue | setter 渲染时被调用，setter 会根据该函数的返回值设置 setter 当前值 | Function            | (target: SettingTarget, value: any) => any;            |
-| extraProps.setValue | setter 内容修改时调用，开发者可在该函数内部修改节点 schema 或者进行其他操作 | Function            | (target: SettingTarget, value: any) => void;            |
+| extraProps.getValue | setter 渲染时被调用，setter 会根据该函数的返回值设置 setter 当前值 | Function            | (target: IPublicModelSettingField, value: any) => any;            |
+| extraProps.setValue | setter 内容修改时调用，开发者可在该函数内部修改节点 schema 或者进行其他操作 | Function            | (target: IPublicModelSettingField, value: any) => void;            |
 
 
 根据属性值类型 propType，确定对应控件类型 (setter) 。
@@ -922,7 +923,7 @@ props 数组下对象字段描述：
 
 | 字段 | 用途 | 类型 | 备注 |
 | ------------------------------- | --------------------------------------------------------------------------------------------------- | ------- | --- |
-|initialChildren	| 组件拖入“设计器”时根据此配置自动生成 children 节点 schema |NodeData[]/Function	NodeData[] | ((target: SettingTarget) => NodeData[]);|
+|initialChildren	| 组件拖入“设计器”时根据此配置自动生成 children 节点 schema |NodeData[]/Function	NodeData[] | ((target: IPublicModelSettingField) => NodeData[]);|
 |getResizingHandlers|	用于配置设计器中组件 resize 操作工具的样式和内容 |	Function|	(currentNode: any) => Array<{ type: 'N' | 'W' | 'S' | 'E' | 'NW' | 'NE' | 'SE' | 'SW'; content?: ReactElement; propTarget?: string; appearOn?: 'mouse-enter' | 'mouse-hover' | 'selected' | 'always'; }> / ReactElement[];
 |callbacks|	配置 callbacks 可捕获引擎抛出的一些事件，例如 onNodeAdd、onResize 等 |	Callback|	-
 |callbacks.onNodeAdd|	在容器中拖入组件时触发的事件回调 |	Function|	(e: MouseEvent, currentNode: any) => any
@@ -1098,7 +1099,7 @@ export interface Advanced {
   /**
    * 拖入容器时，自动带入 children 列表
    */
-  initialChildren?: NodeData[] | ((target: SettingTarget) => NodeData[]);
+  initialChildren?: NodeData[] | ((target: IPublicModelSettingField) => NodeData[]);
   /**
    * @todo 待补充文档
    */

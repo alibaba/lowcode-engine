@@ -83,7 +83,7 @@ export class ModalNodesManager implements IModalNodesManager {
   }
 
   private addNode(node: INode) {
-    if (node.componentMeta.isModal) {
+    if (node?.componentMeta.isModal) {
       this.hideModalNodes();
       this.modalNodes.push(node);
       this.addNodeEvent(node);

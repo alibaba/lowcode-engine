@@ -1,5 +1,5 @@
 import { Component } from '../simulator';
-import { IPublicTypeNodeSchema, IPublicTypeComponentInstance, IPublicTypeNodeInstance } from '@alilc/lowcode-types';
+import { IPublicTypeNodeSchema, IPublicTypeComponentInstance, IPublicTypeNodeInstance, Asset } from '@alilc/lowcode-types';
 
 export interface BuiltinSimulatorRenderer {
   readonly isSimulatorRenderer: true;
@@ -22,6 +22,7 @@ export interface BuiltinSimulatorRenderer {
   stopAutoRepaintNode(): void;
   enableAutoRepaintNode(): void;
   run(): void;
+  load(asset: Asset): Promise<any>;
 }
 
 export function isSimulatorRenderer(obj: any): obj is BuiltinSimulatorRenderer {

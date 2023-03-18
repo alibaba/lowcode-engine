@@ -1,144 +1,149 @@
-import { SettingField, ISettingEntry } from '@alilc/lowcode-designer';
+import { ISettingField, isSettingField } from '@alilc/lowcode-designer';
 import {
   IPublicTypeCompositeValue,
   IPublicTypeFieldConfig,
   IPublicTypeCustomView,
-  IPublicModelSettingPropEntry,
   IPublicTypeSetterType,
   IPublicTypeFieldExtraProps,
   IPublicModelSettingTopEntry,
   IPublicModelNode,
   IPublicModelComponentMeta,
   IPublicTypeSetValueOptions,
+  IPublicModelSettingField,
+  IPublicTypeDisposable,
 } from '@alilc/lowcode-types';
-import { settingPropEntrySymbol } from '../symbols';
+import { settingFieldSymbol } from '../symbols';
 import { Node as ShellNode } from './node';
-import { SettingTopEntry as ShellSettingTopEntry } from './setting-top-entry';
+import { SettingTopEntry, SettingTopEntry as ShellSettingTopEntry } from './setting-top-entry';
 import { ComponentMeta as ShellComponentMeta } from './component-meta';
 import { isCustomView } from '@alilc/lowcode-utils';
 
-export class SettingPropEntry implements IPublicModelSettingPropEntry {
-  private readonly [settingPropEntrySymbol]: SettingField;
+export class SettingField implements IPublicModelSettingField {
+  private readonly [settingFieldSymbol]: ISettingField;
 
-  constructor(prop: SettingField) {
-    this[settingPropEntrySymbol] = prop;
+  constructor(prop: ISettingField) {
+    this[settingFieldSymbol] = prop;
   }
 
-  static create(prop: SettingField): IPublicModelSettingPropEntry {
-    return new SettingPropEntry(prop);
+  static create(prop: ISettingField): IPublicModelSettingField {
+    return new SettingField(prop);
   }
 
   /**
    * 获取设置属性的 isGroup
    */
   get isGroup(): boolean {
-    return this[settingPropEntrySymbol].isGroup;
+    return this[settingFieldSymbol].isGroup;
   }
 
   /**
    * 获取设置属性的 id
    */
   get id(): string {
-    return this[settingPropEntrySymbol].id;
+    return this[settingFieldSymbol].id;
   }
 
   /**
    * 获取设置属性的 name
    */
-  get name(): string | number {
-    return this[settingPropEntrySymbol].name;
+  get name(): string | number | undefined {
+    return this[settingFieldSymbol].name;
   }
 
   /**
    * 获取设置属性的 key
    */
-  get key(): string | number {
-    return this[settingPropEntrySymbol].getKey();
+  get key(): string | number | undefined {
+    return this[settingFieldSymbol].getKey();
   }
 
   /**
    * 获取设置属性的 path
    */
   get path(): any[] {
-    return this[settingPropEntrySymbol].path;
+    return this[settingFieldSymbol].path;
   }
 
   /**
    * 获取设置属性的 title
    */
   get title(): any {
-    return this[settingPropEntrySymbol].title;
+    return this[settingFieldSymbol].title;
   }
 
   /**
    * 获取设置属性的 setter
    */
   get setter(): IPublicTypeSetterType | null {
-    return this[settingPropEntrySymbol].setter;
+    return this[settingFieldSymbol].setter;
   }
 
   /**
    * 获取设置属性的 expanded
    */
   get expanded(): boolean {
-    return this[settingPropEntrySymbol].expanded;
+    return this[settingFieldSymbol].expanded;
   }
 
   /**
    * 获取设置属性的 extraProps
    */
   get extraProps(): IPublicTypeFieldExtraProps {
-    return this[settingPropEntrySymbol].extraProps;
+    return this[settingFieldSymbol].extraProps;
   }
 
   get props(): IPublicModelSettingTopEntry {
-    return ShellSettingTopEntry.create(this[settingPropEntrySymbol].props);
+    return ShellSettingTopEntry.create(this[settingFieldSymbol].props);
   }
 
   /**
    * 获取设置属性对应的节点实例
    */
   get node(): IPublicModelNode | null {
-    return ShellNode.create(this[settingPropEntrySymbol].getNode());
+    return ShellNode.create(this[settingFieldSymbol].getNode());
   }
 
   /**
    * 获取设置属性的父设置属性
    */
-  get parent(): IPublicModelSettingPropEntry {
-    return SettingPropEntry.create(this[settingPropEntrySymbol].parent as any);
+  get parent(): IPublicModelSettingField | IPublicModelSettingTopEntry {
+    if (isSettingField(this[settingFieldSymbol].parent)) {
+      return SettingField.create(this[settingFieldSymbol].parent);
+    }
+
+    return SettingTopEntry.create(this[settingFieldSymbol].parent);
   }
 
   /**
    * 获取顶级设置属性
    */
   get top(): IPublicModelSettingTopEntry {
-    return ShellSettingTopEntry.create(this[settingPropEntrySymbol].top);
+    return ShellSettingTopEntry.create(this[settingFieldSymbol].top);
   }
 
   /**
    * 是否是 SettingField 实例
    */
   get isSettingField(): boolean {
-    return this[settingPropEntrySymbol].isSettingField;
+    return this[settingFieldSymbol].isSettingField;
   }
 
   /**
    * componentMeta
    */
   get componentMeta(): IPublicModelComponentMeta | null {
-    return ShellComponentMeta.create(this[settingPropEntrySymbol].componentMeta);
+    return ShellComponentMeta.create(this[settingFieldSymbol].componentMeta);
   }
 
   /**
    * 获取设置属性的 items
    */
-  get items(): Array<IPublicModelSettingPropEntry | IPublicTypeCustomView> {
-    return this[settingPropEntrySymbol].items?.map((item) => {
+  get items(): Array<IPublicModelSettingField | IPublicTypeCustomView> {
+    return this[settingFieldSymbol].items?.map((item) => {
       if (isCustomView(item)) {
         return item;
       }
-      return item.internalToShellPropEntry();
+      return item.internalToShellField();
     });
   }
 
@@ -147,7 +152,7 @@ export class SettingPropEntry implements IPublicModelSettingPropEntry {
    * @param key
    */
   setKey(key: string | number): void {
-    this[settingPropEntrySymbol].setKey(key);
+    this[settingFieldSymbol].setKey(key);
   }
 
   /**
@@ -169,7 +174,7 @@ export class SettingPropEntry implements IPublicModelSettingPropEntry {
    * @param val 值
    */
   setValue(val: IPublicTypeCompositeValue, extraOptions?: IPublicTypeSetValueOptions): void {
-    this[settingPropEntrySymbol].setValue(val, false, false, extraOptions);
+    this[settingFieldSymbol].setValue(val, false, false, extraOptions);
   }
 
   /**
@@ -178,7 +183,7 @@ export class SettingPropEntry implements IPublicModelSettingPropEntry {
    * @param value 值
    */
   setPropValue(propName: string | number, value: any): void {
-    this[settingPropEntrySymbol].setPropValue(propName, value);
+    this[settingFieldSymbol].setPropValue(propName, value);
   }
 
   /**
@@ -186,7 +191,7 @@ export class SettingPropEntry implements IPublicModelSettingPropEntry {
    * @param propName
    */
   clearPropValue(propName: string | number): void {
-    this[settingPropEntrySymbol].clearPropValue(propName);
+    this[settingFieldSymbol].clearPropValue(propName);
   }
 
   /**
@@ -194,7 +199,7 @@ export class SettingPropEntry implements IPublicModelSettingPropEntry {
    * @returns
    */
   getDefaultValue(): any {
-    return this[settingPropEntrySymbol].getDefaultValue();
+    return this[settingFieldSymbol].getDefaultValue();
   }
 
   /**
@@ -202,7 +207,7 @@ export class SettingPropEntry implements IPublicModelSettingPropEntry {
    * @returns
    */
   getValue(): any {
-    return this[settingPropEntrySymbol].getValue();
+    return this[settingFieldSymbol].getValue();
   }
 
   /**
@@ -211,21 +216,21 @@ export class SettingPropEntry implements IPublicModelSettingPropEntry {
    * @returns
    */
   getPropValue(propName: string | number): any {
-    return this[settingPropEntrySymbol].getPropValue(propName);
+    return this[settingFieldSymbol].getPropValue(propName);
   }
 
   /**
    * 获取顶层附属属性值
    */
   getExtraPropValue(propName: string): any {
-    return this[settingPropEntrySymbol].getExtraPropValue(propName);
+    return this[settingFieldSymbol].getExtraPropValue(propName);
   }
 
   /**
    * 设置顶层附属属性值
    */
   setExtraPropValue(propName: string, value: any): void {
-    this[settingPropEntrySymbol].setExtraPropValue(propName, value);
+    this[settingFieldSymbol].setExtraPropValue(propName, value);
   }
 
   /**
@@ -233,7 +238,7 @@ export class SettingPropEntry implements IPublicModelSettingPropEntry {
    * @returns
    */
   getProps(): IPublicModelSettingTopEntry {
-    return ShellSettingTopEntry.create(this[settingPropEntrySymbol].getProps() as ISettingEntry);
+    return ShellSettingTopEntry.create(this[settingFieldSymbol].getProps());
   }
 
   /**
@@ -241,7 +246,7 @@ export class SettingPropEntry implements IPublicModelSettingPropEntry {
    * @returns
    */
   isUseVariable(): boolean {
-    return this[settingPropEntrySymbol].isUseVariable();
+    return this[settingFieldSymbol].isUseVariable();
   }
 
   /**
@@ -249,7 +254,7 @@ export class SettingPropEntry implements IPublicModelSettingPropEntry {
    * @param flag
    */
   setUseVariable(flag: boolean): void {
-    this[settingPropEntrySymbol].setUseVariable(flag);
+    this[settingFieldSymbol].setUseVariable(flag);
   }
 
   /**
@@ -257,8 +262,8 @@ export class SettingPropEntry implements IPublicModelSettingPropEntry {
    * @param config
    * @returns
    */
-  createField(config: IPublicTypeFieldConfig): IPublicModelSettingPropEntry {
-    return SettingPropEntry.create(this[settingPropEntrySymbol].createField(config));
+  createField(config: IPublicTypeFieldConfig): IPublicModelSettingField {
+    return SettingField.create(this[settingFieldSymbol].createField(config));
   }
 
   /**
@@ -266,21 +271,21 @@ export class SettingPropEntry implements IPublicModelSettingPropEntry {
    * @returns
    */
   getMockOrValue(): any {
-    return this[settingPropEntrySymbol].getMockOrValue();
+    return this[settingFieldSymbol].getMockOrValue();
   }
 
   /**
    * 销毁当前 field 实例
    */
   purge(): void {
-    this[settingPropEntrySymbol].purge();
+    this[settingFieldSymbol].purge();
   }
 
   /**
    * 移除当前 field 实例
    */
   remove(): void {
-    this[settingPropEntrySymbol].remove();
+    this[settingFieldSymbol].remove();
   }
 
   /**
@@ -288,15 +293,15 @@ export class SettingPropEntry implements IPublicModelSettingPropEntry {
    * @param action
    * @returns
    */
-  onEffect(action: () => void): () => void {
-    return this[settingPropEntrySymbol].onEffect(action);
+  onEffect(action: () => void): IPublicTypeDisposable {
+    return this[settingFieldSymbol].onEffect(action);
   }
 
   /**
    * 返回 shell 模型，兼容某些场景下 field 已经是 shell field 了
    * @returns
    */
-  internalToShellPropEntry() {
+  internalToShellField() {
     return this;
   }
 }

@@ -3,20 +3,22 @@ import { IPublicEnumTransformStage } from '../enum';
 import { IPublicApiSimulatorHost } from './';
 import { IPublicModelDocumentModel } from '../model';
 
-export interface IPublicApiProject {
+export interface IBaseApiProject<
+  DocumentModel
+> {
 
   /**
    * 获取当前的 document
    * get current document
    */
-  get currentDocument(): IPublicModelDocumentModel | null;
+  get currentDocument(): DocumentModel | null;
 
   /**
    * 获取当前 project 下所有 documents
    * get all documents of this project
    * @returns
    */
-  get documents(): IPublicModelDocumentModel[];
+  get documents(): DocumentModel[];
 
   /**
    * 获取模拟器的 host
@@ -30,7 +32,7 @@ export interface IPublicApiProject {
    * @param doc
    * @returns
    */
-  openDocument(doc?: string | IPublicTypeRootSchema | undefined): IPublicModelDocumentModel | null;
+  openDocument(doc?: string | IPublicTypeRootSchema | undefined): DocumentModel | null;
 
   /**
    * 创建一个 document
@@ -38,14 +40,14 @@ export interface IPublicApiProject {
    * @param data
    * @returns
    */
-  createDocument(data?: IPublicTypeRootSchema): IPublicModelDocumentModel | null;
+  createDocument(data?: IPublicTypeRootSchema): DocumentModel | null;
 
   /**
    * 删除一个 document
    * remove a document
    * @param doc
    */
-  removeDocument(doc: IPublicModelDocumentModel): void;
+  removeDocument(doc: DocumentModel): void;
 
   /**
    * 根据 fileName 获取 document
@@ -53,7 +55,7 @@ export interface IPublicApiProject {
    * @param fileName
    * @returns
    */
-  getDocumentByFileName(fileName: string): IPublicModelDocumentModel | null;
+  getDocumentByFileName(fileName: string): DocumentModel | null;
 
   /**
    * 根据 id 获取 document
@@ -61,7 +63,7 @@ export interface IPublicApiProject {
    * @param id
    * @returns
    */
-  getDocumentById(id: string): IPublicModelDocumentModel | null;
+  getDocumentById(id: string): DocumentModel | null;
 
   /**
    * 导出 project
@@ -82,7 +84,7 @@ export interface IPublicApiProject {
    * get current document
    * @returns
    */
-  getCurrentDocument(): IPublicModelDocumentModel | null;
+  getCurrentDocument(): DocumentModel | null;
 
   /**
    * 增加一个属性的管道处理函数
@@ -107,7 +109,7 @@ export interface IPublicApiProject {
    * 当前 project 内的 document 变更事件
    * set callback for event onDocumentChanged
    */
-  onChangeDocument(fn: (doc: IPublicModelDocumentModel) => void): IPublicTypeDisposable;
+  onChangeDocument(fn: (doc: DocumentModel) => void): IPublicTypeDisposable;
 
   /**
    * 当前 project 的模拟器 ready 事件
@@ -131,3 +133,5 @@ export interface IPublicApiProject {
    */
   setI18n(value: object): void;
 }
+
+export interface IPublicApiProject extends IBaseApiProject<IPublicModelDocumentModel> {}

@@ -1,10 +1,10 @@
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import classNames from 'classnames';
 import TreeNode from '../controllers/tree-node';
 import TreeNodeView from './tree-node';
-import { IPublicModelPluginContext, IPublicModelExclusiveGroup } from '@alilc/lowcode-types';
+import { IPublicModelPluginContext, IPublicModelExclusiveGroup, IPublicTypeDisposable, IPublicTypeLocationChildrenDetail } from '@alilc/lowcode-types';
 
-export default class TreeBranches extends Component<{
+export default class TreeBranches extends PureComponent<{
   treeNode: TreeNode;
   isModal?: boolean;
   pluginContext: IPublicModelPluginContext;
@@ -25,10 +25,10 @@ export default class TreeBranches extends Component<{
 
   componentDidMount() {
     const { treeNode } = this.props;
-    treeNode.onFilterResultChanged = () => {
+    treeNode.onFilterResultChanged(() => {
       const { filterWorking: newFilterWorking, matchChild: newMatchChild } = treeNode.filterReult;
       this.setState({ filterWorking: newFilterWorking, matchChild: newMatchChild });
-    };
+    });
   }
 
   componentWillUnmount(): void {
@@ -62,18 +62,25 @@ export default class TreeBranches extends Component<{
   }
 }
 
-class TreeNodeChildren extends Component<{
+
+interface ITreeNodeChildrenState {
+  filterWorking: boolean;
+  matchSelf: boolean;
+  keywords: string | null;
+  dropDetail: IPublicTypeLocationChildrenDetail | undefined | null;
+}
+class TreeNodeChildren extends PureComponent<{
     treeNode: TreeNode;
     isModal?: boolean;
     pluginContext: IPublicModelPluginContext;
-  }> {
-  state = {
+  }, ITreeNodeChildrenState> {
+  state: ITreeNodeChildrenState = {
     filterWorking: false,
     matchSelf: false,
     keywords: null,
     dropDetail: null,
   };
-  offLocationChanged: () => void;
+  offLocationChanged: IPublicTypeDisposable | undefined;
   componentDidMount() {
     const { treeNode, pluginContext } = this.props;
     const { project } = pluginContext;
@@ -85,7 +92,7 @@ class TreeNodeChildren extends Component<{
       keywords,
       dropDetail,
     });
-    treeNode.onFilterResultChanged = () => {
+    treeNode.onFilterResultChanged(() => {
       const {
         filterWorking: newFilterWorking,
         matchSelf: newMatchChild,
@@ -96,7 +103,7 @@ class TreeNodeChildren extends Component<{
         matchSelf: newMatchChild,
         keywords: newKeywords,
       });
-    };
+    });
     this.offLocationChanged = project.currentDocument?.onDropLocationChanged(
         () => {
           this.setState({ dropDetail: treeNode.dropDetail });
@@ -118,7 +125,7 @@ class TreeNodeChildren extends Component<{
     const endGroup = () => {
       if (groupContents.length > 0) {
         children.push(
-          <div key={currentGrp.id} className="condition-group-container" data-id={currentGrp.firstNode.id}>
+          <div key={currentGrp.id} className="condition-group-container" data-id={currentGrp.firstNode?.id}>
             <div className="condition-group-title">
               <Title
                 title={currentGrp.title}
@@ -144,7 +151,7 @@ class TreeNodeChildren extends Component<{
       />
     );
     treeNode.children?.forEach((child, index) => {
-      const childIsModal = child.node.componentMeta.isModal || false;
+      const childIsModal = child.node.componentMeta?.isModal || false;
       if (isModal != childIsModal) {
         return;
       }
@@ -180,7 +187,7 @@ class TreeNodeChildren extends Component<{
   }
 }
 
-class TreeNodeSlots extends Component<{
+class TreeNodeSlots extends PureComponent<{
     treeNode: TreeNode;
     pluginContext: IPublicModelPluginContext;
   }> {

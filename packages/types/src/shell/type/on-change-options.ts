@@ -1,6 +1,8 @@
 import { IPublicModelNode } from '..';
 
-export interface IPublicTypeOnChangeOptions {
+export interface IPublicTypeOnChangeOptions<
+  Node = IPublicModelNode
+> {
   type: string;
-  node: IPublicModelNode;
+  node: Node;
 }

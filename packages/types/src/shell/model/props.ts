@@ -1,5 +1,5 @@
 import { IPublicTypeCompositeValue } from '../type';
-import { IPublicModelNode } from './';
+import { IPublicModelNode, IPublicModelProp } from './';
 
 export interface IBaseModelProps<
   Prop
@@ -86,4 +86,4 @@ export interface IBaseModelProps<
 
 }
 
-export type IPublicModelProps = IBaseModelProps<IPublicModelProps>;
+export interface IPublicModelProps extends IBaseModelProps<IPublicModelProp> {};

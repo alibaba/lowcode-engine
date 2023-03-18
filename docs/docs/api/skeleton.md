@@ -90,7 +90,7 @@ Widget 形式是直接渲染在当前编辑器的对应位置上。如 demo 中�
 接入可以参考代码：
 
 ```javascript
-import {skeleton} from "@alilc/lowcode-engine";
+import { skeleton } from "@alilc/lowcode-engine";
 // 注册 logo 面板
 skeleton.add({
   area: "topArea",
@@ -119,18 +119,15 @@ skeleton.add({
   area: "leftArea",
   type: "Dock",
   name: "opener",
-  content: Opener, // Widget 组件实例
-  contentProps: {  // Widget 插件 props
-    xxx: "1",
-  },
   props: {
+    icon: Icon, // Icon 组件实例
     align: "bottom",
-  },
-  onClick: function() {
-    // 打开外部链接
-    window.open('https://lowcode-engine.cn');
-    // 显示 widget
-    skeleton.showWidget('xxx');
+    onClick: function () {
+      // 打开外部链接
+      window.open('https://lowcode-engine.cn');
+      // 显示 widget
+      skeleton.showWidget('xxx');
+    }
   }
 });
 ```
@@ -159,7 +156,7 @@ IWidgetBaseConfig 定义如下：
 | --- | --- | --- |
 | name | 面板名称 |  |
 | area | 扩展区位置，可选值：'topArea' &#124; 'leftArea' &#124; 'rightArea' &#124; 'toolbar' &#124; 'bottomArea' &#124; 'mainArea' |  |
-| type | 面板类型，可选值：'Widget' &#124; 'PanelDock' &#124; 'Panel' | 详见前文中对**展示类型**的描述 |
+| type | 面板类型，可选值：'Widget' &#124; 'PanelDock' &#124; 'Panel' &#124; Dock | 详见前文中对**展示类型**的描述 |
 | content | 面板的实现类/节点，类型是 ReactClass &#124; ReactElement |  |
 | props | 面板属性 | align: 'top' &#124; 'bottom' &#124; 'left' &#124; 'center' &#124; 'right'; // 指定面板 icon 位置区域<br />icon: string &#124; ReactElement;  // icon 为字符串时，请确定当前 fusion 主题包中包含该 icon<br />description: string;<br />condition: Function; // 指定当前面板的显影状态 |
 | contentProps | 面板的实现类/节点的参数 |  |
@@ -420,7 +417,7 @@ skeleton.disableWidget('sourceEditor');
 import { skeleton } from '@alilc/lowcode-engine';
 
 skeleton.add({
-	name: 'bottomAreaPanelName',
+  name: 'bottomAreaPanelName',
   area: 'bottomArea',
   type: 'Panel',
   content: () => 'demoText',

@@ -75,8 +75,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
 
     // 注意：这里其实隐含了一个假设：schema 中的 componentName 应该是一个有效的 JS 标识符，而且是大写字母打头的
     // FIXME: 为了快速修复临时加的逻辑，需要用 pre-process 的方式替代处理。
-    const mapComponentNameToAliasOrKeepIt = (componentName: string) =>
-      componentsNameAliasMap.get(componentName) || componentName;
+    const mapComponentNameToAliasOrKeepIt = (componentName: string) => componentsNameAliasMap.get(componentName) || componentName;
 
     // 然后过滤掉所有的别名 chunks
     next.chunks = next.chunks.filter((chunk) => !isImportAliasDefineChunk(chunk));

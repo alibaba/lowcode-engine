@@ -1,11 +1,9 @@
-/* eslint-disable max-len */
-import { Component, KeyboardEvent, FocusEvent, Fragment } from 'react';
+import { KeyboardEvent, FocusEvent, Fragment, PureComponent } from 'react';
 import classNames from 'classnames';
 import { createIcon } from '@alilc/lowcode-utils';
 import { IPublicModelPluginContext, IPublicApiEvent } from '@alilc/lowcode-types';
 import TreeNode from '../controllers/tree-node';
 import { IconLock, IconUnlock, IconArrowRight, IconEyeClose, IconEye, IconCond, IconLoop, IconRadioActive, IconRadio, IconSetting } from '../icons';
-
 
 function emitOutlineEvent(event: IPublicApiEvent, type: string, treeNode: TreeNode, rest?: Record<string, unknown>) {
   const node = treeNode?.node;
@@ -18,7 +16,7 @@ function emitOutlineEvent(event: IPublicApiEvent, type: string, treeNode: TreeNo
   });
 }
 
-export default class TreeTitle extends Component<{
+export default class TreeTitle extends PureComponent<{
   treeNode: TreeNode;
   isModal?: boolean;
   expanded: boolean;
@@ -35,7 +33,9 @@ export default class TreeTitle extends Component<{
     title: '',
   };
 
-  private enableEdit = (e) => {
+  private lastInput?: HTMLInputElement;
+
+  private enableEdit = (e: MouseEvent) => {
     e.preventDefault();
     this.setState({
       editing: true,
@@ -66,8 +66,6 @@ export default class TreeTitle extends Component<{
     }
   };
 
-  private lastInput?: HTMLInputElement;
-
   private setCaret = (input: HTMLInputElement | null) => {
     if (!input || this.lastInput === input) {
       return;
@@ -84,11 +82,11 @@ export default class TreeTitle extends Component<{
       editing: false,
       title: treeNode.titleLabel,
     });
-    treeNode.onTitleLabelChanged = () => {
+    treeNode.onTitleLabelChanged(() => {
       this.setState({
         title: treeNode.titleLabel,
       });
-    };
+    });
   }
 
   render() {
@@ -96,6 +94,8 @@ export default class TreeTitle extends Component<{
     const { editing } = this.state;
     const isCNode = !treeNode.isRoot();
     const { node } = treeNode;
+    const { componentMeta } = node;
+    const availableActions = componentMeta ? componentMeta.availableActions.map((availableAction) => availableAction.name) : [];
     const isNodeParent = node.isParentalNode;
     const isContainer = node.isContainerNode;
     let style: any;
@@ -112,8 +112,11 @@ export default class TreeTitle extends Component<{
     const { intlNode, common, config } = pluginContext;
     const Tip = common.editorCabin.Tip;
     const Title = common.editorCabin.Title;
-    const shouldShowHideBtn = isCNode && isNodeParent && !isModal;
-    const shouldShowLockBtn = config.get('enableCanvasLock', false) && isContainer && isCNode && isNodeParent;
+    const couldHide = availableActions.includes('hide');
+    const couldLock = availableActions.includes('lock');
+    const couldUnlock = availableActions.includes('unlock');
+    const shouldShowHideBtn = isCNode && isNodeParent && !isModal && couldHide;
+    const shouldShowLockBtn = config.get('enableCanvasLock', false) && isContainer && isCNode && isNodeParent && ((couldLock && !node.isLocked) || (couldUnlock && node.isLocked));
     const shouldEditBtn = isCNode && isNodeParent;
     return (
       <div
@@ -201,7 +204,7 @@ export default class TreeTitle extends Component<{
   }
 }
 
-class RenameBtn extends Component<{
+class RenameBtn extends PureComponent<{
   treeNode: TreeNode;
   pluginContext: IPublicModelPluginContext;
   onClick: (e: any) => void;
@@ -221,8 +224,7 @@ class RenameBtn extends Component<{
   }
 }
 
-
-class LockBtn extends Component<{
+class LockBtn extends PureComponent<{
   treeNode: TreeNode;
   pluginContext: IPublicModelPluginContext;
   locked: boolean;
@@ -246,7 +248,7 @@ class LockBtn extends Component<{
   }
 }
 
-class HideBtn extends Component<{
+class HideBtn extends PureComponent<{
   treeNode: TreeNode;
   hidden: boolean;
   pluginContext: IPublicModelPluginContext;
@@ -273,8 +275,7 @@ class HideBtn extends Component<{
   }
 }
 
-
-class ExpandBtn extends Component<{
+class ExpandBtn extends PureComponent<{
   treeNode: TreeNode;
   pluginContext: IPublicModelPluginContext;
   expanded: boolean;

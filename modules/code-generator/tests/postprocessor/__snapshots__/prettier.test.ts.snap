@@ -19,7 +19,12 @@ export function App() {
 `;
 
 exports[`postprocessor/prettier should works for json file 1`] = `
-"{ \\"components\\": [\\"Button\\", \\"Block\\"] }
+"{
+  \\"components\\": [
+    \\"Button\\",
+    \\"Block\\"
+  ]
+}
 "
 `;
 

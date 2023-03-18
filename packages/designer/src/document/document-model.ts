@@ -39,7 +39,7 @@ import { IProject, Project } from '../project';
 import { ISimulatorHost } from '../simulator';
 import { IComponentMeta } from '../component-meta';
 import { IDesigner, IHistory } from '../designer';
-import { insertChildren, insertChild, RootNode, INode } from './node/node';
+import { insertChildren, insertChild, IRootNode, INode } from './node/node';
 import { Selection, ISelection } from './selection';
 import { History } from './history';
 import { IModalNodesManager, ModalNodesManager, Node } from './node';
@@ -56,7 +56,7 @@ export type GetDataType<T, NodeType> = T extends undefined
 export interface IDocumentModel extends Omit< IPublicModelDocumentModel<
   ISelection,
   IHistory,
-  INode | RootNode,
+  INode | IRootNode,
   IDropLocation,
   IModalNodesManager,
   IProject
@@ -87,10 +87,27 @@ export interface IDocumentModel extends Omit< IPublicModelDocumentModel<
 
   get active(): boolean;
 
+  get nodesMap(): Map<string, INode>;
+
+  /**
+   * 是否为非激活状态
+   */
+  get suspensed(): boolean;
+
+  get fileName(): string;
+
+  get currentRoot(): INode | null;
+
+  selection: ISelection;
+
+  isBlank(): boolean;
+
   /**
    * 根据 id 获取节点
    */
   getNode(id: string): INode | null;
+
+  getRoot(): INode | null;
 
   getHistory(): IHistory;
 
@@ -114,13 +131,27 @@ export interface IDocumentModel extends Omit< IPublicModelDocumentModel<
   onChangeNodeVisible(fn: (node: INode, visible: boolean) => void): IPublicTypeDisposable;
 
   addWillPurge(node: INode): void;
+
+  removeWillPurge(node: INode): void;
+
+  getComponentMeta(componentName: string): IComponentMeta;
+
+  insertNodes(parent: INode, thing: INode[] | IPublicTypeNodeData[], at?: number | null, copy?: boolean): INode[];
+
+  open(): DocumentModel;
+
+  remove(): void;
+
+  suspense(): void;
+
+  close(): void;
 }
 
 export class DocumentModel implements IDocumentModel {
   /**
    * 根节点 类型有：Page/Component/Block
    */
-  rootNode: INode | null;
+  rootNode: IRootNode | null;
 
   /**
    * 文档编号
@@ -272,7 +303,7 @@ export class DocumentModel implements IDocumentModel {
     return this.rootNode;
   }
 
-  constructor(project: Project, schema?: IPublicTypeRootSchema) {
+  constructor(project: IProject, schema?: IPublicTypeRootSchema) {
     makeObservable(this);
     this.project = project;
     this.designer = this.project?.designer;
@@ -318,7 +349,7 @@ export class DocumentModel implements IDocumentModel {
     };
   }
 
-  onChangeNodeChildren(fn: (info: IPublicTypeOnChangeOptions) => void): IPublicTypeDisposable {
+  onChangeNodeChildren(fn: (info: IPublicTypeOnChangeOptions<INode>) => void): IPublicTypeDisposable {
     this.designer.editor?.eventBus.on(EDITOR_EVENT.NODE_VISIBLE_CHANGE, fn);
 
     return () => {
@@ -338,7 +369,7 @@ export class DocumentModel implements IDocumentModel {
   }
 
   isBlank() {
-    return this._blank && !this.isModified();
+    return !!(this._blank && !this.isModified());
   }
 
   /**
@@ -379,7 +410,7 @@ export class DocumentModel implements IDocumentModel {
    * 根据 schema 创建一个节点
    */
   @action
-  createNode<T extends INode = INode, C = undefined>(data: GetDataType<C, T>, checkId: boolean = true): T {
+  createNode<T extends INode = INode, C = undefined>(data: GetDataType<C, T>): T {
     let schema: any;
     if (isDOMText(data) || isJSExpression(data)) {
       schema = {
@@ -410,7 +441,7 @@ export class DocumentModel implements IDocumentModel {
       }
     }
     if (!node) {
-      node = new Node(this, schema, { checkId });
+      node = new Node(this, schema);
       // will add
       // todo: this.activeNodes?.push(node);
     }
@@ -429,7 +460,7 @@ export class DocumentModel implements IDocumentModel {
   /**
    * 插入一个节点
    */
-  insertNode(parent: INode, thing: INode | IPublicTypeNodeData, at?: number | null, copy?: boolean): INode {
+  insertNode(parent: INode, thing: INode | IPublicTypeNodeData, at?: number | null, copy?: boolean): INode | null {
     return insertChild(parent, thing, at, copy);
   }
 
@@ -445,7 +476,7 @@ export class DocumentModel implements IDocumentModel {
    */
   removeNode(idOrNode: string | INode) {
     let id: string;
-    let node: INode | null;
+    let node: INode | null = null;
     if (typeof idOrNode === 'string') {
       id = idOrNode;
       node = this.getNode(id);
@@ -544,7 +575,7 @@ export class DocumentModel implements IDocumentModel {
   /**
    * 是否已修改
    */
-  isModified() {
+  isModified(): boolean {
     return this.history.isSavePoint();
   }
 
@@ -633,7 +664,7 @@ export class DocumentModel implements IDocumentModel {
       items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
     } else if (isDragNodeObject<INode>(dragObject)) {
       items = dragObject.nodes;
-    } else if (isNode(dragObject) || isNodeSchema(dragObject)) {
+    } else if (isNode<INode>(dragObject) || isNodeSchema(dragObject)) {
       items = [dragObject];
     } else {
       console.warn('the dragObject is not in the correct type, dragObject:', dragObject);
@@ -752,7 +783,7 @@ export class DocumentModel implements IDocumentModel {
   /* istanbul ignore next */
   acceptRootNodeVisitor(
     visitorName = 'default',
-    visitorFn: (node: RootNode) => any,
+    visitorFn: (node: IRootNode) => any,
   ) {
     let visitorResult = {};
     if (!visitorName) {
@@ -760,8 +791,10 @@ export class DocumentModel implements IDocumentModel {
       console.warn('Invalid or empty RootNodeVisitor name.');
     }
     try {
-      visitorResult = visitorFn.call(this, this.rootNode);
-      this.rootNodeVisitorMap[visitorName] = visitorResult;
+      if (this.rootNode) {
+        visitorResult = visitorFn.call(this, this.rootNode);
+        this.rootNodeVisitorMap[visitorName] = visitorResult;
+      }
     } catch (e) {
       console.error('RootNodeVisitor is not valid.');
       console.error(e);
@@ -856,10 +889,10 @@ export class DocumentModel implements IDocumentModel {
     console.warn('onRefresh method is deprecated');
   }
 
-  onReady(fn: Function) {
+  onReady(fn: (...args: any[]) => void) {
     this.designer.editor.eventBus.on('document-open', fn);
     return () => {
-      this.designer.editor.removeListener('document-open', fn);
+      this.designer.editor.eventBus.off('document-open', fn);
     };
   }
 
@@ -868,7 +901,7 @@ export class DocumentModel implements IDocumentModel {
   }
 }
 
-export function isDocumentModel(obj: any): obj is DocumentModel {
+export function isDocumentModel(obj: any): obj is IDocumentModel {
   return obj && obj.rootNode;
 }
 

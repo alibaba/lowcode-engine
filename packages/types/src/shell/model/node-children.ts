@@ -27,6 +27,7 @@ export interface IPublicModelNodeChildren<
 
   /**
    * 是否为空
+   *
    * @returns
    */
   get isEmptyNode(): boolean;
@@ -44,6 +45,7 @@ export interface IPublicModelNodeChildren<
 
   /**
    * 删除指定节点
+   *
    * delete the node
    * @param node
    */
@@ -51,6 +53,7 @@ export interface IPublicModelNodeChildren<
 
   /**
    * 插入一个节点
+   *
    * insert a node at specific position
    * @param node 待插入节点
    * @param at 插入下标
@@ -60,6 +63,7 @@ export interface IPublicModelNodeChildren<
 
   /**
    * 返回指定节点的下标
+   *
    * get index of node in current children
    * @param node
    * @returns
@@ -68,6 +72,7 @@ export interface IPublicModelNodeChildren<
 
   /**
    * 类似数组 splice 操作
+   *
    * provide the same function with {Array.prototype.splice}
    * @param start
    * @param deleteCount
@@ -77,6 +82,7 @@ export interface IPublicModelNodeChildren<
 
   /**
    * 返回指定下标的节点
+   *
    * get node with index
    * @param index
    * @returns
@@ -85,6 +91,7 @@ export interface IPublicModelNodeChildren<
 
   /**
    * 是否包含指定节点
+   *
    * check if node exists in current children
    * @param node
    * @returns
@@ -93,6 +100,7 @@ export interface IPublicModelNodeChildren<
 
   /**
    * 类似数组的 forEach
+   *
    * provide the same function with {Array.prototype.forEach}
    * @param fn
    */
@@ -100,12 +108,14 @@ export interface IPublicModelNodeChildren<
 
   /**
    * 类似数组的 reverse
+   *
    * provide the same function with {Array.prototype.reverse}
    */
   reverse(): Node[];
 
   /**
    * 类似数组的 map
+   *
    * provide the same function with {Array.prototype.map}
    * @param fn
    */
@@ -141,6 +151,7 @@ export interface IPublicModelNodeChildren<
 
   /**
    * 类似数组的 reduce
+   *
    * provide the same function with {Array.prototype.reduce}
    * @param fn
    */
@@ -148,6 +159,7 @@ export interface IPublicModelNodeChildren<
 
   /**
    * 导入 schema
+   *
    * import schema
    * @param data
    */
@@ -155,6 +167,7 @@ export interface IPublicModelNodeChildren<
 
   /**
    * 导出 schema
+   *
    * export schema
    * @param stage
    */
@@ -162,6 +175,7 @@ export interface IPublicModelNodeChildren<
 
   /**
    * 执行新增、删除、排序等操作
+   *
    * excute remove/add/sort operations
    * @param remover
    * @param adder

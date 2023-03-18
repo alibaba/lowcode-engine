@@ -19,10 +19,9 @@ export default function rendererFactory(): IRenderComponent {
 
   const debug = Debug('renderer:entry');
 
-  class FaultComponent extends PureComponent<IPublicTypeNodeSchema> {
+  class FaultComponent extends PureComponent<IPublicTypeNodeSchema | any> {
     render() {
-      // FIXME: errorlog
-      console.error('render error', this.props);
+      logger.error(`%c组件渲染异常, 异常原因: ${this.props.error?.message || this.props.error || '未知'}`, 'color: #ff0000;');
       return createElement(Div, {
         style: {
           width: '100%',
@@ -86,8 +85,9 @@ export default function rendererFactory(): IRenderComponent {
       debug(`entry.componentWillUnmount - ${this.props?.schema?.componentName}`);
     }
 
-    async componentDidCatch(e: any) {
-      console.warn(e);
+    componentDidCatch(error: Error) {
+      this.state.engineRenderError = true;
+      this.state.error = error;
     }
 
     shouldComponentUpdate(nextProps: IRendererProps) {
@@ -180,6 +180,13 @@ export default function rendererFactory(): IRenderComponent {
         if (!(Comp.prototype instanceof BaseRenderer)) {
           Comp = RENDERER_COMPS[`${componentName}Renderer`];
         }
+      }
+
+      if (this.state && this.state.engineRenderError) {
+        return createElement(this.getFaultComponent(), {
+          ...this.props,
+          error: this.state.error,
+        });
       }
 
       if (Comp) {

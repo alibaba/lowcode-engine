@@ -645,3 +645,14 @@ setConditionalVisible(): void;
 ```
 
 **@since v1.1.0**
+
+### getDOMNode
+获取节点实例对应的 dom 节点
+
+```typescript
+/**
+ * 获取节点实例对应的 dom 节点
+ */
+getDOMNode(): HTMLElement;
+
+```
