@@ -1,4 +1,4 @@
-export { Workspace } from './workspace';
+export { Workspace, IWorkspace } from './workspace';
 export * from './window';
 export * from './layouts/workbench';
-export { Resource } from './resource';
+export { Resource, IResource } from './resource';

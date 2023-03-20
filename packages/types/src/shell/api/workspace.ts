@@ -2,19 +2,20 @@ import { IPublicModelWindow } from '../model';
 import { IPublicApiPlugins, IPublicModelResource, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType } from '@alilc/lowcode-types';
 
 export interface IPublicApiWorkspace<
-  Plugins = IPublicApiPlugins
+  Plugins = IPublicApiPlugins,
+  ModelWindow = IPublicModelWindow
 > {
 
   /** 是否启用 workspace 模式 */
   isActive: boolean;
 
   /** 当前设计器窗口 */
-  window: IPublicModelWindow;
+  window: ModelWindow;
 
   plugins: Plugins;
 
   /** 当前设计器的编辑窗口 */
-  windows: IPublicModelWindow[];
+  windows: ModelWindow[];
 
   /** 获取资源树列表 */
   get resourceList(): IPublicModelResource[];

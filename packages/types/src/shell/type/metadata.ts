@@ -1,3 +1,4 @@
+import { MouseEvent } from 'react';
 import { IPublicTypePropType, IPublicTypeComponentAction } from './';
 import { IPublicModelNode, IPublicModelProp, IPublicModelSettingField } from '../model';
 

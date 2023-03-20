@@ -1,6 +1,8 @@
 import { ReactElement } from 'react';
 
-export interface IPublicModelResource {
+export interface IBaseModelResource<
+  Resource
+> {
   get title(): string | undefined;
 
   get icon(): ReactElement | undefined;
@@ -13,7 +15,9 @@ export interface IPublicModelResource {
 
   get category(): string | undefined;
 
-  get children(): IPublicModelResource[];
+  get children(): Resource[];
 
   get viewName(): string | undefined;
 }
+
+export type IPublicModelResource = IBaseModelResource<IPublicModelResource>;

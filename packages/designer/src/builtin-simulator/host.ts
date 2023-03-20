@@ -47,26 +47,26 @@ import {
   getRectTarget,
   CanvasPoint,
   Designer,
+  IDesigner,
 } from '../designer';
 import { parseMetadata } from './utils/parse-metadata';
 import { getClosestClickableNode } from './utils/clickable';
 import {
   IPublicTypeComponentMetadata,
-  IPublicTypeComponentSchema,
   IPublicTypePackage,
   IPublicEnumTransitionType,
   IPublicEnumDragObjectType,
-  IPublicTypeDragNodeObject,
   IPublicTypeNodeInstance,
   IPublicTypeComponentInstance,
   IPublicTypeLocationChildrenDetail,
   IPublicTypeLocationDetailType,
   IPublicTypeRect,
+  IPublicModelNode,
 } from '@alilc/lowcode-types';
 import { BuiltinSimulatorRenderer } from './renderer';
 import { clipboard } from '../designer/clipboard';
 import { LiveEditing } from './live-editing/live-editing';
-import { Project } from '../project';
+import { IProject, Project } from '../project';
 import { IScroller } from '../designer/scroller';
 import { isElementNode, isDOMNodeVisible } from '../utils/misc';
 import { debounce } from 'lodash';
@@ -164,9 +164,9 @@ const defaultRaxEnvironment = [
 export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProps> {
   readonly isSimulator = true;
 
-  readonly project: Project;
+  readonly project: IProject;
 
-  readonly designer: Designer;
+  readonly designer: IDesigner;
 
   readonly viewport = new Viewport();
 
@@ -217,7 +217,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return this.get('requestHandlersMap') || null;
   }
 
-  get thisRequiredInJSE(): any {
+  get thisRequiredInJSE(): boolean {
     return engineConfig.get('thisRequiredInJSE') ?? true;
   }
 
@@ -559,8 +559,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           return;
         }
         // FIXME: dirty fix remove label-for fro liveEditing
-        (downEvent.target as HTMLElement).removeAttribute('for');
-        const nodeInst = this.getNodeInstanceFromElement(downEvent.target as Element);
+        downEvent.target?.removeAttribute('for');
+        const nodeInst = this.getNodeInstanceFromElement(downEvent.target);
         const { focusNode } = documentModel;
         const node = getClosestClickableNode(nodeInst?.node || focusNode, downEvent);
         // 如果找不到可点击的节点，直接返回
@@ -675,11 +675,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         const x = new Event('click');
         x.initEvent('click', true);
         this._iframe?.dispatchEvent(x);
-        const target = e.target as HTMLElement;
+        const target = e.target;
 
         const customizeIgnoreSelectors = engineConfig.get('customizeIgnoreSelectors');
         // TODO: need more elegant solution to ignore click events of components in designer
-        const defaultIgnoreSelectors: any = [
+        const defaultIgnoreSelectors: string[] = [
           '.next-input-group',
           '.next-checkbox-group',
           '.next-checkbox-wrapper',
@@ -741,7 +741,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       }
     };
     const leave = () => {
-      this.project.currentDocument && detecting.leave(this.project.currentDocument)
+      this.project.currentDocument && detecting.leave(this.project.currentDocument);
     };
 
     doc.addEventListener('mouseover', hover, true);
@@ -812,7 +812,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * @see ISimulator
    */
-  setSuspense(suspended: boolean) {
+  setSuspense(/** _suspended: boolean */) {
     return false;
     // if (suspended) {
     //   /*
@@ -897,7 +897,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return this.renderer?.getComponent(componentName) || null;
   }
 
-  createComponent(schema: IPublicTypeComponentSchema): Component | null {
+  createComponent(/** _schema: IPublicTypeComponentSchema */): Component | null {
     return null;
     // return this.renderer?.createComponent(schema) || null;
   }
@@ -1018,7 +1018,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     }
 
     if (last) {
-      const r: any = new DOMRect(last.x, last.y, last.r - last.x, last.b - last.y);
+      const r: IPublicTypeRect = new DOMRect(last.x, last.y, last.r - last.x, last.b - last.y);
       r.elements = elements;
       r.computed = _computed;
       return r;
@@ -1186,13 +1186,14 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    */
   locate(e: ILocateEvent): any {
     const { dragObject } = e;
-    const { nodes } = dragObject as IPublicTypeDragNodeObject;
+
+    const nodes = dragObject?.nodes;
 
     const operationalNodes = nodes?.filter((node) => {
       const onMoveHook = node.componentMeta?.advanced.callbacks?.onMoveHook;
       const canMove = onMoveHook && typeof onMoveHook === 'function' ? onMoveHook(node.internalToShellNode()) : true;
 
-      let parentContainerNode: Node | null = null;
+      let parentContainerNode: INode | null = null;
       let parentNode = node.parent;
 
       while (parentNode) {
@@ -1254,7 +1255,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     };
 
     const locationData = {
-      target: container as INode,
+      target: container,
       detail,
       source: `simulator${document.id}`,
       event: e,
@@ -1279,12 +1280,12 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       return this.designer.createLocation(locationData);
     }
 
-    let nearRect = null;
-    let nearIndex = 0;
-    let nearNode = null;
-    let nearDistance = null;
-    let minTop = null;
-    let maxBottom = null;
+    let nearRect: IPublicTypeRect | null = null;
+    let nearIndex: number = 0;
+    let nearNode: INode | null = null;
+    let nearDistance: number | null = null;
+    let minTop: number | null = null;
+    let maxBottom: number | null = null;
 
     for (let i = 0, l = children.size; i < l; i++) {
       const node = children.get(i)!;
@@ -1341,8 +1342,13 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       const vertical = inline || row;
 
       // TODO: fix type
-      const near: any = {
-        node: nearNode,
+      const near: {
+        node: IPublicModelNode;
+        pos: 'before' | 'after' | 'replace';
+        rect?: IPublicTypeRect;
+        align?: 'V' | 'H';
+      } = {
+        node: nearNode.internalToShellNode()!,
         pos: 'before',
         align: vertical ? 'V' : 'H',
       };
@@ -1465,7 +1471,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           container = container.parent;
           instance = this.getClosestNodeInstance(dropContainer.instance, container.id)?.instance;
           dropContainer = {
-            container: container,
+            container,
             instance,
           };
         } else {
@@ -1483,12 +1489,12 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * 控制接受
    */
-  handleAccept({ container, instance }: DropContainer, e: ILocateEvent): boolean {
+  handleAccept({ container }: DropContainer, e: ILocateEvent): boolean {
     const { dragObject } = e;
     const document = this.currentDocument!;
     const focusNode = document.focusNode;
     if (isRootNode(container) || container.contains(focusNode)) {
-      return document.checkNesting(focusNode, dragObject as any);
+      return document.checkNesting(focusNode!, dragObject as any);
     }
 
     const meta = (container as Node).componentMeta;
@@ -1509,15 +1515,12 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   getNearByContainer(
     { container, instance }: DropContainer,
     drillDownExcludes: Set<INode>,
-    e: ILocateEvent,
   ) {
     const { children } = container;
-    const document = this.project.currentDocument!;
     if (!children || children.isEmpty()) {
       return null;
     }
 
-    const nearDistance: any = null;
     const nearBy: any = null;
     for (let i = 0, l = children.size; i < l; i++) {
       let child = children.get(i);

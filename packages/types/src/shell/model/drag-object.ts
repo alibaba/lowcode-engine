@@ -1,8 +1,3 @@
-export interface IPublicModelDragObject {
+import { IPublicTypeDragNodeDataObject, IPublicTypeDragNodeObject } from '../type';
 
-  get type(): any;
-
-  get nodes(): any;
-
-  get data(): any;
-}
+export type IPublicModelDragObject = Readonly<IPublicTypeDragNodeObject> | Readonly<IPublicTypeDragNodeDataObject>;

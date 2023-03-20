@@ -41,6 +41,14 @@ export interface IProject extends Omit< IBaseApiProject<
 
   get documents(): IDocumentModel[];
 
+  get i18n(): {
+    [local: string]: {
+      [key: string]: any;
+    };
+  };
+
+  mountSimulator(simulator: ISimulatorHost): void;
+
   open(doc?: string | IDocumentModel | IPublicTypeRootSchema): IDocumentModel | null;
 
   getDocumentByFileName(fileName: string): IDocumentModel | null;

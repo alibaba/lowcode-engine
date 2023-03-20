@@ -35,7 +35,7 @@ import {
   isDragNodeDataObject,
   isNode,
 } from '@alilc/lowcode-utils';
-import { IProject, Project } from '../project';
+import { IProject } from '../project';
 import { ISimulatorHost } from '../simulator';
 import { IComponentMeta } from '../component-meta';
 import { IDesigner, IHistory } from '../designer';
@@ -56,7 +56,7 @@ export type GetDataType<T, NodeType> = T extends undefined
 export interface IDocumentModel extends Omit< IPublicModelDocumentModel<
   ISelection,
   IHistory,
-  INode | IRootNode,
+  INode,
   IDropLocation,
   IModalNodesManager,
   IProject
@@ -81,6 +81,8 @@ export interface IDocumentModel extends Omit< IPublicModelDocumentModel<
 
   readonly designer: IDesigner;
 
+  selection: ISelection;
+
   get rootNode(): INode | null;
 
   get simulator(): ISimulatorHost | null;
@@ -97,8 +99,6 @@ export interface IDocumentModel extends Omit< IPublicModelDocumentModel<
   get fileName(): string;
 
   get currentRoot(): INode | null;
-
-  selection: ISelection;
 
   isBlank(): boolean;
 

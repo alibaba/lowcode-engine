@@ -339,8 +339,8 @@ function fireCallback(callback: IPublicTypeHotkeyCallback, e: KeyboardEvent, com
   }
 }
 
-export interface IHotKey extends IPublicApiHotkey {
-
+export interface IHotKey extends Omit<IPublicApiHotkey, 'bind' | 'callbacks'> {
+  activate(activate: boolean): void;
 }
 
 export class Hotkey implements IHotKey {

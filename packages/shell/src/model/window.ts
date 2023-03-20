@@ -1,10 +1,10 @@
 import { windowSymbol } from '../symbols';
 import { IPublicModelResource, IPublicModelWindow, IPublicTypeDisposable } from '@alilc/lowcode-types';
-import { EditorWindow } from '@alilc/lowcode-workspace';
+import { IEditorWindow } from '@alilc/lowcode-workspace';
 import { Resource as ShellResource } from './resource';
 
 export class Window implements IPublicModelWindow {
-  private readonly [windowSymbol]: EditorWindow;
+  private readonly [windowSymbol]: IEditorWindow;
 
   get id() {
     return this[windowSymbol]?.id;
@@ -22,7 +22,7 @@ export class Window implements IPublicModelWindow {
     return new ShellResource(this[windowSymbol].resource);
   }
 
-  constructor(editorWindow: EditorWindow) {
+  constructor(editorWindow: IEditorWindow) {
     this[windowSymbol] = editorWindow;
   }
 

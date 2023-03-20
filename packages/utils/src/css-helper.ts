@@ -10,14 +10,13 @@ const pseudoMap = ['hover', 'focus', 'active', 'visited'];
 
 const RE_CAMEL = /[A-Z]/g;
 const RE_HYPHEN = /[-\s]+(.)?/g;
-const CSS_REG = /:root(.*)\{.*/i;
 const PROPS_REG = /([^:]*):\s?(.*)/i;
 
 // 给 css 分组
-function groupingCss(css) {
+function groupingCss(css: string) {
   let stackLength = 0;
   let startIndex = 0;
-  const group = [];
+  const group: string[] = [];
   css.split('').forEach((char, index) => {
     if (char === '{') {
       stackLength++;
@@ -33,38 +32,38 @@ function groupingCss(css) {
   return group;
 }
 
-
-function isString(str) {
+function isString(str: any): str is string {
   return {}.toString.call(str) === '[object String]';
 }
 
-function hyphenate(str) {
+function hyphenate(str: string): string {
   return str.replace(RE_CAMEL, w => `-${w}`).toLowerCase();
 }
 
-function camelize(str) {
+function camelize(str: string): string {
   return str.replace(RE_HYPHEN, (m, w) => (w ? w.toUpperCase() : ''));
 }
+
 /**
  * convert
  * {background-color: "red"}
  * to
  * background-color: red;
  */
-function runtimeToCss(runtime) {
-  const css = [];
+function runtimeToCss(runtime: Record<string, string>) {
+  const css: string[] = [];
   Object.keys(runtime).forEach((key) => {
     css.push(`  ${key}: ${runtime[key]};`);
   });
   return css.join('\n');
 }
 
-function toNativeStyle(runtime) {
+function toNativeStyle(runtime: Record<string, string> | undefined) {
   if (!runtime) {
     return {};
   }
   if (runtime.default) {
-    const normalized = {};
+    const normalized: Record<string, string> = {};
     Object.keys(runtime).forEach((pseudo) => {
       if (pseudo === 'extra') {
         normalized[pseudo] = runtime[pseudo];
@@ -98,13 +97,12 @@ function normalizeStyle(style) {
     return normalized;
   }
 
-  const normalized = {};
+  const normalized: Record<string, string | Record<string, string>> = {};
   Object.keys(style).forEach((key) => {
     normalized[hyphenate(key)] = style[key];
   });
   return normalized;
 }
-
 
 function toCss(runtime) {
   if (!runtime) {
@@ -115,7 +113,7 @@ function toCss(runtime) {
   }
 
   if (runtime.default) {
-    const css = [];
+    const css: string[] = [];
     Object.keys(runtime).forEach((pseudo) => {
       if (pseudo === 'extra') {
         Array.isArray(runtime.extra) && css.push(runtime.extra.join('\n'));
@@ -140,11 +138,14 @@ ${runtimeToCss(normalizeStyle(runtime))}
   );
 }
 
-function cssToRuntime(css) {
+function cssToRuntime(css: string) {
   if (!css) {
     return {};
   }
-  const runtime = {};
+  const runtime: {
+    extra?: string[];
+    default?: Record<string, string>;
+  } = {};
   const groups = groupingCss(css);
   groups.forEach((cssItem) => {
     if (!cssItem.startsWith(':root')) {
@@ -153,7 +154,7 @@ function cssToRuntime(css) {
     } else {
       const res = /:root:?(.*)?{(.*)/ig.exec(cssItem.replace(/[\r\n]+/ig, '').trim());
       if (res) {
-        let pseudo;
+        let pseudo: string | undefined;
 
         if (res[1] && res[1].trim() && some(pseudoMap, pse => res[1].indexOf(pse) === 0)) {
           pseudo = res[1].trim();
@@ -161,8 +162,8 @@ function cssToRuntime(css) {
           pseudo = res[1];
         }
 
-        const s = {};
-        res[2].split(';').reduce((prev, next) => {
+        const s: Record<string, string> = {};
+        res[2].split(';').reduce<string[]>((prev, next) => {
           if (next.indexOf('base64') > -1) {
             prev[prev.length - 1] += `;${next}`;
           } else {
@@ -173,8 +174,8 @@ function cssToRuntime(css) {
           if (item) {
             if (PROPS_REG.test(item)) {
               const props = item.match(PROPS_REG);
-              const key = props[1];
-              const value = props[2];
+              const key = props?.[1];
+              const value = props?.[2];
               if (key && value) {
                 s[key.trim()] = value.trim();
               }
@@ -182,10 +183,7 @@ function cssToRuntime(css) {
           }
         });
 
-        if (!pseudo) {
-          pseudo = 'default';
-        }
-        runtime[pseudo] = s;
+        runtime[pseudo || 'default'] = s;
       }
     }
   });

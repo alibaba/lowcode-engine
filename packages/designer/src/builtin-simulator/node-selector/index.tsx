@@ -1,19 +1,19 @@
 import { Overlay } from '@alifd/next';
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { Title, globalContext } from '@alilc/lowcode-editor-core';
 import { canClickNode } from '@alilc/lowcode-utils';
 import './index.less';
 
-import { Node, INode } from '@alilc/lowcode-designer';
+import { INode } from '@alilc/lowcode-designer';
 
 const { Popup } = Overlay;
 
 export interface IProps {
-  node: Node;
+  node: INode;
 }
 
 export interface IState {
-  parentNodes: Node[];
+  parentNodes: INode[];
 }
 
 type UnionNode = INode | null;
@@ -26,14 +26,18 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
   componentDidMount() {
     const parentNodes = this.getParentNodes(this.props.node);
     this.setState({
-      parentNodes,
+      parentNodes: parentNodes ?? [],
     });
   }
 
   // 获取节点的父级节点（最多获取 5 层）
-  getParentNodes = (node: Node) => {
+  getParentNodes = (node: INode) => {
     const parentNodes: any[] = [];
-    const { focusNode } = node.document;
+    const focusNode = node.document?.focusNode;
+
+    if (!focusNode) {
+      return null;
+    }
 
     if (node.contains(focusNode) || !focusNode.contains(node)) {
       return parentNodes;
@@ -53,12 +57,12 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
     return parentNodes;
   };
 
-  onSelect = (node: Node) => (e: unknown) => {
+  onSelect = (node: INode) => (event: MouseEvent) => {
     if (!node) {
       return;
     }
 
-    const canClick = canClickNode(node, e as MouseEvent);
+    const canClick = canClickNode(node.internalToShellNode()!, event);
 
     if (canClick && typeof node.select === 'function') {
       node.select();
@@ -76,19 +80,19 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
     }
   };
 
-  onMouseOver = (node: Node) => (_: any, flag = true) => {
+  onMouseOver = (node: INode) => (_: any, flag = true) => {
     if (node && typeof node.hover === 'function') {
       node.hover(flag);
     }
   };
 
-  onMouseOut = (node: Node) => (_: any, flag = false) => {
+  onMouseOut = (node: INode) => (_: any, flag = false) => {
     if (node && typeof node.hover === 'function') {
       node.hover(flag);
     }
   };
 
-  renderNodes = (/* node: Node */) => {
+  renderNodes = () => {
     const nodes = this.state.parentNodes;
     if (!nodes || nodes.length < 1) {
       return null;
@@ -136,7 +140,7 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
           triggerType="hover"
           offset={[0, 0]}
         >
-          <div className="instance-node-selector">{this.renderNodes(node)}</div>
+          <div className="instance-node-selector">{this.renderNodes()}</div>
         </Popup>
       </div>
     );

@@ -13,9 +13,9 @@ import { observer, computed, Tip, globalContext } from '@alilc/lowcode-editor-co
 import { createIcon, isReactComponent, isActionContentObject } from '@alilc/lowcode-utils';
 import { IPublicTypeActionContentObject } from '@alilc/lowcode-types';
 import { BuiltinSimulatorHost } from '../host';
-import { OffsetObserver } from '../../designer';
-import { Node } from '../../document';
+import { INode, OffsetObserver } from '../../designer';
 import NodeSelector from '../node-selector';
+import { ISimulatorHost } from '../../simulator';
 
 @observer
 export class BorderSelectingInstance extends Component<{
@@ -116,8 +116,8 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
   }
 }
 
-function createAction(content: ReactNode | ComponentType<any> | IPublicTypeActionContentObject, key: string, node: Node) {
-  if (isValidElement(content)) {
+function createAction(content: ReactNode | ComponentType<any> | IPublicTypeActionContentObject, key: string, node: INode) {
+  if (isValidElement<{ key: string; node: INode }>(content)) {
     return cloneElement(content, { key, node });
   }
   if (isReactComponent(content)) {
@@ -130,7 +130,7 @@ function createAction(content: ReactNode | ComponentType<any> | IPublicTypeActio
         key={key}
         className="lc-borders-action"
         onClick={() => {
-          action && action(node);
+          action && action(node.internalToShellNode()!);
           const workspace = globalContext.get('workspace');
           const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
           const npm = node?.componentMeta?.npm;
@@ -153,8 +153,8 @@ function createAction(content: ReactNode | ComponentType<any> | IPublicTypeActio
 }
 
 @observer
-export class BorderSelectingForNode extends Component<{ host: BuiltinSimulatorHost; node: Node }> {
-  get host(): BuiltinSimulatorHost {
+export class BorderSelectingForNode extends Component<{ host: ISimulatorHost; node: INode }> {
+  get host(): ISimulatorHost {
     return this.props.host;
   }
 
