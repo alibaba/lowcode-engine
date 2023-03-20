@@ -1,13 +1,13 @@
 import { IPublicApiWorkspace, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType } from '@alilc/lowcode-types';
-import { Workspace as InnerWorkSpace } from '@alilc/lowcode-workspace';
+import { IWorkspace } from '@alilc/lowcode-workspace';
 import { Plugins } from '@alilc/lowcode-shell';
 import { workspaceSymbol } from '../symbols';
 import { Resource as ShellResource, Window as ShellWindow } from '../model';
 
 export class Workspace implements IPublicApiWorkspace {
-  readonly [workspaceSymbol]: InnerWorkSpace;
+  readonly [workspaceSymbol]: IWorkspace;
 
-  constructor(innerWorkspace: InnerWorkSpace) {
+  constructor(innerWorkspace: IWorkspace) {
     this[workspaceSymbol] = innerWorkspace;
   }
 

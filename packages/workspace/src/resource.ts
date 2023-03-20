@@ -1,13 +1,31 @@
-import { IPublicTypeEditorView, IPublicModelResource, IPublicResourceData, IPublicResourceTypeConfig } from '@alilc/lowcode-types';
+import { IPublicTypeEditorView, IPublicResourceData, IPublicResourceTypeConfig, IBaseModelResource } from '@alilc/lowcode-types';
 import { Logger } from '@alilc/lowcode-utils';
-import { BasicContext } from './context/base-context';
-import { ResourceType } from './resource-type';
-import { Workspace as InnerWorkSpace } from './workspace';
+import { BasicContext, IBasicContext } from './context/base-context';
+import { ResourceType, IResourceType } from './resource-type';
+import { IWorkspace } from './workspace';
 
 const logger = new Logger({ level: 'warn', bizName: 'workspace:resource' });
 
-export class Resource implements IPublicModelResource {
-  private context: BasicContext;
+export interface IBaseResource<T> extends IBaseModelResource<T> {
+  readonly resourceType: ResourceType;
+
+  get editorViews(): IPublicTypeEditorView[];
+
+  get defaultViewType(): string;
+
+  getEditorView(name: string): IPublicTypeEditorView | undefined;
+
+  import(schema: any): Promise<any>;
+
+  save(value: any): Promise<any>;
+
+  url(): Promise<string | undefined>;
+}
+
+export type IResource = IBaseResource<IResource>;
+
+export class Resource implements IResource {
+  private context: IBasicContext;
 
   resourceTypeInstance: IPublicResourceTypeConfig;
 
@@ -49,13 +67,13 @@ export class Resource implements IPublicModelResource {
     return this.context.innerSkeleton;
   }
 
-  get children(): Resource[] {
+  get children(): IResource[] {
     return this.resourceData?.children?.map(d => new Resource(d, this.resourceType, this.workspace)) || [];
   }
 
-  constructor(readonly resourceData: IPublicResourceData, readonly resourceType: ResourceType, readonly workspace: InnerWorkSpace) {
+  constructor(readonly resourceData: IPublicResourceData, readonly resourceType: IResourceType, readonly workspace: IWorkspace) {
     this.context = new BasicContext(workspace, `resource-${resourceData.resourceName || resourceType.name}`);
-    this.resourceTypeInstance = resourceType.resourceTypeModel(this.context, this.options);
+    this.resourceTypeInstance = resourceType.resourceTypeModel(this.context.innerPlugins._getLowCodePluginContext(), this.options);
     this.init();
     if (this.resourceTypeInstance.editorViews) {
       this.resourceTypeInstance.editorViews.forEach((d: any) => {

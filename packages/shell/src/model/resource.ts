@@ -1,11 +1,11 @@
 import { IPublicModelResource } from '@alilc/lowcode-types';
-import { Resource as InnerResource } from '@alilc/lowcode-workspace';
+import { IResource } from '@alilc/lowcode-workspace';
 import { resourceSymbol } from '../symbols';
 
 export class Resource implements IPublicModelResource {
-  readonly [resourceSymbol]: InnerResource;
+  readonly [resourceSymbol]: IResource;
 
-  constructor(resource: InnerResource) {
+  constructor(resource: IResource) {
     this[resourceSymbol] = resource;
   }
 

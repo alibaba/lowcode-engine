@@ -52,6 +52,6 @@ module.exports = {
       'error',
       { default: ['signature', 'field', 'constructor', 'method'] }
     ],
-    'no-unused-vars': ['error', { "destructuredArrayIgnorePattern": "^_" }]
+    '@typescript-eslint/no-unused-vars': ['error']
   },
 };

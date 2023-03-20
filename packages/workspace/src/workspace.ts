@@ -1,23 +1,33 @@
-import { Designer, LowCodePluginManager } from '@alilc/lowcode-designer';
+import { IDesigner, ILowCodePluginManager, LowCodePluginManager } from '@alilc/lowcode-designer';
 import { createModuleEventBus, Editor, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
-import { Plugins } from '@alilc/lowcode-shell';
-import { IPublicApiWorkspace, IPublicResourceList, IPublicTypeResourceType } from '@alilc/lowcode-types';
+import { IPublicApiPlugins, IPublicApiWorkspace, IPublicResourceList, IPublicTypeResourceType, IShellModelFactory } from '@alilc/lowcode-types';
 import { BasicContext } from './context/base-context';
-import { EditorWindow } from './window';
-import { Resource } from './resource';
-import { ResourceType } from './resource-type';
+import { EditorWindow, IEditorWindow } from './window';
+import { IResource, Resource } from './resource';
+import { IResourceType, ResourceType } from './resource-type';
 
-enum event {
-  ChangeWindow = 'change_window',
+enum EVENT {
+  CHANGE_WINDOW = 'change_window',
 
-  ChangeActiveWindow = 'change_active_window',
+  CHANGE_ACTIVE_WINDOW = 'change_active_window',
 }
 
 const CHANGE_EVENT = 'resource.list.change';
 
-interface IWorkspace extends Omit<IPublicApiWorkspace<
-LowCodePluginManager
->, 'resourceList'> {}
+export interface IWorkspace extends Omit<IPublicApiWorkspace<
+  LowCodePluginManager,
+  IEditorWindow
+>, 'resourceList' | 'plugins'> {
+  readonly registryInnerPlugin: (designer: IDesigner, editor: Editor, plugins: IPublicApiPlugins) => Promise<void>;
+
+  readonly shellModelFactory: IShellModelFactory;
+
+  window: IEditorWindow;
+
+  plugins: ILowCodePluginManager;
+
+  getResourceList(): IResource[];
+}
 
 export class Workspace implements IWorkspace {
   context: BasicContext;
@@ -28,7 +38,7 @@ export class Workspace implements IWorkspace {
 
   private resourceTypeMap: Map<string, ResourceType> = new Map();
 
-  private resourceList: Resource[] = [];
+  private resourceList: IResource[] = [];
 
   get skeleton() {
     return this.context.innerSkeleton;
@@ -50,14 +60,14 @@ export class Workspace implements IWorkspace {
     return null;
   }
 
-  @obx.ref windows: EditorWindow[] = [];
+  @obx.ref windows: IEditorWindow[] = [];
 
-  editorWindowMap: Map<string, EditorWindow> = new Map<string, EditorWindow>();
+  editorWindowMap: Map<string, IEditorWindow> = new Map<string, IEditorWindow>();
 
-  @obx.ref window: EditorWindow;
+  @obx.ref window: IEditorWindow;
 
   constructor(
-    readonly registryInnerPlugin: (designer: Designer, editor: Editor, plugins: Plugins) => Promise<void>,
+    readonly registryInnerPlugin: (designer: IDesigner, editor: Editor, plugins: IPublicApiPlugins) => Promise<void>,
     readonly shellModelFactory: any,
   ) {
     this.init();
@@ -74,7 +84,10 @@ export class Workspace implements IWorkspace {
       return;
     }
     const title = this.defaultResourceType.name;
-    const resource = new Resource({}, this.defaultResourceType, this);
+    const resource = new Resource({
+      resourceName: title,
+      options: {},
+    }, this.defaultResourceType, this);
     this.window = new EditorWindow(resource, this, {
       title,
     });
@@ -113,7 +126,7 @@ export class Workspace implements IWorkspace {
     };
   }
 
-  getResourceType(resourceName: string): ResourceType {
+  getResourceType(resourceName: string): IResourceType {
     return this.resourceTypeMap.get(resourceName)!;
   }
 
@@ -139,7 +152,7 @@ export class Workspace implements IWorkspace {
   }
 
   removeEditorWindow(resourceName: string) {
-    const index = this.windows.findIndex(d => (d.resource.name === resourceName && d.title));
+    const index = this.windows.findIndex(d => (d.resource?.name === resourceName && d.title));
     this.remove(index);
   }
 
@@ -157,7 +170,7 @@ export class Workspace implements IWorkspace {
       console.error(`${name} resourceType is not available`);
       return;
     }
-    const filterWindows = this.windows.filter(d => (d.resource.name === name && d.resource.title == title));
+    const filterWindows = this.windows.filter(d => (d.resource?.name === name && d.resource.title == title));
     if (filterWindows && filterWindows.length) {
       this.window = filterWindows[0];
       this.emitChangeActiveWindow();
@@ -180,24 +193,24 @@ export class Workspace implements IWorkspace {
   }
 
   onChangeWindows(fn: () => void) {
-    this.emitter.on(event.ChangeWindow, fn);
+    this.emitter.on(EVENT.CHANGE_WINDOW, fn);
     return () => {
-      this.emitter.removeListener(event.ChangeWindow, fn);
+      this.emitter.removeListener(EVENT.CHANGE_WINDOW, fn);
     };
   }
 
   emitChangeWindow() {
-    this.emitter.emit(event.ChangeWindow);
+    this.emitter.emit(EVENT.CHANGE_WINDOW);
   }
 
   emitChangeActiveWindow() {
-    this.emitter.emit(event.ChangeActiveWindow);
+    this.emitter.emit(EVENT.CHANGE_ACTIVE_WINDOW);
   }
 
   onChangeActiveWindow(fn: () => void) {
-    this.emitter.on(event.ChangeActiveWindow, fn);
+    this.emitter.on(EVENT.CHANGE_ACTIVE_WINDOW, fn);
     return () => {
-      this.emitter.removeListener(event.ChangeActiveWindow, fn);
+      this.emitter.removeListener(EVENT.CHANGE_ACTIVE_WINDOW, fn);
     };
   }
 }

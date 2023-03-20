@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { TipItem } from './tip-item';
 import { tipHandler } from './tip-handler';
 
@@ -25,11 +26,13 @@ export class TipContainer extends Component {
   }
 
   render() {
-    return window.ReactDOM.createPortal(
+    ReactDOM.createPortal(
       <div className="lc-tips-container">
         <TipItem />
       </div>,
       document.querySelector('body')!,
     );
+
+    return null;
   }
 }

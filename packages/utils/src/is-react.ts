@@ -23,7 +23,8 @@ export function isReactComponent(obj: any): obj is ComponentType<any> {
 export function wrapReactClass(view: FunctionComponent) {
   let ViewComponentClass = class extends Component {
     render() {
-      return createElement(view, this.props);
+      const { children, ...other } = this.props;
+      return createElement(view, other, children);
     }
   } as any;
   ViewComponentClass = cloneEnumerableProperty(ViewComponentClass, view);

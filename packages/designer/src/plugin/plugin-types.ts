@@ -6,7 +6,6 @@ import {
   IPublicApiMaterial,
   IPublicApiEvent,
   IPublicApiCommon,
-  IPublicTypeCompositeObject,
   IPublicApiPlugins,
   IPublicTypePluginConfig,
   IPublicApiLogger,
@@ -16,6 +15,7 @@ import {
   IPublicApiCanvas,
   IPublicApiWorkspace,
   IPublicTypePluginMeta,
+  IPublicTypePluginRegisterOptions,
 } from '@alilc/lowcode-types';
 
 export type PluginPreference = Map<string, Record<string, IPublicTypePreferenceValueType>>;
@@ -72,7 +72,7 @@ export interface ILowCodePluginManagerCore {
   register(
     pluginModel: IPublicTypePlugin,
     pluginOptions?: any,
-    options?: IPublicTypeCompositeObject,
+    options?: IPublicTypePluginRegisterOptions,
   ): Promise<void>;
   init(pluginPreference?: Map<string, Record<string, IPublicTypePreferenceValueType>>): Promise<void>;
   get(pluginName: string): ILowCodePluginRuntime | undefined;

@@ -1,9 +1,9 @@
 import { computed, makeObservable, obx } from '@alilc/lowcode-editor-core';
 import { IPublicEditorViewConfig, IPublicTypeEditorView } from '@alilc/lowcode-types';
 import { flow } from 'mobx';
-import { Workspace as InnerWorkspace } from '../workspace';
+import { IWorkspace } from '../workspace';
 import { BasicContext } from './base-context';
-import { EditorWindow } from '../window';
+import { IEditorWindow } from '../window';
 import { getWebviewPlugin } from '../inner-plugins/webview';
 
 export class Context extends BasicContext {
@@ -21,7 +21,7 @@ export class Context extends BasicContext {
     return this._activate;
   }
 
-  init = flow(function* (this: any) {
+  init = flow(function* (this: Context) {
     if (this.viewType === 'webview') {
       const url = yield this.instance?.url?.();
       yield this.plugins.register(getWebviewPlugin(url, this.viewName));
@@ -33,7 +33,7 @@ export class Context extends BasicContext {
     this.isInit = true;
   });
 
-  constructor(public workspace: InnerWorkspace, public editorWindow: EditorWindow, public editorView: IPublicTypeEditorView, options: Object | undefined) {
+  constructor(public workspace: IWorkspace, public editorWindow: IEditorWindow, public editorView: IPublicTypeEditorView, options: Object | undefined) {
     super(workspace, editorView.viewName, editorWindow);
     this.viewType = editorView.viewType || 'editor';
     this.viewName = editorView.viewName;
