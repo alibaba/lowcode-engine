@@ -73,7 +73,9 @@ export class Resource implements IResource {
 
   constructor(readonly resourceData: IPublicResourceData, readonly resourceType: IResourceType, readonly workspace: IWorkspace) {
     this.context = new BasicContext(workspace, `resource-${resourceData.resourceName || resourceType.name}`);
-    this.resourceTypeInstance = resourceType.resourceTypeModel(this.context.innerPlugins._getLowCodePluginContext(), this.options);
+    this.resourceTypeInstance = resourceType.resourceTypeModel(this.context.innerPlugins._getLowCodePluginContext({
+      pluginName: '',
+    }), this.options);
     this.init();
     if (this.resourceTypeInstance.editorViews) {
       this.resourceTypeInstance.editorViews.forEach((d: any) => {

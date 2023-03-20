@@ -17,6 +17,7 @@ import {
   IPublicTypePluginMeta,
   IPublicTypePluginRegisterOptions,
 } from '@alilc/lowcode-types';
+import PluginContext from './plugin-context';
 
 export type PluginPreference = Map<string, Record<string, IPublicTypePreferenceValueType>>;
 
@@ -81,6 +82,7 @@ export interface ILowCodePluginManagerCore {
   delete(pluginName: string): any;
   setDisabled(pluginName: string, flag: boolean): void;
   dispose(): void;
+  _getLowCodePluginContext (options: IPluginContextOptions): PluginContext;
 }
 
 export type ILowCodePluginManager = ILowCodePluginManagerCore & ILowCodePluginManagerPluginAccessor;

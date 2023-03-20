@@ -1,7 +1,7 @@
 import { Component, isValidElement, ReactNode } from 'react';
 import classNames from 'classnames';
-import { createIcon, isI18nData } from '@alilc/lowcode-utils';
-import { IPublicTypeTitleContent, IPublicTypeI18nData } from '@alilc/lowcode-types';
+import { createIcon, isI18nData, isTitleConfig } from '@alilc/lowcode-utils';
+import { IPublicTypeTitleContent, IPublicTypeI18nData, IPublicTypeTitleConfig } from '@alilc/lowcode-types';
 import { intl } from '../../intl';
 import { Tip } from '../tip';
 import './title.less';
@@ -88,7 +88,8 @@ export class Title extends Component<{
 
   render() {
     // eslint-disable-next-line prefer-const
-    let { title, className } = this.props;
+    const { title, className } = this.props;
+    let _title: IPublicTypeTitleConfig;
     if (title == null) {
       return null;
     }
@@ -96,34 +97,40 @@ export class Title extends Component<{
       return title;
     }
     if (typeof title === 'string' || isI18nData(title)) {
-      title = { label: title };
+      _title = { label: title };
+    } else if (isTitleConfig(title)) {
+      _title = title;
+    } else {
+      _title = {
+        label: title,
+      };
     }
 
-    const icon = title.icon ? createIcon(title.icon, { size: 20 }) : null;
+    const icon = _title.icon ? createIcon(_title.icon, { size: 20 }) : null;
 
     let tip: any = null;
-    if (title.tip) {
-      if (isValidElement(title.tip) && title.tip.type === Tip) {
-        tip = title.tip;
+    if (_title.tip) {
+      if (isValidElement(_title.tip) && _title.tip.type === Tip) {
+        tip = _title.tip;
       } else {
         const tipProps =
-          typeof title.tip === 'object' && !(isValidElement(title.tip) || isI18nData(title.tip))
-            ? title.tip
-            : { children: title.tip };
+          typeof _title.tip === 'object' && !(isValidElement(_title.tip) || isI18nData(_title.tip))
+            ? _title.tip
+            : { children: _title.tip };
         tip = <Tip {...tipProps} />;
       }
     }
 
     return (
       <span
-        className={classNames('lc-title', className, title.className, {
+        className={classNames('lc-title', className, _title.className, {
           'has-tip': !!tip,
-          'only-icon': !title.label,
+          'only-icon': !_title.label,
         })}
         onClick={this.handleClick}
       >
         {icon ? <b className="lc-title-icon">{icon}</b> : null}
-        {this.renderLabel(title.label)}
+        {this.renderLabel(_title.label)}
         {tip}
       </span>
     );

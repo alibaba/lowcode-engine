@@ -1,16 +1,16 @@
-import { ILocateEvent as InnerLocateEvent } from '@alilc/lowcode-designer';
+import { ILocateEvent } from '@alilc/lowcode-designer';
 import { locateEventSymbol } from '../symbols';
 import { DragObject } from './drag-object';
 import { IPublicModelLocateEvent, IPublicModelDragObject } from '@alilc/lowcode-types';
 
 export default class LocateEvent implements IPublicModelLocateEvent {
-  private readonly [locateEventSymbol]: InnerLocateEvent;
+  private readonly [locateEventSymbol]: ILocateEvent;
 
-  constructor(locateEvent: InnerLocateEvent) {
+  constructor(locateEvent: ILocateEvent) {
     this[locateEventSymbol] = locateEvent;
   }
 
-  static create(locateEvent: InnerLocateEvent): IPublicModelLocateEvent | null {
+  static create(locateEvent: ILocateEvent): IPublicModelLocateEvent | null {
     if (!locateEvent) {
       return null;
     }

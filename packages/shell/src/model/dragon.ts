@@ -1,5 +1,7 @@
 import {
+  IDragon,
   ILocateEvent as InnerLocateEvent,
+  INode,
 } from '@alilc/lowcode-designer';
 import { dragonSymbol, nodeSymbol } from '../symbols';
 import LocateEvent from './locate-event';
@@ -11,18 +13,19 @@ import {
   IPublicModelDragObject,
   IPublicTypeDragNodeDataObject,
   IPublicModelNode,
+  IPublicTypeDragObject,
 } from '@alilc/lowcode-types';
 
 export const innerDragonSymbol = Symbol('innerDragonSymbol');
 
 export class Dragon implements IPublicModelDragon {
-  private readonly [innerDragonSymbol]: IPublicModelDragon;
+  private readonly [innerDragonSymbol]: IDragon;
 
-  constructor(innerDragon: IPublicModelDragon, readonly workspaceMode: boolean) {
+  constructor(innerDragon: IDragon, readonly workspaceMode: boolean) {
     this[innerDragonSymbol] = innerDragon;
   }
 
-  get [dragonSymbol](): any {
+  get [dragonSymbol](): IDragon {
     if (this.workspaceMode) {
       return this[innerDragonSymbol];
     }
@@ -38,7 +41,7 @@ export class Dragon implements IPublicModelDragon {
   }
 
   static create(
-      dragon: IPublicModelDragon | null,
+      dragon: IDragon | null,
       workspaceMode: boolean,
     ): IPublicModelDragon | null {
     if (!dragon) {
@@ -102,11 +105,13 @@ export class Dragon implements IPublicModelDragon {
    * @param dragObject 拖拽对象
    * @param boostEvent 拖拽初始时事件
    */
-  boost(dragObject: DragObject, boostEvent: MouseEvent | DragEvent, fromRglNode?: Node | IPublicModelNode): void {
+  boost(dragObject: IPublicTypeDragObject, boostEvent: MouseEvent | DragEvent, fromRglNode?: IPublicModelNode & {
+    [nodeSymbol]: INode;
+  }): void {
     return this[dragonSymbol].boost({
       ...dragObject,
       nodes: dragObject.nodes.map((node: any) => node[nodeSymbol]),
-    }, boostEvent, fromRglNode);
+    }, boostEvent, fromRglNode?.[nodeSymbol]);
   }
 
   /**

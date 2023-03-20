@@ -26,13 +26,11 @@ export class TipContainer extends Component {
   }
 
   render() {
-    ReactDOM.createPortal(
+    return ReactDOM.createPortal(
       <div className="lc-tips-container">
         <TipItem />
       </div>,
       document.querySelector('body')!,
     );
-
-    return null;
   }
 }
