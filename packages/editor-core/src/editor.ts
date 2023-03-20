@@ -2,7 +2,7 @@
 /* eslint-disable max-len */
 import { StrictEventEmitter } from 'strict-event-emitter-types';
 import { EventEmitter } from 'events';
-import { EventBus } from './event-bus';
+import { EventBus, IEventBus } from './event-bus';
 import {
   IPublicModelEditor,
   EditorConfig,
@@ -52,15 +52,18 @@ export declare interface Editor extends StrictEventEmitter<EventEmitter, GlobalE
   eventNames(): Array<string | symbol>;
 }
 
+export interface IEditor extends IPublicModelEditor {
+  config?: EditorConfig;
+
+  components?: PluginClassSet;
+
+  eventBus: IEventBus;
+
+  init(config?: EditorConfig, components?: PluginClassSet): Promise<any>;
+}
+
 // eslint-disable-next-line no-redeclare
-export class Editor extends (EventEmitter as any) implements IPublicModelEditor {
-  constructor(readonly viewName: string = 'global', readonly workspaceMode: boolean = false) {
-    // eslint-disable-next-line constructor-super
-    super();
-    // set global emitter maxListeners
-    this.setMaxListeners(200);
-    this.eventBus = new EventBus(this);
-  }
+export class Editor extends EventEmitter implements IEditor {
 
   /**
    * Ioc Container
@@ -71,9 +74,31 @@ export class Editor extends (EventEmitter as any) implements IPublicModelEditor 
     return globalLocale.getLocale();
   }
 
+  config?: EditorConfig;
+
+  eventBus: EventBus;
+
+  components?: PluginClassSet;
+
   // readonly utils = utils;
 
   private hooks: HookConfig[] = [];
+
+  private waits = new Map<
+    IPublicTypeEditorValueKey,
+    Array<{
+      once?: boolean;
+      resolve: (data: any) => void;
+    }>
+  >();
+
+  constructor(readonly viewName: string = 'global', readonly workspaceMode: boolean = false) {
+    // eslint-disable-next-line constructor-super
+    super();
+    // set global emitter maxListeners
+    this.setMaxListeners(200);
+    this.eventBus = new EventBus(this);
+  }
 
   get<T = undefined, KeyOrType = any>(
       keyOrType: KeyOrType,
@@ -202,12 +227,6 @@ export class Editor extends (EventEmitter as any) implements IPublicModelEditor 
     this.notifyGot(key || data);
   }
 
-  config?: EditorConfig;
-
-  eventBus: EventBus;
-
-  components?: PluginClassSet;
-
   async init(config?: EditorConfig, components?: PluginClassSet): Promise<any> {
     this.config = config || {};
     this.components = components || {};
@@ -269,16 +288,6 @@ export class Editor extends (EventEmitter as any) implements IPublicModelEditor 
       this.removeListener(message, handler);
     });
   };
-
-  /* eslint-disable */
-  private waits = new Map<
-    IPublicTypeEditorValueKey,
-    Array<{
-      once?: boolean;
-      resolve: (data: any) => void;
-    }>
-  >();
-  /* eslint-enable */
 
   private notifyGot(key: IPublicTypeEditorValueKey) {
     let waits = this.waits.get(key);

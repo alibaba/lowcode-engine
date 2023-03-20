@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { observer } from '@alilc/lowcode-editor-core';
-import { SettingTopEntry, SettingField } from '@alilc/lowcode-designer';
 import StageChain from './stage-chain';
 import Stage from './stage';
-import { Skeleton } from '../../skeleton';
+import { ISkeleton } from '../../skeleton';
 import PopupService, { PopupPipe } from '../popup';
 import { Stage as StageWidget } from '../../widget/stage';
 
@@ -14,9 +13,7 @@ export type StageBoxProps = typeof StageBoxDefaultProps & {
   stageChain?: StageChain;
   className?: string;
   children: React.ReactNode;
-  skeleton: Skeleton;
-  // @todo to remove
-  target?: SettingTopEntry | SettingField;
+  skeleton: ISkeleton;
 };
 
 type WillDetachMember = () => void;

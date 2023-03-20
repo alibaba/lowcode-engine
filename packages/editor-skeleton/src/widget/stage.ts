@@ -1,6 +1,6 @@
 // import { uniqueId } from '@alilc/lowcode-utils';
 import { Widget } from './widget';
-import { Skeleton } from '../skeleton';
+import { ISkeleton } from '../skeleton';
 import { WidgetConfig } from '../types';
 
 export interface StageConfig extends WidgetConfig {
@@ -17,7 +17,7 @@ export class Stage extends Widget {
     direction?: 'right' | 'left';
   };
 
-  constructor(skeleton: Skeleton, config: StageConfig) {
+  constructor(skeleton: ISkeleton, config: StageConfig) {
     super(skeleton, config);
     this.isRoot = config.isRoot || false;
   }

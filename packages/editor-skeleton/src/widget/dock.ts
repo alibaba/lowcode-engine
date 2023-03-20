@@ -3,7 +3,7 @@ import { makeObservable, obx } from '@alilc/lowcode-editor-core';
 import { uniqueId, createContent } from '@alilc/lowcode-utils';
 import { getEvent } from '@alilc/lowcode-shell';
 import { DockConfig } from '../types';
-import { Skeleton } from '../skeleton';
+import { ISkeleton } from '../skeleton';
 import { DockView, WidgetView } from '../components/widget-views';
 import { IWidget } from './widget';
 
@@ -59,7 +59,7 @@ export class Dock implements IWidget {
     return this._body;
   }
 
-  constructor(readonly skeleton: Skeleton, readonly config: DockConfig) {
+  constructor(readonly skeleton: ISkeleton, readonly config: DockConfig) {
     makeObservable(this);
     const { props = {}, name } = config;
     this.name = name;

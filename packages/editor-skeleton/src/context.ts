@@ -1,4 +1,4 @@
 import { createContext } from 'react';
-import { Skeleton } from './skeleton';
+import { ISkeleton } from './skeleton';
 
-export const SkeletonContext = createContext<Skeleton>({} as any);
+export const SkeletonContext = createContext<ISkeleton>({} as any);

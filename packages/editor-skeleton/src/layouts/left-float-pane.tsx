@@ -3,9 +3,10 @@ import classNames from 'classnames';
 import { observer, Focusable, focusTracker } from '@alilc/lowcode-editor-core';
 import { Area } from '../area';
 import { Panel } from '../widget/panel';
+import { PanelConfig } from '../types';
 
 @observer
-export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }> {
+export default class LeftFloatPane extends Component<{ area: Area<PanelConfig, Panel> }> {
   private dispose?: () => void;
 
   private focusing?: Focusable;
