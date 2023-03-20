@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import {
   IPublicTypeTitleContent,
   IPublicTypeSetterType,
@@ -6,14 +7,18 @@ import {
   IPublicTypeFieldConfig,
   IPublicTypeCustomView,
   IPublicTypeSetValueOptions,
+  IPublicTypeDisposable,
+  IPublicModelSettingField,
+  IBaseModelSettingField,
 } from '@alilc/lowcode-types';
 import { Transducer } from './utils';
-import { SettingPropEntry } from './setting-prop-entry';
-import { ISettingEntry } from './setting-entry';
+import { ISettingPropEntry, SettingPropEntry } from './setting-prop-entry';
 import { computed, obx, makeObservable, action, untracked, intl } from '@alilc/lowcode-editor-core';
 import { cloneDeep, isCustomView, isDynamicSetter } from '@alilc/lowcode-utils';
+import { ISettingTopEntry } from './setting-top-entry';
+import { IComponentMeta, INode } from '@alilc/lowcode-designer';
 
-function getSettingFieldCollectorKey(parent: ISettingEntry, config: IPublicTypeFieldConfig) {
+function getSettingFieldCollectorKey(parent: ISettingTopEntry | ISettingField, config: IPublicTypeFieldConfig) {
   let cur = parent;
   const path = [config.name];
   while (cur !== parent.top) {
@@ -25,8 +30,50 @@ function getSettingFieldCollectorKey(parent: ISettingEntry, config: IPublicTypeF
   return path.join('.');
 }
 
-export interface ISettingField extends ISettingEntry {
+export interface ISettingField extends ISettingPropEntry, Omit<IBaseModelSettingField<
+ISettingTopEntry,
+ISettingField,
+IComponentMeta,
+INode
+>, 'setValue' | 'key' | 'node'> {
+  get items(): Array<ISettingField | IPublicTypeCustomView>;
 
+  get title(): string | ReactNode | undefined;
+
+  readonly isSettingField: true;
+
+  purge(): void;
+
+  extraProps: IPublicTypeFieldExtraProps;
+
+  get setter(): IPublicTypeSetterType | null;
+
+  get expanded(): boolean;
+
+  readonly isRequired: boolean;
+
+  readonly isGroup: boolean;
+
+  get valueState(): number;
+
+  setExpanded(value: boolean): void;
+
+  setValue(
+    val: any,
+    isHotValue?: boolean,
+    force?: boolean,
+    extraOptions?: IPublicTypeSetValueOptions,
+  ): void;
+
+  clearValue(): void;
+
+  valueChange(options: IPublicTypeSetValueOptions): void;
+
+  createField(config: IPublicTypeFieldConfig): ISettingField;
+
+  onEffect(action: () => void): IPublicTypeDisposable;
+
+  internalToShellField(): IPublicModelSettingField;
 }
 
 export class SettingField extends SettingPropEntry implements ISettingField {
@@ -40,7 +87,7 @@ export class SettingField extends SettingPropEntry implements ISettingField {
 
   private hotValue: any;
 
-  parent: ISettingEntry;
+  parent: ISettingTopEntry | ISettingField;
 
   extraProps: IPublicTypeFieldExtraProps;
 
@@ -57,12 +104,12 @@ export class SettingField extends SettingPropEntry implements ISettingField {
 
   @obx.ref private _expanded = true;
 
-  private _items: Array<SettingField | IPublicTypeCustomView> = [];
+  private _items: Array<ISettingField | IPublicTypeCustomView> = [];
 
   constructor(
-    parent: ISettingEntry,
+    parent: ISettingTopEntry | ISettingField,
     config: IPublicTypeFieldConfig,
-    private settingFieldCollector?: (name: string | number, field: SettingField) => void,
+    private settingFieldCollector?: (name: string | number, field: ISettingField) => void,
   ) {
     super(parent, config.name, config.type);
     makeObservable(this);
@@ -96,8 +143,8 @@ export class SettingField extends SettingPropEntry implements ISettingField {
     }
     if (isDynamicSetter(this._setter)) {
       return untracked(() => {
-        const shellThis = this.internalToShellPropEntry();
-        return this._setter.call(shellThis, shellThis);
+        const shellThis = this.internalToShellField();
+        return (this._setter as IPublicTypeDynamicSetter)?.call(shellThis, shellThis!);
       });
     }
     return this._setter;
@@ -111,7 +158,7 @@ export class SettingField extends SettingPropEntry implements ISettingField {
     this._expanded = value;
   }
 
-  get items(): Array<SettingField | IPublicTypeCustomView> {
+  get items(): Array<ISettingField | IPublicTypeCustomView> {
     return this._items;
   }
 
@@ -122,8 +169,8 @@ export class SettingField extends SettingPropEntry implements ISettingField {
   private initItems(
     items: Array<IPublicTypeFieldConfig | IPublicTypeCustomView>,
     settingFieldCollector?: {
-      (name: string | number, field: SettingField): void;
-      (name: string, field: SettingField): void;
+      (name: string | number, field: ISettingField): void;
+      (name: string, field: ISettingField): void;
     },
   ) {
     this._items = items.map((item) => {
@@ -140,7 +187,7 @@ export class SettingField extends SettingPropEntry implements ISettingField {
   }
 
   // 创建子配置项，通常用于 object/array 类型数据
-  createField(config: IPublicTypeFieldConfig): SettingField {
+  createField(config: IPublicTypeFieldConfig): ISettingField {
     this.settingFieldCollector?.(getSettingFieldCollectorKey(this.parent, config), this);
     return new SettingField(this, config, this.settingFieldCollector);
   }
@@ -161,8 +208,8 @@ export class SettingField extends SettingPropEntry implements ISettingField {
   }
 
   getItems(
-    filter?: (item: SettingField | IPublicTypeCustomView) => boolean,
-  ): Array<SettingField | IPublicTypeCustomView> {
+    filter?: (item: ISettingField | IPublicTypeCustomView) => boolean,
+  ): Array<ISettingField | IPublicTypeCustomView> {
     return this._items.filter((item) => {
       if (filter) {
         return filter(item);
@@ -244,14 +291,19 @@ export class SettingField extends SettingPropEntry implements ISettingField {
     this.valueChange(options);
   }
 
-  onEffect(action: () => void): () => void {
-    return this.designer.autorun(action, true);
+  onEffect(action: () => void): IPublicTypeDisposable {
+    return this.designer!.autorun(action, true);
+  }
+
+
+  internalToShellField() {
+    return this.designer!.shellModelFactory.createSettingField(this);
   }
 }
 
 /**
  * @deprecated use same function from '@alilc/lowcode-utils' instead
  */
-export function isSettingField(obj: any): obj is SettingField {
+export function isSettingField(obj: any): obj is ISettingField {
   return obj && obj.isSettingField;
 }

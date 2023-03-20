@@ -8,10 +8,11 @@ import {
   IPublicTypeTransformedComponentMetadata,
   IPublicTypeNestingFilter,
   IPublicTypeI18nData,
-  IPublicTypePluginConfig,
   IPublicTypeFieldConfig,
   IPublicModelComponentMeta,
   IPublicTypeAdvanced,
+  IPublicTypeDisposable,
+  IPublicTypeLiveTextEditingConfig,
 } from '@alilc/lowcode-types';
 import { deprecate, isRegExp, isTitleConfig, isNode } from '@alilc/lowcode-utils';
 import { computed, createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
@@ -58,6 +59,12 @@ export function buildFilter(rule?: string | string[] | RegExp | IPublicTypeNesti
 
 export interface IComponentMeta extends IPublicModelComponentMeta<INode> {
   prototype?: any;
+
+  get rootSelector(): string | undefined;
+
+  setMetadata(metadata: IPublicTypeComponentMetadata): void;
+
+  onMetadataChange(fn: (args: any) => void): IPublicTypeDisposable;
 }
 
 export class ComponentMeta implements IComponentMeta {
@@ -116,7 +123,7 @@ export class ComponentMeta implements IComponentMeta {
     return config?.combined || config?.props || [];
   }
 
-  private _liveTextEditing?: IPublicTypePluginConfig[];
+  private _liveTextEditing?: IPublicTypeLiveTextEditingConfig[];
 
   get liveTextEditing() {
     return this._liveTextEditing;
@@ -332,7 +339,7 @@ export class ComponentMeta implements IComponentMeta {
     if (this.parentWhitelist) {
       return this.parentWhitelist(
         parent.internalToShellNode(),
-        isNode(my) ? my.internalToShellNode() : my,
+        isNode<INode>(my) ? my.internalToShellNode() : my,
       );
     }
     return true;
@@ -343,7 +350,7 @@ export class ComponentMeta implements IComponentMeta {
     if (this.childWhitelist) {
       const _target: any = !Array.isArray(target) ? [target] : target;
       return _target.every((item: Node | IPublicTypeNodeSchema) => {
-        const _item = !isNode(item) ? new Node(my.document, item) : item;
+        const _item = !isNode<INode>(item) ? new Node(my.document, item) : item;
         return (
           this.childWhitelist &&
           this.childWhitelist(_item.internalToShellNode(), my.internalToShellNode())
@@ -353,7 +360,7 @@ export class ComponentMeta implements IComponentMeta {
     return true;
   }
 
-  onMetadataChange(fn: (args: any) => void): () => void {
+  onMetadataChange(fn: (args: any) => void): IPublicTypeDisposable {
     this.emitter.on('metadata_change', fn);
     return () => {
       this.emitter.removeListener('metadata_change', fn);

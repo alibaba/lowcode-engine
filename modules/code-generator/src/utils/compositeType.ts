@@ -16,6 +16,7 @@ import { generateExpression, generateFunction } from './jsExpression';
 import { generateJsSlot } from './jsSlot';
 import { executeFunctionStack } from './aopHelper';
 import { parseExpressionGetKeywords } from './expressionParser';
+import { isJSExpressionFn } from './common';
 
 interface ILegaoVariable {
   type: 'variable';
@@ -159,7 +160,7 @@ function generateUnknownType(
     return generateExpression(value, scope);
   }
 
-  if (isJSFunction(value)) {
+  if (isJSFunction(value) || isJSExpressionFn(value)) {
     if (options.handlers?.function) {
       return executeFunctionStack(value, scope, options.handlers.function, genFunction, options);
     }

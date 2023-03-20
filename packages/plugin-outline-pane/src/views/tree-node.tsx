@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import classNames from 'classnames';
 import TreeNode from '../controllers/tree-node';
 import TreeTitle from './tree-title';
@@ -6,7 +6,7 @@ import TreeBranches from './tree-branches';
 import { IconEyeClose } from '../icons/eye-close';
 import { IPublicModelPluginContext, IPublicModelModalNodesManager, IPublicModelDocumentModel, IPublicTypeDisposable } from '@alilc/lowcode-types';
 
-class ModalTreeNodeView extends Component<{
+class ModalTreeNodeView extends PureComponent<{
   treeNode: TreeNode;
   pluginContext: IPublicModelPluginContext;
 }> {
@@ -59,11 +59,11 @@ class ModalTreeNodeView extends Component<{
   }
 }
 
-export default class TreeNodeView extends Component<{
+export default class TreeNodeView extends PureComponent<{
   treeNode: TreeNode;
   isModal?: boolean;
   pluginContext: IPublicModelPluginContext;
-  isRootNode: boolean;
+  isRootNode?: boolean;
 }> {
   state = {
     expanded: false,

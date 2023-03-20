@@ -4,7 +4,7 @@ import { host } from './host';
 import SimulatorRendererView from './renderer-view';
 import { computed, observable as obx, untracked, makeObservable, configure } from 'mobx';
 import { getClientRects } from './utils/get-client-rects';
-import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
+import { reactFindDOMNodes, getReactInternalFiber } from './utils/react-find-dom-nodes';
 import {
   Asset,
   isElement,
@@ -17,9 +17,9 @@ import {
   AssetLoader,
   getProjectUtils,
 } from '@alilc/lowcode-utils';
-import { IPublicTypeComponentSchema, IPublicEnumTransformStage, IPublicTypeNodeSchema, IPublicTypeNodeInstance } from '@alilc/lowcode-types';
+import { IPublicTypeComponentSchema, IPublicEnumTransformStage, IPublicTypeNodeInstance, IPublicTypeProjectSchema } from '@alilc/lowcode-types';
 // just use types
-import { BuiltinSimulatorRenderer, Component, DocumentModel, Node } from '@alilc/lowcode-designer';
+import { BuiltinSimulatorRenderer, Component, IDocumentModel, INode } from '@alilc/lowcode-designer';
 import LowCodeRenderer from '@alilc/lowcode-react-renderer';
 import { createMemoryHistory, MemoryHistory } from 'history';
 import Slot from './builtin-components/slot';
@@ -94,7 +94,7 @@ export class DocumentInstance {
     return this.document.id;
   }
 
-  constructor(readonly container: SimulatorRendererContainer, readonly document: DocumentModel) {
+  constructor(readonly container: SimulatorRendererContainer, readonly document: IDocumentModel) {
     makeObservable(this);
   }
 
@@ -173,7 +173,7 @@ export class DocumentInstance {
   mountContext() {
   }
 
-  getNode(id: string): Node | null {
+  getNode(id: string): INode | null {
     return this.document.getNode(id);
   }
 
@@ -207,12 +207,12 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
   private _libraryMap: { [key: string]: string } = {};
 
-  private _components: any = {};
+  private _components: Record<string, React.FC | React.ComponentClass> | null = {};
 
-  get components(): object {
+  get components(): Record<string, React.FC | React.ComponentClass> {
     // 根据 device 选择不同组件，进行响应式
     // 更好的做法是，根据 device 选择加载不同的组件资源，甚至是 simulatorUrl
-    return this._components;
+    return this._components || {};
   }
   // context from: utils、constants、history、location、match
   @obx.ref private _appContext: any = {};
@@ -388,7 +388,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     const subs: string[] = [];
 
     while (true) {
-      const component = this._components[componentName];
+      const component = this._components?.[componentName];
       if (component) {
         return getSubComponent(component, subs);
       }
@@ -430,17 +430,20 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     cursor.release();
   }
 
-  createComponent(schema: IPublicTypeNodeSchema): Component | null {
-    const _schema: any = {
-      ...compatibleLegaoSchema(schema),
+  createComponent(schema: IPublicTypeProjectSchema<IPublicTypeComponentSchema>): Component | null {
+    const _schema: IPublicTypeProjectSchema<IPublicTypeComponentSchema> = {
+      ...schema,
+      componentsTree: schema.componentsTree.map(compatibleLegaoSchema),
     };
 
-    if (schema.componentName === 'Component' && (schema as IPublicTypeComponentSchema).css) {
+    const componentsTreeSchema = _schema.componentsTree[0];
+
+    if (componentsTreeSchema.componentName === 'Component' && componentsTreeSchema.css) {
       const doc = window.document;
       const s = doc.createElement('style');
       s.setAttribute('type', 'text/css');
-      s.setAttribute('id', `Component-${schema.id || ''}`);
-      s.appendChild(doc.createTextNode((schema as IPublicTypeComponentSchema).css || ''));
+      s.setAttribute('id', `Component-${componentsTreeSchema.id || ''}`);
+      s.appendChild(doc.createTextNode(componentsTreeSchema.css || ''));
       doc.getElementsByTagName('head')[0].appendChild(s);
     }
 
@@ -452,9 +455,11 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         return createElement(LowCodeRenderer, {
           ...extraProps, // 防止覆盖下面内置属性
           // 使用 _schema 为了使低代码组件在页面设计中使用变量，同 react 组件使用效果一致
-          schema: _schema,
+          schema: componentsTreeSchema,
           components: renderer.components,
           designMode: '',
+          locale: renderer.locale,
+          messages: _schema.i18n || {},
           device: renderer.device,
           appHelper: renderer.context,
           rendererName: 'LowCodeRenderer',
@@ -565,7 +570,7 @@ function getClosestNodeInstance(
     if (isElement(el)) {
       el = cacheReactKey(el);
     } else {
-      return getNodeInstance(el[FIBER_KEY], specId);
+      return getNodeInstance(getReactInternalFiber(el), specId);
     }
   }
   while (el) {

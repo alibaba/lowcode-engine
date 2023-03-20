@@ -15,7 +15,6 @@ module.exports = {
     'no-prototype-builtins': 1,
     'no-useless-constructor': 1,
     'no-empty-function': 1,
-    '@typescript-eslint/member-ordering': 0,
     'lines-between-class-members': 0,
     'no-await-in-loop': 0,
     'no-plusplus': 0,
@@ -35,23 +34,24 @@ module.exports = {
     '@typescript-eslint/indent': 0,
     'import/no-cycle': 0,
     '@typescript-eslint/no-shadow': 0,
-    "@typescript-eslint/method-signature-style": 0,
-    "@typescript-eslint/consistent-type-assertions": 0,
-    "@typescript-eslint/no-useless-constructor": 0,
+    '@typescript-eslint/method-signature-style': 0,
+    '@typescript-eslint/consistent-type-assertions': 0,
+    '@typescript-eslint/no-useless-constructor': 0,
     '@typescript-eslint/dot-notation': 0, // for lint performance
     '@typescript-eslint/restrict-plus-operands': 0, // for lint performance
     'no-unexpected-multiline': 1,
-    'no-multiple-empty-lines': ['error', { "max": 1 }],
+    'no-multiple-empty-lines': ['error', { max: 1 }],
     'lines-around-comment': ['error', {
-      "beforeBlockComment": true,
-      "afterBlockComment": false,
-      "afterLineComment": false,
-      "allowBlockStart": true,
+      beforeBlockComment: true,
+      afterBlockComment: false,
+      afterLineComment: false,
+      allowBlockStart: true,
     }],
-    "no-unused-vars": ['error', { "destructuredArrayIgnorePattern": "^_" }],
-    "@typescript-eslint/member-ordering": [
-      "error",
-      { "default": ["signature", "field", "constructor", "method"] }
+    'comma-dangle': ['error', 'always-multiline'],
+    '@typescript-eslint/member-ordering': [
+      'error',
+      { default: ['signature', 'field', 'constructor', 'method'] }
     ],
-  }
+    'no-unused-vars': ['error', { "destructuredArrayIgnorePattern": "^_" }]
+  },
 };

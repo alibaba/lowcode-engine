@@ -4,7 +4,7 @@ import { DocumentModel } from './document-model';
 import { IPublicModelSelection } from '@alilc/lowcode-types';
 
 export interface ISelection extends Omit<IPublicModelSelection<INode>, 'node'> {
-
+  containsNode(node: INode, excludeRoot: boolean): boolean;
 }
 
 export class Selection implements ISelection {

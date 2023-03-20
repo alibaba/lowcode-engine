@@ -1,5 +1,5 @@
 import { IPublicTypePropType, IPublicTypeComponentAction } from './';
-import { IPublicModelNode, IPublicModelProp, IPublicModelSettingTarget } from '../model';
+import { IPublicModelNode, IPublicModelProp, IPublicModelSettingField } from '../model';
 
 /**
  * 嵌套控制函数
@@ -93,11 +93,11 @@ export interface IPublicTypeComponentConfigure {
 
 export interface IPublicTypeInitialItem {
   name: string;
-  initial: (target: IPublicModelSettingTarget, currentValue: any) => any;
+  initial: (target: IPublicModelSettingField, currentValue: any) => any;
 }
 export interface IPublicTypeFilterItem {
   name: string;
-  filter: (target: IPublicModelSettingTarget | null, currentValue: any) => any;
+  filter: (target: IPublicModelSettingField | null, currentValue: any) => any;
 }
 export interface IPublicTypeAutorunItem {
   name: string;
@@ -184,9 +184,9 @@ export interface ConfigureSupport {
  */
 export interface IPublicTypeCallbacks {
   // hooks
-  onMouseDownHook?: (e: MouseEvent, currentNode: IPublicModelNode) => any;
-  onDblClickHook?: (e: MouseEvent, currentNode: IPublicModelNode) => any;
-  onClickHook?: (e: MouseEvent, currentNode: IPublicModelNode) => any;
+  onMouseDownHook?: (e: MouseEvent, currentNode: IPublicModelNode | null) => any;
+  onDblClickHook?: (e: MouseEvent, currentNode: IPublicModelNode | null) => any;
+  onClickHook?: (e: MouseEvent, currentNode: IPublicModelNode | null) => any;
   // onLocateHook?: (e: any, currentNode: any) => any;
   // onAcceptHook?: (currentNode: any, locationData: any) => any;
   onMoveHook?: (currentNode: IPublicModelNode) => boolean;

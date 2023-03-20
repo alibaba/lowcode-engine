@@ -65,7 +65,6 @@ class Test$$Page extends React.Component {
     };
 
     this.__jp__init();
-
     this.statusDesc = {
       0: '失败',
       1: '成功',
@@ -163,7 +162,6 @@ class Test$$Page extends React.Component {
     if (!item) {
       return '暂无结果';
     }
-
     const { channel, plat, version, status } = item;
     return [channel, plat, version, status].join('-');
   }

@@ -297,8 +297,9 @@ export interface IBaseModelNode<
    * 获取指定 path 的属性模型实例
    * get prop by path
    * @param path 属性路径，支持 a / a.b / a.0 等格式
+   * @param createIfNone 如果不存在，是否新建，默认为 true
    */
-  getProp(path: string, createIfNone: boolean): Prop | null;
+  getProp(path: string, createIfNone?: boolean): Prop | null;
 
   /**
    * 获取指定 path 的属性模型实例值

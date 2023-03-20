@@ -18,6 +18,7 @@ import {
   IPublicEnumTransformStage,
   IPublicModelDragon,
   IPublicModelDropLocation,
+  IPublicModelLocateEvent,
 } from '@alilc/lowcode-types';
 import { megreAssets, IPublicTypeAssetsJson, isNodeSchema, isDragNodeObject, isDragNodeDataObject, isLocationChildrenDetail, Logger } from '@alilc/lowcode-utils';
 import { Project } from '../project';
@@ -45,15 +46,15 @@ export interface DesignerProps {
   defaultSchema?: IPublicTypeProjectSchema;
   hotkeys?: object;
   viewName?: string;
-  simulatorProps?: object | ((document: DocumentModel) => object);
+  simulatorProps?: Record<string, any> | ((document: DocumentModel) => object);
   simulatorComponent?: ComponentType<any>;
   dragGhostComponent?: ComponentType<any>;
   suspensed?: boolean;
   componentMetadatas?: IPublicTypeComponentMetadata[];
   globalComponentActions?: IPublicTypeComponentAction[];
   onMount?: (designer: Designer) => void;
-  onDragstart?: (e: ILocateEvent) => void;
-  onDrag?: (e: ILocateEvent) => void;
+  onDragstart?: (e: IPublicModelLocateEvent) => void;
+  onDrag?: (e: IPublicModelLocateEvent) => void;
   onDragend?: (
       e: { dragObject: IPublicModelDragObject; copy: boolean },
       loc?: DropLocation,
@@ -73,12 +74,14 @@ export interface IDesigner {
 
   get detecting(): Detecting;
 
+  get simulatorComponent(): ComponentType<any> | undefined;
+
   createScroller(scrollable: IPublicTypeScrollable): IPublicModelScroller;
 
   /**
    * 创建插入位置，考虑放到 dragon 中
    */
-  createLocation(locationData: IPublicTypeLocationData): IPublicModelDropLocation;
+  createLocation(locationData: IPublicTypeLocationData<INode>): DropLocation;
 
   get componentsMap(): { [key: string]: IPublicTypeNpmInfo | Component };
 
@@ -100,6 +103,8 @@ export interface IDesigner {
   transformProps(props: IPublicTypeCompositeObject | IPublicTypePropsList, node: Node, stage: IPublicEnumTransformStage): IPublicTypeCompositeObject | IPublicTypePropsList;
 
   createSettingEntry(nodes: INode[]): ISettingTopEntry;
+
+  autorun(effect: (reaction: IReactionPublic) => void, options?: IReactionOptions<any, any>): IReactionDisposer;
 }
 
 export class Designer implements IDesigner {
@@ -135,7 +140,7 @@ export class Designer implements IDesigner {
 
   @obx.ref private _simulatorComponent?: ComponentType<any>;
 
-  @obx.ref private _simulatorProps?: object | ((project: Project) => object);
+  @obx.ref private _simulatorProps?: Record<string, any> | ((project: Project) => object);
 
   @obx.ref private _suspensed = false;
 
@@ -196,7 +201,7 @@ export class Designer implements IDesigner {
       const loc = this._dropLocation;
       if (loc) {
         if (isLocationChildrenDetail(loc.detail) && loc.detail.valid !== false) {
-          let nodes: Node[] | undefined;
+          let nodes: INode[] | undefined;
           if (isDragNodeObject(dragObject)) {
             nodes = insertChildren(loc.target, [...dragObject.nodes], loc.detail.index, copy);
           } else if (isDragNodeDataObject(dragObject)) {
@@ -209,7 +214,7 @@ export class Designer implements IDesigner {
             nodes = insertChildren(loc.target, nodeData, loc.detail.index);
           }
           if (nodes) {
-            loc.document.selection.selectAll(nodes.map((o) => o.id));
+            loc.document?.selection.selectAll(nodes.map((o) => o.id));
             setTimeout(() => this.activeTracker.track(nodes![0]), 10);
           }
         }
@@ -222,7 +227,7 @@ export class Designer implements IDesigner {
     });
 
     this.activeTracker.onChange(({ node, detail }) => {
-      node.document.simulator?.scrollToNode(node, detail);
+      node.document?.simulator?.scrollToNode(node, detail);
     });
 
     let historyDispose: undefined | (() => void);
@@ -264,8 +269,8 @@ export class Designer implements IDesigner {
       currentSelection.selected.length === 0 &&
       this.simulatorProps?.designMode === 'live'
     ) {
-      const rootNodeChildrens = this.currentDocument.getRoot().getChildren().children;
-      if (rootNodeChildrens.length > 0) {
+      const rootNodeChildrens = this.currentDocument?.getRoot()?.getChildren()?.children;
+      if (rootNodeChildrens && rootNodeChildrens.length > 0) {
         currentSelection.select(rootNodeChildrens[0].id);
       }
     }
@@ -288,14 +293,16 @@ export class Designer implements IDesigner {
   /**
    * 创建插入位置，考虑放到 dragon 中
    */
-  createLocation(locationData: IPublicTypeLocationData): DropLocation {
+  createLocation(locationData: IPublicTypeLocationData<INode>): DropLocation {
     const loc = new DropLocation(locationData);
-    if (this._dropLocation && this._dropLocation.document !== loc.document) {
+    if (this._dropLocation && this._dropLocation.document && this._dropLocation.document !== loc.document) {
       this._dropLocation.document.dropLocation = null;
     }
     this._dropLocation = loc;
     this.postEvent('dropLocation.change', loc);
-    loc.document.dropLocation = loc;
+    if (loc.document) {
+      loc.document.dropLocation = loc;
+    }
     this.activeTracker.track({ node: loc.target, detail: loc.detail });
     return loc;
   }
@@ -304,7 +311,7 @@ export class Designer implements IDesigner {
    * 清除插入位置
    */
   clearLocation() {
-    if (this._dropLocation) {
+    if (this._dropLocation && this._dropLocation.document) {
       this._dropLocation.document.dropLocation = null;
     }
     this.postEvent('dropLocation.change', undefined);
@@ -376,7 +383,7 @@ export class Designer implements IDesigner {
     } else {
       // FIXME!!, parent maybe null
       target = refNode.parent!;
-      index = refNode.index + 1;
+      index = (refNode.index || 0) + 1;
     }
 
     if (target && insertNode && !target.componentMeta.checkNestingDown(target, insertNode)) {
@@ -467,7 +474,7 @@ export class Designer implements IDesigner {
     return this._simulatorComponent;
   }
 
-  @computed get simulatorProps(): object {
+  @computed get simulatorProps(): Record<string, any> {
     if (typeof this._simulatorProps === 'function') {
       return this._simulatorProps(this.project);
     }
@@ -622,7 +629,7 @@ export class Designer implements IDesigner {
     }
   }
 
-  autorun(effect: (reaction: IReactionPublic) => void, options?: IReactionOptions): IReactionDisposer {
+  autorun(effect: (reaction: IReactionPublic) => void, options?: IReactionOptions<any, any>): IReactionDisposer {
     return autorun(effect, options);
   }
 

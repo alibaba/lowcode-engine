@@ -23,7 +23,6 @@ export interface ILocateEvent extends IPublicModelLocateEvent {
    * 激活的感应器
    */
   sensor?: IPublicModelSensor;
-
 }
 
 /**
@@ -97,7 +96,7 @@ function isDragEvent(e: any): e is DragEvent {
 }
 
 export interface IDragon extends IPublicModelDragon {
-
+  emitter: IEventBus;
 }
 
 /**
@@ -105,6 +104,8 @@ export interface IDragon extends IPublicModelDragon {
  */
 export class Dragon implements IDragon {
   private sensors: IPublicModelSensor[] = [];
+
+  private nodeInstPointerEvents: boolean;
 
   key = Math.random();
 
@@ -127,7 +128,7 @@ export class Dragon implements IDragon {
 
   viewName: string | undefined;
 
-  private emitter: IEventBus = createModuleEventBus('Dragon');
+  emitter: IEventBus = createModuleEventBus('Dragon');
 
   constructor(readonly designer: Designer) {
     makeObservable(this);
@@ -356,8 +357,8 @@ export class Dragon implements IDragon {
               rglNode,
               node: tarNode,
             });
-            const { selection } = designer.project.currentDocument;
-            selection.select(tarNode.id);
+            const selection = designer.project.currentDocument?.selection;
+            selection?.select(tarNode.id);
           }
         }
       }

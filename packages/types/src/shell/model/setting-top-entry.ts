@@ -1,18 +1,21 @@
-import { IPublicModelNode, IPublicModelSettingPropEntry } from './';
+import { IPublicModelNode, IPublicModelSettingField } from './';
 
-export interface IPublicModelSettingTopEntry {
+export interface IPublicModelSettingTopEntry<
+  Node = IPublicModelNode,
+  SettingField = IPublicModelSettingField
+> {
 
   /**
    * 返回所属的节点实例
    */
-  get node(): IPublicModelNode | null;
+  get node(): Node | null;
 
   /**
    * 获取子级属性对象
    * @param propName
    * @returns
    */
-  get(propName: string | number): IPublicModelSettingPropEntry;
+  get(propName: string | number): SettingField | null;
 
   /**
    * 获取指定 propName 的值
@@ -27,4 +30,10 @@ export interface IPublicModelSettingTopEntry {
    * @param value
    */
   setPropValue(propName: string | number, value: any): void;
+
+  /**
+   * 清除指定 propName 的值
+   * @param propName
+   */
+  clearPropValue(propName: string | number): void;
 }

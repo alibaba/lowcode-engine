@@ -5,14 +5,15 @@ import {
   IPublicTypeProjectSchema,
   IPublicTypeRootSchema,
   IPublicTypeComponentsMap,
-  IPublicApiProject,
-  IPublicModelDocumentModel,
   IPublicEnumTransformStage,
+  IBaseApiProject,
 } from '@alilc/lowcode-types';
 import { isLowCodeComponentType, isProCodeComponentType } from '@alilc/lowcode-utils';
 import { ISimulatorHost } from '../simulator';
 
-export interface IProject extends Omit< IPublicApiProject,
+export interface IProject extends Omit< IBaseApiProject<
+  IDocumentModel
+>,
   'simulatorHost' |
   'importSchema' |
   'exportSchema' |
@@ -49,7 +50,7 @@ export interface IProject extends Omit< IPublicApiProject,
   load(schema?: IPublicTypeProjectSchema, autoOpen?: boolean | string): void;
 
   getSchema(
-    stage: IPublicEnumTransformStage,
+    stage?: IPublicEnumTransformStage,
   ): IPublicTypeProjectSchema;
 
   getDocument(id: string): IDocumentModel | null;
@@ -134,10 +135,10 @@ export class Project implements IProject {
   }
 
   private getComponentsMap(): IPublicTypeComponentsMap {
-    return this.documents.reduce((
+    return this.documents.reduce<IPublicTypeComponentsMap>((
       componentsMap: IPublicTypeComponentsMap,
-      curDoc: DocumentModel,
-      ) => {
+      curDoc: IDocumentModel,
+      ): IPublicTypeComponentsMap => {
       const curComponentsMap = curDoc.getComponentsMap();
       if (Array.isArray(curComponentsMap)) {
         curComponentsMap.forEach((item) => {
@@ -176,7 +177,7 @@ export class Project implements IProject {
       componentsMap: this.getComponentsMap(),
       componentsTree: this.documents
         .filter((doc) => !doc.isBlank())
-        .map((doc) => doc.export(stage)),
+        .map((doc) => doc.export(stage) || {} as IPublicTypeRootSchema),
       i18n: this.i18n,
     };
   }
@@ -188,7 +189,7 @@ export class Project implements IProject {
   setSchema(schema?: IPublicTypeProjectSchema) {
     // FIXME: 这里的行为和 getSchema 并不对等，感觉不太对
     const doc = this.documents.find((doc) => doc.active);
-    doc && doc.import(schema?.componentsTree[0]);
+    doc && schema?.componentsTree[0] && doc.import(schema?.componentsTree[0]);
     this.simulator?.rerender();
   }
 
@@ -244,7 +245,7 @@ export class Project implements IProject {
     }
   }
 
-  removeDocument(doc: IPublicModelDocumentModel) {
+  removeDocument(doc: IDocumentModel) {
     const index = this.documents.indexOf(doc);
     if (index < 0) {
       return;

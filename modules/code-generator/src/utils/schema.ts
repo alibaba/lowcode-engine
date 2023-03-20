@@ -13,6 +13,7 @@ import {
   isJSFunction,
 } from '@alilc/lowcode-types';
 import { CodeGeneratorError } from '../types/error';
+import { isJSExpressionFn } from './common';
 
 export function isContainerSchema(x: any): x is IPublicTypeContainerSchema {
   return (
@@ -100,7 +101,7 @@ export function handleSubNodes<T>(
         });
       } else {
         Object.values(child.props).forEach((value) => {
-          const childRes = handleCompositeValueInProps(value);
+          const childRes = handleCompositeValueInProps(value as IPublicTypeCompositeValue);
           childrenRes.push(...childRes);
         });
       }
@@ -128,6 +129,7 @@ export function handleSubNodes<T>(
     // IPublicTypeCompositeObject
     if (
       !isJSExpression(value) &&
+      !isJSExpressionFn(value) &&
       !isJSFunction(value) &&
       typeof value === 'object' &&
       value !== null

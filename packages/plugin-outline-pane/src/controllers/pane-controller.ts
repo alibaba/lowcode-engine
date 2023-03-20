@@ -444,7 +444,7 @@ export class PaneController implements IPublicModelSensor, ITreeBoard, IPublicTy
       event: e,
       detail: {
         type: IPublicTypeLocationDetailType.Children,
-        index: index + 1,
+        index: (index || 0) + 1,
         valid: document?.checkNesting(node.parent!, dragObject as any),
         near: { node, pos: 'after' },
         focus: checkRecursion(focusNode, dragObject) ? { type: 'node', node: focusNode } : undefined,

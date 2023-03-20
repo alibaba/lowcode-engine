@@ -1,17 +1,17 @@
-import { ISettingEntry } from '@alilc/lowcode-designer';
+import { ISettingTopEntry } from '@alilc/lowcode-designer';
 import { settingTopEntrySymbol } from '../symbols';
 import { Node as ShellNode } from './node';
-import { SettingPropEntry as ShellSettingPropEntry } from './setting-prop-entry';
-import { IPublicModelSettingTopEntry, IPublicModelNode, IPublicModelSettingPropEntry } from '@alilc/lowcode-types';
+import { IPublicModelSettingTopEntry, IPublicModelNode, IPublicModelSettingField } from '@alilc/lowcode-types';
+import { SettingField } from './setting-field';
 
 export class SettingTopEntry implements IPublicModelSettingTopEntry {
-  private readonly [settingTopEntrySymbol]: ISettingEntry;
+  private readonly [settingTopEntrySymbol]: ISettingTopEntry;
 
-  constructor(prop: ISettingEntry) {
+  constructor(prop: ISettingTopEntry) {
     this[settingTopEntrySymbol] = prop;
   }
 
-  static create(prop: ISettingEntry): IPublicModelSettingTopEntry {
+  static create(prop: ISettingTopEntry): IPublicModelSettingTopEntry {
     return new SettingTopEntry(prop);
   }
 
@@ -27,8 +27,8 @@ export class SettingTopEntry implements IPublicModelSettingTopEntry {
    * @param propName
    * @returns
    */
-  get(propName: string | number): IPublicModelSettingPropEntry {
-    return ShellSettingPropEntry.create(this[settingTopEntrySymbol].get(propName) as any);
+  get(propName: string | number): IPublicModelSettingField {
+    return SettingField.create(this[settingTopEntrySymbol].get(propName)!);
   }
 
   /**
@@ -54,5 +54,9 @@ export class SettingTopEntry implements IPublicModelSettingTopEntry {
    */
   setPropValue(propName: string | number, value: any): void {
     this[settingTopEntrySymbol].setPropValue(propName, value);
+  }
+
+  clearPropValue(propName: string | number) {
+    this[settingTopEntrySymbol].clearPropValue(propName);
   }
 }
