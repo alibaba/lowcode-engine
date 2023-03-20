@@ -3,7 +3,7 @@ import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
 import { Logger } from '@alilc/lowcode-utils';
 import { IPublicTypeWidgetBaseConfig } from '@alilc/lowcode-types';
 import { WidgetContainer } from './widget/widget-container';
-import { Skeleton } from './skeleton';
+import { ISkeleton } from './skeleton';
 import { IWidget } from './widget/widget';
 
 const logger = new Logger({ level: 'warn', bizName: 'skeleton:area' });
@@ -35,7 +35,9 @@ export class Area<C extends IPublicTypeWidgetBaseConfig = any, T extends IWidget
 
   readonly container: WidgetContainer<T, C>;
 
-  constructor(readonly skeleton: Skeleton, readonly name: string, handle: (item: T | C) => T, private exclusive?: boolean, defaultSetCurrent = false) {
+  private lastCurrent: T | null = null;
+
+  constructor(readonly skeleton: ISkeleton, readonly name: string, handle: (item: T | C) => T, private exclusive?: boolean, defaultSetCurrent = false) {
     makeObservable(this);
     this.container = skeleton.createContainer(name, handle, exclusive, () => this.visible, defaultSetCurrent);
   }
@@ -56,8 +58,6 @@ export class Area<C extends IPublicTypeWidgetBaseConfig = any, T extends IWidget
   remove(config: T | string): number {
     return this.container.remove(config);
   }
-
-  private lastCurrent: T | null = null;
 
   setVisible(flag: boolean) {
     if (this.exclusive) {

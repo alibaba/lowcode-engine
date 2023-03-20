@@ -1,4 +1,4 @@
-import { Editor as InnerEditor, EventBus } from '@alilc/lowcode-editor-core';
+import { IEditor, IEventBus } from '@alilc/lowcode-editor-core';
 import { getLogger, isPluginEventName } from '@alilc/lowcode-utils';
 import { IPublicApiEvent, IPublicTypeDisposable } from '@alilc/lowcode-types';
 
@@ -11,10 +11,10 @@ type EventOptions = {
 const eventBusSymbol = Symbol('eventBus');
 
 export class Event implements IPublicApiEvent {
-  private readonly [eventBusSymbol]: EventBus;
+  private readonly [eventBusSymbol]: IEventBus;
   private readonly options: EventOptions;
 
-  constructor(eventBus: EventBus, options: EventOptions, public workspaceMode = false) {
+  constructor(eventBus: IEventBus, options: EventOptions, public workspaceMode = false) {
     this[eventBusSymbol] = eventBus;
     this.options = options;
     if (!this.options.prefix) {
@@ -69,6 +69,6 @@ export class Event implements IPublicApiEvent {
   }
 }
 
-export function getEvent(editor: InnerEditor, options: any = { prefix: 'common' }) {
+export function getEvent(editor: IEditor, options: any = { prefix: 'common' }) {
   return new Event(editor.eventBus, options);
 }

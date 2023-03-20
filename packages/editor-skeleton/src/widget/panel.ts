@@ -6,7 +6,7 @@ import { WidgetContainer } from './widget-container';
 import { getEvent } from '@alilc/lowcode-shell';
 import { PanelConfig, HelpTipConfig } from '../types';
 import { TitledPanelView, TabsPanelView, PanelView } from '../components/widget-views';
-import { Skeleton } from '../skeleton';
+import { ISkeleton } from '../skeleton';
 import { composeTitle } from './utils';
 import { IWidget } from './widget';
 import { isPanelDock, PanelDock } from './panel-dock';
@@ -80,7 +80,7 @@ export class Panel implements IWidget {
 
   @obx.ref public parent?: WidgetContainer;
 
-  constructor(readonly skeleton: Skeleton, readonly config: PanelConfig) {
+  constructor(readonly skeleton: ISkeleton, readonly config: PanelConfig) {
     makeObservable(this);
     const { name, content, props = {} } = config;
     const { hideTitleBar, title, icon, description, help } = props;
@@ -111,7 +111,7 @@ export class Panel implements IWidget {
       props.onInit.call(this, this);
     }
 
-    if (content.onInit) {
+    if (typeof content !== 'string' && content && content.onInit) {
       content.onInit.call(this, this);
     }
     // todo: process shortcut

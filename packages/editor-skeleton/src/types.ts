@@ -1,12 +1,11 @@
 import { ReactElement, ComponentType } from 'react';
 import {
   IPublicTypeTitleContent,
-  IPublicTypeIconType,
   IPublicTypeI18nData,
-  TipContent,
   IPublicTypeWidgetConfigArea,
   IPublicTypeWidgetBaseConfig,
   IPublicTypePanelDockPanelProps,
+  IPublicTypePanelDockProps,
 } from '@alilc/lowcode-types';
 import { IWidget } from './widget/widget';
 
@@ -24,13 +23,7 @@ export function isWidgetConfig(obj: any): obj is WidgetConfig {
   return obj && obj.type === 'Widget';
 }
 
-export interface DockProps {
-  title?: IPublicTypeTitleContent;
-  icon?: IPublicTypeIconType;
-  size?: 'small' | 'medium' | 'large';
-  className?: string;
-  description?: TipContent;
-  onClick?: () => void;
+export interface DockProps extends IPublicTypePanelDockProps {
 }
 
 export interface DividerConfig extends IPublicTypeWidgetBaseConfig {
