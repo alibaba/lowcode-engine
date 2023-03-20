@@ -95,7 +95,10 @@ function isDragEvent(e: any): e is DragEvent {
   return e?.type?.startsWith('drag');
 }
 
-export interface IDragon extends IPublicModelDragon<INode> {
+export interface IDragon extends IPublicModelDragon<
+  INode,
+  ILocateEvent
+> {
   emitter: IEventBus;
 }
 

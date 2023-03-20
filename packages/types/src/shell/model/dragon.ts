@@ -3,7 +3,8 @@ import { IPublicTypeDragNodeDataObject, IPublicTypeDragObject } from '../type';
 import { IPublicModelDragObject, IPublicModelLocateEvent, IPublicModelNode } from './';
 
 export interface IPublicModelDragon<
-  Node = IPublicModelNode
+  Node = IPublicModelNode,
+  LocateEvent = IPublicModelLocateEvent
 > {
 
   /**
@@ -18,7 +19,7 @@ export interface IPublicModelDragon<
    * @param func
    * @returns
    */
-  onDragstart(func: (e: IPublicModelLocateEvent) => any): () => void;
+  onDragstart(func: (e: LocateEvent) => any): () => void;
 
   /**
    * 绑定 drag 事件
@@ -26,7 +27,7 @@ export interface IPublicModelDragon<
    * @param func
    * @returns
    */
-  onDrag(func: (e: IPublicModelLocateEvent) => any): () => void;
+  onDrag(func: (e: LocateEvent) => any): () => void;
 
   /**
    * 绑定 dragend 事件
