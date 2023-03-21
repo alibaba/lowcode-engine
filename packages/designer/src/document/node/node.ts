@@ -98,11 +98,11 @@ export interface IBaseNode<Schema extends IPublicTypeNodeSchema = IPublicTypeNod
   /**
    * 导出 schema
    */
-  export<T = IPublicTypeNodeSchema>(stage: IPublicEnumTransformStage, options?: any): T;
+  export<T = Schema>(stage: IPublicEnumTransformStage, options?: any): T;
 
   emitPropChange(val: IPublicTypePropChangeOptions): void;
 
-  import(data: IPublicTypeNodeSchema, checkId?: boolean): void;
+  import(data: Schema, checkId?: boolean): void;
 
   internalSetSlotFor(slotFor: Prop | null | undefined): void;
 
@@ -394,7 +394,10 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
       editor?.eventBus.emit(EDITOR_EVENT.NODE_VISIBLE_CHANGE, this, visible);
     });
     this.onChildrenChange((info?: { type: string; node: INode }) => {
-      editor?.eventBus.emit(EDITOR_EVENT.NODE_VISIBLE_CHANGE, info);
+      editor?.eventBus.emit(EDITOR_EVENT.NODE_CHILDREN_CHANGE, {
+        type: info?.type,
+        node: this,
+      });
     });
   }
 

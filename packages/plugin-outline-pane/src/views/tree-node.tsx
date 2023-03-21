@@ -4,7 +4,7 @@ import TreeNode from '../controllers/tree-node';
 import TreeTitle from './tree-title';
 import TreeBranches from './tree-branches';
 import { IconEyeClose } from '../icons/eye-close';
-import { IPublicModelPluginContext, IPublicModelModalNodesManager, IPublicModelDocumentModel, IPublicTypeDisposable } from '@alilc/lowcode-types';
+import { IPublicModelPluginContext, IPublicModelModalNodesManager, IPublicTypeDisposable } from '@alilc/lowcode-types';
 
 class ModalTreeNodeView extends PureComponent<{
   treeNode: TreeNode;
@@ -49,6 +49,7 @@ class ModalTreeNodeView extends PureComponent<{
         <div className="tree-pane-modal-content">
           <TreeBranches
             treeNode={rootTreeNode}
+            treeChildren={rootTreeNode.children}
             expanded={expanded}
             isModal
             pluginContext={this.pluginContext}
@@ -65,7 +66,19 @@ export default class TreeNodeView extends PureComponent<{
   pluginContext: IPublicModelPluginContext;
   isRootNode?: boolean;
 }> {
-  state = {
+  state: {
+    expanded: boolean;
+    selected: boolean;
+    hidden: boolean;
+    locked: boolean;
+    detecting: boolean;
+    isRoot: boolean;
+    highlight: boolean;
+    dropping: boolean;
+    conditionFlow: boolean;
+    expandable: boolean;
+    treeChildren: TreeNode[] | null;
+  } = {
     expanded: false,
     selected: false,
     hidden: false,
@@ -76,6 +89,7 @@ export default class TreeNodeView extends PureComponent<{
     dropping: false,
     conditionFlow: false,
     expandable: false,
+    treeChildren: [],
   };
 
   eventOffCallbacks: Array<IPublicTypeDisposable | undefined> = [];
@@ -95,6 +109,7 @@ export default class TreeNodeView extends PureComponent<{
       conditionFlow: treeNode.node.conditionGroup != null,
       highlight: treeNode.isFocusingNode(),
       expandable: treeNode.expandable,
+      treeChildren: treeNode.children,
     };
   }
 
@@ -114,11 +129,13 @@ export default class TreeNodeView extends PureComponent<{
       this.setState({ locked });
     });
     treeNode.onExpandableChanged((expandable: boolean) => {
-      this.setState({ expandable });
+      this.setState({
+        expandable,
+        treeChildren: treeNode.children,
+      });
     });
-
     this.eventOffCallbacks.push(
-      doc?.onDropLocationChanged((document: IPublicModelDocumentModel) => {
+      doc?.onDropLocationChanged(() => {
         this.setState({
           dropping: treeNode.dropDetail?.index != null,
         });
@@ -210,6 +227,7 @@ export default class TreeNodeView extends PureComponent<{
           isModal={false}
           expanded={this.state.expanded}
           pluginContext={this.props.pluginContext}
+          treeChildren={this.state.treeChildren}
         />
       </div>
     );
