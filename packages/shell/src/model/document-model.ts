@@ -300,7 +300,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * @param fn
    */
   onChangeNodeChildren(fn: (info: IPublicTypeOnChangeOptions) => void): IPublicTypeDisposable {
-    return this[documentSymbol].onChangeNodeChildren((info?: IPublicTypeOnChangeOptions) => {
+    return this[documentSymbol].onChangeNodeChildren((info?: IPublicTypeOnChangeOptions<InnerNode>) => {
       if (!info) {
         return;
       }

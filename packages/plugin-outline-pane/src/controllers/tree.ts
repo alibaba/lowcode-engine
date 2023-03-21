@@ -20,23 +20,10 @@ export class Tree {
     const doc = this.pluginContext.project.currentDocument;
     this.id = doc?.id;
 
-    doc?.onMountNode((payload: {node: IPublicModelNode }) => {
-      const { node } = payload;
-      const parentNode = node.parent;
-      if (!parentNode) {
-        return;
-      }
-      const parentTreeNode = this.getTreeNodeById(parentNode.id);
-      parentTreeNode?.notifyExpandableChanged();
-    });
-
-    doc?.onRemoveNode((node: IPublicModelNode) => {
-      const parentNode = node.parent;
-      if (!parentNode) {
-        return;
-      }
-      const parentTreeNode = this.getTreeNodeById(parentNode.id);
-      parentTreeNode?.notifyExpandableChanged();
+    doc?.onChangeNodeChildren((info: {node: IPublicModelNode }) => {
+      const { node } = info;
+      const treeNode = this.getTreeNodeById(node.id);
+      treeNode?.notifyExpandableChanged();
     });
   }
 
