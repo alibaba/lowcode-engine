@@ -92,7 +92,10 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
     const { extraProps } = this.field;
     const { ignoreDefaultValue } = extraProps;
     try {
-      return typeof ignoreDefaultValue === 'function' ? ignoreDefaultValue(this.field.internalToShell()) : false;
+      if (typeof ignoreDefaultValue === 'function') {
+        return ignoreDefaultValue(this.field.internalToShellField());
+      }
+      return false;
     } catch (error) {
       console.error('exception when ignoreDefaultValue is excuted', error);
     }

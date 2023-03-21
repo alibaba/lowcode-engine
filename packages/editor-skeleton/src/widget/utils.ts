@@ -3,45 +3,51 @@ import { isI18nData, isTitleConfig } from '@alilc/lowcode-utils';
 import { isValidElement } from 'react';
 
 export function composeTitle(title?: IPublicTypeTitleContent, icon?: IPublicTypeIconType, tip?: TipContent, tipAsTitle?: boolean, noIcon?: boolean) {
+  let _title: IPublicTypeTitleContent | undefined;
   if (!title) {
-    title = {};
+    _title = {};
     if (!icon || tipAsTitle) {
-      title.label = tip;
+      _title = {
+        label: tip,
+      };
       tip = undefined;
     }
+  } else {
+    _title = title;
   }
+
   if (icon || tip) {
-    if (typeof title !== 'object' || isValidElement(title) || isI18nData(title)) {
-      if (isValidElement(title)) {
-        if (title.type === 'svg' || (title.type as any).getIcon) {
+    if (typeof _title !== 'object' || isValidElement(_title) || isI18nData(_title)) {
+      if (isValidElement(_title)) {
+        if (_title.type === 'svg' || _title.type.getIcon) {
           if (!icon) {
-            icon = title as any;
+            icon = _title;
           }
           if (tipAsTitle) {
-            title = tip as any;
+            _title = tip;
             tip = null;
           } else {
-            title = undefined;
+            _title = undefined;
           }
         }
       }
-      title = {
-        label: title,
+      _title = {
+        label: _title,
         icon,
         tip,
       };
     } else {
-      title = {
-        ...title,
+      _title = {
+        ..._title,
         icon,
         tip,
       };
     }
   }
-  if (isTitleConfig(title) && noIcon) {
+  if (isTitleConfig(_title) && noIcon) {
     if (!isValidElement(title)) {
-      title.icon = undefined;
+      _title.icon = undefined;
     }
   }
-  return title;
+  return _title;
 }

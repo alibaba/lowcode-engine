@@ -1,17 +1,18 @@
 import { globalContext } from '@alilc/lowcode-editor-core';
 import {
-  Skeleton as InnerSkeleton,
+  ISkeleton,
   SkeletonEvents,
 } from '@alilc/lowcode-editor-skeleton';
 import { skeletonSymbol } from '../symbols';
 import { IPublicApiSkeleton, IPublicTypeDisposable, IPublicTypeSkeletonConfig, IPublicTypeWidgetConfigArea } from '@alilc/lowcode-types';
 
 const innerSkeletonSymbol = Symbol('skeleton');
+
 export class Skeleton implements IPublicApiSkeleton {
-  private readonly [innerSkeletonSymbol]: InnerSkeleton;
+  private readonly [innerSkeletonSymbol]: ISkeleton;
   private readonly pluginName: string;
 
-  get [skeletonSymbol](): InnerSkeleton {
+  get [skeletonSymbol](): ISkeleton {
     if (this.workspaceMode) {
       return this[innerSkeletonSymbol];
     }
@@ -24,7 +25,7 @@ export class Skeleton implements IPublicApiSkeleton {
   }
 
   constructor(
-      skeleton: InnerSkeleton,
+      skeleton: ISkeleton,
       pluginName: string,
       readonly workspaceMode: boolean = false,
     ) {
@@ -57,7 +58,7 @@ export class Skeleton implements IPublicApiSkeleton {
     if (!normalizeArea(area)) {
       return;
     }
-    skeleton[normalizeArea(area)!].container?.remove(name);
+    skeleton[normalizeArea(area)].container?.remove(name);
   }
 
   /**
@@ -185,7 +186,7 @@ export class Skeleton implements IPublicApiSkeleton {
   }
 }
 
-function normalizeArea(area: IPublicTypeWidgetConfigArea | undefined) {
+function normalizeArea(area: IPublicTypeWidgetConfigArea | undefined): 'leftArea' | 'rightArea' | 'topArea' | 'toolbar' | 'mainArea' | 'bottomArea' | 'leftFixedArea' | 'leftFloatArea' | 'stages' {
   switch (area) {
     case 'leftArea':
     case 'left':

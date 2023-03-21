@@ -220,7 +220,7 @@ checkNesting(
 **@since v1.0.16**
 
 ### isDetectingNode
-检查拖拽放置的目标节点是否可以放置该拖拽对象
+判断是否当前节点处于被探测状态
 
 ```typescript
 /**

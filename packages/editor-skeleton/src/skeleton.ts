@@ -1,4 +1,4 @@
-import { Editor, action, makeObservable, obx, engineConfig } from '@alilc/lowcode-editor-core';
+import { action, makeObservable, obx, engineConfig, IEditor } from '@alilc/lowcode-editor-core';
 import {
   DockConfig,
   PanelConfig,
@@ -27,6 +27,7 @@ import {
   IPublicTypeWidgetBaseConfig,
   IPublicTypeWidgetConfigArea,
   IPublicTypeSkeletonConfig,
+  IPublicApiSkeleton,
 } from '@alilc/lowcode-types';
 
 const logger = new Logger({ level: 'warn', bizName: 'skeleton' });
@@ -40,6 +41,66 @@ export enum SkeletonEvents {
   WIDGET_HIDE = 'skeleton.widget.hide',
   WIDGET_DISABLE = 'skeleton.widget.disable',
   WIDGET_ENABLE = 'skeleton.widget.enable',
+}
+
+export interface ISkeleton extends Omit<IPublicApiSkeleton,
+  'showPanel' |
+  'hidePanel' |
+  'showWidget' |
+  'enableWidget' |
+  'hideWidget' |
+  'disableWidget' |
+  'showArea' |
+  'onShowPanel' |
+  'onHidePanel' |
+  'onShowWidget' |
+  'onHideWidget' |
+  'remove' |
+  'hideArea'
+> {
+  editor: IEditor;
+
+  readonly leftArea: Area<DockConfig | PanelDockConfig | DialogDockConfig>;
+
+  readonly topArea: Area<DockConfig | DividerConfig | PanelDockConfig | DialogDockConfig>;
+
+  readonly subTopArea: Area<DockConfig | DividerConfig | PanelDockConfig | DialogDockConfig>;
+
+  readonly toolbar: Area<DockConfig | DividerConfig | PanelDockConfig | DialogDockConfig>;
+
+  readonly leftFixedArea: Area<PanelConfig, Panel>;
+
+  readonly leftFloatArea: Area<PanelConfig, Panel>;
+
+  readonly rightArea: Area<PanelConfig, Panel>;
+
+  readonly mainArea: Area<WidgetConfig | PanelConfig, Widget | Panel>;
+
+  readonly bottomArea: Area<PanelConfig, Panel>;
+
+  readonly stages: Area<StageConfig, Stage>;
+
+  readonly widgets: IWidget[];
+
+  getPanel(name: string): Panel | undefined;
+
+  getWidget(name: string): IWidget | undefined;
+
+  buildFromConfig(config?: EditorConfig, components?: PluginClassSet): void;
+
+  createStage(config: any): string | undefined;
+
+  getStage(name: string): Stage | null;
+
+  createContainer(
+    name: string,
+    handle: (item: any) => any,
+    exclusive?: boolean,
+    checkVisible?: () => boolean,
+    defaultSetCurrent?: boolean,
+  ): WidgetContainer;
+
+  createPanel(config: PanelConfig): Panel;
 }
 
 export class Skeleton {
@@ -69,7 +130,7 @@ export class Skeleton {
 
   readonly widgets: IWidget[] = [];
 
-  constructor(readonly editor: Editor, readonly viewName: string = 'global') {
+  constructor(readonly editor: IEditor, readonly viewName: string = 'global') {
     makeObservable(this);
     this.leftArea = new Area(
       this,
@@ -244,7 +305,7 @@ export class Skeleton {
     Object.keys(plugins).forEach((area) => {
       plugins[area].forEach((item) => {
         const { pluginKey, type, props = {}, pluginProps } = item;
-        const config: Partial<IPublicTypeWidgetBaseConfig> = {
+        const config: IPublicTypeWidgetBaseConfig = {
           area: area as IPublicTypeWidgetConfigArea,
           type: 'Widget',
           name: pluginKey,
@@ -272,7 +333,7 @@ export class Skeleton {
         if (pluginKey in components) {
           config.content = components[pluginKey];
         }
-        this.add(config as IPublicTypeWidgetBaseConfig);
+        this.add(config);
       });
     });
   }

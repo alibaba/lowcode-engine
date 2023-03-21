@@ -1,9 +1,10 @@
 import { uniqueId } from '@alilc/lowcode-utils';
 import { createModuleEventBus, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
 import { Context } from './context/view-context';
-import { Workspace } from './workspace';
-import { Resource } from './resource';
+import { IWorkspace } from './workspace';
+import { IResource } from './resource';
 import { IPublicTypeDisposable } from '../../types/es/shell/type/disposable';
+import { IPublicModelWindow } from '@alilc/lowcode-types';
 
 interface IWindowCOnfig {
   title: string | undefined;
@@ -11,7 +12,13 @@ interface IWindowCOnfig {
   viewType?: string | undefined;
 }
 
-export class EditorWindow {
+export interface IEditorWindow extends Omit<IPublicModelWindow<IResource>, 'changeViewType'> {
+  readonly resource: IResource;
+
+  changeViewType: (name: string, ignoreEmit?: boolean) => void;
+}
+
+export class EditorWindow implements IEditorWindow {
   id: string = uniqueId('window');
   icon: React.ReactElement | undefined;
 
@@ -27,7 +34,7 @@ export class EditorWindow {
 
   @obx initReady = false;
 
-  constructor(readonly resource: Resource, readonly workspace: Workspace, private config: IWindowCOnfig) {
+  constructor(readonly resource: IResource, readonly workspace: IWorkspace, private config: IWindowCOnfig) {
     makeObservable(this);
     this.init();
     this.title = config.title;

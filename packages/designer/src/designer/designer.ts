@@ -16,17 +16,15 @@ import {
   IPublicModelScroller,
   IPublicTypeLocationData,
   IPublicEnumTransformStage,
-  IPublicModelDragon,
-  IPublicModelDropLocation,
   IPublicModelLocateEvent,
 } from '@alilc/lowcode-types';
 import { megreAssets, IPublicTypeAssetsJson, isNodeSchema, isDragNodeObject, isDragNodeDataObject, isLocationChildrenDetail, Logger } from '@alilc/lowcode-utils';
-import { Project } from '../project';
+import { IProject, Project } from '../project';
 import { Node, DocumentModel, insertChildren, INode } from '../document';
 import { ComponentMeta, IComponentMeta } from '../component-meta';
 import { INodeSelector, Component } from '../simulator';
 import { Scroller } from './scroller';
-import { Dragon, IDragon, ILocateEvent } from './dragon';
+import { Dragon, IDragon } from './dragon';
 import { ActiveTracker, IActiveTracker } from './active-tracker';
 import { Detecting } from './detecting';
 import { DropLocation } from './location';
@@ -64,7 +62,11 @@ export interface DesignerProps {
 export interface IDesigner {
   readonly shellModelFactory: IShellModelFactory;
 
-  get dragon(): IPublicModelDragon;
+  viewName: string | undefined;
+
+  readonly project: IProject;
+
+  get dragon(): IDragon;
 
   get activeTracker(): IActiveTracker;
 
@@ -77,6 +79,10 @@ export interface IDesigner {
   get simulatorComponent(): ComponentType<any> | undefined;
 
   createScroller(scrollable: IPublicTypeScrollable): IPublicModelScroller;
+
+  refreshComponentMetasMap(): void;
+
+  createOffsetObserver(nodeInstance: INodeSelector): OffsetObserver | null;
 
   /**
    * 创建插入位置，考虑放到 dragon 中
@@ -91,6 +97,8 @@ export interface IDesigner {
     componentName: string,
     generateMetadata?: () => IPublicTypeComponentMetadata | null,
   ): IComponentMeta;
+
+  clearLocation(): void;
 
   createComponentMeta(data: IPublicTypeComponentMetadata): IComponentMeta | null;
 
@@ -118,7 +126,7 @@ export class Designer implements IDesigner {
 
   readonly detecting = new Detecting();
 
-  readonly project: Project;
+  readonly project: IProject;
 
   readonly editor: IPublicModelEditor;
 
@@ -140,7 +148,7 @@ export class Designer implements IDesigner {
 
   @obx.ref private _simulatorComponent?: ComponentType<any>;
 
-  @obx.ref private _simulatorProps?: Record<string, any> | ((project: Project) => object);
+  @obx.ref private _simulatorProps?: Record<string, any> | ((project: IProject) => object);
 
   @obx.ref private _suspensed = false;
 

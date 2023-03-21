@@ -1,4 +1,4 @@
-import { IPublicTypeWidgetConfigArea } from './';
+import { IPublicTypeIconType, IPublicTypeTitleContent, IPublicTypeWidgetConfigArea, TipContent } from './';
 
 export interface IPublicTypeWidgetBaseConfig {
   [extra: string]: any;
@@ -21,6 +21,24 @@ export interface IPublicTypePanelDockConfig extends IPublicTypeWidgetBaseConfig 
   type: 'PanelDock';
 
   panelProps?: IPublicTypePanelDockPanelProps;
+
+  props?: IPublicTypePanelDockProps;
+}
+
+export interface IPublicTypePanelDockProps {
+  [key: string]: any;
+
+  size?: 'small' | 'medium' | 'large';
+
+  className?: string;
+
+  description?: TipContent;
+
+  onClick?: () => void;
+
+  icon?: IPublicTypeIconType;
+
+  title?: IPublicTypeTitleContent;
 }
 
 export interface IPublicTypePanelDockPanelProps {

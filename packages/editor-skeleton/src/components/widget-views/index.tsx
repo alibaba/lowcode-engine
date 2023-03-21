@@ -47,6 +47,8 @@ function HelpTip({ tip }: any) {
 
 @observer
 export class PanelDockView extends Component<DockProps & { dock: PanelDock }> {
+  private lastActived = false;
+
   componentDidMount() {
     this.checkActived();
   }
@@ -54,8 +56,6 @@ export class PanelDockView extends Component<DockProps & { dock: PanelDock }> {
   componentDidUpdate() {
     this.checkActived();
   }
-
-  private lastActived = false;
 
   checkActived() {
     const { dock } = this.props;
@@ -134,7 +134,7 @@ export class DraggableLineView extends Component<{ panel: Panel }> {
     // 默认 关闭，通过配置开启
     const enableDrag = this.props.panel.config.props?.enableDrag;
     const isRightArea = this.props.panel.config?.area === 'rightArea';
-    if (isRightArea || !enableDrag || this.props.panel?.parent.name === 'leftFixedArea') {
+    if (isRightArea || !enableDrag || this.props.panel?.parent?.name === 'leftFixedArea') {
       return null;
     }
     return (
@@ -159,6 +159,8 @@ export class DraggableLineView extends Component<{ panel: Panel }> {
 
 @observer
 export class TitledPanelView extends Component<{ panel: Panel; area?: string }> {
+  private lastVisible = false;
+
   componentDidMount() {
     this.checkVisible();
   }
@@ -166,8 +168,6 @@ export class TitledPanelView extends Component<{ panel: Panel; area?: string }> 
   componentDidUpdate() {
     this.checkVisible();
   }
-
-  private lastVisible = false;
 
   checkVisible() {
     const { panel } = this.props;
@@ -218,6 +218,8 @@ export class PanelView extends Component<{
   hideOperationRow?: boolean;
   hideDragLine?: boolean;
 }> {
+  private lastVisible = false;
+
   componentDidMount() {
     this.checkVisible();
   }
@@ -225,8 +227,6 @@ export class PanelView extends Component<{
   componentDidUpdate() {
     this.checkVisible();
   }
-
-  private lastVisible = false;
 
   checkVisible() {
     const { panel } = this.props;
@@ -331,6 +331,9 @@ class PanelTitle extends Component<{ panel: Panel; className?: string }> {
 
 @observer
 export class WidgetView extends Component<{ widget: IWidget }> {
+  private lastVisible = false;
+  private lastDisabled: boolean | undefined = false;
+
   componentDidMount() {
     this.checkVisible();
     this.checkDisabled();
@@ -340,9 +343,6 @@ export class WidgetView extends Component<{ widget: IWidget }> {
     this.checkVisible();
     this.checkDisabled();
   }
-
-  private lastVisible = false;
-  private lastDisabled = false;
 
   checkVisible() {
     const { widget } = this.props;

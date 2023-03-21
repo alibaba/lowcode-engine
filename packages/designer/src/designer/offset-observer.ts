@@ -2,7 +2,7 @@ import requestIdleCallback, { cancelIdleCallback } from 'ric-shim';
 import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
 import { uniqueId } from '@alilc/lowcode-utils';
 import { INodeSelector, IViewport } from '../simulator';
-import { Node } from '../document';
+import { INode } from '../document';
 
 export class OffsetObserver {
   readonly id = uniqueId('oobx');
@@ -93,11 +93,11 @@ export class OffsetObserver {
 
   private pid: number | undefined;
 
-  readonly viewport: IViewport;
+  readonly viewport: IViewport | undefined;
 
   private isRoot: boolean;
 
-  readonly node: Node;
+  readonly node: INode;
 
   readonly compute: () => void;
 
@@ -105,10 +105,10 @@ export class OffsetObserver {
     const { node, instance } = nodeInstance;
     this.node = node;
     const doc = node.document;
-    const host = doc.simulator!;
-    const focusNode = doc.focusNode;
+    const host = doc?.simulator;
+    const focusNode = doc?.focusNode;
     this.isRoot = node.contains(focusNode!);
-    this.viewport = host.viewport;
+    this.viewport = host?.viewport;
     makeObservable(this);
     if (this.isRoot) {
       this.hasOffset = true;
@@ -118,7 +118,7 @@ export class OffsetObserver {
       return;
     }
 
-    let pid: number;
+    let pid: number | undefined;
     const compute = () => {
       if (pid !== this.pid) {
         return;

@@ -6,7 +6,6 @@ import {
   IPublicApiMaterial,
   IPublicApiEvent,
   IPublicApiCommon,
-  IPublicTypeCompositeObject,
   IPublicApiPlugins,
   IPublicTypePluginConfig,
   IPublicApiLogger,
@@ -16,7 +15,9 @@ import {
   IPublicApiCanvas,
   IPublicApiWorkspace,
   IPublicTypePluginMeta,
+  IPublicTypePluginRegisterOptions,
 } from '@alilc/lowcode-types';
+import PluginContext from './plugin-context';
 
 export type PluginPreference = Map<string, Record<string, IPublicTypePreferenceValueType>>;
 
@@ -72,7 +73,7 @@ export interface ILowCodePluginManagerCore {
   register(
     pluginModel: IPublicTypePlugin,
     pluginOptions?: any,
-    options?: IPublicTypeCompositeObject,
+    options?: IPublicTypePluginRegisterOptions,
   ): Promise<void>;
   init(pluginPreference?: Map<string, Record<string, IPublicTypePreferenceValueType>>): Promise<void>;
   get(pluginName: string): ILowCodePluginRuntime | undefined;
@@ -81,6 +82,7 @@ export interface ILowCodePluginManagerCore {
   delete(pluginName: string): any;
   setDisabled(pluginName: string, flag: boolean): void;
   dispose(): void;
+  _getLowCodePluginContext (options: IPluginContextOptions): PluginContext;
 }
 
 export type ILowCodePluginManager = ILowCodePluginManagerCore & ILowCodePluginManagerPluginAccessor;

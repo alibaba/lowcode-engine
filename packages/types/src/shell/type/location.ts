@@ -15,13 +15,14 @@ export enum LocationDetailType {
 }
 
 export type IPublicTypeRect = DOMRect & {
-  elements: Array<Element | Text>;
+  elements?: Array<Element | Text>;
   computed?: boolean;
 };
 
 export interface IPublicTypeLocationChildrenDetail {
   type: IPublicTypeLocationDetailType.Children;
   index?: number | null;
+
   /**
    * 是否有效位置
    */
@@ -43,8 +44,7 @@ export interface IPublicTypeLocationPropDetail {
   domNode?: HTMLElement;
 }
 
-// eslint-disable-next-line max-len
-export type IPublicTypeLocationDetail = IPublicTypeLocationChildrenDetail | IPublicTypeLocationPropDetail | { type: string; [key: string]: any };
+export type IPublicTypeLocationDetail = IPublicTypeLocationChildrenDetail | IPublicTypeLocationPropDetail | { [key: string]: any; type: string };
 
 export interface IPublicTypeLocationData<
   Node = IPublicModelNode

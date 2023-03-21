@@ -2,7 +2,9 @@ import { ReactElement } from 'react';
 import { IPublicTypeDisposable, IPublicTypeNodeSchema } from '../type';
 import { IPublicModelResource } from './resource';
 
-export interface IPublicModelWindow {
+export interface IPublicModelWindow<
+  Resource = IPublicModelResource
+> {
 
   /** 窗口 id */
   id: string;
@@ -14,7 +16,7 @@ export interface IPublicModelWindow {
   icon?: ReactElement;
 
   /** 窗口资源类型 */
-  resource?: IPublicModelResource;
+  resource?: Resource;
 
   /** 当前窗口导入 schema */
   importSchema(schema: IPublicTypeNodeSchema): void;

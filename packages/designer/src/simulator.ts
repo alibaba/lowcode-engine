@@ -1,8 +1,9 @@
 import { ComponentType } from 'react';
 import { IPublicTypeComponentMetadata, IPublicTypeNodeSchema, IPublicTypeScrollable, IPublicTypeComponentInstance, IPublicModelSensor, IPublicTypeNodeInstance, IPublicTypePackage } from '@alilc/lowcode-types';
-import { Point, ScrollTarget, ILocateEvent } from './designer';
+import { Point, ScrollTarget, ILocateEvent, IDesigner } from './designer';
 import { BuiltinSimulatorRenderer } from './builtin-simulator/renderer';
 import { INode } from './document';
+import { IProject } from './project';
 
 export type AutoFit = '100%';
 // eslint-disable-next-line no-redeclare
@@ -88,6 +89,10 @@ export interface ISimulatorHost<P = object> extends IPublicModelSensor<INode> {
   readonly contentWindow?: Window;
   readonly contentDocument?: Document;
   readonly renderer?: BuiltinSimulatorRenderer;
+
+  readonly project: IProject;
+
+  readonly designer: IDesigner;
 
   // dependsAsset // like react jQuery lodash
   // themesAsset

@@ -3,13 +3,17 @@ import {
   engineConfig, Setters as InnerSetters,
   Hotkey as InnerHotkey,
   commonEvent,
+  IEngineConfig,
+  IHotKey,
 } from '@alilc/lowcode-editor-core';
 import {
   Designer,
   ILowCodePluginContextApiAssembler,
   LowCodePluginManager,
   ILowCodePluginContextPrivate,
-  Project as InnerProject,
+  IProject,
+  IDesigner,
+  ILowCodePluginManager,
 } from '@alilc/lowcode-designer';
 import {
   Skeleton as InnerSkeleton,
@@ -29,40 +33,72 @@ import {
 } from '@alilc/lowcode-shell';
 import {
   IPluginPreferenceMananger,
+  IPublicApiCanvas,
+  IPublicApiCommon,
   IPublicApiEvent,
-  IPublicApiWorkspace,
+  IPublicApiHotkey,
+  IPublicApiMaterial,
+  IPublicApiPlugins,
+  IPublicApiProject,
+  IPublicApiSetters,
+  IPublicApiSkeleton,
   IPublicModelPluginContext,
   IPublicTypePluginMeta,
 } from '@alilc/lowcode-types';
-import { getLogger } from '@alilc/lowcode-utils';
-import { Workspace as InnerWorkspace } from '../workspace';
-import { EditorWindow } from '../window';
+import { getLogger, Logger as InnerLogger } from '@alilc/lowcode-utils';
+import { IWorkspace } from '../workspace';
+import { IEditorWindow } from '../window';
 
-export class BasicContext implements IPublicModelPluginContext {
-  skeleton: Skeleton;
-  plugins: Plugins;
-  project: Project;
-  setters: Setters;
-  material: Material;
-  common: Common;
-  config;
-  event;
-  logger;
-  hotkey: Hotkey;
-  innerProject: InnerProject;
+export interface IBasicContext extends Omit<IPublicModelPluginContext, 'workspace'> {
+  skeleton: IPublicApiSkeleton;
+  plugins: IPublicApiPlugins;
+  project: IPublicApiProject;
+  setters: IPublicApiSetters;
+  material: IPublicApiMaterial;
+  common: IPublicApiCommon;
+  config: IEngineConfig;
+  event: IPublicApiEvent;
+  logger: InnerLogger;
+  hotkey: IPublicApiHotkey;
+  innerProject: IProject;
   editor: Editor;
-  designer: Designer;
+  designer: IDesigner;
   registerInnerPlugins: () => Promise<void>;
   innerSetters: InnerSetters;
   innerSkeleton: InnerSkeleton;
-  innerHotkey: InnerHotkey;
-  innerPlugins: LowCodePluginManager;
-  canvas: Canvas;
+  innerHotkey: IHotKey;
+  innerPlugins: ILowCodePluginManager;
+  canvas: IPublicApiCanvas;
   pluginEvent: IPublicApiEvent;
   preference: IPluginPreferenceMananger;
-  workspace: IPublicApiWorkspace;
+  workspace: IWorkspace;
+}
 
-  constructor(innerWorkspace: InnerWorkspace, viewName: string, public editorWindow?: EditorWindow) {
+export class BasicContext implements IBasicContext {
+  skeleton: IPublicApiSkeleton;
+  plugins: IPublicApiPlugins;
+  project: IPublicApiProject;
+  setters: IPublicApiSetters;
+  material: IPublicApiMaterial;
+  common: IPublicApiCommon;
+  config: IEngineConfig;
+  event: IPublicApiEvent;
+  logger: InnerLogger;
+  hotkey: IPublicApiHotkey;
+  innerProject: IProject;
+  editor: Editor;
+  designer: IDesigner;
+  registerInnerPlugins: () => Promise<void>;
+  innerSetters: InnerSetters;
+  innerSkeleton: InnerSkeleton;
+  innerHotkey: IHotKey;
+  innerPlugins: ILowCodePluginManager;
+  canvas: IPublicApiCanvas;
+  pluginEvent: IPublicApiEvent;
+  preference: IPluginPreferenceMananger;
+  workspace: IWorkspace;
+
+  constructor(innerWorkspace: IWorkspace, viewName: string, public editorWindow?: IEditorWindow) {
     const editor = new Editor(viewName, true);
 
     const innerSkeleton = new InnerSkeleton(editor, viewName);
@@ -110,7 +146,7 @@ export class BasicContext implements IPublicModelPluginContext {
     this.canvas = canvas;
     const common = new Common(editor, innerSkeleton);
     this.common = common;
-    let plugins: any;
+    let plugins: IPublicApiPlugins;
 
     const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
       assembleApis: (context: ILowCodePluginContextPrivate, pluginName: string, meta: IPublicTypePluginMeta) => {

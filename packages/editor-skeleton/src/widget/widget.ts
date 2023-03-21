@@ -3,7 +3,7 @@ import { makeObservable, obx } from '@alilc/lowcode-editor-core';
 import { createContent, uniqueId } from '@alilc/lowcode-utils';
 import { getEvent } from '@alilc/lowcode-shell';
 import { WidgetConfig } from '../types';
-import { Skeleton } from '../skeleton';
+import { ISkeleton } from '../skeleton';
 import { WidgetView } from '../components/widget-views';
 import { IPublicTypeTitleContent, IPublicTypeWidgetBaseConfig } from '@alilc/lowcode-types';
 
@@ -15,7 +15,7 @@ export interface IWidget {
   readonly visible: boolean;
   readonly disabled?: boolean;
   readonly body: ReactNode;
-  readonly skeleton: Skeleton;
+  readonly skeleton: ISkeleton;
   readonly config: IPublicTypeWidgetBaseConfig;
 
   getName(): string;
@@ -71,7 +71,7 @@ export class Widget implements IWidget {
 
   readonly title: IPublicTypeTitleContent;
 
-  constructor(readonly skeleton: Skeleton, readonly config: WidgetConfig) {
+  constructor(readonly skeleton: ISkeleton, readonly config: WidgetConfig) {
     makeObservable(this);
     const { props = {}, name } = config;
     this.name = name;
