@@ -2,7 +2,7 @@ import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
 export function DesignerView(props: {
   url: string;
-  viewName: string;
+  viewName?: string;
 }) {
   return (
     <div className="lc-designer lowcode-plugin-designer">
