@@ -27,6 +27,8 @@ export interface IWorkspace extends Omit<IPublicApiWorkspace<
   plugins: ILowCodePluginManager;
 
   getResourceList(): IResource[];
+
+  getResourceType(resourceName: string): IResourceType;
 }
 
 export class Workspace implements IWorkspace {

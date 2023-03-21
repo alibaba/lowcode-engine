@@ -15,6 +15,8 @@ interface IWindowCOnfig {
 export interface IEditorWindow extends Omit<IPublicModelWindow<IResource>, 'changeViewType'> {
   readonly resource: IResource;
 
+  editorViews: Map<string, Context>;
+
   changeViewType: (name: string, ignoreEmit?: boolean) => void;
 }
 
