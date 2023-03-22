@@ -16,6 +16,7 @@ import {
   ILowCodePluginManager,
 } from '@alilc/lowcode-designer';
 import {
+  ISkeleton,
   Skeleton as InnerSkeleton,
 } from '@alilc/lowcode-editor-skeleton';
 import {
@@ -65,7 +66,7 @@ export interface IBasicContext extends Omit<IPublicModelPluginContext, 'workspac
   designer: IDesigner;
   registerInnerPlugins: () => Promise<void>;
   innerSetters: InnerSetters;
-  innerSkeleton: InnerSkeleton;
+  innerSkeleton: ISkeleton;
   innerHotkey: IHotKey;
   innerPlugins: ILowCodePluginManager;
   canvas: IPublicApiCanvas;

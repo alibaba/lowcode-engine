@@ -1,3 +1,4 @@
+import { ISkeleton } from '@alilc/lowcode-editor-skeleton';
 import { IPublicTypeEditorView, IPublicResourceData, IPublicResourceTypeConfig, IBaseModelResource } from '@alilc/lowcode-types';
 import { Logger } from '@alilc/lowcode-utils';
 import { BasicContext, IBasicContext } from './context/base-context';
@@ -8,6 +9,8 @@ const logger = new Logger({ level: 'warn', bizName: 'workspace:resource' });
 
 export interface IBaseResource<T> extends IBaseModelResource<T> {
   readonly resourceType: ResourceType;
+
+  skeleton: ISkeleton;
 
   get editorViews(): IPublicTypeEditorView[];
 
@@ -68,7 +71,7 @@ export class Resource implements IResource {
   }
 
   get children(): IResource[] {
-    return this.resourceData?.children?.map(d => new Resource(d, this.resourceType, this.workspace)) || [];
+    return this.resourceData?.children?.map(d => new Resource(d, this.workspace.getResourceType(d.resourceName || this.resourceType.name), this.workspace)) || [];
   }
 
   constructor(readonly resourceData: IPublicResourceData, readonly resourceType: IResourceType, readonly workspace: IWorkspace) {

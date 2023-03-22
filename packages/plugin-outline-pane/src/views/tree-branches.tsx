@@ -9,6 +9,7 @@ export default class TreeBranches extends PureComponent<{
   isModal?: boolean;
   pluginContext: IPublicModelPluginContext;
   expanded: boolean;
+  treeChildren: TreeNode[] | null;
 }> {
   state = {
     filterWorking: false,
@@ -56,12 +57,12 @@ export default class TreeBranches extends PureComponent<{
           treeNode={treeNode}
           isModal={isModal || false}
           pluginContext={this.props.pluginContext}
+          treeChildren={this.props.treeChildren}
         />
       </div>
     );
   }
 }
-
 
 interface ITreeNodeChildrenState {
   filterWorking: boolean;
@@ -73,6 +74,7 @@ class TreeNodeChildren extends PureComponent<{
     treeNode: TreeNode;
     isModal?: boolean;
     pluginContext: IPublicModelPluginContext;
+    treeChildren: TreeNode[] | null;
   }, ITreeNodeChildrenState> {
   state: ITreeNodeChildrenState = {
     filterWorking: false,
@@ -115,7 +117,7 @@ class TreeNodeChildren extends PureComponent<{
   }
 
   render() {
-    const { treeNode, isModal } = this.props;
+    const { isModal } = this.props;
     const children: any = [];
     let groupContents: any[] = [];
     let currentGrp: IPublicModelExclusiveGroup;
@@ -150,7 +152,7 @@ class TreeNodeChildren extends PureComponent<{
         })}
       />
     );
-    treeNode.children?.forEach((child, index) => {
+    this.props.treeChildren?.forEach((child, index) => {
       const childIsModal = child.node.componentMeta?.isModal || false;
       if (isModal != childIsModal) {
         return;
@@ -178,7 +180,7 @@ class TreeNodeChildren extends PureComponent<{
       }
     });
     endGroup();
-    const length = treeNode.children?.length || 0;
+    const length = this.props.treeChildren?.length || 0;
     if (dropIndex != null && dropIndex >= length) {
       children.push(insertion);
     }

@@ -2,14 +2,14 @@ import { PureComponent } from 'react';
 import { EditorView } from './editor-view';
 import { observer } from '@alilc/lowcode-editor-core';
 import TopArea from '../layouts/top-area';
-import { Resource } from '../resource';
-import { EditorWindow } from '../window';
+import { IResource } from '../resource';
+import { IEditorWindow } from '../window';
 import './resource-view.less';
 
 @observer
 export class ResourceView extends PureComponent<{
-  window: EditorWindow;
-  resource: Resource;
+  window: IEditorWindow;
+  resource: IResource;
 }, any> {
   render() {
     const { skeleton } = this.props.resource;
