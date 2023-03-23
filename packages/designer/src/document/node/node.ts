@@ -21,11 +21,12 @@ import {
 import { compatStage, isDOMText, isJSExpression, isNode, isNodeSchema } from '@alilc/lowcode-utils';
 import { ISettingTopEntry } from '@alilc/lowcode-designer';
 import { Props, getConvertedExtraKey, IProps } from './props/props';
-import { IDocumentModel } from '../document-model';
+import type { IDocumentModel } from '../document-model';
 import { NodeChildren, INodeChildren } from './node-children';
 import { IProp, Prop } from './props/prop';
-import { IComponentMeta } from '../../component-meta';
-import { ExclusiveGroup, IExclusiveGroup, isExclusiveGroup } from './exclusive-group';
+import type { IComponentMeta } from '../../component-meta';
+import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
+import type { IExclusiveGroup } from './exclusive-group';
 import { includeSlot, removeSlot } from '../../utils/slot';
 import { foreachReverse } from '../../utils/tree';
 import { NodeRemoveOptions, EDITOR_EVENT } from '../../types';
@@ -1095,7 +1096,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
           condition(this) !== false :
           condition !== false;
       })
-      .map((action: IPublicTypeComponentAction) => action.name) || [];
+        .map((action: IPublicTypeComponentAction) => action.name) || [];
 
     return availableActions.indexOf(actionName) >= 0;
   }

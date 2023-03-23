@@ -1,7 +1,7 @@
 import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
 import { uniqueId } from '@alilc/lowcode-utils';
 import { IPublicTypeTitleContent, IPublicModelExclusiveGroup } from '@alilc/lowcode-types';
-import { INode } from './node';
+import type { INode } from './node';
 import { intl } from '../../locale';
 
 export interface IExclusiveGroup extends IPublicModelExclusiveGroup<INode> {

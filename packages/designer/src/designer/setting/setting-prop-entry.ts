@@ -3,7 +3,7 @@ import { GlobalEvent, IPublicApiSetters, IPublicModelEditor, IPublicModelSetting
 import { uniqueId, isJSExpression } from '@alilc/lowcode-utils';
 import { ISettingEntry } from './setting-entry-type';
 import { INode } from '../../document';
-import { IComponentMeta } from '../../component-meta';
+import type { IComponentMeta } from '../../component-meta';
 import { IDesigner } from '../designer';
 import { ISettingTopEntry } from './setting-top-entry';
 import { ISettingField, isSettingField } from './setting-field';

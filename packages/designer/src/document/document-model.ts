@@ -11,7 +11,6 @@ import {
 import {
   IPublicTypeNodeData,
   IPublicTypeNodeSchema,
-  IPublicTypeRootSchema,
   IPublicTypePageSchema,
   IPublicTypeComponentsMap,
   IPublicTypeDragNodeObject,
@@ -21,7 +20,10 @@ import {
   IPublicTypeOnChangeOptions,
   IPublicTypeDisposable,
 } from '@alilc/lowcode-types';
-import {
+import type {
+  IPublicTypeRootSchema,
+} from '@alilc/lowcode-types';
+import type {
   IDropLocation,
 } from '@alilc/lowcode-designer';
 import {
@@ -37,9 +39,10 @@ import {
 } from '@alilc/lowcode-utils';
 import { IProject } from '../project';
 import { ISimulatorHost } from '../simulator';
-import { IComponentMeta } from '../component-meta';
+import type { IComponentMeta } from '../component-meta';
 import { IDesigner, IHistory } from '../designer';
-import { insertChildren, insertChild, IRootNode, INode } from './node/node';
+import { insertChildren, insertChild, IRootNode } from './node/node';
+import type { INode } from './node/node';
 import { Selection, ISelection } from './selection';
 import { History } from './history';
 import { IModalNodesManager, ModalNodesManager, Node } from './node';
@@ -49,11 +52,11 @@ export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
     schema: infer R;
   }
-    ? R
-    : any
+  ? R
+  : any
   : T;
 
-export interface IDocumentModel extends Omit< IPublicModelDocumentModel<
+export interface IDocumentModel extends Omit<IPublicModelDocumentModel<
   ISelection,
   IHistory,
   INode,
@@ -656,9 +659,9 @@ export class DocumentModel implements IDocumentModel {
   }
 
   checkNesting(
-      dropTarget: INode,
-      dragObject: IPublicTypeDragNodeObject | IPublicTypeNodeSchema | INode | IPublicTypeDragNodeDataObject,
-    ): boolean {
+    dropTarget: INode,
+    dragObject: IPublicTypeDragNodeObject | IPublicTypeNodeSchema | INode | IPublicTypeDragNodeDataObject,
+  ): boolean {
     let items: Array<INode | IPublicTypeNodeSchema>;
     if (isDragNodeDataObject(dragObject)) {
       items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
