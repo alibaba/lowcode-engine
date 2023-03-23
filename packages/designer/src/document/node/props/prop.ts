@@ -1,5 +1,6 @@
 import { untracked, computed, obx, engineConfig, action, makeObservable, mobx, runInAction } from '@alilc/lowcode-editor-core';
-import { IPublicTypeCompositeValue, GlobalEvent, IPublicTypeJSSlot, IPublicTypeSlotSchema, IPublicEnumTransformStage, IPublicModelProp } from '@alilc/lowcode-types';
+import { GlobalEvent, IPublicEnumTransformStage } from '@alilc/lowcode-types';
+import type { IPublicTypeCompositeValue, IPublicTypeJSSlot, IPublicTypeSlotSchema, IPublicModelProp } from '@alilc/lowcode-types';
 import { uniqueId, isPlainObject, hasOwnProperty, compatStage, isJSExpression, isJSSlot, isNodeSchema } from '@alilc/lowcode-utils';
 import { valueToSource } from './value-to-source';
 import { IProps, IPropParent } from './props';
@@ -13,7 +14,7 @@ export type UNSET = typeof UNSET;
 
 export interface IProp extends Omit<IPublicModelProp<
   INode
->, 'exportSchema' | 'node' > {
+>, 'exportSchema' | 'node'> {
 
   readonly props: IProps;
 

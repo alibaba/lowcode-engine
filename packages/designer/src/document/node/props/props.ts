@@ -1,5 +1,6 @@
 import { computed, makeObservable, obx, action } from '@alilc/lowcode-editor-core';
-import { IPublicTypePropsMap, IPublicTypePropsList, IPublicTypeCompositeValue, IPublicEnumTransformStage, IBaseModelProps } from '@alilc/lowcode-types';
+import { IPublicTypePropsList, IPublicTypeCompositeValue, IPublicEnumTransformStage, IBaseModelProps } from '@alilc/lowcode-types';
+import type { IPublicTypePropsMap } from '@alilc/lowcode-types';
 import { uniqueId, compatStage } from '@alilc/lowcode-utils';
 import { Prop, IProp, UNSET } from './prop';
 import { INode } from '../node';

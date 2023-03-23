@@ -6,10 +6,12 @@ import {
   IPublicTypeFieldExtraProps,
   IPublicTypeFieldConfig,
   IPublicTypeCustomView,
-  IPublicTypeSetValueOptions,
   IPublicTypeDisposable,
   IPublicModelSettingField,
   IBaseModelSettingField,
+} from '@alilc/lowcode-types';
+import type {
+  IPublicTypeSetValueOptions,
 } from '@alilc/lowcode-types';
 import { Transducer } from './utils';
 import { ISettingPropEntry, SettingPropEntry } from './setting-prop-entry';
@@ -31,10 +33,10 @@ function getSettingFieldCollectorKey(parent: ISettingTopEntry | ISettingField, c
 }
 
 export interface ISettingField extends ISettingPropEntry, Omit<IBaseModelSettingField<
-ISettingTopEntry,
-ISettingField,
-IComponentMeta,
-INode
+  ISettingTopEntry,
+  ISettingField,
+  IComponentMeta,
+  INode
 >, 'setValue' | 'key' | 'node'> {
   get items(): Array<ISettingField | IPublicTypeCustomView>;
 

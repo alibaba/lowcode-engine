@@ -4,7 +4,7 @@ import { computed, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor
 import { ISettingEntry } from './setting-entry-type';
 import { ISettingField, SettingField } from './setting-field';
 import { INode } from '../../document';
-import { IComponentMeta } from '../../component-meta';
+import type { IComponentMeta } from '../../component-meta';
 import { IDesigner } from '../designer';
 import { Setters } from '@alilc/lowcode-shell';
 

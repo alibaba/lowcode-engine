@@ -1,17 +1,20 @@
 import { obx, computed, makeObservable, action, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { IDesigner } from '../designer';
-import { DocumentModel, IDocumentModel, isDocumentModel } from '../document';
+import { DocumentModel, isDocumentModel } from '../document';
+import type { IDocumentModel } from "../document";
 import {
-  IPublicTypeProjectSchema,
-  IPublicTypeRootSchema,
   IPublicTypeComponentsMap,
   IPublicEnumTransformStage,
   IBaseApiProject,
 } from '@alilc/lowcode-types';
+import type {
+  IPublicTypeProjectSchema,
+  IPublicTypeRootSchema,
+} from '@alilc/lowcode-types';
 import { isLowCodeComponentType, isProCodeComponentType } from '@alilc/lowcode-utils';
 import { ISimulatorHost } from '../simulator';
 
-export interface IProject extends Omit< IBaseApiProject<
+export interface IProject extends Omit<IBaseApiProject<
   IDocumentModel
 >,
   'simulatorHost' |
@@ -146,7 +149,7 @@ export class Project implements IProject {
     return this.documents.reduce<IPublicTypeComponentsMap>((
       componentsMap: IPublicTypeComponentsMap,
       curDoc: IDocumentModel,
-      ): IPublicTypeComponentsMap => {
+    ): IPublicTypeComponentsMap => {
       const curComponentsMap = curDoc.getComponentsMap();
       if (Array.isArray(curComponentsMap)) {
         curComponentsMap.forEach((item) => {
@@ -178,8 +181,8 @@ export class Project implements IProject {
    * 获取项目整体 schema
    */
   getSchema(
-      stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Save,
-    ): IPublicTypeProjectSchema {
+    stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Save,
+  ): IPublicTypeProjectSchema {
     return {
       ...this.data,
       componentsMap: this.getComponentsMap(),
