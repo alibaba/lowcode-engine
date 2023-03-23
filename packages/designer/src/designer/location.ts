@@ -1,4 +1,4 @@
-import { IDocumentModel, INode } from '../document';
+import type { IDocumentModel, INode } from '../document';
 import { ILocateEvent } from './dragon';
 import {
   IPublicModelDropLocation,
@@ -98,7 +98,7 @@ function isDocument(elem: any): elem is Document {
 export function getWindow(elem: Element | Document): Window {
   return (isDocument(elem) ? elem : elem.ownerDocument!).defaultView!;
 }
-export interface IDropLocation extends Omit< IPublicModelDropLocation, 'target' | 'clone' > {
+export interface IDropLocation extends Omit<IPublicModelDropLocation, 'target' | 'clone'> {
 
   readonly source: string;
 

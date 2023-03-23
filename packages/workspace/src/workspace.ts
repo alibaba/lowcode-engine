@@ -2,7 +2,8 @@ import { IDesigner, ILowCodePluginManager, LowCodePluginManager } from '@alilc/l
 import { createModuleEventBus, Editor, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
 import { IPublicApiPlugins, IPublicApiWorkspace, IPublicResourceList, IPublicTypeResourceType, IShellModelFactory } from '@alilc/lowcode-types';
 import { BasicContext } from './context/base-context';
-import { EditorWindow, IEditorWindow } from './window';
+import { EditorWindow } from './window';
+import type { IEditorWindow } from './window';
 import { IResource, Resource } from './resource';
 import { IResourceType, ResourceType } from './resource-type';
 

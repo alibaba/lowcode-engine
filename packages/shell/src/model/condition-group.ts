@@ -1,4 +1,4 @@
-import { IExclusiveGroup } from '@alilc/lowcode-designer';
+import type { IExclusiveGroup } from '@alilc/lowcode-designer';
 import { IPublicModelExclusiveGroup, IPublicModelNode } from '@alilc/lowcode-types';
 import { conditionGroupSymbol, nodeSymbol } from '../symbols';
 import { Node } from './node';
