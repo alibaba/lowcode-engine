@@ -38,7 +38,7 @@ export * from './symbols';
  *  4. 对于属性的导出，统一用 .xxx 的 getter 模式，不能使用 .getXxx()
  */
 export {
-  DocumentModel,
+  DocumentModel as X,
   Detecting,
   Event,
   History,
