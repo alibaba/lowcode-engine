@@ -41,43 +41,22 @@ export default class TreeNode {
   readonly pluginContext: IPublicModelPluginContext;
   event = new EventEmitter();
 
-  onFilterResultChanged(fn: () => void): IPublicTypeDisposable {
-    this.event.on(EVENT_NAMES.filterResultChanged, fn);
-    return () => {
-      this.event.off(EVENT_NAMES.filterResultChanged, fn);
-    }
-  };
-  onExpandedChanged(fn: (expanded: boolean) => void): IPublicTypeDisposable {
-    this.event.on(EVENT_NAMES.expandedChanged, fn);
-    return () => {
-      this.event.off(EVENT_NAMES.expandedChanged, fn);
-    }
-  };
-  onHiddenChanged(fn: (hidden: boolean) => void): IPublicTypeDisposable {
-    this.event.on(EVENT_NAMES.hiddenChanged, fn);
-    return () => {
-      this.event.off(EVENT_NAMES.hiddenChanged, fn);
-    }
-  };
-  onLockedChanged(fn: (locked: boolean) => void): IPublicTypeDisposable {
-    this.event.on(EVENT_NAMES.lockedChanged, fn);
-    return () => {
-      this.event.off(EVENT_NAMES.lockedChanged, fn);
-    }
-  };
-  onTitleLabelChanged(fn: (treeNode: TreeNode) => void): IPublicTypeDisposable {
-    this.event.on(EVENT_NAMES.titleLabelChanged, fn);
+  private _node: IPublicModelNode;
 
-    return () => {
-      this.event.off(EVENT_NAMES.titleLabelChanged, fn);
-    }
+  readonly tree: Tree;
+
+  private _filterResult: FilterResult = {
+    filterWorking: false,
+    matchChild: false,
+    matchSelf: false,
+    keywords: '',
   };
-  onExpandableChanged(fn: (expandable: boolean) => void): IPublicTypeDisposable {
-    this.event.on(EVENT_NAMES.expandableChanged, fn);
-    return () => {
-      this.event.off(EVENT_NAMES.expandableChanged, fn);
-    }
-  }
+
+  /**
+   * 默认为折叠状态
+   * 在初始化根节点时，设置为展开状态
+   */
+  private _expanded = false;
 
   get id(): string {
     return this.node.id;
@@ -91,11 +70,8 @@ export default class TreeNode {
     return this.hasChildren() || this.hasSlots() || this.dropDetail?.index != null;
   }
 
-  /**
-   * 触发 onExpandableChanged 回调
-   */
-  notifyExpandableChanged(): void {
-    this.event.emit(EVENT_NAMES.expandableChanged, this.expandable);
+  get expanded(): boolean {
+    return this.isRoot(true) || (this.expandable && this._expanded);
   }
 
   /**
@@ -108,47 +84,6 @@ export default class TreeNode {
 
   get depth(): number {
     return this.node.zLevel;
-  }
-
-  isRoot(includeOriginalRoot = false) {
-    const rootNode = this.pluginContext.project.getCurrentDocument()?.root;
-    return this.tree.root === this || (includeOriginalRoot && rootNode === this.node);
-  }
-
-  /**
-   * 是否是响应投放区
-   */
-  isResponseDropping(): boolean {
-    const loc = this.pluginContext.project.getCurrentDocument()?.dropLocation;
-    if (!loc) {
-      return false;
-    }
-    return loc.target?.id === this.id;
-  }
-
-  isFocusingNode(): boolean {
-    const loc = this.pluginContext.project.getCurrentDocument()?.dropLocation;
-    if (!loc) {
-      return false;
-    }
-    return (
-      isLocationChildrenDetail(loc.detail) && loc.detail.focus?.type === 'node' && loc.detail?.focus?.node.id === this.id
-    );
-  }
-
-  /**
-   * 默认为折叠状态
-   * 在初始化根节点时，设置为展开状态
-   */
-  private _expanded = false;
-
-  get expanded(): boolean {
-    return this.isRoot(true) || (this.expandable && this._expanded);
-  }
-
-  setExpanded(value: boolean) {
-    this._expanded = value;
-    this.event.emit(EVENT_NAMES.expandedChanged, value);
   }
 
   get detecting() {
@@ -164,21 +99,8 @@ export default class TreeNode {
     return !cv;
   }
 
-  setHidden(flag: boolean) {
-    if (this.node.conditionGroup) {
-      return;
-    }
-    this.node.visible = !flag;
-    this.event.emit(EVENT_NAMES.hiddenChanged, flag);
-  }
-
   get locked(): boolean {
     return this.node.isLocked;
-  }
-
-  setLocked(flag: boolean) {
-    this.node.lock(flag);
-    this.event.emit(EVENT_NAMES.lockedChanged, flag);
   }
 
   get selected(): boolean {
@@ -213,19 +135,6 @@ export default class TreeNode {
     return this.node.componentName;
   }
 
-  setTitleLabel(label: string) {
-    const origLabel = this.titleLabel;
-    if (label === origLabel) {
-      return;
-    }
-    if (label === '') {
-      this.node.getExtraProp('title', false)?.remove();
-    } else {
-      this.node.getExtraProp('title', true)?.setValue(label);
-    }
-    this.event.emit(EVENT_NAMES.titleLabelChanged, this);
-  }
-
   get icon() {
     return this.node.componentMeta?.icon;
   }
@@ -245,6 +154,123 @@ export default class TreeNode {
 
   get children(): TreeNode[] | null {
     return this.node.children?.map((node) => this.tree.getTreeNode(node)) || null;
+  }
+
+  get node(): IPublicModelNode {
+    return this._node;
+  }
+
+  constructor(tree: Tree, node: IPublicModelNode, pluginContext: IPublicModelPluginContext) {
+    this.tree = tree;
+    this.pluginContext = pluginContext;
+    this._node = node;
+  }
+
+  setLocked(flag: boolean) {
+    this.node.lock(flag);
+    this.event.emit(EVENT_NAMES.lockedChanged, flag);
+  }
+
+  onFilterResultChanged(fn: () => void): IPublicTypeDisposable {
+    this.event.on(EVENT_NAMES.filterResultChanged, fn);
+    return () => {
+      this.event.off(EVENT_NAMES.filterResultChanged, fn);
+    };
+  }
+  onExpandedChanged(fn: (expanded: boolean) => void): IPublicTypeDisposable {
+    this.event.on(EVENT_NAMES.expandedChanged, fn);
+    return () => {
+      this.event.off(EVENT_NAMES.expandedChanged, fn);
+    };
+  }
+  onHiddenChanged(fn: (hidden: boolean) => void): IPublicTypeDisposable {
+    this.event.on(EVENT_NAMES.hiddenChanged, fn);
+    return () => {
+      this.event.off(EVENT_NAMES.hiddenChanged, fn);
+    };
+  }
+  onLockedChanged(fn: (locked: boolean) => void): IPublicTypeDisposable {
+    this.event.on(EVENT_NAMES.lockedChanged, fn);
+    return () => {
+      this.event.off(EVENT_NAMES.lockedChanged, fn);
+    };
+  }
+
+  onTitleLabelChanged(fn: (treeNode: TreeNode) => void): IPublicTypeDisposable {
+    this.event.on(EVENT_NAMES.titleLabelChanged, fn);
+
+    return () => {
+      this.event.off(EVENT_NAMES.titleLabelChanged, fn);
+    };
+  }
+  onExpandableChanged(fn: (expandable: boolean) => void): IPublicTypeDisposable {
+    this.event.on(EVENT_NAMES.expandableChanged, fn);
+    return () => {
+      this.event.off(EVENT_NAMES.expandableChanged, fn);
+    };
+  }
+
+  /**
+   * 触发 onExpandableChanged 回调
+   */
+  notifyExpandableChanged(): void {
+    this.event.emit(EVENT_NAMES.expandableChanged, this.expandable);
+  }
+
+  notifyTitleLabelChanged(): void {
+    this.event.emit(EVENT_NAMES.titleLabelChanged, this.title);
+  }
+
+  setHidden(flag: boolean) {
+    if (this.node.conditionGroup) {
+      return;
+    }
+    this.node.visible = !flag;
+    this.event.emit(EVENT_NAMES.hiddenChanged, flag);
+  }
+
+  isFocusingNode(): boolean {
+    const loc = this.pluginContext.project.getCurrentDocument()?.dropLocation;
+    if (!loc) {
+      return false;
+    }
+    return (
+      isLocationChildrenDetail(loc.detail) && loc.detail.focus?.type === 'node' && loc.detail?.focus?.node.id === this.id
+    );
+  }
+
+  setExpanded(value: boolean) {
+    this._expanded = value;
+    this.event.emit(EVENT_NAMES.expandedChanged, value);
+  }
+
+  isRoot(includeOriginalRoot = false) {
+    const rootNode = this.pluginContext.project.getCurrentDocument()?.root;
+    return this.tree.root === this || (includeOriginalRoot && rootNode === this.node);
+  }
+
+  /**
+   * 是否是响应投放区
+   */
+  isResponseDropping(): boolean {
+    const loc = this.pluginContext.project.getCurrentDocument()?.dropLocation;
+    if (!loc) {
+      return false;
+    }
+    return loc.target?.id === this.id;
+  }
+
+  setTitleLabel(label: string) {
+    const origLabel = this.titleLabel;
+    if (label === origLabel) {
+      return;
+    }
+    if (label === '') {
+      this.node.getExtraProp('title', false)?.remove();
+    } else {
+      this.node.getExtraProp('title', true)?.setValue(label);
+    }
+    this.event.emit(EVENT_NAMES.titleLabelChanged, this);
   }
 
   /**
@@ -298,32 +324,11 @@ export default class TreeNode {
     }
   }
 
-  private _node: IPublicModelNode;
-
-  get node(): IPublicModelNode {
-    return this._node;
-  }
-
-  readonly tree: Tree;
-
-  constructor(tree: Tree, node: IPublicModelNode, pluginContext: IPublicModelPluginContext) {
-    this.tree = tree;
-    this.pluginContext = pluginContext;
-    this._node = node;
-  }
-
   setNode(node: IPublicModelNode) {
     if (this._node !== node) {
       this._node = node;
     }
   }
-
-  private _filterResult: FilterResult = {
-    filterWorking: false,
-    matchChild: false,
-    matchSelf: false,
-    keywords: '',
-  };
 
   get filterReult(): FilterResult {
     return this._filterResult;
@@ -331,6 +336,6 @@ export default class TreeNode {
 
   setFilterReult(val: FilterResult) {
     this._filterResult = val;
-    this.event.emit(EVENT_NAMES.filterResultChanged)
+    this.event.emit(EVENT_NAMES.filterResultChanged);
   }
 }

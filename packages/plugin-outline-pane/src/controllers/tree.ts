@@ -1,5 +1,5 @@
 import TreeNode from './tree-node';
-import { IPublicModelNode, IPublicModelPluginContext } from '@alilc/lowcode-types';
+import { IPublicModelNode, IPublicModelPluginContext, IPublicTypePropChangeOptions } from '@alilc/lowcode-types';
 
 export class Tree {
   private treeNodesMap = new Map<string, TreeNode>();
@@ -24,6 +24,14 @@ export class Tree {
       const { node } = info;
       const treeNode = this.getTreeNodeById(node.id);
       treeNode?.notifyExpandableChanged();
+    });
+
+    doc?.onChangeNodeProp((info: IPublicTypePropChangeOptions) => {
+      const { node, key } = info;
+      if (key === '___title___') {
+        const treeNode = this.getTreeNodeById(node.id);
+        treeNode?.notifyTitleLabelChanged();
+      }
     });
   }
 
