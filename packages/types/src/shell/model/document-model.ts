@@ -108,7 +108,7 @@ export interface IPublicModelDocumentModel<
    * @param data
    * @returns
    */
-  createNode(data: IPublicTypeNodeSchema): Node | null;
+  createNode<T = Node>(data: IPublicTypeNodeSchema): T | null;
 
   /**
    * 移除指定节点/节点id

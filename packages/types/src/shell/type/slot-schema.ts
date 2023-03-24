@@ -1,3 +1,4 @@
+import { IPublicTypeNodeData } from './node-data';
 import { IPublicTypeNodeSchema } from './node-schema';
 
 /**
@@ -13,5 +14,5 @@ export interface IPublicTypeSlotSchema extends IPublicTypeNodeSchema {
     slotName?: string;
     slotParams?: string[];
   };
-  children?: IPublicTypeNodeSchema[];
+  children?: IPublicTypeNodeData[] | IPublicTypeNodeData;
 }

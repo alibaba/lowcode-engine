@@ -3,7 +3,8 @@ import { GlobalEvent, IPublicEnumTransformStage } from '@alilc/lowcode-types';
 import type { IPublicTypeCompositeValue, IPublicTypeJSSlot, IPublicTypeSlotSchema, IPublicModelProp } from '@alilc/lowcode-types';
 import { uniqueId, isPlainObject, hasOwnProperty, compatStage, isJSExpression, isJSSlot, isNodeSchema } from '@alilc/lowcode-utils';
 import { valueToSource } from './value-to-source';
-import { IProps, IPropParent } from './props';
+import { IPropParent } from './props';
+import type { IProps } from './props';
 import { ISlotNode, INode } from '../node';
 // import { TransformStage } from '../transform-stage';
 
@@ -14,13 +15,14 @@ export type UNSET = typeof UNSET;
 
 export interface IProp extends Omit<IPublicModelProp<
   INode
->, 'exportSchema' | 'node'> {
+>, 'exportSchema' | 'node'>, IPropParent {
+  key: string | number | undefined;
 
   readonly props: IProps;
 
   readonly owner: INode;
 
-  delete(prop: Prop): void;
+  delete(prop: IProp): void;
 
   export(stage: IPublicEnumTransformStage): IPublicTypeCompositeValue;
 
@@ -36,7 +38,15 @@ export interface IProp extends Omit<IPublicModelProp<
 
   isUnset(): boolean;
 
-  key: string | number | undefined;
+  purge(): void;
+
+  setupItems(): IProp[] | null;
+
+  get type(): ValueTypes;
+
+  get size(): number;
+
+  get code(): string;
 }
 
 export type ValueTypes = 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot';
@@ -126,15 +136,15 @@ export class Prop implements IProp, IPropParent {
     this._code = code;
   }
 
-  private _slotNode?: INode;
+  private _slotNode?: INode | null;
 
   get slotNode(): INode | null {
     return this._slotNode || null;
   }
 
-  @obx.shallow private _items: Prop[] | null = null;
+  @obx.shallow private _items: IProp[] | null = null;
 
-  @obx.shallow private _maps: Map<string | number, Prop> | null = null;
+  @obx.shallow private _maps: Map<string | number, IProp> | null = null;
 
   /**
    * 作为 _maps 的一层缓存机制，主要是复用部分已存在的 Prop，保持响应式关系，比如：
@@ -142,15 +152,15 @@ export class Prop implements IProp, IPropParent {
    * 导致假如外部有 mobx reaction（常见于 observer），此时响应式链路会被打断，
    * 因为 reaction 监听的是原 Prop(a) 的 _value，而不是新 Prop(a) 的 _value。
    */
-  private _prevMaps: Map<string | number, Prop> | null = null;
+  private _prevMaps: Map<string | number, IProp> | null = null;
 
   /**
    * 构造 items 属性，同时构造 maps 属性
    */
-  private get items(): Prop[] | null {
+  private get items(): IProp[] | null {
     if (this._items) return this._items;
     return runInAction(() => {
-      let items: Prop[] | null = null;
+      let items: IProp[] | null = null;
       if (this._type === 'list') {
         const data = this._value;
         data.forEach((item: any, idx: number) => {
@@ -160,10 +170,10 @@ export class Prop implements IProp, IPropParent {
         this._maps = null;
       } else if (this._type === 'map') {
         const data = this._value;
-        const maps = new Map<string, Prop>();
+        const maps = new Map<string, IProp>();
         const keys = Object.keys(data);
         for (const key of keys) {
-          let prop: Prop;
+          let prop: IProp;
           if (this._prevMaps?.has(key)) {
             prop = this._prevMaps.get(key)!;
             prop.setValue(data[key]);
@@ -184,7 +194,7 @@ export class Prop implements IProp, IPropParent {
     });
   }
 
-  @computed private get maps(): Map<string | number, Prop> | null {
+  @computed private get maps(): Map<string | number, IProp> | null {
     if (!this.items) {
       return null;
     }
@@ -434,7 +444,7 @@ export class Prop implements IProp, IPropParent {
       this._slotNode.import(slotSchema);
     } else {
       const { owner } = this.props;
-      this._slotNode = owner.document.createNode<ISlotNode>(slotSchema);
+      this._slotNode = owner.document?.createNode<ISlotNode>(slotSchema);
       if (this._slotNode) {
         owner.addSlot(this._slotNode);
         this._slotNode.internalSetSlotFor(this);
@@ -465,7 +475,7 @@ export class Prop implements IProp, IPropParent {
   /**
    * @returns  0: the same 1: maybe & like 2: not the same
    */
-  compare(other: Prop | null): number {
+  compare(other: IProp | null): number {
     if (!other || other.isUnset()) {
       return this.isUnset() ? 0 : 2;
     }
@@ -489,7 +499,7 @@ export class Prop implements IProp, IPropParent {
    * @param createIfNone 当没有的时候，是否创建一个
    */
   @action
-  get(path: string | number, createIfNone = true): Prop | null {
+  get(path: string | number, createIfNone = true): IProp | null {
     const type = this._type;
     if (type !== 'map' && type !== 'list' && type !== 'unset' && !createIfNone) {
       return null;
@@ -548,7 +558,7 @@ export class Prop implements IProp, IPropParent {
    * 删除项
    */
   @action
-  delete(prop: Prop): void {
+  delete(prop: IProp): void {
     /* istanbul ignore else */
     if (this._items) {
       const i = this._items.indexOf(prop);
@@ -582,7 +592,7 @@ export class Prop implements IProp, IPropParent {
    * @param force 强制
    */
   @action
-  add(value: IPublicTypeCompositeValue, force = false): Prop | null {
+  add(value: IPublicTypeCompositeValue, force = false): IProp | null {
     const type = this._type;
     if (type !== 'list' && type !== 'unset' && !force) {
       return null;
@@ -688,7 +698,7 @@ export class Prop implements IProp, IPropParent {
   /**
    * 迭代器
    */
-  [Symbol.iterator](): { next(): { value: Prop } } {
+  [Symbol.iterator](): { next(): { value: IProp } } {
     let index = 0;
     const { items } = this;
     const length = items?.length || 0;
@@ -712,7 +722,7 @@ export class Prop implements IProp, IPropParent {
    * 遍历
    */
   @action
-  forEach(fn: (item: Prop, key: number | string | undefined) => void): void {
+  forEach(fn: (item: IProp, key: number | string | undefined) => void): void {
     const { items } = this;
     if (!items) {
       return;
@@ -727,7 +737,7 @@ export class Prop implements IProp, IPropParent {
    * 遍历
    */
   @action
-  map<T>(fn: (item: Prop, key: number | string | undefined) => T): T[] | null {
+  map<T>(fn: (item: IProp, key: number | string | undefined) => T): T[] | null {
     const { items } = this;
     if (!items) {
       return null;
