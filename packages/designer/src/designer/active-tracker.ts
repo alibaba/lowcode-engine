@@ -14,7 +14,7 @@ export interface IActiveTracker extends Omit< IPublicModelActiveTracker, 'track'
 
 export interface ActiveTarget extends Omit< IPublicTypeActiveTarget, 'node' > {
   node: INode;
-  x2: string;
+  x3: string;
 }
 
 export class ActiveTracker implements IActiveTracker {
