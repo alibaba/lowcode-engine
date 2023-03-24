@@ -63,7 +63,7 @@ export class Material implements IPublicApiMaterial {
    * 获取「资产包」结构
    * @returns
    */
-  getAssets() {
+  getAssets(): IPublicTypeAssetsJson | undefined {
     return this[editorSymbol].get('assets');
   }
 

@@ -22,7 +22,7 @@ export interface IPublicApiMaterial {
    * get AssetsJson data
    * @returns IPublicTypeAssetsJson
    */
-  getAssets(): IPublicTypeAssetsJson;
+  getAssets(): IPublicTypeAssetsJson | undefined;
 
   /**
    * 加载增量的「资产包」结构，该增量包会与原有的合并
