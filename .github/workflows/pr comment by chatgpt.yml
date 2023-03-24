@@ -1,0 +1,23 @@
+name: Pull Request Review By ChatGPT
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  code-review:
+    name: Code Review
+    runs-on: ubuntu-latest
+
+    steps:
+      # 判断用户是否有写仓库权限
+      - name: 'Check User Permission'
+        uses: 'lannonbr/repo-permission-check-action@2.0.0'
+        with:
+          permission: 'write'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: opensumi/actions/.github/actions/code-review@main
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
