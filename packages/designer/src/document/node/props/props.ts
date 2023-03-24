@@ -2,7 +2,8 @@ import { computed, makeObservable, obx, action } from '@alilc/lowcode-editor-cor
 import { IPublicTypePropsList, IPublicTypeCompositeValue, IPublicEnumTransformStage, IBaseModelProps } from '@alilc/lowcode-types';
 import type { IPublicTypePropsMap } from '@alilc/lowcode-types';
 import { uniqueId, compatStage } from '@alilc/lowcode-utils';
-import { Prop, IProp, UNSET } from './prop';
+import { Prop, UNSET } from './prop';
+import type { IProp } from './prop';
 import { INode } from '../node';
 // import { TransformStage } from '../transform-stage';
 
@@ -27,23 +28,23 @@ export function getOriginalExtraKey(key: string): string {
 
 export interface IPropParent {
 
-  readonly props: Props;
+  readonly props: IProps;
 
   readonly owner: INode;
 
   get path(): string[];
 
-  delete(prop: Prop): void;
+  delete(prop: IProp): void;
 }
 
-export interface IProps extends Omit<IBaseModelProps<IProp>, | 'getExtraProp' | 'getExtraPropValue' | 'setExtraPropValue' | 'node'> {
+export interface IProps extends Omit<IBaseModelProps<IProp>, | 'getExtraProp' | 'getExtraPropValue' | 'setExtraPropValue' | 'node'>, IPropParent {
 
   /**
    * 获取 props 对应的 node
    */
   getNode(): INode;
 
-  get(path: string, createIfNone?: boolean): Prop | null;
+  get(path: string, createIfNone?: boolean): IProp | null;
 
   export(stage?: IPublicEnumTransformStage): {
     props?: IPublicTypePropsMap | IPublicTypePropsList;
@@ -54,7 +55,7 @@ export interface IProps extends Omit<IBaseModelProps<IProp>, | 'getExtraProp' | 
 
   purge(): void;
 
-  query(path: string, createIfNone: boolean): Prop | null;
+  query(path: string, createIfNone: boolean): IProp | null;
 
   import(value?: IPublicTypePropsMap | IPublicTypePropsList | null, extras?: ExtrasObject): void;
 }
@@ -62,7 +63,7 @@ export interface IProps extends Omit<IBaseModelProps<IProp>, | 'getExtraProp' | 
 export class Props implements IProps, IPropParent {
   readonly id = uniqueId('props');
 
-  @obx.shallow private items: Prop[] = [];
+  @obx.shallow private items: IProp[] = [];
 
   @computed private get maps(): Map<string, Prop> {
     const maps = new Map();
@@ -78,7 +79,7 @@ export class Props implements IProps, IPropParent {
 
   readonly path = [];
 
-  get props(): Props {
+  get props(): IProps {
     return this;
   }
 
@@ -229,7 +230,7 @@ export class Props implements IProps, IPropParent {
    * @param createIfNone 当没有的时候，是否创建一个
    */
   @action
-  query(path: string, createIfNone = true): Prop | null {
+  query(path: string, createIfNone = true): IProp | null {
     return this.get(path, createIfNone);
   }
 
@@ -238,7 +239,7 @@ export class Props implements IProps, IPropParent {
    * @param createIfNone 当没有的时候，是否创建一个
    */
   @action
-  get(path: string, createIfNone = false): Prop | null {
+  get(path: string, createIfNone = false): IProp | null {
     let entry = path;
     let nest = '';
     const i = path.indexOf('.');
@@ -266,7 +267,7 @@ export class Props implements IProps, IPropParent {
    * 删除项
    */
   @action
-  delete(prop: Prop): void {
+  delete(prop: IProp): void {
     const i = this.items.indexOf(prop);
     if (i > -1) {
       this.items.splice(i, 1);
@@ -298,7 +299,7 @@ export class Props implements IProps, IPropParent {
     key?: string | number,
     spread = false,
     options: any = {},
-  ): Prop {
+  ): IProp {
     const prop = new Prop(this, value, key, spread, options);
     this.items.push(prop);
     return prop;
@@ -314,7 +315,7 @@ export class Props implements IProps, IPropParent {
   /**
    * 迭代器
    */
-  [Symbol.iterator](): { next(): { value: Prop } } {
+  [Symbol.iterator](): { next(): { value: IProp } } {
     let index = 0;
     const { items } = this;
     const length = items.length || 0;
@@ -338,7 +339,7 @@ export class Props implements IProps, IPropParent {
    * 遍历
    */
   @action
-  forEach(fn: (item: Prop, key: number | string | undefined) => void): void {
+  forEach(fn: (item: IProp, key: number | string | undefined) => void): void {
     this.items.forEach((item) => {
       return fn(item, item.key);
     });
@@ -348,14 +349,14 @@ export class Props implements IProps, IPropParent {
    * 遍历
    */
   @action
-  map<T>(fn: (item: Prop, key: number | string | undefined) => T): T[] | null {
+  map<T>(fn: (item: IProp, key: number | string | undefined) => T): T[] | null {
     return this.items.map((item) => {
       return fn(item, item.key);
     });
   }
 
   @action
-  filter(fn: (item: Prop, key: number | string | undefined) => boolean) {
+  filter(fn: (item: IProp, key: number | string | undefined) => boolean) {
     return this.items.filter((item) => {
       return fn(item, item.key);
     });
@@ -378,7 +379,7 @@ export class Props implements IProps, IPropParent {
    * @param createIfNone 当没有的时候，是否创建一个
    */
   @action
-  getProp(path: string, createIfNone = true): Prop | null {
+  getProp(path: string, createIfNone = true): IProp | null {
     return this.query(path, createIfNone) || null;
   }
 
