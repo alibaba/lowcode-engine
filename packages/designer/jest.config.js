@@ -16,6 +16,7 @@ const jestConfig = {
   // testMatch: ['**/prop.test.ts'],
   // testMatch: ['(/tests?/.*(test))\\.[jt]s$'],
   // testMatch: ['**/document/node/node.add.test.ts'],
+  // testMatch: ['**/setting-field.test.ts'],
   transformIgnorePatterns: [
     `/node_modules/(?!${esModules})/`,
   ],

@@ -65,8 +65,8 @@ describe('setting-field 测试', () => {
 
     it('常规方法', () => {
       // 普通 field
-      const settingEntry = mockNode.settingEntry as SettingTopEntry;
-      const field = settingEntry.get('behavior') as SettingField;
+      const settingEntry = mockNode.settingEntry;
+      const field = settingEntry.get('behavior');
       expect(field.title).toBe('默认状态');
       expect(field.expanded).toBeTruthy();
       field.setExpanded(false);
@@ -103,24 +103,24 @@ describe('setting-field 测试', () => {
       expect(nonExistingField.setter).toBeNull();
 
       // group 类型的 field
-      const groupField = settingEntry.get('groupkgzzeo41') as SettingField;
+      const groupField = settingEntry.get('groupkgzzeo41');
       expect(groupField.items).toEqual([]);
 
       // 有子节点的 field
-      const objField = settingEntry.get('obj') as SettingField;
+      const objField = settingEntry.get('obj');
       expect(objField.items).toHaveLength(3);
       expect(objField.getItems()).toHaveLength(3);
       expect(objField.getItems(x => x.name === 'a')).toHaveLength(1);
       objField.purge();
       expect(objField.items).toHaveLength(0);
-      const objAField = settingEntry.get('obj.a') as SettingField;
+      const objAField = settingEntry.get('obj.a');
       expect(objAField.setter).toBe('StringSetter');
     });
 
     it('setValue / getValue / setHotValue / getHotValue', () => {
       // 获取已有的 prop
       const settingEntry = mockNode.settingEntry as SettingTopEntry;
-      const field = settingEntry.get('behavior') as SettingField;
+      const field = settingEntry.get('behavior');
 
       // 会读取 extraProps.defaultValue
       expect(field.getHotValue()).toBe('NORMAL');
@@ -140,11 +140,37 @@ describe('setting-field 测试', () => {
 
       // dirty fix list setter
       field.setHotValue([{ __sid__: 1 }]);
+
+      // 数组的 field
+      const arrField = settingEntry.get('arr');
+      const subArrField = arrField.createField({
+        name: 0,
+        title: 'sub',
+      });
+      const subArrField02 = arrField.createField({
+        name: 1,
+        title: 'sub',
+      });
+      const subArrField03 = arrField.createField({
+        name: '2',
+        title: 'sub',
+      });
+      subArrField.setValue({name: '1'});
+      expect(subArrField.path).toEqual(['arr', 0]);
+      expect(subArrField02.path).toEqual(['arr', 1]);
+      subArrField02.setValue({name: '2'});
+      expect(subArrField.getValue()).toEqual({name: '1'});
+      expect(arrField.getHotValue()).toEqual([{name: '1'}, {name: '2'}]);
+      subArrField.clearValue();
+      expect(subArrField.getValue()).toBeUndefined();
+      expect(arrField.getHotValue()).toEqual([undefined, {name: '2'}]);
+      subArrField03.setValue({name: '3'});
+      expect(arrField.getHotValue()).toEqual([undefined, {name: '2'}, {name: '3'}]);
     });
 
     it('onEffect', async () => {
       const settingEntry = mockNode.settingEntry as SettingTopEntry;
-      const field = settingEntry.get('behavior') as SettingField;
+      const field = settingEntry.get('behavior');
 
       const mockFn = jest.fn();
 

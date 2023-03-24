@@ -9,9 +9,9 @@ import { ISettingTopEntry } from './setting-top-entry';
 import { ISettingField, isSettingField } from './setting-field';
 
 export interface ISettingPropEntry extends ISettingEntry {
-  get props(): ISettingTopEntry;
-
   readonly isGroup: boolean;
+
+  get props(): ISettingTopEntry;
 
   get name(): string | number | undefined;
 
@@ -75,7 +75,7 @@ export class SettingPropEntry implements ISettingPropEntry {
 
   @computed get path() {
     const path = this.parent.path.slice();
-    if (this.type === 'field' && this.name) {
+    if (this.type === 'field' && this.name?.toString()) {
       path.push(this.name);
     }
     return path;
@@ -191,7 +191,7 @@ export class SettingPropEntry implements ISettingPropEntry {
    */
   getValue(): any {
     let val: any;
-    if (this.type === 'field' && this.name) {
+    if (this.type === 'field' && this.name?.toString()) {
       val = this.parent.getPropValue(this.name);
     }
     const { getValue } = this.extraProps;
@@ -209,7 +209,7 @@ export class SettingPropEntry implements ISettingPropEntry {
   setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: IPublicTypeSetValueOptions) {
     const oldValue = this.getValue();
     if (this.type === 'field') {
-      this.name && this.parent.setPropValue(this.name, val);
+      this.name?.toString() && this.parent.setPropValue(this.name, val);
     }
 
     const { setValue } = this.extraProps;
@@ -233,7 +233,7 @@ export class SettingPropEntry implements ISettingPropEntry {
    */
   clearValue() {
     if (this.type === 'field') {
-      this.name && this.parent.clearPropValue(this.name);
+      this.name?.toString() && this.parent.clearPropValue(this.name);
     }
     const { setValue } = this.extraProps;
     if (setValue) {
@@ -395,6 +395,6 @@ export class SettingPropEntry implements ISettingPropEntry {
   }
 
   internalToShellField(): IPublicModelSettingField {
-    return this.designer!.shellModelFactory.createSettingField(this);;
+    return this.designer!.shellModelFactory.createSettingField(this);
   }
 }
