@@ -155,7 +155,7 @@ export interface IBaseNode<Schema extends IPublicTypeNodeSchema = IPublicTypeNod
 
   getChildren(): INodeChildren | null;
 
-  clearPropValue(path: string): void;
+  clearPropValue(path: string | number): void;
 
   setProps(props?: IPublicTypePropsMap | IPublicTypePropsList | Props | null): void;
 

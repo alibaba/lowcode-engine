@@ -299,7 +299,7 @@ export interface IBaseModelNode<
    * @param path 属性路径，支持 a / a.b / a.0 等格式
    * @param createIfNone 如果不存在，是否新建，默认为 true
    */
-  getProp(path: string, createIfNone?: boolean): Prop | null;
+  getProp(path: string | number, createIfNone?: boolean): Prop | null;
 
   /**
    * 获取指定 path 的属性模型实例值
@@ -336,7 +336,7 @@ export interface IBaseModelNode<
    * @param path 属性路径，支持 a / a.b / a.0 等格式
    * @param value 值
    */
-  setPropValue(path: string, value: IPublicTypeCompositeValue): void;
+  setPropValue(path: string | number, value: IPublicTypeCompositeValue): void;
 
   /**
    * 设置指定 path 的属性模型实例值
