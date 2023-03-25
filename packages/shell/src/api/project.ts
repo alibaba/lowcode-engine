@@ -13,6 +13,7 @@ import {
   IPublicTypePropsTransducer,
   IPublicEnumTransformStage,
   IPublicTypeDisposable,
+  IPublicTypeAppConfig,
 } from '@alilc/lowcode-types';
 import { DocumentModel as ShellDocumentModel } from '../model';
 import { SimulatorHost } from './simulator-host';
@@ -215,5 +216,24 @@ export class Project implements IPublicApiProject {
    */
   setI18n(value: object): void {
     this[projectSymbol].set('i18n', value);
+  }
+
+  /**
+   * 设置项目配置
+   * @param value object
+   * @returns
+   */
+  setConfig<T extends keyof IPublicTypeAppConfig>(key: T, value: IPublicTypeAppConfig[T]): void;
+  setConfig(value: IPublicTypeAppConfig): void;
+  setConfig(...params: any[]): void{
+    if(params.length === 2) {
+      const oldConfig = this[projectSymbol].get('config');
+      this[projectSymbol].set('config', {
+        ...oldConfig,
+        [params[0]]: params[1],
+      })
+    } else {
+      this[projectSymbol].set('config', params[0])
+    }
   }
 }

@@ -4,7 +4,6 @@ export interface IPublicTypeAppConfig {
   targetRootID?: string;
   layout?: IPublicTypeLayout;
   theme?: IPublicTypeTheme;
-  [key: string]: any;
 }
 
 interface IPublicTypeTheme {

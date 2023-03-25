@@ -1,4 +1,4 @@
-import { IPublicTypeProjectSchema, IPublicTypeDisposable, IPublicTypeRootSchema, IPublicTypePropsTransducer } from '../type';
+import { IPublicTypeProjectSchema, IPublicTypeDisposable, IPublicTypeRootSchema, IPublicTypePropsTransducer, IPublicTypeAppConfig } from '../type';
 import { IPublicEnumTransformStage } from '../enum';
 import { IPublicApiSimulatorHost } from './';
 import { IPublicModelDocumentModel } from '../model';
@@ -132,6 +132,16 @@ export interface IBaseApiProject<
    * @since v1.0.17
    */
   setI18n(value: object): void;
+
+  /**
+   * 设置当前项目配置
+   *
+   * set config data for this project
+   * @param value object
+   * @since v1.1.4
+   */
+  setConfig<T extends keyof IPublicTypeAppConfig>(key: T, value: IPublicTypeAppConfig[T]): void;
+  setConfig(value: IPublicTypeAppConfig): void;
 }
 
 export interface IPublicApiProject extends IBaseApiProject<IPublicModelDocumentModel> {}

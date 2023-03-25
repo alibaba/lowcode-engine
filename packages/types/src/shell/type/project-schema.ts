@@ -57,8 +57,10 @@ export interface IPublicTypeProjectSchema<T = IPublicTypeRootSchema> {
   dataSource?: DataSource;
   /**
    * 当前应用配置信息
+   *
+   * TODO: 需要在后续版本中移除 `Record<string, unknown>` 类型签名
    */
-  config?: IPublicTypeAppConfig | Record<string, any>;
+  config?: IPublicTypeAppConfig & Record<string, unknown>;
   /**
    * 当前应用元数据信息
    */
