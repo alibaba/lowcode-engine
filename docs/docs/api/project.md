@@ -252,6 +252,35 @@ setI18n(value: object): void;
 
 **@since v1.0.17**
 
+### setConfig
+设置当前项目配置
+
+```typescript
+/**
+ * 设置当前项目配置
+ * set config for this project
+ * @param value object
+ * @since v1.1.4
+ */
+  setConfig(value: IPublicTypeAppConfig): void;
+  setConfig<T extends keyof IPublicTypeAppConfig>(key: T, value: IPublicTypeAppConfig[T]): void;
+```
+
+**@since v1.1.4**
+
+#### 如何扩展项目配置
+
+```typescript
+// shims.d.ts
+declare module '@alilc/lowcode-types' {
+  export interface IPublicTypeAppConfig {
+    customProp: CustomPropType
+  }
+}
+
+export {};
+```
+
 
 ## 事件
 
