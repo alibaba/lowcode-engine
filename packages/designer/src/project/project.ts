@@ -29,6 +29,7 @@ export interface IProject extends Omit<IBaseApiProject<
   'onSimulatorHostReady' |
   'onSimulatorRendererReady' |
   'setI18n' |
+  'setConfig' |
   'currentDocument' |
   'selection' |
   'documents' |
@@ -75,21 +76,15 @@ export interface IProject extends Omit<IBaseApiProject<
   /**
    * 分字段设置储存数据，不记录操作记录
    */
-  set(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    key:
-      | 'version'
-      | 'componentsTree'
-      | 'componentsMap'
-      | 'utils'
-      | 'constants'
-      | 'i18n'
-      | 'css'
-      | 'dataSource'
-      | string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    value: any,
-  ): void;
+  set<T extends keyof IPublicTypeProjectSchema>(key: T, value: IPublicTypeProjectSchema[T]): void;
+  set(key: string, value: unknown): void;
+
+  /**
+   * 分字段获取储存数据
+   */
+  get<T extends keyof IPublicTypeProjectSchema>(key: T): IPublicTypeProjectSchema[T];
+  get<T>(key: string): T;
+  get(key: string): unknown;
 
   checkExclusive(activeDoc: DocumentModel): void;
 }
@@ -268,21 +263,9 @@ export class Project implements IProject {
   /**
    * 分字段设置储存数据，不记录操作记录
    */
-  set(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    key:
-      | 'version'
-      | 'componentsTree'
-      | 'componentsMap'
-      | 'utils'
-      | 'constants'
-      | 'i18n'
-      | 'css'
-      | 'dataSource'
-      | string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    value: any,
-  ): void {
+  set<T extends keyof IPublicTypeProjectSchema>(key: T, value: IPublicTypeProjectSchema[T]): void;
+  set(key: string, value: unknown): void;
+  set(key: string, value: unknown): void {
     if (key === 'config') {
       this.config = value;
     }
@@ -295,20 +278,10 @@ export class Project implements IProject {
   /**
    * 分字段设置储存数据
    */
-  get(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    key:
-      | 'version'
-      | 'componentsTree'
-      | 'componentsMap'
-      | 'utils'
-      | 'constants'
-      | 'i18n'
-      | 'css'
-      | 'dataSource'
-      | 'config'
-      | string,
-  ): any {
+  get<T extends keyof IPublicTypeRootSchema>(key: T): IPublicTypeRootSchema[T];
+  get<T>(key: string): T;
+  get(key: string): unknown;
+  get(key: string): any {
     if (key === 'config') {
       return this.config;
     }
