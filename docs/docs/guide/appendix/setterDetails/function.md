@@ -12,7 +12,7 @@ title: FunctionSetter
 export type TestProps = React.ComponentProps<typeof Test> & {
   testFunction?: Function | undefined;
 };
-
+ 
 const getTestData = () => {
   if(this.props.testFunction === undefined){
     return undefined;
