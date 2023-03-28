@@ -254,6 +254,8 @@ sidebar_position: 1
 
 `@type {IPublicModelSettingTopEntry}`
 
+相关章节：[设置器顶层操作对象](./setting-top-entry)
+
 相关类型：[IPublicModelSettingTopEntry](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/setting-top-entry.ts)
 
 ### visible

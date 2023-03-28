@@ -9,6 +9,11 @@ export interface IBaseModelSettingField<
 > {
 
   /**
+   * 获取设置属性的父设置属性
+   */
+  readonly parent: SettingTopEntry | SettingField;
+
+  /**
    * 获取设置属性的 isGroup
    */
   get isGroup(): boolean;
@@ -31,12 +36,12 @@ export interface IBaseModelSettingField<
   /**
    * 获取设置属性的 path
    */
-  get path(): any[];
+  get path(): (string | number)[];
 
   /**
    * 获取设置属性的 title
    */
-  get title(): any;
+  get title(): string;
 
   /**
    * 获取设置属性的 setter
@@ -59,11 +64,6 @@ export interface IBaseModelSettingField<
    * 获取设置属性对应的节点实例
    */
   get node(): Node | null;
-
-  /**
-   * 获取设置属性的父设置属性
-   */
-  readonly parent: SettingTopEntry | SettingField;
 
   /**
    * 获取顶级设置属性
