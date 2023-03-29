@@ -1,0 +1,123 @@
+{
+  version: '1.0.0',
+  componentsMap: [
+    {
+      package: '@alilc/b6-page',
+      version: '^0.1.0',
+      componentName: 'Page',
+      destructuring: true,
+      exportName: 'Page',
+    },
+    {
+      package: '@alilc/b6-text',
+      version: '^0.1.0',
+      componentName: 'Text',
+      destructuring: true,
+      exportName: 'Text',
+    },
+  ],
+  componentsTree: [
+    {
+      componentName: 'Page',
+      id: 'node_ockp6ci0hm1',
+      props: {
+        title: '',
+        backgroundColor: '#fff',
+        textColor: '#333',
+        style: {},
+      },
+      fileName: 'aaaa',
+      dataSource: {
+        list: [
+          {
+            id: 'urlParams',
+            type: 'urlParams',
+            description: 'URL参数',
+            options: {
+              uri: '',
+            },
+          },
+        ],
+      },
+      children: [
+        {
+          componentName: 'Text',
+          id: 'node_ockp6ci0hm2',
+          props: {
+            content: '欢迎使用 BuildSuccess！sadsad',
+            style: {},
+            fieldId: 'text_kp6ci11t',
+          },
+        },
+      ],
+      meta: {
+        router: '/aaaa',
+      },
+      methodsModule: {
+        type: 'JSModule',
+        compiled: '"use strict";\n\nObject.defineProperty(exports, "__esModule", {\n  value: true\n});\nexports.helloPage = helloPage;\n\n/**\n * Private, and can be re-used functions\n * Actions panel help documentation：\n * @see https://yuque.antfin.com/docs/share/89ca7965-6387-4e3a-9964-81929ed48f1e\n */\nfunction printLog(obj) {\n  console.info(obj);\n}\n/**\n * page function\n */\n\n\nfunction helloPage() {\n  console.log(\'hello page\');\n}',
+        source: "/**\n * Private, and can be re-used functions\n * Actions panel help documentation：\n * @see https://yuque.antfin.com/docs/share/89ca7965-6387-4e3a-9964-81929ed48f1e\n */\nfunction printLog(obj) {\n  console.info(obj);\n}\n\n/**\n * page function\n */\nexport function helloPage() {\n  console.log('hello page');\n}",
+      },
+    },
+  ],
+  i18n: {},
+  utils: [
+    {
+      name: 'legaoBuiltin',
+      type: 'npm',
+      content: {
+        exportName: 'legaoBuiltin',
+        package: '@alilc/b6-compact-legao-builtin',
+        version: '1.x',
+      },
+    },
+    {
+      name: 'message',
+      type: 'npm',
+      content: {
+        package: 'antd',
+        version: '3.x',
+        destructuring: true,
+        exportName: 'message',
+      },
+    },
+    {
+      name: 'mocks',
+      type: 'npm',
+      content: {
+        package: '@alilc/b6-util-mocks',
+        version: '1.x',
+        exportName: 'mocks',
+        destructuring: true,
+      },
+    },
+    {
+      name: 'modal',
+      type: 'npm',
+      content: {
+        package: 'antd',
+        version: '3.x',
+        destructuring: true,
+        exportName: 'Modal',
+      },
+    },
+  ],
+  constants: {},
+  dataSource: {
+    list: [],
+  },
+  config: {
+    sdkVersion: '1.0.3',
+    historyMode: 'hash',
+    targetRootID: 'root',
+    miniAppBuildType: 'runtime',
+  },
+  meta: {
+    name: 'jinyuan-test2',
+    git_group: 'b6',
+    project_name: 'jinyuan-test2',
+    description: '瑾源测试',
+    spma: 'spmademo',
+    creator: '张三',
+  },
+}

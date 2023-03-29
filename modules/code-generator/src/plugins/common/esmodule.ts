@@ -16,7 +16,7 @@ import {
   IWithDependency,
 } from '../../types';
 
-import { isValidIdentifier, isValidComponentName } from '../../utils/validate';
+import { isValidIdentifier } from '../../utils/validate';
 
 // TODO: main 这个信息到底怎么用，是不是外部包不需要使用？
 const DEP_MAIN_BLOCKLIST = ['lib', 'lib/index', 'es', 'es/index', 'main'];
@@ -261,7 +261,7 @@ function buildPackageImport(
     if (!isValidIdentifier(name)) {
       throw new CodeGeneratorError(`Invalid Identifier [${name}]`);
     }
-    if (info.nodeIdentifier && !isValidComponentName(info.nodeIdentifier)) {
+    if (info.nodeIdentifier && !isValidIdentifier(info.nodeIdentifier)) {
       throw new CodeGeneratorError(`Invalid Identifier [${info.nodeIdentifier}]`);
     }
   });

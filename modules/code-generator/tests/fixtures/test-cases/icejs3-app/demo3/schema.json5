@@ -1,0 +1,159 @@
+{
+	"version": "1.0.0",
+	"componentsMap": [
+		{
+			"componentName": "Super",
+			"package": "@alifd/next",
+			"version": "1.19.18",
+			"destructuring": false,
+			"exportName": "Super"
+		},
+		{
+			"componentName": "SuperOther",
+			"package": "@alifd/next",
+			"version": "1.19.18",
+			"destructuring": false,
+			"exportName": "Super"
+		},
+		{
+			"componentName": "SuperSub",
+			"package": "@alifd/next",
+			"version": "1.19.18",
+			"destructuring": false,
+			"exportName": "Super",
+			"subName": "Sub",
+		},
+		{
+			"componentName": "Button",
+			"package": "@alifd/next",
+			"version": "1.19.18",
+			"destructuring": true,
+			"exportName": "Button"
+		},
+		{
+			"componentName": "SearchTable",
+			"package": "@alifd/next",
+			"version": "1.19.18",
+			"destructuring": true,
+			"exportName": "SearchTable",
+			"subName": "default",
+		},
+		{
+			"componentName": "Button.Group",
+			"package": "@alifd/next",
+			"version": "1.19.18",
+			"destructuring": true,
+			"exportName": "Button",
+			"subName": "Group"
+		},
+		{
+			"componentName": "CustomInput",
+			"package": "@alifd/next",
+			"version": "1.19.18",
+			"destructuring": true,
+			"exportName": "Input"
+		},
+		{
+			"componentName": "Form",
+			"package": "@alifd/next",
+			"version": "1.19.18",
+			"destructuring": true,
+			"exportName": "Form"
+		},
+		{
+			"componentName": "Form.Item",
+			"package": "@alifd/next",
+			"version": "1.19.18",
+			"destructuring": true,
+			"exportName": "Form",
+			"subName": "Item"
+		},
+		{
+			"componentName": "NumberPicker",
+			"package": "@alifd/next",
+			"version": "1.19.18",
+			"destructuring": true,
+			"exportName": "NumberPicker"
+		},
+		{
+			"componentName": "SelectOption",
+			"package": "@alifd/next",
+			"version": "1.19.18",
+			"destructuring": true,
+			"exportName": "Select",
+			"subName": "Option"
+		}
+	],
+	"componentsTree": [
+		{
+			"componentName": "Page",
+			"id": "node$1",
+			"meta": {
+				"title": "测试",
+				"router": "/"
+			},
+			"fileName": "test",
+			"children": [
+				{
+					"componentName": "Super",
+					"props": {
+						"title": {
+							"type":"variable",
+							"value":"标题",
+							"variable":"this.state.title"
+						}
+					}
+				},
+				{ "componentName": "SuperSub" },
+				{ "componentName": "SuperOther" },
+				{ "componentName": "Button" },
+				{ "componentName": "Button.Group" },
+				{ "componentName": "CustomInput" },
+				{ "componentName": "Form.Item" },
+				{ "componentName": "NumberPicker" },
+				{ "componentName": "SelectOption" },
+				{ "componentName": "SearchTable" },
+			]
+		}
+	],
+	"constants": {
+		"ENV": "prod",
+		"DOMAIN": "xxx.xxx.com"
+	},
+	"i18n": {
+		"zh-CN": {
+			"i18n-jwg27yo4": "你好",
+			"i18n-jwg27yo3": "中国"
+		},
+		"en-US": {
+			"i18n-jwg27yo4": "Hello",
+			"i18n-jwg27yo3": "China"
+		}
+	},
+	"css": "body {font-size: 12px;} .table { width: 100px;}",
+	"config": {
+		"sdkVersion": "1.0.3",
+		"historyMode": "hash",
+		"targetRootID": "J_Container",
+		"layout": {
+			"componentName": "BasicLayout",
+			"props": {
+				"logo": "...",
+				"name": "测试网站"
+			}
+		},
+		"theme": {
+			"package": "@alife/theme-fusion",
+			"version": "^0.1.0",
+			"primary": "#ff9966"
+		}
+	},
+	"meta": {
+		"name": "demo应用",
+		"git_group": "appGroup",
+		"project_name": "app_demo",
+		"description": "这是一个测试应用",
+		"spma": "spa23d",
+		"creator": "月飞"
+	}
+}
