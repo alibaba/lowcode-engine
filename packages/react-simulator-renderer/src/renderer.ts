@@ -461,7 +461,6 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
           locale: renderer.locale,
           messages: _schema.i18n || {},
           device: renderer.device,
-          locale: renderer.locale,
           appHelper: renderer.context,
           rendererName: 'LowCodeRenderer',
           thisRequiredInJSE: host.thisRequiredInJSE,
@@ -630,6 +629,7 @@ function getLowCodeComponentProps(props: any) {
     }
     newProps[k] = props[k];
   });
+  newProps['componentName'] = props['_componentName'];
   return newProps;
 }
 

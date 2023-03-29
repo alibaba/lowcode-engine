@@ -157,6 +157,7 @@ export function canAcceptsRef(Comp: any) {
   // eslint-disable-next-line max-len
   return Comp?.$$typeof === REACT_FORWARD_REF_TYPE || Comp?.prototype?.isReactComponent || Comp?.prototype?.setState || Comp._forwardRef;
 }
+
 /**
  * transform array to a object
  * @param arr array to be transformed
@@ -207,7 +208,6 @@ export function checkPropTypes(value: any, name: string, rule: any, componentNam
   return !err;
 }
 
-
 /**
  * transform string to a function
  * @param str function in string form
@@ -230,7 +230,26 @@ export function transformStringToFunction(str: string) {
  * @param self scope object
  * @returns funtion
  */
-export function parseExpression(str: any, self: any, thisRequired = false) {
+
+function parseExpression(options: {
+  str: any; self: any; thisRequired?: boolean; logScope?: string;
+}): any;
+function parseExpression(str: any, self: any, thisRequired?: boolean): any;
+function parseExpression(a: any, b?: any, c = false) {
+  let str;
+  let self;
+  let thisRequired;
+  let logScope;
+  if (typeof a === 'object' && b === undefined) {
+    str = a.str;
+    self = a.self;
+    thisRequired = a.thisRequired;
+    logScope = a.logScope;
+  } else {
+    str = a;
+    self = b;
+    thisRequired = c;
+  }
   try {
     const contextArr = ['"use strict";', 'var __self = arguments[0];'];
     contextArr.push('return ');
@@ -250,10 +269,14 @@ export function parseExpression(str: any, self: any, thisRequired = false) {
     const code = `with(${thisRequired ? '{}' : '$scope || {}'}) { ${tarStr} }`;
     return new Function('$scope', code)(self);
   } catch (err) {
-    logger.error('parseExpression.error', err, str, self?.__self ?? self);
+    logger.error(`${logScope || ''} parseExpression.error`, err, str, self?.__self ?? self);
     return undefined;
   }
 }
+
+export {
+  parseExpression,
+};
 
 export function parseThisRequiredExpression(str: any, self: any) {
   return parseExpression(str, self, true);
@@ -320,11 +343,17 @@ export function forEach(targetObj: any, fn: any, context?: any) {
 
 interface IParseOptions {
   thisRequiredInJSE?: boolean;
+  logScope?: string;
 }
 
 export function parseData(schema: unknown, self: any, options: IParseOptions = {}): any {
   if (isJSExpression(schema)) {
-    return parseExpression(schema, self, options.thisRequiredInJSE);
+    return parseExpression({
+      str: schema,
+      self,
+      thisRequired: options.thisRequiredInJSE,
+      logScope: options.logScope,
+    });
   } else if (isI18nData(schema)) {
     return parseI18n(schema, self);
   } else if (typeof schema === 'string') {

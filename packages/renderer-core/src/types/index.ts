@@ -208,6 +208,7 @@ export interface IBaseRendererProps {
    * 设备类型，默认值：'default'
    */
   device?: 'default' | 'mobile' | string;
+  componentName?: string;
 }
 
 export interface INodeInfo {
