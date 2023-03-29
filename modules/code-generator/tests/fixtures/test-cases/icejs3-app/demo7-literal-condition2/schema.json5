@@ -1,0 +1,1703 @@
+{
+  version: '1.0.0',
+  componentsMap: [
+    {
+      package: '@alife/container',
+      version: '0.3.7',
+      exportName: 'Text',
+      main: 'lib/index.js',
+      destructuring: true,
+      subName: '',
+      componentName: 'NextText',
+    },
+    {
+      package: '@alilc/antd-lowcode',
+      version: '0.8.0',
+      exportName: 'Modal',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      componentName: 'Modal',
+    },
+    {
+      package: '@alilc/antd-lowcode',
+      version: '0.8.0',
+      exportName: 'Steps',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      subName: 'Step',
+      componentName: 'Steps.Step',
+    },
+    {
+      package: '@alilc/antd-lowcode',
+      version: '0.8.0',
+      exportName: 'Steps',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      componentName: 'Steps',
+    },
+    {
+      package: '@alife/container',
+      version: '0.3.7',
+      exportName: 'P',
+      main: 'lib/index.js',
+      destructuring: true,
+      subName: '',
+      componentName: 'NextP',
+    },
+    {
+      package: '@alilc/antd-lowcode',
+      version: '0.8.0',
+      exportName: 'Input',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      componentName: 'Input',
+    },
+    {
+      package: '@alilc/antd-lowcode',
+      version: '0.8.0',
+      exportName: 'Form',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      subName: 'Item',
+      componentName: 'Form.Item',
+    },
+    {
+      package: '@alilc/antd-lowcode',
+      version: '0.8.0',
+      exportName: 'Checkbox',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      subName: 'Group',
+      componentName: 'Checkbox.Group',
+    },
+    {
+      package: '@alilc/antd-lowcode',
+      version: '0.8.0',
+      exportName: 'Select',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      componentName: 'Select',
+    },
+    {
+      package: '@alilc/antd-lowcode',
+      version: '0.8.0',
+      exportName: 'DatePicker',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      componentName: 'DatePicker',
+    },
+    {
+      package: '@alilc/antd-lowcode',
+      version: '0.8.0',
+      exportName: 'InputNumber',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      componentName: 'InputNumber',
+    },
+    {
+      package: '@alilc/antd-lowcode',
+      version: '0.8.0',
+      exportName: 'Button',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      componentName: 'Button',
+    },
+    {
+      package: '@alilc/antd-lowcode',
+      version: '0.8.0',
+      exportName: 'Form',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      componentName: 'Form',
+    },
+    {
+      package: '@alife/container',
+      version: '0.3.7',
+      exportName: 'Block',
+      main: 'lib/index.js',
+      destructuring: true,
+      subName: 'Cell',
+      componentName: 'NextBlockCell',
+    },
+    {
+      package: '@alife/container',
+      version: '0.3.7',
+      exportName: 'Block',
+      main: 'lib/index.js',
+      destructuring: true,
+      subName: '',
+      componentName: 'NextBlock',
+    },
+    {
+      devMode: 'lowcode',
+      componentName: 'Slot',
+    },
+    {
+      package: '@alife/container',
+      version: '0.3.7',
+      exportName: 'Page',
+      main: 'lib/index.js',
+      destructuring: true,
+      subName: '',
+      componentName: 'NextPage',
+    },
+    {
+      devMode: 'lowcode',
+      componentName: 'Page',
+    },
+  ],
+  componentsTree: [
+    {
+      componentName: 'Page',
+      id: 'node_dockcviv8fo1',
+      props: {
+        ref: 'outterView',
+        style: {
+          height: '100%',
+        },
+      },
+      fileName: 'test',
+      dataSource: {
+        list: [],
+      },
+      css: 'body {\n  font-size: 12px;\n}\n\n.botton {\n  width: 100px;\n  color: #ff00ff\n}',
+      lifeCycles: {
+        constructor: {
+          type: 'JSFunction',
+          value: "function() { /*...*/ }",
+        },
+        componentDidMount: {
+          type: 'JSFunction',
+          value: 'function() {}',
+        },
+        componentDidUpdate: {
+          type: 'JSFunction',
+          value: 'function(prevProps, prevState, snapshot) {}',
+        },
+        componentWillUnmount: {
+          type: 'JSFunction',
+          value: 'function() {}',
+        },
+      },
+      methods: {
+        __jp__init: {
+          type: 'JSFunction',
+          value: "function() { /*...*/ }",
+        },
+        __jp__initRouter: {
+          type: 'JSFunction',
+          value: "function() { /*...*/ }",
+        },
+        __jp__initDataSource: {
+          type: 'JSFunction',
+          value: "function() { /*...*/ }",
+        },
+        __jp__initEnv: {
+          type: 'JSFunction',
+          value: "function() { /*...*/ }",
+        },
+        __jp__initUtils: {
+          type: 'JSFunction',
+          value: "function() { /*...*/ }",
+        },
+        onFinishFirst: {
+          type: 'JSFunction',
+          value: "function() { /*...*/ }",
+        },
+        onClickPreSecond: {
+          type: 'JSFunction',
+          value: "function() { /*...*/ }",
+        },
+        onFinishSecond: {
+          type: 'JSFunction',
+          value: "function() { /*...*/ }",
+        },
+        onClickModifyThird: {
+          type: 'JSFunction',
+          value: "function() { /*...*/ }",
+        },
+        onOkModifyDialogThird: {
+          type: 'JSFunction',
+          value: 'function() {\n    //第三步 修改 对话框 确定\n\n    this.setState({\n      currentStep: 0,\n      isModifyDialogVisible: false,\n    });\n  }',
+        },
+        onCancelModifyDialogThird: {
+          type: 'JSFunction',
+          value: 'function() {\n    //第三步 修改 对话框 取消\n\n    this.setState({\n      isModifyDialogVisible: false,\n    });\n  }',
+        },
+        onFinishFailed: {
+          type: 'JSFunction',
+          value: 'function() {}',
+        },
+        onClickPreThird: {
+          type: 'JSFunction',
+          value: 'function() {\n    // 第三步 上一步\n    this.setState({\n      currentStep: 1,\n    });\n  }',
+        },
+        onClickFirstBack: {
+          type: 'JSFunction',
+          value: "function() {\n    // 第一步 返回按钮\n    this.$router.push('/myProjectList');\n  }",
+        },
+        onClickSecondBack: {
+          type: 'JSFunction',
+          value: "function() {\n    // 第二步 返回按钮\n    this.$router.push('/myProjectList');\n  }",
+        },
+        onClickThirdBack: {
+          type: 'JSFunction',
+          value: "function() {\n    // 第三步 返回按钮\n    this.$router.push('/myProjectList');\n  }",
+        },
+        onValuesChange: {
+          type: 'JSFunction',
+          value: 'function(_, values) {\n    this.setState({\n      customerProjectInfo: {\n        ...this.state.customerProjectInfo,\n        ...values,\n      },\n    });\n  }',
+        },
+      },
+      state: {
+        books: [],
+        currentStep: 0,
+        isModifyDialogVisible: false,
+        isModifyStatus: false,
+        secondCommitText: '完成并提交',
+        thirdAuditText: '审核中',
+        thirdButtonText: '修改',
+        customerProjectInfo: {
+          id: null,
+          systemProjectName: null,
+          projectVersionTypeArray: null,
+          projectVersionType: null,
+          versionLine: 2,
+          expectedTime: null,
+          expectedNum: null,
+          projectModal: null,
+          displayWidth: null,
+          displayHeight: null,
+          displayInch: null,
+          displayDpi: null,
+          mainSoc: null,
+          cpuCoreNum: null,
+          instructions: null,
+          osVersion: null,
+          status: null,
+        },
+        versionLinesArray: [
+          {
+            label: 'AmapAuto 485',
+            value: 1,
+          },
+          {
+            label: 'AmapAuto 505',
+            value: 2,
+          },
+        ],
+        projectModalsArray: [
+          {
+            label: '车机',
+            value: 1,
+          },
+          {
+            label: '车镜',
+            value: 2,
+          },
+          {
+            label: '记录仪',
+            value: 3,
+          },
+          {
+            label: '其他',
+            value: 4,
+          },
+        ],
+        osVersionsArray: [
+          {
+            label: '安卓5',
+            value: 1,
+          },
+          {
+            label: '安卓6',
+            value: 2,
+          },
+          {
+            label: '安卓7',
+            value: 3,
+          },
+          {
+            label: '安卓8',
+            value: 4,
+          },
+          {
+            label: '安卓9',
+            value: 5,
+          },
+          {
+            label: '安卓10',
+            value: 6,
+          },
+        ],
+        instructionsArray: [
+          {
+            label: 'ARM64-V8',
+            value: 'ARM64-V8',
+          },
+          {
+            label: 'ARM32-V7',
+            value: 'ARM32-V7',
+          },
+          {
+            label: 'X86',
+            value: 'X86',
+          },
+          {
+            label: 'X64',
+            value: 'X64',
+          },
+        ],
+      },
+      children: [
+        {
+          componentName: 'Modal',
+          id: 'node_ockodngwu940',
+          props: {
+            title: '是否修改',
+            visible: {
+              type: 'JSExpression',
+              value: 'this.state.isModifyDialogVisible',
+            },
+            okText: '确认',
+            okType: '',
+            forceRender: false,
+            cancelText: '取消',
+            zIndex: 2000,
+            destroyOnClose: false,
+            confirmLoading: false,
+            __events: {
+              eventDataList: [
+                {
+                  type: 'componentEvent',
+                  name: 'onOk',
+                  relatedEventName: 'onOkModifyDialogThird',
+                },
+                {
+                  type: 'componentEvent',
+                  name: 'onCancel',
+                  relatedEventName: 'onCancelModifyDialogThird',
+                },
+              ],
+              eventList: [
+                {
+                  name: 'onCancel',
+                  disabled: true,
+                },
+                {
+                  name: 'onOk',
+                  disabled: true,
+                },
+              ],
+            },
+            onOk: {
+              type: 'JSFunction',
+              value: 'function(){this.onOkModifyDialogThird.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+            },
+            onCancel: {
+              type: 'JSFunction',
+              value: 'function(){this.onCancelModifyDialogThird.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+            },
+          },
+          hidden: true,
+          children: [
+            {
+              componentName: 'NextText',
+              id: 'node_ockodngwu946',
+              props: {
+                type: 'inherit',
+                children: '修改将撤回此前填写的信息',
+                style: {
+                  fontStyle: 'normal',
+                  textAlign: 'left',
+                  display: 'block',
+                  fontFamily: 'arial, helvetica, microsoft yahei',
+                  fontWeight: 'normal',
+                },
+              },
+            },
+          ],
+        },
+        {
+          componentName: 'NextPage',
+          id: 'node_ocko19zplh1',
+          props: {
+            columns: 12,
+            headerDivider: true,
+            placeholderStyle: {
+              gridRowEnd: 'span 1',
+              gridColumnEnd: 'span 12',
+            },
+            placeholder: '页面主体内容：拖拽Block布局组件到这里',
+            header: {
+              type: 'JSSlot',
+              title: 'header',
+            },
+            headerProps: {
+              background: 'surface',
+            },
+            footer: {
+              type: 'JSSlot',
+              title: 'footer',
+            },
+            minHeight: '100vh',
+            style: {},
+          },
+          title: '页面',
+          children: [
+            {
+              componentName: 'NextBlock',
+              id: 'node_ocko19zplh2',
+              props: {
+                prefix: 'next-',
+                placeholderStyle: {
+                  height: '100%',
+                },
+                noPadding: false,
+                noBorder: false,
+                background: 'surface',
+                layoutmode: 'O',
+                colSpan: 12,
+                rowSpan: 1,
+                childTotalColumns: 12,
+              },
+              title: '区块',
+              children: [
+                {
+                  componentName: 'NextBlockCell',
+                  id: 'node_ocko19zplh3',
+                  props: {
+                    title: '',
+                    prefix: 'next-',
+                    placeholderStyle: {
+                      height: '100%',
+                    },
+                    layoutmode: 'O',
+                    childTotalColumns: 12,
+                    isAutoContainer: true,
+                    colSpan: 12,
+                    rowSpan: 1,
+                  },
+                  children: [
+                    {
+                      componentName: 'NextP',
+                      id: 'node_ockoco6icv1w',
+                      props: {
+                        wrap: false,
+                        type: 'body2',
+                        verAlign: 'middle',
+                        textSpacing: true,
+                        align: 'left',
+                        flex: true,
+                        style: {
+                          marginBottom: '24px',
+                        },
+                      },
+                      title: '段落',
+                      children: [
+                        {
+                          componentName: 'Steps',
+                          id: 'node_ockoco6icv1x',
+                          props: {
+                            current: {
+                              type: 'JSExpression',
+                              value: 'this.state.currentStep',
+                            },
+                          },
+                          children: [
+                            {
+                              componentName: 'Steps.Step',
+                              id: 'node_ockoco6icv1y',
+                              props: {
+                                title: '版本申请',
+                                description: '',
+                              },
+                            },
+                            {
+                              componentName: 'Steps.Step',
+                              id: 'node_ockoco6icv1z',
+                              props: {
+                                title: '机器配置',
+                                subTitle: '',
+                                description: '',
+                              },
+                            },
+                            {
+                              componentName: 'Steps.Step',
+                              id: 'node_ockoco6icv20',
+                              props: {
+                                title: '项目审批',
+                                description: '',
+                              },
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    {
+                      componentName: 'NextP',
+                      id: 'node_ockoco6icv12w',
+                      props: {
+                        wrap: false,
+                        type: 'body2',
+                        verAlign: 'middle',
+                        textSpacing: true,
+                        align: 'left',
+                        full: true,
+                        flex: true,
+                        style: {
+                          display: 'flex',
+                          justifyContent: 'center',
+                        },
+                      },
+                      title: '段落',
+                      condition: {
+                        type: 'JSExpression',
+                        value: 'this.state.currentStep === 0',
+                      },
+                      children: [
+                        {
+                          componentName: 'Form',
+                          id: 'node_ockoco6icv12x',
+                          props: {
+                            labelCol: {
+                              span: 10,
+                            },
+                            wrapperCol: {
+                              span: 10,
+                            },
+                            onFinish: {
+                              type: 'JSFunction',
+                              value: 'function(){this.onFinishFirst.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                            },
+                            name: 'basic',
+                            style: {
+                              display: 'flex',
+                              flexDirection: 'column',
+                              width: '600px',
+                              justifyContent: 'center',
+                            },
+                            layout: 'vertical',
+                            __events: {
+                              eventDataList: [
+                                {
+                                  type: 'componentEvent',
+                                  name: 'onFinish',
+                                  relatedEventName: 'onFinishFirst',
+                                },
+                                {
+                                  type: 'componentEvent',
+                                  name: 'onValuesChange',
+                                  relatedEventName: 'onValuesChange',
+                                },
+                              ],
+                              eventList: [
+                                {
+                                  name: 'onFinish',
+                                  disabled: true,
+                                },
+                                {
+                                  name: 'onFinishFailed',
+                                  disabled: false,
+                                },
+                                {
+                                  name: 'onFieldsChange',
+                                  disabled: false,
+                                },
+                                {
+                                  name: 'onValuesChange',
+                                  disabled: true,
+                                },
+                              ],
+                            },
+                            initialValues: {
+                              type: 'JSExpression',
+                              value: 'this.state.customerProjectInfo',
+                            },
+                            onValuesChange: {
+                              type: 'JSFunction',
+                              value: 'function(){this.onValuesChange.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                            },
+                          },
+                          children: [
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockojhvrkn2u',
+                              props: {
+                                label: '',
+                                style: {
+                                  width: '600px',
+                                },
+                                colon: false,
+                                name: 'id',
+                              },
+                              condition: false,
+                              children: [
+                                {
+                                  componentName: 'Input',
+                                  id: 'node_ockojhvrkn2v',
+                                  props: {
+                                    placeholder: '',
+                                    style: {
+                                      width: '600px',
+                                    },
+                                    bordered: false,
+                                    disabled: true,
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockoco6icv12y',
+                              props: {
+                                label: '版本类型选择',
+                                name: 'projectVersionTypeArray',
+                                initialValue: '',
+                                labelAlign: 'left',
+                                colon: false,
+                                required: true,
+                                style: {
+                                  flexDirection: 'column',
+                                  width: '600px',
+                                },
+                                requiredobj: {
+                                  required: true,
+                                  message: '请选择版本类型',
+                                },
+                              },
+                              children: [
+                                {
+                                  componentName: 'Checkbox.Group',
+                                  id: 'node_ockoco6icv12z',
+                                  props: {
+                                    options: [
+                                      {
+                                        label: '基础版本',
+                                        value: '3',
+                                      },
+                                      {
+                                        label: 'AR导航',
+                                        value: '1',
+                                      },
+                                      {
+                                        label: '货车导航',
+                                        value: '2',
+                                      },
+                                      {
+                                        label: 'UI定制',
+                                        value: '4',
+                                        disabled: false,
+                                      },
+                                    ],
+                                    style: {
+                                      width: '600px',
+                                    },
+                                    disabled: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.customerProjectInfo.id > 0 && ! this.state.isModifyStatus',
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockoco6icv13a',
+                              props: {
+                                label: '版本线选择',
+                                labelAlign: 'left',
+                                colon: false,
+                                required: true,
+                                style: {
+                                  width: '600px',
+                                },
+                                name: 'versionLine',
+                                requiredobj: {
+                                  required: true,
+                                  message: '请选择版本线',
+                                },
+                                extra: '',
+                              },
+                              children: [
+                                {
+                                  componentName: 'Select',
+                                  id: 'node_ockoco6icv13b',
+                                  props: {
+                                    style: {
+                                      width: '600px',
+                                    },
+                                    options: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.versionLinesArray',
+                                    },
+                                    disabled: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.customerProjectInfo.id > 0 && ! this.state.isModifyStatus',
+                                    },
+                                    placeholder: '请选择版本线',
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockoco6icv13o',
+                              props: {
+                                label: '项目名称',
+                                colon: false,
+                                required: true,
+                                style: {
+                                  display: 'flex',
+                                },
+                                labelAlign: 'left',
+                                extra: '',
+                                name: 'systemProjectName',
+                                requiredobj: {
+                                  required: true,
+                                  message: '请按格式填写项目名称',
+                                },
+                                typeobj: {
+                                  type: 'string',
+                                  message: '请输入项目名称，格式：公司简称-产品名称-版本类型',
+                                },
+                                lenobj: {
+                                  max: 100,
+                                  message: '项目名称不能超过100个字符',
+                                },
+                              },
+                              children: [
+                                {
+                                  componentName: 'Input',
+                                  id: 'node_ockoco6icv13p',
+                                  props: {
+                                    placeholder: '公司简称-产品名称-版本类型',
+                                    style: {
+                                      width: '600px',
+                                    },
+                                    disabled: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.customerProjectInfo.id > 0 && ! this.state.isModifyStatus',
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockoco6icv13v',
+                              props: {
+                                label: '预期交付时间',
+                                style: {
+                                  width: '600px',
+                                },
+                                colon: false,
+                                required: true,
+                                name: 'expectedTime',
+                                labelAlign: 'left',
+                                requiredobj: {
+                                  required: true,
+                                  message: '请填写预期交付时间',
+                                },
+                              },
+                              children: [
+                                {
+                                  componentName: 'DatePicker',
+                                  id: 'node_ockoco6icv13w',
+                                  props: {
+                                    style: {
+                                      width: '600px',
+                                    },
+                                    disabled: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.customerProjectInfo.id > 0 && ! this.state.isModifyStatus',
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockpmbs0bv8',
+                              props: {
+                                label: '预期出货量',
+                                style: {
+                                  width: '600px',
+                                },
+                                required: true,
+                                requiredobj: {
+                                  required: true,
+                                  message: '请填写预期出货量',
+                                },
+                                name: 'expectedNum',
+                                labelAlign: 'left',
+                                colon: false,
+                              },
+                              children: [
+                                {
+                                  componentName: 'InputNumber',
+                                  id: 'node_ockpmbs0bv9',
+                                  props: {
+                                    value: 3,
+                                    style: {
+                                      width: '600px',
+                                    },
+                                    placeholder: '单位（台）使用该版本的机器数量+预计出货量，请如实填写',
+                                    disabled: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.customerProjectInfo.id > 0 && ! this.state.isModifyStatus',
+                                    },
+                                    min: 0,
+                                    size: 'middle',
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockoco6icv130',
+                              props: {
+                                wrapperCol: {
+                                  offset: '',
+                                },
+                                style: {
+                                  flexDirection: 'row',
+                                  alignItems: 'baseline',
+                                  justifyContent: 'space-between',
+                                  width: '600px',
+                                  display: 'block',
+                                },
+                                labelAlign: 'left',
+                                colon: false,
+                              },
+                              children: [
+                                {
+                                  componentName: 'Button',
+                                  id: 'node_ockoco6icv132',
+                                  props: {
+                                    style: {
+                                      margin: '0px',
+                                    },
+                                    children: '返回',
+                                    __events: {
+                                      eventDataList: [
+                                        {
+                                          type: 'componentEvent',
+                                          name: 'onClick',
+                                          relatedEventName: 'onClickFirstBack',
+                                        },
+                                      ],
+                                      eventList: [
+                                        {
+                                          name: 'onClick',
+                                          disabled: true,
+                                        },
+                                      ],
+                                    },
+                                    onClick: {
+                                      type: 'JSFunction',
+                                      value: 'function(){this.onClickFirstBack.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                                    },
+                                  },
+                                },
+                                {
+                                  componentName: 'Button',
+                                  id: 'node_ockoco6icv131',
+                                  props: {
+                                    type: 'primary',
+                                    children: '下一步',
+                                    htmlType: 'submit',
+                                    style: {
+                                      boxShadow: 'rgba(31, 56, 88, 0.2) 0px 0px 0px 0px',
+                                      float: 'right',
+                                    },
+                                    __events: {
+                                      eventDataList: [],
+                                      eventList: [
+                                        {
+                                          name: 'onClick',
+                                          disabled: false,
+                                        },
+                                      ],
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    {
+                      componentName: 'NextP',
+                      id: 'node_ockoco6icv1ue',
+                      props: {
+                        wrap: false,
+                        type: 'body2',
+                        verAlign: 'middle',
+                        textSpacing: true,
+                        align: 'left',
+                        full: true,
+                        flex: true,
+                        style: {
+                          display: 'flex',
+                          justifyContent: 'center',
+                        },
+                      },
+                      title: '段落',
+                      condition: {
+                        type: 'JSExpression',
+                        value: 'this.state.currentStep === 1',
+                      },
+                      children: [
+                        {
+                          componentName: 'Form',
+                          id: 'node_ockoco6icv1uf',
+                          props: {
+                            labelCol: {
+                              span: 10,
+                            },
+                            wrapperCol: {
+                              span: 10,
+                            },
+                            onFinish: {
+                              type: 'JSFunction',
+                              value: 'function(){this.onFinishSecond.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                            },
+                            name: 'basic',
+                            style: {
+                              display: 'flex',
+                              flexDirection: 'column',
+                              width: '600px',
+                              justifyContent: 'center',
+                              height: '800px',
+                            },
+                            layout: 'vertical',
+                            __events: {
+                              eventDataList: [
+                                {
+                                  type: 'componentEvent',
+                                  name: 'onFinish',
+                                  relatedEventName: 'onFinishSecond',
+                                },
+                                {
+                                  type: 'componentEvent',
+                                  name: 'onValuesChange',
+                                  relatedEventName: 'onValuesChange',
+                                },
+                              ],
+                              eventList: [
+                                {
+                                  name: 'onFinish',
+                                  disabled: true,
+                                },
+                                {
+                                  name: 'onFinishFailed',
+                                  disabled: false,
+                                },
+                                {
+                                  name: 'onFieldsChange',
+                                  disabled: false,
+                                },
+                                {
+                                  name: 'onValuesChange',
+                                  disabled: true,
+                                },
+                              ],
+                            },
+                            initialValues: {
+                              type: 'JSExpression',
+                              value: 'this.state.customerProjectInfo',
+                            },
+                            onValuesChange: {
+                              type: 'JSFunction',
+                              value: 'function(){this.onValuesChange.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                            },
+                          },
+                          children: [
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockoco6icv1ui',
+                              props: {
+                                label: '设备类型选择',
+                                labelAlign: 'left',
+                                colon: false,
+                                required: true,
+                                style: {
+                                  width: '600px',
+                                },
+                                name: 'projectModal',
+                                requiredobj: {
+                                  required: true,
+                                  message: '请选择设备类型',
+                                },
+                              },
+                              children: [
+                                {
+                                  componentName: 'Select',
+                                  id: 'node_ockoco6icv1uj',
+                                  props: {
+                                    style: {
+                                      width: '600px',
+                                    },
+                                    options: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.projectModalsArray',
+                                    },
+                                    disabled: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.customerProjectInfo.id > 0 && ! this.state.isModifyStatus',
+                                    },
+                                    placeholder: '请选择设备类型',
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockpmbs0bv17',
+                              props: {
+                                label: '屏幕分辨率宽',
+                                style: {
+                                  width: '600px',
+                                },
+                                name: 'displayWidth',
+                                colon: false,
+                                required: true,
+                                requiredobj: {
+                                  required: true,
+                                  message: '请输入屏幕分辨率宽',
+                                },
+                                labelAlign: 'left',
+                              },
+                              children: [
+                                {
+                                  componentName: 'InputNumber',
+                                  id: 'node_ockpmbs0bv18',
+                                  props: {
+                                    value: 3,
+                                    style: {
+                                      width: '600px',
+                                    },
+                                    placeholder: '例如1280',
+                                    disabled: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.customerProjectInfo.id > 0 && ! this.state.isModifyStatus',
+                                    },
+                                    min: 0,
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockpmbs0bv10',
+                              props: {
+                                label: '屏幕分辨率高',
+                                style: {
+                                  width: '600px',
+                                },
+                                labelAlign: 'left',
+                                colon: false,
+                                name: 'displayHeight',
+                                required: true,
+                                requiredobj: {
+                                  required: true,
+                                  message: '请输入屏幕分辨率高',
+                                },
+                              },
+                              children: [
+                                {
+                                  componentName: 'InputNumber',
+                                  id: 'node_ockpmbs0bv11',
+                                  props: {
+                                    value: 3,
+                                    style: {
+                                      width: '600px',
+                                    },
+                                    placeholder: '例如720',
+                                    disabled: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.customerProjectInfo.id > 0 && ! this.state.isModifyStatus',
+                                    },
+                                    min: 0,
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockpmbs0bvt',
+                              props: {
+                                label: '屏幕尺寸（inch）',
+                                style: {
+                                  width: '600px',
+                                },
+                                name: 'displayInch',
+                                labelAlign: 'left',
+                                required: true,
+                                colon: false,
+                                requiredobj: {
+                                  required: true,
+                                  message: '请输入屏幕尺寸',
+                                },
+                              },
+                              children: [
+                                {
+                                  componentName: 'InputNumber',
+                                  id: 'node_ockpmbs0bvu',
+                                  props: {
+                                    value: 3,
+                                    style: {
+                                      width: '600px',
+                                    },
+                                    placeholder: '请输入尺寸',
+                                    disabled: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.customerProjectInfo.id > 0 && ! this.state.isModifyStatus',
+                                    },
+                                    min: 0,
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockpmbs0bvm',
+                              props: {
+                                label: '屏幕DPI',
+                                style: {
+                                  width: '600px',
+                                },
+                                labelAlign: 'left',
+                                colon: false,
+                                required: false,
+                                name: 'displayDpi',
+                              },
+                              children: [
+                                {
+                                  componentName: 'InputNumber',
+                                  id: 'node_ockpmbs0bvn',
+                                  props: {
+                                    value: 3,
+                                    style: {
+                                      width: '600px',
+                                    },
+                                    placeholder: 'UI定制项目必填',
+                                    disabled: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.customerProjectInfo.id > 0 && ! this.state.isModifyStatus',
+                                    },
+                                    min: 0,
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockoco6icv1v3',
+                              props: {
+                                label: '芯片名称',
+                                colon: false,
+                                required: true,
+                                style: {
+                                  display: 'flex',
+                                },
+                                labelAlign: 'left',
+                                extra: '',
+                                name: 'mainSoc',
+                                requiredobj: {
+                                  required: true,
+                                  message: '请输入芯片名称',
+                                },
+                                lenobj: {
+                                  max: 50,
+                                  message: '芯片名称不能超过50个字符',
+                                },
+                              },
+                              children: [
+                                {
+                                  componentName: 'Input',
+                                  id: 'node_ockoco6icv1v4',
+                                  props: {
+                                    placeholder: '请输入芯片名称',
+                                    style: {
+                                      width: '600px',
+                                    },
+                                    disabled: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.customerProjectInfo.id > 0 && ! this.state.isModifyStatus',
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockpmbs0bvf',
+                              props: {
+                                label: '芯片核数',
+                                style: {
+                                  width: '600px',
+                                },
+                                required: true,
+                                requiredobj: {
+                                  required: true,
+                                  message: '请输入芯片核数',
+                                },
+                                name: 'cpuCoreNum',
+                                labelAlign: 'left',
+                                colon: false,
+                              },
+                              children: [
+                                {
+                                  componentName: 'InputNumber',
+                                  id: 'node_ockpmbs0bvg',
+                                  props: {
+                                    value: 3,
+                                    style: {
+                                      width: '600px',
+                                    },
+                                    placeholder: '请输入芯片核数',
+                                    disabled: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.customerProjectInfo.id > 0 && ! this.state.isModifyStatus',
+                                    },
+                                    defaultValue: '',
+                                    min: 0,
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockpxba11aa',
+                              props: {
+                                label: '指令集',
+                                style: {
+                                  width: '600px',
+                                },
+                                required: true,
+                                requiredobj: {
+                                  required: true,
+                                  message: '请选择指令集',
+                                },
+                                name: 'instructions',
+                                colon: false,
+                              },
+                              children: [
+                                {
+                                  componentName: 'Select',
+                                  id: 'node_ockpxba11ab',
+                                  props: {
+                                    style: {
+                                      width: '600px',
+                                    },
+                                    options: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.instructionsArray',
+                                    },
+                                    disabled: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.customerProjectInfo.id > 0 && ! this.state.isModifyStatus',
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockodz1kiqh',
+                              props: {
+                                label: '系统版本',
+                                labelAlign: 'left',
+                                colon: false,
+                                required: true,
+                                style: {
+                                  width: '600px',
+                                },
+                                name: 'osVersion',
+                                requiredobj: {
+                                  required: true,
+                                  message: '请选择系统版本',
+                                },
+                              },
+                              children: [
+                                {
+                                  componentName: 'Select',
+                                  id: 'node_ockodz1kiqi',
+                                  props: {
+                                    style: {
+                                      width: '600px',
+                                    },
+                                    options: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.osVersionsArray',
+                                    },
+                                    disabled: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.customerProjectInfo.id > 0 && ! this.state.isModifyStatus',
+                                    },
+                                    placeholder: '请选择系统版本',
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockoco6icv1uq',
+                              props: {
+                                wrapperCol: {
+                                  offset: '',
+                                },
+                                style: {
+                                  flexDirection: 'row',
+                                  width: '600px',
+                                  display: 'flex',
+                                },
+                              },
+                              children: [
+                                {
+                                  componentName: 'Button',
+                                  id: 'node_ockoco6icv1ur',
+                                  props: {
+                                    style: {
+                                      marginLeft: '0',
+                                    },
+                                    children: '返回',
+                                    __events: {
+                                      eventDataList: [
+                                        {
+                                          type: 'componentEvent',
+                                          name: 'onClick',
+                                          relatedEventName: 'onClickSecondBack',
+                                        },
+                                      ],
+                                      eventList: [
+                                        {
+                                          name: 'onClick',
+                                          disabled: true,
+                                        },
+                                      ],
+                                    },
+                                    onClick: {
+                                      type: 'JSFunction',
+                                      value: 'function(){this.onClickSecondBack.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                                    },
+                                  },
+                                },
+                                {
+                                  componentName: 'Button',
+                                  id: 'node_ockoco6icv1vb',
+                                  props: {
+                                    type: 'primary',
+                                    children: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.secondCommitText',
+                                    },
+                                    htmlType: 'submit',
+                                    style: {
+                                      float: 'right',
+                                      marginLeft: '20px',
+                                    },
+                                    loading: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.LOADING_ADD_OR_UPDATE_CUSTOMER_PROJECT',
+                                    },
+                                  },
+                                },
+                                {
+                                  componentName: 'Button',
+                                  id: 'node_ockoco6icv1us',
+                                  props: {
+                                    type: 'primary',
+                                    children: '上一步',
+                                    htmlType: 'submit',
+                                    style: {
+                                      marginLeft: '0px',
+                                      float: 'right',
+                                    },
+                                    __events: {
+                                      eventDataList: [
+                                        {
+                                          type: 'componentEvent',
+                                          name: 'onClick',
+                                          relatedEventName: 'onClickPreSecond',
+                                        },
+                                      ],
+                                      eventList: [
+                                        {
+                                          name: 'onClick',
+                                          disabled: true,
+                                        },
+                                      ],
+                                    },
+                                    onClick: {
+                                      type: 'JSFunction',
+                                      value: 'function(){this.onClickPreSecond.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    {
+                      componentName: 'NextP',
+                      id: 'node_ockodngwu9m',
+                      props: {
+                        wrap: false,
+                        type: 'body2',
+                        verAlign: 'middle',
+                        textSpacing: true,
+                        align: 'left',
+                        full: true,
+                        flex: true,
+                        style: {
+                          display: 'flex',
+                          justifyContent: 'center',
+                        },
+                      },
+                      title: '段落',
+                      condition: {
+                        type: 'JSExpression',
+                        value: 'this.state.currentStep === 2',
+                      },
+                      children: [
+                        {
+                          componentName: 'Form',
+                          id: 'node_ockodngwu9n',
+                          props: {
+                            labelCol: {
+                              span: 10,
+                            },
+                            wrapperCol: {
+                              span: 10,
+                            },
+                            onFinishFailed: {
+                              type: 'JSFunction',
+                              value: 'function(){this.onFinishFailed.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                            },
+                            name: 'basic',
+                            style: {
+                              display: 'flex',
+                              flexDirection: 'column',
+                              width: '600px',
+                              justifyContent: 'center',
+                            },
+                            layout: 'vertical',
+                            __events: {
+                              eventDataList: [
+                                {
+                                  type: 'componentEvent',
+                                  name: 'onFinishFailed',
+                                  relatedEventName: 'onFinishFailed',
+                                },
+                              ],
+                              eventList: [
+                                {
+                                  name: 'onFinish',
+                                  disabled: false,
+                                },
+                                {
+                                  name: 'onFinishFailed',
+                                  disabled: true,
+                                },
+                                {
+                                  name: 'onFieldsChange',
+                                  disabled: false,
+                                },
+                                {
+                                  name: 'onValuesChange',
+                                  disabled: false,
+                                },
+                              ],
+                            },
+                          },
+                          children: [
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockodngwu91m',
+                              props: {
+                                label: '',
+                              },
+                              children: [
+                                {
+                                  componentName: 'Steps',
+                                  id: 'node_ockodngwu91n',
+                                  props: {
+                                    current: 1,
+                                    style: {
+                                      width: '600px',
+                                      display: 'flex',
+                                      justifyContent: 'space-around',
+                                      alignItems: 'center',
+                                      height: '300px',
+                                    },
+                                    labelPlacement: 'horizontal',
+                                    direction: 'vertical',
+                                  },
+                                  children: [
+                                    {
+                                      componentName: 'Steps.Step',
+                                      id: 'node_ockodngwu91o',
+                                      props: {
+                                        title: '提交完成',
+                                        description: '',
+                                        style: {
+                                          width: '200px',
+                                        },
+                                      },
+                                    },
+                                    {
+                                      componentName: 'Steps.Step',
+                                      id: 'node_ockodngwu91p',
+                                      props: {
+                                        title: {
+                                          type: 'JSExpression',
+                                          value: 'this.state.thirdAuditText',
+                                        },
+                                        subTitle: '',
+                                        description: '',
+                                        style: {
+                                          width: '200px',
+                                        },
+                                      },
+                                    },
+                                  ],
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ockodngwu914',
+                              props: {
+                                wrapperCol: {
+                                  offset: '',
+                                },
+                                style: {
+                                  flexDirection: 'row',
+                                  width: '600px',
+                                  display: 'flex',
+                                },
+                              },
+                              children: [
+                                {
+                                  componentName: 'Button',
+                                  id: 'node_ockodngwu915',
+                                  props: {
+                                    style: {
+                                      marginLeft: '0',
+                                    },
+                                    children: '返回',
+                                    __events: {
+                                      eventDataList: [
+                                        {
+                                          type: 'componentEvent',
+                                          name: 'onClick',
+                                          relatedEventName: 'onClickThirdBack',
+                                        },
+                                      ],
+                                      eventList: [
+                                        {
+                                          name: 'onClick',
+                                          disabled: true,
+                                        },
+                                      ],
+                                    },
+                                    onClick: {
+                                      type: 'JSFunction',
+                                      value: 'function(){this.onClickThirdBack.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                                    },
+                                  },
+                                },
+                                {
+                                  componentName: 'Button',
+                                  id: 'node_ockodngwu916',
+                                  props: {
+                                    type: 'primary',
+                                    children: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.thirdButtonText',
+                                    },
+                                    htmlType: 'submit',
+                                    style: {
+                                      float: 'right',
+                                      marginLeft: '20px',
+                                    },
+                                    __events: {
+                                      eventDataList: [
+                                        {
+                                          type: 'componentEvent',
+                                          name: 'onClick',
+                                          relatedEventName: 'onClickModifyThird',
+                                        },
+                                      ],
+                                      eventList: [
+                                        {
+                                          name: 'onClick',
+                                          disabled: true,
+                                        },
+                                      ],
+                                    },
+                                    onClick: {
+                                      type: 'JSFunction',
+                                      value: 'function(){this.onClickModifyThird.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                                    },
+                                  },
+                                },
+                                {
+                                  componentName: 'Button',
+                                  id: 'node_ockosjrkvr1d',
+                                  props: {
+                                    type: 'primary',
+                                    children: '上一步',
+                                    htmlType: 'submit',
+                                    style: {
+                                      marginLeft: '0px',
+                                      float: 'right',
+                                    },
+                                    __events: {
+                                      eventDataList: [
+                                        {
+                                          type: 'componentEvent',
+                                          name: 'onClick',
+                                          relatedEventName: 'onClickPreThird',
+                                        },
+                                      ],
+                                      eventList: [
+                                        {
+                                          name: 'onClick',
+                                          disabled: true,
+                                        },
+                                      ],
+                                    },
+                                    onClick: {
+                                      type: 'JSFunction',
+                                      value: 'function(){this.onClickPreThird.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                                    },
+                                  },
+                                  condition: {
+                                    type: 'JSExpression',
+                                    value: 'this.state.customerProjectInfo.status > 2',
+                                  },
+                                },
+                              ],
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  i18n: {},
+}
