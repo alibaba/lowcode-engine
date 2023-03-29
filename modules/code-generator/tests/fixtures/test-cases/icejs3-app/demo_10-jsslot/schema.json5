@@ -1,0 +1,1206 @@
+{
+  version: '1.0.0',
+  componentsMap: [
+    {
+      devMode: 'lowcode',
+      componentName: 'Slot',
+    },
+    {
+      package: '@alilc/antd-lowcode-materials',
+      version: '0.9.4',
+      exportName: 'Button',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      componentName: 'Button',
+    },
+    {
+      package: '@alife/mc-assets-1935',
+      version: '0.1.42',
+      exportName: 'AliAutoDiv',
+      main: 'build/lowcode/index.js',
+      destructuring: true,
+      subName: 'default',
+      componentName: 'AliAutoDivDefault',
+    },
+    {
+      package: '@alilc/antd-lowcode-materials',
+      version: '0.9.4',
+      exportName: 'Typography',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      subName: 'Text',
+      componentName: 'Typography.Text',
+    },
+    {
+      package: '@alilc/antd-lowcode-materials',
+      version: '0.9.4',
+      exportName: 'Typography',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      subName: 'Link',
+      componentName: 'Typography.Link',
+    },
+    {
+      package: '@alilc/antd-lowcode-materials',
+      version: '0.9.4',
+      exportName: 'Modal',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      componentName: 'Modal',
+    },
+    {
+      package: '@alilc/antd-lowcode-materials',
+      version: '0.9.4',
+      exportName: 'Select',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      componentName: 'Select',
+    },
+    {
+      package: '@alilc/antd-lowcode-materials',
+      version: '0.9.4',
+      exportName: 'Form',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      subName: 'Item',
+      componentName: 'Form.Item',
+    },
+    {
+      package: '@alilc/antd-lowcode-materials',
+      version: '0.9.4',
+      exportName: 'Input',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      componentName: 'Input',
+    },
+    {
+      package: '@alilc/antd-lowcode-materials',
+      version: '0.9.4',
+      exportName: 'Form',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      componentName: 'Form',
+    },
+    {
+      package: '@alife/container',
+      version: '0.3.7',
+      exportName: 'P',
+      main: 'lib/index.js',
+      destructuring: true,
+      subName: '',
+      componentName: 'NextP',
+    },
+    {
+      package: '@alife/container',
+      version: '0.3.7',
+      exportName: 'Block',
+      main: 'lib/index.js',
+      destructuring: true,
+      subName: 'Cell',
+      componentName: 'NextBlockCell',
+    },
+    {
+      package: '@alife/container',
+      version: '0.3.7',
+      exportName: 'Block',
+      main: 'lib/index.js',
+      destructuring: true,
+      subName: '',
+      componentName: 'NextBlock',
+    },
+    {
+      package: '@alife/mc-assets-1935',
+      version: '0.1.42',
+      exportName: 'AliAutoSearchTable',
+      main: 'build/lowcode/index.js',
+      destructuring: true,
+      subName: 'default',
+      componentName: 'AliAutoSearchTableDefault',
+    },
+    {
+      package: '@alilc/antd-lowcode-materials',
+      version: '0.9.4',
+      exportName: 'ConfigProvider',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      componentName: 'ConfigProvider',
+    },
+    {
+      package: '@alilc/antd-lowcode-materials',
+      version: '0.9.4',
+      exportName: 'Empty',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      componentName: 'Empty',
+    },
+    {
+      package: '@alife/container',
+      version: '0.3.7',
+      exportName: 'Page',
+      main: 'lib/index.js',
+      destructuring: true,
+      subName: '',
+      componentName: 'NextPage',
+    },
+    {
+      devMode: 'lowcode',
+      componentName: 'Page',
+    },
+    {
+      package: '@alilc/antd-lowcode-materials',
+      version: '0.9.4',
+      exportName: 'Tooltip',
+      main: 'dist/antd-lowcode.esm.js',
+      destructuring: true,
+      componentName: 'Tooltip',
+    },
+  ],
+  componentsTree: [
+    {
+      componentName: 'Page',
+      id: 'node_dockcviv8fo1',
+      props: {
+        ref: 'outterView',
+        style: {
+          height: '100%',
+        },
+      },
+      fileName: 'test',
+      dataSource: {
+        list: [],
+      },
+      css: 'body {\n  font-size: 12px;\n}\n\n.botton {\n  width: 100px;\n  color: #ff00ff\n}',
+      lifeCycles: {
+        constructor: {
+          type: 'JSFunction',
+          value: "function() {\n    this.__jp__init();\n    this.statusDesc = {\n      0: '失败',\n      1: '成功',\n      2: '构建中',\n      3: '构建超时',\n    };\n    this.pageParams = {};\n  }",
+        },
+        componentDidMount: {
+          type: 'JSFunction',
+          value: "function() {\n    this.$ds.resolve('PROJECTS', {\n      params: {\n        size: 5000,\n      },\n    });\n    // if (this.state.init === false) {\n    //   this.setState({\n    //     init: true,\n    //   });\n    // }\n  }",
+        },
+        componentDidUpdate: {
+          type: 'JSFunction',
+          value: 'function(prevProps, prevState, snapshot) {}',
+        },
+        componentWillUnmount: {
+          type: 'JSFunction',
+          value: 'function() {}',
+        },
+      },
+      methods: {
+        __jp__init: {
+          type: 'JSFunction',
+          value: 'function() { /*...*/ }',
+        },
+        __jp__initRouter: {
+          type: 'JSFunction',
+          value: 'function() {\n  if (window.arsenal) {\n    this.$router = new window.jianpin.ArsenalRouter({\n      app: this.props.microApp,\n    });\n  } else {\n    this.$router = new window.jianpin.ArsenalRouter();\n  }\n}',
+        },
+        __jp__initDataSource: {
+          type: 'JSFunction',
+          value: 'function() { /*...*/ }',
+        },
+        __jp__initEnv: {
+          type: 'JSFunction',
+          value: 'function() { /*...*/ }',
+        },
+        __jp__initConfig: {
+          type: 'JSFunction',
+          value: 'function() { /*...*/ }',
+        },
+        __jp__initUtils: {
+          type: 'JSFunction',
+          value: 'function() {\n  this.$utils = {\n    message: window.jianpin.utils.message,\n    axios: window.jianpin.utils.axios,\n    moment: window.jianpin.utils.moment,\n  };\n}',
+        },
+        fetchPkgs: {
+          type: 'JSFunction',
+          value: 'function() { /*...*/ }',
+        },
+        onPageChange: {
+          type: 'JSFunction',
+          value: 'function(pageIndex, pageSize) {\n    this.pageParams = {\n      pageIndex,\n      pageSize,\n    };\n    this.fetchPkgs();\n  }',
+        },
+        renderTime: {
+          type: 'JSFunction',
+          value: "function(time) {\n    return this.$utils.moment(time).format('YYYY-MM-DD HH:mm');\n  }",
+        },
+        renderUserName: {
+          type: 'JSFunction',
+          value: 'function(user) {\n    return user.user_name;\n  }',
+        },
+        reload: {
+          type: 'JSFunction',
+          value: 'function() { /*...*/ }',
+        },
+        handleResult: {
+          type: 'JSFunction',
+          value: 'function() { /*...*/ }',
+        },
+        handleDetail: {
+          type: 'JSFunction',
+          value: 'function() {\n    // 跳转详情页面 TODO\n  }',
+        },
+        onResultCancel: {
+          type: 'JSFunction',
+          value: 'function() {\n    this.setState({\n      resultVisible: false,\n    });\n  }',
+        },
+        formatResult: {
+          type: 'JSFunction',
+          value: "function(item) {\n    if (!item) {\n      return '暂无结果';\n    }\n    const { channel, plat, version, status } = item;\n    return [channel, plat, version, status].join('-');\n  }",
+        },
+        handleDownload: {
+          type: 'JSFunction',
+          value: 'function() { /*...*/ }',
+        },
+        onFinish: {
+          type: 'JSFunction',
+          value: 'function() { /*...*/ }',
+        },
+      },
+      state: {
+        pkgs: [],
+        total: 0,
+        isSearch: false,
+        projects: [],
+        results: [],
+        resultVisible: false,
+      },
+      children: [
+        {
+          componentName: 'Modal',
+          id: 'node_ocksh9yppxb',
+          props: {
+            title: '查看结果',
+            visible: {
+              type: 'JSExpression',
+              value: 'this.state.resultVisible',
+            },
+            footer: {
+              type: 'JSSlot',
+              value: [
+                {
+                  componentName: 'Button',
+                  id: 'node_ocksh9yppxf',
+                  props: {
+                    type: 'primary',
+                    children: '确定',
+                    __events: {
+                      eventDataList: [
+                        {
+                          type: 'componentEvent',
+                          name: 'onClick',
+                          relatedEventName: 'onResultCancel',
+                        },
+                      ],
+                      eventList: [
+                        {
+                          name: 'onClick',
+                          disabled: true,
+                        },
+                      ],
+                    },
+                    onClick: {
+                      type: 'JSFunction',
+                      value: 'function(){this.onResultCancel.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                    },
+                  },
+                },
+              ],
+            },
+            __events: {
+              eventDataList: [
+                {
+                  type: 'componentEvent',
+                  name: 'onCancel',
+                  relatedEventName: 'onResultCancel',
+                },
+              ],
+              eventList: [
+                {
+                  name: 'onCancel',
+                  disabled: true,
+                },
+                {
+                  name: 'onOk',
+                  disabled: false,
+                },
+              ],
+            },
+            onCancel: {
+              type: 'JSFunction',
+              value: 'function(){this.onResultCancel.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+            },
+            width: '720px',
+            centered: true,
+          },
+          hidden: true,
+          children: [
+            {
+              componentName: 'AliAutoDivDefault',
+              id: 'node_ockshazuxa4',
+              props: {
+                style: {
+                  width: '100%',
+                },
+              },
+              loop: {
+                type: 'JSExpression',
+                value: 'this.state.results',
+              },
+              children: [
+                {
+                  componentName: 'AliAutoDivDefault',
+                  id: 'node_ockshazuxai',
+                  props: {
+                    style: {
+                      width: '100%',
+                      textAlign: 'left',
+                      marginBottom: '10px',
+                    },
+                  },
+                  condition: {
+                    type: 'JSExpression',
+                    value: 'this.state.results && this.state.results.length > 0',
+                  },
+                  children: [
+                    {
+                      componentName: 'Button',
+                      id: 'node_ockshazuxah',
+                      props: {
+                        type: 'primary',
+                        children: '下载全部',
+                        size: 'small',
+                        __events: {
+                          eventDataList: [
+                            {
+                              type: 'componentEvent',
+                              name: 'onClick',
+                              relatedEventName: 'handleDownload',
+                            },
+                          ],
+                          eventList: [
+                            {
+                              name: 'onClick',
+                              disabled: true,
+                            },
+                          ],
+                        },
+                        onClick: {
+                          type: 'JSFunction',
+                          value: 'function(){this.handleDownload.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                        },
+                      },
+                    },
+                  ],
+                },
+                {
+                  componentName: 'Typography.Text',
+                  id: 'node_ockshazuxa5',
+                  props: {
+                    children: {
+                      type: 'JSExpression',
+                      value: 'this.formatResult(this.item)',
+                    },
+                  },
+                },
+                {
+                  componentName: 'Typography.Link',
+                  id: 'node_ockshazuxa6',
+                  props: {
+                    href: {
+                      type: 'JSExpression',
+                      value: 'this.item.download_link',
+                    },
+                    target: '_blank',
+                    children: ' - 点击下载',
+                  },
+                  condition: {
+                    type: 'JSExpression',
+                    value: 'this.item.download_link',
+                  },
+                },
+                {
+                  componentName: 'Typography.Link',
+                  id: 'node_ockshazuxa7',
+                  props: {
+                    href: {
+                      type: 'JSExpression',
+                      value: 'this.item.release_notes',
+                    },
+                    target: '_blank',
+                    children: ' - 跳转发布节点',
+                  },
+                  condition: {
+                    type: 'JSExpression',
+                    value: 'this.item.release_notes',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        {
+          componentName: 'NextPage',
+          id: 'node_ocko19zplh1',
+          props: {
+            columns: 12,
+            headerDivider: true,
+            placeholderStyle: {
+              gridRowEnd: 'span 1',
+              gridColumnEnd: 'span 12',
+            },
+            placeholder: '页面主体内容：拖拽Block布局组件到这里',
+            header: {
+              type: 'JSSlot',
+              title: 'header',
+            },
+            headerProps: {
+              background: 'surface',
+            },
+            footer: {
+              type: 'JSSlot',
+              title: 'footer',
+            },
+            minHeight: '100vh',
+          },
+          title: '页面',
+          children: [
+            {
+              componentName: 'NextBlock',
+              id: 'node_ocko19zplh2',
+              props: {
+                prefix: 'next-',
+                placeholderStyle: {
+                  height: '100%',
+                },
+                noPadding: false,
+                noBorder: false,
+                background: 'surface',
+                layoutmode: 'O',
+                colSpan: 12,
+                rowSpan: 1,
+                childTotalColumns: 12,
+              },
+              title: '区块',
+              children: [
+                {
+                  componentName: 'NextBlockCell',
+                  id: 'node_ocko19zplh3',
+                  props: {
+                    title: '',
+                    prefix: 'next-',
+                    placeholderStyle: {
+                      height: '100%',
+                    },
+                    layoutmode: 'O',
+                    childTotalColumns: 12,
+                    isAutoContainer: true,
+                    colSpan: 12,
+                    rowSpan: 1,
+                  },
+                  children: [
+                    {
+                      componentName: 'NextP',
+                      id: 'node_ocks8dtt1ms',
+                      props: {
+                        wrap: false,
+                        type: 'body2',
+                        verAlign: 'middle',
+                        textSpacing: true,
+                        align: 'left',
+                        full: true,
+                        flex: true,
+                      },
+                      title: '段落',
+                      children: [
+                        {
+                          componentName: 'Form',
+                          id: 'node_ocks8dtt1mt',
+                          props: {
+                            labelCol: {
+                              span: 10,
+                            },
+                            wrapperCol: {
+                              span: 14,
+                            },
+                            onFinish: {
+                              type: 'JSFunction',
+                              value: 'function(){this.onFinish.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                            },
+                            name: 'basic',
+                            layout: 'inline',
+                            __events: {
+                              eventDataList: [
+                                {
+                                  type: 'componentEvent',
+                                  name: 'onFinish',
+                                  relatedEventName: 'onFinish',
+                                },
+                              ],
+                              eventList: [
+                                {
+                                  name: 'onFinish',
+                                  disabled: true,
+                                },
+                                {
+                                  name: 'onFinishFailed',
+                                  disabled: false,
+                                },
+                                {
+                                  name: 'onFieldsChange',
+                                  disabled: false,
+                                },
+                                {
+                                  name: 'onValuesChange',
+                                  disabled: false,
+                                },
+                              ],
+                            },
+                          },
+                          children: [
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ocks8dtt1mz',
+                              props: {
+                                label: '项目名称/渠道号',
+                                name: 'channel_id',
+                              },
+                              children: [
+                                {
+                                  componentName: 'Select',
+                                  id: 'node_ocksfuhwhsd',
+                                  props: {
+                                    style: {
+                                      width: '280px',
+                                    },
+                                    options: {
+                                      type: 'JSExpression',
+                                      value: 'this.state.projects',
+                                    },
+                                    showArrow: true,
+                                    tokenSeparators: [],
+                                    showSearch: true,
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ocks8dtt1m12',
+                              props: {
+                                label: '版本号',
+                                name: 'buildId',
+                              },
+                              children: [
+                                {
+                                  componentName: 'Input',
+                                  id: 'node_ocksfuhwhs3',
+                                  props: {
+                                    placeholder: '请输入',
+                                    style: {
+                                      width: '280px',
+                                    },
+                                    size: 'middle',
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ocks8dtt1m18',
+                              props: {
+                                label: '构建人',
+                                name: 'user_id',
+                              },
+                              children: [
+                                {
+                                  componentName: 'Select',
+                                  id: 'node_ocksfuhwhsi',
+                                  props: {
+                                    style: {
+                                      width: 200,
+                                    },
+                                    options: [
+                                      {
+                                        label: 'A',
+                                        value: 'A',
+                                      },
+                                      {
+                                        label: 'B',
+                                        value: 'B',
+                                      },
+                                      {
+                                        label: 'C',
+                                        value: 'C',
+                                      },
+                                    ],
+                                    showSearch: true,
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ocks8dtt1m19',
+                              props: {
+                                label: 'ID',
+                                name: 'id',
+                              },
+                              children: [
+                                {
+                                  componentName: 'Input',
+                                  id: 'node_ocksfuhwhs8',
+                                  props: {
+                                    placeholder: '请输入',
+                                    style: {
+                                      width: '160px',
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              componentName: 'Form.Item',
+                              id: 'node_ocks8dtt1mw',
+                              props: {
+                                wrapperCol: {
+                                  offset: 6,
+                                },
+                              },
+                              children: [
+                                {
+                                  componentName: 'Button',
+                                  id: 'node_ocks8dtt1mx',
+                                  props: {
+                                    type: 'primary',
+                                    children: '查询',
+                                    htmlType: 'submit',
+                                  },
+                                },
+                              ],
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              componentName: 'NextBlock',
+              id: 'node_ockshc4ifn1b',
+              props: {
+                childTotalColumns: 12,
+              },
+              title: '区块',
+              children: [
+                {
+                  componentName: 'NextBlockCell',
+                  id: 'node_ockshc4ifn1c',
+                  props: {
+                    isAutoContainer: true,
+                    colSpan: 12,
+                    rowSpan: 1,
+                  },
+                  title: '子区块',
+                  children: [
+                    {
+                      componentName: 'NextP',
+                      id: 'node_ockshc4ifn1d',
+                      props: {
+                        wrap: false,
+                        type: 'body2',
+                        verAlign: 'middle',
+                        textSpacing: true,
+                        align: 'left',
+                        flex: true,
+                      },
+                      title: '段落',
+                      children: [
+                        {
+                          componentName: 'ConfigProvider',
+                          id: 'node_ockshc4ifn1e',
+                          props: {
+                            locale: 'zh-CN',
+                          },
+                          children: [
+                            {
+                              componentName: 'AliAutoSearchTableDefault',
+                              id: 'node_ocksfuhwhsx',
+                              props: {
+                                rowKey: 'key',
+                                dataSource: {
+                                  type: 'JSExpression',
+                                  value: 'this.state.pkgs',
+                                },
+                                columns: [
+                                  {
+                                    title: 'ID',
+                                    dataIndex: 'id',
+                                    key: 'name',
+                                    width: 80,
+                                  },
+                                  {
+                                    title: '渠道号',
+                                    dataIndex: 'channels',
+                                    key: 'age',
+                                    width: 142,
+                                    render: {
+                                      type: 'JSSlot',
+                                      params: ['text', 'record', 'index'],
+                                      value: [
+                                        {
+                                          componentName: 'Typography.Text',
+                                          id: 'node_ocksh2bq0428',
+                                          props: {
+                                            children: {
+                                              type: 'JSExpression',
+                                              value: 'this.item',
+                                            },
+                                            style: {
+                                              display: 'block',
+                                            },
+                                          },
+                                          loop: {
+                                            type: 'JSExpression',
+                                            value: "this.text.split(',')",
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                  {
+                                    title: '版本号',
+                                    dataIndex: 'dic_version',
+                                    key: 'address',
+                                    render: {
+                                      type: 'JSSlot',
+                                      params: ['text', 'record', 'index'],
+                                      value: [
+                                        {
+                                          componentName: 'Tooltip',
+                                          id: 'node_ocksso4xavj',
+                                          props: {
+                                            title: {
+                                              type: 'JSSlot',
+                                              value: [
+                                                {
+                                                  componentName: 'Typography.Text',
+                                                  id: 'node_ocksso4xavn',
+                                                  props: {
+                                                    children: {
+                                                      type: 'JSExpression',
+                                                      value: "this.item. channelId + ' / ' +  this.item.version",
+                                                    },
+                                                    style: {
+                                                      display: 'block',
+                                                      color: '#FFFFFF',
+                                                    },
+                                                  },
+                                                  loop: {
+                                                    type: 'JSExpression',
+                                                    value: 'this.text || []',
+                                                  },
+                                                },
+                                              ],
+                                            },
+                                          },
+                                          children: [
+                                            {
+                                              componentName: 'Typography.Text',
+                                              id: 'node_ocksso4xavm',
+                                              props: {
+                                                children: {
+                                                  type: 'JSExpression',
+                                                  value: 'this.text[0].version',
+                                                },
+                                              },
+                                            },
+                                          ],
+                                        },
+                                      ],
+                                    },
+                                    width: 120,
+                                  },
+                                  {
+                                    title: '构建Job',
+                                    dataIndex: 'job_name',
+                                    width: 180,
+                                  },
+                                  {
+                                    title: '构建类型',
+                                    dataIndex: 'packaging_type',
+                                    width: 94,
+                                  },
+                                  {
+                                    title: '构建状态',
+                                    dataIndex: 'status',
+                                    render: {
+                                      type: 'JSSlot',
+                                      params: ['text', 'record', 'index'],
+                                      value: [
+                                        {
+                                          componentName: 'Typography.Text',
+                                          id: 'node_ocksh3jkxzw',
+                                          props: {
+                                            children: {
+                                              type: 'JSExpression',
+                                              value: 'this.statusDesc[this.text]',
+                                            },
+                                          },
+                                        },
+                                        {
+                                          componentName: 'Icon',
+                                          id: 'node_ocksh3jkxzx',
+                                          props: {
+                                            type: 'SyncOutlined',
+                                            size: 16,
+                                            spin: true,
+                                            style: {
+                                              marginLeft: '10px',
+                                            },
+                                          },
+                                          condition: {
+                                            type: 'JSExpression',
+                                            value: 'this.text === 2',
+                                          },
+                                        },
+                                      ],
+                                    },
+                                    width: 100,
+                                  },
+                                  {
+                                    title: '构建时间',
+                                    dataIndex: 'start_time',
+                                    render: {
+                                      type: 'JSFunction',
+                                      value: 'function(){ return this.renderTime.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                                    },
+                                    width: 148,
+                                  },
+                                  {
+                                    title: '构建人',
+                                    dataIndex: 'user',
+                                    render: {
+                                      type: 'JSFunction',
+                                      value: 'function(){ return this.renderUserName.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                                    },
+                                    width: 80,
+                                  },
+                                  {
+                                    title: 'Jenkins 链接',
+                                    dataIndex: 'jenkins_link',
+                                    render: {
+                                      type: 'JSSlot',
+                                      params: ['text', 'record', 'index'],
+                                      value: [
+                                        {
+                                          componentName: 'Typography.Link',
+                                          id: 'node_ocksh64kbx21',
+                                          props: {
+                                            href: {
+                                              type: 'JSExpression',
+                                              value: 'this.text',
+                                            },
+                                            target: '_blank',
+                                            children: '查看',
+                                          },
+                                          condition: {
+                                            type: 'JSExpression',
+                                            value: 'this.text',
+                                          },
+                                        },
+                                        {
+                                          componentName: 'Typography.Text',
+                                          id: 'node_ocksh64kbx22',
+                                          props: {
+                                            children: '暂无',
+                                          },
+                                          condition: {
+                                            type: 'JSExpression',
+                                            value: '!this.text',
+                                          },
+                                        },
+                                      ],
+                                    },
+                                    width: 120,
+                                  },
+                                  {
+                                    title: '测试平台链接',
+                                    dataIndex: 'is_run_testing',
+                                    width: 120,
+                                    render: {
+                                      type: 'JSSlot',
+                                      params: ['text', 'record', 'index'],
+                                      value: [
+                                        {
+                                          componentName: 'Typography.Link',
+                                          id: 'node_ocksh3jkxz3e',
+                                          props: {
+                                            href: 'http://rivermap.alibaba.net/dashboard/testExecute',
+                                            target: '_blank',
+                                            children: '查看',
+                                          },
+                                          condition: {
+                                            type: 'JSExpression',
+                                            value: 'this.text',
+                                          },
+                                        },
+                                        {
+                                          componentName: 'Typography.Text',
+                                          id: 'node_ocksh3jkxz3f',
+                                          props: {
+                                            children: '暂无',
+                                          },
+                                          condition: {
+                                            type: 'JSExpression',
+                                            value: '!this.text',
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                  {
+                                    title: '触发源',
+                                    dataIndex: 'source',
+                                    width: 120,
+                                  },
+                                  {
+                                    title: '详情',
+                                    dataIndex: 'id',
+                                    render: {
+                                      type: 'JSSlot',
+                                      params: ['text', 'record', 'index'],
+                                      value: [
+                                        {
+                                          componentName: 'Button',
+                                          id: 'node_ocksh8yryw7',
+                                          props: {
+                                            type: 'link',
+                                            children: '查看',
+                                            size: 'small',
+                                            style: {
+                                              padding: '0px',
+                                            },
+                                            __events: {
+                                              eventDataList: [
+                                                {
+                                                  type: 'componentEvent',
+                                                  name: 'onClick',
+                                                  relatedEventName: 'handleDetail',
+                                                },
+                                              ],
+                                              eventList: [
+                                                {
+                                                  name: 'onClick',
+                                                  disabled: true,
+                                                },
+                                              ],
+                                            },
+                                            onClick: {
+                                              type: 'JSFunction',
+                                              value: 'function(){this.handleDetail.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                                            },
+                                          },
+                                        },
+                                      ],
+                                    },
+                                    width: 80,
+                                    fixed: 'right',
+                                  },
+                                  {
+                                    title: '结果',
+                                    dataIndex: 'id',
+                                    render: {
+                                      type: 'JSSlot',
+                                      params: ['text', 'record', 'index'],
+                                      value: [
+                                        {
+                                          componentName: 'Button',
+                                          id: 'node_ocksh9v6jw7',
+                                          props: {
+                                            type: 'link',
+                                            children: '查看',
+                                            size: 'small',
+                                            style: {
+                                              padding: '0px',
+                                            },
+                                            __events: {
+                                              eventDataList: [
+                                                {
+                                                  type: 'componentEvent',
+                                                  name: 'onClick',
+                                                  relatedEventName: 'handleResult',
+                                                  paramStr: 'this.text',
+                                                },
+                                              ],
+                                              eventList: [
+                                                {
+                                                  name: 'onClick',
+                                                  disabled: true,
+                                                },
+                                              ],
+                                            },
+                                            onClick: {
+                                              type: 'JSFunction',
+                                              value: 'function(){this.handleResult.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                                            },
+                                            ghost: false,
+                                            href: {
+                                              type: 'JSExpression',
+                                              value: 'this.text',
+                                            },
+                                          },
+                                        },
+                                      ],
+                                    },
+                                    width: 80,
+                                    fixed: 'right',
+                                  },
+                                  {
+                                    title: '重新执行',
+                                    dataIndex: 'id',
+                                    width: 92,
+                                    render: {
+                                      type: 'JSSlot',
+                                      params: ['text', 'record', 'index'],
+                                      value: [
+                                        {
+                                          componentName: 'Button',
+                                          id: 'node_ocksh96rad1g',
+                                          props: {
+                                            type: 'text',
+                                            children: '',
+                                            icon: {
+                                              type: 'JSSlot',
+                                              value: [
+                                                {
+                                                  componentName: 'Icon',
+                                                  id: 'node_ocksh96rad1j',
+                                                  props: {
+                                                    type: 'ReloadOutlined',
+                                                    size: 14,
+                                                    color: '#0593d3',
+                                                    style: {
+                                                      padding: '3px',
+                                                      border: '1px solid #0593d3',
+                                                      borderRadius: '14px',
+                                                      cursor: 'pointer',
+                                                      height: '22px',
+                                                    },
+                                                    spin: false,
+                                                  },
+                                                },
+                                              ],
+                                            },
+                                            shape: 'circle',
+                                            __events: {
+                                              eventDataList: [
+                                                {
+                                                  type: 'componentEvent',
+                                                  name: 'onClick',
+                                                  relatedEventName: 'reload',
+                                                },
+                                              ],
+                                              eventList: [
+                                                {
+                                                  name: 'onClick',
+                                                  disabled: true,
+                                                },
+                                              ],
+                                            },
+                                            onClick: {
+                                              type: 'JSFunction',
+                                              value: 'function(){this.reload.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                                            },
+                                          },
+                                        },
+                                      ],
+                                    },
+                                    fixed: 'right',
+                                  },
+                                ],
+                                actions: [],
+                                pagination: {
+                                  total: {
+                                    type: 'JSExpression',
+                                    value: 'this.state.total',
+                                  },
+                                  defaultPageSize: 8,
+                                  onPageChange: {
+                                    type: 'JSFunction',
+                                    value: 'function(){ return this.onPageChange.apply(this,Array.prototype.slice.call(arguments).concat([])) }',
+                                  },
+                                },
+                                scrollX: 1200,
+                              },
+                              condition: {
+                                type: 'JSExpression',
+                                value: '!this.state.isSearch || (this.state.isSearch && this.state.pkgs.length > 0)',
+                              },
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              componentName: 'NextBlock',
+              id: 'node_ocksk6f8fa3b',
+              props: {
+                childTotalColumns: 12,
+              },
+              title: '区块',
+              children: [
+                {
+                  componentName: 'NextBlockCell',
+                  id: 'node_ocksk6f8fa3c',
+                  props: {
+                    isAutoContainer: true,
+                    colSpan: 12,
+                    rowSpan: 1,
+                  },
+                  title: '子区块',
+                  children: [
+                    {
+                      componentName: 'NextP',
+                      id: 'node_ocksk6f8fa3d',
+                      props: {
+                        wrap: false,
+                        type: 'body2',
+                        verAlign: 'middle',
+                        textSpacing: true,
+                        align: 'left',
+                        flex: true,
+                      },
+                      title: '段落',
+                      children: [
+                        {
+                          componentName: 'Empty',
+                          id: 'node_ocksk6f8fa3e',
+                          props: {
+                            description: '暂无数据',
+                          },
+                          condition: {
+                            type: 'JSExpression',
+                            value: 'this.state.pkgs.length < 1 && this.state.isSearch',
+                          },
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  i18n: {},
+}

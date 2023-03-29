@@ -9,6 +9,7 @@ import { createModuleBuilder } from './generator/ModuleBuilder';
 import { createDiskPublisher } from './publisher/disk';
 import { createZipPublisher } from './publisher/zip';
 import createIceJsProjectBuilder, { plugins as reactPlugins } from './solutions/icejs';
+import createIce3JsProjectBuilder, { plugins as icejs3Plugins } from './solutions/icejs3';
 import createRaxAppProjectBuilder, { plugins as raxPlugins } from './solutions/rax-app';
 
 // 引入说明
@@ -32,6 +33,7 @@ import * as CONSTANTS from './const';
 
 // 引入内置解决方案模块
 import icejs from './plugins/project/framework/icejs';
+import icejs3 from './plugins/project/framework/icejs3';
 import rax from './plugins/project/framework/rax';
 
 export default {
@@ -39,10 +41,12 @@ export default {
   createModuleBuilder,
   solutions: {
     icejs: createIceJsProjectBuilder,
+    icejs3: createIce3JsProjectBuilder,
     rax: createRaxAppProjectBuilder,
   },
   solutionParts: {
     icejs,
+    icejs3,
     rax,
   },
   publishers: {
@@ -73,6 +77,9 @@ export default {
       constants,
       i18n,
       utils,
+    },
+    icejs3: {
+      ...icejs3Plugins,
     },
   },
   postprocessor: {

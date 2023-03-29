@@ -1,0 +1,59 @@
+{
+  version: '1.0.0',
+  componentsMap: [
+    {
+      componentName: 'Switch',
+      package: '@alifd/next',
+      version: '1.19.18',
+      exportName: 'Switch',
+      destructuring: true,
+      subName: '',
+    },
+  ],
+  componentsTree: [
+    {
+      componentName: 'Page',
+      props: {},
+      children: [
+        {
+          componentName: 'Div',
+          props: {},
+          children: [
+            {
+              componentName: 'Switch',
+              props: {
+                checkedChildren: '开',
+                unCheckedChildren: '关',
+                checked: {
+                  type: 'JSExpression',
+                  value: 'this.item.done',
+                },
+              },
+            },
+          ],
+          loop: {
+            type: 'JSExpression',
+            value: 'this.dataSourceMap.todos.data',
+          },
+        },
+      ],
+      dataSource: {
+        list: [
+          {
+            id: 'todos',
+            isInit: true,
+            type: 'jsonp',
+            options: {
+              method: 'GET',
+              uri: 'https://a0ee9135-6a7f-4c0f-a215-f0f247ad907d.mock.pstmn.io',
+            },
+            dataHandler: {
+              type: 'JSFunction',
+              value: 'function dataHandler(data) {return data.data;}',
+            },
+          },
+        ],
+      },
+    },
+  ],
+}
