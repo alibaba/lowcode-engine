@@ -14,7 +14,7 @@ sidebar_position: 4
 | DateYearSetter || 日期型 - 年数据设置器 | |
 | [EventSetter](./setterDetails/event) | function | 事件绑定设置器 | ![](https://img.alicdn.com/imgextra/i4/O1CN01qxIYiO1ksVknhTpnW_!!6000000004739-2-tps-1202-1014.png) |
 | [IconSetter](./setterDetails/icon) | string | 图标设置器 | ![](https://img.alicdn.com/imgextra/i3/O1CN01zsOMxo1TXaBmjHCRc_!!6000000002392-2-tps-1172-579.png) |
-| FunctionSetter | any | 函数型数据设置器 | ![](https://img.alicdn.com/imgextra/i4/O1CN01jLiJBo1ZIp7OmDLp0_!!6000000003172-2-tps-794-110.png) |
+| [FunctionSetter](./setterDetails/function) | function | 函数型数据设置器 | ![](https://img.alicdn.com/imgextra/i4/O1CN01jLiJBo1ZIp7OmDLp0_!!6000000003172-2-tps-794-110.png) |
 | JsonSetter | object | json 型数据设置器 | ![](https://img.alicdn.com/imgextra/i2/O1CN01mQTFjY1YiBQzWYj64_!!6000000003092-2-tps-1076-1068.png) |
 | [MixedSetter](./setterDetails/mixed) | any | 混合型数据设置器 | ![](https://img.alicdn.com/imgextra/i1/O1CN01ZxomFY1JW4j7wIGuQ_!!6000000001035-2-tps-1552-480.png) |
 | [NumberSetter](./setterDetails/number) | number | 数值型数据设置器 | ![](https://img.alicdn.com/imgextra/i3/O1CN01dSfSgg1WS2EpbqJIO_!!6000000002786-2-tps-1152-328.png) |
