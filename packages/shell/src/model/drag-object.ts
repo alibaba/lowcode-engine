@@ -1,5 +1,5 @@
 import { dragObjectSymbol } from '../symbols';
-import { IPublicModelDragObject, IPublicModelDragObject as InnerDragObject, IPublicTypeDragNodeDataObject } from '@alilc/lowcode-types';
+import { IPublicModelDragObject, IPublicModelDragObject as InnerDragObject, IPublicTypeDragNodeDataObject, IPublicTypeNodeSchema } from '@alilc/lowcode-types';
 import { Node } from './node';
 
 export class DragObject implements IPublicModelDragObject {
@@ -16,11 +16,11 @@ export class DragObject implements IPublicModelDragObject {
     return new DragObject(dragObject);
   }
 
-  get type(): any {
+  get type() {
     return this[dragObjectSymbol].type;
   }
 
-  get nodes(): any {
+  get nodes() {
     const { nodes } = this[dragObjectSymbol];
     if (!nodes) {
       return null;
@@ -28,7 +28,7 @@ export class DragObject implements IPublicModelDragObject {
     return nodes.map(Node.create);
   }
 
-  get data(): any {
+  get data(): IPublicTypeNodeSchema | IPublicTypeNodeSchema[] {
     return (this[dragObjectSymbol] as IPublicTypeDragNodeDataObject).data;
   }
 }

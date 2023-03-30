@@ -20,6 +20,7 @@ import {
   DropLocation as ShellDropLocation,
   ActiveTracker as ShellActiveTracker,
   Clipboard as ShellClipboard,
+  DropLocation,
 } from '../model';
 
 const clipboardInstanceSymbol = Symbol('clipboardInstace');
@@ -66,10 +67,10 @@ export class Canvas implements IPublicApiCanvas {
    * 创建插入位置，考虑放到 dragon 中
    */
   createLocation(locationData: IPublicTypeLocationData): IPublicModelDropLocation {
-    return this[designerSymbol].createLocation({
+    return new DropLocation(this[designerSymbol].createLocation({
       ...locationData,
       target: (locationData.target as any)[nodeSymbol],
-    });
+    }));
   }
 
   /**

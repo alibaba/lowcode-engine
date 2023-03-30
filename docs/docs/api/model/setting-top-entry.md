@@ -4,21 +4,21 @@ sidebar_position: 6
 ---
 > **@types** [IPublicModelSettingTopEntry](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/setting-top-entry.ts)<br/>
 
-# 基本介绍
+## 基本介绍
 
 setter 设置器顶层操作对象
 
-# 属性
+## 属性
 
-## node
+#### node
 
 返回所属的节点实例
 
 `@type {IPublicModelNode | null}`
 
-# 方法
+## 方法
 
-## get
+#### get
 
 获取子级属性对象
 
@@ -35,7 +35,7 @@ get(propName: string | number): IPublicModelSettingField | null;
 相关类型：[IPublicModelSettingField](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/setting-field.ts)
 
 
-## getPropValue
+#### getPropValue
 
 获取指定 propName 的值
 
@@ -48,7 +48,7 @@ get(propName: string | number): IPublicModelSettingField | null;
 getPropValue(propName: string | number): any;
 ```
 
-## setPropValue
+#### setPropValue
 
 设置指定 propName 的值
 
@@ -61,7 +61,7 @@ getPropValue(propName: string | number): any;
 setPropValue(propName: string | number, value: any): void;
 ```
 
-## clearPropValue
+#### clearPropValue
 
 清除指定 propName 的值
 

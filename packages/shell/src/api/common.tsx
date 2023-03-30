@@ -59,7 +59,7 @@ import {
   observer as innerObserver,
 } from '@alilc/lowcode-editor-core';
 import { Dragon as ShellDragon } from '../model';
-import { ReactNode, Component } from 'react';
+import { ReactNode } from 'react';
 
 class DesignerCabin implements IPublicApiCommonDesignerCabin {
   private readonly [editorSymbol]: Editor;
@@ -246,7 +246,7 @@ class EditorCabin implements IPublicApiCommonEditorCabin {
    * Title 组件
    * @experimental unstable API, pay extra caution when trying to use this
    */
-  get Title(): Component {
+  get Title() {
     return InnerTitle;
   }
 
@@ -254,7 +254,7 @@ class EditorCabin implements IPublicApiCommonEditorCabin {
    * Tip 组件
    * @experimental unstable API, pay extra caution when trying to use this
    */
-  get Tip(): Component {
+  get Tip() {
     return InnerTip;
   }
 

@@ -1,3 +1,11 @@
-import { IPublicTypeDragNodeDataObject, IPublicTypeDragNodeObject } from '../type';
+import { IPublicEnumDragObjectType } from '../enum';
+import { IPublicTypeNodeSchema } from '../type';
+import { IPublicModelNode } from './node';
 
-export type IPublicModelDragObject = Readonly<IPublicTypeDragNodeObject> | Readonly<IPublicTypeDragNodeDataObject>;
+export class IPublicModelDragObject {
+  type: IPublicEnumDragObjectType.Node | IPublicEnumDragObjectType.NodeData;
+
+  data: IPublicTypeNodeSchema | IPublicTypeNodeSchema[] | null;
+
+  nodes: (IPublicModelNode | null)[] | null;
+}

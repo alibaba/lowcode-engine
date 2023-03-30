@@ -4,6 +4,7 @@ import { IPublicTypeNodeSchema, IPublicTypeTitleContent } from '../type';
 import { IPublicEnumTransitionType } from '../enum';
 
 export interface IPublicApiCommonUtils {
+
   /**
    * 是否为合法的 schema 结构
    * check if data is valid NodeSchema
@@ -70,6 +71,7 @@ export interface IPublicApiCommonUtils {
   };
 }
 export interface IPublicApiCommonSkeletonCabin {
+
   /**
    * 编辑器框架 View
    * get Workbench Component
@@ -78,16 +80,18 @@ export interface IPublicApiCommonSkeletonCabin {
 }
 
 export interface IPublicApiCommonEditorCabin {
+
   /**
    * Title 组件
    * @experimental unstable API, pay extra caution when trying to use this
    */
-  get Tip(): React.FC<{}>;
+  get Tip(): React.ComponentClass<{}>;
+
   /**
    * Tip 组件
    * @experimental unstable API, pay extra caution when trying to use this
    */
-  get Title(): React.FC<{
+  get Title(): React.ComponentClass<{
     title: IPublicTypeTitleContent | undefined;
     match?: boolean;
     keywords?: string | null;

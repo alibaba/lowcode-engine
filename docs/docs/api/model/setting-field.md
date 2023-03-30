@@ -4,68 +4,68 @@ sidebar_position: 6
 ---
 > **@types** [IPublicModelSettingField](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/setting-field.ts)<br/>
 
-# 基本介绍
+## 基本介绍
 
 setter 设置器操作对象
 
-# 属性
+## 属性
 
-## isGroup
+#### isGroup
 
 获取设置属性的 isGroup
 
 `@type {boolean}`
 
 
-## id
+#### id
 
 获取设置属性的 id
 
 `@type {string}`
 
-## name
+#### name
 
 获取设置属性的 name
 
 `@type {string | number | undefined}`
 
-## key
+#### key
 
 获取设置属性的 key
 
 `@type {string | number | undefined}`
 
-## path
+#### path
 
 获取设置属性的 path
 
 `@type {(string | number)[]}`
 
-## title
+#### title
 
 获取设置属性的 title
 
 `@type {string}`
 
-## setter
+#### setter
 
 获取设置属性的 setter
 
 `@type {IPublicTypeSetterType | null}`
 
-## expanded
+#### expanded
 
 获取设置属性的 expanded
 
 `@type {boolean}`
 
-## extraProps
+#### extraProps
 
 获取设置属性的 extraProps
 
 `@type {IPublicTypeFieldExtraProps}`
 
-## props
+#### props
 
 `@type {IPublicModelSettingTopEntry}`
 
@@ -73,14 +73,14 @@ setter 设置器操作对象
 
 相关类型：[IPublicModelSettingTopEntry](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/setting-top-entry.ts)
 
-## node
+#### node
 
 获取设置属性对应的节点实例
 
 `@type {IPublicModelNode | null}`
 
 
-## parent
+#### parent
 
 获取设置属性的父设置属性
 
@@ -90,7 +90,7 @@ setter 设置器操作对象
 
 相关类型：[IPublicModelSettingTopEntry](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/setting-top-entry.ts)
 
-## top
+#### top
 
 获取顶级设置属性
 
@@ -100,19 +100,19 @@ setter 设置器操作对象
 
 相关类型：[IPublicModelSettingTopEntry](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/setting-top-entry.ts)
 
-## isSettingField
+#### isSettingField
 
 是否是 SettingField 实例
 
 `@type {boolean}`
 
-## componentMeta
+#### componentMeta
 
 `@type {IPublicModelComponentMeta}`
 
 相关类型：[IPublicModelComponentMeta](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/component-meta.ts)
 
-## items
+#### items
 
 获取设置属性的 items
 
@@ -120,9 +120,9 @@ setter 设置器操作对象
 
 相关类型：[IPublicTypeCustomView](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/custom-view.ts)
 
-# 方法
+## 方法
 
-## setKey
+#### setKey
 
 设置 key 值
 
@@ -134,7 +134,7 @@ setter 设置器操作对象
 setKey(key: string | number): void;
 ```
 
-## setValue
+#### setValue
 
 设置值
 
@@ -150,7 +150,7 @@ setValue(val: IPublicTypeCompositeValue, extraOptions?: IPublicTypeSetValueOptio
 - [IPublicTypeCompositeValue](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/composite-value.ts)
 - [IPublicTypeSetValueOptions](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/set-value-options.ts)
 
-## setPropValue
+#### setPropValue
 
 设置子级属性值
 
@@ -163,7 +163,7 @@ setValue(val: IPublicTypeCompositeValue, extraOptions?: IPublicTypeSetValueOptio
 setPropValue(propName: string | number, value: any): void;
 ```
 
-## clearPropValue
+#### clearPropValue
 
 清空指定属性值
 
@@ -175,7 +175,7 @@ setPropValue(propName: string | number, value: any): void;
 clearPropValue(propName: string | number): void;
 ```
 
-## getDefaultValue
+#### getDefaultValue
 
 获取配置的默认值
 
@@ -187,7 +187,7 @@ clearPropValue(propName: string | number): void;
 getDefaultValue(): any;
 ```
 
-## getValue
+#### getValue
 
 获取值
 
@@ -199,7 +199,7 @@ getDefaultValue(): any;
 getValue(): any;
 ```
 
-## getPropValue
+#### getPropValue
 
 获取子级属性值
 
@@ -212,7 +212,7 @@ getValue(): any;
 getPropValue(propName: string | number): any;
 ```
 
-## getExtraPropValue
+#### getExtraPropValue
 
 获取顶层附属属性值
 
@@ -223,7 +223,7 @@ getPropValue(propName: string | number): any;
 getExtraPropValue(propName: string): any;
 ```
 
-## setExtraPropValue
+#### setExtraPropValue
 
 设置顶层附属属性值
 
@@ -234,7 +234,7 @@ getExtraPropValue(propName: string): any;
 setExtraPropValue(propName: string, value: any): void;
 ```
 
-## getProps
+#### getProps
 
 获取设置属性集
 
@@ -250,7 +250,7 @@ getProps(): IPublicModelSettingTopEntry;
 
 相关类型：[IPublicModelSettingTopEntry](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/setting-top-entry.ts)
 
-## isUseVariable
+#### isUseVariable
 
 是否绑定了变量
 
@@ -262,7 +262,7 @@ getProps(): IPublicModelSettingTopEntry;
 isUseVariable(): boolean;
 ```
 
-## setUseVariable
+#### setUseVariable
 
 设置绑定变量
 
@@ -274,7 +274,7 @@ isUseVariable(): boolean;
 setUseVariable(flag: boolean): void;
 ```
 
-## createField
+#### createField
 
 创建一个设置 field 实例
 
@@ -289,7 +289,7 @@ createField(config: IPublicTypeFieldConfig): IPublicModelSettingField;
 
 相关类型：[IPublicTypeFieldConfig](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/field-config.ts)
 
-## getMockOrValue
+#### getMockOrValue
 
 获取值，当为变量时，返回 mock
 
@@ -302,7 +302,7 @@ getMockOrValue(): any;
 
 ```
 
-## purge
+#### purge
 
 销毁当前 field 实例
 
@@ -313,7 +313,7 @@ getMockOrValue(): any;
 purge(): void;
 ```
 
-## remove
+#### remove
 
 移除当前 field 实例
 
@@ -324,7 +324,9 @@ purge(): void;
 remove(): void;
 ```
 
-## onEffect
+## 事件
+
+#### onEffect
 
 设置 autorun
 

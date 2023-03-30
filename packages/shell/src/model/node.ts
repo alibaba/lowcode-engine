@@ -31,6 +31,10 @@ import { ConditionGroup } from './condition-group';
 
 const shellNodeSymbol = Symbol('shellNodeSymbol');
 
+function isShellNode(node: any): node is IPublicModelNode {
+  return node[shellNodeSymbol];
+}
+
 export class Node implements IPublicModelNode {
   private readonly [documentSymbol]: InnerDocumentModel | null;
   private readonly [nodeSymbol]: InnerNode;
@@ -326,12 +330,12 @@ export class Node implements IPublicModelNode {
     this._id = this[nodeSymbol].id;
   }
 
-  static create(node: InnerNode | null | undefined): IPublicModelNode | null {
+  static create(node: InnerNode | IPublicModelNode | null | undefined): IPublicModelNode | null {
     if (!node) {
       return null;
     }
     // @ts-ignore 直接返回已挂载的 shell node 实例
-    if (node[shellNodeSymbol]) {
+    if (isShellNode(node)) {
       return (node as any)[shellNodeSymbol];
     }
     const shellNode = new Node(node);

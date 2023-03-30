@@ -29,12 +29,17 @@ sidebar_position: 0
 - node-children 节点孩子
 - props 属性集
 - prop 属性
-- setting-prop-entry 设置属性
+- setting-field 设置属性
 - setting-top-entry 设置属性集
 - component-meta 物料元数据
 - selection 画布选中
 - detecting 画布 hover
 - history 操作历史
+- window 低代码设计器窗口模型
+- detecting 画布节点悬停模型
+- modal-nodes-manager 模态节点管理器模型
+- plugin-instance 插件实例
+- drop-location 拖拽放置位置模型
 
 
 ## API 设计约定

@@ -10,3 +10,4 @@ export * from './simulator-host';
 export * from './skeleton';
 export * from './canvas';
 export * from './workspace';
+export * from './config';
