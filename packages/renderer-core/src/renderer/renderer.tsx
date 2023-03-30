@@ -158,18 +158,13 @@ export default function rendererFactory(): IRenderComponent {
       return this.props.notFoundComponent || NotFoundComponent;
     }
 
-    getFaultComponent(options: { useCompFaultComponent?: boolean } = {}) {
-      const { useCompFaultComponent = false } = options;
-      let Returned: any = this.props.faultComponent;
-      if (!Returned) {
-        if (useCompFaultComponent) {
-          const Comp = this.getComp();
-          Returned = Comp.FaultComponent || FaultComponent;
-        } else {
-          Returned = FaultComponent;
-        }
+    getFaultComponent() {
+      const { faultComponent, faultComponentMap, schema } = this.props;
+      if (faultComponentMap) {
+        const { componentName } = schema;
+        return faultComponentMap[componentName] || faultComponent || FaultComponent;
       }
-      return Returned;
+      return faultComponent || FaultComponent;
     }
 
     getComp() {

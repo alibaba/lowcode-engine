@@ -234,6 +234,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return engineConfig.get('faultComponent') ?? null;
   }
 
+  get faultComponentMap(): any {
+    return engineConfig.get('faultComponentMap') ?? null;
+  }
+
   @computed get componentsAsset(): Asset | undefined {
     return this.get('componentsAsset');
   }
