@@ -121,7 +121,7 @@ export function buildComponents(libraryMap: LibraryMap,
     } else {
       component = findComponent(libraryMap, componentName, component);
       if (component) {
-        if (!acceptsRef(component)) {
+        if (!acceptsRef(component) && isReactComponent(component)) {
           component = wrapReactClass(component as FunctionComponent);
         }
         components[componentName] = component;
