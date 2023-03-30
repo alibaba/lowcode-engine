@@ -8,6 +8,8 @@ import { createJsonpHandler as __$$createJsonpRequestHandler } from '@alilc/lowc
 
 import { create as __$$createDataSourceEngine } from '@alilc/lowcode-datasource-engine/runtime';
 
+import '@alifd/next/lib/switch/style';
+
 import utils from '../../utils';
 
 import * as __$$i18n from '../../i18n';

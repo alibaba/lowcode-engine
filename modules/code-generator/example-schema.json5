@@ -62,12 +62,12 @@
         router: '/',
       },
       props: {
-        ref: 'outterView',
+        ref: 'outerView',
         autoLoading: true,
       },
       fileName: 'test',
       state: {
-        text: 'outter',
+        text: 'outer',
       },
       lifeCycles: {
         componentDidMount: {
