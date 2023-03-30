@@ -72,7 +72,7 @@
       lifeCycles: {
         componentDidMount: {
           type: 'JSFunction',
-          value: "function() { console.log('componentDidMount'); }",
+          value: "function componentDidMount() { console.log('componentDidMount'); }",
         },
       },
       dataSource: {

@@ -41,7 +41,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
         // 按低代码规范里面的要求进行变量替换
         const format = (msg, variables) => (
           typeof msg === 'string'
-            ? msg.replace(/\\\$\\{(\\w+)\\}/g, (match, key) => variables?.[key] ?? '')
+            ? msg.replace(/\\\$?\\{(\\w+)\\}/g, (match, key) => variables?.[key] ?? '')
             : msg
         );
 

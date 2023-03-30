@@ -81,7 +81,7 @@ export default defineConfig(() => ({
   },
   plugins: [
     fusion({
-      importStyle: true,
+      importStyle: 'sass',
     }),
     locales(),
     plugin(),

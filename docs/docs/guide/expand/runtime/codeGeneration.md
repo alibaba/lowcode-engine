@@ -23,9 +23,9 @@ sidebar_position: 1
 ## 如何使用
 ### 1) 通过命令行快速体验
 
-欢迎使用命令行工具快速体验：`npx @alilc/lowcode-code-generator -i example-schema.json -o generated -s icejs`
+欢迎使用命令行工具快速体验：`npx @alilc/lowcode-code-generator -i example-schema.json -o generated -s icejs3`
 
---其中 example-schema.json 可以从[这里下载](https://unpkg.com/@alilc/lowcode-code-generator@beta/example-schema.json)
+--其中 example-schema.json 可以从[这里下载](https://alifd.alicdn.com/npm/@alilc/lowcode-code-generator@latest/example-schema.json)
 
 ### 2) 通过设计器插件快速体验
 
@@ -112,7 +112,7 @@ await CodeGenerator.init();
 
 ```javascript
 const result = await CodeGenerator.generateCode({
-  solution: 'icejs', // 出码方案 (目前内置有 icejs 和 rax )
+  solution: 'icejs', // 出码方案 (目前内置有 icejs、icejs3 和 rax )
   schema, // 编排搭建出来的 schema
 });
 
@@ -124,6 +124,7 @@ console.log(result); // 出码结果 (默认是递归结构描述的，可以传
 ### 5）自定义出码
 前端框架灵活多变，默认内置的出码方案很难满足所有人的需求，好在此代码生成器支持非常灵活的插件机制 -- 内置功能大多都是通过插件完成的（在 `src/plugins`下），比如：
 ![image.png](https://img.alicdn.com/imgextra/i1/O1CN01CEl2Hq1omnH0UCyGF_!!6000000005268-2-tps-457-376.png)
+
 所以您可以通过添加自己的插件或替换掉默认内置的插件来实现您的自定义功能。
 为了方便自定义出码方案，出码模块还提供自定义出码方案的脚手架功能，即执行下面脚本即可生成一个自定义出码方案：
 ```shell

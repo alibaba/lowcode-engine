@@ -10,13 +10,13 @@ export default function getFile(): [string[], ResultFile] {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: $color-text1-1;
+  color: #FF7300;
   font-weight: bold;
   font-size: 14px;
   line-height: 22px;
 
   &:visited, &:link {
-    color: $color-text1-1;
+    color: #FF7300;
   }
 
   img {
