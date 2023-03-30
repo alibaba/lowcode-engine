@@ -3,6 +3,7 @@ import { IProjectBuilder, IProjectBuilderOptions } from '../types';
 import { createProjectBuilder } from '../generator/ProjectBuilder';
 
 import esmodule from '../plugins/common/esmodule';
+import styleImport from '../plugins/common/styleImport';
 import containerClass from '../plugins/component/react/containerClass';
 import containerInitState from '../plugins/component/react/containerInitState';
 import containerInjectContext from '../plugins/component/react/containerInjectContext';
@@ -38,6 +39,7 @@ export default function createIceJsProjectBuilder(
         esmodule({
           fileType: 'jsx',
         }),
+        styleImport(),
         containerClass(),
         containerInjectContext(),
         containerInjectUtils(),
@@ -61,6 +63,7 @@ export default function createIceJsProjectBuilder(
         esmodule({
           fileType: 'jsx',
         }),
+        styleImport(),
         containerClass(),
         containerInjectContext(),
         containerInjectUtils(),

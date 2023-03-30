@@ -13,6 +13,20 @@ import Super, {
 
 import SuperOther from '@alifd/next';
 
+import '@alifd/next/lib/super/style';
+
+import '@alifd/next/lib/button/style';
+
+import '@alifd/next/lib/input/style';
+
+import '@alifd/next/lib/form/style';
+
+import '@alifd/next/lib/number-picker/style';
+
+import '@alifd/next/lib/select/style';
+
+import '@alifd/next/lib/search-table/style';
+
 import utils from '../../utils';
 
 import * as __$$i18n from '../../i18n';

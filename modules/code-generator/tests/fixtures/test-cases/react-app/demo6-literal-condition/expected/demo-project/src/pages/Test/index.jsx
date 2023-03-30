@@ -10,6 +10,16 @@ import { createFetchHandler as __$$createFetchRequestHandler } from '@alilc/lowc
 
 import { create as __$$createDataSourceEngine } from '@alilc/lowcode-datasource-engine/runtime';
 
+import '@alifd/next/lib/form/style';
+
+import '@alifd/next/lib/input/style';
+
+import '@alifd/next/lib/number-picker/style';
+
+import '@alifd/next/lib/select/style';
+
+import '@alifd/next/lib/button/style';
+
 import utils, { RefsManager } from '../../utils';
 
 import * as __$$i18n from '../../i18n';
