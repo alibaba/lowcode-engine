@@ -196,7 +196,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * @param data
    * @returns
    */
-  createNode(data: IPublicTypeNodeSchema): IPublicModelNode | null {
+  createNode<IPublicModelNode>(data: IPublicTypeNodeSchema): IPublicModelNode | null {
     return ShellNode.create(this[documentSymbol].createNode(data));
   }
 

@@ -9,7 +9,6 @@ import {
   Dragon,
   SettingTopEntry,
   Clipboard,
-  Config,
   SettingField,
 } from './model';
 import {
@@ -26,6 +25,7 @@ import {
   Canvas,
   Workspace,
   SimulatorHost,
+  Config,
 } from './api';
 
 export * from './symbols';
