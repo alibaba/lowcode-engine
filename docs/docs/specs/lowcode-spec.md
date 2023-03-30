@@ -1370,11 +1370,11 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
   "i18n": {
     "zh-CN": {
       "i18n-hello": "你好",
-      "i18n-chicken": "我有${count}只鸡"
+      "i18n-chicken": "我有{count}只鸡"
     },
     "en-US": {
       "i18n-hello": "Hello",
-      "i18n-chicken": "I have ${count} chicken"
+      "i18n-chicken": "I have {count} chicken"
     }
   }
 }

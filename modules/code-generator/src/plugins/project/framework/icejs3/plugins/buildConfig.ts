@@ -103,7 +103,7 @@ export default defineConfig(() => ({
       importStyle: 'sass',
       themePackage: '${getThemeInfo(cfg.themePackage).name}',
     }` : `{
-      importStyle: true,
+      importStyle: 'sass',
     }`}),
     locales(),
     plugin(),
