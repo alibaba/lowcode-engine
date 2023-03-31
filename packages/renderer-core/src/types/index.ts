@@ -160,6 +160,11 @@ export interface IRendererProps {
   /** 当组件渲染异常时，显示的组件 */
   faultComponent?: IGeneralComponent;
 
+  /**  */
+  faultComponentMap?: {
+    [prop: string]: IGeneralComponent;
+  };
+
   /** 设备信息 */
   device?: string;
 
@@ -208,6 +213,7 @@ export interface IBaseRendererProps {
    * 设备类型，默认值：'default'
    */
   device?: 'default' | 'mobile' | string;
+  componentName?: string;
 }
 
 export interface INodeInfo {

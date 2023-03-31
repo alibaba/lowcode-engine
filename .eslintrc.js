@@ -52,6 +52,8 @@ module.exports = {
       'error',
       { default: ['signature', 'field', 'constructor', 'method'] }
     ],
-    '@typescript-eslint/no-unused-vars': ['error']
+    '@typescript-eslint/no-unused-vars': ['error'],
+    'no-redeclare': 0,
+    '@typescript-eslint/no-redeclare': 1,
   },
 };

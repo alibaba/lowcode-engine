@@ -161,7 +161,9 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     constructor(props: IBaseRendererProps, context: IBaseRendererContext) {
       super(props, context);
       this.context = context;
-      this.__parseExpression = props?.thisRequiredInJSE ? parseThisRequiredExpression : parseExpression;
+      this.__parseExpression = (str: string, self: any) => {
+        return parseExpression({ str, self, thisRequired: props?.thisRequiredInJSE, logScope: props.componentName });
+      };
       this.__beforeInit(props);
       this.__init(props);
       this.__afterInit(props);
@@ -299,8 +301,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     };
 
     __parseData = (data: any, ctx?: Record<string, any>) => {
-      const { __ctx, thisRequiredInJSE } = this.props;
-      return parseData(data, ctx || __ctx || this, { thisRequiredInJSE });
+      const { __ctx, thisRequiredInJSE, componentName } = this.props;
+      return parseData(data, ctx || __ctx || this, { thisRequiredInJSE, logScope: componentName });
     };
 
     __initDataSource = (props: IBaseRendererProps) => {

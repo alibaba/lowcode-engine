@@ -21,7 +21,7 @@ export default function rendererFactory(): IRenderComponent {
 
   class FaultComponent extends PureComponent<IPublicTypeNodeSchema | any> {
     render() {
-      logger.error(`%c组件渲染异常, 异常原因: ${this.props.error?.message || this.props.error || '未知'}`, 'color: #ff0000;');
+      logger.error(`%c${this.props.componentName || ''} 组件渲染异常, 异常原因: ${this.props.error?.message || this.props.error || '未知'}`, 'color: #ff0000;');
       return createElement(Div, {
         style: {
           width: '100%',
@@ -159,7 +159,25 @@ export default function rendererFactory(): IRenderComponent {
     }
 
     getFaultComponent() {
-      return this.props.faultComponent || FaultComponent;
+      const { faultComponent, faultComponentMap, schema } = this.props;
+      if (faultComponentMap) {
+        const { componentName } = schema;
+        return faultComponentMap[componentName] || faultComponent || FaultComponent;
+      }
+      return faultComponent || FaultComponent;
+    }
+
+    getComp() {
+      const { schema, components } = this.props;
+      const { componentName } = schema;
+      const allComponents = { ...RENDERER_COMPS, ...components };
+      let Comp = allComponents[componentName] || RENDERER_COMPS[`${componentName}Renderer`];
+      if (Comp && Comp.prototype) {
+        if (!(Comp.prototype instanceof BaseRenderer)) {
+          Comp = RENDERER_COMPS[`${componentName}Renderer`];
+        }
+      }
+      return Comp;
     }
 
     render() {
@@ -173,14 +191,8 @@ export default function rendererFactory(): IRenderComponent {
         return '模型结构异常';
       }
       debug('entry.render');
-      const { componentName } = schema;
       const allComponents = { ...RENDERER_COMPS, ...components };
-      let Comp = allComponents[componentName] || RENDERER_COMPS[`${componentName}Renderer`];
-      if (Comp && Comp.prototype) {
-        if (!(Comp.prototype instanceof BaseRenderer)) {
-          Comp = RENDERER_COMPS[`${componentName}Renderer`];
-        }
-      }
+      let Comp = this.getComp();
 
       if (this.state && this.state.engineRenderError) {
         return createElement(this.getFaultComponent(), {
@@ -190,11 +202,13 @@ export default function rendererFactory(): IRenderComponent {
       }
 
       if (Comp) {
-        return createElement(AppContext.Provider, { value: {
-          appHelper,
-          components: allComponents,
-          engine: this,
-        } }, createElement(ConfigProvider, {
+        return createElement(AppContext.Provider, {
+          value: {
+            appHelper,
+            components: allComponents,
+            engine: this,
+          },
+        }, createElement(ConfigProvider, {
           device: this.props.device,
           locale: this.props.locale,
         }, createElement(Comp, {

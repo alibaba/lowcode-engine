@@ -465,6 +465,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
           rendererName: 'LowCodeRenderer',
           thisRequiredInJSE: host.thisRequiredInJSE,
           faultComponent: host.faultComponent,
+          faultComponentMap: host.faultComponentMap,
           customCreateElement: (Comp: any, props: any, children: any) => {
             const componentMeta = host.currentDocument?.getComponentMeta(Comp.displayName);
             if (componentMeta?.isModal) {
@@ -629,6 +630,7 @@ function getLowCodeComponentProps(props: any) {
     }
     newProps[k] = props[k];
   });
+  newProps['componentName'] = props['_componentName'];
   return newProps;
 }
 
