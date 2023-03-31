@@ -1,8 +1,13 @@
 // @ts-nocheck
 import '../../fixtures/window';
 import { set } from '../../utils';
-import { Editor } from '@alilc/lowcode-editor-core';
+import {
+  Editor,
+  globalContext,
+  Setters as InnerSetters,
+} from '@alilc/lowcode-editor-core';
 import { Project } from '../../../src/project/project';
+import { Workspace as InnerWorkspace } from '@alilc/lowcode-workspace';
 import { DocumentModel } from '../../../src/document/document-model';
 import {
   isRootNode,
@@ -23,6 +28,7 @@ import rootContentMetadata from '../../fixtures/component-metadata/root-content'
 import rootFooterMetadata from '../../fixtures/component-metadata/root-footer';
 import { shellModelFactory } from '../../../../engine/src/modules/shell-model-factory';
 import { isNode } from '@alilc/lowcode-utils';
+import { Setters } from '@alilc/lowcode-shell';
 
 describe('Node 方法测试', () => {
   let editor: Editor;
@@ -35,6 +41,9 @@ describe('Node 方法测试', () => {
     designer = new Designer({ editor, shellModelFactory });
     project = designer.project;
     doc = new DocumentModel(project, formSchema);
+    editor.set('setters', new Setters(new InnerSetters()));
+    !globalContext.has(Editor) && globalContext.register(editor, Editor);
+    !globalContext.has('workspace') && globalContext.register(new InnerWorkspace(), 'workspace');
   });
 
   afterEach(() => {
