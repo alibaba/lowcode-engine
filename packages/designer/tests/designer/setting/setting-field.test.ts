@@ -182,5 +182,66 @@ describe('setting-field 测试', () => {
 
       expect(mockFn).toHaveBeenCalled();
     });
+
+    it('autorun', async () => {
+      const settingEntry = mockNode.settingEntry as SettingTopEntry;
+      const arrField = settingEntry.get('columns');
+      const subArrField = arrField.createField({
+        name: 0,
+        title: 'sub',
+      });
+      const objSubField = subArrField.createField({
+        name: 'objSub',
+        title: 'objSub',
+      });
+      const mockFnArrField = jest.fn();
+      const mockFnSubArrField = jest.fn();
+      const mockFnObjSubField = jest.fn();
+
+      arrField.setValue([{ objSub: "subMock0.Index.0" }]);
+      // 这里需要 setValue 两遍，触发 prop 的 purge 方法，使 purged 为 true，之后的 purge 方法不会正常执行，prop 才能正常缓存，autorun 才能正常执行
+      // TODO: 该机制后续得研究一下，再确定是否要修改
+      arrField.setValue([{ objSub: "subMock0.Index.0" }]);
+
+      arrField.onEffect(() => {
+        mockFnArrField(arrField.getValue());
+      });
+      arrField.onEffect(() => {
+        mockFnSubArrField(subArrField.getValue());
+      });
+      arrField.onEffect(() => {
+        mockFnObjSubField(objSubField.getValue());
+      });
+
+      await delayObxTick();
+
+      expect(mockFnObjSubField).toHaveBeenCalledWith('subMock0.Index.0');
+      expect(mockFnSubArrField).toHaveBeenCalledWith({ objSub: "subMock0.Index.0" });
+      expect(mockFnArrField).toHaveBeenCalledWith([{ objSub: "subMock0.Index.0" }]);
+
+      arrField.setValue([{ objSub: "subMock0.Index.1" }]);
+
+      await delayObxTick();
+
+      expect(mockFnObjSubField).toHaveBeenCalledWith('subMock0.Index.1');
+      expect(mockFnSubArrField).toHaveBeenCalledWith({ objSub: "subMock0.Index.1" });
+      expect(mockFnArrField).toHaveBeenCalledWith([{ objSub: "subMock0.Index.1" }]);
+
+      subArrField.setValue({ objSub: "subMock0.Index.2" });
+
+      await delayObxTick();
+
+      expect(mockFnObjSubField).toHaveBeenCalledWith('subMock0.Index.2');
+      expect(mockFnSubArrField).toHaveBeenCalledWith({ objSub: "subMock0.Index.2" });
+      expect(mockFnArrField).toHaveBeenCalledWith([{ objSub: "subMock0.Index.2" }]);
+
+      objSubField.setValue('subMock0.Index.3');
+
+      await delayObxTick();
+
+      expect(mockFnObjSubField).toHaveBeenCalledWith('subMock0.Index.3');
+      expect(mockFnSubArrField).toHaveBeenCalledWith({ objSub: "subMock0.Index.3" });
+      expect(mockFnArrField).toHaveBeenCalledWith([{ objSub: "subMock0.Index.3" }]);
+    })
   });
 });
