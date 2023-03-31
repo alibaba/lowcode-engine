@@ -162,12 +162,21 @@ export class Prop implements IProp, IPropParent {
     return runInAction(() => {
       let items: IProp[] | null = null;
       if (this._type === 'list') {
+        const maps = new Map<string, IProp>();
         const data = this._value;
         data.forEach((item: any, idx: number) => {
           items = items || [];
-          items.push(new Prop(this, item, idx));
+          let prop;
+          if (this._prevMaps?.has(idx.toString())) {
+            prop = this._prevMaps.get(idx.toString())!;
+            prop.setValue(item);
+          } else {
+            prop = new Prop(this, item, idx);
+          }
+          maps.set(idx.toString(), prop);
+          items.push(prop);
         });
-        this._maps = null;
+        this._maps = maps;
       } else if (this._type === 'map') {
         const data = this._value;
         const maps = new Map<string, IProp>();
@@ -377,6 +386,8 @@ export class Prop implements IProp, IPropParent {
     }
 
     this.dispose();
+    // setValue 的时候，如果不重新建立 items，items 的 setValue 没有触发，会导致子项的响应式逻辑不能被触发
+    this.setupItems();
 
     if (oldValue !== this._value) {
       const propsInfo = {
