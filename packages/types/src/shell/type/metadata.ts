@@ -133,11 +133,13 @@ export interface IPublicTypeLiveTextEditingConfig {
   onSaveContent?: (content: string, prop: any) => any;
 }
 
-export type ConfigureSupportEvent = string | {
+export type ConfigureSupportEvent = string | ConfigureSupportEventConfig;
+
+export interface ConfigureSupportEventConfig {
   name: string;
   propType?: IPublicTypePropType;
   description?: string;
-};
+}
 
 /**
  * 通用扩展面板支持性配置

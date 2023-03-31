@@ -1,3 +1,3 @@
-import { IPublicTypeJSExpression, IPublicTypeNodeSchema, IPublicTypeDOMText } from './';
+import { IPublicTypeJSExpression, IPublicTypeNodeSchema, IPublicTypeDOMText, IPublicTypeI18nData } from './';
 
-export type IPublicTypeNodeData = IPublicTypeNodeSchema | IPublicTypeJSExpression | IPublicTypeDOMText;
+export type IPublicTypeNodeData = IPublicTypeNodeSchema | IPublicTypeJSExpression | IPublicTypeDOMText | IPublicTypeI18nData;
