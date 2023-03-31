@@ -195,7 +195,7 @@ export default function rendererFactory(): IRenderComponent {
       let Comp = this.getComp();
 
       if (this.state && this.state.engineRenderError) {
-        return createElement(this.getFaultComponent({ useCompFaultComponent: true }), {
+        return createElement(this.getFaultComponent(), {
           ...this.props,
           error: this.state.error,
         });
