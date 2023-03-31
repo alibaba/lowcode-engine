@@ -30,7 +30,6 @@ import type { IExclusiveGroup } from './exclusive-group';
 import { includeSlot, removeSlot } from '../../utils/slot';
 import { foreachReverse } from '../../utils/tree';
 import { NodeRemoveOptions, EDITOR_EVENT } from '../../types';
-import { Prop as ShellProp } from '@alilc/lowcode-shell';
 
 export interface NodeStatus {
   locking: boolean;
@@ -432,7 +431,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     }
     this.autoruns = autoruns.map((item) => {
       return autorun(() => {
-        item.autorun(ShellProp.create(this.props.get(item.name, true))!);
+        item.autorun(this.props.getNode().settingEntry.get(item.name)?.internalToShellField());
       });
     });
   }
