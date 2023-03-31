@@ -176,10 +176,9 @@ function getSuitablePlaceForNode(targetNode: IPublicModelNode, node: IPublicMode
   if (node?.componentMeta?.isModal) {
     return { container: focusNode, ref };
   }
-  const canDropInFn = document.checkNesting;
 
   if (!ref && focusNode && targetNode.contains(focusNode)) {
-    if (canDropInFn(focusNode, dragNodeObject)) {
+    if (document.checkNesting(focusNode, dragNodeObject)) {
       return { container: focusNode };
     }
 
@@ -191,7 +190,7 @@ function getSuitablePlaceForNode(targetNode: IPublicModelNode, node: IPublicMode
       if (!c.isContainerNode) {
         return false;
       }
-      if (canDropInFn(c, dragNodeObject)) {
+      if (document.checkNesting(c, dragNodeObject)) {
         return true;
       }
       return false;
@@ -201,7 +200,7 @@ function getSuitablePlaceForNode(targetNode: IPublicModelNode, node: IPublicMode
       return { container: dropElement, ref };
     }
 
-    if (canDropInFn(targetNode, dragNodeObject)) {
+    if (document.checkNesting(targetNode, dragNodeObject)) {
       return { container: targetNode, ref };
     }
 
@@ -209,7 +208,7 @@ function getSuitablePlaceForNode(targetNode: IPublicModelNode, node: IPublicMode
   }
 
   if (targetNode.isContainerNode) {
-    if (canDropInFn(targetNode, dragNodeObject)) {
+    if (document.checkNesting(targetNode, dragNodeObject)) {
       return { container: targetNode, ref };
     }
   }

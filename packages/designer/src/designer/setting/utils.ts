@@ -2,7 +2,7 @@
 import { isValidElement } from 'react';
 import { IPublicTypeFieldConfig, IPublicTypeSetterConfig } from '@alilc/lowcode-types';
 import { isSetterConfig, isDynamicSetter } from '@alilc/lowcode-utils';
-import { SettingField } from './setting-field';
+import { ISettingField } from './setting-field';
 
 function getHotterFromSetter(setter) {
   return setter && (setter.Hotter || (setter.type && setter.type.Hotter)) || []; // eslint-disable-line
@@ -35,7 +35,7 @@ export class Transducer {
 
   context: any;
 
-  constructor(context: SettingField, config: { setter: IPublicTypeFieldConfig['setter'] }) {
+  constructor(context: ISettingField, config: { setter: IPublicTypeFieldConfig['setter'] }) {
     let { setter } = config;
 
     // 1. validElement
