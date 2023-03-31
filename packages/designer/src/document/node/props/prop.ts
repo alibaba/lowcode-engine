@@ -302,6 +302,7 @@ export class Prop implements IProp, IPropParent {
           type: 'JSSlot',
           params: schema.params,
           value: schema,
+          id: schema.id,
         };
       }
       return {
@@ -310,6 +311,7 @@ export class Prop implements IProp, IPropParent {
         value: schema.children,
         title: schema.title,
         name: schema.name,
+        id: schema.id,
       };
     }
 
