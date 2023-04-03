@@ -16,7 +16,7 @@ import type {
 import { Transducer } from './utils';
 import { ISettingPropEntry, SettingPropEntry } from './setting-prop-entry';
 import { computed, obx, makeObservable, action, untracked, intl } from '@alilc/lowcode-editor-core';
-import { cloneDeep, isCustomView, isDynamicSetter } from '@alilc/lowcode-utils';
+import { cloneDeep, isCustomView, isDynamicSetter, isJSExpression } from '@alilc/lowcode-utils';
 import { ISettingTopEntry } from './setting-top-entry';
 import { IComponentMeta, INode } from '@alilc/lowcode-designer';
 
@@ -38,27 +38,27 @@ export interface ISettingField extends ISettingPropEntry, Omit<IBaseModelSetting
   IComponentMeta,
   INode
 >, 'setValue' | 'key' | 'node'> {
-  get items(): Array<ISettingField | IPublicTypeCustomView>;
-
-  get title(): string | ReactNode | undefined;
-
   readonly isSettingField: true;
-
-  purge(): void;
-
-  extraProps: IPublicTypeFieldExtraProps;
-
-  get setter(): IPublicTypeSetterType | null;
-
-  get expanded(): boolean;
 
   readonly isRequired: boolean;
 
   readonly isGroup: boolean;
 
+  extraProps: IPublicTypeFieldExtraProps;
+
+  get items(): Array<ISettingField | IPublicTypeCustomView>;
+
+  get title(): string | ReactNode | undefined;
+
+  get setter(): IPublicTypeSetterType | null;
+
+  get expanded(): boolean;
+
   get valueState(): number;
 
   setExpanded(value: boolean): void;
+
+  purge(): void;
 
   setValue(
     val: any,
@@ -271,16 +271,29 @@ export class SettingField extends SettingPropEntry implements ISettingField {
     }
     if (this.isUseVariable()) {
       const oldValue = this.getValue();
-      this.setValue(
-        {
-          type: 'JSExpression',
-          value: oldValue.value,
-          mock: value,
-        },
-        false,
-        false,
-        options,
-      );
+      if (isJSExpression(value)) {
+        this.setValue(
+          {
+            type: 'JSExpression',
+            value: value.value,
+            mock: oldValue.mock,
+          },
+          false,
+          false,
+          options,
+        );
+      } else {
+        this.setValue(
+          {
+            type: 'JSExpression',
+            value: oldValue.value,
+            mock: value,
+          },
+          false,
+          false,
+          options,
+        );
+      }
     } else {
       this.setValue(value, false, false, options);
     }
@@ -296,7 +309,6 @@ export class SettingField extends SettingPropEntry implements ISettingField {
   onEffect(action: () => void): IPublicTypeDisposable {
     return this.designer!.autorun(action, true);
   }
-
 
   internalToShellField() {
     return this.designer!.shellModelFactory.createSettingField(this);

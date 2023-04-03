@@ -168,6 +168,40 @@ describe('setting-field 测试', () => {
       expect(arrField.getHotValue()).toEqual([undefined, {name: '2'}, {name: '3'}]);
     });
 
+    it('js expression setValue / setHotValue', () => {
+      const settingEntry = mockNode.settingEntry;
+      const field = settingEntry.get('behavior');
+
+      const subField = field.createField({
+        name: 'sub',
+        title: 'sub',
+      });
+      subField.setValue({
+        type: 'JSExpression',
+        value: 'state.a',
+        mock: 'haha',
+      });
+
+      subField.setHotValue({
+        type: 'JSExpression',
+        value: 'state.b',
+      });
+
+      expect(subField.getValue()).toEqual({
+        type: 'JSExpression',
+        value: 'state.b',
+        mock: 'haha',
+      });
+
+      subField.setHotValue('mock02');
+
+      expect(subField.getValue()).toEqual({
+        type: 'JSExpression',
+        value: 'state.b',
+        mock: 'mock02',
+      });
+    });
+
     it('onEffect', async () => {
       const settingEntry = mockNode.settingEntry as SettingTopEntry;
       const field = settingEntry.get('behavior');
