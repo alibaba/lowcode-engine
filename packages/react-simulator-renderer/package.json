@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-react-simulator-renderer",
-  "version": "1.1.6-beta.1",
+  "version": "1.1.6-beta.2",
   "description": "react simulator renderer for alibaba lowcode designer",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -17,10 +17,10 @@
     "test:cov": "build-scripts test --config build.test.json --jest-coverage"
   },
   "dependencies": {
-    "@alilc/lowcode-designer": "1.1.6-beta.1",
-    "@alilc/lowcode-react-renderer": "1.1.6-beta.1",
-    "@alilc/lowcode-types": "1.1.6-beta.1",
-    "@alilc/lowcode-utils": "1.1.6-beta.1",
+    "@alilc/lowcode-designer": "1.1.6-beta.2",
+    "@alilc/lowcode-react-renderer": "1.1.6-beta.2",
+    "@alilc/lowcode-types": "1.1.6-beta.2",
+    "@alilc/lowcode-utils": "1.1.6-beta.2",
     "classnames": "^2.2.6",
     "mobx": "^6.3.0",
     "mobx-react": "^7.2.0",
@@ -43,5 +43,5 @@
     "type": "http",
     "url": "https://github.com/alibaba/lowcode-engine/tree/main/packages/react-simulator-renderer"
   },
-  "gitHead": "2669f179e6f899d395ce1942d0fe04f9c5ed48a6"
+  "gitHead": "63d9836915774b294db21c2282be53d5f24600ff"
 }
