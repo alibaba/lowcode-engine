@@ -45,7 +45,7 @@ export function composeTitle(title?: IPublicTypeTitleContent, icon?: IPublicType
     }
   }
   if (isTitleConfig(_title) && noIcon) {
-    if (!isValidElement(title)) {
+    if (!isValidElement(_title)) {
       _title.icon = undefined;
     }
   }
