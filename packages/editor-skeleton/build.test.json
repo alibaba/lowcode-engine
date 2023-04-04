@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    "build-plugin-component",
+    "@alilc/lowcode-test-mate/plugin/index.ts"
+  ],
+  "babelPlugins": [
+    ["@babel/plugin-proposal-private-property-in-object", { "loose": true }]
+  ]
+}
