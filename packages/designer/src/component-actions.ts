@@ -56,8 +56,8 @@ export class ComponentActions {
             const { isRGL, rglNode } = node.getRGL();
             if (isRGL) {
               // 复制 layout 信息
-              let layout = rglNode.getPropValue('layout') || [];
-              let curLayout = layout.filter((item) => item.i === node.getPropValue('fieldId'));
+              const layout = rglNode.getPropValue('layout') || [];
+              const curLayout = layout.filter((item) => item.i === node.getPropValue('fieldId'));
               if (curLayout && curLayout[0]) {
                 layout.push({
                   ...curLayout[0],
