@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-editor-core",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Core Api for Ali lowCode engine",
   "license": "MIT",
   "main": "lib/index.js",
@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "@alifd/next": "^1.19.16",
-    "@alilc/lowcode-types": "1.1.5",
-    "@alilc/lowcode-utils": "1.1.5",
+    "@alilc/lowcode-types": "1.1.6",
+    "@alilc/lowcode-utils": "1.1.6",
     "classnames": "^2.2.6",
     "debug": "^4.1.1",
     "intl-messageformat": "^9.3.1",
