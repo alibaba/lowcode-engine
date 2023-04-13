@@ -102,6 +102,9 @@ function initRerenderEvent({
     return;
   }
   cache.event.get(schema.id)?.dispose.forEach((disposeFn: any) => disposeFn && disposeFn());
+  const debounceRerender = debounce(() => {
+    container.rerender();
+  }, 20);
   cache.event.set(schema.id, {
     clear: false,
     leaf,
@@ -111,21 +114,21 @@ function initRerenderEvent({
           return;
         }
         __debug(`${schema.componentName}[${schema.id}] leaf not render in SimulatorRendererView, leaf onPropsChange make rerender`);
-        container.rerender();
+        debounceRerender();
       }),
       leaf?.onChildrenChange?.(() => {
         if (!container.autoRepaintNode) {
           return;
         }
         __debug(`${schema.componentName}[${schema.id}] leaf not render in SimulatorRendererView, leaf onChildrenChange make rerender`);
-        container.rerender();
+        debounceRerender();
       }) as Function,
       leaf?.onVisibleChange?.(() => {
         if (!container.autoRepaintNode) {
           return;
         }
         __debug(`${schema.componentName}[${schema.id}] leaf not render in SimulatorRendererView, leaf onVisibleChange make rerender`);
-        container.rerender();
+        debounceRerender();
       }),
     ],
   });

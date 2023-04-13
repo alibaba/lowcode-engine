@@ -1,9 +1,12 @@
 import { IPublicTypeCustomView, IPublicApiSetters, IPublicTypeRegisteredSetter } from '@alilc/lowcode-types';
 import { Setters as InnerSetters, globalContext } from '@alilc/lowcode-editor-core';
 import { ReactNode } from 'react';
+import { getLogger } from '@alilc/lowcode-utils';
 
 const innerSettersSymbol = Symbol('setters');
 const settersSymbol = Symbol('setters');
+
+const logger = getLogger({ level: 'warn', bizName: 'shell-setters' });
 
 export class Setters implements IPublicApiSetters {
   readonly [innerSettersSymbol]: InnerSetters;
@@ -15,6 +18,10 @@ export class Setters implements IPublicApiSetters {
 
     const workspace = globalContext.get('workspace');
     if (workspace.isActive) {
+      if (!workspace.window.innerSetters) {
+        logger.error('setter api 调用时机出现问题，请检查');
+        return this[innerSettersSymbol];
+      }
       return workspace.window.innerSetters;
     }
 
