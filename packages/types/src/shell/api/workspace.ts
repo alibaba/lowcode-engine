@@ -30,7 +30,7 @@ export interface IPublicApiWorkspace<
   registerResourceType(resourceTypeModel: IPublicTypeResourceType): void;
 
   /** 打开视图窗口 */
-  openEditorWindow(resourceName: string, title: string, extra: Object, viewName?: string): void;
+  openEditorWindow(resourceName: string, title: string, extra: Object, viewName?: string, sleep?: boolean): void;
 
   /** 通过视图 id 打开窗口 */
   openEditorWindowById(id: string): void;

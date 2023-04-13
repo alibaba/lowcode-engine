@@ -39,7 +39,7 @@ export class Resource implements IResource {
   }
 
   get viewName() {
-    return this.resourceData.viewName || (this.resourceData as any).viewType;
+    return this.resourceData.viewName || (this.resourceData as any).viewType || this.defaultViewType;
   }
 
   get description() {

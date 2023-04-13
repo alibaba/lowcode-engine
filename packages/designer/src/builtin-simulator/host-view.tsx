@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { observer, globalContext } from '@alilc/lowcode-editor-core';
+import { observer } from '@alilc/lowcode-editor-core';
 import { BuiltinSimulatorHost, BuiltinSimulatorProps } from './host';
 import { BemTools } from './bem-tools';
 import { Project } from '../project';
@@ -76,8 +76,7 @@ class Content extends Component<{ host: BuiltinSimulatorHost }> {
   private dispose?: () => void;
 
   componentDidMount() {
-    const workspace = globalContext.get('workspace');
-    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
+    const editor = this.props.host.designer.editor;
     const onEnableEvents = (type: boolean) => {
       this.setState({
         disabledEvents: type,

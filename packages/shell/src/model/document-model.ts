@@ -90,7 +90,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * @returns
    */
   get project(): IPublicApiProject {
-    return ShellProject.create(this[documentSymbol].project);
+    return ShellProject.create(this[documentSymbol].project, true);
   }
 
   /**

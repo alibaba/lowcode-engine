@@ -1,5 +1,5 @@
 import { Component, MouseEvent, Fragment } from 'react';
-import { shallowIntl, observer, obx, engineConfig, runInAction, globalContext } from '@alilc/lowcode-editor-core';
+import { shallowIntl, observer, obx, engineConfig, runInAction } from '@alilc/lowcode-editor-core';
 import { createContent, isJSSlot, isSetterConfig } from '@alilc/lowcode-utils';
 import { Skeleton, Stage } from '@alilc/lowcode-editor-skeleton';
 import { IPublicTypeCustomView } from '@alilc/lowcode-types';
@@ -40,7 +40,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
 
   stageName: string | undefined;
 
-  setters: Setters;
+  setters?: Setters;
 
   constructor(props: SettingFieldViewProps) {
     super(props);
@@ -49,10 +49,10 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
     const { extraProps } = field;
     const { display } = extraProps;
 
-    const workspace = globalContext.get('workspace');
-    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
-    const { stages } = editor.get('skeleton') as Skeleton;
-    this.setters = editor.get('setters');
+    const editor = field.designer?.editor;
+    const skeleton = editor?.get('skeleton') as Skeleton;
+    const { stages } = skeleton || {};
+    this.setters = editor?.get('setters');
     let stageName;
     if (display === 'entry') {
       runInAction(() => {
@@ -291,9 +291,8 @@ class SettingGroupView extends Component<SettingGroupViewProps> {
     const { field } = this.props;
     const { extraProps } = field;
     const { display } = extraProps;
-    const workspace = globalContext.get('workspace');
-    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
-    const { stages } = editor.get('skeleton') as Skeleton;
+    const editor = this.props.field.designer?.editor;
+    const { stages } = editor?.get('skeleton') as Skeleton;
     // const items = field.items;
 
     let stageName;
@@ -343,15 +342,15 @@ class SettingGroupView extends Component<SettingGroupViewProps> {
   }
 }
 
-export function createSettingFieldView(item: ISettingField | IPublicTypeCustomView, field: ISettingEntry, index?: number) {
-  if (isSettingField(item)) {
-    if (item.isGroup) {
-      return <SettingGroupView field={item} key={item.id} />;
+export function createSettingFieldView(field: ISettingField | IPublicTypeCustomView, fieldEntry: ISettingEntry, index?: number) {
+  if (isSettingField(field)) {
+    if (field.isGroup) {
+      return <SettingGroupView field={field} key={field.id} />;
     } else {
-      return <SettingFieldView field={item} key={item.id} />;
+      return <SettingFieldView field={field} key={field.id} />;
     }
   } else {
-    return createContent(item, { key: index, field });
+    return createContent(field, { key: index, field: fieldEntry });
   }
 }
 

@@ -10,6 +10,7 @@ import {
   SettingTopEntry,
   Clipboard,
   SettingField,
+  Window,
 } from './model';
 import {
   Project,
@@ -50,6 +51,7 @@ export {
   Selection,
   Setters,
   Hotkey,
+  Window,
   Skeleton,
   SettingField as SettingPropEntry,
   SettingTopEntry,
