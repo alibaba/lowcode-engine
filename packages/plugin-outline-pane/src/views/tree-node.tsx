@@ -9,6 +9,8 @@ import { IPublicModelPluginContext, IPublicModelModalNodesManager, IPublicTypeDi
 class ModalTreeNodeView extends PureComponent<{
   treeNode: TreeNode;
   pluginContext: IPublicModelPluginContext;
+}, {
+  treeChildren: TreeNode[] | null;
 }> {
   private modalNodesManager: IPublicModelModalNodesManager | undefined | null;
   readonly pluginContext: IPublicModelPluginContext;
@@ -20,18 +22,36 @@ class ModalTreeNodeView extends PureComponent<{
     this.pluginContext = props.pluginContext;
     const { project } = this.pluginContext;
     this.modalNodesManager = project.currentDocument?.modalNodesManager;
+    this.state = {
+      treeChildren: this.rootTreeNode.children,
+    };
   }
 
   hideAllNodes() {
     this.modalNodesManager?.hideModalNodes();
   }
 
-  render() {
+  componentDidMount(): void {
+    const rootTreeNode = this.rootTreeNode;
+    rootTreeNode.onExpandableChanged(() => {
+      this.setState({
+        treeChildren: rootTreeNode.children,
+      });
+    });
+  }
+
+  get rootTreeNode() {
     const { treeNode } = this.props;
     // 当指定了新的根节点时，要从原始的根节点去获取模态节点
     const { project } = this.pluginContext;
     const rootNode = project.currentDocument?.root;
     const rootTreeNode = treeNode.tree.getTreeNode(rootNode!);
+
+    return rootTreeNode;
+  }
+
+  render() {
+    const rootTreeNode = this.rootTreeNode;
     const { expanded } = rootTreeNode;
 
     const hasVisibleModalNode = !!this.modalNodesManager?.getVisibleModalNode();
@@ -49,7 +69,7 @@ class ModalTreeNodeView extends PureComponent<{
         <div className="tree-pane-modal-content">
           <TreeBranches
             treeNode={rootTreeNode}
-            treeChildren={rootTreeNode.children}
+            treeChildren={this.state.treeChildren}
             expanded={expanded}
             isModal
             pluginContext={this.pluginContext}
