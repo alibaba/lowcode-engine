@@ -1,3 +1,4 @@
+import { IPublicTypePluginMeta } from './../../../../lib/packages/types/src/shell/type/plugin-meta.d';
 import '../fixtures/window';
 import {
   Editor,
@@ -22,6 +23,7 @@ import { BuiltinSimulatorHost } from '../../src/builtin-simulator/host';
 import { fireEvent } from '@testing-library/react';
 import { shellModelFactory } from '../../../engine/src/modules/shell-model-factory';
 import { Setters, Workspace } from '@alilc/lowcode-shell';
+import { ILowCodePluginContextApiAssembler, ILowCodePluginContextPrivate, LowCodePluginManager } from '@alilc/lowcode-designer';
 
 describe('Host 测试', () => {
   let editor: Editor;
@@ -32,10 +34,20 @@ describe('Host 测试', () => {
 
   beforeAll(() => {
     editor = new Editor();
-    const innerWorkspace = new InnerWorkspace();
+    const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      assembleApis: (context: ILowCodePluginContextPrivate, pluginName: string, meta: IPublicTypePluginMeta) => {
+        context.project = project;
+        const eventPrefix = meta?.eventPrefix || 'common';
+        context.workspace = workspace;
+      },
+    };
+    const innerPlugins = new LowCodePluginManager(pluginContextApiAssembler);
+    const innerWorkspace = new InnerWorkspace(() => {}, {});
     const workspace = new Workspace(innerWorkspace);
     editor.set('innerHotkey', new InnerHotkey())
     editor.set('setters', new Setters(new InnerSetters()));
+    editor.set('innerPlugins' as any, innerPlugins);
     !globalContext.has(Editor) && globalContext.register(editor, Editor);
     !globalContext.has('workspace') && globalContext.register(innerWorkspace, 'workspace');
   });

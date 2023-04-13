@@ -30,6 +30,8 @@ export interface IWorkspace extends Omit<IPublicApiWorkspace<
   getResourceList(): IResource[];
 
   getResourceType(resourceName: string): IResourceType;
+
+  checkWindowQueue(): void;
 }
 
 export class Workspace implements IWorkspace {
@@ -69,12 +71,30 @@ export class Workspace implements IWorkspace {
 
   @obx.ref window: IEditorWindow;
 
+  windowQueue: {
+    name: string;
+    title: string;
+    options: Object;
+    viewType?: string;
+  }[] = [];
+
   constructor(
     readonly registryInnerPlugin: (designer: IDesigner, editor: Editor, plugins: IPublicApiPlugins) => Promise<void>,
     readonly shellModelFactory: any,
   ) {
     this.init();
     makeObservable(this);
+  }
+
+  checkWindowQueue() {
+    if (!this.windowQueue || !this.windowQueue.length) {
+      return;
+    }
+
+    const windowInfo = this.windowQueue.shift();
+    if (windowInfo) {
+      this.openEditorWindow(windowInfo.name, windowInfo.title, windowInfo.options, windowInfo.viewType);
+    }
   }
 
   init() {
@@ -86,13 +106,13 @@ export class Workspace implements IWorkspace {
     if (!this.defaultResourceType) {
       return;
     }
-    const title = this.defaultResourceType.name;
+    const resourceName = this.defaultResourceType.name;
     const resource = new Resource({
-      resourceName: title,
+      resourceName,
       options: {},
     }, this.defaultResourceType, this);
     this.window = new EditorWindow(resource, this, {
-      title,
+      title: resource.title,
     });
     this.editorWindowMap.set(this.window.id, this.window);
     this.windows.push(this.window);
@@ -167,7 +187,13 @@ export class Workspace implements IWorkspace {
     }
   }
 
-  openEditorWindow(name: string, title: string, options: Object, viewType?: string) {
+  openEditorWindow(name: string, title: string, options: Object, viewType?: string, sleep?: boolean) {
+    if (!this.window?.initReady && !sleep) {
+      this.windowQueue.push({
+        name, title, options, viewType,
+      });
+      return;
+    }
     const resourceType = this.resourceTypeMap.get(name);
     if (!resourceType) {
       console.error(`${name} resourceType is not available`);
@@ -176,6 +202,11 @@ export class Workspace implements IWorkspace {
     const filterWindows = this.windows.filter(d => (d.resource?.name === name && d.resource.title == title));
     if (filterWindows && filterWindows.length) {
       this.window = filterWindows[0];
+      if (!sleep && this.window.sleep) {
+        this.window.init();
+      } else {
+        this.checkWindowQueue();
+      }
       this.emitChangeActiveWindow();
       return;
     }
@@ -184,13 +215,17 @@ export class Workspace implements IWorkspace {
       title,
       options,
     }, resourceType, this);
-    this.window = new EditorWindow(resource, this, {
+    const window = new EditorWindow(resource, this, {
       title,
       options,
       viewType,
+      sleep,
     });
-    this.windows = [...this.windows, this.window];
-    this.editorWindowMap.set(this.window.id, this.window);
+    this.windows = [...this.windows, window];
+    this.editorWindowMap.set(window.id, window);
+    if (!sleep) {
+      this.window = window;
+    }
     this.emitChangeWindow();
     this.emitChangeActiveWindow();
   }

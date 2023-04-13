@@ -20,7 +20,9 @@ export function createSimulator(
 ): Promise<BuiltinSimulatorRenderer> {
   const win: any = iframe.contentWindow;
   const doc = iframe.contentDocument!;
+  const innerPlugins = host.designer.editor.get('innerPlugins');
 
+  win.AliLowCodeEngine = innerPlugins._getLowCodePluginContext({});
   win.LCSimulatorHost = host;
   win._ = window._;
 

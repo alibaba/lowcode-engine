@@ -14,6 +14,7 @@ import {
   IPublicTypeEngineOptions,
   IPublicModelDocumentModel,
   IPublicTypePluginMeta,
+  IPublicTypeDisposable,
 } from '@alilc/lowcode-types';
 import {
   Designer,
@@ -60,14 +61,26 @@ export * from './modules/skeleton-types';
 export * from './modules/designer-types';
 export * from './modules/lowcode-types';
 
-async function registryInnerPlugin(designer: Designer, editor: Editor, plugins: Plugins) {
+async function registryInnerPlugin(designer: Designer, editor: Editor, plugins: Plugins): Promise<IPublicTypeDisposable> {
   // 注册一批内置插件
+  const componentMetaParserPlugin = componentMetaParser(designer);
+  const defaultPanelRegistryPlugin = defaultPanelRegistry(editor);
   await plugins.register(OutlinePlugin, {}, { autoInit: true });
-  await plugins.register(componentMetaParser(designer));
+  await plugins.register(componentMetaParserPlugin);
   await plugins.register(setterRegistry, {});
-  await plugins.register(defaultPanelRegistry(editor));
+  await plugins.register(defaultPanelRegistryPlugin);
   await plugins.register(builtinHotkey);
   await plugins.register(registerDefaults, {}, { autoInit: true });
+
+  return () => {
+    plugins.delete(OutlinePlugin.pluginName);
+    plugins.delete(componentMetaParserPlugin.pluginName);
+    plugins.delete(setterRegistry.pluginName);
+    plugins.delete(defaultPanelRegistryPlugin.pluginName);
+    plugins.delete(defaultPanelRegistryPlugin.pluginName);
+    plugins.delete(builtinHotkey.pluginName);
+    plugins.delete(registerDefaults.pluginName);
+  };
 }
 
 const innerWorkspace = new InnerWorkspace(registryInnerPlugin, shellModelFactory);
@@ -158,7 +171,7 @@ let engineContainer: HTMLElement;
 export const version = VERSION_PLACEHOLDER;
 engineConfig.set('ENGINE_VERSION', version);
 
-registryInnerPlugin(designer, editor, plugins);
+const pluginPromise = registryInnerPlugin(designer, editor, plugins);
 
 export async function init(
   container?: HTMLElement,
@@ -183,10 +196,10 @@ export async function init(
   }
   engineConfig.setEngineOptions(engineOptions as any);
 
-  await plugins.init(pluginPreference as any);
-
   const { Workbench } = common.skeletonCabin;
   if (options && options.enableWorkspaceMode) {
+    const disposeFun = await pluginPromise;
+    disposeFun && disposeFun();
     render(
       createElement(WorkSpaceWorkbench, {
         workspace: innerWorkspace,
@@ -201,6 +214,8 @@ export async function init(
     await innerWorkspace.plugins.init(pluginPreference);
     return;
   }
+
+  await plugins.init(pluginPreference as any);
 
   render(
     createElement(Workbench, {

@@ -30,6 +30,7 @@ import {
   Common,
   Logger,
   Workspace,
+  Window,
   Canvas,
 } from '@alilc/lowcode-shell';
 import {
@@ -164,6 +165,9 @@ export class BasicContext implements IBasicContext {
         context.plugins = plugins;
         context.logger = new Logger({ level: 'warn', bizName: `plugin:${pluginName}` });
         context.canvas = canvas;
+        if (editorWindow) {
+          context.editorWindow = new Window(editorWindow);
+        }
       },
     };
 

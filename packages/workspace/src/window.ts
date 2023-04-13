@@ -10,6 +10,7 @@ interface IWindowCOnfig {
   title: string | undefined;
   options?: Object;
   viewType?: string | undefined;
+  sleep?: boolean;
 }
 
 export interface IEditorWindow extends Omit<IPublicModelWindow<IResource>, 'changeViewType'> {
@@ -18,6 +19,12 @@ export interface IEditorWindow extends Omit<IPublicModelWindow<IResource>, 'chan
   editorViews: Map<string, Context>;
 
   changeViewType: (name: string, ignoreEmit?: boolean) => void;
+
+  initReady: boolean;
+
+  sleep?: boolean;
+
+  init(): void;
 }
 
 export class EditorWindow implements IEditorWindow {
@@ -36,11 +43,16 @@ export class EditorWindow implements IEditorWindow {
 
   @obx initReady = false;
 
+  sleep: boolean | undefined;
+
   constructor(readonly resource: IResource, readonly workspace: IWorkspace, private config: IWindowCOnfig) {
     makeObservable(this);
-    this.init();
     this.title = config.title;
     this.icon = resource.icon;
+    this.sleep = config.sleep;
+    if (!config.sleep) {
+      this.init();
+    }
   }
 
   async importSchema(schema: any) {
@@ -73,6 +85,8 @@ export class EditorWindow implements IEditorWindow {
     this.url = await this.resource.url();
     this.setDefaultViewType();
     this.initReady = true;
+    this.workspace.checkWindowQueue();
+    this.sleep = false;
   }
 
   initViewTypes = async () => {
