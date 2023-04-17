@@ -152,8 +152,6 @@ export {
   logger,
   hotkey,
   common,
-  // 兼容原 editor 的事件功能
-  event as editor,
   workspace,
   canvas,
 };
