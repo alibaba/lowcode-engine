@@ -73,7 +73,7 @@ jobs:
           package-manager: yarn
           annotations: none
 
-cov-utils:
+  cov-utils:
     runs-on: ubuntu-latest
     # skip fork's PR, otherwise it fails while making a comment
     if: ${{ github.event.pull_request.head.repo.full_name == 'alibaba/lowcode-engine' }}
@@ -91,6 +91,6 @@ cov-utils:
       - uses: ArtiomTr/jest-coverage-report-action@v2
         with:
           working-directory: packages/utils
-          test-script: npm test
+          test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
           package-manager: yarn
           annotations: none
