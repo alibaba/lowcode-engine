@@ -58,6 +58,9 @@ import {
   untracked as innerUntracked,
   computed as innerComputed,
   observer as innerObserver,
+  action as innerAction,
+  runInAction as innerRunInAction,
+  engineConfig as innerEngineConfig,
 } from '@alilc/lowcode-editor-core';
 import { Dragon as ShellDragon } from '../model';
 import { ReactNode } from 'react';
@@ -300,6 +303,27 @@ class EditorCabin implements IPublicApiCommonEditorCabin {
    */
   get obx() {
     return innerObx;
+  }
+
+  /**
+   * @deprecated
+   */
+  get action() {
+    return innerAction;
+  }
+
+  /**
+   * @deprecated
+   */
+  get engineConfig() {
+    return innerEngineConfig;
+  }
+
+  /**
+   * @deprecated
+   */
+  get runInAction() {
+    return innerRunInAction;
   }
 
   /**
