@@ -374,7 +374,7 @@ describe('test parseThisRequiredExpression', () => {
     };
     const fn = logger.error = jest.fn();
     parseThisRequiredExpression(mockExpression, { state: { text: 'text' } });
-    expect(fn).toBeCalledWith('parseExpression.error', new ReferenceError('state is not defined'), {"type": "JSExpression", "value": "state.text"}, {"state": {"text": "text"}});
+    expect(fn).toBeCalledWith(' parseExpression.error', new ReferenceError('state is not defined'), {"type": "JSExpression", "value": "state.text"}, {"state": {"text": "text"}});
   });
 
   it('[success] JSExpression handle without this use scopeValue', () => {

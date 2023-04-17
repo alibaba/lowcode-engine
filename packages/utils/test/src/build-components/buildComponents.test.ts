@@ -309,8 +309,14 @@ describe('build-component', () => {
       ))
     .toEqual({
       Button: {
-        componentName: 'Component',
-        schema: {},
+        componentsMap: [],
+        componentsTree: [
+          {
+            componentName: 'Component',
+            schema: {},
+          }
+        ],
+        version: "",
       },
     });
   })
