@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-react-renderer",
-  "version": "1.1.7-beta.3",
+  "version": "1.1.7-beta.4",
   "description": "react renderer for ali lowcode engine",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -22,7 +22,7 @@
   ],
   "dependencies": {
     "@alifd/next": "^1.21.16",
-    "@alilc/lowcode-renderer-core": "1.1.7-beta.3"
+    "@alilc/lowcode-renderer-core": "1.1.7-beta.4"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
@@ -42,5 +42,5 @@
     "url": "https://github.com/alibaba/lowcode-engine/tree/main/packages/react-renderer"
   },
   "homepage": "https://unpkg.alibaba-inc.com/@alilc/lowcode-react-renderer@1.0.21/build/index.html",
-  "gitHead": "2669f179e6f899d395ce1942d0fe04f9c5ed48a6"
+  "gitHead": "55534f00cef69f734cb86f42b03490e5ceb1cbd6"
 }
