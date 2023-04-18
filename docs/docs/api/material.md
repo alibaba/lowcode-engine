@@ -245,6 +245,7 @@ material.getComponentMeta('Input');
 ```
 
 #### getComponentMetasMap
+
 获取所有已注册的物料元数据
 
 ```typescript
@@ -264,6 +265,15 @@ import { material } from '@alilc/lowcode-engine';
 material.getComponentMetasMap();
 ```
 
+#### refreshComponentMetasMap
+
+刷新 componentMetasMap，可触发模拟器里的 components 重新构建
+
+**@since v1.1.7**
+
+```typescript
+  refreshComponentMetasMap(): void;
+```
 
 ### 物料元数据管道函数
 #### registerMetadataTransducer
