@@ -143,9 +143,16 @@ export class Material implements IPublicApiMaterial {
    * 在设计器辅助层增加一个扩展 action
    * @param action
    */
-  addBuiltinComponentAction(action: IPublicTypeComponentAction) {
+  addBuiltinComponentAction = (action: IPublicTypeComponentAction) => {
     this[designerSymbol].componentActions.addBuiltinComponentAction(action);
-  }
+  };
+
+  /**
+   * 刷新 componentMetasMap，可触发模拟器里的 components 重新构建
+   */
+  refreshComponentMetasMap = () => {
+    this[designerSymbol].refreshComponentMetasMap();
+  };
 
   /**
    * 移除设计器辅助层的指定 action

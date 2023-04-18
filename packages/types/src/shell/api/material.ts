@@ -122,4 +122,10 @@ export interface IPublicApiMaterial {
    * @param fn
    */
   onChangeAssets(fn: () => void): IPublicTypeDisposable;
+
+  /**
+   * 刷新 componentMetasMap，可触发模拟器里的 components 重新构建
+   * @since v1.1.7
+   */
+  refreshComponentMetasMap(): void;
 }
