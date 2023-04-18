@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-types",
-  "version": "1.1.7-beta.7",
+  "version": "1.1.7-beta.8",
   "description": "Types for Ali lowCode engine",
   "files": [
     "es",
@@ -29,5 +29,5 @@
     "type": "http",
     "url": "https://github.com/alibaba/lowcode-engine/tree/main/packages/types"
   },
-  "gitHead": "55534f00cef69f734cb86f42b03490e5ceb1cbd6"
+  "gitHead": "fdb74f0aeb15a30f85387979f620e27dd1673b92"
 }
