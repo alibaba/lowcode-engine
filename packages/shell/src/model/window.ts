@@ -41,4 +41,8 @@ export class Window implements IPublicModelWindow {
   async save() {
     return await this[windowSymbol].save();
   }
+
+  get plugins() {
+    return this[windowSymbol].plugins;
+  }
 }

@@ -32,7 +32,7 @@ export class Project implements IPublicApiProject {
     }
     const workspace = globalContext.get('workspace');
     if (workspace.isActive) {
-      if (!workspace.window.innerProject) {
+      if (!workspace.window?.innerProject) {
         logger.error('project api 调用时机出现问题，请检查');
         return this[innerProjectSymbol];
       }

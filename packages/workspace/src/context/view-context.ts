@@ -17,10 +17,6 @@ export class Context extends BasicContext {
 
   @obx isInit: boolean = false;
 
-  @computed get active() {
-    return this._activate;
-  }
-
   init = flow(function* (this: Context) {
     if (this.viewType === 'webview') {
       const url = yield this.instance?.url?.();
@@ -42,6 +38,18 @@ export class Context extends BasicContext {
     }), options);
     makeObservable(this);
   }
+
+  @computed get active() {
+    return this._activate;
+  }
+
+  onSimulatorRendererReady = (): Promise<void> => {
+    return new Promise((resolve) => {
+      this.project.onSimulatorRendererReady(() => {
+        resolve();
+      });
+    });
+  };
 
   setActivate = (_activate: boolean) => {
     this._activate = _activate;

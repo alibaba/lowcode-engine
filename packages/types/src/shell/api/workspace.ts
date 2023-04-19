@@ -10,7 +10,7 @@ export interface IPublicApiWorkspace<
   isActive: boolean;
 
   /** 当前设计器窗口 */
-  window: ModelWindow;
+  window: ModelWindow | null;
 
   plugins: Plugins;
 
@@ -46,4 +46,10 @@ export interface IPublicApiWorkspace<
 
   /** active 窗口变更事件 */
   onChangeActiveWindow(fn: () => void): IPublicTypeDisposable;
+
+  /**
+   * window 下的所有视图 renderer ready 事件
+   * @since v1.1.7
+   */
+  onWindowRendererReady(fn: () => void): IPublicTypeDisposable;
 }

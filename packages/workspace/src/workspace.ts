@@ -1,6 +1,6 @@
 import { IDesigner, ILowCodePluginManager, LowCodePluginManager } from '@alilc/lowcode-designer';
-import { createModuleEventBus, Editor, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
-import { IPublicApiPlugins, IPublicApiWorkspace, IPublicResourceList, IPublicTypeResourceType, IShellModelFactory } from '@alilc/lowcode-types';
+import { createModuleEventBus, Editor, IEditor, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
+import { IPublicApiPlugins, IPublicApiWorkspace, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType, IShellModelFactory } from '@alilc/lowcode-types';
 import { BasicContext } from './context/base-context';
 import { EditorWindow } from './window';
 import type { IEditorWindow } from './window';
@@ -11,6 +11,8 @@ enum EVENT {
   CHANGE_WINDOW = 'change_window',
 
   CHANGE_ACTIVE_WINDOW = 'change_active_window',
+
+  WINDOW_RENDER_READY = 'window_render_ready',
 }
 
 const CHANGE_EVENT = 'resource.list.change';
@@ -19,9 +21,11 @@ export interface IWorkspace extends Omit<IPublicApiWorkspace<
   LowCodePluginManager,
   IEditorWindow
 >, 'resourceList' | 'plugins'> {
-  readonly registryInnerPlugin: (designer: IDesigner, editor: Editor, plugins: IPublicApiPlugins) => Promise<void>;
+  readonly registryInnerPlugin: (designer: IDesigner, editor: Editor, plugins: IPublicApiPlugins) => Promise<IPublicTypeDisposable>;
 
   readonly shellModelFactory: IShellModelFactory;
+
+  enableAutoOpenFirstWindow: boolean;
 
   window: IEditorWindow;
 
@@ -32,10 +36,18 @@ export interface IWorkspace extends Omit<IPublicApiWorkspace<
   getResourceType(resourceName: string): IResourceType;
 
   checkWindowQueue(): void;
+
+  emitWindowRendererReady(): void;
+
+  initWindow(): void;
+
+  setActive(active: boolean): void;
 }
 
 export class Workspace implements IWorkspace {
   context: BasicContext;
+
+  enableAutoOpenFirstWindow: boolean;
 
   private emitter: IEventBus = createModuleEventBus('workspace');
 
@@ -79,10 +91,10 @@ export class Workspace implements IWorkspace {
   }[] = [];
 
   constructor(
-    readonly registryInnerPlugin: (designer: IDesigner, editor: Editor, plugins: IPublicApiPlugins) => Promise<void>,
+    readonly registryInnerPlugin: (designer: IDesigner, editor: IEditor, plugins: IPublicApiPlugins) => Promise<IPublicTypeDisposable>,
     readonly shellModelFactory: any,
   ) {
-    this.init();
+    this.context = new BasicContext(this, '');
     makeObservable(this);
   }
 
@@ -97,13 +109,8 @@ export class Workspace implements IWorkspace {
     }
   }
 
-  init() {
-    this.initWindow();
-    this.context = new BasicContext(this, '');
-  }
-
   initWindow() {
-    if (!this.defaultResourceType) {
+    if (!this.defaultResourceType || this.enableAutoOpenFirstWindow === false) {
       return;
     }
     const resourceName = this.defaultResourceType.name;
@@ -128,7 +135,7 @@ export class Workspace implements IWorkspace {
     const resourceType = new ResourceType(resourceTypeModel);
     this.resourceTypeMap.set(resourceTypeModel.resourceName, resourceType);
 
-    if (!this.window && this.defaultResourceType) {
+    if (!this.window && this.defaultResourceType && this._isActive) {
       this.initWindow();
     }
   }
@@ -147,6 +154,17 @@ export class Workspace implements IWorkspace {
     return () => {
       this.emitter.off(CHANGE_EVENT, fn);
     };
+  }
+
+  onWindowRendererReady(fn: () => void): IPublicTypeDisposable {
+    this.emitter.on(EVENT.WINDOW_RENDER_READY, fn);
+    return () => {
+      this.emitter.off(EVENT.WINDOW_RENDER_READY, fn);
+    };
+  }
+
+  emitWindowRendererReady() {
+    this.emitter.emit(EVENT.WINDOW_RENDER_READY);
   }
 
   getResourceType(resourceName: string): IResourceType {
@@ -188,7 +206,7 @@ export class Workspace implements IWorkspace {
   }
 
   openEditorWindow(name: string, title: string, options: Object, viewType?: string, sleep?: boolean) {
-    if (!this.window?.initReady && !sleep) {
+    if (this.window && !this.window?.initReady && !sleep) {
       this.windowQueue.push({
         name, title, options, viewType,
       });

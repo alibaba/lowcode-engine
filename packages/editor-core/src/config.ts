@@ -145,6 +145,11 @@ const VALID_ENGINE_OPTIONS = {
     type: 'function',
     description: '配置指定节点为根组件',
   },
+  enableAutoOpenFirstWindow: {
+    type: 'boolean',
+    description: '应用级设计模式下，自动打开第一个窗口',
+    default: true,
+  },
 };
 
 const getStrictModeValue = (engineOptions: IPublicTypeEngineOptions, defaultValue: boolean): boolean => {

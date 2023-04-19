@@ -28,7 +28,14 @@ export class Workspace implements IPublicApiWorkspace {
   }
 
   get window() {
+    if (!this[workspaceSymbol].window) {
+      return null;
+    }
     return new ShellWindow(this[workspaceSymbol].window);
+  }
+
+  onWindowRendererReady(fn: () => void): IPublicTypeDisposable {
+    return this[workspaceSymbol].onWindowRendererReady(fn);
   }
 
   registerResourceType(resourceTypeModel: IPublicTypeResourceType): void {
