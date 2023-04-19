@@ -5,8 +5,11 @@ import {
 } from '@alilc/lowcode-editor-skeleton';
 import { skeletonSymbol } from '../symbols';
 import { IPublicApiSkeleton, IPublicTypeDisposable, IPublicTypeSkeletonConfig, IPublicTypeWidgetConfigArea } from '@alilc/lowcode-types';
+import { getLogger } from '@alilc/lowcode-utils';
 
 const innerSkeletonSymbol = Symbol('skeleton');
+
+const logger = getLogger({ level: 'warn', bizName: 'shell-skeleton' });
 
 export class Skeleton implements IPublicApiSkeleton {
   private readonly [innerSkeletonSymbol]: ISkeleton;
@@ -18,6 +21,10 @@ export class Skeleton implements IPublicApiSkeleton {
     }
     const workspace = globalContext.get('workspace');
     if (workspace.isActive) {
+      if (!workspace.window.innerSkeleton) {
+        logger.error('skeleton api 调用时机出现问题，请检查');
+        return this[innerSkeletonSymbol];
+      }
       return workspace.window.innerSkeleton;
     }
 
