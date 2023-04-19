@@ -9,12 +9,15 @@ import {
   engineConfig,
   Setters as InnerSetters,
   Hotkey as InnerHotkey,
+  IEditor,
 } from '@alilc/lowcode-editor-core';
 import {
   IPublicTypeEngineOptions,
   IPublicModelDocumentModel,
   IPublicTypePluginMeta,
   IPublicTypeDisposable,
+  IPublicApiPlugins,
+  IPublicApiWorkspace,
 } from '@alilc/lowcode-types';
 import {
   Designer,
@@ -22,6 +25,7 @@ import {
   ILowCodePluginContextPrivate,
   ILowCodePluginContextApiAssembler,
   PluginPreference,
+  IDesigner,
 } from '@alilc/lowcode-designer';
 import {
   Skeleton as InnerSkeleton,
@@ -30,6 +34,7 @@ import {
 import {
   Workspace as InnerWorkspace,
   Workbench as WorkSpaceWorkbench,
+  IWorkspace,
 } from '@alilc/lowcode-workspace';
 
 import {
@@ -61,7 +66,7 @@ export * from './modules/skeleton-types';
 export * from './modules/designer-types';
 export * from './modules/lowcode-types';
 
-async function registryInnerPlugin(designer: Designer, editor: Editor, plugins: Plugins): Promise<IPublicTypeDisposable> {
+async function registryInnerPlugin(designer: IDesigner, editor: IEditor, plugins: IPublicApiPlugins): Promise<IPublicTypeDisposable> {
   // 注册一批内置插件
   const componentMetaParserPlugin = componentMetaParser(designer);
   const defaultPanelRegistryPlugin = defaultPanelRegistry(editor);
@@ -83,8 +88,8 @@ async function registryInnerPlugin(designer: Designer, editor: Editor, plugins: 
   };
 }
 
-const innerWorkspace = new InnerWorkspace(registryInnerPlugin, shellModelFactory);
-const workspace = new Workspace(innerWorkspace);
+const innerWorkspace: IWorkspace = new InnerWorkspace(registryInnerPlugin, shellModelFactory);
+const workspace: IPublicApiWorkspace = new Workspace(innerWorkspace);
 const editor = new Editor();
 globalContext.register(editor, Editor);
 globalContext.register(editor, 'editor');
@@ -207,7 +212,9 @@ export async function init(
       }),
       engineContainer,
     );
+    innerWorkspace.enableAutoOpenFirstWindow = engineConfig.get('enableAutoOpenFirstWindow', true);
     innerWorkspace.setActive(true);
+    innerWorkspace.initWindow();
     innerHotkey.activate(false);
     await innerWorkspace.plugins.init(pluginPreference);
     return;
