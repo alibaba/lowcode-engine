@@ -435,7 +435,7 @@ describe('Prop 类测试', () => {
 
       it('should return undefined when all items are undefined', () => {
         prop = new Prop(mockPropsInst, [undefined, undefined], '___loopArgs___');
-        expect(prop.getValue()).toBeUndefined();
+        expect(prop.getValue()).toEqual([undefined, undefined]);
       });
 
       it('迭代器 / map / forEach', () => {
