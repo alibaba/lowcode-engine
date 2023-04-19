@@ -18,6 +18,7 @@ const originCloneElement = window.React.cloneElement;
   if (child.ref && props.ref) {
     const dRef = props.ref;
     const cRef = child.ref;
+
     props.ref = (x: any) => {
       if (cRef) {
         if (typeof cRef === 'function') {
