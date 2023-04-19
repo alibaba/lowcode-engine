@@ -105,6 +105,17 @@ getPreference(): IPublicModelPreference;
 
 **@since v1.1.0**
 
+示例
+
+```javascript
+import { config } from '@alilc/lowcode-engine';
+
+const panelName = 'outline-master-pane';
+
+// 设置大纲树面板钉住，在大纲树下次重新打开时生效
+config.getPreference().set(`${panelName}-pinned-status-isFloat`, false, 'skeleton')
+```
+
 ## 事件
 
 ### onceGot
