@@ -1,0 +1,33 @@
+name: Check Base Branch
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  code-review:
+    name: Check
+    runs-on: ubuntu-latest
+
+    steps:
+      # 判断用户是否有写仓库权限
+      - name: 'Check User Permission'
+        uses: 'lannonbr/repo-permission-check-action@2.0.0'
+        with:
+          permission: 'write'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 'Check base branch name is develop or not'
+        if: github.event.pull_request.base.ref != 'develop'   # check the target branch if it's master
+        uses: actions-cool/issues-helper@v2
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            感谢你的 PR，根据引擎的 [研发协作流程](https://lowcode-engine.cn/site/docs/participate/flow)，请将目标合入分支设置为 **develop**。
+
+            Thanks in advance, according to the [Contribution Guideline](https://lowcode-engine.cn/site/docs/participate/flow), please set the base branch to **develop**.
+
+            @${{ github.event.pull_request.user.login }}

@@ -1,4 +1,4 @@
-name: Issue Reply
+name: Insufficient Info
 
 on:
   issues:

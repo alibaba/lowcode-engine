@@ -1,4 +1,4 @@
-name: lint & test
+name: Lint & Test (Mods)
 
 on:
   push:
