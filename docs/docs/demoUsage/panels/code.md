@@ -45,16 +45,13 @@ window.Next.Message.success('成功')
 
 - 读取：每次打开面板时，都会尝试读取 schema 中的 originCode 字段，如果没有，则从 schema 上的字段还原代码；
 - 写入：在关闭代码编辑面板（主动点击叉或者点击非代码编辑区块的被动关闭都算）时，将自动写入到 schema 中；您也可以在编辑过程中点击“保存”按钮手动保存；
-| 源码面板中 | schema 中 |
+
+| 源码面板中 | Schema 中 |
 | --- | --- |
-| 本地数据初始值设置：
-![image.png](https://img.alicdn.com/imgextra/i4/O1CN01V6iaTY1gVNHi7gQfK_!!6000000004147-2-tps-370-146.png) | ![image.png](https://img.alicdn.com/imgextra/i2/O1CN010rhIPa268BEfGmzO6_!!6000000007616-2-tps-2098-826.png) |
-| 生命周期方法：
-![image.png](https://img.alicdn.com/imgextra/i4/O1CN010Y1TxV1QOvrVLRUjD_!!6000000001967-2-tps-478-260.png) | ![image.png](https://img.alicdn.com/imgextra/i3/O1CN01pbJzVQ1VSfAL7Lh8G_!!6000000002652-2-tps-2010-836.png) |
-| 自定义函数：
-![image.png](https://img.alicdn.com/imgextra/i4/O1CN01S2gjFk1CU3fm61eiD_!!6000000000083-2-tps-660-642.png) | ![image.png](https://img.alicdn.com/imgextra/i2/O1CN01X35YxU1GUkjj1YWVj_!!6000000000626-2-tps-1862-822.png) |
-| 编译前全量代码：
-![image.png](https://img.alicdn.com/imgextra/i2/O1CN01sbiK9N1kc1Uxp1OHY_!!6000000004703-2-tps-762-1122.png) | ![image.png](https://img.alicdn.com/imgextra/i3/O1CN01adKSg61QXAzRjQ4bm_!!6000000001985-2-tps-1906-796.png) |
+| 本地数据初始值设置：![image.png](https://img.alicdn.com/imgextra/i4/O1CN01V6iaTY1gVNHi7gQfK_!!6000000004147-2-tps-370-146.png) | ![image.png](https://img.alicdn.com/imgextra/i2/O1CN010rhIPa268BEfGmzO6_!!6000000007616-2-tps-2098-826.png) |
+| 生命周期方法：![image.png](https://img.alicdn.com/imgextra/i4/O1CN010Y1TxV1QOvrVLRUjD_!!6000000001967-2-tps-478-260.png) | ![image.png](https://img.alicdn.com/imgextra/i3/O1CN01pbJzVQ1VSfAL7Lh8G_!!6000000002652-2-tps-2010-836.png) |
+| 自定义函数：![image.png](https://img.alicdn.com/imgextra/i4/O1CN01S2gjFk1CU3fm61eiD_!!6000000000083-2-tps-660-642.png) | ![image.png](https://img.alicdn.com/imgextra/i2/O1CN01X35YxU1GUkjj1YWVj_!!6000000000626-2-tps-1862-822.png) |
+| 编译前全量代码：![image.png](https://img.alicdn.com/imgextra/i2/O1CN01sbiK9N1kc1Uxp1OHY_!!6000000004703-2-tps-762-1122.png) | ![image.png](https://img.alicdn.com/imgextra/i3/O1CN01adKSg61QXAzRjQ4bm_!!6000000001985-2-tps-1906-796.png) |
 
 
 - 异常处理：如果代码解析失败，它将无法被正常保存到 schema 中，此时编辑器会弹层提示：
