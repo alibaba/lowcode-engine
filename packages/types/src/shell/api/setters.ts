@@ -1,6 +1,9 @@
+import { ReactNode } from 'react';
+
 import { IPublicTypeRegisteredSetter, IPublicTypeCustomView } from '../type';
 
 export interface IPublicApiSetters {
+
   /**
    * 获取指定 setter
    * get setter by type
@@ -29,4 +32,9 @@ export interface IPublicApiSetters {
     typeOrMaps: string | { [key: string]: IPublicTypeCustomView | IPublicTypeRegisteredSetter },
     setter?: IPublicTypeCustomView | IPublicTypeRegisteredSetter | undefined
   ): void;
+
+  /**
+   * @deprecated
+   */
+  createSetterContent (setter: any, props: Record<string, any>): ReactNode;
 }
