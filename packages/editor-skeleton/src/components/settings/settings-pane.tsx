@@ -1,14 +1,13 @@
-import { Component, MouseEvent, Fragment } from 'react';
+import { Component, MouseEvent, Fragment, ReactNode } from 'react';
 import { shallowIntl, observer, obx, engineConfig, runInAction } from '@alilc/lowcode-editor-core';
 import { createContent, isJSSlot, isSetterConfig } from '@alilc/lowcode-utils';
 import { Skeleton, Stage } from '@alilc/lowcode-editor-skeleton';
-import { IPublicTypeCustomView } from '@alilc/lowcode-types';
+import { IPublicApiSetters, IPublicTypeCustomView, IPublicTypeDynamicProps } from '@alilc/lowcode-types';
 import { ISettingEntry, IComponentMeta, ISettingField, isSettingField, ISettingTopEntry } from '@alilc/lowcode-designer';
 import { createField } from '../field';
 import PopupService, { PopupPipe } from '../popup';
 import { SkeletonContext } from '../../context';
 import { intl } from '../../locale';
-import { Setters } from '@alilc/lowcode-shell';
 
 function isStandardComponent(componentMeta: IComponentMeta | null) {
   if (!componentMeta) return false;
@@ -40,7 +39,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
 
   stageName: string | undefined;
 
-  setters?: Setters;
+  setters?: IPublicApiSetters;
 
   constructor(props: SettingFieldViewProps) {
     super(props);
@@ -112,7 +111,9 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
     const { defaultValue } = extraProps;
 
     const { setter } = this.field;
-    let setterProps: any = {};
+    let setterProps: {
+      setters?: (ReactNode | string)[];
+    } & Record<string, unknown> | IPublicTypeDynamicProps = {};
     let setterType: any;
     let initialValue: any = null;
 
@@ -236,7 +237,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
         ...extraProps,
       },
       !stageName &&
-      this.setters.createSetterContent(setterType, {
+      this.setters?.createSetterContent(setterType, {
         ...shallowIntl(setterProps),
         forceInline: extraProps.forceInline,
         key: field.id,
