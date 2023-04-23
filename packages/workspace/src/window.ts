@@ -1,6 +1,6 @@
 import { uniqueId } from '@alilc/lowcode-utils';
 import { createModuleEventBus, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
-import { Context } from './context/view-context';
+import { Context, IViewContext } from './context/view-context';
 import { IWorkspace } from './workspace';
 import { IResource } from './resource';
 import { IPublicTypeDisposable } from '../../types/es/shell/type/disposable';
@@ -13,10 +13,12 @@ interface IWindowCOnfig {
   sleep?: boolean;
 }
 
-export interface IEditorWindow extends Omit<IPublicModelWindow<IResource>, 'changeViewType'> {
+export interface IEditorWindow extends Omit<IPublicModelWindow<IResource>, 'changeViewType' | 'currentEditorView' | 'editorViews'> {
   readonly resource: IResource;
 
-  editorViews: Map<string, Context>;
+  editorViews: Map<string, IViewContext>;
+
+  editorView: IViewContext;
 
   changeViewType: (name: string, ignoreEmit?: boolean) => void;
 
@@ -71,6 +73,9 @@ export class EditorWindow implements IEditorWindow {
   async save() {
     const value: any = {};
     const editorViews = this.resource.editorViews;
+    if (!editorViews) {
+      return;
+    }
     for (let i = 0; i < editorViews.length; i++) {
       const name = editorViews[i].viewName;
       const saveResult = await this.editorViews.get(name)?.save();

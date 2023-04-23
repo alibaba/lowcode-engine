@@ -2,7 +2,7 @@ import { MouseEvent as ReactMouseEvent, PureComponent } from 'react';
 import { isFormEvent, canClickNode, isShaken } from '@alilc/lowcode-utils';
 import { Tree } from '../controllers/tree';
 import TreeNodeView from './tree-node';
-import { IPublicEnumDragObjectType, IPublicModelPluginContext, IPublicModelNode } from '@alilc/lowcode-types';
+import { IPublicEnumDragObjectType, IPublicModelNode } from '@alilc/lowcode-types';
 import TreeNode from '../controllers/tree-node';
 
 function getTreeNodeIdByEvent(e: ReactMouseEvent, stop: Element): null | string {
@@ -20,12 +20,21 @@ function getTreeNodeIdByEvent(e: ReactMouseEvent, stop: Element): null | string 
 
 export default class TreeView extends PureComponent<{
   tree: Tree;
-  pluginContext: IPublicModelPluginContext;
 }> {
   private shell: HTMLDivElement | null = null;
 
+  private ignoreUpSelected = false;
+
+  private boostEvent?: MouseEvent;
+
+  state: {
+    root: TreeNode | null;
+  } = {
+    root: null,
+  };
+
   private hover(e: ReactMouseEvent) {
-    const { project } = this.props.pluginContext;
+    const { project } = this.props.tree.pluginContext;
     const detecting = project.currentDocument?.detecting;
     if (detecting?.enable) {
       return;
@@ -54,7 +63,7 @@ export default class TreeView extends PureComponent<{
       return;
     }
 
-    const { project, event, canvas } = this.props.pluginContext;
+    const { project, event, canvas } = this.props.tree.pluginContext;
     const doc = project.currentDocument;
     const selection = doc?.selection;
     const focusNode = doc?.focusNode;
@@ -109,10 +118,6 @@ export default class TreeView extends PureComponent<{
     return tree.getTreeNodeById(id);
   }
 
-  private ignoreUpSelected = false;
-
-  private boostEvent?: MouseEvent;
-
   private onMouseDown = (e: ReactMouseEvent) => {
     if (isFormEvent(e.nativeEvent)) {
       return;
@@ -127,7 +132,7 @@ export default class TreeView extends PureComponent<{
     if (!canClickNode(node, e)) {
       return;
     }
-    const { project, canvas } = this.props.pluginContext;
+    const { project, canvas } = this.props.tree.pluginContext;
     const selection = project.currentDocument?.selection;
     const focusNode = project.currentDocument?.focusNode;
 
@@ -166,22 +171,16 @@ export default class TreeView extends PureComponent<{
   };
 
   private onMouseLeave = () => {
-    const { pluginContext } = this.props;
+    const { pluginContext } = this.props.tree;
     const { project } = pluginContext;
     const doc = project.currentDocument;
     doc?.detecting.leave();
   };
 
-  state: {
-    root: TreeNode | null
-  } = {
-    root: null,
-  };
-
   componentDidMount() {
-    const { tree, pluginContext } = this.props;
+    const { tree } = this.props;
     const { root } = tree;
-    const { project } = pluginContext;
+    const { project } = tree.pluginContext;
     this.setState({ root });
     const doc = project.currentDocument;
     doc?.onFocusNodeChanged(() => {
@@ -208,7 +207,6 @@ export default class TreeView extends PureComponent<{
         <TreeNodeView
           key={this.state.root?.id}
           treeNode={this.state.root}
-          pluginContext={this.props.pluginContext}
           isRootNode
         />
       </div>

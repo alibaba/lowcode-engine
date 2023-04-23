@@ -1,6 +1,7 @@
 import { ReactElement } from 'react';
 import { IPublicTypeDisposable, IPublicTypeNodeSchema } from '../type';
 import { IPublicModelResource } from './resource';
+import { IPublicModelEditorView } from './editor-view';
 
 export interface IPublicModelWindow<
   Resource = IPublicModelResource
@@ -17,6 +18,18 @@ export interface IPublicModelWindow<
 
   /** 窗口资源类型 */
   resource?: Resource;
+
+  /**
+   * 窗口当前视图
+   * @since v1.1.7
+   */
+  currentEditorView: IPublicModelEditorView;
+
+  /**
+   * 窗口全部视图实例
+   * @since v1.1.7
+   */
+  editorViews: IPublicModelEditorView[];
 
   /** 当前窗口导入 schema */
   importSchema(schema: IPublicTypeNodeSchema): void;
