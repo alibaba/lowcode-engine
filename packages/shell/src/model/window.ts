@@ -2,6 +2,7 @@ import { windowSymbol } from '../symbols';
 import { IPublicModelResource, IPublicModelWindow, IPublicTypeDisposable } from '@alilc/lowcode-types';
 import { IEditorWindow } from '@alilc/lowcode-workspace';
 import { Resource as ShellResource } from './resource';
+import { EditorView } from './editor-view';
 
 export class Window implements IPublicModelWindow {
   private readonly [windowSymbol]: IEditorWindow;
@@ -42,7 +43,11 @@ export class Window implements IPublicModelWindow {
     return await this[windowSymbol].save();
   }
 
-  get plugins() {
-    return this[windowSymbol].plugins;
+  get currentEditorView() {
+    return new EditorView(this[windowSymbol].editorView).toProxy() as any;
+  }
+
+  get editorViews() {
+    return Array.from(this[windowSymbol].editorViews.values()).map(d => new EditorView(d).toProxy() as any);
   }
 }

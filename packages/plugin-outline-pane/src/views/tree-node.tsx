@@ -4,22 +4,24 @@ import TreeNode from '../controllers/tree-node';
 import TreeTitle from './tree-title';
 import TreeBranches from './tree-branches';
 import { IconEyeClose } from '../icons/eye-close';
-import { IPublicModelPluginContext, IPublicModelModalNodesManager, IPublicTypeDisposable } from '@alilc/lowcode-types';
+import { IPublicModelModalNodesManager, IPublicTypeDisposable } from '@alilc/lowcode-types';
+import { IOutlinePanelPluginContext } from '../controllers/tree-master';
 
 class ModalTreeNodeView extends PureComponent<{
   treeNode: TreeNode;
-  pluginContext: IPublicModelPluginContext;
 }, {
   treeChildren: TreeNode[] | null;
 }> {
   private modalNodesManager: IPublicModelModalNodesManager | undefined | null;
-  readonly pluginContext: IPublicModelPluginContext;
+  readonly pluginContext: IOutlinePanelPluginContext;
 
-  constructor(props: any) {
+  constructor(props: {
+    treeNode: TreeNode;
+  }) {
     super(props);
 
     // 模态管理对象
-    this.pluginContext = props.pluginContext;
+    this.pluginContext = props.treeNode.pluginContext;
     const { project } = this.pluginContext;
     this.modalNodesManager = project.currentDocument?.modalNodesManager;
     this.state = {
@@ -72,7 +74,6 @@ class ModalTreeNodeView extends PureComponent<{
             treeChildren={this.state.treeChildren}
             expanded={expanded}
             isModal
-            pluginContext={this.pluginContext}
           />
         </div>
       </div>
@@ -83,7 +84,6 @@ class ModalTreeNodeView extends PureComponent<{
 export default class TreeNodeView extends PureComponent<{
   treeNode: TreeNode;
   isModal?: boolean;
-  pluginContext: IPublicModelPluginContext;
   isRootNode?: boolean;
 }> {
   state: {
@@ -134,8 +134,8 @@ export default class TreeNodeView extends PureComponent<{
   }
 
   componentDidMount() {
-    const { treeNode, pluginContext } = this.props;
-    const { project } = pluginContext;
+    const { treeNode } = this.props;
+    const { project } = treeNode.pluginContext;
 
     const doc = project.currentDocument;
 
@@ -178,14 +178,14 @@ export default class TreeNodeView extends PureComponent<{
   }
 
   shouldShowModalTreeNode(): boolean {
-    const { treeNode, isRootNode, pluginContext } = this.props;
+    const { treeNode, isRootNode } = this.props;
     if (!isRootNode) {
       // 只在 当前树 的根节点展示模态节点
       return false;
     }
 
     // 当指定了新的根节点时，要从原始的根节点去获取模态节点
-    const { project } = pluginContext;
+    const { project } = treeNode.pluginContext;
     const rootNode = project.currentDocument?.root;
     const rootTreeNode = treeNode.tree.getTreeNode(rootNode!);
     const modalNodes = rootTreeNode.children?.filter((item) => {
@@ -234,19 +234,16 @@ export default class TreeNodeView extends PureComponent<{
           hidden={this.state.hidden}
           locked={this.state.locked}
           expandable={this.state.expandable}
-          pluginContext={this.props.pluginContext}
         />
         {shouldShowModalTreeNode &&
           <ModalTreeNodeView
             treeNode={treeNode}
-            pluginContext={this.props.pluginContext}
           />
         }
         <TreeBranches
           treeNode={treeNode}
           isModal={false}
           expanded={this.state.expanded}
-          pluginContext={this.props.pluginContext}
           treeChildren={this.state.treeChildren}
         />
       </div>

@@ -4,3 +4,4 @@ export * from './window';
 export * from './layouts/workbench';
 export { Resource } from './resource';
 export type { IResource } from './resource';
+export type { IViewContext } from './context/view-context';

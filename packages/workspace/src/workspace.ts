@@ -1,6 +1,6 @@
 import { IDesigner, ILowCodePluginManager, LowCodePluginManager } from '@alilc/lowcode-designer';
 import { createModuleEventBus, Editor, IEditor, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
-import { IPublicApiPlugins, IPublicApiWorkspace, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType, IShellModelFactory } from '@alilc/lowcode-types';
+import { IPublicApiPlugins, IPublicApiWorkspace, IPublicEnumPluginRegisterLevel, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType, IShellModelFactory } from '@alilc/lowcode-types';
 import { BasicContext } from './context/base-context';
 import { EditorWindow } from './window';
 import type { IEditorWindow } from './window';
@@ -94,7 +94,7 @@ export class Workspace implements IWorkspace {
     readonly registryInnerPlugin: (designer: IDesigner, editor: IEditor, plugins: IPublicApiPlugins) => Promise<IPublicTypeDisposable>,
     readonly shellModelFactory: any,
   ) {
-    this.context = new BasicContext(this, '');
+    this.context = new BasicContext(this, '', IPublicEnumPluginRegisterLevel.Workspace);
     makeObservable(this);
   }
 
