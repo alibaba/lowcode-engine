@@ -18,6 +18,7 @@ import {
   IPublicTypeDisposable,
   IPublicApiPlugins,
   IPublicApiWorkspace,
+  IPublicEnumPluginRegisterLevel,
 } from '@alilc/lowcode-types';
 import {
   Designer,
@@ -138,6 +139,7 @@ const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
     context.plugins = plugins;
     context.logger = new Logger({ level: 'warn', bizName: `plugin:${pluginName}` });
     context.workspace = workspace;
+    context.registerLevel = IPublicEnumPluginRegisterLevel.Default;
   },
 };
 

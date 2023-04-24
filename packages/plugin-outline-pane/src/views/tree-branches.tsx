@@ -2,12 +2,11 @@ import { PureComponent } from 'react';
 import classNames from 'classnames';
 import TreeNode from '../controllers/tree-node';
 import TreeNodeView from './tree-node';
-import { IPublicModelPluginContext, IPublicModelExclusiveGroup, IPublicTypeDisposable, IPublicTypeLocationChildrenDetail } from '@alilc/lowcode-types';
+import { IPublicModelExclusiveGroup, IPublicTypeDisposable, IPublicTypeLocationChildrenDetail } from '@alilc/lowcode-types';
 
 export default class TreeBranches extends PureComponent<{
   treeNode: TreeNode;
   isModal?: boolean;
-  pluginContext: IPublicModelPluginContext;
   expanded: boolean;
   treeChildren: TreeNode[] | null;
 }> {
@@ -51,12 +50,11 @@ export default class TreeBranches extends PureComponent<{
     return (
       <div className="tree-node-branches">
         {
-          !isModal && <TreeNodeSlots treeNode={treeNode} pluginContext={this.props.pluginContext} />
+          !isModal && <TreeNodeSlots treeNode={treeNode} />
         }
         <TreeNodeChildren
           treeNode={treeNode}
           isModal={isModal || false}
-          pluginContext={this.props.pluginContext}
           treeChildren={this.props.treeChildren}
         />
       </div>
@@ -73,7 +71,6 @@ interface ITreeNodeChildrenState {
 class TreeNodeChildren extends PureComponent<{
     treeNode: TreeNode;
     isModal?: boolean;
-    pluginContext: IPublicModelPluginContext;
     treeChildren: TreeNode[] | null;
   }, ITreeNodeChildrenState> {
   state: ITreeNodeChildrenState = {
@@ -84,8 +81,8 @@ class TreeNodeChildren extends PureComponent<{
   };
   offLocationChanged: IPublicTypeDisposable | undefined;
   componentDidMount() {
-    const { treeNode, pluginContext } = this.props;
-    const { project } = pluginContext;
+    const { treeNode } = this.props;
+    const { project } = treeNode.pluginContext;
     const { filterWorking, matchSelf, keywords } = treeNode.filterReult;
     const { dropDetail } = treeNode;
     this.setState({
@@ -122,13 +119,14 @@ class TreeNodeChildren extends PureComponent<{
     let groupContents: any[] = [];
     let currentGrp: IPublicModelExclusiveGroup;
     const { filterWorking, matchSelf, keywords } = this.state;
-    const Title = this.props.pluginContext.common.editorCabin.Title;
+    const Title = this.props.treeNode.pluginContext.common.editorCabin.Title;
 
     const endGroup = () => {
       if (groupContents.length > 0) {
         children.push(
           <div key={currentGrp.id} className="condition-group-container" data-id={currentGrp.firstNode?.id}>
             <div className="condition-group-title">
+              {/* @ts-ignore */}
               <Title
                 title={currentGrp.title}
                 match={filterWorking && matchSelf}
@@ -171,12 +169,12 @@ class TreeNodeChildren extends PureComponent<{
             children.push(insertion);
           }
         }
-        groupContents.push(<TreeNodeView key={child.id} treeNode={child} isModal={isModal} pluginContext={this.props.pluginContext} />);
+        groupContents.push(<TreeNodeView key={child.id} treeNode={child} isModal={isModal} />);
       } else {
         if (index === dropIndex) {
           children.push(insertion);
         }
-        children.push(<TreeNodeView key={child.id} treeNode={child} isModal={isModal} pluginContext={this.props.pluginContext} />);
+        children.push(<TreeNodeView key={child.id} treeNode={child} isModal={isModal} />);
       }
     });
     endGroup();
@@ -191,14 +189,13 @@ class TreeNodeChildren extends PureComponent<{
 
 class TreeNodeSlots extends PureComponent<{
     treeNode: TreeNode;
-    pluginContext: IPublicModelPluginContext;
   }> {
   render() {
     const { treeNode } = this.props;
     if (!treeNode.hasSlots()) {
       return null;
     }
-    const Title = this.props.pluginContext.common.editorCabin.Title;
+    const Title = this.props.treeNode.pluginContext.common.editorCabin.Title;
     return (
       <div
         className={classNames('tree-node-slots', {
@@ -207,10 +204,11 @@ class TreeNodeSlots extends PureComponent<{
         data-id={treeNode.id}
       >
         <div className="tree-node-slots-title">
-          <Title title={{ type: 'i18n', intl: this.props.pluginContext.intlNode('Slots') }} />
+          {/* @ts-ignore */}
+          <Title title={{ type: 'i18n', intl: this.props.treeNode.pluginContext.intlNode('Slots') }} />
         </div>
         {treeNode.slots.map(tnode => (
-          <TreeNodeView key={tnode.id} treeNode={tnode} pluginContext={this.props.pluginContext} />
+          <TreeNodeView key={tnode.id} treeNode={tnode} />
         ))}
       </div>
     );

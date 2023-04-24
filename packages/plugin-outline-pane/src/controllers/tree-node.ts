@@ -2,12 +2,12 @@ import {
   IPublicTypeTitleContent,
   IPublicTypeLocationChildrenDetail,
   IPublicModelNode,
-  IPublicModelPluginContext,
   IPublicTypeDisposable,
 } from '@alilc/lowcode-types';
 import { isI18nData, isLocationChildrenDetail } from '@alilc/lowcode-utils';
 import EventEmitter from 'events';
 import { Tree } from './tree';
+import { IOutlinePanelPluginContext } from './tree-master';
 
 /**
  * 大纲树过滤结果
@@ -38,7 +38,7 @@ enum EVENT_NAMES {
 }
 
 export default class TreeNode {
-  readonly pluginContext: IPublicModelPluginContext;
+  readonly pluginContext: IOutlinePanelPluginContext;
   event = new EventEmitter();
 
   private _node: IPublicModelNode;
@@ -160,9 +160,9 @@ export default class TreeNode {
     return this._node;
   }
 
-  constructor(tree: Tree, node: IPublicModelNode, pluginContext: IPublicModelPluginContext) {
+  constructor(tree: Tree, node: IPublicModelNode) {
     this.tree = tree;
-    this.pluginContext = pluginContext;
+    this.pluginContext = tree.pluginContext;
     this._node = node;
   }
 

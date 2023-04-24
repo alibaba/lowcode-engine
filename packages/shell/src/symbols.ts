@@ -34,3 +34,5 @@ export const resourceSymbol = Symbol('resource');
 export const clipboardSymbol = Symbol('clipboard');
 export const configSymbol = Symbol('configSymbol');
 export const conditionGroupSymbol = Symbol('conditionGroup');
+export const editorViewSymbol = Symbol('editorView');
+export const pluginContextSymbol = Symbol('pluginContext');

@@ -16,16 +16,15 @@ import {
   IPublicModelDropLocation,
   IPublicModelScroller,
   IPublicModelScrollTarget,
-  IPublicModelPluginContext,
   IPublicModelLocateEvent,
 } from '@alilc/lowcode-types';
 import TreeNode from './tree-node';
 import { IndentTrack } from '../helper/indent-track';
 import DwellTimer from '../helper/dwell-timer';
-import { ITreeBoard, TreeMaster } from './tree-master';
+import { IOutlinePanelPluginContext, ITreeBoard, TreeMaster } from './tree-master';
 
 export class PaneController implements IPublicModelSensor, ITreeBoard, IPublicTypeScrollable {
-  private pluginContext: IPublicModelPluginContext;
+  private pluginContext: IOutlinePanelPluginContext;
 
   private treeMaster?: TreeMaster;
 
@@ -100,8 +99,8 @@ export class PaneController implements IPublicModelSensor, ITreeBoard, IPublicTy
 
   private _shell: HTMLDivElement | null = null;
 
-  constructor(at: string | symbol, pluginContext: IPublicModelPluginContext, treeMaster: TreeMaster) {
-    this.pluginContext = pluginContext;
+  constructor(at: string | symbol, treeMaster: TreeMaster) {
+    this.pluginContext = treeMaster.pluginContext;
     this.treeMaster = treeMaster;
     this.at = at;
     let inited = false;
@@ -237,7 +236,7 @@ export class PaneController implements IPublicModelSensor, ITreeBoard, IPublicTy
         let { node } = treeNode;
         if (isDragNodeObject(dragObject)) {
           const newNodes = operationalNodes;
-          let i = newNodes.length;
+          let i = newNodes?.length;
           let p: any = node;
           while (i-- > 0) {
             if (newNodes[i].contains(p)) {
@@ -482,7 +481,7 @@ export class PaneController implements IPublicModelSensor, ITreeBoard, IPublicTy
     const isSlotContainer = treeNode.hasSlots();
     const isContainer = treeNode.isContainer();
 
-    if (container.isSlot && !treeNode.expanded) {
+    if (container.isSlotNode && !treeNode.expanded) {
       // 未展开，直接定位到内部第一个节点
       if (isSlotContainer) {
         detail.index = null;

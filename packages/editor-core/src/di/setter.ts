@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
-import { IPublicTypeCustomView, IPublicTypeRegisteredSetter } from '@alilc/lowcode-types';
+import { IPublicApiSetters, IPublicTypeCustomView, IPublicTypeRegisteredSetter } from '@alilc/lowcode-types';
 import { createContent, isCustomView } from '@alilc/lowcode-utils';
-
 
 const settersMap = new Map<string, IPublicTypeRegisteredSetter & {
   type: string;
@@ -44,12 +43,16 @@ function getInitialFromSetter(setter: any) {
     ) || null; // eslint-disable-line
 }
 
-export class Setters {
-  constructor(readonly viewName: string = 'global') {}
+export interface ISetters extends IPublicApiSetters {
 
+}
+
+export class Setters implements ISetters {
   settersMap = new Map<string, IPublicTypeRegisteredSetter & {
     type: string;
   }>();
+
+  constructor(readonly viewName: string = 'global') {}
 
   getSetter = (type: string): IPublicTypeRegisteredSetter | null => {
     return this.settersMap.get(type) || null;

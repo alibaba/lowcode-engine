@@ -38,6 +38,22 @@ sidebar_position: 12
 
 关联模型 [IPublicModelResource](./resource)
 
+### currentEditorView
+窗口当前视图
+
+`@type {IPublicModelEditorView}`
+
+关联模型 [IPublicModelEditorView](./editor-view)
+
+### editorViews
+
+窗口所有视图
+
+`@type {IPublicModelEditorView[]}`
+
+关联模型 [IPublicModelEditorView](./editor-view)
+
+
 ## 方法
 
 ### importSchema
