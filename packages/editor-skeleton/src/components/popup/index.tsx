@@ -76,7 +76,7 @@ export default class PopupService extends Component<{
   }
 
   render() {
-    const { children, actionKey, safeId, popupContainer } = this.props;
+    const { children, actionKey, safeId, popupContainer, ..restState } = this.props;
     return (
       <PopupContext.Provider value={this.popupPipe}>
         {children}
@@ -167,6 +167,7 @@ export class PopupContent extends PureComponent<{ safeId?: string; popupContaine
         safeNode={id}
         closeable
         container={this.props.popupContainer}
+        {...restState}
       >
         <div className="lc-ballon-title">{title}</div>
         <div className="lc-ballon-content">
