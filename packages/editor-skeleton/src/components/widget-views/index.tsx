@@ -1,7 +1,7 @@
 import { Component, ReactElement } from 'react';
 import { Icon } from '@alifd/next';
 import classNames from 'classnames';
-import { Title, observer, Tip, globalContext } from '@alilc/lowcode-editor-core';
+import { Title, observer, Tip } from '@alilc/lowcode-editor-core';
 import { DockProps } from '../../types';
 import { PanelDock } from '../../widget/panel-dock';
 import { composeTitle } from '../../widget/utils';
@@ -116,14 +116,12 @@ export class DraggableLineView extends Component<{ panel: Panel }> {
     }
 
     // 抛出事件，对于有些需要 panel 插件随着 度变化进行再次渲染的，由panel插件内部监听事件实现
-    const workspace = globalContext.get('workspace');
-    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
+    const editor = this.props.panel.skeleton.editor;
     editor?.eventBus.emit('dockpane.drag', width);
   }
 
   onDragChange(type: 'start' | 'end') {
-    const workspace = globalContext.get('workspace');
-    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
+    const editor = this.props.panel.skeleton.editor;
     editor?.eventBus.emit('dockpane.dragchange', type);
     // builtinSimulator 屏蔽掉 鼠标事件
     editor?.eventBus.emit('designer.builtinSimulator.disabledEvents', type === 'start');
@@ -187,8 +185,7 @@ export class TitledPanelView extends Component<{ panel: Panel; area?: string }> 
     if (!panel.inited) {
       return null;
     }
-    const workspace = globalContext.get('workspace');
-    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
+    const editor = panel.skeleton.editor;
     const panelName = area ? `${area}-${panel.name}` : panel.name;
     editor?.eventBus.emit('skeleton.panel.toggle', {
       name: panelName || '',
@@ -250,8 +247,7 @@ export class PanelView extends Component<{
     if (!panel.inited) {
       return null;
     }
-    const workspace = globalContext.get('workspace');
-    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
+    const editor = panel.skeleton.editor;
     const panelName = area ? `${area}-${panel.name}` : panel.name;
     editor?.eventBus.emit('skeleton.panel.toggle', {
       name: panelName || '',

@@ -1,6 +1,6 @@
 import { Overlay } from '@alifd/next';
 import React, { MouseEvent } from 'react';
-import { Title, globalContext } from '@alilc/lowcode-editor-core';
+import { Title } from '@alilc/lowcode-editor-core';
 import { canClickNode } from '@alilc/lowcode-utils';
 import './index.less';
 
@@ -66,8 +66,7 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
 
     if (canClick && typeof node.select === 'function') {
       node.select();
-      const workspace = globalContext.get('workspace');
-      const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
+      const editor = node.document?.designer.editor;
       const npm = node?.componentMeta?.npm;
       const selected =
         [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||

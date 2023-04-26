@@ -1,6 +1,6 @@
-import { obx, globalContext } from '@alilc/lowcode-editor-core';
+import { obx } from '@alilc/lowcode-editor-core';
 import { IPublicTypePluginConfig, IPublicTypeLiveTextEditingConfig } from '@alilc/lowcode-types';
-import { Node, Prop } from '../../document';
+import { INode, Prop } from '../../document';
 
 const EDITOR_KEY = 'data-setter-prop';
 
@@ -17,7 +17,7 @@ function defaultSaveContent(content: string, prop: Prop) {
 }
 
 export interface EditingTarget {
-  node: Node;
+  node: INode;
   rootElement: HTMLElement;
   event: MouseEvent;
 }
@@ -47,13 +47,16 @@ export class LiveEditing {
 
   @obx.ref private _editing: Prop | null = null;
 
+  private _dispose?: () => void;
+
+  private _save?: () => void;
+
   apply(target: EditingTarget) {
     const { node, event, rootElement } = target;
     const targetElement = event.target as HTMLElement;
     const { liveTextEditing } = node.componentMeta;
 
-    const workspace = globalContext.get('workspace');
-    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
+    const editor = node.document?.designer.editor;
     const npm = node?.componentMeta?.npm;
     const selected =
       [npm?.package, npm?.componentName].filter((item) => !!item).join('-') || node?.componentMeta?.componentName || '';
@@ -165,10 +168,6 @@ export class LiveEditing {
   get editing() {
     return this._editing;
   }
-
-  private _dispose?: () => void;
-
-  private _save?: () => void;
 
   saveAndDispose() {
     if (this._save) {
