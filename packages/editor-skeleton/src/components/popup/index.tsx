@@ -4,25 +4,6 @@ import { uniqueId } from '@alilc/lowcode-utils';
 import { IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import './style.less';
 
-
-
-
-export interface PopupExtProps {
-  width?: number;
-  hasMask?: boolean;
-  trigger?: ReactNode;
-  canCloseByOutSideClick?: boolean
-  className?: string;
-  safeNode?: string[];
-}
-
-interface PopupProps extends PopupExtProps{
-  content?: ReactNode,
-  title?: ReactNode,
-  actionKey?: string
-}
-
-
 export const PopupContext = createContext<PopupPipe>({} as any);
 
 export class PopupPipe {
@@ -30,7 +11,7 @@ export class PopupPipe {
 
   private currentId?: string;
 
-  create(props?: PopupExtProps): {
+  create(props?: object): {
     send: (content: ReactNode, title: ReactNode) => void;
     show: (target: Element) => void;
   } {
@@ -64,13 +45,13 @@ export class PopupPipe {
     };
   }
 
-  private popup(props: PopupProps, target?: Element) {
+  private popup(props: object, target?: Element) {
     Promise.resolve().then(() => {
       this.emitter.emit('popupchange', props, target);
     });
   }
 
-  onPopupChange(fn: (props: PopupProps, target?: Element) => void): () => void {
+  onPopupChange(fn: (props: object, target?: Element) => void): () => void {
     this.emitter.on('popupchange', fn);
     return () => {
       this.emitter.removeListener('popupchange', fn);
@@ -95,7 +76,7 @@ export default class PopupService extends Component<{
   }
 
   render() {
-    const { children, actionKey, safeId, popupContainer } = this.props;
+    const { children, actionKey, safeId, popupContainer, ..restState } = this.props;
     return (
       <PopupContext.Provider value={this.popupPipe}>
         {children}
@@ -105,23 +86,18 @@ export default class PopupService extends Component<{
   }
 }
 
-interface StateType extends PopupProps {
-  visible?: boolean, 
-  offsetX?: number, 
-  pos?: {top: number, height: number}
-}
 export class PopupContent extends PureComponent<{ safeId?: string; popupContainer?: string }> {
   static contextType = PopupContext;
 
   popupContainerId = uniqueId('popupContainer');
 
-  state: StateType = {
+  state: any = {
     visible: false,
     offsetX: -300,
   };
 
   private dispose = (this.context as PopupPipe).onPopupChange((props, target) => {
-    const state: StateType = {
+    const state: any = {
       ...props,
       visible: true,
     };
@@ -156,7 +132,7 @@ export class PopupContent extends PureComponent<{ safeId?: string; popupContaine
   };
 
   render() {
-    const { content, visible, title, actionKey, pos, offsetX, width = 360, hasMask = false, canCloseByOutSideClick = true, safeNode = [] } = this.state;
+    const { content, visible, title, actionKey, pos, offsetX } = this.state;
     if (!visible) {
       return null;
     }
@@ -170,10 +146,10 @@ export class PopupContent extends PureComponent<{ safeId?: string; popupContaine
 
     return (
       <Drawer
-        width={width}
+        width={360}
         visible={visible}
         offset={[offsetX, 0]}
-        hasMask={hasMask}
+        hasMask={false}
         onVisibleChange={(_visible, type) => {
           if (avoidLaterHidden) {
             return;
@@ -184,13 +160,14 @@ export class PopupContent extends PureComponent<{ safeId?: string; popupContaine
         }}
         trigger={<div className="lc-popup-placeholder" style={pos} />}
         triggerType="click"
-        canCloseByOutSideClick={canCloseByOutSideClick}
+        canCloseByOutSideClick
         animation={false}
         onClose={this.onClose}
         id={this.props.safeId}
-        safeNode={[id, ...safeNode]}
+        safeNode={id}
         closeable
         container={this.props.popupContainer}
+        {...restState}
       >
         <div className="lc-ballon-title">{title}</div>
         <div className="lc-ballon-content">
