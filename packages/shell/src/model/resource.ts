@@ -25,6 +25,10 @@ export class Resource implements IPublicModelResource {
     return this[resourceSymbol].resourceType.name;
   }
 
+  get config() {
+    return this[resourceSymbol].config;
+  }
+
   get type() {
     return this[resourceSymbol].resourceType.type;
   }

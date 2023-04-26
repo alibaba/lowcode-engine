@@ -40,6 +40,7 @@ export class TreeMaster {
     const { workspace } = this.pluginContext;
     this.initEvent();
     if (pluginContext.registerLevel === IPublicEnumPluginRegisterLevel.Workspace) {
+      this.setPluginContext(workspace.window?.currentEditorView);
       workspace.onWindowRendererReady(() => {
         this.setPluginContext(workspace.window?.currentEditorView);
         let dispose: IPublicTypeDisposable | undefined;
@@ -60,7 +61,7 @@ export class TreeMaster {
     }
   }
 
-  private setPluginContext(pluginContext: IPublicModelPluginContext | undefined) {
+  private setPluginContext(pluginContext: IPublicModelPluginContext | undefined | null) {
     if (!pluginContext) {
       return;
     }

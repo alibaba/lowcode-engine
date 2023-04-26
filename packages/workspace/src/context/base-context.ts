@@ -101,7 +101,7 @@ export class BasicContext implements IBasicContext {
   preference: IPluginPreferenceMananger;
   workspace: IWorkspace;
 
-  constructor(innerWorkspace: IWorkspace, viewName: string, registerLevel: IPublicEnumPluginRegisterLevel, public editorWindow?: IEditorWindow) {
+  constructor(innerWorkspace: IWorkspace, viewName: string, readonly registerLevel: IPublicEnumPluginRegisterLevel, public editorWindow?: IEditorWindow) {
     const editor = new Editor(viewName, true);
 
     const innerSkeleton = new InnerSkeleton(editor, viewName);

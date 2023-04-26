@@ -44,7 +44,10 @@ export class Window implements IPublicModelWindow {
   }
 
   get currentEditorView() {
-    return new EditorView(this[windowSymbol].editorView).toProxy() as any;
+    if (this[windowSymbol].editorView) {
+      return new EditorView(this[windowSymbol].editorView).toProxy() as any;
+    }
+    return null;
   }
 
   get editorViews() {

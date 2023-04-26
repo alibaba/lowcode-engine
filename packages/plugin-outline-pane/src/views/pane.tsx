@@ -9,9 +9,9 @@ import { Tree } from '../controllers/tree';
 import { IPublicTypeDisposable } from '@alilc/lowcode-types';
 
 export class Pane extends PureComponent<{
-  config: any;
   treeMaster: TreeMaster;
   controller: PaneController;
+  hideFilter?: boolean;
 }, {
   tree: Tree | null;
 }> {
@@ -26,19 +26,16 @@ export class Pane extends PureComponent<{
     this.state = {
       tree: treeMaster.currentTree,
     };
+    this.dispose = this.props.treeMaster.pluginContext?.project?.onSimulatorRendererReady(() => {
+      this.setState({
+        tree: this.props.treeMaster.currentTree,
+      });
+    });
   }
 
   componentWillUnmount() {
     this.controller.purge();
     this.dispose && this.dispose();
-  }
-
-  componentDidMount() {
-    this.dispose = this.props.treeMaster.pluginContext.project.onSimulatorRendererReady(() => {
-      this.setState({
-        tree: this.props.treeMaster.currentTree,
-      });
-    });
   }
 
   render() {
@@ -48,7 +45,6 @@ export class Pane extends PureComponent<{
       return (
         <div className="lc-outline-pane">
           <p className="lc-outline-notice">
-            {/* @ts-ignore */}
             <Loading
               style={{
                 display: 'block',
@@ -63,8 +59,8 @@ export class Pane extends PureComponent<{
 
     return (
       <div className="lc-outline-pane">
-        <Filter tree={tree} />
-        <div ref={(shell) => this.controller.mount(shell)} className="lc-outline-tree-container">
+        { !this.props.hideFilter && <Filter tree={tree} /> }
+        <div ref={(shell) => this.controller.mount(shell)} className={`lc-outline-tree-container ${ this.props.hideFilter ? 'lc-hidden-outline-filter' : '' }`}>
           <TreeView key={tree.id} tree={tree} />
         </div>
       </div>
