@@ -23,7 +23,7 @@ export interface IPublicModelWindow<
    * 窗口当前视图
    * @since v1.1.7
    */
-  currentEditorView: IPublicModelEditorView;
+  currentEditorView: IPublicModelEditorView | null;
 
   /**
    * 窗口全部视图实例

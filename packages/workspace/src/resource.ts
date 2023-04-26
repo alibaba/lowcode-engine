@@ -74,6 +74,10 @@ export class Resource implements IResource {
     return this.resourceData?.children?.map(d => new Resource(d, this.workspace.getResourceType(d.resourceName || this.resourceType.name), this.workspace)) || [];
   }
 
+  get config() {
+    return this.resourceData.config;
+  }
+
   constructor(readonly resourceData: IPublicResourceData, readonly resourceType: IResourceType, readonly workspace: IWorkspace) {
     this.context = new BasicContext(workspace, `resource-${resourceData.resourceName || resourceType.name}`, IPublicEnumPluginRegisterLevel.Resource);
     this.resourceTypeInstance = resourceType.resourceTypeModel(this.context.innerPlugins._getLowCodePluginContext({
