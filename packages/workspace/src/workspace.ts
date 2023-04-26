@@ -192,8 +192,8 @@ export class Workspace implements IWorkspace {
     this.emitChangeWindow();
   }
 
-  removeEditorWindow(resourceName: string) {
-    const index = this.windows.findIndex(d => (d.resource?.name === resourceName && d.title));
+  removeEditorWindow(resourceName: string, title: string) {
+    const index = this.windows.findIndex(d => (d.resource?.name === resourceName && d.title === title));
     this.remove(index);
   }
 
