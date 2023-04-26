@@ -1,4 +1,4 @@
-import { obx, computed, globalContext, makeObservable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
+import { obx, computed, makeObservable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { Node, INode } from './node';
 import { IPublicTypeNodeData, IPublicModelNodeChildren, IPublicEnumTransformStage, IPublicTypeDisposable } from '@alilc/lowcode-types';
 import { shallowEqual, compatStage, isNodeSchema } from '@alilc/lowcode-utils';
@@ -16,11 +16,11 @@ export interface INodeChildren extends Omit<IPublicModelNodeChildren<INode>,
   'isEmpty' |
   'notEmpty'
 > {
+  children: INode[];
+
   get owner(): INode;
 
   get length(): number;
-
-  children: INode[];
 
   unlinkChild(node: INode): void;
 
@@ -239,11 +239,8 @@ export class NodeChildren implements INodeChildren {
     }
     const { document } = node;
     /* istanbul ignore next */
-    if (globalContext.has('editor')) {
-      const workspace = globalContext.get('workspace');
-      const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
-      editor.eventBus.emit('node.remove', { node, index: i });
-    }
+    const editor = node.document?.designer.editor;
+    editor?.eventBus.emit('node.remove', { node, index: i });
     document?.unlinkNode(node);
     document?.selection.remove(node.id);
     document?.destroyNode(node);
@@ -281,14 +278,11 @@ export class NodeChildren implements INodeChildren {
     const i = children.map(d => d.id).indexOf(node.id);
 
     if (node.parent) {
-      if (globalContext.has('editor')) {
-        const workspace = globalContext.get('workspace');
-        const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
-        editor.eventBus.emit('node.remove.topLevel', {
-          node,
-          index: node.index,
-        });
-      }
+      const editor = node.document?.designer.editor;
+      editor?.eventBus.emit('node.remove.topLevel', {
+        node,
+        index: node.index,
+      });
     }
 
     if (i < 0) {
@@ -317,11 +311,8 @@ export class NodeChildren implements INodeChildren {
     });
     this.emitter.emit('insert', node);
     /* istanbul ignore next */
-    if (globalContext.has('editor')) {
-      const workspace = globalContext.get('workspace');
-      const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
-      editor.eventBus.emit('node.add', { node });
-    }
+    const editor = node.document?.designer.editor;
+    editor?.eventBus.emit('node.add', { node });
     if (useMutator) {
       this.reportModified(node, this.owner, { type: 'insert' });
     }

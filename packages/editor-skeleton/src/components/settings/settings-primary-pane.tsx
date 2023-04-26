@@ -53,8 +53,7 @@ export class SettingsPrimaryPane extends Component<ISettingsPrimaryPaneProps, { 
   }
 
   renderBreadcrumb() {
-    const { settings } = this.main;
-    const { config } = this.props;
+    const { settings, editor } = this.main;
     // const shouldIgnoreRoot = config.props?.ignoreRoot;
     const { shouldIgnoreRoot } = this.state;
     if (!settings) {
@@ -73,8 +72,6 @@ export class SettingsPrimaryPane extends Component<ISettingsPrimaryPaneProps, { 
       );
     }
 
-    const workspace = globalContext.get('workspace');
-    const editor = this.props.engineEditor;
     const designer = editor.get('designer');
     const current = designer?.currentSelection?.getNodes()?.[0];
     let node: INode | null = settings.first;
