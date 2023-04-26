@@ -148,6 +148,10 @@ export interface IDocumentModel extends Omit<IPublicModelDocumentModel<
   suspense(): void;
 
   close(): void;
+
+  unlinkNode(node: INode): void;
+
+  destroyNode(node: INode): void;
 }
 
 export class DocumentModel implements IDocumentModel {
@@ -333,6 +337,7 @@ export class DocumentModel implements IDocumentModel {
         this.import(schema as IPublicTypeRootSchema, true);
         this.simulator?.rerender();
       },
+      this,
     );
 
     this.setupListenActiveNodes();

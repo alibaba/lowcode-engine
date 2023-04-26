@@ -9,7 +9,7 @@ import {
   ComponentType,
 } from 'react';
 import classNames from 'classnames';
-import { observer, computed, Tip, globalContext } from '@alilc/lowcode-editor-core';
+import { observer, computed, Tip } from '@alilc/lowcode-editor-core';
 import { createIcon, isReactComponent, isActionContentObject } from '@alilc/lowcode-utils';
 import { IPublicTypeActionContentObject } from '@alilc/lowcode-types';
 import { BuiltinSimulatorHost } from '../host';
@@ -131,8 +131,7 @@ function createAction(content: ReactNode | ComponentType<any> | IPublicTypeActio
         className="lc-borders-action"
         onClick={() => {
           action && action(node.internalToShellNode()!);
-          const workspace = globalContext.get('workspace');
-          const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
+          const editor = node.document?.designer.editor;
           const npm = node?.componentMeta?.npm;
           const selected =
             [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||

@@ -183,6 +183,9 @@ export class Workspace implements IWorkspace {
   }
 
   private remove(index: number) {
+    if (index < 0) {
+      return;
+    }
     const window = this.windows[index];
     this.windows.splice(index, 1);
     if (this.window === window) {

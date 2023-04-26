@@ -60,6 +60,8 @@ export function buildFilter(rule?: string | string[] | RegExp | IPublicTypeNesti
 export interface IComponentMeta extends IPublicModelComponentMeta<INode> {
   prototype?: any;
 
+  liveTextEditing?: IPublicTypeLiveTextEditingConfig[];
+
   get rootSelector(): string | undefined;
 
   setMetadata(metadata: IPublicTypeComponentMetadata): void;
