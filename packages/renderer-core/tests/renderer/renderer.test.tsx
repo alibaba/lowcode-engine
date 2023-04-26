@@ -13,7 +13,6 @@ function getComp(schema, comp = null, others = {}): Promise<{
 }> {
   return new Promise((resolve, reject) => {
     const component = renderer.create(
-      // @ts-ignore
       <Renderer
         schema={schema}
         components={components as any}
@@ -48,7 +47,6 @@ afterEach(() => {
 describe('Base Render', () => {
   it('renderComp', () => {
     const content = (
-      // @ts-ignore
       <Renderer
         schema={schema as any}
         components={components as any}
