@@ -51,7 +51,6 @@ export default class Filter extends PureComponent<{
 
     return (
       <div className="lc-outline-filter">
-        {/* @ts-ignore */}
         <Search
           hasClear
           shape="simple"
@@ -60,7 +59,6 @@ export default class Filter extends PureComponent<{
           value={keywords}
           onChange={this.handleSearchChange}
         />
-        {/* @ts-ignore */}
         <Balloon
           v2
           align="br"
@@ -72,7 +70,6 @@ export default class Filter extends PureComponent<{
             </div>
           )}
         >
-          {/* @ts-ignore */}
           <Checkbox
             checked={checkAll}
             indeterminate={indeterminate}
@@ -80,9 +77,7 @@ export default class Filter extends PureComponent<{
           >
             {this.props.tree.pluginContext.intlNode('Check All')}
           </Checkbox>
-          {/* @ts-ignore */}
           <Divider />
-          {/* @ts-ignore */}
           <Checkbox.Group
             value={filterOps}
             direction="ver"

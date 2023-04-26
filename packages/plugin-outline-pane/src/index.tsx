@@ -6,6 +6,34 @@ import { TreeMaster } from './controllers/tree-master';
 import { PaneController } from './controllers/pane-controller';
 import { useState } from 'react';
 
+export function OutlinePaneContext(props: {
+  treeMaster?: TreeMaster;
+
+  pluginContext: IPublicModelPluginContext;
+
+  options: any;
+
+  paneName: string;
+
+  hideFilter?: boolean;
+}) {
+  const treeMaster = props.treeMaster || new TreeMaster(props.pluginContext, props.options);
+  const [masterPaneController, setMasterPaneController] = useState(new PaneController(props.paneName || MasterPaneName, treeMaster));
+  treeMaster.onPluginContextChange(() => {
+    setMasterPaneController(new PaneController(props.paneName || MasterPaneName, treeMaster));
+  });
+
+  return (
+    <Pane
+      treeMaster={treeMaster}
+      controller={masterPaneController}
+      key={masterPaneController.id}
+      hideFilter={props.hideFilter}
+      {...props}
+    />
+  );
+}
+
 export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
   const { skeleton, config, canvas, project } = ctx;
 
@@ -19,7 +47,6 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
     backupPane: false,
   };
   const treeMaster = new TreeMaster(ctx, options);
-  let backupPaneController: PaneController | null = null;
   return {
     async init() {
       skeleton.add({
@@ -33,22 +60,7 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
             icon: IconOutline,
             description: treeMaster.pluginContext.intlNode('Outline Tree'),
           },
-          content: function Context(props: any) {
-            const [masterPaneController, setMasterPaneController] = useState(new PaneController(MasterPaneName, treeMaster));
-            treeMaster.onPluginContextChange(() => {
-              setMasterPaneController(new PaneController(MasterPaneName, treeMaster));
-            });
-
-            return (
-              <Pane
-                config={config}
-                treeMaster={treeMaster}
-                controller={masterPaneController}
-                key={masterPaneController.id}
-                {...props}
-              />
-            );
-          },
+          content: OutlinePaneContext,
         },
         panelProps: {
           area: isInFloatArea ? 'leftFloatArea' : 'leftFixedArea',
@@ -57,6 +69,8 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
         },
         contentProps: {
           treeTitleExtra: config.get('treeTitleExtra'),
+          treeMaster,
+          paneName: MasterPaneName,
         },
       });
 
@@ -67,15 +81,10 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
         props: {
           hiddenWhenInit: true,
         },
-        content: (props: any) => {
-          backupPaneController = new PaneController(BackupPaneName, treeMaster);
-          return (
-            <Pane
-              treeMaster={treeMaster}
-              controller={backupPaneController}
-              {...props}
-            />
-          );
+        content: OutlinePaneContext,
+        contentProps: {
+          paneName: BackupPaneName,
+          treeMaster,
         },
       });
 

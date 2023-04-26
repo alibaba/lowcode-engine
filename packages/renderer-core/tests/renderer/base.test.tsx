@@ -79,7 +79,6 @@ describe('Base Render methods', () => {
     // const originalUtils = jest.requireActual('../../src/utils');
     // mockParseExpression.mockImplementation(originalUtils.parseExpression);
     const component = TestRenderer.create(
-      // @ts-ignore
       <RendererClass
         __schema={mockSchema}
         components={components as any}
