@@ -18,6 +18,10 @@ export interface IBaseModelResource<
   get children(): Resource[];
 
   get viewName(): string | undefined;
+
+  get config(): {
+    disableBehaviors?: ('copy' | 'remove')[];
+  } | undefined;
 }
 
 export type IPublicModelResource = IBaseModelResource<IPublicModelResource>;

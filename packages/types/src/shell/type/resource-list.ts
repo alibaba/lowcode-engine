@@ -24,6 +24,10 @@ export interface IPublicResourceData {
 
   /** 资源子元素 */
   children?: IPublicResourceData[];
+
+  config?: {
+    disableBehaviors?: ('copy' | 'remove')[];
+  };
 }
 
 export type IPublicResourceList = IPublicResourceData[];
