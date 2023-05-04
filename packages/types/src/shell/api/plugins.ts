@@ -13,6 +13,7 @@ export interface IPluginPreferenceMananger {
 export type PluginOptionsType = string | number | boolean | object;
 
 export interface IPublicApiPlugins {
+
   /**
    * 可以通过 plugin api 获取其他插件 export 导出的内容
    */
@@ -59,5 +60,12 @@ export interface IPublicApiPlugins {
    *
    * delete plugin instance by name
    */
-  delete(pluginName: string): void;
+  delete(pluginName: string): Promise<boolean>;
+
+  /**
+   * 删除所有插件
+   *
+   * delete all plugin instance
+   */
+  dispose(): void;
 }

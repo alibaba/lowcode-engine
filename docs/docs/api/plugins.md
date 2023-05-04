@@ -209,7 +209,19 @@ has(pluginName: string): boolean;
  * 删除指定插件
  * delete plugin instance by name
  */
-delete(pluginName: string): void;
+delete(pluginName: string): Promise<boolean>;
+```
+
+### dispose
+
+删除所有插件
+
+```typescript
+/**
+ * 删除所有插件
+ * delete all plugin instance
+ */
+dispose(): void;
 ```
 
 ### getPluginPreference

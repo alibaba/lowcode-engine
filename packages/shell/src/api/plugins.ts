@@ -70,6 +70,10 @@ export class Plugins implements IPublicApiPlugins {
     return await this[pluginsSymbol].delete(pluginName);
   }
 
+  async dispose() {
+    await this[pluginsSymbol].dispose();
+  }
+
   toProxy() {
     return new Proxy(this, {
       get(target, prop, receiver) {

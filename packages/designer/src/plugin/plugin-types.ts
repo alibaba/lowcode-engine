@@ -83,7 +83,7 @@ export interface ILowCodePluginManagerCore {
   get(pluginName: string): ILowCodePluginRuntime | undefined;
   getAll(): ILowCodePluginRuntime[];
   has(pluginName: string): boolean;
-  delete(pluginName: string): any;
+  delete(pluginName: string): Promise<boolean>;
   setDisabled(pluginName: string, flag: boolean): void;
   dispose(): void;
   _getLowCodePluginContext (options: IPluginContextOptions): PluginContext;
