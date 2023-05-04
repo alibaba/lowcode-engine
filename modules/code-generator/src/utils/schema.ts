@@ -148,3 +148,9 @@ export function isValidContainerType(schema: IPublicTypeNodeSchema) {
     'Block',
   ].includes(schema.componentName);
 }
+
+export const enum ContainerType {
+  Page = 'Page',
+  Component = 'Component',
+  Block = 'Block',
+}
