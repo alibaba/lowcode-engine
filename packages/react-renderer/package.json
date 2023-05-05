@@ -25,7 +25,10 @@
     "@alilc/lowcode-renderer-core": "1.1.6"
   },
   "devDependencies": {
-    "@alib/build-scripts": "^0.1.18",
+    "build-scripts": "^1.0.0",
+    "webpack": "^4.0.0",
+    "webpack-dev-server": "^3.0.0",
+    "jest": "^26.4.2",
     "@alifd/next": "^1.19.17",
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0",

@@ -30,7 +30,9 @@
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
-    "@alib/build-scripts": "^0.1.18",
+    "build-scripts": "^1.0.0",
+    "webpack": "^4.0.0",
+    "webpack-dev-server": "^3.0.0",
     "@alifd/next": "^1.26.0",
     "@alilc/lowcode-designer": "1.1.6",
     "@babel/plugin-transform-typescript": "^7.16.8",

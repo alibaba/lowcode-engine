@@ -27,7 +27,9 @@
     "react-dom": "^16.7.0"
   },
   "devDependencies": {
-    "@alib/build-scripts": "^0.1.29",
+    "build-scripts": "^1.0.0",
+    "webpack": "^4.0.0",
+    "webpack-dev-server": "^3.0.0",
     "@testing-library/react": "^11.2.2",
     "@types/classnames": "^2.2.7",
     "@types/jest": "^26.0.16",

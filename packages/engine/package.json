@@ -32,7 +32,10 @@
     "react-dom": "^16.8.1"
   },
   "devDependencies": {
-    "@alib/build-scripts": "^0.1.18",
+    "build-scripts": "^1.0.0",
+    "webpack": "^4.0.0",
+    "webpack-dev-server": "^3.0.0",
+    "jest": "^26.4.2",
     "@alifd/theme-lowcode-dark": "^0.2.0",
     "@alifd/theme-lowcode-light": "^0.2.0",
     "@types/domready": "^1.0.0",

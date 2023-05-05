@@ -28,7 +28,9 @@
     "store": "^2.0.12"
   },
   "devDependencies": {
-    "@alib/build-scripts": "^0.1.18",
+    "build-scripts": "^1.0.0",
+    "webpack": "^4.0.0",
+    "webpack-dev-server": "^3.0.0",
     "@alilc/lowcode-datasource-types": "^1.0.1",
     "@types/classnames": "^2.2.7",
     "@types/lodash.get": "^4.4.6",

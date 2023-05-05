@@ -17,7 +17,9 @@
     "strict-event-emitter-types": "^2.0.0"
   },
   "devDependencies": {
-    "@alib/build-scripts": "^0.1.18",
+    "build-scripts": "^1.0.0",
+    "webpack": "^4.0.0",
+    "webpack-dev-server": "^3.0.0",
     "@types/node": "^13.7.1",
     "@types/react": "^16"
   },

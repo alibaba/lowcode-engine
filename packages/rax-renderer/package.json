@@ -35,7 +35,9 @@
     "rax-find-dom-node": "^1.0.1"
   },
   "devDependencies": {
-    "@alib/build-scripts": "^0.1.0",
+    "build-scripts": "^1.0.0",
+    "webpack": "^4.0.0",
+    "webpack-dev-server": "^3.0.0",
     "build-plugin-rax-component": "^0.2.11",
     "driver-universal": "^3.1.3"
   },
