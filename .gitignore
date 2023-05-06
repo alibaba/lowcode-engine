@@ -3,6 +3,7 @@ build
 dist
 packages/*/lib/
 packages/*/es/
+packages/*/es2017/
 packages/*/dist/
 packages/*/output/
 packages/demo/
