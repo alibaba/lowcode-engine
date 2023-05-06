@@ -57,7 +57,7 @@
     "@alilc/lowcode-test-mate": "^1.0.1"
   },
   "engines": {
-    "node": ">=14.17.0 <18"
+    "node": ">=16.14.0 <18"
   },
   "tnpm": {
     "mode": "yarn",
