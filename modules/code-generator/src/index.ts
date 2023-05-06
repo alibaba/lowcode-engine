@@ -9,7 +9,7 @@ import { createModuleBuilder } from './generator/ModuleBuilder';
 import { createDiskPublisher } from './publisher/disk';
 import { createZipPublisher } from './publisher/zip';
 import createIceJsProjectBuilder, { plugins as icejsPlugins } from './solutions/icejs';
-import createIce3JsProjectBuilder, { plugins as icejs3Plugins } from './solutions/icejs3';
+import createIceJs3ProjectBuilder, { plugins as icejs3Plugins } from './solutions/icejs3';
 import createRaxAppProjectBuilder, { plugins as raxPlugins } from './solutions/rax-app';
 
 // 引入说明
@@ -42,7 +42,7 @@ export default {
   createModuleBuilder,
   solutions: {
     icejs: createIceJsProjectBuilder,
-    icejs3: createIce3JsProjectBuilder,
+    icejs3: createIceJs3ProjectBuilder,
     rax: createRaxAppProjectBuilder,
   },
   solutionParts: {
