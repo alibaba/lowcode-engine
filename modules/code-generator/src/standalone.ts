@@ -8,7 +8,8 @@ import './polyfills/buffer';
 import { createProjectBuilder } from './generator/ProjectBuilder';
 import { createModuleBuilder } from './generator/ModuleBuilder';
 import { createZipPublisher } from './publisher/zip';
-import createIceJsProjectBuilder, { plugins as reactPlugins } from './solutions/icejs';
+import createIceJsProjectBuilder, { plugins as icejsPlugins } from './solutions/icejs';
+import createIceJs3ProjectBuilder, { plugins as icejs3Plugins } from './solutions/icejs3';
 import createRaxAppProjectBuilder, { plugins as raxPlugins } from './solutions/rax-app';
 
 // 引入说明
@@ -18,6 +19,7 @@ import { COMMON_CHUNK_NAME, CLASS_DEFINE_CHUNK_NAME, DEFAULT_LINK_AFTER } from '
 // 引入通用插件组
 import esmodule from './plugins/common/esmodule';
 import requireUtils from './plugins/common/requireUtils';
+import styleImport from './plugins/common/styleImport';
 
 import css from './plugins/component/style/css';
 import constants from './plugins/project/constants';
@@ -32,6 +34,7 @@ import * as CONSTANTS from './const';
 
 // 引入内置解决方案模块
 import icejs from './plugins/project/framework/icejs';
+import icejs3 from './plugins/project/framework/icejs3';
 import rax from './plugins/project/framework/rax';
 
 export default {
@@ -39,10 +42,12 @@ export default {
   createModuleBuilder,
   solutions: {
     icejs: createIceJsProjectBuilder,
+    icejs3: createIceJs3ProjectBuilder,
     rax: createRaxAppProjectBuilder,
   },
   solutionParts: {
     icejs,
+    icejs3,
     rax,
   },
   publishers: {
@@ -50,6 +55,7 @@ export default {
   },
   plugins: {
     common: {
+
       /**
        * 处理 ES Module
        * @deprecated please use esModule
@@ -57,12 +63,7 @@ export default {
       esmodule,
       esModule: esmodule,
       requireUtils,
-    },
-    react: {
-      ...reactPlugins,
-    },
-    rax: {
-      ...raxPlugins,
+      styleImport,
     },
     style: {
       css,
@@ -71,6 +72,22 @@ export default {
       constants,
       i18n,
       utils,
+    },
+    icejs: {
+      ...icejsPlugins,
+    },
+    icejs3: {
+      ...icejs3Plugins,
+    },
+    rax: {
+      ...raxPlugins,
+    },
+
+    /**
+     * @deprecated please use icejs
+     */
+    react: {
+      ...icejsPlugins,
     },
   },
   postprocessor: {
