@@ -153,6 +153,14 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
 
     // 根据是否支持变量配置做相应的更改
     const supportVariable = this.field.extraProps?.supportVariable;
+    // supportVariable SHOULD take precedence over supportVariableGlobally
+    if (supportVariable === false) {
+      return {
+        setterProps,
+        initialValue,
+        setterType,
+      };
+    }
     // supportVariableGlobally 只对标准组件生效，vc 需要单独配置
     const supportVariableGlobally = engineConfig.get('supportVariableGlobally', false) && isStandardComponent(componentMeta);
     if (supportVariable || supportVariableGlobally) {
