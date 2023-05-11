@@ -27,6 +27,7 @@ export default class TreeTitle extends PureComponent<{
   state: {
     editing: boolean;
     title: string;
+    condition?: boolean;
   } = {
     editing: false,
     title: '',
@@ -80,10 +81,16 @@ export default class TreeTitle extends PureComponent<{
     this.setState({
       editing: false,
       title: treeNode.titleLabel,
+      condition: treeNode.condition,
     });
     treeNode.onTitleLabelChanged(() => {
       this.setState({
         title: treeNode.titleLabel,
+      });
+    });
+    treeNode.onConditionChanged(() => {
+      this.setState({
+        condition: treeNode.condition,
       });
     });
   }
@@ -188,7 +195,7 @@ export default class TreeTitle extends PureComponent<{
                   <Tip>{intlNode('Loop')}</Tip>
                 </a>
               )}
-              {node.hasCondition() && !node.conditionGroup && (
+              {this.state.condition && (
                 <a className="tree-node-tag cond">
                   {/* todo: click todo something */}
                   <IconCond />
