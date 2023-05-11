@@ -211,6 +211,10 @@ export class Panel implements IWidget {
     this.setActive(false);
   }
 
+  disable() {}
+
+  enable(): void {}
+
   show() {
     this.setActive(true);
   }

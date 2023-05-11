@@ -4,8 +4,9 @@ import {
   SkeletonEvents,
 } from '@alilc/lowcode-editor-skeleton';
 import { skeletonSymbol } from '../symbols';
-import { IPublicApiSkeleton, IPublicTypeDisposable, IPublicTypeSkeletonConfig, IPublicTypeWidgetConfigArea } from '@alilc/lowcode-types';
+import { IPublicApiSkeleton, IPublicModelSkeletonItem, IPublicTypeDisposable, IPublicTypeSkeletonConfig, IPublicTypeWidgetConfigArea } from '@alilc/lowcode-types';
 import { getLogger } from '@alilc/lowcode-utils';
+import { SkeletonItem } from '../model/skeleton-item';
 
 const innerSkeletonSymbol = Symbol('skeleton');
 
@@ -46,12 +47,15 @@ export class Skeleton implements IPublicApiSkeleton {
    * @param extraConfig
    * @returns
    */
-  add(config: IPublicTypeSkeletonConfig, extraConfig?: Record<string, any>) {
+  add(config: IPublicTypeSkeletonConfig, extraConfig?: Record<string, any>): IPublicModelSkeletonItem | undefined {
     const configWithName = {
       ...config,
       pluginName: this.pluginName,
     };
-    return this[skeletonSymbol].add(configWithName, extraConfig);
+    const item = this[skeletonSymbol].add(configWithName, extraConfig);
+    if (item) {
+      return new SkeletonItem(item);
+    }
   }
 
   /**
@@ -66,6 +70,10 @@ export class Skeleton implements IPublicApiSkeleton {
       return;
     }
     skeleton[normalizeArea(area)].container?.remove(name);
+  }
+
+  getAreaItems(areaName: IPublicTypeWidgetConfigArea): IPublicModelSkeletonItem[] {
+    return this[skeletonSymbol][normalizeArea(areaName)].container.items?.map(d => new SkeletonItem(d));
   }
 
   /**
@@ -193,7 +201,7 @@ export class Skeleton implements IPublicApiSkeleton {
   }
 }
 
-function normalizeArea(area: IPublicTypeWidgetConfigArea | undefined): 'leftArea' | 'rightArea' | 'topArea' | 'toolbar' | 'mainArea' | 'bottomArea' | 'leftFixedArea' | 'leftFloatArea' | 'stages' {
+function normalizeArea(area: IPublicTypeWidgetConfigArea | undefined): 'leftArea' | 'rightArea' | 'topArea' | 'toolbar' | 'mainArea' | 'bottomArea' | 'leftFixedArea' | 'leftFloatArea' | 'stages' | 'subTopArea' {
   switch (area) {
     case 'leftArea':
     case 'left':
@@ -220,6 +228,8 @@ function normalizeArea(area: IPublicTypeWidgetConfigArea | undefined): 'leftArea
       return 'leftFloatArea';
     case 'stages':
       return 'stages';
+    case 'subTopArea':
+      return 'subTopArea';
     default:
       throw new Error(`${area} not supported`);
   }
