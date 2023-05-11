@@ -10,7 +10,7 @@
   "module": "es/index.js",
   "stylePath": "style.js",
   "scripts": {
-    "build": "build-scripts build --skip-demo"
+    "build": "build-scripts build"
   },
   "keywords": [
     "lowcode",

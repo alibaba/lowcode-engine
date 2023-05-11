@@ -12,7 +12,7 @@
   "scripts": {
     "start": "build-scripts start",
     "version:update": "node ./scripts/version.js",
-    "build": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --skip-demo",
+    "build": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build",
     "build:umd": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --config build.umd.json",
     "test": "build-scripts test --config build.test.json --jest-passWithNoTests"
   },

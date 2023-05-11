@@ -10,7 +10,7 @@
     "es"
   ],
   "scripts": {
-    "build": "build-scripts build --skip-demo"
+    "build": "build-scripts build"
   },
   "dependencies": {
     "@alifd/next": "^1.19.16",

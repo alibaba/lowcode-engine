@@ -1,7 +1,7 @@
 {
   "plugins": [
     [
-      "build-plugin-component",
+      "@alilc/build-plugin-lce",
       {
         "filename": "editor-preset-vision",
         "library": "LowcodeEditor",
