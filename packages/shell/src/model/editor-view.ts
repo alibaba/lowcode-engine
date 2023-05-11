@@ -10,7 +10,7 @@ export class EditorView {
   constructor(editorView: IViewContext) {
     this[editorViewSymbol] = editorView;
     this[pluginContextSymbol] = this[editorViewSymbol].innerPlugins._getLowCodePluginContext({
-      pluginName: '',
+      pluginName: editorView.editorWindow + editorView.viewName,
     });
   }
 
