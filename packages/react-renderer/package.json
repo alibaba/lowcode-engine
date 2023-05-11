@@ -12,7 +12,7 @@
   "scripts": {
     "test": "build-scripts test --config build.test.json",
     "start": "build-scripts start",
-    "build": "build-scripts build --skip-demo",
+    "build": "build-scripts build",
     "build:umd": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --config build.umd.json"
   },
   "keywords": [

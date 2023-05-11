@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --skip-demo",
+    "build": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build",
     "build:umd": "build-scripts build --config build.umd.json"
   },
   "dependencies": {
