@@ -141,7 +141,7 @@ export interface IDocumentModel extends Omit<IPublicModelDocumentModel<
 
   insertNodes(parent: INode, thing: INode[] | IPublicTypeNodeData[], at?: number | null, copy?: boolean): INode[];
 
-  open(): DocumentModel;
+  open(): IDocumentModel;
 
   remove(): void;
 

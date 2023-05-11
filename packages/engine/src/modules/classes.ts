@@ -10,6 +10,7 @@ import {
   Selection,
   Prop,
   SimulatorHost,
+  SkeletonItem,
 } from '@alilc/lowcode-shell';
 import { Node as InnerNode } from '@alilc/lowcode-designer';
 
@@ -26,4 +27,5 @@ export default {
   Selection,
   Prop,
   SimulatorHost,
+  SkeletonItem,
 };

@@ -66,8 +66,8 @@ export class Plugins implements IPublicApiPlugins {
     return this[pluginsSymbol].has(pluginName);
   }
 
-  delete(pluginName: string) {
-    this[pluginsSymbol].delete(pluginName);
+  async delete(pluginName: string) {
+    return await this[pluginsSymbol].delete(pluginName);
   }
 
   toProxy() {

@@ -11,6 +11,7 @@ import {
   Clipboard,
   SettingField,
   Window,
+  SkeletonItem,
 } from './model';
 import {
   Project,
@@ -66,4 +67,5 @@ export {
   SimulatorHost,
   Config,
   SettingField,
+  SkeletonItem,
 };

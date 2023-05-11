@@ -25,7 +25,7 @@ export interface IPublicTypePanelDockConfig extends IPublicTypeWidgetBaseConfig 
   props?: IPublicTypePanelDockProps;
 
   /** 面板 name, 当没有 props.title 时, 会使用 name 作为标题 */
-  name?: string;
+  name: string;
 }
 
 export interface IPublicTypePanelDockProps {

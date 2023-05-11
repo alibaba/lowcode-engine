@@ -13,6 +13,8 @@ enum EVENT {
   CHANGE_ACTIVE_WINDOW = 'change_active_window',
 
   WINDOW_RENDER_READY = 'window_render_ready',
+
+  CHANGE_ACTIVE_EDITOR_VIEW = 'change_active_editor_view',
 }
 
 const CHANGE_EVENT = 'resource.list.change';
@@ -42,6 +44,10 @@ export interface IWorkspace extends Omit<IPublicApiWorkspace<
   initWindow(): void;
 
   setActive(active: boolean): void;
+
+  onChangeActiveEditorView(fn: () => void): IPublicTypeDisposable;
+
+  emitChangeActiveEditorView(): void;
 }
 
 export class Workspace implements IWorkspace {
@@ -258,12 +264,24 @@ export class Workspace implements IWorkspace {
     };
   }
 
+  onChangeActiveEditorView(fn: () => void) {
+    this.emitter.on(EVENT.CHANGE_ACTIVE_EDITOR_VIEW, fn);
+    return () => {
+      this.emitter.removeListener(EVENT.CHANGE_ACTIVE_EDITOR_VIEW, fn);
+    };
+  }
+
+  emitChangeActiveEditorView() {
+    this.emitter.emit(EVENT.CHANGE_ACTIVE_EDITOR_VIEW);
+  }
+
   emitChangeWindow() {
     this.emitter.emit(EVENT.CHANGE_WINDOW);
   }
 
   emitChangeActiveWindow() {
     this.emitter.emit(EVENT.CHANGE_ACTIVE_WINDOW);
+    this.emitChangeActiveEditorView();
   }
 
   onChangeActiveWindow(fn: () => void) {

@@ -32,7 +32,7 @@ import {
 import { SUPPORT_SCHEMA_VERSION_LIST } from '../const';
 
 import { getErrorMessage } from '../utils/errors';
-import { handleSubNodes, isValidContainerType } from '../utils/schema';
+import { handleSubNodes, isValidContainerType, ContainerType } from '../utils/schema';
 import { uniqueArray } from '../utils/common';
 import { componentAnalyzer } from '../analyzer/componentAnalyzer';
 import { ensureValidClassName } from '../utils/validate';
@@ -161,7 +161,8 @@ export class SchemaParser implements ISchemaParser {
             ...subRoot,
             componentName: getRootComponentName(subRoot.componentName, compDeps),
             containerType: subRoot.componentName,
-            moduleName: ensureValidClassName(changeCase.pascalCase(subRoot.fileName)),
+            moduleName: ensureValidClassName(subRoot.componentName === ContainerType.Component ?
+              subRoot.fileName : changeCase.pascalCase(subRoot.fileName)),
           };
           return container;
         });

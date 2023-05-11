@@ -36,3 +36,4 @@ export const configSymbol = Symbol('configSymbol');
 export const conditionGroupSymbol = Symbol('conditionGroup');
 export const editorViewSymbol = Symbol('editorView');
 export const pluginContextSymbol = Symbol('pluginContext');
+export const skeletonItemSymbol = Symbol('skeletonItem');

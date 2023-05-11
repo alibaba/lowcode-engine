@@ -73,4 +73,8 @@ export class Workspace implements IPublicApiWorkspace {
   onChangeActiveWindow(fn: () => void): IPublicTypeDisposable {
     return this[workspaceSymbol].onChangeActiveWindow(fn);
   }
+
+  onChangeActiveEditorView(fn: () => void): IPublicTypeDisposable {
+    return this[workspaceSymbol].onChangeActiveEditorView(fn);
+  }
 }
