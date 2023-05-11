@@ -7,7 +7,9 @@ import { IEditorWindow } from '../window';
 import { getWebviewPlugin } from '../inner-plugins/webview';
 
 export interface IViewContext extends IBasicContext {
+  editorWindow: IEditorWindow;
 
+  viewName: string;
 }
 
 export class Context extends BasicContext implements IViewContext {

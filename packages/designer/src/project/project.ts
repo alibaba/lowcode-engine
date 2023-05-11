@@ -1,7 +1,7 @@
 import { obx, computed, makeObservable, action, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { IDesigner } from '../designer';
 import { DocumentModel, isDocumentModel } from '../document';
-import type { IDocumentModel } from "../document";
+import type { IDocumentModel } from '../document';
 import {
   IPublicTypeComponentsMap,
   IPublicEnumTransformStage,
@@ -317,13 +317,13 @@ export class Project implements IProject {
       doc = this.createDocument();
       return doc.open();
     }
-    if (typeof doc === 'string') {
-      const got = this.documents.find((item) => item.fileName === doc || item.id === doc);
+    if (typeof doc === 'string' || typeof doc === 'number') {
+      const got = this.documents.find((item) => item.fileName === String(doc) || String(item.id) === String(doc));
       if (got) {
         return got.open();
       }
 
-      const data = this.data.componentsTree.find((data) => data.fileName === doc);
+      const data = this.data.componentsTree.find((data) => data.fileName === String(doc));
       if (data) {
         doc = this.createDocument(data);
         return doc.open();

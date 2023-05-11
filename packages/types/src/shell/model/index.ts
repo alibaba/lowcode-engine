@@ -31,3 +31,4 @@ export * from './resource';
 export * from './clipboard';
 export * from './setting-field';
 export * from './editor-view';
+export * from './skeleton-item';

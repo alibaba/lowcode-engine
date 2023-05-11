@@ -56,7 +56,8 @@ export interface ISkeleton extends Omit<IPublicApiSkeleton,
   'onShowWidget' |
   'onHideWidget' |
   'remove' |
-  'hideArea'
+  'hideArea' |
+  'add'
 > {
   editor: IEditor;
 
@@ -101,6 +102,8 @@ export interface ISkeleton extends Omit<IPublicApiSkeleton,
   ): WidgetContainer;
 
   createPanel(config: PanelConfig): Panel;
+
+  add(config: IPublicTypeSkeletonConfig, extraConfig?: Record<string, any>): IWidget | Widget | Panel | Stage | Dock | PanelDock | undefined;
 }
 
 export class Skeleton {
@@ -440,7 +443,7 @@ export class Skeleton {
     return restConfig;
   }
 
-  add(config: IPublicTypeSkeletonConfig, extraConfig?: Record<string, any>) {
+  add(config: IPublicTypeSkeletonConfig, extraConfig?: Record<string, any>): IWidget | Widget | Panel | Stage | Dock | PanelDock | undefined {
     const parsedConfig = {
       ...this.parseConfig(config),
       ...extraConfig,

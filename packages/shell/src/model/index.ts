@@ -20,3 +20,4 @@ export * from './plugin-instance';
 export * from './window';
 export * from './clipboard';
 export * from './editor-view';
+export * from './skeleton-item';

@@ -1,3 +1,4 @@
+import { IPublicModelSkeletonItem } from '../model';
 import { IPublicTypeDisposable, IPublicTypeSkeletonConfig } from '../type';
 
 export interface IPublicApiSkeleton {
@@ -9,7 +10,7 @@ export interface IPublicApiSkeleton {
    * @param extraConfig
    * @returns
    */
-  add(config: IPublicTypeSkeletonConfig, extraConfig?: Record<string, any>): any;
+  add(config: IPublicTypeSkeletonConfig, extraConfig?: Record<string, any>): IPublicModelSkeletonItem | undefined;
 
   /**
    * 移除一个面板实例
