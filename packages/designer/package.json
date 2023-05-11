@@ -9,7 +9,7 @@
     "es"
   ],
   "scripts": {
-    "build": "build-scripts build --skip-demo",
+    "build": "build-scripts build",
     "test": "build-scripts test --config build.test.json",
     "test:cov": "build-scripts test --config build.test.json --jest-coverage"
   },

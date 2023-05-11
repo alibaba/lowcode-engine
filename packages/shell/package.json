@@ -9,9 +9,7 @@
     "es"
   ],
   "scripts": {
-    "build": "build-scripts build --skip-demo",
-    "test": "build-scripts test --config build.test.json",
-    "test:cov": "build-scripts test --config build.test.json --jest-coverage"
+    "build": "build-scripts build"
   },
   "license": "MIT",
   "dependencies": {

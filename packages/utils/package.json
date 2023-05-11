@@ -10,7 +10,7 @@
   "module": "es/index.js",
   "scripts": {
     "test": "build-scripts test --config build.test.json",
-    "build": "build-scripts build --skip-demo"
+    "build": "build-scripts build"
   },
   "dependencies": {
     "@alifd/next": "^1.19.16",

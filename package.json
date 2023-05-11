@@ -52,7 +52,7 @@
     "yarn": "^1.22.17",
     "rimraf": "^3.0.2",
     "@types/react-router": "5.1.18",
-    "build-plugin-component": "^1.12.0",
+    "@alilc/build-plugin-lce": "^0.0.3",
     "babel-jest": "^26.5.2",
     "@alilc/lowcode-test-mate": "^1.0.1"
   },
