@@ -35,6 +35,9 @@ export class Tree {
       if (key === '___title___') {
         const treeNode = this.getTreeNodeById(node.id);
         treeNode?.notifyTitleLabelChanged();
+      } else if (key === '___condition___') {
+        const treeNode = this.getTreeNodeById(node.id);
+        treeNode?.notifyConditionChanged();
       }
     });
   }
