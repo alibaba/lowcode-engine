@@ -3,8 +3,7 @@ import { createModuleEventBus, IEventBus, makeObservable, obx } from '@alilc/low
 import { Context, IViewContext } from './context/view-context';
 import { IWorkspace } from './workspace';
 import { IResource } from './resource';
-import { IPublicTypeDisposable } from '../../types/es/shell/type/disposable';
-import { IPublicModelWindow } from '@alilc/lowcode-types';
+import { IPublicModelWindow, IPublicTypeDisposable } from '@alilc/lowcode-types';
 
 interface IWindowCOnfig {
   title: string | undefined;
@@ -158,6 +157,10 @@ export class EditorWindow implements IEditorWindow {
 
     if (!ignoreEmit) {
       this.emitter.emit('window.change.view.type', name);
+
+      if (this.id === this.workspace.window.id) {
+        this.workspace.emitChangeActiveEditorView();
+      }
     }
     this.editorView.setActivate(true);
   };
