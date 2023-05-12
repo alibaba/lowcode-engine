@@ -493,6 +493,11 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           return schema.map((item, idy) => this.__createVirtualDom(item, scope, parentInfo, (item as IPublicTypeNodeSchema)?.__ctx?.lceKey ? '' : String(idy)));
         }
 
+        // @ts-expect-error 如果直接转换好了，可以返回
+        if (schema.$$typeof) {
+          return schema;
+        }
+
         const _children = getSchemaChildren(schema);
         if (!schema.componentName) {
           logger.error('The componentName in the schema is invalid, please check the schema: ', schema);
@@ -508,11 +513,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           const text: string = schema.props?.text;
           schema = { ...schema };
           schema.children = [text];
-        }
-
-        // @ts-expect-error 如果直接转换好了，可以返回
-        if (schema.$$typeof) {
-          return schema;
         }
 
         if (!isSchema(schema)) {
