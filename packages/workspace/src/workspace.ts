@@ -128,7 +128,7 @@ export class Workspace implements IWorkspace {
       title: resource.title,
     });
     this.editorWindowMap.set(this.window.id, this.window);
-    this.windows.push(this.window);
+    this.windows = [...this.windows, this.window];
     this.emitChangeWindow();
     this.emitChangeActiveWindow();
   }
@@ -214,7 +214,7 @@ export class Workspace implements IWorkspace {
     }
   }
 
-  openEditorWindow(name: string, title: string, options: Object, viewType?: string, sleep?: boolean) {
+  async openEditorWindow(name: string, title: string, options: Object, viewType?: string, sleep?: boolean) {
     if (this.window && !this.window?.initReady && !sleep) {
       this.windowQueue.push({
         name, title, options, viewType,
@@ -230,7 +230,7 @@ export class Workspace implements IWorkspace {
     if (filterWindows && filterWindows.length) {
       this.window = filterWindows[0];
       if (!sleep && this.window.sleep) {
-        this.window.init();
+        await this.window.init();
       } else {
         this.checkWindowQueue();
       }

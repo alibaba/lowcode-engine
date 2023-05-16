@@ -30,7 +30,7 @@ export interface IPublicApiWorkspace<
   registerResourceType(resourceTypeModel: IPublicTypeResourceType): void;
 
   /** 打开视图窗口 */
-  openEditorWindow(resourceName: string, title: string, extra: Object, viewName?: string, sleep?: boolean): void;
+  openEditorWindow(resourceName: string, title: string, extra: Object, viewName?: string, sleep?: boolean): Promise<void>;
 
   /** 通过视图 id 打开窗口 */
   openEditorWindowById(id: string): void;
@@ -46,6 +46,12 @@ export interface IPublicApiWorkspace<
 
   /** active 窗口变更事件 */
   onChangeActiveWindow(fn: () => void): IPublicTypeDisposable;
+
+  /**
+   * active 视图变更事件
+   * @since v1.1.7
+   */
+  onChangeActiveEditorView(fn: () => void): IPublicTypeDisposable;
 
   /**
    * window 下的所有视图 renderer ready 事件

@@ -42,8 +42,8 @@ export class Workspace implements IPublicApiWorkspace {
     this[workspaceSymbol].registerResourceType(resourceTypeModel);
   }
 
-  openEditorWindow(resourceName: string, title: string, extra: object, viewName?: string, sleep?: boolean): void {
-    this[workspaceSymbol].openEditorWindow(resourceName, title, extra, viewName, sleep);
+  async openEditorWindow(resourceName: string, title: string, extra: object, viewName?: string, sleep?: boolean): Promise<void> {
+    await this[workspaceSymbol].openEditorWindow(resourceName, title, extra, viewName, sleep);
   }
 
   openEditorWindowById(id: string) {
