@@ -150,6 +150,11 @@ const VALID_ENGINE_OPTIONS = {
     description: '应用级设计模式下，自动打开第一个窗口',
     default: true,
   },
+  enableWorkspaceMode: {
+    type: 'boolean',
+    description: '是否开启应用级设计模式',
+    default: false,
+  },
 };
 
 const getStrictModeValue = (engineOptions: IPublicTypeEngineOptions, defaultValue: boolean): boolean => {
