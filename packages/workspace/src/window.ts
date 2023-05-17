@@ -51,9 +51,6 @@ export class EditorWindow implements IEditorWindow {
     this.title = config.title;
     this.icon = resource.icon;
     this.sleep = config.sleep;
-    if (!config.sleep) {
-      this.init();
-    }
   }
 
   async importSchema(schema: any) {
@@ -155,6 +152,8 @@ export class EditorWindow implements IEditorWindow {
       return;
     }
 
+    this.editorView.setActivate(true);
+
     if (!ignoreEmit) {
       this.emitter.emit('window.change.view.type', name);
 
@@ -162,7 +161,6 @@ export class EditorWindow implements IEditorWindow {
         this.workspace.emitChangeActiveEditorView();
       }
     }
-    this.editorView.setActivate(true);
   };
 
   get project() {
