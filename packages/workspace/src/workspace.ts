@@ -115,7 +115,7 @@ export class Workspace implements IWorkspace {
     }
   }
 
-  initWindow() {
+  async initWindow() {
     if (!this.defaultResourceType || this.enableAutoOpenFirstWindow === false) {
       return;
     }
@@ -127,6 +127,7 @@ export class Workspace implements IWorkspace {
     this.window = new EditorWindow(resource, this, {
       title: resource.title,
     });
+    await this.window.init();
     this.editorWindowMap.set(this.window.id, this.window);
     this.windows = [...this.windows, this.window];
     this.emitChangeWindow();
@@ -196,6 +197,9 @@ export class Workspace implements IWorkspace {
     this.windows.splice(index, 1);
     if (this.window === window) {
       this.window = this.windows[index] || this.windows[index + 1] || this.windows[index - 1];
+      if (this.window.sleep) {
+        this.window.init();
+      }
       this.emitChangeActiveWindow();
     }
     this.emitChangeWindow();
@@ -206,10 +210,13 @@ export class Workspace implements IWorkspace {
     this.remove(index);
   }
 
-  openEditorWindowById(id: string) {
+  async openEditorWindowById(id: string) {
     const window = this.editorWindowMap.get(id);
     if (window) {
       this.window = window;
+      if (window.sleep) {
+        await window.init();
+      }
       this.emitChangeActiveWindow();
     }
   }
@@ -252,6 +259,7 @@ export class Workspace implements IWorkspace {
     this.editorWindowMap.set(window.id, window);
     if (!sleep) {
       this.window = window;
+      await this.window.init();
     }
     this.emitChangeWindow();
     this.emitChangeActiveWindow();
