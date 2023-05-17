@@ -90,28 +90,29 @@ export class TreeMaster {
   private initEvent() {
     let startTime: any;
     const { event, project, canvas } = this.pluginContext;
+    const setExpandByActiveTracker = (target: IPublicTypeActiveTarget) => {
+      const { node, detail } = target;
+      const tree = this.currentTree;
+      if (!tree/* || node.document !== tree.document */) {
+        return;
+      }
+      const treeNode = tree.getTreeNode(node);
+      if (detail && isLocationChildrenDetail(detail)) {
+        treeNode.expand(true);
+      } else {
+        treeNode.expandParents();
+      }
+      this.boards.forEach((board) => {
+        board.scrollToNode(treeNode, detail);
+      });
+    };
     this.disposeEvents = [
       canvas.dragon?.onDragstart(() => {
         startTime = Date.now() / 1000;
         // needs?
         this.toVision();
       }),
-      canvas.activeTracker?.onChange((target: IPublicTypeActiveTarget) => {
-        const { node, detail } = target;
-        const tree = this.currentTree;
-        if (!tree/* || node.document !== tree.document */) {
-          return;
-        }
-        const treeNode = tree.getTreeNode(node);
-        if (detail && isLocationChildrenDetail(detail)) {
-          treeNode.expand(true);
-        } else {
-          treeNode.expandParents();
-        }
-        this.boards.forEach((board) => {
-          board.scrollToNode(treeNode, detail);
-        });
-      }),
+      canvas.activeTracker?.onChange(setExpandByActiveTracker),
       canvas.dragon?.onDragend(() => {
         const endTime: any = Date.now() / 1000;
         const nodes = project.currentDocument?.selection?.getNodes();
@@ -135,6 +136,9 @@ export class TreeMaster {
         this.treeMap.delete(id);
       }),
     ];
+    if (canvas.activeTracker?.target) {
+      setExpandByActiveTracker(canvas.activeTracker?.target);
+    }
   }
 
   private toVision() {
