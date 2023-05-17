@@ -12,6 +12,16 @@ export class ActiveTracker implements IPublicModelActiveTracker {
     this[activeTrackerSymbol] = innerTracker;
   }
 
+  get target() {
+    const { node: innerNode, detail, instance } = this[activeTrackerSymbol]._target;
+    const publicNode = ShellNode.create(innerNode);
+    return {
+      node: publicNode!,
+      detail,
+      instance,
+    };
+  }
+
   onChange(fn: (target: IPublicTypeActiveTarget) => void): () => void {
     if (!fn) {
       return () => {};
