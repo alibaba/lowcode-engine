@@ -70,9 +70,7 @@ export class Resource implements IResource {
     return this.context.innerSkeleton;
   }
 
-  get children(): IResource[] {
-    return this.resourceData?.children?.map(d => new Resource(d, this.workspace.getResourceType(d.resourceName || this.resourceType.name), this.workspace)) || [];
-  }
+  children: IResource[];
 
   get config() {
     return this.resourceData.config;
@@ -92,6 +90,7 @@ export class Resource implements IResource {
     if (!resourceType) {
       logger.error(`resourceType[${resourceType}] is unValid.`);
     }
+    this.children = this.resourceData?.children?.map(d => new Resource(d, this.workspace.getResourceType(d.resourceName || this.resourceType.name), this.workspace)) || [];
   }
 
   async init() {
