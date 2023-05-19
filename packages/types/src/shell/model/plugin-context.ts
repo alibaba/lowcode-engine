@@ -13,7 +13,7 @@ import {
   IPublicApiWorkspace,
 } from '../api';
 import { IPublicEnumPluginRegisterLevel } from '../enum';
-import { IPublicModelEngineConfig, IPublicModelEditorView } from './';
+import { IPublicModelEngineConfig, IPublicModelWindow } from './';
 
 export interface IPublicModelPluginContext {
 
@@ -108,7 +108,7 @@ export interface IPublicModelPluginContext {
    */
   get registerLevel(): IPublicEnumPluginRegisterLevel;
 
-  get editorWindow(): IPublicModelEditorView;
+  get editorWindow(): IPublicModelWindow;
 }
 
 /**
