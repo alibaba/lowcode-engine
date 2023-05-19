@@ -21,6 +21,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
     if (ir && ir.deps && ir.deps.length > 0) {
       let lowcodeMaterialsStyleAdded = false;
+      let fusionUIStyleAdded = false;
       let nextStyleAddedMap: Record<string, boolean> = {};
       ir.deps.forEach((dep: any) => {
         if (dep.package === '@alifd/next' && !nextStyleAddedMap[dep.exportName]) {
@@ -41,6 +42,15 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
             linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport],
           });
           lowcodeMaterialsStyleAdded = true;
+        } else if (dep.package === '@alifd/fusion-ui' && !fusionUIStyleAdded) {
+          chunks.push({
+            type: ChunkType.STRING,
+            fileType: FileType.JSX,
+            name: COMMON_CHUNK_NAME.InternalDepsImport,
+            content: 'import \'@alifd/fusion-ui/lib/style\';',
+            linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport],
+          });
+          fusionUIStyleAdded = true;
         }
       });
     }
