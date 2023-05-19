@@ -42,4 +42,10 @@ export interface IPublicModelWindow<
 
   /** 窗口视图变更事件 */
   onChangeViewType(fn: (viewName: string) => void): IPublicTypeDisposable;
+
+  /**
+   * 窗口视图保存事件
+   * @since 1.1.7
+   */
+  onSave(fn: () => void): IPublicTypeDisposable;
 }

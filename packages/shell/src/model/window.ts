@@ -43,6 +43,10 @@ export class Window implements IPublicModelWindow {
     return await this[windowSymbol].save();
   }
 
+  onSave(fn: () => void) {
+    return this[windowSymbol].onSave(fn);
+  }
+
   get currentEditorView() {
     if (this[windowSymbol].editorView) {
       return new EditorView(this[windowSymbol].editorView).toProxy() as any;
