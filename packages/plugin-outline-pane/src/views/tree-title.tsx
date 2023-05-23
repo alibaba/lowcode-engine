@@ -28,6 +28,7 @@ export default class TreeTitle extends PureComponent<{
     editing: boolean;
     title: string;
     condition?: boolean;
+    visible?: boolean;
   } = {
     editing: false,
     title: '',
@@ -93,6 +94,11 @@ export default class TreeTitle extends PureComponent<{
         condition: treeNode.condition,
       });
     });
+    treeNode.onHiddenChanged((hidden: boolean) => {
+      this.setState({
+        visible: !hidden,
+      });
+    });
   }
 
   render() {
@@ -132,7 +138,7 @@ export default class TreeTitle extends PureComponent<{
         data-id={treeNode.id}
         onClick={() => {
           if (isModal) {
-            if (node.visible) {
+            if (this.state.visible) {
               node.document?.modalNodesManager?.setInvisible(node);
             } else {
               node.document?.modalNodesManager?.setVisible(node);
@@ -144,7 +150,7 @@ export default class TreeTitle extends PureComponent<{
           }
         }}
       >
-        {isModal && node.visible && (
+        {isModal && this.state.visible && (
           <div onClick={() => {
             node.document?.modalNodesManager?.setInvisible(node);
           }}
@@ -152,7 +158,7 @@ export default class TreeTitle extends PureComponent<{
             <IconRadioActive className="tree-node-modal-radio-active" />
           </div>
         )}
-        {isModal && !node.visible && (
+        {isModal && !this.state.visible && (
           <div onClick={() => {
             node.document?.modalNodesManager?.setVisible(node);
           }}

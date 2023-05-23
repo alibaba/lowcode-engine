@@ -40,6 +40,11 @@ export class Tree {
         treeNode?.notifyConditionChanged();
       }
     });
+
+    doc?.onChangeNodeVisible((node: IPublicModelNode, visible: boolean) => {
+      const treeNode = this.getTreeNodeById(node.id);
+      treeNode?.setHidden(!visible);
+    });
   }
 
   setNodeSelected(nodeId: string): void {

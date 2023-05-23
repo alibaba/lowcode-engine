@@ -244,7 +244,9 @@ export default class TreeNode {
     if (this.node.conditionGroup) {
       return;
     }
-    this.node.visible = !flag;
+    if (this.node.visible !== !flag) {
+      this.node.visible = !flag;
+    }
     this.event.emit(EVENT_NAMES.hiddenChanged, flag);
   }
 
