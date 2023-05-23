@@ -45,6 +45,8 @@ sidebar_position: 12
 
 关联模型 [IPublicModelEditorView](./editor-view)
 
+**@since v1.1.7**
+
 ### editorViews
 
 窗口所有视图
@@ -53,6 +55,7 @@ sidebar_position: 12
 
 关联模型 [IPublicModelEditorView](./editor-view)
 
+**@since v1.1.7**
 
 ## 方法
 
@@ -90,3 +93,15 @@ onChangeViewType(fn: (viewName: string) => void): IPublicTypeDisposable;
 ```
 
 相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
+
+### onSave
+
+窗口视图保存事件
+
+```
+onSave(fn: () => void): IPublicTypeDisposable;
+```
+
+相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
+
+**@since v1.1.7**

@@ -17,7 +17,9 @@ export class Pane extends PureComponent<{
 }> {
   private controller;
 
-  private dispose: IPublicTypeDisposable;
+  private simulatorRendererReadyDispose: IPublicTypeDisposable;
+  private changeDocumentDispose: IPublicTypeDisposable;
+  private removeDocumentDispose: IPublicTypeDisposable;
 
   constructor(props: any) {
     super(props);
@@ -26,16 +28,22 @@ export class Pane extends PureComponent<{
     this.state = {
       tree: treeMaster.currentTree,
     };
-    this.dispose = this.props.treeMaster.pluginContext?.project?.onSimulatorRendererReady(() => {
-      this.setState({
-        tree: this.props.treeMaster.currentTree,
-      });
-    });
+    this.simulatorRendererReadyDispose = this.props.treeMaster.pluginContext?.project?.onSimulatorRendererReady(this.changeTree);
+    this.changeDocumentDispose = this.props.treeMaster.pluginContext?.project?.onChangeDocument(this.changeTree);
+    this.removeDocumentDispose = this.props.treeMaster.pluginContext?.project?.onRemoveDocument(this.changeTree);
   }
+
+  changeTree = () => {
+    this.setState({
+      tree: this.props.treeMaster.currentTree,
+    });
+  };
 
   componentWillUnmount() {
     this.controller.purge();
-    this.dispose && this.dispose();
+    this.simulatorRendererReadyDispose?.();
+    this.changeDocumentDispose?.();
+    this.removeDocumentDispose?.();
   }
 
   render() {

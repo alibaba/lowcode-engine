@@ -77,7 +77,18 @@ export class EditorWindow implements IEditorWindow {
       const saveResult = await this.editorViews.get(name)?.save();
       value[name] = saveResult;
     }
-    return await this.resource.save(value);
+    const result = await this.resource.save(value);
+    this.emitter.emit('handle.save');
+
+    return result;
+  }
+
+  onSave(fn: () => void) {
+    this.emitter.on('handle.save', fn);
+
+    return () => {
+      this.emitter.off('handle.save', fn);
+    };
   }
 
   async init() {
