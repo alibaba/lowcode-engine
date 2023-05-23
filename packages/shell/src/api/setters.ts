@@ -47,11 +47,11 @@ export class Setters implements IPublicApiSetters {
    * 获取已注册的所有 settersMap
    * @returns
    */
-  getSettersMap(): Map<string, IPublicTypeRegisteredSetter & {
+  getSettersMap = (): Map<string, IPublicTypeRegisteredSetter & {
     type: string;
-  }> {
+  }> => {
     return this[settersSymbol].getSettersMap();
-  }
+  };
 
   /**
    * 注册一个 setter
