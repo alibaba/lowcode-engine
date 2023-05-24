@@ -18,27 +18,34 @@ export default function rendererFactory() {
 
   const debug = Debug('renderer:entry');
 
+  const exceptionStyle = {
+    width: '100%',
+    height: '50px',
+    lineHeight: '50px',
+    textAlign: 'center',
+    fontSize: '15px',
+    color: '#ff0000',
+    border: '2px solid #ff0000',
+    borderRadius: '4px',
+  };
+
   class FaultComponent extends PureComponent {
     render() {
       console.error(this.props.error);
       console.error('render error', this.props);
       return createElement(Div, {
-        style: {
-          width: '100%',
-          height: '50px',
-          lineHeight: '50px',
-          textAlign: 'center',
-          fontSize: '15px',
-          color: '#ff0000',
-          border: '2px solid #ff0000',
-        },
+        className: 'engine-fault-component',
+        style: exceptionStyle,
       }, '组件渲染异常，请查看控制台日志');
     }
   }
 
   class NotFoundComponent extends PureComponent {
     render() {
-      return createElement(Div, this.props, this.props.children || 'Component Not Found');
+      return createElement(Div, {
+        className: 'engine-unknown-component',
+        style: exceptionStyle,
+      }, this.props.children || '组件未找到');
     }
   }
 
