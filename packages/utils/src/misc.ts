@@ -81,6 +81,7 @@ const stageList = [
   'init',
   'upgrade',
 ];
+
 /**
  * 兼容原来的数字版本的枚举对象
  * @param stage
@@ -108,4 +109,18 @@ export function deprecate(fail: any, message: string, alterative?: string) {
 
 export function isRegExp(obj: any): obj is RegExp {
   return obj && obj.test && obj.exec && obj.compile;
+}
+
+/**
+ * The prop supportVariable SHOULD take precedence over default global supportVariable.
+ * @param propSupportVariable prop supportVariable
+ * @param globalSupportVariable global supportVariable
+ * @returns
+ */
+export function shouldUseVariableSetter(
+  propSupportVariable: boolean | undefined,
+  globalSupportVariable: boolean,
+) {
+  if (propSupportVariable === false) return false;
+  return propSupportVariable || globalSupportVariable;
 }
