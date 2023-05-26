@@ -38,7 +38,7 @@
     "@ali/lerna": "^1",
     "f2elint": "^2.0.1",
     "husky": "^7.0.4",
-    "typescript": "^3.2.2"
+    "typescript": "^5.0.4"
   },
   "engines": {
     "node": ">=14.0.0"
@@ -48,6 +48,7 @@
     "lockfile": "enable"
   },
   "resolutions": {
-    "@builder/babel-preset-ice": "1.0.1"
+    "@builder/babel-preset-ice": "1.0.1",
+    "typescript": "^5.0.4"
   }
 }
