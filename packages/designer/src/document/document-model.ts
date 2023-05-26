@@ -839,13 +839,18 @@ export class DocumentModel implements IDocumentModel {
     }
     // 合并外界传入的自定义渲染的组件
     if (Array.isArray(extraComps)) {
-      extraComps.forEach(c => {
-        if (c && !exsitingMap[c]) {
-          const m = this.getComponentMeta(c);
-          if (m && m.npm?.package) {
+      extraComps.forEach((componentName) => {
+        if (componentName && !exsitingMap[componentName]) {
+          const meta = this.getComponentMeta(componentName);
+          if (meta?.npm?.package) {
             componentsMap.push({
-              ...m?.npm,
-              componentName: c,
+              ...meta?.npm,
+              componentName,
+            });
+          } else {
+            componentsMap.push({
+              devMode: 'lowCode',
+              componentName,
             });
           }
         }
