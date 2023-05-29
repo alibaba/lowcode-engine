@@ -1,6 +1,6 @@
 import { Component, MouseEvent, Fragment, ReactNode } from 'react';
 import { shallowIntl, observer, obx, engineConfig, runInAction } from '@alilc/lowcode-editor-core';
-import { createContent, isJSSlot, isSetterConfig } from '@alilc/lowcode-utils';
+import { createContent, isJSSlot, isSetterConfig, shouldUseVariableSetter } from '@alilc/lowcode-utils';
 import { Skeleton, Stage } from '@alilc/lowcode-editor-skeleton';
 import { IPublicApiSetters, IPublicTypeCustomView, IPublicTypeDynamicProps } from '@alilc/lowcode-types';
 import { ISettingEntry, IComponentMeta, ISettingField, isSettingField, ISettingTopEntry } from '@alilc/lowcode-designer';
@@ -155,23 +155,29 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
     const supportVariable = this.field.extraProps?.supportVariable;
     // supportVariableGlobally 只对标准组件生效，vc 需要单独配置
     const supportVariableGlobally = engineConfig.get('supportVariableGlobally', false) && isStandardComponent(componentMeta);
-    if (supportVariable || supportVariableGlobally) {
-      if (setterType === 'MixedSetter') {
-        // VariableSetter 不单独使用
-        if (Array.isArray(setterProps.setters) && !setterProps.setters.includes('VariableSetter')) {
-          setterProps.setters.push('VariableSetter');
-        }
-      } else {
-        setterType = 'MixedSetter';
-        setterProps = {
-          setters: [
-            setter,
-            'VariableSetter',
-          ],
-        };
-      }
+    const isUseVariableSetter = shouldUseVariableSetter(supportVariable, supportVariableGlobally);
+    if (isUseVariableSetter === false) {
+      return {
+        setterProps,
+        initialValue,
+        setterType,
+      };
     }
 
+    if (setterType === 'MixedSetter') {
+      // VariableSetter 不单独使用
+      if (Array.isArray(setterProps.setters) && !setterProps.setters.includes('VariableSetter')) {
+        setterProps.setters.push('VariableSetter');
+      }
+    } else {
+      setterType = 'MixedSetter';
+      setterProps = {
+        setters: [
+          setter,
+          'VariableSetter',
+        ],
+      };
+    }
     return {
       setterProps,
       initialValue,
