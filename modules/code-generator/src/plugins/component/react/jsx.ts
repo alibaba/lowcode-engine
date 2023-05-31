@@ -58,7 +58,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
           generateCompositeType(
             {
               type: 'JSFunction',
-              value: input.value || 'null',
+              value: input.value || 'function () {}',
             },
             Scope.createRootScope(),
           ),

@@ -2,12 +2,12 @@ import {
   IPublicTypeTitleContent,
   IPublicTypeLocationChildrenDetail,
   IPublicModelNode,
-  IPublicModelPluginContext,
   IPublicTypeDisposable,
 } from '@alilc/lowcode-types';
 import { isI18nData, isLocationChildrenDetail } from '@alilc/lowcode-utils';
 import EventEmitter from 'events';
 import { Tree } from './tree';
+import { IOutlinePanelPluginContext } from './tree-master';
 
 /**
  * 大纲树过滤结果
@@ -35,10 +35,12 @@ enum EVENT_NAMES {
   titleLabelChanged = 'titleLabelChanged',
 
   expandableChanged = 'expandableChanged',
+
+  conditionChanged = 'conditionChanged',
 }
 
 export default class TreeNode {
-  readonly pluginContext: IPublicModelPluginContext;
+  readonly pluginContext: IOutlinePanelPluginContext;
   event = new EventEmitter();
 
   private _node: IPublicModelNode;
@@ -152,6 +154,10 @@ export default class TreeNode {
     return this.node.slots.map((node) => this.tree.getTreeNode(node));
   }
 
+  get condition(): boolean {
+    return this.node.hasCondition() && !this.node.conditionGroup;
+  }
+
   get children(): TreeNode[] | null {
     return this.node.children?.map((node) => this.tree.getTreeNode(node)) || null;
   }
@@ -160,9 +166,9 @@ export default class TreeNode {
     return this._node;
   }
 
-  constructor(tree: Tree, node: IPublicModelNode, pluginContext: IPublicModelPluginContext) {
+  constructor(tree: Tree, node: IPublicModelNode) {
     this.tree = tree;
-    this.pluginContext = pluginContext;
+    this.pluginContext = tree.pluginContext;
     this._node = node;
   }
 
@@ -203,6 +209,15 @@ export default class TreeNode {
       this.event.off(EVENT_NAMES.titleLabelChanged, fn);
     };
   }
+
+  onConditionChanged(fn: (treeNode: TreeNode) => void): IPublicTypeDisposable {
+    this.event.on(EVENT_NAMES.conditionChanged, fn);
+
+    return () => {
+      this.event.off(EVENT_NAMES.conditionChanged, fn);
+    };
+  }
+
   onExpandableChanged(fn: (expandable: boolean) => void): IPublicTypeDisposable {
     this.event.on(EVENT_NAMES.expandableChanged, fn);
     return () => {
@@ -221,11 +236,17 @@ export default class TreeNode {
     this.event.emit(EVENT_NAMES.titleLabelChanged, this.title);
   }
 
+  notifyConditionChanged(): void {
+    this.event.emit(EVENT_NAMES.conditionChanged, this.condition);
+  }
+
   setHidden(flag: boolean) {
     if (this.node.conditionGroup) {
       return;
     }
-    this.node.visible = !flag;
+    if (this.node.visible !== !flag) {
+      this.node.visible = !flag;
+    }
     this.event.emit(EVENT_NAMES.hiddenChanged, flag);
   }
 

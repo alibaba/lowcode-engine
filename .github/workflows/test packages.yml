@@ -1,4 +1,4 @@
-name: lint & test
+name: Lint & Test (Pkgs)
 
 on:
   push:
@@ -43,7 +43,7 @@ jobs:
       - name: test
         run: cd packages/designer && npm test
 
-  editor-skeleton:
+  test-editor-skeleton:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -58,3 +58,51 @@ jobs:
 
       - name: test
         run: cd packages/editor-skeleton && npm test
+
+  test-renderer-core:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: install
+        run: npm i && npm run setup:skip-build
+
+      - name: test
+        run: cd packages/renderer-core && npm test
+
+  test-react-simulator-renderer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: install
+        run: npm i && npm run setup:skip-build
+
+      - name: test
+        run: cd packages/react-simulator-renderer && npm test
+
+  test-utils:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: install
+        run: npm i && npm run setup:skip-build
+
+      - name: test
+        run: cd packages/utils && npm test

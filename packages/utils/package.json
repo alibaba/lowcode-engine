@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-utils",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "Utils for Ali lowCode engine",
   "files": [
     "lib",
@@ -10,11 +10,11 @@
   "module": "es/index.js",
   "scripts": {
     "test": "build-scripts test --config build.test.json",
-    "build": "build-scripts build --skip-demo"
+    "build": "build-scripts build"
   },
   "dependencies": {
     "@alifd/next": "^1.19.16",
-    "@alilc/lowcode-types": "1.1.6",
+    "@alilc/lowcode-types": "1.1.7",
     "lodash": "^4.17.21",
     "mobx": "^6.3.0",
     "react": "^16"

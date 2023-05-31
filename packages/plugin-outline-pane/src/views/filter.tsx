@@ -5,11 +5,9 @@ import { Search, Checkbox, Balloon, Divider } from '@alifd/next';
 import TreeNode from '../controllers/tree-node';
 import { Tree } from '../controllers/tree';
 import { matchTreeNode, FILTER_OPTIONS } from './filter-tree';
-import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 
 export default class Filter extends PureComponent<{
   tree: Tree;
-  pluginContext: IPublicModelPluginContext;
 }, {
   keywords: string;
   filterOps: string[];
@@ -56,7 +54,7 @@ export default class Filter extends PureComponent<{
         <Search
           hasClear
           shape="simple"
-          placeholder={this.props.pluginContext.intl('Filter Node')}
+          placeholder={this.props.tree.pluginContext.intl('Filter Node')}
           className="lc-outline-filter-search-input"
           value={keywords}
           onChange={this.handleSearchChange}
@@ -77,7 +75,7 @@ export default class Filter extends PureComponent<{
             indeterminate={indeterminate}
             onChange={this.handleCheckAll}
           >
-            {this.props.pluginContext.intlNode('Check All')}
+            {this.props.tree.pluginContext.intlNode('Check All')}
           </Checkbox>
           <Divider />
           <Checkbox.Group
@@ -91,7 +89,7 @@ export default class Filter extends PureComponent<{
                 value={op.value}
                 key={op.value}
               >
-                {this.props.pluginContext.intlNode(op.label)}
+                {this.props.tree.pluginContext.intlNode(op.label)}
               </Checkbox>
             ))}
           </Checkbox.Group>

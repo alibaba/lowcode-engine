@@ -47,7 +47,7 @@ export class Workbench extends Component<{
                   {
                     workspace.windows.map(d => (
                       <WindowView
-                        active={d.id === workspace.window.id}
+                        active={d.id === workspace.window?.id}
                         window={d}
                         key={d.id}
                       />

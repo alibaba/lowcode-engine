@@ -16,6 +16,8 @@ export type UNSET = typeof UNSET;
 export interface IProp extends Omit<IPublicModelProp<
   INode
 >, 'exportSchema' | 'node'>, IPropParent {
+  spread: boolean;
+
   key: string | number | undefined;
 
   readonly props: IProps;
@@ -41,6 +43,8 @@ export interface IProp extends Omit<IPublicModelProp<
   purge(): void;
 
   setupItems(): IProp[] | null;
+
+  isVirtual(): boolean;
 
   get type(): ValueTypes;
 
@@ -336,13 +340,9 @@ export class Prop implements IProp, IPropParent {
       if (!this._items) {
         return this._value;
       }
-      const values = this.items!.map((prop) => {
+      return this.items!.map((prop) => {
         return prop?.export(stage);
       });
-      if (values.every((val) => val === undefined)) {
-        return undefined;
-      }
-      return values;
     }
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-shell",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "Shell Layer for AliLowCodeEngine",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -9,18 +9,16 @@
     "es"
   ],
   "scripts": {
-    "build": "build-scripts build --skip-demo",
-    "test": "build-scripts test --config build.test.json",
-    "test:cov": "build-scripts test --config build.test.json --jest-coverage"
+    "build": "build-scripts build"
   },
   "license": "MIT",
   "dependencies": {
-    "@alilc/lowcode-designer": "1.1.6",
-    "@alilc/lowcode-editor-core": "1.1.6",
-    "@alilc/lowcode-editor-skeleton": "1.1.6",
-    "@alilc/lowcode-types": "1.1.6",
-    "@alilc/lowcode-utils": "1.1.6",
-    "@alilc/lowcode-workspace": "1.1.6",
+    "@alilc/lowcode-designer": "1.1.7",
+    "@alilc/lowcode-editor-core": "1.1.7",
+    "@alilc/lowcode-editor-skeleton": "1.1.7",
+    "@alilc/lowcode-types": "1.1.7",
+    "@alilc/lowcode-utils": "1.1.7",
+    "@alilc/lowcode-workspace": "1.1.7",
     "classnames": "^2.2.6",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",

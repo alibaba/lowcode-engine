@@ -48,7 +48,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
         type: ChunkType.STRING,
         fileType: FileType.JSX,
         name: CLASS_DEFINE_CHUNK_NAME.InsVar,
-        content: `static displayName = '${changeCase.pascalCase(ir.moduleName)}';`,
+        content: `static displayName = '${ir.moduleName}';`,
         linkAfter: [
           CLASS_DEFINE_CHUNK_NAME.Start,
         ],

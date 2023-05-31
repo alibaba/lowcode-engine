@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import DragResizeEngine from './drag-resize-engine';
-import { observer, computed, globalContext } from '@alilc/lowcode-editor-core';
+import { observer, computed } from '@alilc/lowcode-editor-core';
 import classNames from 'classnames';
 import { SimulatorContext } from '../context';
 import { BuiltinSimulatorHost } from '../host';
-import { OffsetObserver, Designer } from '../../designer';
+import { OffsetObserver, Designer, INode } from '../../designer';
 import { Node } from '../../document';
 import { normalizeTriggers } from '../../utils/misc';
 
@@ -135,7 +135,7 @@ export class BoxResizingInstance extends Component<{
     // this.hoveringCapture.setBoundary(this.outline);
     this.willBind();
 
-    const resize = (e: MouseEvent, direction: string, node: any, moveX: number, moveY: number) => {
+    const resize = (e: MouseEvent, direction: string, node: INode, moveX: number, moveY: number) => {
       const { advanced } = node.componentMeta;
       if (
         advanced.callbacks &&
@@ -149,7 +149,7 @@ export class BoxResizingInstance extends Component<{
       }
     };
 
-    const resizeStart = (e: MouseEvent, direction: string, node: any) => {
+    const resizeStart = (e: MouseEvent, direction: string, node: INode) => {
       const { advanced } = node.componentMeta;
       if (
         advanced.callbacks &&
@@ -161,7 +161,7 @@ export class BoxResizingInstance extends Component<{
       }
     };
 
-    const resizeEnd = (e: MouseEvent, direction: string, node: any) => {
+    const resizeEnd = (e: MouseEvent, direction: string, node: INode) => {
       const { advanced } = node.componentMeta;
       if (
         advanced.callbacks &&
@@ -172,8 +172,7 @@ export class BoxResizingInstance extends Component<{
         advanced.callbacks.onResizeEnd(e, cbNode);
       }
 
-      const workspace = globalContext.get('workspace');
-      const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
+      const editor = node.document?.designer.editor;
       const npm = node?.componentMeta?.npm;
       const selected =
         [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||

@@ -1,12 +1,18 @@
 import { computed, makeObservable, obx } from '@alilc/lowcode-editor-core';
-import { IPublicEditorViewConfig, IPublicTypeEditorView } from '@alilc/lowcode-types';
+import { IPublicEditorViewConfig, IPublicEnumPluginRegisterLevel, IPublicTypeEditorView } from '@alilc/lowcode-types';
 import { flow } from 'mobx';
 import { IWorkspace } from '../workspace';
-import { BasicContext } from './base-context';
+import { BasicContext, IBasicContext } from './base-context';
 import { IEditorWindow } from '../window';
 import { getWebviewPlugin } from '../inner-plugins/webview';
 
-export class Context extends BasicContext {
+export interface IViewContext extends IBasicContext {
+  editorWindow: IEditorWindow;
+
+  viewName: string;
+}
+
+export class Context extends BasicContext implements IViewContext {
   viewName = 'editor-view';
 
   instance: IPublicEditorViewConfig;
@@ -16,10 +22,6 @@ export class Context extends BasicContext {
   @obx _activate = false;
 
   @obx isInit: boolean = false;
-
-  @computed get active() {
-    return this._activate;
-  }
 
   init = flow(function* (this: Context) {
     if (this.viewType === 'webview') {
@@ -34,7 +36,7 @@ export class Context extends BasicContext {
   });
 
   constructor(public workspace: IWorkspace, public editorWindow: IEditorWindow, public editorView: IPublicTypeEditorView, options: Object | undefined) {
-    super(workspace, editorView.viewName, editorWindow);
+    super(workspace, editorView.viewName, IPublicEnumPluginRegisterLevel.EditorView, editorWindow);
     this.viewType = editorView.viewType || 'editor';
     this.viewName = editorView.viewName;
     this.instance = editorView(this.innerPlugins._getLowCodePluginContext({
@@ -42,6 +44,18 @@ export class Context extends BasicContext {
     }), options);
     makeObservable(this);
   }
+
+  @computed get active() {
+    return this._activate;
+  }
+
+  onSimulatorRendererReady = (): Promise<void> => {
+    return new Promise((resolve) => {
+      this.project.onSimulatorRendererReady(() => {
+        resolve();
+      });
+    });
+  };
 
   setActivate = (_activate: boolean) => {
     this._activate = _activate;

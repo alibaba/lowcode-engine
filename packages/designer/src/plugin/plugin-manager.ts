@@ -143,11 +143,10 @@ export class LowCodePluginManager implements ILowCodePluginManager {
   }
 
   async delete(pluginName: string): Promise<boolean> {
-    const idx = this.plugins.findIndex((plugin) => plugin.name === pluginName);
-    if (idx === -1) return false;
-    const plugin = this.plugins[idx];
+    const plugin = this.plugins.find(({ name }) => name === pluginName);
+    if (!plugin) return false;
     await plugin.destroy();
-
+    const idx = this.plugins.indexOf(plugin);
     this.plugins.splice(idx, 1);
     return this.pluginsMap.delete(pluginName);
   }

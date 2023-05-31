@@ -1,6 +1,6 @@
 import { IDesigner, ILowCodePluginManager, LowCodePluginManager } from '@alilc/lowcode-designer';
-import { createModuleEventBus, Editor, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
-import { IPublicApiPlugins, IPublicApiWorkspace, IPublicResourceList, IPublicTypeResourceType, IShellModelFactory } from '@alilc/lowcode-types';
+import { createModuleEventBus, Editor, IEditor, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
+import { IPublicApiPlugins, IPublicApiWorkspace, IPublicEnumPluginRegisterLevel, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType, IShellModelFactory } from '@alilc/lowcode-types';
 import { BasicContext } from './context/base-context';
 import { EditorWindow } from './window';
 import type { IEditorWindow } from './window';
@@ -11,6 +11,10 @@ enum EVENT {
   CHANGE_WINDOW = 'change_window',
 
   CHANGE_ACTIVE_WINDOW = 'change_active_window',
+
+  WINDOW_RENDER_READY = 'window_render_ready',
+
+  CHANGE_ACTIVE_EDITOR_VIEW = 'change_active_editor_view',
 }
 
 const CHANGE_EVENT = 'resource.list.change';
@@ -19,9 +23,11 @@ export interface IWorkspace extends Omit<IPublicApiWorkspace<
   LowCodePluginManager,
   IEditorWindow
 >, 'resourceList' | 'plugins'> {
-  readonly registryInnerPlugin: (designer: IDesigner, editor: Editor, plugins: IPublicApiPlugins) => Promise<void>;
+  readonly registryInnerPlugin: (designer: IDesigner, editor: Editor, plugins: IPublicApiPlugins) => Promise<IPublicTypeDisposable>;
 
   readonly shellModelFactory: IShellModelFactory;
+
+  enableAutoOpenFirstWindow: boolean;
 
   window: IEditorWindow;
 
@@ -30,10 +36,24 @@ export interface IWorkspace extends Omit<IPublicApiWorkspace<
   getResourceList(): IResource[];
 
   getResourceType(resourceName: string): IResourceType;
+
+  checkWindowQueue(): void;
+
+  emitWindowRendererReady(): void;
+
+  initWindow(): void;
+
+  setActive(active: boolean): void;
+
+  onChangeActiveEditorView(fn: () => void): IPublicTypeDisposable;
+
+  emitChangeActiveEditorView(): void;
 }
 
 export class Workspace implements IWorkspace {
   context: BasicContext;
+
+  enableAutoOpenFirstWindow: boolean;
 
   private emitter: IEventBus = createModuleEventBus('workspace');
 
@@ -69,33 +89,47 @@ export class Workspace implements IWorkspace {
 
   @obx.ref window: IEditorWindow;
 
+  windowQueue: {
+    name: string;
+    title: string;
+    options: Object;
+    viewType?: string;
+  }[] = [];
+
   constructor(
-    readonly registryInnerPlugin: (designer: IDesigner, editor: Editor, plugins: IPublicApiPlugins) => Promise<void>,
+    readonly registryInnerPlugin: (designer: IDesigner, editor: IEditor, plugins: IPublicApiPlugins) => Promise<IPublicTypeDisposable>,
     readonly shellModelFactory: any,
   ) {
-    this.init();
+    this.context = new BasicContext(this, '', IPublicEnumPluginRegisterLevel.Workspace);
     makeObservable(this);
   }
 
-  init() {
-    this.initWindow();
-    this.context = new BasicContext(this, '');
-  }
-
-  initWindow() {
-    if (!this.defaultResourceType) {
+  checkWindowQueue() {
+    if (!this.windowQueue || !this.windowQueue.length) {
       return;
     }
-    const title = this.defaultResourceType.name;
+
+    const windowInfo = this.windowQueue.shift();
+    if (windowInfo) {
+      this.openEditorWindow(windowInfo.name, windowInfo.title, windowInfo.options, windowInfo.viewType);
+    }
+  }
+
+  async initWindow() {
+    if (!this.defaultResourceType || this.enableAutoOpenFirstWindow === false) {
+      return;
+    }
+    const resourceName = this.defaultResourceType.name;
     const resource = new Resource({
-      resourceName: title,
+      resourceName,
       options: {},
     }, this.defaultResourceType, this);
     this.window = new EditorWindow(resource, this, {
-      title,
+      title: resource.title,
     });
+    await this.window.init();
     this.editorWindowMap.set(this.window.id, this.window);
-    this.windows.push(this.window);
+    this.windows = [...this.windows, this.window];
     this.emitChangeWindow();
     this.emitChangeActiveWindow();
   }
@@ -108,7 +142,7 @@ export class Workspace implements IWorkspace {
     const resourceType = new ResourceType(resourceTypeModel);
     this.resourceTypeMap.set(resourceTypeModel.resourceName, resourceType);
 
-    if (!this.window && this.defaultResourceType) {
+    if (!this.window && this.defaultResourceType && this._isActive) {
       this.initWindow();
     }
   }
@@ -129,6 +163,17 @@ export class Workspace implements IWorkspace {
     };
   }
 
+  onWindowRendererReady(fn: () => void): IPublicTypeDisposable {
+    this.emitter.on(EVENT.WINDOW_RENDER_READY, fn);
+    return () => {
+      this.emitter.off(EVENT.WINDOW_RENDER_READY, fn);
+    };
+  }
+
+  emitWindowRendererReady() {
+    this.emitter.emit(EVENT.WINDOW_RENDER_READY);
+  }
+
   getResourceType(resourceName: string): IResourceType {
     return this.resourceTypeMap.get(resourceName)!;
   }
@@ -145,29 +190,44 @@ export class Workspace implements IWorkspace {
   }
 
   private remove(index: number) {
+    if (index < 0) {
+      return;
+    }
     const window = this.windows[index];
     this.windows.splice(index, 1);
     if (this.window === window) {
       this.window = this.windows[index] || this.windows[index + 1] || this.windows[index - 1];
+      if (this.window.sleep) {
+        this.window.init();
+      }
       this.emitChangeActiveWindow();
     }
     this.emitChangeWindow();
   }
 
-  removeEditorWindow(resourceName: string) {
-    const index = this.windows.findIndex(d => (d.resource?.name === resourceName && d.title));
+  removeEditorWindow(resourceName: string, title: string) {
+    const index = this.windows.findIndex(d => (d.resource?.name === resourceName && d.title === title));
     this.remove(index);
   }
 
-  openEditorWindowById(id: string) {
+  async openEditorWindowById(id: string) {
     const window = this.editorWindowMap.get(id);
     if (window) {
       this.window = window;
+      if (window.sleep) {
+        await window.init();
+      }
       this.emitChangeActiveWindow();
     }
   }
 
-  openEditorWindow(name: string, title: string, options: Object, viewType?: string) {
+  async openEditorWindow(name: string, title: string, options: Object, viewType?: string, sleep?: boolean) {
+    if (this.window && !this.window?.initReady && !sleep) {
+      this.windowQueue.push({
+        name, title, options, viewType,
+      });
+      return;
+    }
     const resourceType = this.resourceTypeMap.get(name);
     if (!resourceType) {
       console.error(`${name} resourceType is not available`);
@@ -176,6 +236,11 @@ export class Workspace implements IWorkspace {
     const filterWindows = this.windows.filter(d => (d.resource?.name === name && d.resource.title == title));
     if (filterWindows && filterWindows.length) {
       this.window = filterWindows[0];
+      if (!sleep && this.window.sleep) {
+        await this.window.init();
+      } else {
+        this.checkWindowQueue();
+      }
       this.emitChangeActiveWindow();
       return;
     }
@@ -184,13 +249,18 @@ export class Workspace implements IWorkspace {
       title,
       options,
     }, resourceType, this);
-    this.window = new EditorWindow(resource, this, {
+    const window = new EditorWindow(resource, this, {
       title,
       options,
       viewType,
+      sleep,
     });
-    this.windows = [...this.windows, this.window];
-    this.editorWindowMap.set(this.window.id, this.window);
+    this.windows = [...this.windows, window];
+    this.editorWindowMap.set(window.id, window);
+    if (!sleep) {
+      this.window = window;
+      await this.window.init();
+    }
     this.emitChangeWindow();
     this.emitChangeActiveWindow();
   }
@@ -202,12 +272,24 @@ export class Workspace implements IWorkspace {
     };
   }
 
+  onChangeActiveEditorView(fn: () => void) {
+    this.emitter.on(EVENT.CHANGE_ACTIVE_EDITOR_VIEW, fn);
+    return () => {
+      this.emitter.removeListener(EVENT.CHANGE_ACTIVE_EDITOR_VIEW, fn);
+    };
+  }
+
+  emitChangeActiveEditorView() {
+    this.emitter.emit(EVENT.CHANGE_ACTIVE_EDITOR_VIEW);
+  }
+
   emitChangeWindow() {
     this.emitter.emit(EVENT.CHANGE_WINDOW);
   }
 
   emitChangeActiveWindow() {
     this.emitter.emit(EVENT.CHANGE_ACTIVE_WINDOW);
+    this.emitChangeActiveEditorView();
   }
 
   onChangeActiveWindow(fn: () => void) {

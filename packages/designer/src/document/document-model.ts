@@ -141,13 +141,17 @@ export interface IDocumentModel extends Omit<IPublicModelDocumentModel<
 
   insertNodes(parent: INode, thing: INode[] | IPublicTypeNodeData[], at?: number | null, copy?: boolean): INode[];
 
-  open(): DocumentModel;
+  open(): IDocumentModel;
 
   remove(): void;
 
   suspense(): void;
 
   close(): void;
+
+  unlinkNode(node: INode): void;
+
+  destroyNode(node: INode): void;
 }
 
 export class DocumentModel implements IDocumentModel {
@@ -333,6 +337,7 @@ export class DocumentModel implements IDocumentModel {
         this.import(schema as IPublicTypeRootSchema, true);
         this.simulator?.rerender();
       },
+      this,
     );
 
     this.setupListenActiveNodes();
@@ -834,13 +839,18 @@ export class DocumentModel implements IDocumentModel {
     }
     // 合并外界传入的自定义渲染的组件
     if (Array.isArray(extraComps)) {
-      extraComps.forEach(c => {
-        if (c && !exsitingMap[c]) {
-          const m = this.getComponentMeta(c);
-          if (m && m.npm?.package) {
+      extraComps.forEach((componentName) => {
+        if (componentName && !exsitingMap[componentName]) {
+          const meta = this.getComponentMeta(componentName);
+          if (meta?.npm?.package) {
             componentsMap.push({
-              ...m?.npm,
-              componentName: c,
+              ...meta?.npm,
+              componentName,
+            });
+          } else {
+            componentsMap.push({
+              devMode: 'lowCode',
+              componentName,
             });
           }
         }

@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-types",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "Types for Ali lowCode engine",
   "files": [
     "es",
@@ -9,7 +9,7 @@
   "main": "lib/index.js",
   "module": "es/index.js",
   "scripts": {
-    "build": "build-scripts build --skip-demo"
+    "build": "build-scripts build"
   },
   "dependencies": {
     "@alilc/lowcode-datasource-types": "^1.0.0",

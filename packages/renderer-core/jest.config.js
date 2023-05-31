@@ -11,6 +11,7 @@ const jestConfig = {
   // },
   // testMatch: ['(/tests?/.*(test))\\.[jt]s$'],
   // testMatch: ['**/*/base.test.tsx'],
+  // testMatch: ['**/utils/common.test.ts'],
   transformIgnorePatterns: [
     `/node_modules/(?!${esModules})/`,
   ],

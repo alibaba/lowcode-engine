@@ -95,6 +95,17 @@ common.utils.startTransaction(() => {
 }, IPublicEnumTransitionType.repaint);
 ```
 
+#### getConvertedExtraKey
+
+props key 转化工具
+
+```typescript
+getConvertedExtraKey(key: string): string
+
+```
+
+**@since v1.0.17**
+
 #### createIntl
 i18n 相关工具
 ```typescript

@@ -30,6 +30,7 @@ import {
   Common,
   Logger,
   Workspace,
+  Window,
   Canvas,
 } from '@alilc/lowcode-shell';
 import {
@@ -43,6 +44,7 @@ import {
   IPublicApiProject,
   IPublicApiSetters,
   IPublicApiSkeleton,
+  IPublicEnumPluginRegisterLevel,
   IPublicModelPluginContext,
   IPublicTypePluginMeta,
 } from '@alilc/lowcode-types';
@@ -99,7 +101,7 @@ export class BasicContext implements IBasicContext {
   preference: IPluginPreferenceMananger;
   workspace: IWorkspace;
 
-  constructor(innerWorkspace: IWorkspace, viewName: string, public editorWindow?: IEditorWindow) {
+  constructor(innerWorkspace: IWorkspace, viewName: string, readonly registerLevel: IPublicEnumPluginRegisterLevel, public editorWindow?: IEditorWindow) {
     const editor = new Editor(viewName, true);
 
     const innerSkeleton = new InnerSkeleton(editor, viewName);
@@ -164,6 +166,10 @@ export class BasicContext implements IBasicContext {
         context.plugins = plugins;
         context.logger = new Logger({ level: 'warn', bizName: `plugin:${pluginName}` });
         context.canvas = canvas;
+        if (editorWindow) {
+          context.editorWindow = new Window(editorWindow);
+        }
+        context.registerLevel = registerLevel;
       },
     };
 

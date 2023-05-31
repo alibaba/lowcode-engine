@@ -32,7 +32,7 @@ import {
 import { SUPPORT_SCHEMA_VERSION_LIST } from '../const';
 
 import { getErrorMessage } from '../utils/errors';
-import { handleSubNodes, isValidContainerType } from '../utils/schema';
+import { handleSubNodes, isValidContainerType, ContainerType } from '../utils/schema';
 import { uniqueArray } from '../utils/common';
 import { componentAnalyzer } from '../analyzer/componentAnalyzer';
 import { ensureValidClassName } from '../utils/validate';
@@ -106,6 +106,11 @@ function processChildren(schema: IPublicTypeNodeSchema): void {
   }
 }
 
+function getInternalDep(internalDeps: Record<string, IInternalDependency>, depName: string) {
+  const dep = internalDeps[depName];
+  return (dep && dep.type !== InternalDependencyType.PAGE) ? dep : null;
+}
+
 export class SchemaParser implements ISchemaParser {
   validate(schema: IPublicTypeProjectSchema): boolean {
     if (SUPPORT_SCHEMA_VERSION_LIST.indexOf(schema.version) < 0) {
@@ -161,7 +166,8 @@ export class SchemaParser implements ISchemaParser {
             ...subRoot,
             componentName: getRootComponentName(subRoot.componentName, compDeps),
             containerType: subRoot.componentName,
-            moduleName: ensureValidClassName(changeCase.pascalCase(subRoot.fileName)),
+            moduleName: ensureValidClassName(subRoot.componentName === ContainerType.Component ?
+              subRoot.fileName : changeCase.pascalCase(subRoot.fileName)),
           };
           return container;
         });
@@ -220,12 +226,11 @@ export class SchemaParser implements ISchemaParser {
       }
     });
 
-    // 分析容器内部组件依赖
     containers.forEach((container) => {
       const depNames = this.getComponentNames(container);
       // eslint-disable-next-line no-param-reassign
       container.deps = uniqueArray<string>(depNames, (i: string) => i)
-        .map((depName) => internalDeps[depName] || compDeps[depName])
+        .map((depName) => getInternalDep(internalDeps, depName) || compDeps[depName])
         .filter(Boolean);
       // container.deps = Object.keys(compDeps).map((depName) => compDeps[depName]);
     });

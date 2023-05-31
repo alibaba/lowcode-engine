@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-react-renderer",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "react renderer for ali lowcode engine",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -12,7 +12,7 @@
   "scripts": {
     "test": "build-scripts test --config build.test.json",
     "start": "build-scripts start",
-    "build": "build-scripts build --skip-demo",
+    "build": "build-scripts build",
     "build:umd": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --config build.umd.json"
   },
   "keywords": [
@@ -22,7 +22,7 @@
   ],
   "dependencies": {
     "@alifd/next": "^1.21.16",
-    "@alilc/lowcode-renderer-core": "1.1.6"
+    "@alilc/lowcode-renderer-core": "1.1.7"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",

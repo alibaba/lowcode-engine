@@ -1,7 +1,7 @@
 import { KeyboardEvent, FocusEvent, Fragment, PureComponent } from 'react';
 import classNames from 'classnames';
 import { createIcon } from '@alilc/lowcode-utils';
-import { IPublicModelPluginContext, IPublicApiEvent } from '@alilc/lowcode-types';
+import { IPublicApiEvent } from '@alilc/lowcode-types';
 import TreeNode from '../controllers/tree-node';
 import { IconLock, IconUnlock, IconArrowRight, IconEyeClose, IconEye, IconCond, IconLoop, IconRadioActive, IconRadio, IconSetting } from '../icons';
 
@@ -23,11 +23,12 @@ export default class TreeTitle extends PureComponent<{
   hidden: boolean;
   locked: boolean;
   expandable: boolean;
-  pluginContext: IPublicModelPluginContext;
 }> {
   state: {
     editing: boolean;
     title: string;
+    condition?: boolean;
+    visible?: boolean;
   } = {
     editing: false,
     title: '',
@@ -53,7 +54,7 @@ export default class TreeTitle extends PureComponent<{
     const { treeNode } = this.props;
     const value = (e.target as HTMLInputElement).value || '';
     treeNode.setTitleLabel(value);
-    emitOutlineEvent(this.props.pluginContext.event, 'rename', treeNode, { value });
+    emitOutlineEvent(this.props.treeNode.pluginContext.event, 'rename', treeNode, { value });
     this.cancelEdit();
   };
 
@@ -81,16 +82,28 @@ export default class TreeTitle extends PureComponent<{
     this.setState({
       editing: false,
       title: treeNode.titleLabel,
+      condition: treeNode.condition,
     });
     treeNode.onTitleLabelChanged(() => {
       this.setState({
         title: treeNode.titleLabel,
       });
     });
+    treeNode.onConditionChanged(() => {
+      this.setState({
+        condition: treeNode.condition,
+      });
+    });
+    treeNode.onHiddenChanged((hidden: boolean) => {
+      this.setState({
+        visible: !hidden,
+      });
+    });
   }
 
   render() {
-    const { treeNode, isModal, pluginContext } = this.props;
+    const { treeNode, isModal } = this.props;
+    const { pluginContext } = treeNode;
     const { editing } = this.state;
     const isCNode = !treeNode.isRoot();
     const { node } = treeNode;
@@ -125,7 +138,7 @@ export default class TreeTitle extends PureComponent<{
         data-id={treeNode.id}
         onClick={() => {
           if (isModal) {
-            if (node.visible) {
+            if (this.state.visible) {
               node.document?.modalNodesManager?.setInvisible(node);
             } else {
               node.document?.modalNodesManager?.setVisible(node);
@@ -137,7 +150,7 @@ export default class TreeTitle extends PureComponent<{
           }
         }}
       >
-        {isModal && node.visible && (
+        {isModal && this.state.visible && (
           <div onClick={() => {
             node.document?.modalNodesManager?.setInvisible(node);
           }}
@@ -145,7 +158,7 @@ export default class TreeTitle extends PureComponent<{
             <IconRadioActive className="tree-node-modal-radio-active" />
           </div>
         )}
-        {isModal && !node.visible && (
+        {isModal && !this.state.visible && (
           <div onClick={() => {
             node.document?.modalNodesManager?.setVisible(node);
           }}
@@ -153,7 +166,7 @@ export default class TreeTitle extends PureComponent<{
             <IconRadio className="tree-node-modal-radio" />
           </div>
         )}
-        {isCNode && <ExpandBtn expandable={this.props.expandable} expanded={this.props.expanded} treeNode={treeNode} pluginContext={this.props.pluginContext} />}
+        {isCNode && <ExpandBtn expandable={this.props.expandable} expanded={this.props.expanded} treeNode={treeNode} />}
         <div className="tree-node-icon">{createIcon(treeNode.icon)}</div>
         <div className="tree-node-title-label">
           {editing ? (
@@ -166,6 +179,7 @@ export default class TreeTitle extends PureComponent<{
             />
           ) : (
             <Fragment>
+              {/* @ts-ignore */}
               <Title
                 title={this.state.title}
                 match={filterWorking && matchSelf}
@@ -175,6 +189,7 @@ export default class TreeTitle extends PureComponent<{
               {node.slotFor && (
                 <a className="tree-node-tag slot">
                   {/* todo: click redirect to prop */}
+                  {/* @ts-ignore */}
                   <Tip>{intlNode('Slot for {prop}', { prop: node.slotFor.key })}</Tip>
                 </a>
               )}
@@ -182,22 +197,24 @@ export default class TreeTitle extends PureComponent<{
                 <a className="tree-node-tag loop">
                   {/* todo: click todo something */}
                   <IconLoop />
+                  {/* @ts-ignore */}
                   <Tip>{intlNode('Loop')}</Tip>
                 </a>
               )}
-              {node.hasCondition() && !node.conditionGroup && (
+              {this.state.condition && (
                 <a className="tree-node-tag cond">
                   {/* todo: click todo something */}
                   <IconCond />
+                  {/* @ts-ignore */}
                   <Tip>{intlNode('Conditional')}</Tip>
                 </a>
               )}
             </Fragment>
           )}
         </div>
-        {shouldShowHideBtn && <HideBtn hidden={this.props.hidden} treeNode={treeNode} pluginContext={this.props.pluginContext} />}
-        {shouldShowLockBtn && <LockBtn locked={this.props.locked} treeNode={treeNode} pluginContext={this.props.pluginContext} />}
-        {shouldEditBtn && <RenameBtn treeNode={treeNode} pluginContext={this.props.pluginContext} onClick={this.enableEdit} /> }
+        {shouldShowHideBtn && <HideBtn hidden={this.props.hidden} treeNode={treeNode} />}
+        {shouldShowLockBtn && <LockBtn locked={this.props.locked} treeNode={treeNode} />}
+        {shouldEditBtn && <RenameBtn treeNode={treeNode} onClick={this.enableEdit} /> }
 
       </div>
     );
@@ -206,11 +223,10 @@ export default class TreeTitle extends PureComponent<{
 
 class RenameBtn extends PureComponent<{
   treeNode: TreeNode;
-  pluginContext: IPublicModelPluginContext;
   onClick: (e: any) => void;
 }> {
   render() {
-    const { intl, common } = this.props.pluginContext;
+    const { intl, common } = this.props.treeNode.pluginContext;
     const Tip = common.editorCabin.Tip;
     return (
       <div
@@ -218,6 +234,7 @@ class RenameBtn extends PureComponent<{
         onClick={this.props.onClick}
       >
         <IconSetting />
+        {/* @ts-ignore */}
         <Tip>{intl('Rename')}</Tip>
       </div>
     );
@@ -226,12 +243,11 @@ class RenameBtn extends PureComponent<{
 
 class LockBtn extends PureComponent<{
   treeNode: TreeNode;
-  pluginContext: IPublicModelPluginContext;
   locked: boolean;
 }> {
   render() {
     const { treeNode, locked } = this.props;
-    const { intl, common } = this.props.pluginContext;
+    const { intl, common } = this.props.treeNode.pluginContext;
     const Tip = common.editorCabin.Tip;
     return (
       <div
@@ -242,6 +258,7 @@ class LockBtn extends PureComponent<{
         }}
       >
         {locked ? <IconUnlock /> : <IconLock /> }
+        {/* @ts-ignore */}
         <Tip>{locked ? intl('Unlock') : intl('Lock')}</Tip>
       </div>
     );
@@ -251,24 +268,24 @@ class LockBtn extends PureComponent<{
 class HideBtn extends PureComponent<{
   treeNode: TreeNode;
   hidden: boolean;
-  pluginContext: IPublicModelPluginContext;
 }, {
   hidden: boolean;
 }> {
   render() {
     const { treeNode, hidden } = this.props;
-    const { intl, common } = this.props.pluginContext;
+    const { intl, common } = treeNode.pluginContext;
     const Tip = common.editorCabin.Tip;
     return (
       <div
         className="tree-node-hide-btn"
         onClick={(e) => {
           e.stopPropagation();
-          emitOutlineEvent(this.props.pluginContext.event, hidden ? 'show' : 'hide', treeNode);
+          emitOutlineEvent(treeNode.pluginContext.event, hidden ? 'show' : 'hide', treeNode);
           treeNode.setHidden(!hidden);
         }}
       >
         {hidden ? <IconEye /> : <IconEyeClose />}
+        {/* @ts-ignore */}
         <Tip>{hidden ? intl('Show') : intl('Hide')}</Tip>
       </div>
     );
@@ -277,7 +294,6 @@ class HideBtn extends PureComponent<{
 
 class ExpandBtn extends PureComponent<{
   treeNode: TreeNode;
-  pluginContext: IPublicModelPluginContext;
   expanded: boolean;
   expandable: boolean;
 }> {
@@ -294,7 +310,7 @@ class ExpandBtn extends PureComponent<{
           if (expanded) {
             e.stopPropagation();
           }
-          emitOutlineEvent(this.props.pluginContext.event, expanded ? 'collapse' : 'expand', treeNode);
+          emitOutlineEvent(treeNode.pluginContext.event, expanded ? 'collapse' : 'expand', treeNode);
           treeNode.setExpanded(!expanded);
         }}
       >

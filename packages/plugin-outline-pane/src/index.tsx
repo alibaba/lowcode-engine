@@ -1,21 +1,43 @@
 import { Pane } from './views/pane';
 import { IconOutline } from './icons/outline';
 import { IPublicModelPluginContext, IPublicModelDocumentModel } from '@alilc/lowcode-types';
-import { enUS, zhCN } from './locale';
 import { MasterPaneName, BackupPaneName } from './helper/consts';
 import { TreeMaster } from './controllers/tree-master';
 import { PaneController } from './controllers/pane-controller';
+import { useState, useEffect } from 'react';
+
+export function OutlinePaneContext(props: {
+  treeMaster?: TreeMaster;
+
+  pluginContext: IPublicModelPluginContext;
+
+  options: any;
+
+  paneName: string;
+
+  hideFilter?: boolean;
+}) {
+  const treeMaster = props.treeMaster || new TreeMaster(props.pluginContext, props.options);
+  const [masterPaneController, setMasterPaneController] = useState(new PaneController(props.paneName || MasterPaneName, treeMaster));
+  useEffect(() => {
+    return treeMaster.onPluginContextChange(() => {
+      setMasterPaneController(new PaneController(props.paneName || MasterPaneName, treeMaster));
+    });
+  }, []);
+
+  return (
+    <Pane
+      treeMaster={treeMaster}
+      controller={masterPaneController}
+      key={masterPaneController.id}
+      hideFilter={props.hideFilter}
+      {...props}
+    />
+  );
+}
 
 export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
-  const { skeleton, config, common, event, canvas, project } = ctx;
-  const { intl, intlNode, getLocale } = common.utils.createIntl({
-    'en-US': enUS,
-    'zh-CN': zhCN,
-  });
-  ctx.intl = intl;
-  ctx.intlNode = intlNode;
-  ctx.getLocale = getLocale;
-  ctx.extraTitle = options && options['extraTitle'];
+  const { skeleton, config, canvas, project } = ctx;
 
   let isInFloatArea = true;
   const hasPreferenceForOutline = config.getPreference().contains('outline-pane-pinned-status-isFloat', 'skeleton');
@@ -26,9 +48,7 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
     masterPane: false,
     backupPane: false,
   };
-  const treeMaster = new TreeMaster(ctx);
-  let masterPaneController: PaneController | null = null;
-  let backupPaneController: PaneController | null = null;
+  const treeMaster = new TreeMaster(ctx, options);
   return {
     async init() {
       skeleton.add({
@@ -40,20 +60,9 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
           name: MasterPaneName,
           props: {
             icon: IconOutline,
-            description: intlNode('Outline Tree'),
+            description: treeMaster.pluginContext.intlNode('Outline Tree'),
           },
-          content: (props: any) => {
-            masterPaneController = new PaneController(MasterPaneName, ctx, treeMaster);
-            return (
-              <Pane
-                config={config}
-                pluginContext={ctx}
-                treeMaster={treeMaster}
-                controller={masterPaneController}
-                {...props}
-              />
-            );
-          },
+          content: OutlinePaneContext,
         },
         panelProps: {
           area: isInFloatArea ? 'leftFloatArea' : 'leftFixedArea',
@@ -62,6 +71,8 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
         },
         contentProps: {
           treeTitleExtra: config.get('treeTitleExtra'),
+          treeMaster,
+          paneName: MasterPaneName,
         },
       });
 
@@ -72,16 +83,10 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
         props: {
           hiddenWhenInit: true,
         },
-        content: (props: any) => {
-          backupPaneController = new PaneController(BackupPaneName, ctx, treeMaster);
-          return (
-            <Pane
-              pluginContext={ctx}
-              treeMaster={treeMaster}
-              controller={backupPaneController}
-              {...props}
-            />
-          );
+        content: OutlinePaneContext,
+        contentProps: {
+          paneName: BackupPaneName,
+          treeMaster,
         },
       });
 

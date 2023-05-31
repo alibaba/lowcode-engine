@@ -10,6 +10,8 @@ import {
   SettingTopEntry,
   Clipboard,
   SettingField,
+  Window,
+  SkeletonItem,
 } from './model';
 import {
   Project,
@@ -50,6 +52,7 @@ export {
   Selection,
   Setters,
   Hotkey,
+  Window,
   Skeleton,
   SettingField as SettingPropEntry,
   SettingTopEntry,
@@ -64,4 +67,5 @@ export {
   SimulatorHost,
   Config,
   SettingField,
+  SkeletonItem,
 };

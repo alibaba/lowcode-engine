@@ -7,6 +7,8 @@ import {
 import { isNode } from '@alilc/lowcode-utils';
 
 export interface IActiveTracker extends Omit< IPublicModelActiveTracker, 'track' | 'onChange' > {
+  _target: ActiveTarget | INode;
+
   track(originalTarget: ActiveTarget | INode): void;
 
   onChange(fn: (target: ActiveTarget) => void): () => void;
@@ -17,9 +19,9 @@ export interface ActiveTarget extends Omit< IPublicTypeActiveTarget, 'node' > {
 }
 
 export class ActiveTracker implements IActiveTracker {
-  private emitter: IEventBus = createModuleEventBus('ActiveTracker');
-
   @obx.ref private _target?: ActiveTarget | INode;
+
+  private emitter: IEventBus = createModuleEventBus('ActiveTracker');
 
   track(originalTarget: ActiveTarget | INode) {
     let target = originalTarget;

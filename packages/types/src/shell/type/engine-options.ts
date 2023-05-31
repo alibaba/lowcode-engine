@@ -2,6 +2,7 @@ import { RequestHandlersMap } from '@alilc/lowcode-datasource-types';
 import { ComponentType } from 'react';
 
 export interface IPublicTypeEngineOptions {
+
   /**
    * 是否开启 condition 的能力，默认在设计器中不管 condition 是啥都正常展示
    * when this is true, node that configured as conditional not renderring
@@ -136,8 +137,10 @@ export interface IPublicTypeEngineOptions {
    * 与 react-renderer 的 appHelper 一致，https://lowcode-engine.cn/site/docs/guide/expand/runtime/renderer#apphelper
    */
   appHelper?: {
+
     /** 全局公共函数 */
     utils?: Record<string, any>;
+
     /** 全局常量 */
     constants?: Record<string, any>;
   };
@@ -168,6 +171,12 @@ export interface IPublicTypeEngineOptions {
    * 开启应用级设计模式
    */
   enableWorkspaceMode?: boolean;
+
+  /**
+   * @default true
+   * 应用级设计模式下，自动打开第一个窗口
+   */
+  enableAutoOpenFirstWindow?: boolean;
 }
 
 /**

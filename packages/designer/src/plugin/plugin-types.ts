@@ -16,6 +16,8 @@ import {
   IPublicApiWorkspace,
   IPublicTypePluginMeta,
   IPublicTypePluginRegisterOptions,
+  IPublicModelWindow,
+  IPublicEnumPluginRegisterLevel,
 } from '@alilc/lowcode-types';
 import PluginContext from './plugin-context';
 
@@ -56,6 +58,8 @@ export interface ILowCodePluginContextPrivate {
   set pluginEvent(event: IPublicApiEvent);
   set canvas(canvas: IPublicApiCanvas);
   set workspace(workspace: IPublicApiWorkspace);
+  set editorWindow(window: IPublicModelWindow);
+  set registerLevel(level: IPublicEnumPluginRegisterLevel);
 }
 export interface ILowCodePluginContextApiAssembler {
   assembleApis(

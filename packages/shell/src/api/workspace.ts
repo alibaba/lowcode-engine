@@ -28,15 +28,22 @@ export class Workspace implements IPublicApiWorkspace {
   }
 
   get window() {
+    if (!this[workspaceSymbol].window) {
+      return null;
+    }
     return new ShellWindow(this[workspaceSymbol].window);
+  }
+
+  onWindowRendererReady(fn: () => void): IPublicTypeDisposable {
+    return this[workspaceSymbol].onWindowRendererReady(fn);
   }
 
   registerResourceType(resourceTypeModel: IPublicTypeResourceType): void {
     this[workspaceSymbol].registerResourceType(resourceTypeModel);
   }
 
-  openEditorWindow(resourceName: string, title: string, extra: object, viewName?: string) {
-    this[workspaceSymbol].openEditorWindow(resourceName, title, extra, viewName);
+  async openEditorWindow(resourceName: string, title: string, extra: object, viewName?: string, sleep?: boolean): Promise<void> {
+    await this[workspaceSymbol].openEditorWindow(resourceName, title, extra, viewName, sleep);
   }
 
   openEditorWindowById(id: string) {
@@ -65,5 +72,9 @@ export class Workspace implements IPublicApiWorkspace {
 
   onChangeActiveWindow(fn: () => void): IPublicTypeDisposable {
     return this[workspaceSymbol].onChangeActiveWindow(fn);
+  }
+
+  onChangeActiveEditorView(fn: () => void): IPublicTypeDisposable {
+    return this[workspaceSymbol].onChangeActiveEditorView(fn);
   }
 }

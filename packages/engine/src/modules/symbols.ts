@@ -11,6 +11,7 @@ import {
   designerCabinSymbol,
   propSymbol,
   simulatorHostSymbol,
+  skeletonItemSymbol,
 } from '@alilc/lowcode-shell';
 
 export default {
@@ -26,4 +27,5 @@ export default {
   designerCabinSymbol,
   propSymbol,
   simulatorHostSymbol,
+  skeletonItemSymbol,
 };
