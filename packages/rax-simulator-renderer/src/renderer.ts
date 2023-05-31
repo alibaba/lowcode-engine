@@ -600,7 +600,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     }), container, {
       driver: DriverUniversal,
     });
-    host.project.setRendererReady(this);
+    host.setRendererReady(this);
   }
 }
 

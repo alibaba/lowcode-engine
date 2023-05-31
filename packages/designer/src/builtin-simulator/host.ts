@@ -330,6 +330,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     }, IPublicEnumTransitionType.REPAINT);
   }
 
+  setRendererReady(renderer: any) {
+    (this.project as Project).setRendererReady(renderer);
+  }
+
   stopAutoRepaintNode() {
     this.renderer?.stopAutoRepaintNode();
   }

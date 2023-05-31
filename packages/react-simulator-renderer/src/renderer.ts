@@ -506,7 +506,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     document.body.classList.add('engine-document'); // important! Stylesheet.invoke depends
 
     reactRender(createElement(SimulatorRendererView, { rendererContainer: this }), container);
-    host.project.setRendererReady(this);
+    host.setRendererReady(this);
   }
 
   /**
