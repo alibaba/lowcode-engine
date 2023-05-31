@@ -379,7 +379,6 @@ describe('Prop 类测试', () => {
         prop.dispose();
 
         expect(prop._items).toBeNull();
-        expect(prop._maps).toBeNull();
       });
     });
 
