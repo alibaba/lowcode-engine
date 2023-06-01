@@ -32,6 +32,12 @@ export class Selection implements ISelection {
       return;
     }
 
+    const node = this.doc.getNode(id);
+
+    if (!node?.canSelect()) {
+      return;
+    }
+
     this._selected = [id];
     this.emitter.emit('selectionchange', this._selected);
   }
@@ -40,7 +46,18 @@ export class Selection implements ISelection {
    * 批量选中
    */
   selectAll(ids: string[]) {
-    this._selected = ids;
+    const selectIds: string[] = [];
+
+    ids.forEach(d => {
+      const node = this.doc.getNode(d);
+
+      if (node?.canSelect()) {
+        selectIds.push(d);
+      }
+    });
+
+    this._selected = selectIds;
+
     this.emitter.emit('selectionchange', this._selected);
   }
 
