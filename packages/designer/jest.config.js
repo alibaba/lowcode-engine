@@ -19,6 +19,7 @@ const jestConfig = {
   // testMatch: ['**/setting-field.test.ts'],
   // testMatch: ['**/node.test.ts'],
   // testMatch: ['**/builtin-hotkey.test.ts'],
+  // testMatch: ['**/selection.test.ts'],
   transformIgnorePatterns: [
     `/node_modules/(?!${esModules})/`,
   ],
