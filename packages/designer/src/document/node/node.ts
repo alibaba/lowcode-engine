@@ -159,6 +159,9 @@ export interface IBaseNode<Schema extends IPublicTypeNodeSchema = IPublicTypeNod
   setProps(props?: IPublicTypePropsMap | IPublicTypePropsList | Props | null): void;
 
   mergeProps(props: IPublicTypePropsMap): void;
+
+  /** 是否可以选中 */
+  canSelect(): boolean;
 }
 
 /**
@@ -642,6 +645,12 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
    */
   get isLocked(): boolean {
     return !!this.getExtraProp('isLocked')?.getValue();
+  }
+
+  canSelect(): boolean {
+    const onSelectHook = this.componentMeta?.advanced?.callbacks?.onSelectHook;
+    const canSelect = typeof onSelectHook === 'function' ? onSelectHook(this.internalToShellNode()!) : true;
+    return canSelect;
   }
 
   /**
