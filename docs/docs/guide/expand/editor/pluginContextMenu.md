@@ -53,8 +53,7 @@ import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 const removeCopyAction = (ctx: IPublicModelPluginContext) => {
   return {
     async init() {
-      const { removeBuiltinComponentAction } = ctx.material;
-      removeBuiltinComponentAction('copy');
+      ctx.material.removeBuiltinComponentAction('copy');
     }
   }
 };
