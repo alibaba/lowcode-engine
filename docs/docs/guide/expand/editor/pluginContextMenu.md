@@ -18,7 +18,6 @@ import { Icon, Message } from '@alifd/next';
 const addHelloAction = (ctx: IPublicModelPluginContext) => {
   return {
     async init() {
-      //const { addBuiltinComponentAction } = ctx.material;
       ctx.material.addBuiltinComponentAction({
         name: 'hello',
         content: {
