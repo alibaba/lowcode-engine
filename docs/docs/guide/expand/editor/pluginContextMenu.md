@@ -18,8 +18,7 @@ import { Icon, Message } from '@alifd/next';
 const addHelloAction = (ctx: IPublicModelPluginContext) => {
   return {
     async init() {
-      const { addBuiltinComponentAction } = ctx.material;
-      addBuiltinComponentAction({
+      ctx.material.addBuiltinComponentAction({
         name: 'hello',
         content: {
           icon: <Icon type="atm" />,
@@ -54,8 +53,7 @@ import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 const removeCopyAction = (ctx: IPublicModelPluginContext) => {
   return {
     async init() {
-      const { removeBuiltinComponentAction } = ctx.material;
-      removeBuiltinComponentAction('copy');
+      ctx.material.removeBuiltinComponentAction('copy');
     }
   }
 };

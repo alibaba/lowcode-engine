@@ -4,7 +4,7 @@ import { IPublicModelPluginContext, IPublicModelDocumentModel } from '@alilc/low
 import { MasterPaneName, BackupPaneName } from './helper/consts';
 import { TreeMaster } from './controllers/tree-master';
 import { PaneController } from './controllers/pane-controller';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export function OutlinePaneContext(props: {
   treeMaster?: TreeMaster;
@@ -19,9 +19,11 @@ export function OutlinePaneContext(props: {
 }) {
   const treeMaster = props.treeMaster || new TreeMaster(props.pluginContext, props.options);
   const [masterPaneController, setMasterPaneController] = useState(new PaneController(props.paneName || MasterPaneName, treeMaster));
-  treeMaster.onPluginContextChange(() => {
-    setMasterPaneController(new PaneController(props.paneName || MasterPaneName, treeMaster));
-  });
+  useEffect(() => {
+    return treeMaster.onPluginContextChange(() => {
+      setMasterPaneController(new PaneController(props.paneName || MasterPaneName, treeMaster));
+    });
+  }, []);
 
   return (
     <Pane
