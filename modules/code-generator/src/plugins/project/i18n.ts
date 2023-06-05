@@ -9,7 +9,12 @@ import {
   IProjectInfo,
 } from '../../types';
 
-const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
+export interface II18nPluginConfig {
+  getSetLocaleStr?(defaultStr: string): string;
+}
+
+const pluginFactory: BuilderComponentPluginFactory<II18nPluginConfig> = (cfg) => {
+  const { getSetLocaleStr = (val: string) => val } = cfg || {};
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {
       ...pre,
@@ -30,7 +35,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
         const getLocale = () => locale;
 
         const setLocale = (target) => {
-          locale = target;
+          ${getSetLocaleStr('locale = target;')}
         };
 
         const isEmptyVariables = variables => (
