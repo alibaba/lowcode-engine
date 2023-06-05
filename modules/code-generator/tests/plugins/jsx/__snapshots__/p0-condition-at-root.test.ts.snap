@@ -281,3 +281,75 @@ Object {
   },
 }
 `;
+
+exports[`condition at root invalid attr name should not be generated 1`] = `
+Object {
+  "chunks": Array [
+    Object {
+      "content": "
+        const __$$context = this._context || this;
+        const { state } = __$$context;
+        return <Page><Text a={1}>Hello world!</Text></Page>;
+      ",
+      "fileType": "jsx",
+      "linkAfter": Array [
+        "ReactComponentClassRenderStart",
+        "ReactComponentClassRenderPre",
+      ],
+      "name": "ReactComponentClassRenderJSX",
+      "type": "string",
+    },
+    Object {
+      "content": "
+          function __$$eval(expr) {
+            try {
+              return expr();
+            } catch (error) {
+              
+            }
+          }
+
+          function __$$evalArray(expr) {
+            const res = __$$eval(expr);
+            return Array.isArray(res) ? res : [];
+          }
+      
+
+        function __$$createChildContext(oldContext, ext) {
+          const childContext = {
+            ...oldContext,
+            ...ext,
+          };
+          childContext.__proto__ = oldContext;
+          return childContext;
+        }
+      ",
+      "fileType": "jsx",
+      "linkAfter": Array [
+        "CommonFileExport",
+      ],
+      "name": "CommonCustomContent",
+      "type": "string",
+    },
+  ],
+  "contextData": Object {},
+  "depNames": Array [],
+  "ir": Object {
+    "children": Array [
+      Object {
+        "children": "Hello world!",
+        "componentName": "Text",
+        "props": Object {
+          "a": 1,
+          "a.b": 2,
+        },
+      },
+    ],
+    "componentName": "Page",
+    "condition": null,
+    "containerType": "Page",
+    "fileName": "test",
+    "moduleName": "test",
+  },
+}
+`;
