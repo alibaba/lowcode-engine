@@ -19,6 +19,7 @@ import { executeFunctionStack } from './aopHelper';
 import { encodeJsxStringNode } from './encodeJsxAttrString';
 import { unwrapJsExprQuoteInJsx } from './jsxHelpers';
 import { transformThis2Context } from '../core/jsx/handlers/transformThis2Context';
+import { isValidIdentifier } from './validate';
 
 function mergeNodeGeneratorConfig(
   cfg1: NodeGeneratorConfig,
@@ -126,11 +127,13 @@ function generateAttrs(
   if (props) {
     if (!Array.isArray(props)) {
       Object.keys(props).forEach((propName: string) => {
-        pieces = pieces.concat(generateAttr(propName, props[propName] as IPublicTypeCompositeValue, scope, config));
+        if (isValidIdentifier(propName)) {
+          pieces = pieces.concat(generateAttr(propName, props[propName] as IPublicTypeCompositeValue, scope, config));
+        }
       });
     } else {
       props.forEach((prop) => {
-        if (prop.name && !prop.spread) {
+        if (prop.name && isValidIdentifier(prop.name) && !prop.spread) {
           pieces = pieces.concat(generateAttr(prop.name, prop.value, scope, config));
         }
 
