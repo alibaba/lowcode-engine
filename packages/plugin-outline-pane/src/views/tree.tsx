@@ -91,7 +91,7 @@ export default class TreeView extends PureComponent<{
   private onDoubleClick = (e: ReactMouseEvent) => {
     e.preventDefault();
     const treeNode = this.getTreeNodeFromEvent(e);
-    if (treeNode?.id === this.state.root?.id) {
+    if (treeNode?.nodeId === this.state.root?.nodeId) {
       return;
     }
     if (!treeNode?.expanded) {
@@ -184,6 +184,11 @@ export default class TreeView extends PureComponent<{
     this.setState({ root });
     const doc = project.currentDocument;
     doc?.onFocusNodeChanged(() => {
+      this.setState({
+        root: tree.root,
+      });
+    });
+    doc?.onImportSchema(() => {
       this.setState({
         root: tree.root,
       });

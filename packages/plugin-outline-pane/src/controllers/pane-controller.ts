@@ -593,7 +593,7 @@ export class PaneController implements IPublicModelSensor, ITreeBoard, IPublicTy
           // at this moment, it is possible that pane is not ready yet, so
           // put ui related operations to the next loop
           setTimeout(() => {
-            tree.setNodeSelected(treeNode.id);
+            tree.setNodeSelected(treeNode.nodeId);
             this.scrollToNode(treeNode, null, 4);
           }, 0);
         }
@@ -615,21 +615,21 @@ export class PaneController implements IPublicModelSensor, ITreeBoard, IPublicTy
     if (!this._shell) {
       return undefined;
     }
-    return this._shell.querySelector(`.tree-node[data-id="${treeNode.id}"]`)?.getBoundingClientRect();
+    return this._shell.querySelector(`.tree-node[data-id="${treeNode.nodeId}"]`)?.getBoundingClientRect();
   }
 
   private getTreeTitleRect(treeNode: TreeNode): DOMRect | undefined {
     if (!this._shell) {
       return undefined;
     }
-    return this._shell.querySelector(`.tree-node-title[data-id="${treeNode.id}"]`)?.getBoundingClientRect();
+    return this._shell.querySelector(`.tree-node-title[data-id="${treeNode.nodeId}"]`)?.getBoundingClientRect();
   }
 
   private getTreeSlotsRect(treeNode: TreeNode): DOMRect | undefined {
     if (!this._shell) {
       return undefined;
     }
-    return this._shell.querySelector(`.tree-node-slots[data-id="${treeNode.id}"]`)?.getBoundingClientRect();
+    return this._shell.querySelector(`.tree-node-slots[data-id="${treeNode.nodeId}"]`)?.getBoundingClientRect();
   }
 }
 
