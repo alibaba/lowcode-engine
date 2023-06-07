@@ -83,7 +83,10 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     }
     const ctx = this._getLowCodePluginContext({ pluginName, meta });
     const customFilterValidOptions = engineConfig.get('customPluginFilterOptions', filterValidOptions);
-    const config = pluginModel(ctx, customFilterValidOptions(options, preferenceDeclaration!));
+    const pluginTransducer = engineConfig.get('customPluginTransducer', null);
+    const newOptions = customFilterValidOptions(options, preferenceDeclaration!);
+    const newPluginModel = pluginTransducer ? await pluginTransducer(pluginModel, ctx, newOptions) : pluginModel;
+    const config = newPluginModel(ctx, newOptions);
     // compat the legacy way to declare pluginName
     // @ts-ignore
     pluginName = pluginName || config.name;
