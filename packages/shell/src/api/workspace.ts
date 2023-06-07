@@ -34,6 +34,21 @@ export class Workspace implements IPublicApiWorkspace {
     return new ShellWindow(this[workspaceSymbol].window);
   }
 
+  get resourceTypeList() {
+    return Array.from(this[workspaceSymbol].resourceTypeMap.values()).map((d) => {
+      const { name: resourceName, type: resourceType } = d;
+      const {
+        description,
+      } = d.resourceTypeModel({} as any, {});
+
+      return {
+        resourceName,
+        resourceType,
+        description,
+      };
+    });
+  }
+
   onWindowRendererReady(fn: () => void): IPublicTypeDisposable {
     return this[workspaceSymbol].onWindowRendererReady(fn);
   }
