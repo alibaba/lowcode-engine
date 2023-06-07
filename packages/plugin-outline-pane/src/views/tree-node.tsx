@@ -225,7 +225,7 @@ export default class TreeNodeView extends PureComponent<{
     return (
       <div
         className={className}
-        data-id={treeNode.id}
+        data-id={treeNode.nodeId}
       >
         <TreeTitle
           treeNode={treeNode}
