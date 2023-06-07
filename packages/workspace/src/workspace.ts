@@ -33,6 +33,8 @@ export interface IWorkspace extends Omit<IPublicApiWorkspace<
 
   plugins: ILowCodePluginManager;
 
+  resourceTypeMap: Map<string, ResourceType>;
+
   getResourceList(): IResource[];
 
   getResourceType(resourceName: string): IResourceType;
@@ -55,11 +57,11 @@ export class Workspace implements IWorkspace {
 
   enableAutoOpenFirstWindow: boolean;
 
+  resourceTypeMap: Map<string, ResourceType> = new Map();
+
   private emitter: IEventBus = createModuleEventBus('workspace');
 
   private _isActive = false;
-
-  private resourceTypeMap: Map<string, ResourceType> = new Map();
 
   private resourceList: IResource[] = [];
 
