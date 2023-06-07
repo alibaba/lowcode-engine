@@ -19,6 +19,8 @@ export interface IBaseModelResource<
 
   get viewName(): string | undefined;
 
+  get description(): string | undefined;
+
   get config(): {
     disableBehaviors?: ('copy' | 'remove')[];
   } | undefined;
