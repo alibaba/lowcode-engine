@@ -22,12 +22,11 @@ const fs = require('fs-extra');
 
     async function setRepo(opts) {
         const pkgDir = path.join(opts.pkgDir, opts.pkg);
-        if (!fs.existsSync(path.join(pkgDir, 'package.json'))) {
+        const pkgPkgJSONPath = path.join(pkgDir, 'package.json');
+        if (!fs.existsSync(pkgPkgJSONPath)) {
             console.log(`${opts.pkg} exists`);
         } else {
-            const pkgPkgJSONPath = path.join(pkgDir, 'package.json');
-            const hasPkgJSON = fs.existsSync(pkgPkgJSONPath);
-            const pkgPkgJSON = hasPkgJSON ? require(pkgPkgJSONPath) : {};
+            const pkgPkgJSON = require(pkgPkgJSONPath);
             fs.writeJSONSync(
                 pkgPkgJSONPath,
                 Object.assign(pkgPkgJSON, {
@@ -40,6 +39,7 @@ const fs = require('fs-extra');
                 }),
                 { spaces: '  ' },
             );
+            console.log(`[Write] ${opts.pkg}`);
         }
     }
 })();
