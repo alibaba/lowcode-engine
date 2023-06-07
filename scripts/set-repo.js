@@ -35,7 +35,7 @@ const fs = require('fs-extra');
                         url: `https://github.com/alibaba/lowcode-engine/tree/main/${opts.workspace}/${opts.pkg}`,
                     },
                     bugs: 'https://github.com/alibaba/lowcode-engine/issues',
-                    homepage: `https://github.com/alibaba/lowcode-engine/tree/main/${opts.workspace}/${opts.pkg}#readme`,
+                    homepage: 'https://github.com/alibaba/lowcode-engine/#readme',
                 }),
                 { spaces: '  ' },
             );
