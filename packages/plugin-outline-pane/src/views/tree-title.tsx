@@ -135,7 +135,7 @@ export default class TreeTitle extends PureComponent<{
       <div
         className={classNames('tree-node-title', { editing })}
         style={style}
-        data-id={treeNode.id}
+        data-id={treeNode.nodeId}
         onClick={() => {
           if (isModal) {
             if (this.state.visible) {

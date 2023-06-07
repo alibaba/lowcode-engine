@@ -45,6 +45,10 @@ export class Tree {
       const treeNode = this.getTreeNodeById(node.id);
       treeNode?.setHidden(!visible);
     });
+
+    doc?.onImportSchema(() => {
+      this.treeNodesMap = new Map<string, TreeNode>();
+    });
   }
 
   setNodeSelected(nodeId: string): void {
