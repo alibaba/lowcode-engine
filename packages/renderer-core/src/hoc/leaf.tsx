@@ -538,7 +538,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
       if (this.props.children && this.props.children.length) {
         return this.props.children;
       }
-      return [];
+      return this.props.children;
     }
 
     get leaf(): INode | undefined {
