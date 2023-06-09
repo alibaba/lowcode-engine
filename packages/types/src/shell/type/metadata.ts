@@ -139,6 +139,7 @@ export interface ConfigureSupportEventConfig {
   name: string;
   propType?: IPublicTypePropType;
   description?: string;
+  template?: string;
 }
 
 /**
