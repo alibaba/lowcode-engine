@@ -182,19 +182,6 @@ importSchema(schema?: IPublicTypeProjectSchema): void;
 ```
 相关类型：[IPublicTypeProjectSchema](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/project-schema.ts)
 
-### getCurrentDocument
-获取当前的 document
-
-```typescript
-/**
- * 获取当前的 document
- * get current document
- * @returns
- */
-getCurrentDocument(): IPublicModelDocumentModel | null;
-```
-相关类型：[IPublicModelDocumentModel](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/document-model.ts)
-
 ### addPropsTransducer
 增加一个属性的管道处理函数
 
