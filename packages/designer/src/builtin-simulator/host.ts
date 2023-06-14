@@ -13,9 +13,8 @@ import {
   makeObservable,
   createModuleEventBus,
   IEventBus,
-  observable,
-  runInAction,
 } from '@alilc/lowcode-editor-core';
+
 import {
   ISimulatorHost,
   Component,
@@ -72,7 +71,7 @@ import { LiveEditing } from './live-editing/live-editing';
 import { IProject, Project } from '../project';
 import { IScroller } from '../designer/scroller';
 import { isElementNode, isDOMNodeVisible } from '../utils/misc';
-import { debounce, merge } from 'lodash';
+import { debounce } from 'lodash';
 
 export type LibraryItem = IPublicTypePackage & {
   package: string;
@@ -267,6 +266,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   @obx.ref private _contentDocument?: Document;
 
+  @obx.ref private _appHelper?: any;
+
   get contentDocument() {
     return this._contentDocument;
   }
@@ -312,18 +313,19 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.designer = designer;
     this.scroller = this.designer.createScroller(this.viewport);
     this.autoRender = !engineConfig.get('disableAutoRender', false);
+    this._appHelper = engineConfig.get('appHelper');
     this.componentsConsumer = new ResourceConsumer<Asset | undefined>(() => this.componentsAsset);
     this.injectionConsumer = new ResourceConsumer(() => {
-      let appHelper = observable(engineConfig.get('appHelper'));
-      engineConfig.onGot('appHelper', (data) => {
-        runInAction(() => {
-          merge(appHelper, data);
-        });
-      });
       return {
-        appHelper: engineConfig.get('appHelper'),
+        appHelper: this._appHelper,
       };
     });
+
+    engineConfig.onGot('appHelper', (data) => {
+      // appHelper被config.set修改后触发injectionConsumer.consume回调
+      this._appHelper = data;
+    });
+
     this.i18nConsumer = new ResourceConsumer(() => this.project.i18n);
 
     transactionManager.onStartTransaction(() => {
