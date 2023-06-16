@@ -1,0 +1,175 @@
+{
+  // 本例是一个路由测试页面，里面有几个页面，相互之间有跳转关系的
+  version: '1.0.0',
+  componentsMap: [
+    {
+      componentName: 'View',
+      package: 'rax-view',
+      version: '^1.0.0',
+      destructuring: false,
+      exportName: 'View',
+    },
+    {
+      componentName: 'Text',
+      package: 'rax-text',
+      version: '^1.0.0',
+      destructuring: false,
+      exportName: 'Text',
+    },
+    {
+      componentName: 'Link',
+      package: 'rax-link',
+      version: '^1.0.0',
+      destructuring: false,
+      exportName: 'Link',
+    },
+    {
+      componentName: 'Image',
+      package: 'rax-image',
+      version: '^1.0.0',
+      destructuring: false,
+      exportName: 'Image',
+    },
+    {
+      componentName: 'Page',
+      package: 'rax-view',
+      version: '^1.0.0',
+      destructuring: false,
+      exportName: 'Page',
+    },
+  ],
+  componentsTree: [
+    {
+      componentName: 'Page',
+      fileName: 'home',
+      state: {},
+      dataSource: {
+        list: [],
+      },
+      meta: {
+        router: '/',
+      },
+      children: [
+        {
+          componentName: 'View',
+          children: [
+            {
+              componentName: 'Text',
+              children: 'This is the Home Page',
+            },
+          ],
+        },
+        {
+          componentName: 'Link',
+          props: {
+            href: '#/list',
+            miniappHref: 'navigate:/pages/List/index',
+          },
+          children: [
+            {
+              componentName: 'Text',
+              children: 'Go To The List Page',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      componentName: 'Page',
+      fileName: 'list',
+      state: {},
+      dataSource: {
+        list: [],
+      },
+      meta: {
+        router: '/list',
+      },
+      children: [
+        {
+          componentName: 'View',
+          children: [
+            {
+              componentName: 'Text',
+              children: 'This is the List Page',
+            },
+          ],
+        },
+        {
+          componentName: 'Link',
+          props: {
+            href: '#/detail',
+            miniappHref: 'navigate:/pages/Detail/index',
+          },
+          children: [
+            {
+              componentName: 'Text',
+              children: 'Go To The Detail Page',
+            },
+          ],
+        },
+        {
+          componentName: 'Link',
+          props: {
+            href: 'javascript:history.back();',
+            miniappHref: 'navigateBack:',
+          },
+          children: [
+            {
+              componentName: 'Text',
+              children: 'Go back',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      componentName: 'Page',
+      fileName: 'detail',
+      state: {},
+      dataSource: {
+        list: [],
+      },
+      meta: {
+        router: '/detail',
+      },
+      children: [
+        {
+          componentName: 'View',
+          children: [
+            {
+              componentName: 'Text',
+              children: 'This is the Detail Page',
+            },
+          ],
+        },
+        {
+          componentName: 'Link',
+          props: {
+            href: 'javascript:history.back();',
+            miniappHref: 'navigateBack:',
+          },
+          children: [
+            {
+              componentName: 'Text',
+              children: 'Go back',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  css: 'page,body{\n  width: 750rpx;\n  overflow-x: hidden;\n}',
+  config: {
+    sdkVersion: '1.0.3',
+    historyMode: 'hash',
+    targetRootID: 'root',
+  },
+  meta: {
+    name: 'Rax App Demo',
+    git_group: 'demo-group',
+    project_name: 'demo-project',
+    description: '这是一个示例应用',
+    spma: 'spmademo',
+    creator: '张三',
+  },
+}

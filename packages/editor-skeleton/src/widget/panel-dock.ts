@@ -1,15 +1,15 @@
 import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
 import { uniqueId } from '@alilc/lowcode-utils';
 import { createElement, ReactNode, ReactInstance } from 'react';
-import { Skeleton } from '../skeleton';
+import { ISkeleton } from '../skeleton';
 import { PanelDockConfig } from '../types';
-import Panel from './panel';
+import { Panel } from './panel';
 import { PanelDockView, WidgetView } from '../components/widget-views';
 import { IWidget } from './widget';
 import { composeTitle } from './utils';
 import { findDOMNode } from 'react-dom';
 
-export default class PanelDock implements IWidget {
+export class PanelDock implements IWidget {
   readonly isWidget = true;
 
   readonly isPanelDock = true;
@@ -18,7 +18,7 @@ export default class PanelDock implements IWidget {
 
   readonly name: string;
 
-  readonly align?: string;
+  readonly align?: 'left' | 'right' | 'bottom' | 'center' | 'top' | undefined;
 
   private inited = false;
 
@@ -51,11 +51,6 @@ export default class PanelDock implements IWidget {
     });
   }
 
-  getDOMNode() {
-    // eslint-disable-next-line react/no-find-dom-node
-    return this._shell ? findDOMNode(this._shell) : null;
-  }
-
   @obx.ref private _visible = true;
 
   get visible() {
@@ -76,7 +71,7 @@ export default class PanelDock implements IWidget {
     return this._panel || this.skeleton.getPanel(this.panelName);
   }
 
-  constructor(readonly skeleton: Skeleton, readonly config: PanelDockConfig) {
+  constructor(readonly skeleton: ISkeleton, readonly config: PanelDockConfig) {
     makeObservable(this);
     const { content, contentProps, panelProps, name, props } = config;
     this.name = name;
@@ -84,7 +79,7 @@ export default class PanelDock implements IWidget {
     this.panelName = config.panelName || name;
     this.align = props?.align;
     if (content) {
-      const _panelProps: any = { ...panelProps };
+      const _panelProps = { ...panelProps };
       if (_panelProps.title == null && props) {
         _panelProps.title = composeTitle(props.title, undefined, props.description, true, true);
       }
@@ -100,6 +95,11 @@ export default class PanelDock implements IWidget {
     if (props?.onInit) {
       props.onInit.call(this, this);
     }
+  }
+
+  getDOMNode() {
+    // eslint-disable-next-line react/no-find-dom-node
+    return this._shell ? findDOMNode(this._shell) : null;
   }
 
   setVisible(flag: boolean) {
@@ -169,7 +169,6 @@ export default class PanelDock implements IWidget {
     return this.panel?.onActiveChange(func);
   }
 }
-
 
 export function isPanelDock(obj: any): obj is PanelDock {
   return obj && obj.isPanelDock;

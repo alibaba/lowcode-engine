@@ -1,7 +1,7 @@
-import { EventEmitter } from 'events';
-import { TipConfig } from '@alilc/lowcode-types';
+import { IPublicTypeTipConfig } from '@alilc/lowcode-types';
+import { IEventBus, createModuleEventBus } from '../../event-bus';
 
-export interface TipOptions extends TipConfig {
+export interface TipOptions extends IPublicTypeTipConfig {
   target: HTMLElement;
 }
 
@@ -12,7 +12,7 @@ class TipHandler {
 
   private hideDelay: number | null = null;
 
-  private emitter = new EventEmitter();
+  private emitter: IEventBus = createModuleEventBus('TipHandler');
 
   setTarget(target: HTMLElement) {
     const tip = findTip(target);
@@ -132,8 +132,8 @@ function findTip(target: HTMLElement | null): TipOptions | null {
   return null;
 }
 
-const tipsMap = new Map<string, TipConfig>();
-export function postTip(id: string, props: TipConfig | null) {
+const tipsMap = new Map<string, IPublicTypeTipConfig>();
+export function postTip(id: string, props: IPublicTypeTipConfig | null) {
   if (props) {
     tipsMap.set(id, props);
   } else {

@@ -14,6 +14,7 @@ program
   .option('-c, --cwd <cwd>', 'specify the working directory', '.')
   .option('-q, --quiet', 'be quiet, do not output anything unless get error', false)
   .option('-v, --verbose', 'be verbose, output more information', false)
+  .option('--solution-options <options>', 'specify the solution options', '{}')
   .arguments('[input-schema] ali lowcode schema JSON file')
   .action(function doGenerate(inputSchema, command) {
     var options = command.opts();

@@ -161,7 +161,11 @@ export function parseExpressionGetKeywords(expr: string | null | undefined): str
   try {
     const keywordVars = new OrderedSet<string>();
 
-    const ast = parser.parse(`!(${expr});`);
+    const ast = parser.parse(`!(${expr});`, {
+      plugins: [
+        'jsx',
+      ],
+    });
 
     const addIdentifierIfNeeded = (x: Record<string, unknown> | number | null | undefined) => {
       if (typeof x === 'object' && isIdentifier(x) && JS_KEYWORDS.includes(x.name)) {
@@ -181,7 +185,7 @@ export function parseExpressionGetKeywords(expr: string | null | undefined): str
             const fieldValue = node[fieldName as keyof typeof node];
             if (typeof fieldValue === 'object') {
               if (Array.isArray(fieldValue)) {
-                fieldValue.forEach((item) => {
+                fieldValue.forEach((item: any) => {
                   addIdentifierIfNeeded(item);
                 });
               } else {
@@ -233,7 +237,7 @@ export function parseExpressionGetGlobalVariables(
             const fieldValue = node[fieldName as keyof typeof node];
             if (typeof fieldValue === 'object') {
               if (Array.isArray(fieldValue)) {
-                fieldValue.forEach((item) => {
+                fieldValue.forEach((item: any) => {
                   addUndeclaredIdentifierIfNeeded(item, path);
                 });
               } else {

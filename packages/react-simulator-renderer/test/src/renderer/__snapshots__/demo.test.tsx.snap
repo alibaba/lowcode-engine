@@ -11,7 +11,7 @@ exports[`Base should be render NotFoundComponent 1`] = `
     <div
       componentName="Text"
     >
-      Component Not Found
+      Text Component Not Found
     </div>
   </div>
 </div>

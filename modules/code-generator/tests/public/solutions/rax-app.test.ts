@@ -13,11 +13,11 @@ import {
 
 import CodeGenerator from '../../../src';
 
-import type { ProjectSchema } from '@alilc/lowcode-types';
+import type { IPublicTypeProjectSchema } from '@alilc/lowcode-types';
 
 jest.setTimeout(15 * 1000);
 
-const TEST_CASES_DIR = path.join(__dirname, '../../../test-cases/rax-app');
+const TEST_CASES_DIR = path.join(__dirname, '../../fixtures/test-cases/rax-app');
 const SHOULD_UPDATE_EXPECTED = process.env.UPDATE_EXPECTED === 'true';
 
 getSubDirectoriesSync(TEST_CASES_DIR).forEach(defineTest);
@@ -50,7 +50,7 @@ function defineTest(caseDirName: string) {
   });
 }
 
-async function exportProject(schemaJson: ProjectSchema, targetPath: string, projectName: string) {
+async function exportProject(schemaJson: IPublicTypeProjectSchema, targetPath: string, projectName: string) {
   const raxAppBuilder = CodeGenerator.solutions.rax();
   const result = await raxAppBuilder.generateProject(schemaJson);
 

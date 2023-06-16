@@ -2,15 +2,13 @@ import '../../fixtures/window';
 import { DocumentModel, isDocumentModel, isPageSchema } from '../../../src/document/document-model';
 import { Editor } from '@alilc/lowcode-editor-core';
 import { Project } from '../../../src/project/project';
-import { Node } from '../../../src/document/node/node';
 import { Designer } from '../../../src/designer/designer';
 import formSchema from '../../fixtures/schema/form';
 import divMeta from '../../fixtures/component-metadata/div';
 import formMeta from '../../fixtures/component-metadata/form';
 import otherMeta from '../../fixtures/component-metadata/other';
 import pageMeta from '../../fixtures/component-metadata/page';
-// const { DocumentModel } = require('../../../src/document/document-model');
-// const { Node } = require('../__mocks__/node');
+import { shellModelFactory } from '../../../../engine/src/modules/shell-model-factory';
 
 describe('document-model 测试', () => {
   let editor: Editor;
@@ -19,13 +17,13 @@ describe('document-model 测试', () => {
 
   beforeEach(() => {
     editor = new Editor();
-    designer = new Designer({ editor });
+    designer = new Designer({ editor, shellModelFactory });
     project = designer.project;
   });
 
   it('empty schema', () => {
     const doc = new DocumentModel(project);
-    expect(doc.rootNode.id).toBe('root');
+    expect(doc.rootNode?.id).toBe('root');
     expect(doc.currentRoot).toBe(doc.rootNode);
     expect(doc.root).toBe(doc.rootNode);
     expect(doc.modalNode).toBeUndefined();
@@ -62,7 +60,7 @@ describe('document-model 测试', () => {
     doc.internalRemoveAndPurgeNode({ id: 'mockId' });
 
     // internalSetDropLocation
-    doc.internalSetDropLocation({ a: 1 });
+    doc.dropLocation = { a: 1 };
     expect(doc.dropLocation).toEqual({ a: 1 });
 
     // wrapWith
@@ -219,6 +217,7 @@ describe('document-model 测试', () => {
   it('checkNesting / checkDropTarget / checkNestingUp / checkNestingDown', () => {
     designer.createComponentMeta(pageMeta);
     designer.createComponentMeta(formMeta);
+    designer.createComponentMeta(otherMeta);
     const doc = new DocumentModel(project, formSchema);
 
     expect(
@@ -239,6 +238,26 @@ describe('document-model 测试', () => {
         type: 'nodedata',
         data: { componentName: 'Form' },
       }),
+    ).toBeTruthy();
+    expect(
+      doc.checkNesting(doc.getNode('page'), doc.getNode('form'))
+    ).toBeTruthy();
+    expect(
+      doc.checkNesting(doc.getNode('page'), null)
+    ).toBeTruthy();
+    expect(
+      doc.checkNesting(doc.getNode('page'), {
+        type: 'nodedata',
+        data: { componentName: 'Other' },
+      })
+    ).toBeFalsy();
+
+    expect(
+      doc.checkNestingUp(doc.getNode('page'), { componentName: 'Other' })
+    ).toBeFalsy();
+
+    expect(
+      doc.checkNestingDown(doc.getNode('page'), { componentName: 'Other' })
     ).toBeTruthy();
 
     expect(doc.checkNestingUp(doc.getNode('page'), null)).toBeTruthy();

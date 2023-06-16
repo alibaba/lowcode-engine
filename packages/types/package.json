@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-types",
-  "version": "1.0.14",
+  "version": "1.1.7",
   "description": "Types for Ali lowCode engine",
   "files": [
     "es",
@@ -9,7 +9,7 @@
   "main": "lib/index.js",
   "module": "es/index.js",
   "scripts": {
-    "build": "build-scripts build --skip-demo"
+    "build": "build-scripts build"
   },
   "dependencies": {
     "@alilc/lowcode-datasource-types": "^1.0.0",
@@ -19,8 +19,7 @@
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
     "@types/node": "^13.7.1",
-    "@types/react": "^16",
-    "build-plugin-component": "^0.2.10"
+    "@types/react": "^16"
   },
   "publishConfig": {
     "access": "public",

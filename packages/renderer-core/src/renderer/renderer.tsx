@@ -4,14 +4,12 @@ import contextFactory from '../context';
 import { isFileSchema, isEmpty } from '../utils';
 import baseRendererFactory from './base';
 import divFactory from '../components/Div';
-import { IGeneralConstructor, IRenderComponent, IRendererProps, IRendererState } from '../types';
-import { RootSchema } from '@alilc/lowcode-types';
+import { IRenderComponent, IRendererProps, IRendererState } from '../types';
+import { IPublicTypeNodeSchema, IPublicTypeRootSchema } from '@alilc/lowcode-types';
+import logger from '../utils/logger';
 
 export default function rendererFactory(): IRenderComponent {
-  const runtime = adapter.getRuntime();
-  const Component = runtime.Component as IGeneralConstructor<IRendererProps, Record<string, any>>;
-  const PureComponent = runtime.PureComponent as IGeneralConstructor<IRendererProps, Record<string, any>>;
-  const { createElement, findDOMNode } = runtime;
+  const { PureComponent, Component, createElement, findDOMNode } = adapter.getRuntime();
   const RENDERER_COMPS: any = adapter.getRenderers();
   const BaseRenderer = baseRendererFactory();
   const AppContext = contextFactory();
@@ -21,10 +19,9 @@ export default function rendererFactory(): IRenderComponent {
 
   const debug = Debug('renderer:entry');
 
-  class FaultComponent extends PureComponent {
+  class FaultComponent extends PureComponent<IPublicTypeNodeSchema | any> {
     render() {
-      // FIXME: errorlog
-      console.error('render error', this.props);
+      logger.error(`%c${this.props.componentName || ''} 组件渲染异常, 异常原因: ${this.props.error?.message || this.props.error || '未知'}`, 'color: #ff0000;');
       return createElement(Div, {
         style: {
           width: '100%',
@@ -35,18 +32,23 @@ export default function rendererFactory(): IRenderComponent {
           color: '#ff0000',
           border: '2px solid #ff0000',
         },
-      }, '组件渲染异常，请查看控制台日志');
+      }, `${this.props.componentName || ''} 组件渲染异常，请查看控制台日志`);
     }
   }
 
-  class NotFoundComponent extends PureComponent {
+  class NotFoundComponent extends PureComponent<{
+    componentName: string;
+  } & IRendererProps> {
     render() {
-      return createElement(Div, this.props, this.props.children || 'Component Not Found');
+      if (this.props.enableStrictNotFoundMode) {
+        return `${this.props.componentName || ''} Component Not Found`;
+      }
+      return createElement(Div, this.props, this.props.children || `${this.props.componentName || ''} Component Not Found`);
     }
   }
 
-  return class Renderer extends Component {
-    static dislayName = 'renderer';
+  return class Renderer extends Component<IRendererProps> {
+    static displayName = 'Renderer';
 
     state: Partial<IRendererState> = {};
 
@@ -57,7 +59,7 @@ export default function rendererFactory(): IRenderComponent {
       components: {},
       designMode: '',
       suspended: false,
-      schema: {} as RootSchema,
+      schema: {} as IPublicTypeRootSchema,
       onCompGetRef: () => { },
       onCompGetCtx: () => { },
       thisRequiredInJSE: true,
@@ -83,8 +85,9 @@ export default function rendererFactory(): IRenderComponent {
       debug(`entry.componentWillUnmount - ${this.props?.schema?.componentName}`);
     }
 
-    async componentDidCatch(e: any) {
-      console.warn(e);
+    componentDidCatch(error: Error) {
+      this.state.engineRenderError = true;
+      this.state.error = error;
     }
 
     shouldComponentUpdate(nextProps: IRendererProps) {
@@ -156,7 +159,25 @@ export default function rendererFactory(): IRenderComponent {
     }
 
     getFaultComponent() {
-      return this.props.faultComponent || FaultComponent;
+      const { faultComponent, faultComponentMap, schema } = this.props;
+      if (faultComponentMap) {
+        const { componentName } = schema;
+        return faultComponentMap[componentName] || faultComponent || FaultComponent;
+      }
+      return faultComponent || FaultComponent;
+    }
+
+    getComp() {
+      const { schema, components } = this.props;
+      const { componentName } = schema;
+      const allComponents = { ...RENDERER_COMPS, ...components };
+      let Comp = allComponents[componentName] || RENDERER_COMPS[`${componentName}Renderer`];
+      if (Comp && Comp.prototype) {
+        if (!(Comp.prototype instanceof BaseRenderer)) {
+          Comp = RENDERER_COMPS[`${componentName}Renderer`];
+        }
+      }
+      return Comp;
     }
 
     render() {
@@ -166,24 +187,28 @@ export default function rendererFactory(): IRenderComponent {
       }
       // 兼容乐高区块模板
       if (schema.componentName !== 'Div' && !isFileSchema(schema)) {
+        logger.error('The root component name needs to be one of Page、Block、Component, please check the schema: ', schema);
         return '模型结构异常';
       }
       debug('entry.render');
-      const { componentName } = schema;
       const allComponents = { ...RENDERER_COMPS, ...components };
-      let Comp = allComponents[componentName] || RENDERER_COMPS[`${componentName}Renderer`];
-      if (Comp && Comp.prototype) {
-        if (!(Comp.prototype instanceof BaseRenderer)) {
-          Comp = RENDERER_COMPS[`${componentName}Renderer`];
-        }
+      let Comp = this.getComp();
+
+      if (this.state && this.state.engineRenderError) {
+        return createElement(this.getFaultComponent(), {
+          ...this.props,
+          error: this.state.error,
+        });
       }
 
       if (Comp) {
-        return createElement(AppContext.Provider, { value: {
-          appHelper,
-          components: allComponents,
-          engine: this,
-        } }, createElement(ConfigProvider, {
+        return createElement(AppContext.Provider, {
+          value: {
+            appHelper,
+            components: allComponents,
+            engine: this,
+          },
+        }, createElement(ConfigProvider, {
           device: this.props.device,
           locale: this.props.locale,
         }, createElement(Comp, {

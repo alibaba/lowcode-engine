@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import type { ProjectSchema, ResultDir } from '@alilc/lowcode-types';
+import type { IPublicTypeProjectSchema, ResultDir } from '@alilc/lowcode-types';
 import type { FlattenFile } from './types/file';
 
 declare const Worker: any;
@@ -8,7 +8,7 @@ declare const __PACKAGE_VERSION__: string;
 
 const packageVersion = __PACKAGE_VERSION__ || 'latest';
 
-export const DEFAULT_WORKER_JS = `https://unpkg.com/@alilc/lowcode-code-generator@${packageVersion}/dist/standalone-worker.min.js`;
+export const DEFAULT_WORKER_JS = `https://cdn.jsdelivr.net/npm/@alilc/lowcode-code-generator@${packageVersion}/dist/standalone-worker.min.js`;
 
 export const DEFAULT_TIMEOUT_IN_MS = 60 * 1000;
 
@@ -26,7 +26,7 @@ export type Result = ResultDir | FlattenFile[];
 
 export async function generateCode(options: {
   solution: 'icejs' | 'rax';
-  schema: ProjectSchema;
+  schema: IPublicTypeProjectSchema;
   flattenResult?: boolean;
   workerJsUrl?: string;
   timeoutInMs?: number;

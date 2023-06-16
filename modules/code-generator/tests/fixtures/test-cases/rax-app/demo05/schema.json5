@@ -1,0 +1,72 @@
+{
+  // 这是一个关于国际化的 schema 示例
+  version: '1.0.0',
+  componentsMap: [
+    {
+      componentName: 'Page',
+      package: 'rax-view',
+      version: '^1.0.0',
+      destructuring: false,
+      exportName: 'Page',
+    },
+    {
+      componentName: 'Text',
+      package: 'rax-text',
+      version: '^1.0.0',
+      destructuring: false,
+      exportName: 'Text',
+    },
+  ],
+  componentsTree: [
+    {
+      componentName: 'Page',
+      props: {},
+      lifeCycles: {},
+      fileName: 'home',
+      meta: {
+        router: '/',
+      },
+      dataSource: {
+        list: [],
+      },
+      children: [
+        {
+          componentName: 'Text',
+          props: {
+            onClick: {
+              type: 'JSFunction',
+              value: "function () {\n  this.setLocale(this.getLocale() === 'en-US' ? 'zh-CN' : 'en-US');\n}",
+            },
+          },
+          children: [
+            {
+              type: 'JSExpression',
+              value: 'this.i18n["hello-world"]',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  i18n: {
+    'zh-CN': {
+      'hello-world': '你好，世界！',
+    },
+    'en-US': {
+      'hello-world': 'Hello world!',
+    },
+  },
+  config: {
+    sdkVersion: '1.0.3',
+    historyMode: 'hash',
+    targetRootID: 'root',
+  },
+  meta: {
+    name: 'Rax App Demo',
+    git_group: 'demo-group',
+    project_name: 'demo-project',
+    description: '这是一个示例应用',
+    spma: 'spmademo',
+    creator: '张三',
+  },
+}

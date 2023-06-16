@@ -1,9 +1,9 @@
-import { Component, MouseEvent as ReactMouseEvent } from 'react';
-import { observer, Editor, globalContext } from '@alilc/lowcode-editor-core';
-import { isRootNode, Node, DragObjectType, isShaken } from '@alilc/lowcode-designer';
-import { isFormEvent, canClickNode } from '@alilc/lowcode-utils';
-import { Tree } from '../tree';
-import RootTreeNodeView from './root-tree-node';
+import { MouseEvent as ReactMouseEvent, PureComponent } from 'react';
+import { isFormEvent, canClickNode, isShaken } from '@alilc/lowcode-utils';
+import { Tree } from '../controllers/tree';
+import TreeNodeView from './tree-node';
+import { IPublicEnumDragObjectType, IPublicModelNode } from '@alilc/lowcode-types';
+import TreeNode from '../controllers/tree-node';
 
 function getTreeNodeIdByEvent(e: ReactMouseEvent, stop: Element): null | string {
   let target: Element | null = e.target as Element;
@@ -18,20 +18,29 @@ function getTreeNodeIdByEvent(e: ReactMouseEvent, stop: Element): null | string 
   return (target as HTMLDivElement).dataset.id || null;
 }
 
-@observer
-export default class TreeView extends Component<{ tree: Tree }> {
+export default class TreeView extends PureComponent<{
+  tree: Tree;
+}> {
   private shell: HTMLDivElement | null = null;
 
-  private hover(e: ReactMouseEvent) {
-    const { tree } = this.props;
+  private ignoreUpSelected = false;
 
-    const doc = tree.document;
-    const { detecting } = doc.designer;
-    if (!detecting.enable) {
+  private boostEvent?: MouseEvent;
+
+  state: {
+    root: TreeNode | null;
+  } = {
+    root: null,
+  };
+
+  private hover(e: ReactMouseEvent) {
+    const { project } = this.props.tree.pluginContext;
+    const detecting = project.currentDocument?.detecting;
+    if (detecting?.enable) {
       return;
     }
     const node = this.getTreeNodeFromEvent(e)?.node;
-    detecting.capture(node || null);
+    detecting?.capture(node as any);
   }
 
   private onClick = (e: ReactMouseEvent) => {
@@ -54,28 +63,41 @@ export default class TreeView extends Component<{ tree: Tree }> {
       return;
     }
 
-    const { designer } = treeNode;
-    const doc = node.document;
-    const { selection, focusNode } = doc;
+    const { project, event, canvas } = this.props.tree.pluginContext;
+    const doc = project.currentDocument;
+    const selection = doc?.selection;
+    const focusNode = doc?.focusNode;
     const { id } = node;
     const isMulti = e.metaKey || e.ctrlKey || e.shiftKey;
-    designer.activeTracker.track(node);
-    if (isMulti && !node.contains(focusNode) && selection.has(id)) {
+    canvas.activeTracker?.track(node);
+    if (isMulti && focusNode && !node.contains(focusNode) && selection?.has(id)) {
       if (!isFormEvent(e.nativeEvent)) {
         selection.remove(id);
       }
     } else {
-      selection.select(id);
-      const editor = globalContext.get(Editor);
-      const selectedNode = designer.currentSelection?.getNodes()?.[0];
+      selection?.select(id);
+      const selectedNode = selection?.getNodes()?.[0];
       const npm = selectedNode?.componentMeta?.npm;
       const selected =
         [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
         selectedNode?.componentMeta?.componentName ||
         '';
-      editor?.emit('outlinePane.select', {
+      event.emit('outlinePane.select', {
         selected,
       });
+    }
+  };
+
+  private onDoubleClick = (e: ReactMouseEvent) => {
+    e.preventDefault();
+    const treeNode = this.getTreeNodeFromEvent(e);
+    if (treeNode?.id === this.state.root?.id) {
+      return;
+    }
+    if (!treeNode?.expanded) {
+      this.props.tree.expandAllDecendants(treeNode);
+    } else {
+      this.props.tree.collapseAllDecendants(treeNode);
     }
   };
 
@@ -96,10 +118,6 @@ export default class TreeView extends Component<{ tree: Tree }> {
     return tree.getTreeNodeById(id);
   }
 
-  private ignoreUpSelected = false;
-
-  private boostEvent?: MouseEvent;
-
   private onMouseDown = (e: ReactMouseEvent) => {
     if (isFormEvent(e.nativeEvent)) {
       return;
@@ -114,36 +132,37 @@ export default class TreeView extends Component<{ tree: Tree }> {
     if (!canClickNode(node, e)) {
       return;
     }
-
-    const { designer } = treeNode;
-    const doc = node.document;
-    const { selection, focusNode } = doc;
+    const { project, canvas } = this.props.tree.pluginContext;
+    const selection = project.currentDocument?.selection;
+    const focusNode = project.currentDocument?.focusNode;
 
     // TODO: shift selection
     const isMulti = e.metaKey || e.ctrlKey || e.shiftKey;
     const isLeftButton = e.button === 0;
 
-    if (isLeftButton && !node.contains(focusNode)) {
-      let nodes: Node[] = [node];
+    if (isLeftButton && focusNode && !node.contains(focusNode)) {
+      let nodes: IPublicModelNode[] = [node];
       this.ignoreUpSelected = false;
       if (isMulti) {
         // multi select mode, directily add
-        if (!selection.has(node.id)) {
-          designer.activeTracker.track(node);
-          selection.add(node.id);
+        if (!selection?.has(node.id)) {
+          canvas.activeTracker?.track(node);
+          selection?.add(node.id);
           this.ignoreUpSelected = true;
         }
         // todo: remove rootNodes id
-        selection.remove(focusNode.id);
+        selection?.remove(focusNode.id);
         // 获得顶层 nodes
-        nodes = selection.getTopNodes();
-      } else if (selection.has(node.id)) {
+        if (selection) {
+          nodes = selection.getTopNodes();
+        }
+      } else if (selection?.has(node.id)) {
         nodes = selection.getTopNodes();
       }
       this.boostEvent = e.nativeEvent;
-      designer.dragon.boost(
+      canvas.dragon?.boost(
         {
-          type: DragObjectType.Node,
+          type: IPublicEnumDragObjectType.Node,
           nodes,
         },
         this.boostEvent,
@@ -152,15 +171,27 @@ export default class TreeView extends Component<{ tree: Tree }> {
   };
 
   private onMouseLeave = () => {
-    const { tree } = this.props;
-    const doc = tree.document;
-    doc.designer.detecting.leave(doc);
+    const { pluginContext } = this.props.tree;
+    const { project } = pluginContext;
+    const doc = project.currentDocument;
+    doc?.detecting.leave();
   };
 
-  render() {
+  componentDidMount() {
     const { tree } = this.props;
     const { root } = tree;
-    if (!root) {
+    const { project } = tree.pluginContext;
+    this.setState({ root });
+    const doc = project.currentDocument;
+    doc?.onFocusNodeChanged(() => {
+      this.setState({
+        root: tree.root,
+      });
+    });
+  }
+
+  render() {
+    if (!this.state.root) {
       return null;
     }
     return (
@@ -170,9 +201,14 @@ export default class TreeView extends Component<{ tree: Tree }> {
         onMouseDownCapture={this.onMouseDown}
         onMouseOver={this.onMouseOver}
         onClick={this.onClick}
+        onDoubleClick={this.onDoubleClick}
         onMouseLeave={this.onMouseLeave}
       >
-        <RootTreeNodeView key={root.id} treeNode={root} />
+        <TreeNodeView
+          key={this.state.root?.id}
+          treeNode={this.state.root}
+          isRootNode
+        />
       </div>
     );
   }

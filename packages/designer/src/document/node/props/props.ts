@@ -1,9 +1,11 @@
 import { computed, makeObservable, obx, action } from '@alilc/lowcode-editor-core';
-import { PropsMap, PropsList, CompositeValue } from '@alilc/lowcode-types';
+import { IPublicTypePropsList, IPublicTypeCompositeValue, IPublicEnumTransformStage, IBaseModelProps } from '@alilc/lowcode-types';
+import type { IPublicTypePropsMap } from '@alilc/lowcode-types';
 import { uniqueId, compatStage } from '@alilc/lowcode-utils';
-import { Prop, IPropParent, UNSET } from './prop';
-import { Node } from '../node';
-import { TransformStage } from '../transform-stage';
+import { Prop, UNSET } from './prop';
+import type { IProp } from './prop';
+import { INode } from '../node';
+// import { TransformStage } from '../transform-stage';
 
 interface ExtrasObject {
   [key: string]: any;
@@ -23,10 +25,45 @@ export function getConvertedExtraKey(key: string): string {
 export function getOriginalExtraKey(key: string): string {
   return key.replace(new RegExp(`${EXTRA_KEY_PREFIX}`, 'g'), '');
 }
-export class Props implements IPropParent {
+
+export interface IPropParent {
+
+  readonly props: IProps;
+
+  readonly owner: INode;
+
+  get path(): string[];
+
+  delete(prop: IProp): void;
+}
+
+export interface IProps extends Omit<IBaseModelProps<IProp>, | 'getExtraProp' | 'getExtraPropValue' | 'setExtraPropValue' | 'node'>, IPropParent {
+
+  /**
+   * 获取 props 对应的 node
+   */
+  getNode(): INode;
+
+  get(path: string, createIfNone?: boolean): IProp | null;
+
+  export(stage?: IPublicEnumTransformStage): {
+    props?: IPublicTypePropsMap | IPublicTypePropsList;
+    extras?: ExtrasObject;
+  };
+
+  merge(value: IPublicTypePropsMap, extras?: IPublicTypePropsMap): void;
+
+  purge(): void;
+
+  query(path: string, createIfNone: boolean): IProp | null;
+
+  import(value?: IPublicTypePropsMap | IPublicTypePropsList | null, extras?: ExtrasObject): void;
+}
+
+export class Props implements IProps, IPropParent {
   readonly id = uniqueId('props');
 
-  @obx.shallow private items: Prop[] = [];
+  @obx.shallow private items: IProp[] = [];
 
   @computed private get maps(): Map<string, Prop> {
     const maps = new Map();
@@ -42,11 +79,11 @@ export class Props implements IPropParent {
 
   readonly path = [];
 
-  get props(): Props {
+  get props(): IProps {
     return this;
   }
 
-  readonly owner: Node;
+  readonly owner: INode;
 
   /**
    * 元素个数
@@ -57,7 +94,9 @@ export class Props implements IPropParent {
 
   @obx type: 'map' | 'list' = 'map';
 
-  constructor(owner: Node, value?: PropsMap | PropsList | null, extras?: ExtrasObject) {
+  private purged = false;
+
+  constructor(owner: INode, value?: IPublicTypePropsMap | IPublicTypePropsList | null, extras?: ExtrasObject) {
     makeObservable(this);
     this.owner = owner;
     if (Array.isArray(value)) {
@@ -76,7 +115,7 @@ export class Props implements IPropParent {
   }
 
   @action
-  import(value?: PropsMap | PropsList | null, extras?: ExtrasObject) {
+  import(value?: IPublicTypePropsMap | IPublicTypePropsList | null, extras?: ExtrasObject) {
     const originItems = this.items;
     if (Array.isArray(value)) {
       this.type = 'list';
@@ -99,7 +138,7 @@ export class Props implements IPropParent {
   }
 
   @action
-  merge(value: PropsMap, extras?: PropsMap) {
+  merge(value: IPublicTypePropsMap, extras?: IPublicTypePropsMap) {
     Object.keys(value).forEach((key) => {
       this.query(key, true)!.setValue(value[key]);
       this.query(key, true)!.setupItems();
@@ -112,8 +151,8 @@ export class Props implements IPropParent {
     }
   }
 
-  export(stage: TransformStage = TransformStage.Save): {
-    props?: PropsMap | PropsList;
+  export(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Save): {
+    props?: IPublicTypePropsMap | IPublicTypePropsList;
     extras?: ExtrasObject;
   } {
     stage = compatStage(stage);
@@ -191,16 +230,16 @@ export class Props implements IPropParent {
    * @param createIfNone 当没有的时候，是否创建一个
    */
   @action
-  query(path: string, createIfNone = true): Prop | null {
+  query(path: string, createIfNone = true): IProp | null {
     return this.get(path, createIfNone);
   }
 
   /**
-   * 获取某个属性, 如果不存在，临时获取一个待写入
+   * 获取某个属性，如果不存在，临时获取一个待写入
    * @param createIfNone 当没有的时候，是否创建一个
    */
   @action
-  get(path: string, createIfNone = false): Prop | null {
+  get(path: string, createIfNone = false): IProp | null {
     let entry = path;
     let nest = '';
     const i = path.indexOf('.');
@@ -228,7 +267,7 @@ export class Props implements IPropParent {
    * 删除项
    */
   @action
-  delete(prop: Prop): void {
+  delete(prop: IProp): void {
     const i = this.items.indexOf(prop);
     if (i > -1) {
       this.items.splice(i, 1);
@@ -256,11 +295,11 @@ export class Props implements IPropParent {
    */
   @action
   add(
-    value: CompositeValue | null,
+    value: IPublicTypeCompositeValue | null,
     key?: string | number,
     spread = false,
     options: any = {},
-  ): Prop {
+  ): IProp {
     const prop = new Prop(this, value, key, spread, options);
     this.items.push(prop);
     return prop;
@@ -276,7 +315,7 @@ export class Props implements IPropParent {
   /**
    * 迭代器
    */
-  [Symbol.iterator](): { next(): { value: Prop } } {
+  [Symbol.iterator](): { next(): { value: IProp } } {
     let index = 0;
     const { items } = this;
     const length = items.length || 0;
@@ -300,7 +339,7 @@ export class Props implements IPropParent {
    * 遍历
    */
   @action
-  forEach(fn: (item: Prop, key: number | string | undefined) => void): void {
+  forEach(fn: (item: IProp, key: number | string | undefined) => void): void {
     this.items.forEach((item) => {
       return fn(item, item.key);
     });
@@ -310,20 +349,18 @@ export class Props implements IPropParent {
    * 遍历
    */
   @action
-  map<T>(fn: (item: Prop, key: number | string | undefined) => T): T[] | null {
+  map<T>(fn: (item: IProp, key: number | string | undefined) => T): T[] | null {
     return this.items.map((item) => {
       return fn(item, item.key);
     });
   }
 
   @action
-  filter(fn: (item: Prop, key: number | string | undefined) => boolean) {
+  filter(fn: (item: IProp, key: number | string | undefined) => boolean) {
     return this.items.filter((item) => {
       return fn(item, item.key);
     });
   }
-
-  private purged = false;
 
   /**
    * 回收销毁
@@ -342,7 +379,7 @@ export class Props implements IPropParent {
    * @param createIfNone 当没有的时候，是否创建一个
    */
   @action
-  getProp(path: string, createIfNone = true): Prop | null {
+  getProp(path: string, createIfNone = true): IProp | null {
     return this.query(path, createIfNone) || null;
   }
 

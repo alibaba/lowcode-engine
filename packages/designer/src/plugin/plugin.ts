@@ -1,27 +1,26 @@
 import { getLogger, Logger } from '@alilc/lowcode-utils';
 import {
-  ILowCodePlugin,
-  ILowCodePluginConfig,
+  ILowCodePluginRuntime,
   ILowCodePluginManager,
-  ILowCodePluginConfigMeta,
 } from './plugin-types';
-import { EventEmitter } from 'events';
+import {
+  IPublicTypePluginConfig,
+  IPublicTypePluginMeta,
+} from '@alilc/lowcode-types';
 import { invariant } from '../utils';
 
-export class LowCodePlugin implements ILowCodePlugin {
-  config: ILowCodePluginConfig;
+export class LowCodePluginRuntime implements ILowCodePluginRuntime {
+  config: IPublicTypePluginConfig;
 
   logger: Logger;
 
   private manager: ILowCodePluginManager;
 
-  private emitter: EventEmitter;
-
   private _inited: boolean;
 
   private pluginName: string;
 
-  private meta: ILowCodePluginConfigMeta;
+  meta: IPublicTypePluginMeta;
 
   /**
    * 标识插件状态，是否被 disabled
@@ -31,15 +30,14 @@ export class LowCodePlugin implements ILowCodePlugin {
   constructor(
     pluginName: string,
     manager: ILowCodePluginManager,
-    config: ILowCodePluginConfig,
-    meta: ILowCodePluginConfigMeta,
+    config: IPublicTypePluginConfig,
+    meta: IPublicTypePluginMeta,
   ) {
     this.manager = manager;
     this.config = config;
-    this.emitter = new EventEmitter();
     this.pluginName = pluginName;
     this.meta = meta;
-    this.logger = getLogger({ level: 'warn', bizName: `designer:plugin:${pluginName}` });
+    this.logger = getLogger({ level: 'warn', bizName: `plugin:${pluginName}` });
   }
 
   get name() {
@@ -51,29 +49,15 @@ export class LowCodePlugin implements ILowCodePlugin {
       return [this.meta.dependencies];
     }
     // compat legacy way to declare dependencies
-    if (typeof this.config.dep === 'string') {
-      return [this.config.dep];
+    const legacyDepValue = (this.config as any).dep;
+    if (typeof legacyDepValue === 'string') {
+      return [legacyDepValue];
     }
-    return this.meta.dependencies || this.config.dep || [];
+    return this.meta.dependencies || legacyDepValue || [];
   }
 
   get disabled() {
     return this._disabled;
-  }
-
-  on(event: string | symbol, listener: (...args: any[]) => void): any {
-    this.emitter.on(event, listener);
-    return () => {
-      this.emitter.off(event, listener);
-    };
-  }
-
-  emit(event: string | symbol, ...args: any[]) {
-    return this.emitter.emit(event, ...args);
-  }
-
-  removeAllListeners(event: string | symbol): any {
-    return this.emitter.removeAllListeners(event);
   }
 
   isInited() {

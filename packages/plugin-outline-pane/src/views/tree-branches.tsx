@@ -1,20 +1,45 @@
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import classNames from 'classnames';
-import { observer, Title } from '@alilc/lowcode-editor-core';
-import { ExclusiveGroup } from '@alilc/lowcode-designer';
-import TreeNode from '../tree-node';
+import TreeNode from '../controllers/tree-node';
 import TreeNodeView from './tree-node';
-import { intlNode } from '../locale';
+import { IPublicModelExclusiveGroup, IPublicTypeDisposable, IPublicTypeLocationChildrenDetail } from '@alilc/lowcode-types';
 
-@observer
-export default class TreeBranches extends Component<{
+export default class TreeBranches extends PureComponent<{
   treeNode: TreeNode;
   isModal?: boolean;
+  expanded: boolean;
+  treeChildren: TreeNode[] | null;
 }> {
-  render() {
-    const { treeNode, isModal } = this.props;
-    const { expanded } = treeNode;
+  state = {
+    filterWorking: false,
+    matchChild: false,
+  };
+  private offExpandedChanged: (() => void) | null;
+  constructor(props: any) {
+    super(props);
+
+    const { treeNode } = this.props;
     const { filterWorking, matchChild } = treeNode.filterReult;
+    this.setState({ filterWorking, matchChild });
+  }
+
+  componentDidMount() {
+    const { treeNode } = this.props;
+    treeNode.onFilterResultChanged(() => {
+      const { filterWorking: newFilterWorking, matchChild: newMatchChild } = treeNode.filterReult;
+      this.setState({ filterWorking: newFilterWorking, matchChild: newMatchChild });
+    });
+  }
+
+  componentWillUnmount(): void {
+    if (this.offExpandedChanged) {
+      this.offExpandedChanged();
+    }
+  }
+
+  render() {
+    const { treeNode, isModal, expanded } = this.props;
+    const { filterWorking, matchChild } = this.state;
     // 条件过滤生效时，如果命中了子节点，需要将该节点展开
     const expandInFilterResult = filterWorking && matchChild;
 
@@ -27,29 +52,81 @@ export default class TreeBranches extends Component<{
         {
           !isModal && <TreeNodeSlots treeNode={treeNode} />
         }
-        <TreeNodeChildren treeNode={treeNode} isModal={isModal || false} />
+        <TreeNodeChildren
+          treeNode={treeNode}
+          isModal={isModal || false}
+          treeChildren={this.props.treeChildren}
+        />
       </div>
     );
   }
 }
 
-@observer
-class TreeNodeChildren extends Component<{
+interface ITreeNodeChildrenState {
+  filterWorking: boolean;
+  matchSelf: boolean;
+  keywords: string | null;
+  dropDetail: IPublicTypeLocationChildrenDetail | undefined | null;
+}
+class TreeNodeChildren extends PureComponent<{
     treeNode: TreeNode;
     isModal?: boolean;
-  }> {
+    treeChildren: TreeNode[] | null;
+  }, ITreeNodeChildrenState> {
+  state: ITreeNodeChildrenState = {
+    filterWorking: false,
+    matchSelf: false,
+    keywords: null,
+    dropDetail: null,
+  };
+  offLocationChanged: IPublicTypeDisposable | undefined;
+  componentDidMount() {
+    const { treeNode } = this.props;
+    const { project } = treeNode.pluginContext;
+    const { filterWorking, matchSelf, keywords } = treeNode.filterReult;
+    const { dropDetail } = treeNode;
+    this.setState({
+      filterWorking,
+      matchSelf,
+      keywords,
+      dropDetail,
+    });
+    treeNode.onFilterResultChanged(() => {
+      const {
+        filterWorking: newFilterWorking,
+        matchSelf: newMatchChild,
+        keywords: newKeywords,
+       } = treeNode.filterReult;
+      this.setState({
+        filterWorking: newFilterWorking,
+        matchSelf: newMatchChild,
+        keywords: newKeywords,
+      });
+    });
+    this.offLocationChanged = project.currentDocument?.onDropLocationChanged(
+        () => {
+          this.setState({ dropDetail: treeNode.dropDetail });
+        },
+      );
+  }
+  componentWillUnmount(): void {
+    this.offLocationChanged && this.offLocationChanged();
+  }
+
   render() {
-    const { treeNode, isModal } = this.props;
+    const { isModal } = this.props;
     const children: any = [];
     let groupContents: any[] = [];
-    let currentGrp: ExclusiveGroup;
-    const { filterWorking, matchSelf, keywords } = treeNode.filterReult;
+    let currentGrp: IPublicModelExclusiveGroup;
+    const { filterWorking, matchSelf, keywords } = this.state;
+    const Title = this.props.treeNode.pluginContext.common.editorCabin.Title;
 
     const endGroup = () => {
       if (groupContents.length > 0) {
         children.push(
-          <div key={currentGrp.id} className="condition-group-container" data-id={currentGrp.firstNode.id}>
+          <div key={currentGrp.id} className="condition-group-container" data-id={currentGrp.firstNode?.id}>
             <div className="condition-group-title">
+              {/* @ts-ignore */}
               <Title
                 title={currentGrp.title}
                 match={filterWorking && matchSelf}
@@ -62,7 +139,8 @@ class TreeNodeChildren extends Component<{
         groupContents = [];
       }
     };
-    const { dropDetail } = treeNode;
+
+    const { dropDetail } = this.state;
     const dropIndex = dropDetail?.index;
     const insertion = (
       <div
@@ -72,8 +150,8 @@ class TreeNodeChildren extends Component<{
         })}
       />
     );
-    treeNode.children?.forEach((child, index) => {
-      const childIsModal = child.node.componentMeta.isModal || false;
+    this.props.treeChildren?.forEach((child, index) => {
+      const childIsModal = child.node.componentMeta?.isModal || false;
       if (isModal != childIsModal) {
         return;
       }
@@ -100,7 +178,7 @@ class TreeNodeChildren extends Component<{
       }
     });
     endGroup();
-    const length = treeNode.children?.length || 0;
+    const length = this.props.treeChildren?.length || 0;
     if (dropIndex != null && dropIndex >= length) {
       children.push(insertion);
     }
@@ -109,8 +187,7 @@ class TreeNodeChildren extends Component<{
   }
 }
 
-@observer
-class TreeNodeSlots extends Component<{
+class TreeNodeSlots extends PureComponent<{
     treeNode: TreeNode;
   }> {
   render() {
@@ -118,6 +195,7 @@ class TreeNodeSlots extends Component<{
     if (!treeNode.hasSlots()) {
       return null;
     }
+    const Title = this.props.treeNode.pluginContext.common.editorCabin.Title;
     return (
       <div
         className={classNames('tree-node-slots', {
@@ -126,7 +204,8 @@ class TreeNodeSlots extends Component<{
         data-id={treeNode.id}
       >
         <div className="tree-node-slots-title">
-          <Title title={{ type: 'i18n', intl: intlNode('Slots') }} />
+          {/* @ts-ignore */}
+          <Title title={{ type: 'i18n', intl: this.props.treeNode.pluginContext.intlNode('Slots') }} />
         </div>
         {treeNode.slots.map(tnode => (
           <TreeNodeView key={tnode.id} treeNode={tnode} />

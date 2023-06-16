@@ -9,7 +9,7 @@ const PARSERS = ['css', 'scss', 'less', 'json', 'html', 'vue'];
 
 export interface ProcessorConfig {
   customFileTypeParser: Record<string, string>;
-  plugins?: Array<prettier.Plugin>;
+  plugins?: prettier.Plugin[];
 }
 
 const factory: PostProcessorFactory<ProcessorConfig> = (config?: ProcessorConfig) => {
@@ -20,8 +20,10 @@ const factory: PostProcessorFactory<ProcessorConfig> = (config?: ProcessorConfig
 
   const codePrettier: PostProcessor = (content: string, fileType: string) => {
     let parser: prettier.BuiltInParserName | any;
-    if (fileType === 'js' || fileType === 'jsx') {
+    if (fileType === 'js' || fileType === 'jsx' || fileType === 'ts' || fileType === 'tsx') {
       parser = 'babel';
+    } else if (fileType === 'json') {
+      parser = 'json-stringify';
     } else if (PARSERS.indexOf(fileType) >= 0) {
       parser = fileType;
     } else if (cfg.customFileTypeParser[fileType]) {
@@ -33,6 +35,8 @@ const factory: PostProcessorFactory<ProcessorConfig> = (config?: ProcessorConfig
     return prettier.format(content, {
       parser,
       plugins: [parserBabel, parserPostCss, parserHtml, ...(cfg.plugins || [])],
+      singleQuote: true,
+      jsxSingleQuote: false,
     });
   };
 

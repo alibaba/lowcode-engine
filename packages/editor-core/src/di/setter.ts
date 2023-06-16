@@ -1,29 +1,13 @@
 import { ReactNode } from 'react';
-import { CustomView, isCustomView, TitleContent } from '@alilc/lowcode-types';
-import { createContent } from '@alilc/lowcode-utils';
+import { IPublicApiSetters, IPublicTypeCustomView, IPublicTypeRegisteredSetter } from '@alilc/lowcode-types';
+import { createContent, isCustomView } from '@alilc/lowcode-utils';
 
-export type RegisteredSetter = {
-  component: CustomView;
-  defaultProps?: object;
-  title?: TitleContent;
-  /**
-   * for MixedSetter to check this setter if available
-   */
-  condition?: (field: any) => boolean;
-  /**
-   * for MixedSetter to manual change to this setter
-   */
-  initialValue?: any | ((field: any) => any);
-  recommend?: boolean;
-  // 标识是否为动态setter，默认为true
-  isDynamic?: boolean;
-};
-const settersMap = new Map<string, RegisteredSetter & {
+const settersMap = new Map<string, IPublicTypeRegisteredSetter & {
   type: string;
 }>();
 export function registerSetter(
-  typeOrMaps: string | { [key: string]: CustomView | RegisteredSetter },
-  setter?: CustomView | RegisteredSetter,
+  typeOrMaps: string | { [key: string]: IPublicTypeCustomView | IPublicTypeRegisteredSetter },
+  setter?: IPublicTypeCustomView | IPublicTypeRegisteredSetter,
 ) {
   if (typeof typeOrMaps === 'object') {
     Object.keys(typeOrMaps).forEach(type => {
@@ -59,32 +43,76 @@ function getInitialFromSetter(setter: any) {
     ) || null; // eslint-disable-line
 }
 
-export function getSetter(type: string): RegisteredSetter | null {
-  return settersMap.get(type) || null;
-}
-export function getSettersMap() {
-  return settersMap;
+export interface ISetters extends IPublicApiSetters {
+
 }
 
-export function createSetterContent(setter: any, props: Record<string, any>): ReactNode {
-  if (typeof setter === 'string') {
-    setter = getSetter(setter);
-    if (!setter) {
-      return null;
+export class Setters implements ISetters {
+  settersMap = new Map<string, IPublicTypeRegisteredSetter & {
+    type: string;
+  }>();
+
+  constructor(readonly viewName: string = 'global') {}
+
+  getSetter = (type: string): IPublicTypeRegisteredSetter | null => {
+    return this.settersMap.get(type) || null;
+  };
+
+  registerSetter = (
+    typeOrMaps: string | { [key: string]: IPublicTypeCustomView | IPublicTypeRegisteredSetter },
+    setter?: IPublicTypeCustomView | IPublicTypeRegisteredSetter,
+  ) => {
+    if (typeof typeOrMaps === 'object') {
+      Object.keys(typeOrMaps).forEach(type => {
+        this.registerSetter(type, typeOrMaps[type]);
+      });
+      return;
     }
-    if (setter.defaultProps) {
-      props = {
-        ...setter.defaultProps,
-        ...props,
+    if (!setter) {
+      return;
+    }
+    if (isCustomView(setter)) {
+      setter = {
+        component: setter,
+        // todo: intl
+        title: (setter as any).displayName || (setter as any).name || 'CustomSetter',
       };
     }
-    setter = setter.component;
-  }
+    if (!setter.initialValue) {
+      const initial = getInitialFromSetter(setter.component);
+      if (initial) {
+        setter.initialValue = (field: any) => {
+          return initial.call(field, field.getValue());
+        };
+      }
+    }
+    this.settersMap.set(typeOrMaps, { type: typeOrMaps, ...setter });
+  };
 
-  // Fusion的表单组件都是通过 'value' in props 来判断是否使用 defaultValue
-  if ('value' in props && typeof props.value === 'undefined') {
-    delete props.value;
-  }
+  getSettersMap = () => {
+    return this.settersMap;
+  };
 
-  return createContent(setter, props);
+  createSetterContent = (setter: any, props: Record<string, any>): ReactNode => {
+    if (typeof setter === 'string') {
+      setter = this.getSetter(setter);
+      if (!setter) {
+        return null;
+      }
+      if (setter.defaultProps) {
+        props = {
+          ...setter.defaultProps,
+          ...props,
+        };
+      }
+      setter = setter.component;
+    }
+
+    // Fusion 的表单组件都是通过 'value' in props 来判断是否使用 defaultValue
+    if ('value' in props && typeof props.value === 'undefined') {
+      delete props.value;
+    }
+
+    return createContent(setter, props);
+  };
 }

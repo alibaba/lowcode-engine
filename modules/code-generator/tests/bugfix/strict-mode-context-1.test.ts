@@ -1,7 +1,7 @@
 import CodeGenerator from '../../src';
 import * as fs from 'fs';
 import * as path from 'path';
-import { ProjectSchema } from '@alilc/lowcode-types';
+import { IPublicTypeProjectSchema } from '@alilc/lowcode-types';
 import { createDiskPublisher } from '../helpers/solutionHelper';
 import { IceJsProjectBuilderOptions } from '../../src/solutions/icejs';
 
@@ -33,7 +33,7 @@ describe(testCaseBaseName, () => {
 function exportProject(
   importPath: string,
   outputPath: string,
-  mergeSchema?: Partial<ProjectSchema>,
+  mergeSchema?: Partial<IPublicTypeProjectSchema>,
   options?: IceJsProjectBuilderOptions,
 ) {
   const schemaJsonStr = fs.readFileSync(importPath, { encoding: 'utf8' });

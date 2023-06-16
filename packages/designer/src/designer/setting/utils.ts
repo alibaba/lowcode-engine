@@ -1,8 +1,8 @@
 // all this file for polyfill vision logic
 import { isValidElement } from 'react';
-import { isSetterConfig, isDynamicSetter, FieldConfig, SetterConfig } from '@alilc/lowcode-types';
-import { getSetter } from '@alilc/lowcode-editor-core';
-import { SettingField } from './setting-field';
+import { IPublicTypeFieldConfig, IPublicTypeSetterConfig } from '@alilc/lowcode-types';
+import { isSetterConfig, isDynamicSetter } from '@alilc/lowcode-utils';
+import { ISettingField } from './setting-field';
 
 function getHotterFromSetter(setter) {
   return setter && (setter.Hotter || (setter.type && setter.type.Hotter)) || []; // eslint-disable-line
@@ -35,12 +35,12 @@ export class Transducer {
 
   context: any;
 
-  constructor(context: SettingField, config: { setter: FieldConfig['setter'] }) {
+  constructor(context: ISettingField, config: { setter: IPublicTypeFieldConfig['setter'] }) {
     let { setter } = config;
 
     // 1. validElement
-    // 2. SetterConfig
-    // 3. SetterConfig[]
+    // 2. IPublicTypeSetterConfig
+    // 3. IPublicTypeSetterConfig[]
     if (Array.isArray(setter)) {
       setter = setter[0];
     } else if (isValidElement(setter) && setter.type.displayName === 'MixedSetter') {
@@ -58,12 +58,12 @@ export class Transducer {
     let isDynamic = true;
 
     if (isSetterConfig(setter)) {
-      const { componentName, isDynamic: dynamicFlag } = setter as SetterConfig;
+      const { componentName, isDynamic: dynamicFlag } = setter as IPublicTypeSetterConfig;
       setter = componentName;
       isDynamic = dynamicFlag !== false;
     }
     if (typeof setter === 'string') {
-      const { component, isDynamic: dynamicFlag } = getSetter(setter) || {};
+      const { component, isDynamic: dynamicFlag } = context.setters.getSetter(setter) || {};
       setter = component;
       // 如果在物料配置中声明了，在 registerSetter 没有声明，取物料配置中的声明
       isDynamic = dynamicFlag === undefined ? isDynamic : dynamicFlag !== false;

@@ -1,14 +1,13 @@
 import { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { TipItem } from './tip-item';
 import { tipHandler } from './tip-handler';
 
 export class TipContainer extends Component {
+  private dispose?: () => void;
   shouldComponentUpdate() {
     return false;
   }
-
-  private dispose?: () => void;
-
   componentDidMount() {
     const over = (e: MouseEvent) => tipHandler.setTarget(e.target as any);
     const down = () => tipHandler.hideImmediately();
@@ -27,10 +26,11 @@ export class TipContainer extends Component {
   }
 
   render() {
-    return (
+    return ReactDOM.createPortal(
       <div className="lc-tips-container">
         <TipItem />
-      </div>
+      </div>,
+      document.querySelector('body')!,
     );
   }
 }

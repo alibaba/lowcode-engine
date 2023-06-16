@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import { globalContext } from './di';
-import { Editor } from './editor';
+import { IPublicTypeHotkeyCallback, IPublicTypeHotkeyCallbackConfig, IPublicTypeHotkeyCallbacks, IPublicApiHotkey } from '@alilc/lowcode-types';
 
 interface KeyMap {
   [key: number]: string;
@@ -14,23 +14,8 @@ interface ActionEvent {
   type: string;
 }
 
-interface HotkeyCallbacks {
-  [key: string]: HotkeyCallbackCfg[];
-}
-
 interface HotkeyDirectMap {
-  [key: string]: HotkeyCallback;
-}
-
-export type HotkeyCallback = (e: KeyboardEvent, combo?: string) => any | false;
-
-interface HotkeyCallbackCfg {
-  callback: HotkeyCallback;
-  modifiers: string[];
-  action: string;
-  seq?: string;
-  level?: number;
-  combo?: string;
+  [key: string]: IPublicTypeHotkeyCallback;
 }
 
 interface KeyInfo {
@@ -329,9 +314,10 @@ function getKeyInfo(combination: string, action?: string): KeyInfo {
  * if your callback function returns false this will use the jquery
  * convention - prevent default and stop propogation on the event
  */
-function fireCallback(callback: HotkeyCallback, e: KeyboardEvent, combo?: string, sequence?: string): void {
+function fireCallback(callback: IPublicTypeHotkeyCallback, e: KeyboardEvent, combo?: string, sequence?: string): void {
   try {
-    const editor = globalContext.get(Editor);
+    const workspace = globalContext.get('workspace');
+    const editor = workspace.isActive ? workspace.window.editor : globalContext.get('editor');
     const designer = editor.get('designer');
     const node = designer?.currentSelection?.getNodes()?.[0];
     const npm = node?.componentMeta?.npm;
@@ -341,7 +327,7 @@ function fireCallback(callback: HotkeyCallback, e: KeyboardEvent, combo?: string
       e.preventDefault();
       e.stopPropagation();
     }
-    editor?.emit('hotkey.callback.call', {
+    editor?.eventBus.emit('hotkey.callback.call', {
       callback,
       e,
       combo,
@@ -353,8 +339,12 @@ function fireCallback(callback: HotkeyCallback, e: KeyboardEvent, combo?: string
   }
 }
 
-export class Hotkey {
-  private callBacks: HotkeyCallbacks = {};
+export interface IHotKey extends Omit<IPublicApiHotkey, 'bind' | 'callbacks'> {
+  activate(activate: boolean): void;
+}
+
+export class Hotkey implements IHotKey {
+  callBacks: IPublicTypeHotkeyCallbacks = {};
 
   private directMap: HotkeyDirectMap = {};
 
@@ -367,6 +357,16 @@ export class Hotkey {
   private ignoreNextKeypress = false;
 
   private nextExpectedAction: boolean | string = false;
+
+  private isActivate = true;
+
+  constructor(readonly viewName: string = 'global') {
+    this.mount(window);
+  }
+
+  activate(activate: boolean): void {
+    this.isActivate = activate;
+  }
 
   mount(window: Window) {
     const { document } = window;
@@ -381,12 +381,12 @@ export class Hotkey {
     };
   }
 
-  bind(combos: string[] | string, callback: HotkeyCallback, action?: string): Hotkey {
+  bind(combos: string[] | string, callback: IPublicTypeHotkeyCallback, action?: string): Hotkey {
     this.bindMultiple(Array.isArray(combos) ? combos : [combos], callback, action);
     return this;
   }
 
-  unbind(combos: string[] | string, callback: HotkeyCallback, action?: string) {
+  unbind(combos: string[] | string, callback: IPublicTypeHotkeyCallback, action?: string) {
     const combinations = Array.isArray(combos) ? combos : [combos];
 
     combinations.forEach(combination => {
@@ -431,10 +431,10 @@ export class Hotkey {
     sequenceName?: string,
     combination?: string,
     level?: number,
-  ): HotkeyCallbackCfg[] {
+  ): IPublicTypeHotkeyCallbackConfig[] {
     let i: number;
-    let callback: HotkeyCallbackCfg;
-    const matches: HotkeyCallbackCfg[] = [];
+    let callback: IPublicTypeHotkeyCallbackConfig;
+    const matches: IPublicTypeHotkeyCallbackConfig[] = [];
     const action: string = e.type;
 
     // if there are no events related to this keycode
@@ -485,7 +485,7 @@ export class Hotkey {
   }
 
   private handleKey(character: string, modifiers: string[], e: KeyboardEvent): void {
-    const callbacks: HotkeyCallbackCfg[] = this.getMatches(character, modifiers, e);
+    const callbacks: IPublicTypeHotkeyCallbackConfig[] = this.getMatches(character, modifiers, e);
     let i: number;
     const doNotReset: SequenceLevels = {};
     let maxLevel = 0;
@@ -542,6 +542,9 @@ export class Hotkey {
   }
 
   private handleKeyEvent(e: KeyboardEvent): void {
+    if (!this.isActivate) {
+      return;
+    }
     const character = characterFromEvent(e);
 
     // no character found then stop
@@ -565,7 +568,7 @@ export class Hotkey {
     this.resetTimer = window.setTimeout(this.resetSequences, 1000);
   }
 
-  private bindSequence(combo: string, keys: string[], callback: HotkeyCallback, action?: string): void {
+  private bindSequence(combo: string, keys: string[], callback: IPublicTypeHotkeyCallback, action?: string): void {
     // const self: any = this;
     this.sequenceLevels[combo] = 0;
     const increaseSequence = (nextAction: string) => {
@@ -593,7 +596,7 @@ export class Hotkey {
 
   private bindSingle(
     combination: string,
-    callback: HotkeyCallback,
+    callback: IPublicTypeHotkeyCallback,
     action?: string,
     sequenceName?: string,
     level?: number,
@@ -638,12 +641,9 @@ export class Hotkey {
     });
   }
 
-  private bindMultiple(combinations: string[], callback: HotkeyCallback, action?: string) {
+  private bindMultiple(combinations: string[], callback: IPublicTypeHotkeyCallback, action?: string) {
     for (const item of combinations) {
       this.bindSingle(item, callback, action);
     }
   }
 }
-
-export const hotkey = new Hotkey();
-hotkey.mount(window);

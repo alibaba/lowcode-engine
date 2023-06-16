@@ -1,43 +1,13 @@
-import { DocumentModel, Node as ComponentNode, ParentalNode } from '../document';
-import { LocateEvent } from './dragon';
-
-export interface LocationData {
-  target: ParentalNode; // shadowNode | ConditionFlow | ElementNode | RootNode
-  detail: LocationDetail;
-  source: string;
-  event: LocateEvent;
-}
-
-export enum LocationDetailType {
-  Children = 'Children',
-  Prop = 'Prop',
-}
-
-export interface LocationChildrenDetail {
-  type: LocationDetailType.Children;
-  index?: number | null;
-  /**
-   * 是否有效位置
-   */
-  valid?: boolean;
-  edge?: DOMRect;
-  near?: {
-    node: ComponentNode;
-    pos: 'before' | 'after' | 'replace';
-    rect?: Rect;
-    align?: 'V' | 'H';
-  };
-  focus?: { type: 'slots' } | { type: 'node'; node: ParentalNode };
-}
-
-export interface LocationPropDetail {
-  // cover 形态，高亮 domNode，如果 domNode 为空，取 container 的值
-  type: LocationDetailType.Prop;
-  name: string;
-  domNode?: HTMLElement;
-}
-
-export type LocationDetail = LocationChildrenDetail | LocationPropDetail | { type: string; [key: string]: any };
+import type { IDocumentModel, INode } from '../document';
+import { ILocateEvent } from './dragon';
+import {
+  IPublicModelDropLocation,
+  IPublicTypeLocationDetailType,
+  IPublicTypeRect,
+  IPublicTypeLocationDetail,
+  IPublicTypeLocationData,
+  IPublicModelLocateEvent,
+} from '@alilc/lowcode-types';
 
 export interface Point {
   clientX: number;
@@ -53,17 +23,18 @@ export type Rects = DOMRect[] & {
   elements: Array<Element | Text>;
 };
 
-export type Rect = DOMRect & {
-  elements: Array<Element | Text>;
-  computed?: boolean;
-};
-
-export function isLocationData(obj: any): obj is LocationData {
+/**
+ * @deprecated use same function in @alilc/lowcode-utils
+ */
+export function isLocationData(obj: any): boolean {
   return obj && obj.target && obj.detail;
 }
 
-export function isLocationChildrenDetail(obj: any): obj is LocationChildrenDetail {
-  return obj && obj.type === LocationDetailType.Children;
+/**
+ * @deprecated use same function in @alilc/lowcode-utils
+ */
+export function isLocationChildrenDetail(obj: any): boolean {
+  return obj && obj.type === IPublicTypeLocationDetailType.Children;
 }
 
 export function isRowContainer(container: Element | Text, win?: Window) {
@@ -92,7 +63,7 @@ export function isChildInline(child: Element | Text, win?: Window) {
   return /^inline/.test(style.getPropertyValue('display')) || /^(left|right)$/.test(style.getPropertyValue('float'));
 }
 
-export function getRectTarget(rect: Rect | null) {
+export function getRectTarget(rect: IPublicTypeRect | null) {
   if (!rect || rect.computed) {
     return null;
   }
@@ -100,7 +71,7 @@ export function getRectTarget(rect: Rect | null) {
   return els && els.length > 0 ? els[0]! : null;
 }
 
-export function isVerticalContainer(rect: Rect | null) {
+export function isVerticalContainer(rect: IPublicTypeRect | null) {
   const el = getRectTarget(rect);
   if (!el) {
     return false;
@@ -108,7 +79,7 @@ export function isVerticalContainer(rect: Rect | null) {
   return isRowContainer(el);
 }
 
-export function isVertical(rect: Rect | null) {
+export function isVertical(rect: IPublicTypeRect | null) {
   const el = getRectTarget(rect);
   if (!el) {
     return false;
@@ -127,28 +98,38 @@ function isDocument(elem: any): elem is Document {
 export function getWindow(elem: Element | Document): Window {
   return (isDocument(elem) ? elem : elem.ownerDocument!).defaultView!;
 }
-
-export class DropLocation {
-  readonly target: ParentalNode;
-
-  readonly detail: LocationDetail;
-
-  readonly event: LocateEvent;
+export interface IDropLocation extends Omit<IPublicModelDropLocation, 'target' | 'clone'> {
 
   readonly source: string;
 
-  get document(): DocumentModel {
+  get target(): INode;
+
+  get document(): IDocumentModel | null;
+
+  clone(event: IPublicModelLocateEvent): IDropLocation;
+}
+
+export class DropLocation implements IDropLocation {
+  readonly target: INode;
+
+  readonly detail: IPublicTypeLocationDetail;
+
+  readonly event: ILocateEvent;
+
+  readonly source: string;
+
+  get document(): IDocumentModel | null {
     return this.target.document;
   }
 
-  constructor({ target, detail, source, event }: LocationData) {
+  constructor({ target, detail, source, event }: IPublicTypeLocationData<INode>) {
     this.target = target;
     this.detail = detail;
     this.source = source;
     this.event = event;
   }
 
-  clone(event: LocateEvent): DropLocation {
+  clone(event: ILocateEvent): IDropLocation {
     return new DropLocation({
       target: this.target,
       detail: this.detail,
@@ -177,7 +158,7 @@ export class DropLocation {
       if (this.detail.index <= 0) {
         return null;
       }
-      return this.target.children.get(this.detail.index - 1);
+      return this.target.children?.get(this.detail.index - 1);
     }
     return (this.detail as any)?.near?.node;
   }

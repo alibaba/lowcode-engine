@@ -1,14 +1,18 @@
-import { Component as ReactComponent, ComponentType } from 'react';
-import { ComponentMetadata, NodeSchema } from '@alilc/lowcode-types';
-import { ISensor, Point, ScrollTarget, IScrollable, LocateEvent, LocationData } from './designer';
+import { ComponentType } from 'react';
+import { IPublicTypeComponentMetadata, IPublicTypeNodeSchema, IPublicTypeScrollable, IPublicTypeComponentInstance, IPublicModelSensor, IPublicTypeNodeInstance, IPublicTypePackage } from '@alilc/lowcode-types';
+import { Point, ScrollTarget, ILocateEvent, IDesigner } from './designer';
 import { BuiltinSimulatorRenderer } from './builtin-simulator/renderer';
-import { Node, ParentalNode } from './document';
+import { INode } from './document';
+import { IProject } from './project';
 
 export type AutoFit = '100%';
 // eslint-disable-next-line no-redeclare
 export const AutoFit = '100%';
 
+export interface IScrollable extends IPublicTypeScrollable {
+}
 export interface IViewport extends IScrollable {
+
   /**
    * 视口大小
    */
@@ -30,22 +34,27 @@ export interface IViewport extends IScrollable {
    * 视口矩形维度
    */
   readonly bounds: DOMRect;
+
   /**
    * 内容矩形维度
    */
   readonly contentBounds: DOMRect;
+
   /**
    * 视口滚动对象
    */
   readonly scrollTarget?: ScrollTarget;
+
   /**
    * 是否滚动中
    */
   readonly scrolling: boolean;
+
   /**
    * 内容当前滚动 X
    */
   readonly scrollX: number;
+
   /**
    * 内容当前滚动 Y
    */
@@ -63,15 +72,16 @@ export interface IViewport extends IScrollable {
 }
 
 export interface DropContainer {
-  container: ParentalNode;
-  instance: ComponentInstance;
+  container: INode;
+  instance: IPublicTypeComponentInstance;
 }
 
 /**
  * 模拟器控制进程协议
  */
-export interface ISimulatorHost<P = object> extends ISensor {
+export interface ISimulatorHost<P = object> extends IPublicModelSensor<INode> {
   readonly isSimulator: true;
+
   /**
    * 获得边界维度等信息
    */
@@ -79,6 +89,10 @@ export interface ISimulatorHost<P = object> extends ISensor {
   readonly contentWindow?: Window;
   readonly contentDocument?: Document;
   readonly renderer?: BuiltinSimulatorRenderer;
+
+  readonly project: IProject;
+
+  readonly designer: IDesigner;
 
   // dependsAsset // like react jQuery lodash
   // themesAsset
@@ -88,7 +102,7 @@ export interface ISimulatorHost<P = object> extends ISensor {
   //
   // later:
   // layout: ComponentName
-  // 获取区块代码, 通过 components 传递，可异步获取
+  // 获取区块代码，通过 components 传递，可异步获取
   // 设置 simulator Props
   setProps(props: P): void;
   // 设置单个 Prop
@@ -102,14 +116,17 @@ export interface ISimulatorHost<P = object> extends ISensor {
    * 设置文字拖选
    */
   setNativeSelection(enableFlag: boolean): void;
+
   /**
    * 设置拖拽态
    */
   setDraggingState(state: boolean): void;
+
   /**
    * 设置拷贝态
    */
   setCopyState(state: boolean): void;
+
   /**
    * 清除所有态：拖拽态、拷贝态
    */
@@ -120,57 +137,57 @@ export interface ISimulatorHost<P = object> extends ISensor {
   /**
    * 滚动视口到节点
    */
-  scrollToNode(node: Node, detail?: any): void;
+  scrollToNode(node: INode, detail?: any): void;
 
   /**
    * 描述组件
    */
-  generateComponentMetadata(componentName: string): ComponentMetadata;
+  generateComponentMetadata(componentName: string): IPublicTypeComponentMetadata;
+
   /**
    * 根据组件信息获取组件类
    */
   getComponent(componentName: string): Component | any;
+
   /**
    * 根据节点获取节点的组件实例
    */
-  getComponentInstances(node: Node): ComponentInstance[] | null;
+  getComponentInstances(node: INode): IPublicTypeComponentInstance[] | null;
+
   /**
    * 根据 schema 创建组件类
    */
-  createComponent(schema: NodeSchema): Component | null;
+  createComponent(schema: IPublicTypeNodeSchema): Component | null;
+
   /**
    * 根据节点获取节点的组件运行上下文
    */
-  getComponentContext(node: Node): object | null;
+  getComponentContext(node: INode): object | null;
 
-  getClosestNodeInstance(from: ComponentInstance, specId?: string): NodeInstance | null;
+  getClosestNodeInstance(from: IPublicTypeComponentInstance, specId?: string): IPublicTypeNodeInstance | null;
 
-  computeRect(node: Node): DOMRect | null;
+  computeRect(node: INode): DOMRect | null;
 
-  computeComponentInstanceRect(instance: ComponentInstance, selector?: string): DOMRect | null;
+  computeComponentInstanceRect(instance: IPublicTypeComponentInstance, selector?: string): DOMRect | null;
 
-  findDOMNodes(instance: ComponentInstance, selector?: string): Array<Element | Text> | null;
+  findDOMNodes(instance: IPublicTypeComponentInstance, selector?: string): Array<Element | Text> | null;
 
-  getDropContainer(e: LocateEvent): DropContainer | null;
+  getDropContainer(e: ILocateEvent): DropContainer | null;
 
   postEvent(evtName: string, evtData: any): void;
 
   rerender(): void;
+
   /**
    * 销毁
    */
   purge(): void;
+
+  setupComponents(library: IPublicTypePackage[]): Promise<void>;
 }
 
 export function isSimulatorHost(obj: any): obj is ISimulatorHost {
   return obj && obj.isSimulator;
-}
-
-export interface NodeInstance<T = ComponentInstance> {
-  docId: string;
-  nodeId: string;
-  instance: T;
-  node?: Node | null;
 }
 
 /**
@@ -178,12 +195,7 @@ export interface NodeInstance<T = ComponentInstance> {
  */
 export type Component = ComponentType<any> | object;
 
-/**
- * 组件实例定义
- */
-export type ComponentInstance = Element | ReactComponent<any> | object;
-
 export interface INodeSelector {
-  node: Node;
-  instance?: ComponentInstance;
+  node: INode;
+  instance?: IPublicTypeComponentInstance;
 }

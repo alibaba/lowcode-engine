@@ -1,12 +1,11 @@
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
 import '../../fixtures/window';
-import { Project } from '../../../src/project/project';
-import { Node } from '../../../src/document/node/node';
+import { Project, IProject } from '../../../src/project/project';
+import { Node, INode } from '../../../src/document/node/node';
 import { Designer } from '../../../src/designer/designer';
 import formSchema from '../../fixtures/schema/form';
 import { getIdsFromSchema, getNodeFromSchemaById } from '../../utils';
-import { EBADF } from 'constants';
 
 const mockCreateSettingEntry = jest.fn();
 jest.mock('../../../src/designer/designer', () => {
@@ -17,6 +16,9 @@ jest.mock('../../../src/designer/designer', () => {
           return {
             getMetadata() {
               return { configure: { advanced: null } };
+            },
+            get advanced() {
+              return {};
             },
           };
         },
@@ -35,7 +37,7 @@ beforeAll(() => {
 
 describe('schema 生成节点模型测试', () => {
   describe('block ❌ | component ❌ | slot ❌', () => {
-    let project: Project;
+    let project: IProject;
     beforeEach(() => {
       project = new Project(designer, {
         componentsTree: [
@@ -50,12 +52,12 @@ describe('schema 生成节点模型测试', () => {
     it('基本的节点模型初始化，模型导出', () => {
       expect(project).toBeTruthy();
       const { currentDocument } = project;
-      const { nodesMap } = currentDocument;
+      const nodesMap = currentDocument?.nodesMap;
       const ids = getIdsFromSchema(formSchema);
       const expectedNodeCnt = ids.length;
-      expect(nodesMap.size).toBe(expectedNodeCnt);
+      expect(nodesMap?.size).toBe(expectedNodeCnt);
       ids.forEach(id => {
-        expect(nodesMap.get(id).componentName).toBe(getNodeFromSchemaById(formSchema, id).componentName);
+        expect(nodesMap?.get(id)?.componentName).toBe(getNodeFromSchemaById(formSchema, id).componentName);
       });
 
       const pageNode = currentDocument?.getNode('page');
@@ -74,18 +76,18 @@ describe('schema 生成节点模型测试', () => {
     it('基本的节点模型初始化，节点深度', () => {
       expect(project).toBeTruthy();
       const { currentDocument } = project;
-      const getNode = currentDocument.getNode.bind(currentDocument);
+      const getNode = currentDocument?.getNode.bind(currentDocument);
 
-      const pageNode = getNode('page');
-      const rootHeaderNode = getNode('node_k1ow3cba');
-      const rootContentNode = getNode('node_k1ow3cbb');
-      const rootFooterNode = getNode('node_k1ow3cbc');
-      const formNode = getNode('form');
-      const cardNode = getNode('node_k1ow3cbj');
-      const cardContentNode = getNode('node_k1ow3cbk');
-      const columnsLayoutNode = getNode('node_k1ow3cbw');
-      const columnNode = getNode('node_k1ow3cbx');
-      const textFieldNode = getNode('node_k1ow3cbz');
+      const pageNode = getNode?.('page');
+      const rootHeaderNode = getNode?.('node_k1ow3cba');
+      const rootContentNode = getNode?.('node_k1ow3cbb');
+      const rootFooterNode = getNode?.('node_k1ow3cbc');
+      const formNode = getNode?.('form');
+      const cardNode = getNode?.('node_k1ow3cbj');
+      const cardContentNode = getNode?.('node_k1ow3cbk');
+      const columnsLayoutNode = getNode?.('node_k1ow3cbw');
+      const columnNode = getNode?.('node_k1ow3cbx');
+      const textFieldNode = getNode?.('node_k1ow3cbz');
 
       expect(pageNode?.zLevel).toBe(0);
       expect(rootHeaderNode?.zLevel).toBe(1);
@@ -129,7 +131,7 @@ describe('schema 生成节点模型测试', () => {
       const textFieldNode = getNode('node_k1ow3cbz');
 
       expect(pageNode?.index).toBe(-1);
-      expect(pageNode?.children.toString()).toBe('[object Array]');
+      expect(pageNode?.children?.toString()).toBe('[object Array]');
       expect(pageNode?.children?.get(1)).toBe(rootContentNode);
       expect(pageNode?.getChildren()?.get(1)).toBe(rootContentNode);
       expect(pageNode?.getNode()).toBe(pageNode);
@@ -160,20 +162,20 @@ describe('schema 生成节点模型测试', () => {
     it('基本的节点模型初始化，节点新建、删除等事件', () => {
       expect(project).toBeTruthy();
       const { currentDocument } = project;
-      const getNode = currentDocument.getNode.bind(currentDocument);
-      const createNode = currentDocument.createNode.bind(currentDocument);
+      const getNode = currentDocument?.getNode.bind(currentDocument);
+      const createNode = currentDocument?.createNode.bind(currentDocument);
 
-      const pageNode = getNode('page');
+      const pageNode = getNode?.('page');
       const nodeCreateHandler = jest.fn();
       const offCreate = currentDocument?.onNodeCreate(nodeCreateHandler);
 
-      const node = createNode({
+      const node = createNode?.({
         componentName: 'TextInput',
         props: {
           propA: 'haha',
         },
       });
-      currentDocument?.insertNode(pageNode, node);
+      pageNode && node && currentDocument?.insertNode(pageNode, node);
 
       expect(nodeCreateHandler).toHaveBeenCalledTimes(1);
       expect(nodeCreateHandler.mock.calls[0][0]).toBe(node);
@@ -182,7 +184,7 @@ describe('schema 生成节点模型测试', () => {
 
       const nodeDestroyHandler = jest.fn();
       const offDestroy = currentDocument?.onNodeDestroy(nodeDestroyHandler);
-      node.remove();
+      node?.remove();
       expect(nodeDestroyHandler).toHaveBeenCalledTimes(1);
       expect(nodeDestroyHandler.mock.calls[0][0]).toBe(node);
       expect(nodeDestroyHandler.mock.calls[0][0].componentName).toBe('TextInput');
@@ -288,9 +290,9 @@ describe('schema 生成节点模型测试', () => {
         expect(project).toBeTruthy();
         const ids = getIdsFromSchema(formSchema);
         const { currentDocument } = project;
-        const { nodesMap } = currentDocument;
-        const formNode = nodesMap.get('form');
-        currentDocument?.insertNode(formNode, {
+        const nodesMap = currentDocument?.nodesMap;
+        const formNode = nodesMap?.get('form');
+        formNode && currentDocument?.insertNode(formNode, {
           componentName: 'TextInput',
           id: 'nodeschema-id1',
           props: {
@@ -298,11 +300,11 @@ describe('schema 生成节点模型测试', () => {
             propB: 3,
           },
         }, 0);
-        expect(nodesMap.size).toBe(ids.length + 1);
-        expect(formNode.children.length).toBe(4);
-        const insertedNode = formNode.children.get(0);
-        expect(insertedNode.componentName).toBe('TextInput');
-        expect(insertedNode.propsData).toEqual({
+        expect(nodesMap?.size).toBe(ids.length + 1);
+        expect(formNode?.children?.length).toBe(4);
+        const insertedNode = formNode?.children?.get(0);
+        expect(insertedNode?.componentName).toBe('TextInput');
+        expect(insertedNode?.propsData).toEqual({
           propA: 'haha',
           propB: 3,
         });
@@ -314,9 +316,9 @@ describe('schema 生成节点模型测试', () => {
         expect(project).toBeTruthy();
         const ids = getIdsFromSchema(formSchema);
         const { currentDocument } = project;
-        const { nodesMap } = currentDocument;
-        const formNode = nodesMap.get('form');
-        currentDocument?.insertNode(formNode, {
+        const nodesMap = currentDocument?.nodesMap;
+        const formNode = nodesMap?.get('form');
+        formNode && currentDocument?.insertNode(formNode, {
           componentName: 'TextInput',
           id: 'nodeschema-id1',
           props: {
@@ -324,11 +326,11 @@ describe('schema 生成节点模型测试', () => {
             propB: 3,
           },
         }, 1);
-        expect(nodesMap.size).toBe(ids.length + 1);
-        expect(formNode.children.length).toBe(4);
-        const insertedNode = formNode.children.get(1);
-        expect(insertedNode.componentName).toBe('TextInput');
-        expect(insertedNode.propsData).toEqual({
+        expect(nodesMap?.size).toBe(ids.length + 1);
+        expect(formNode?.children?.length).toBe(4);
+        const insertedNode = formNode?.children?.get(1);
+        expect(insertedNode?.componentName).toBe('TextInput');
+        expect(insertedNode?.propsData).toEqual({
           propA: 'haha',
           propB: 3,
         });
@@ -340,8 +342,8 @@ describe('schema 生成节点模型测试', () => {
         expect(project).toBeTruthy();
         const ids = getIdsFromSchema(formSchema);
         const { currentDocument } = project;
-        const { nodesMap } = currentDocument;
-        const formNode = nodesMap.get('form') as Node;
+        const nodesMap = currentDocument?.nodesMap;
+        const formNode = nodesMap?.get('form') as INode;
         currentDocument?.insertNode(formNode, {
           componentName: 'ParentNode',
           props: {
@@ -365,8 +367,8 @@ describe('schema 生成节点模型测试', () => {
             },
           ],
         });
-        expect(nodesMap.size).toBe(ids.length + 3);
-        expect(formNode.children.length).toBe(4);
+        expect(nodesMap?.size).toBe(ids.length + 3);
+        expect(formNode.children?.length).toBe(4);
         expect(formNode.children?.get(3)?.componentName).toBe('ParentNode');
         expect(formNode.children?.get(3)?.children?.get(0)?.componentName).toBe('SubNode');
         expect(formNode.children?.get(3)?.children?.get(1)?.componentName).toBe('SubNode2');
@@ -376,9 +378,9 @@ describe('schema 生成节点模型测试', () => {
         expect(project).toBeTruthy();
         const ids = getIdsFromSchema(formSchema);
         const { currentDocument } = project;
-        const { nodesMap } = currentDocument;
-        const formNode = nodesMap.get('form');
-        currentDocument?.insertNode(formNode, {
+        const nodesMap = currentDocument?.nodesMap;
+        const formNode = nodesMap?.get('form');
+        formNode && currentDocument?.insertNode(formNode, {
           componentName: 'TextInput',
           id: 'nodeschema-id1',
           props: {
@@ -386,17 +388,17 @@ describe('schema 生成节点模型测试', () => {
             propB: 3,
           },
         });
-        expect(nodesMap.get('nodeschema-id1').componentName).toBe('TextInput');
-        expect(nodesMap.size).toBe(ids.length + 1);
+        expect(nodesMap?.get('nodeschema-id1')?.componentName).toBe('TextInput');
+        expect(nodesMap?.size).toBe(ids.length + 1);
       });
 
       it.skip('场景一：插入 NodeSchema，id 与现有 schema 里的 id 重复，但关闭了 id 检测器', () => {
         expect(project).toBeTruthy();
         const ids = getIdsFromSchema(formSchema);
         const { currentDocument } = project;
-        const { nodesMap } = currentDocument;
-        const formNode = nodesMap.get('form');
-        currentDocument?.insertNode(formNode, {
+        const nodesMap = currentDocument?.nodesMap;
+        const formNode = nodesMap?.get('form');
+        formNode && currentDocument?.insertNode(formNode, {
           componentName: 'TextInput',
           id: 'nodeschema-id1',
           props: {
@@ -404,16 +406,16 @@ describe('schema 生成节点模型测试', () => {
             propB: 3,
           },
         });
-        expect(nodesMap.get('nodeschema-id1').componentName).toBe('TextInput');
-        expect(nodesMap.size).toBe(ids.length + 1);
+        expect(nodesMap?.get('nodeschema-id1')?.componentName).toBe('TextInput');
+        expect(nodesMap?.size).toBe(ids.length + 1);
       });
 
       it('场景二：插入 Node 实例', () => {
         expect(project).toBeTruthy();
         const ids = getIdsFromSchema(formSchema);
         const { currentDocument } = project;
-        const { nodesMap } = currentDocument;
-        const formNode = nodesMap.get('form');
+        const nodesMap = currentDocument?.nodesMap;
+        const formNode = nodesMap?.get('form');
         const inputNode = currentDocument?.createNode({
           componentName: 'TextInput',
           id: 'nodeschema-id2',
@@ -422,22 +424,22 @@ describe('schema 生成节点模型测试', () => {
             propB: 3,
           },
         });
-        currentDocument?.insertNode(formNode, inputNode);
-        expect(formNode.children?.get(3)?.componentName).toBe('TextInput');
-        expect(nodesMap.size).toBe(ids.length + 1);
+        formNode && currentDocument?.insertNode(formNode, inputNode);
+        expect(formNode?.children?.get(3)?.componentName).toBe('TextInput');
+        expect(nodesMap?.size).toBe(ids.length + 1);
       });
 
       it('场景三：插入 JSExpression', () => {
         expect(project).toBeTruthy();
         const ids = getIdsFromSchema(formSchema);
         const { currentDocument } = project;
-        const { nodesMap } = currentDocument;
-        const formNode = nodesMap.get('form') as Node;
+        const nodesMap = currentDocument?.nodesMap;
+        const formNode = nodesMap?.get('form') as Node;
         currentDocument?.insertNode(formNode, {
           type: 'JSExpression',
           value: 'just a expression',
         });
-        expect(nodesMap.size).toBe(ids.length + 1);
+        expect(nodesMap?.size).toBe(ids.length + 1);
         expect(formNode.children?.get(3)?.componentName).toBe('Leaf');
         // expect(formNode.children?.get(3)?.children).toEqual({
         //   type: 'JSExpression',
@@ -448,10 +450,10 @@ describe('schema 生成节点模型测试', () => {
         expect(project).toBeTruthy();
         const ids = getIdsFromSchema(formSchema);
         const { currentDocument } = project;
-        const { nodesMap } = currentDocument;
-        const formNode = nodesMap.get('form') as Node;
+        const nodesMap = currentDocument?.nodesMap;
+        const formNode = nodesMap?.get('form') as Node;
         currentDocument?.insertNode(formNode, 'just a string');
-        expect(nodesMap.size).toBe(ids.length + 1);
+        expect(nodesMap?.size).toBe(ids.length + 1);
         expect(formNode.children?.get(3)?.componentName).toBe('Leaf');
         // expect(formNode.children?.get(3)?.children).toBe('just a string');
       });
@@ -471,8 +473,8 @@ describe('schema 生成节点模型测试', () => {
         expect(project).toBeTruthy();
         const ids = getIdsFromSchema(formSchema);
         const { currentDocument } = project;
-        const { nodesMap } = currentDocument;
-        const formNode = nodesMap.get('form') as Node;
+        const nodesMap = currentDocument?.nodesMap;
+        const formNode = nodesMap?.get('form') as Node;
         const formNode2 = currentDocument?.getNode('form');
         expect(formNode).toEqual(formNode2);
         currentDocument?.insertNodes(formNode, [
@@ -491,28 +493,28 @@ describe('schema 生成节点模型测试', () => {
             },
           },
         ], 1);
-        expect(nodesMap.size).toBe(ids.length + 2);
+        expect(nodesMap?.size).toBe(ids.length + 2);
         expect(formNode.children?.length).toBe(5);
-        const insertedNode1 = formNode.children.get(1);
-        const insertedNode2 = formNode.children.get(2);
-        expect(insertedNode1.componentName).toBe('TextInput');
-        expect(insertedNode1.propsData).toEqual({
+        const insertedNode1 = formNode.children?.get(1);
+        const insertedNode2 = formNode.children?.get(2);
+        expect(insertedNode1?.componentName).toBe('TextInput');
+        expect(insertedNode1?.propsData).toEqual({
           propA: 'haha2',
           propB: 3,
         });
-        expect(insertedNode2.componentName).toBe('TextInput2');
-        expect(insertedNode2.propsData).toEqual({
+        expect(insertedNode2?.componentName).toBe('TextInput2');
+        expect(insertedNode2?.propsData).toEqual({
           propA: 'haha',
           propB: 3,
         });
       });
 
-      it('场景二：插入 Node 实例，指定 index', () => {
+      it.only('场景二：插入 Node 实例，指定 index', () => {
         expect(project).toBeTruthy();
         const ids = getIdsFromSchema(formSchema);
         const { currentDocument } = project;
-        const { nodesMap } = currentDocument;
-        const formNode = nodesMap.get('form') as Node;
+        const nodesMap = currentDocument?.nodesMap;
+        const formNode = nodesMap?.get('form') as INode;
         const formNode2 = currentDocument?.getNode('form');
         expect(formNode).toEqual(formNode2);
         const createdNode1 = currentDocument?.createNode({
@@ -530,17 +532,17 @@ describe('schema 生成节点模型测试', () => {
           },
         });
         currentDocument?.insertNodes(formNode, [createdNode1, createdNode2], 1);
-        expect(nodesMap.size).toBe(ids.length + 2);
+        expect(nodesMap?.size).toBe(ids.length + 2);
         expect(formNode.children?.length).toBe(5);
-        const insertedNode1 = formNode.children.get(1);
-        const insertedNode2 = formNode.children.get(2);
-        expect(insertedNode1.componentName).toBe('TextInput');
-        expect(insertedNode1.propsData).toEqual({
+        const insertedNode1 = formNode.children?.get(1);
+        const insertedNode2 = formNode.children?.get(2);
+        expect(insertedNode1?.componentName).toBe('TextInput');
+        expect(insertedNode1?.propsData).toEqual({
           propA: 'haha2',
           propB: 3,
         });
-        expect(insertedNode2.componentName).toBe('TextInput2');
-        expect(insertedNode2.propsData).toEqual({
+        expect(insertedNode2?.componentName).toBe('TextInput2');
+        expect(insertedNode2?.propsData).toEqual({
           propA: 'haha',
           propB: 3,
         });
@@ -559,13 +561,13 @@ describe('schema 生成节点模型测试', () => {
       project.open();
       expect(project).toBeTruthy();
       const { currentDocument } = project;
-      const { nodesMap } = currentDocument;
+      const nodesMap = currentDocument?.nodesMap;
       const ids = getIdsFromSchema(formSchema);
       // 目前每个 slot 会新增（1 + children.length）个节点
       const expectedNodeCnt = ids.length + 2;
-      expect(nodesMap.size).toBe(expectedNodeCnt);
+      expect(nodesMap?.size).toBe(expectedNodeCnt);
       // PageHeader
-      expect(nodesMap.get('node_k1ow3cbd').slots).toHaveLength(1);
+      expect(nodesMap?.get('node_k1ow3cbd')?.slots).toHaveLength(1);
     });
   });
 });

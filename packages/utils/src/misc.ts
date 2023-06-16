@@ -1,8 +1,8 @@
 
 import { isI18NObject } from './is-object';
 import { get } from 'lodash';
-import { ComponentMeta } from '@alilc/lowcode-designer';
-import { TransformStage } from '@alilc/lowcode-types';
+import { IPublicEnumTransformStage, IPublicModelComponentMeta } from '@alilc/lowcode-types';
+
 interface Variable {
   type: 'variable';
   variable: string;
@@ -23,7 +23,7 @@ export function isUseI18NSetter(prototype: any, propName: string) {
   return false;
 }
 
-export function convertToI18NObject(v: string | any, locale: string = 'zh_CN') {
+export function convertToI18NObject(v: string | any, locale: string = 'zh-CN') {
   if (isI18NObject(v)) return v;
   return { type: 'i18n', use: locale, [locale]: v };
 }
@@ -65,7 +65,7 @@ export function arrShallowEquals(arr1: any[], arr2: any[]): boolean {
  * 判断当前 meta 是否从 vc prototype 转换而来
  * @param meta
  */
- export function isFromVC(meta: ComponentMeta) {
+ export function isFromVC(meta: IPublicModelComponentMeta) {
   return !!meta?.getMetadata().configure?.advanced;
 }
 
@@ -81,17 +81,18 @@ const stageList = [
   'init',
   'upgrade',
 ];
+
 /**
  * 兼容原来的数字版本的枚举对象
  * @param stage
  * @returns
  */
-export function compatStage(stage: TransformStage | number): TransformStage {
+export function compatStage(stage: IPublicEnumTransformStage | number): IPublicEnumTransformStage {
   if (typeof stage === 'number') {
-    console.warn('stage 直接指定为数字的使用方式已经过时，将在下一版本移除，请直接使用 TransformStage.Render|Serilize|Save|Clone|Init|Upgrade');
-    return stageList[stage - 1] as TransformStage;
+    console.warn('stage 直接指定为数字的使用方式已经过时，将在下一版本移除，请直接使用 IPublicEnumTransformStage.Render|Serilize|Save|Clone|Init|Upgrade');
+    return stageList[stage - 1] as IPublicEnumTransformStage;
   }
-  return stage as TransformStage;
+  return stage as IPublicEnumTransformStage;
 }
 
 export function invariant(check: any, message: string, thing?: any) {
@@ -108,4 +109,18 @@ export function deprecate(fail: any, message: string, alterative?: string) {
 
 export function isRegExp(obj: any): obj is RegExp {
   return obj && obj.test && obj.exec && obj.compile;
+}
+
+/**
+ * The prop supportVariable SHOULD take precedence over default global supportVariable.
+ * @param propSupportVariable prop supportVariable
+ * @param globalSupportVariable global supportVariable
+ * @returns
+ */
+export function shouldUseVariableSetter(
+  propSupportVariable: boolean | undefined,
+  globalSupportVariable: boolean,
+) {
+  if (propSupportVariable === false) return false;
+  return propSupportVariable || globalSupportVariable;
 }

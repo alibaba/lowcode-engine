@@ -18,7 +18,9 @@ exports[`children this.props.children is array 1`] = `
 exports[`lifecycle leaf change and make componentWillReceiveProps 1`] = `
 <div>
   <div
+    __id="text6"
     __tag="222"
+    componentId="text6"
     content="content new leaf"
   >
     content new leaf

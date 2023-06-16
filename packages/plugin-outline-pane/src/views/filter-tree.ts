@@ -1,4 +1,4 @@
-import TreeNode from '../tree-node';
+import TreeNode from '../controllers/tree-node';
 
 export const FilterType = {
   CONDITION: 'CONDITION',
@@ -9,16 +9,16 @@ export const FilterType = {
 
 export const FILTER_OPTIONS = [{
   value: FilterType.CONDITION,
-  label: '条件渲染',
+  label: 'Conditional rendering',
 }, {
   value: FilterType.LOOP,
-  label: '循环渲染',
+  label: 'Loop rendering',
 }, {
   value: FilterType.LOCKED,
-  label: '已锁定',
+  label: 'Locked',
 }, {
   value: FilterType.HIDDEN,
-  label: '已隐藏',
+  label: 'Hidden',
 }];
 
 export const matchTreeNode = (

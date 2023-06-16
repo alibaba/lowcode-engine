@@ -3,14 +3,14 @@ import { makeObservable, obx } from '@alilc/lowcode-editor-core';
 import { uniqueId, createContent } from '@alilc/lowcode-utils';
 import { getEvent } from '@alilc/lowcode-shell';
 import { DockConfig } from '../types';
-import { Skeleton } from '../skeleton';
+import { ISkeleton } from '../skeleton';
 import { DockView, WidgetView } from '../components/widget-views';
 import { IWidget } from './widget';
 
 /**
  * 带图标（主要）/标题（次要）的扩展
  */
-export default class Dock implements IWidget {
+export class Dock implements IWidget {
   readonly isWidget = true;
 
   readonly id = uniqueId('dock');
@@ -59,7 +59,7 @@ export default class Dock implements IWidget {
     return this._body;
   }
 
-  constructor(readonly skeleton: Skeleton, readonly config: DockConfig) {
+  constructor(readonly skeleton: ISkeleton, readonly config: DockConfig) {
     makeObservable(this);
     const { props = {}, name } = config;
     this.name = name;

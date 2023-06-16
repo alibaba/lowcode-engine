@@ -1,8 +1,8 @@
 import {
-  NodeSchema,
-  JSExpression,
-  NpmInfo,
-  CompositeValue,
+  IPublicTypeNodeSchema,
+  IPublicTypeJSExpression,
+  IPublicTypeNpmInfo,
+  IPublicTypeCompositeValue,
   isJSExpression,
 } from '@alilc/lowcode-types';
 
@@ -75,8 +75,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
 
     // 注意：这里其实隐含了一个假设：schema 中的 componentName 应该是一个有效的 JS 标识符，而且是大写字母打头的
     // FIXME: 为了快速修复临时加的逻辑，需要用 pre-process 的方式替代处理。
-    const mapComponentNameToAliasOrKeepIt = (componentName: string) =>
-      componentsNameAliasMap.get(componentName) || componentName;
+    const mapComponentNameToAliasOrKeepIt = (componentName: string) => componentsNameAliasMap.get(componentName) || componentName;
 
     // 然后过滤掉所有的别名 chunks
     next.chunks = next.chunks.filter((chunk) => !isImportAliasDefineChunk(chunk));
@@ -86,7 +85,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     // 2. 小程序出码的时候，很容易出现 Uncaught TypeError: Cannot read property 'avatar' of undefined 这样的异常(如下图的 50 行) -- 因为若直接出码，Rax 构建到小程序的时候会立即计算所有在视图中用到的变量
     // 3. 通过 this.xxx 能拿到的东西太多了，而且自定义的 methods 可能会无意间破坏 Rax 框架或小程序框架在页面 this 上的东东
     const customHandlers: HandlerSet<string> = {
-      expression(input: JSExpression, scope: IScope) {
+      expression(input: IPublicTypeJSExpression, scope: IScope) {
         return transformJsExpr(generateExpression(input, scope), scope, {
           dontWrapEval: !tolerateEvalErrors,
         });
@@ -147,7 +146,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
         function __$$eval(expr) {
           try {
             return expr();
-          } catch (error) { 
+          } catch (error) {
             ${evalErrorsHandler}
           }
         }
@@ -171,7 +170,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     return next;
 
     function generateRaxLoopCtrl(
-      nodeItem: NodeSchema,
+      nodeItem: IPublicTypeNodeSchema,
       scope: IScope,
       config?: NodeGeneratorConfig,
       next?: NodePlugin,
@@ -218,7 +217,7 @@ function isImportAliasDefineChunk(chunk: ICodeChunk): chunk is ICodeChunk & {
   ext: {
     aliasName: string;
     originalName: string;
-    dependency: NpmInfo;
+    dependency: IPublicTypeNpmInfo;
   };
 } {
   return (
@@ -226,13 +225,13 @@ function isImportAliasDefineChunk(chunk: ICodeChunk): chunk is ICodeChunk & {
     !!chunk.ext &&
     typeof chunk.ext.aliasName === 'string' &&
     typeof chunk.ext.originalName === 'string' &&
-    !!(chunk.ext.dependency as NpmInfo | null)?.componentName
+    !!(chunk.ext.dependency as IPublicTypeNpmInfo | null)?.componentName
   );
 }
 
 function generateNodeAttrForRax(
   this: { cfg: PluginConfig },
-  attrData: { attrName: string; attrValue: CompositeValue },
+  attrData: { attrName: string; attrValue: IPublicTypeCompositeValue },
   scope: IScope,
   config?: NodeGeneratorConfig,
   next?: AttrPlugin,
@@ -257,7 +256,7 @@ function generateNodeAttrForRax(
 
 function generateEventHandlerAttrForRax(
   attrName: string,
-  attrValue: CompositeValue,
+  attrValue: IPublicTypeCompositeValue,
   scope: IScope,
   config?: NodeGeneratorConfig,
 ): CodePiece[] {

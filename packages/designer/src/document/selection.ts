@@ -1,10 +1,14 @@
-import { EventEmitter } from 'events';
-import { obx, makeObservable } from '@alilc/lowcode-editor-core';
-import { Node, comparePosition, PositionNO } from './node/node';
+import { obx, makeObservable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
+import { INode, comparePosition, PositionNO } from './node/node';
 import { DocumentModel } from './document-model';
+import { IPublicModelSelection } from '@alilc/lowcode-types';
 
-export class Selection {
-  private emitter = new EventEmitter();
+export interface ISelection extends Omit<IPublicModelSelection<INode>, 'node'> {
+  containsNode(node: INode, excludeRoot: boolean): boolean;
+}
+
+export class Selection implements ISelection {
+  private emitter: IEventBus = createModuleEventBus('Selection');
 
   @obx.shallow private _selected: string[] = [];
 
@@ -101,7 +105,7 @@ export class Selection {
   /**
    * 选区是否包含节点
    */
-  containsNode(node: Node, excludeRoot = false) {
+  containsNode(node: INode, excludeRoot = false) {
     for (const id of this._selected) {
       const parent = this.doc.getNode(id);
       if (excludeRoot && parent?.contains(this.doc.focusNode)) {
@@ -117,8 +121,8 @@ export class Selection {
   /**
    * 获取选中的节点
    */
-  getNodes(): Node[] {
-    const nodes = [];
+  getNodes(): INode[] {
+    const nodes: INode[] = [];
     for (const id of this._selected) {
       const node = this.doc.getNode(id);
       if (node) {
@@ -129,7 +133,7 @@ export class Selection {
   }
 
   /**
-   * 获取顶层选区节点, 场景：拖拽时，建立蒙层，只蒙在最上层
+   * 获取顶层选区节点，场景：拖拽时，建立蒙层，只蒙在最上层
    */
   getTopNodes(includeRoot = false) {
     const nodes = [];

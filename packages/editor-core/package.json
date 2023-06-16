@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-editor-core",
-  "version": "1.0.14",
+  "version": "1.1.7",
   "description": "Core Api for Ali lowCode engine",
   "license": "MIT",
   "main": "lib/index.js",
@@ -10,12 +10,12 @@
     "es"
   ],
   "scripts": {
-    "build": "build-scripts build --skip-demo"
+    "build": "build-scripts build"
   },
   "dependencies": {
     "@alifd/next": "^1.19.16",
-    "@alilc/lowcode-types": "1.0.14",
-    "@alilc/lowcode-utils": "1.0.14",
+    "@alilc/lowcode-types": "1.1.7",
+    "@alilc/lowcode-utils": "1.1.7",
     "classnames": "^2.2.6",
     "debug": "^4.1.1",
     "intl-messageformat": "^9.3.1",
@@ -25,8 +25,7 @@
     "power-di": "^2.2.4",
     "react": "^16",
     "react-dom": "^16.7.0",
-    "store": "^2.0.12",
-    "zen-logger": "^1.1.0"
+    "store": "^2.0.12"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
@@ -37,7 +36,6 @@
     "@types/react": "^16",
     "@types/react-dom": "^16",
     "@types/store": "^2.0.2",
-    "build-plugin-component": "^0.2.11",
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0"
   },

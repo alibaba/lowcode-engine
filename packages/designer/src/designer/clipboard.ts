@@ -1,3 +1,5 @@
+import { IPublicModelClipboard } from '@alilc/lowcode-types';
+
 function getDataFromPasteEvent(event: ClipboardEvent) {
   const { clipboardData } = event;
   if (!clipboardData) {
@@ -18,27 +20,18 @@ function getDataFromPasteEvent(event: ClipboardEvent) {
       };
     }
   } catch (error) {
-    /*
-    const html = clipboardData.getData('text/html');
-    if (html !== '') {
-      // TODO: clear the html
-      return {
-        code: '<div dangerouslySetInnerHTML={ __html: html } />',
-        maps: {},
-      };
-    }
-    */
     // TODO: open the parser implement
     return { };
-    /*
-    return {
-      code: clipboardData.getData('text/plain'),
-      maps: {},
-    }; */
   }
 }
 
-class Clipboard {
+export interface IClipboard extends IPublicModelClipboard {
+
+  initCopyPaster(el: HTMLTextAreaElement): void;
+
+  injectCopyPaster(document: Document): void;
+}
+class Clipboard implements IClipboard {
   private copyPasters: HTMLTextAreaElement[] = [];
 
   private waitFn?: (data: any, e: ClipboardEvent) => void;
@@ -71,7 +64,7 @@ class Clipboard {
   }
 
   injectCopyPaster(document: Document) {
-    if (this.copyPasters.find(x => x.ownerDocument === document)) {
+    if (this.copyPasters.find((x) => x.ownerDocument === document)) {
       return;
     }
     const copyPaster = document.createElement<'textarea'>('textarea');
@@ -84,8 +77,8 @@ class Clipboard {
     };
   }
 
-  setData(data: any) {
-    const copyPaster = this.copyPasters.find(x => x.ownerDocument);
+  setData(data: any): void {
+    const copyPaster = this.copyPasters.find((x) => x.ownerDocument);
     if (!copyPaster) {
       return;
     }
@@ -96,12 +89,12 @@ class Clipboard {
     copyPaster.blur();
   }
 
-  waitPasteData(e: KeyboardEvent, cb: (data: any, e: ClipboardEvent) => void) {
-    const win = e.view;
+  waitPasteData(keyboardEvent: KeyboardEvent, cb: (data: any, e: ClipboardEvent) => void) {
+    const win = keyboardEvent.view;
     if (!win) {
       return;
     }
-    const copyPaster = this.copyPasters.find(cp => cp.ownerDocument === win.document);
+    const copyPaster = this.copyPasters.find((cp) => cp.ownerDocument === win.document);
     if (copyPaster) {
       copyPaster.select();
       this.waitFn = cb;
@@ -109,4 +102,4 @@ class Clipboard {
   }
 }
 
-export default new Clipboard();
+export const clipboard = new Clipboard();

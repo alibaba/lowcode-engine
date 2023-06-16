@@ -3,7 +3,9 @@ import { findDOMNode } from 'react-dom';
 import { isElement } from '@alilc/lowcode-utils';
 import { isDOMNode } from './is-dom-node';
 
-export const FIBER_KEY = '_reactInternalFiber';
+export const getReactInternalFiber = (el: any) => {
+  return el._reactInternals || el._reactInternalFiber;
+};
 
 function elementsFromFiber(fiber: any, elements: Array<Element | Text>) {
   if (fiber) {
@@ -28,7 +30,7 @@ export function reactFindDOMNodes(elem: ReactInstance | null): Array<Element | T
     return [elem];
   }
   const elements: Array<Element | Text> = [];
-  const fiberNode = (elem as any)[FIBER_KEY];
+  const fiberNode = getReactInternalFiber(elem);
   elementsFromFiber(fiberNode?.child, elements);
   if (elements.length > 0) return elements;
   try {

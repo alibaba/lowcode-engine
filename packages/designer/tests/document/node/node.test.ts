@@ -1,17 +1,19 @@
 // @ts-nocheck
 import '../../fixtures/window';
-import { set, delayObxTick, delay } from '../../utils';
-import { Editor } from '@alilc/lowcode-editor-core';
+import { set } from '../../utils';
+import {
+  Editor,
+  globalContext,
+  Setters as InnerSetters,
+} from '@alilc/lowcode-editor-core';
 import { Project } from '../../../src/project/project';
+import { Workspace as InnerWorkspace } from '@alilc/lowcode-workspace';
 import { DocumentModel } from '../../../src/document/document-model';
 import {
   isRootNode,
   Node,
-  isNode,
   comparePosition,
   contains,
-  insertChild,
-  insertChildren,
   PositionNO,
 } from '../../../src/document/node/node';
 import { Designer } from '../../../src/designer/designer';
@@ -20,11 +22,13 @@ import divMetadata from '../../fixtures/component-metadata/div';
 import dialogMetadata from '../../fixtures/component-metadata/dialog';
 import btnMetadata from '../../fixtures/component-metadata/button';
 import formMetadata from '../../fixtures/component-metadata/form';
-import otherMeta from '../../fixtures/component-metadata/other';
 import pageMetadata from '../../fixtures/component-metadata/page';
 import rootHeaderMetadata from '../../fixtures/component-metadata/root-header';
 import rootContentMetadata from '../../fixtures/component-metadata/root-content';
 import rootFooterMetadata from '../../fixtures/component-metadata/root-footer';
+import { shellModelFactory } from '../../../../engine/src/modules/shell-model-factory';
+import { isNode } from '@alilc/lowcode-utils';
+import { Setters } from '@alilc/lowcode-shell';
 
 describe('Node 方法测试', () => {
   let editor: Editor;
@@ -34,9 +38,12 @@ describe('Node 方法测试', () => {
 
   beforeEach(() => {
     editor = new Editor();
-    designer = new Designer({ editor });
+    designer = new Designer({ editor, shellModelFactory });
     project = designer.project;
     doc = new DocumentModel(project, formSchema);
+    editor.set('setters', new Setters(new InnerSetters()));
+    !globalContext.has(Editor) && globalContext.register(editor, Editor);
+    !globalContext.has('workspace') && globalContext.register(new InnerWorkspace(), 'workspace');
   });
 
   afterEach(() => {
@@ -475,7 +482,7 @@ describe('Node 方法测试', () => {
     const form = doc.getNode('node_k1ow3cbo');
     designer.createComponentMeta(divMetadata);
     designer.createComponentMeta(formMetadata);
-    const callbacks = form.componentMeta.getMetadata().configure.advanced?.callbacks;
+    const callbacks = form.componentMeta.advanced.callbacks;
     const fn1 = callbacks.onNodeAdd = jest.fn();
     const fn2 = callbacks.onNodeRemove = jest.fn();
     const textField = doc.getNode('node_k1ow3cc9');

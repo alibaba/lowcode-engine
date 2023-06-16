@@ -4,5 +4,5 @@
     "outDir": "lib"
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["./tests", "./test-cases", "../types", "node_modules"]
+  "exclude": ["./tests", "tests/fixtures/test-cases", "../types", "node_modules"]
 }

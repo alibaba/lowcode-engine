@@ -1,60 +1,58 @@
 /* eslint-disable no-multi-assign */
-import { Editor, EngineConfig, engineConfig } from '@alilc/lowcode-editor-core';
-import { Designer, ILowCodePluginManager } from '@alilc/lowcode-designer';
-import { Skeleton as InnerSkeleton } from '@alilc/lowcode-editor-skeleton';
+import { engineConfig, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import {
-  Hotkey,
-  Project,
-  Skeleton,
-  Setters,
-  Material,
-  Event,
-  editorSymbol,
-  designerSymbol,
-  skeletonSymbol,
-} from '@alilc/lowcode-shell';
-import { getLogger, Logger } from '@alilc/lowcode-utils';
-import {
-  ILowCodePluginContext,
-  IPluginContextOptions,
-  ILowCodePluginPreferenceDeclaration,
-  PreferenceValueType,
+  IPublicApiHotkey,
+  IPublicApiProject,
+  IPublicApiSkeleton,
+  IPublicApiSetters,
+  IPublicApiMaterial,
+  IPublicApiEvent,
+  IPublicApiCommon,
+  IPublicModelPluginContext,
   IPluginPreferenceMananger,
+  IPublicTypePreferenceValueType,
+  IPublicModelEngineConfig,
+  IPublicApiLogger,
+  IPublicApiPlugins,
+  IPublicTypePluginDeclaration,
+  IPublicApiCanvas,
+  IPublicApiWorkspace,
+  IPublicEnumPluginRegisterLevel,
+  IPublicModelWindow,
+} from '@alilc/lowcode-types';
+import {
+  IPluginContextOptions,
+  ILowCodePluginContextApiAssembler,
+  ILowCodePluginContextPrivate,
 } from './plugin-types';
 import { isValidPreferenceKey } from './plugin-utils';
 
-export default class PluginContext implements ILowCodePluginContext {
-  private readonly [editorSymbol]: Editor;
-  private readonly [designerSymbol]: Designer;
-  private readonly [skeletonSymbol]: InnerSkeleton;
-  hotkey: Hotkey;
-  project: Project;
-  skeleton: Skeleton;
-  logger: Logger;
-  setters: Setters;
-  material: Material;
-  config: EngineConfig;
-  event: Event;
-  plugins: ILowCodePluginManager;
+export default class PluginContext implements
+  IPublicModelPluginContext, ILowCodePluginContextPrivate {
+  hotkey: IPublicApiHotkey;
+  project: IPublicApiProject;
+  skeleton: IPublicApiSkeleton;
+  setters: IPublicApiSetters;
+  material: IPublicApiMaterial;
+  event: IPublicApiEvent;
+  config: IPublicModelEngineConfig;
+  common: IPublicApiCommon;
+  logger: IPublicApiLogger;
+  plugins: IPublicApiPlugins;
   preference: IPluginPreferenceMananger;
+  pluginEvent: IPublicApiEvent;
+  canvas: IPublicApiCanvas;
+  workspace: IPublicApiWorkspace;
+  registerLevel: IPublicEnumPluginRegisterLevel;
+  editorWindow: IPublicModelWindow;
 
-  constructor(plugins: ILowCodePluginManager, options: IPluginContextOptions) {
-    const editor = this[editorSymbol] = plugins.editor;
-    const designer = this[designerSymbol] = editor.get('designer')!;
-    const skeleton = this[skeletonSymbol] = editor.get('skeleton')!;
-
-    const { pluginName = 'anonymous' } = options;
-    const project = designer?.project;
-    this.hotkey = new Hotkey();
-    this.project = new Project(project);
-    this.skeleton = new Skeleton(skeleton);
-    this.setters = new Setters();
-    this.material = new Material(editor);
-    this.config = engineConfig;
-    this.plugins = plugins;
-    this.event = new Event(editor, { prefix: 'common' });
-    this.logger = getLogger({ level: 'warn', bizName: `designer:plugin:${pluginName}` });
-
+  constructor(
+      options: IPluginContextOptions,
+      contextApiAssembler: ILowCodePluginContextApiAssembler,
+    ) {
+    const { pluginName = 'anonymous', meta = {} } = options;
+    contextApiAssembler.assembleApis(this, pluginName, meta);
+    this.pluginEvent = createModuleEventBus(pluginName, 200);
     const enhancePluginContextHook = engineConfig.get('enhancePluginContextHook');
     if (enhancePluginContextHook) {
       enhancePluginContextHook(this);
@@ -63,12 +61,12 @@ export default class PluginContext implements ILowCodePluginContext {
 
   setPreference(
     pluginName: string,
-    preferenceDeclaration: ILowCodePluginPreferenceDeclaration,
+    preferenceDeclaration: IPublicTypePluginDeclaration,
   ): void {
     const getPreferenceValue = (
       key: string,
-      defaultValue?: PreferenceValueType,
-      ): PreferenceValueType | undefined => {
+      defaultValue?: IPublicTypePreferenceValueType,
+      ): IPublicTypePreferenceValueType | undefined => {
       if (!isValidPreferenceKey(key, preferenceDeclaration)) {
         return undefined;
       }

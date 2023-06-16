@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { join } = require('path');
-const esModules = ['zen-logger'].join('|');
+const esModules = [].join('|');
 const pkgNames = fs.readdirSync(join('..')).filter(pkgName => !pkgName.startsWith('.'));
 
 const jestConfig = {
@@ -10,9 +10,15 @@ const jestConfig = {
   //   // '^.+\\.(js|jsx)$': 'babel-jest',
   // },
   // testMatch: ['**/node-children.test.ts'],
+  // testMatch: ['**/plugin-manager.test.ts'],
   // testMatch: ['**/history/history.test.ts'],
-  // testMatch: ['**/plugin/plugin-manager.test.ts'],
+  // testMatch: ['**/document-model.test.ts'],
+  // testMatch: ['**/prop.test.ts'],
   // testMatch: ['(/tests?/.*(test))\\.[jt]s$'],
+  // testMatch: ['**/document/node/node.add.test.ts'],
+  // testMatch: ['**/setting-field.test.ts'],
+  // testMatch: ['**/node.test.ts'],
+  // testMatch: ['**/builtin-hotkey.test.ts'],
   transformIgnorePatterns: [
     `/node_modules/(?!${esModules})/`,
   ],

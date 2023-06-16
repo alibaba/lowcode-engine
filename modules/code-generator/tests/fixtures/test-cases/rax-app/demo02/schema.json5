@@ -1,0 +1,374 @@
+{
+  // 本例是一个比较复杂的，带有循环和条件渲染的，以及有各种事件处理函数的页面
+  version: '1.0.0',
+  componentsMap: [
+    {
+      componentName: 'View',
+      package: 'rax-view',
+      version: '^1.0.0',
+      destructuring: false,
+      exportName: 'View',
+    },
+    {
+      componentName: 'Text',
+      package: 'rax-text',
+      version: '^1.0.0',
+      destructuring: false,
+      exportName: 'Text',
+    },
+    {
+      componentName: 'Image',
+      package: 'rax-image',
+      version: '^1.0.0',
+      destructuring: false,
+      exportName: 'Image',
+    },
+    {
+      componentName: 'Page',
+      package: 'rax-view',
+      version: '^1.0.0',
+      destructuring: false,
+      exportName: 'Page',
+    },
+  ],
+  componentsTree: [
+    {
+      componentName: 'Page',
+      fileName: 'home',
+      meta: {
+        router: '/',
+      },
+      state: {
+        clickCount: 0,
+        user: { name: '张三', age: 18, avatar: 'https://gw.alicdn.com/tfs/TB1Ui9BMkY2gK0jSZFgXXc5OFXa-50-50.png' },
+        orders: [
+          {
+            title: '【小米智能生活】米家扫地机器人家用全自动扫拖一体机拖地吸尘器',
+            price: 1799,
+            coverUrl: 'https://gw.alicdn.com/tfs/TB1dGVlRfb2gK0jSZK9XXaEgFXa-258-130.png',
+          },
+          {
+            title: '【限时下单立减】Apple/苹果 iPhone 11 4G全网通智能手机正品苏宁易购官方旗舰店苹果11',
+            price: 4999,
+            coverUrl: 'https://gw.alicdn.com/tfs/TB18gdJddTfau8jSZFwXXX1mVXa-1298-1202.png',
+          },
+        ],
+      },
+      props: {},
+      lifeCycles: {
+        didMount: {
+          type: 'JSExpression',
+          value: 'function didMount(){\n  this.utils.Toast.show(`Hello ${this.state.user.name}!`);\n}',
+        },
+        willUnmount: {
+          type: 'JSExpression',
+          value: 'function didMount(){\n  this.utils.Toast.show(`Bye, ${this.state.user.name}!`);\n}',
+        },
+      },
+      methods: {
+        hello: {
+          type: 'JSExpression',
+          value: 'function hello(){\n  this.utils.Toast.show(`Hello ${this.state.user.name}!`);\n  console.log(`Hello ${this.state.user.name}!`); }',
+        },
+      },
+      dataSource: {
+        list: [
+          {
+            id: 'urlParams',
+            type: 'urlParams',
+          },
+          // 示例数据源：https://shs.xxx.com/mock/1458/demo/user
+          {
+            id: 'user',
+            type: 'fetch',
+            options: {
+              method: 'GET',
+              uri: 'https://shs.xxx.com/mock/1458/demo/user',
+              isSync: true,
+            },
+            dataHandler: {
+              type: 'JSExpression',
+              value: 'function (response) {\nif (!response.success){\n    throw new Error(response.message);\n  }\n  return response.data;\n}',
+            },
+          },
+          // 示例数据源：https://shs.xxx.com/mock/1458/demo/orders
+          {
+            id: 'orders',
+            type: 'fetch',
+            options: {
+              method: 'GET',
+              uri: {
+                type: 'JSExpression',
+                value: 'this.state.user.ordersApiUri',
+              },
+              isSync: true,
+            },
+            dataHandler: {
+              type: 'JSExpression',
+              value: 'function (response) {\nif (!response.success){\n    throw new Error(response.message);\n  }\n  return response.data.result;\n}',
+            },
+          },
+        ],
+        dataHandler: {
+          type: 'JSExpression',
+          value: 'function (dataMap) {\n  console.info("All datasources loaded:", dataMap);\n}',
+        },
+      },
+      children: [
+        {
+          componentName: 'View',
+          children: [
+            {
+              componentName: 'Text',
+              props: {},
+              children: 'Demo data source logic',
+            },
+          ],
+        },
+        {
+          componentName: 'View',
+          children: [
+            {
+              componentName: 'Text',
+              props: {},
+              children: '=== User Info: ===',
+            },
+          ],
+        },
+        {
+          componentName: 'View',
+          condition: {
+            type: 'JSExpression',
+            value: 'this.state.user',
+          },
+          props: {
+            style: { flexDirection: 'row' },
+          },
+          children: [
+            {
+              componentName: 'Image',
+              props: {
+                source: {
+                  uri: {
+                    type: 'JSExpression',
+                    value: 'this.state.user.avatar',
+                  },
+                },
+                style: {
+                  width: '32px',
+                  height: '32px',
+                },
+              },
+            },
+            {
+              componentName: 'View',
+              props: {
+                onClick: {
+                  type: 'JSExpression',
+                  value: 'this.hello',
+                },
+              },
+              children: [
+                {
+                  componentName: 'Text',
+                  children: {
+                    type: 'JSExpression',
+                    value: 'this.state.user.name',
+                  },
+                },
+                {
+                  componentName: 'Text',
+                  children: [
+                    {
+                      type: 'JSExpression',
+                      value: 'this.state.user.age',
+                    },
+                    '岁',
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          componentName: 'View',
+          children: [
+            {
+              componentName: 'Text',
+              props: {},
+              children: '=== Orders: ===',
+            },
+          ],
+        },
+        {
+          componentName: 'View',
+          loop: {
+            type: 'JSExpression',
+            value: 'this.state.orders',
+          },
+          loopArgs: ['order', 'index'],
+          props: {
+            style: { flexDirection: 'row' },
+            onClick: {
+              type: 'JSExpression',
+              value: 'function(){ this.utils.recordEvent(`CLICK_ORDER`, this.order.title) }',
+            },
+          },
+          children: [
+            {
+              componentName: 'View',
+              children: [
+                {
+                  componentName: 'Image',
+                  props: {
+                    source: {
+                      uri: {
+                        type: 'JSExpression',
+                        value: 'this.order.coverUrl',
+                      },
+                    },
+                    style: {
+                      width: '80px',
+                      height: '60px',
+                    },
+                  },
+                },
+              ],
+            },
+            {
+              componentName: 'View',
+              children: [
+                {
+                  componentName: 'Text',
+                  children: {
+                    type: 'JSExpression',
+                    value: 'this.order.title',
+                  },
+                },
+                {
+                  componentName: 'Text',
+                  children: {
+                    type: 'JSExpression',
+                    value: 'this.utils.formatPrice(this.order.price, "元")',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        {
+          componentName: 'View',
+          props: {
+            onClick: {
+              type: 'JSExpression',
+              value: 'function (){ this.setState({ clickCount: this.state.clickCount + 1 }) }',
+            },
+          },
+          children: [
+            {
+              componentName: 'Text',
+              children: [
+                '点击次数：',
+                {
+                  type: 'JSExpression',
+                  value: 'this.state.clickCount',
+                },
+                '(点击加 1)',
+              ],
+            },
+          ],
+        },
+        {
+          componentName: 'View',
+          children: [
+            {
+              componentName: 'Text',
+              props: {},
+              children: '操作提示：',
+            },
+            {
+              componentName: 'Text',
+              props: {},
+              children: '1. 点击会员名，可以弹出 Toast "Hello xxx!"',
+            },
+            {
+              componentName: 'Text',
+              props: {},
+              children: '2. 点击订单，会记录点击的订单信息，并弹出 Toast 提示',
+            },
+            {
+              componentName: 'Text',
+              props: {},
+              children: '3. 最下面的【点击次数】，点一次应该加 1',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  utils: [
+    // 可以直接定义一个函数
+    {
+      name: 'formatPrice',
+      type: 'function',
+      content: {
+        type: 'JSExpression',
+        value: 'function formatPrice(price, unit) { return Number(price).toFixed(2) + unit; }',
+      },
+    },
+    // 在 utils 里面也可以用 this 访问当前上下文:
+    {
+      name: 'recordEvent',
+      type: 'function',
+      content: {
+        type: 'JSExpression',
+        value: 'function recordEvent(eventName, eventDetail) { \n  this.utils.Toast.show(`[EVENT]: ${eventName} ${eventDetail}`);\n  console.log(`[EVENT]: ${eventName} (detail: %o) (user: %o)`, eventDetail, this.state.user); }',
+      },
+    },
+    // 也可以直接从 npm 包引入 (下例等价于 `import moment from 'moment';`)
+    {
+      name: 'moment',
+      type: 'npm',
+      content: {
+        package: 'moment',
+        version: '*',
+        exportName: 'moment',
+      },
+    },
+    // 可以引入子目录（下例等价于 `import clone from 'lodash/clone';`)
+    {
+      name: 'clone',
+      type: 'npm',
+      content: {
+        package: 'lodash',
+        version: '*',
+        exportName: 'clone',
+        destructuring: false,
+        main: '/clone',
+      },
+    },
+    {
+      name: 'Toast',
+      type: 'npm',
+      content: {
+        package: 'universal-toast',
+        version: '^1.2.0',
+        exportName: 'Toast', // TODO: 这个 exportName 是否可以省略？省略后默认是上一层的 name？
+      },
+    },
+  ],
+  css: 'page,body{\n  width: 750rpx;\n  overflow-x: hidden;\n}',
+  config: {
+    sdkVersion: '1.0.3',
+    historyMode: 'hash',
+    targetRootID: 'root',
+  },
+  meta: {
+    name: 'Rax App Demo',
+    git_group: 'demo-group',
+    project_name: 'demo-project',
+    description: '这是一个示例应用',
+    spma: 'spmademo',
+    creator: '张三',
+  },
+}

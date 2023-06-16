@@ -1,12 +1,12 @@
 import { Component, ReactElement } from 'react';
 import { Icon } from '@alifd/next';
 import classNames from 'classnames';
-import { Title, observer, Tip, globalContext, Editor } from '@alilc/lowcode-editor-core';
+import { Title, observer, Tip } from '@alilc/lowcode-editor-core';
 import { DockProps } from '../../types';
-import PanelDock from '../../widget/panel-dock';
+import { PanelDock } from '../../widget/panel-dock';
 import { composeTitle } from '../../widget/utils';
-import WidgetContainer from '../../widget/widget-container';
-import Panel from '../../widget/panel';
+import { WidgetContainer } from '../../widget/widget-container';
+import { Panel } from '../../widget/panel';
 import { IWidget } from '../../widget/widget';
 import { SkeletonEvents } from '../../skeleton';
 import DraggableLine from '../draggable-line';
@@ -47,6 +47,8 @@ function HelpTip({ tip }: any) {
 
 @observer
 export class PanelDockView extends Component<DockProps & { dock: PanelDock }> {
+  private lastActived = false;
+
   componentDidMount() {
     this.checkActived();
   }
@@ -54,8 +56,6 @@ export class PanelDockView extends Component<DockProps & { dock: PanelDock }> {
   componentDidUpdate() {
     this.checkActived();
   }
-
-  private lastActived = false;
 
   checkActived() {
     const { dock } = this.props;
@@ -116,15 +116,15 @@ export class DraggableLineView extends Component<{ panel: Panel }> {
     }
 
     // 抛出事件，对于有些需要 panel 插件随着 度变化进行再次渲染的，由panel插件内部监听事件实现
-    const editor = globalContext.get(Editor);
-    editor?.emit('dockpane.drag', width);
+    const editor = this.props.panel.skeleton.editor;
+    editor?.eventBus.emit('dockpane.drag', width);
   }
 
   onDragChange(type: 'start' | 'end') {
-    const editor = globalContext.get(Editor);
-    editor?.emit('dockpane.dragchange', type);
+    const editor = this.props.panel.skeleton.editor;
+    editor?.eventBus.emit('dockpane.dragchange', type);
     // builtinSimulator 屏蔽掉 鼠标事件
-    editor?.emit('designer.builtinSimulator.disabledEvents', type === 'start');
+    editor?.eventBus.emit('designer.builtinSimulator.disabledEvents', type === 'start');
   }
 
   render() {
@@ -132,7 +132,7 @@ export class DraggableLineView extends Component<{ panel: Panel }> {
     // 默认 关闭，通过配置开启
     const enableDrag = this.props.panel.config.props?.enableDrag;
     const isRightArea = this.props.panel.config?.area === 'rightArea';
-    if (isRightArea || !enableDrag || this.props.panel?.parent.name === 'leftFixedArea') {
+    if (isRightArea || !enableDrag || this.props.panel?.parent?.name === 'leftFixedArea') {
       return null;
     }
     return (
@@ -157,6 +157,8 @@ export class DraggableLineView extends Component<{ panel: Panel }> {
 
 @observer
 export class TitledPanelView extends Component<{ panel: Panel; area?: string }> {
+  private lastVisible = false;
+
   componentDidMount() {
     this.checkVisible();
   }
@@ -164,8 +166,6 @@ export class TitledPanelView extends Component<{ panel: Panel; area?: string }> 
   componentDidUpdate() {
     this.checkVisible();
   }
-
-  private lastVisible = false;
 
   checkVisible() {
     const { panel } = this.props;
@@ -185,9 +185,9 @@ export class TitledPanelView extends Component<{ panel: Panel; area?: string }> 
     if (!panel.inited) {
       return null;
     }
-    const editor = globalContext.get(Editor);
+    const editor = panel.skeleton.editor;
     const panelName = area ? `${area}-${panel.name}` : panel.name;
-    editor?.emit('skeleton.panel.toggle', {
+    editor?.eventBus.emit('skeleton.panel.toggle', {
       name: panelName || '',
       status: panel.visible ? 'show' : 'hide',
     });
@@ -215,6 +215,8 @@ export class PanelView extends Component<{
   hideOperationRow?: boolean;
   hideDragLine?: boolean;
 }> {
+  private lastVisible = false;
+
   componentDidMount() {
     this.checkVisible();
   }
@@ -222,8 +224,6 @@ export class PanelView extends Component<{
   componentDidUpdate() {
     this.checkVisible();
   }
-
-  private lastVisible = false;
 
   checkVisible() {
     const { panel } = this.props;
@@ -247,9 +247,9 @@ export class PanelView extends Component<{
     if (!panel.inited) {
       return null;
     }
-    const editor = globalContext.get(Editor);
+    const editor = panel.skeleton.editor;
     const panelName = area ? `${area}-${panel.name}` : panel.name;
-    editor?.emit('skeleton.panel.toggle', {
+    editor?.eventBus.emit('skeleton.panel.toggle', {
       name: panelName || '',
       status: panel.visible ? 'show' : 'hide',
     });
@@ -327,6 +327,9 @@ class PanelTitle extends Component<{ panel: Panel; className?: string }> {
 
 @observer
 export class WidgetView extends Component<{ widget: IWidget }> {
+  private lastVisible = false;
+  private lastDisabled: boolean | undefined = false;
+
   componentDidMount() {
     this.checkVisible();
     this.checkDisabled();
@@ -336,9 +339,6 @@ export class WidgetView extends Component<{ widget: IWidget }> {
     this.checkVisible();
     this.checkDisabled();
   }
-
-  private lastVisible = false;
-  private lastDisabled = false;
 
   checkVisible() {
     const { widget } = this.props;

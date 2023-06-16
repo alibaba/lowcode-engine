@@ -20,8 +20,11 @@ export function createSimulator(
 ): Promise<BuiltinSimulatorRenderer> {
   const win: any = iframe.contentWindow;
   const doc = iframe.contentDocument!;
+  const innerPlugins = host.designer.editor.get('innerPlugins');
 
+  win.AliLowCodeEngine = innerPlugins._getLowCodePluginContext({});
   win.LCSimulatorHost = host;
+  win._ = window._;
 
   const styles: any = {};
   const scripts: any = {};
@@ -98,7 +101,7 @@ export function createSimulator(
   doc.close();
 
   return new Promise((resolve) => {
-    const renderer = win.SimulatorRenderer || host.renderer;
+    const renderer = win.SimulatorRenderer;
     if (renderer) {
       return resolve(renderer);
     }

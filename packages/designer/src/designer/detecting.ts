@@ -1,12 +1,30 @@
-import { makeObservable, obx } from '@alilc/lowcode-editor-core';
-import { EventEmitter } from 'events';
-import { Node, DocumentModel } from '../document';
+import { makeObservable, obx, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
+import { IPublicModelDetecting } from '@alilc/lowcode-types';
+import type { IDocumentModel } from '../document/document-model';
+import type { INode } from '../document/node/node';
 
 const DETECTING_CHANGE_EVENT = 'detectingChange';
+export interface IDetecting extends Omit<IPublicModelDetecting<INode>,
+  'capture' |
+  'release' |
+  'leave'
+> {
+  capture(node: INode | null): void;
 
-export class Detecting {
+  release(node: INode | null): void;
+
+  leave(document: IDocumentModel | undefined): void;
+
+  get current(): INode | null;
+}
+
+export class Detecting implements IDetecting {
   @obx.ref private _enable = true;
 
+  /**
+   * 控制大纲树 hover 时是否出现悬停效果
+   * TODO: 将该逻辑从设计器中抽离出来
+   */
   get enable() {
     return this._enable;
   }
@@ -20,9 +38,9 @@ export class Detecting {
 
   @obx.ref xRayMode = false;
 
-  @obx.ref private _current: Node | null = null;
+  @obx.ref private _current: INode | null = null;
 
-  private emitter: EventEmitter = new EventEmitter();
+  private emitter: IEventBus = createModuleEventBus('Detecting');
 
   constructor() {
     makeObservable(this);
@@ -32,27 +50,27 @@ export class Detecting {
     return this._current;
   }
 
-  capture(node: Node | null) {
+  capture(node: INode | null) {
     if (this._current !== node) {
       this._current = node;
       this.emitter.emit(DETECTING_CHANGE_EVENT, this.current);
     }
   }
 
-  release(node: Node | null) {
+  release(node: INode | null) {
     if (this._current === node) {
       this._current = null;
       this.emitter.emit(DETECTING_CHANGE_EVENT, this.current);
     }
   }
 
-  leave(document: DocumentModel | undefined) {
+  leave(document: IDocumentModel | undefined) {
     if (this.current && this.current.document === document) {
       this._current = null;
     }
   }
 
-  onDetectingChange(fn: (node: Node) => void) {
+  onDetectingChange(fn: (node: INode) => void) {
     this.emitter.on(DETECTING_CHANGE_EVENT, fn);
     return () => {
       this.emitter.off(DETECTING_CHANGE_EVENT, fn);

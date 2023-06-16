@@ -9,13 +9,13 @@ import {
   ComponentType,
 } from 'react';
 import classNames from 'classnames';
-import { observer, computed, Tip, globalContext, makeObservable } from '@alilc/lowcode-editor-core';
-import { createIcon, isReactComponent } from '@alilc/lowcode-utils';
-import { ActionContentObject, isActionContentObject } from '@alilc/lowcode-types';
+import { observer, computed, Tip } from '@alilc/lowcode-editor-core';
+import { createIcon, isReactComponent, isActionContentObject } from '@alilc/lowcode-utils';
+import { IPublicTypeActionContentObject } from '@alilc/lowcode-types';
 import { BuiltinSimulatorHost } from '../host';
-import { OffsetObserver } from '../../designer';
-import { Node } from '../../document';
+import { INode, OffsetObserver } from '../../designer';
 import NodeSelector from '../node-selector';
+import { ISimulatorHost } from '../../simulator';
 
 @observer
 export class BorderSelectingInstance extends Component<{
@@ -46,7 +46,7 @@ export class BorderSelectingInstance extends Component<{
       dragging,
     });
 
-    const hideSelectTools = observed.node.componentMeta.getMetadata().configure.advanced?.hideSelectTools;
+    const { hideSelectTools } = observed.node.componentMeta.advanced;
 
     if (hideSelectTools) {
       return null;
@@ -116,8 +116,8 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
   }
 }
 
-function createAction(content: ReactNode | ComponentType<any> | ActionContentObject, key: string, node: Node) {
-  if (isValidElement(content)) {
+function createAction(content: ReactNode | ComponentType<any> | IPublicTypeActionContentObject, key: string, node: INode) {
+  if (isValidElement<{ key: string; node: INode }>(content)) {
     return cloneElement(content, { key, node });
   }
   if (isReactComponent(content)) {
@@ -130,14 +130,14 @@ function createAction(content: ReactNode | ComponentType<any> | ActionContentObj
         key={key}
         className="lc-borders-action"
         onClick={() => {
-          action && action(node);
-          const editor = globalContext.get('editor');
+          action && action(node.internalToShellNode()!);
+          const editor = node.document?.designer.editor;
           const npm = node?.componentMeta?.npm;
           const selected =
             [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
             node?.componentMeta?.componentName ||
             '';
-          editor?.emit('designer.border.action', {
+          editor?.eventBus.emit('designer.border.action', {
             name: key,
             selected,
           });
@@ -152,8 +152,8 @@ function createAction(content: ReactNode | ComponentType<any> | ActionContentObj
 }
 
 @observer
-export class BorderSelectingForNode extends Component<{ host: BuiltinSimulatorHost; node: Node }> {
-  get host(): BuiltinSimulatorHost {
+export class BorderSelectingForNode extends Component<{ host: ISimulatorHost; node: INode }> {
+  get host(): ISimulatorHost {
     return this.props.host;
   }
 

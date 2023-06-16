@@ -1,18 +1,28 @@
-import { ComponentInstance, NodeInstance, Component } from '../simulator';
-import { NodeSchema } from '@alilc/lowcode-types';
+import { Component } from '../simulator';
+import { IPublicTypeComponentInstance, IPublicTypeNodeInstance, Asset, IPublicTypeComponentSchema, IPublicTypeProjectSchema, IPublicTypeLowCodeComponent } from '@alilc/lowcode-types';
 
 export interface BuiltinSimulatorRenderer {
   readonly isSimulatorRenderer: true;
-  createComponent(schema: NodeSchema): Component | null;
+  autoRepaintNode?: boolean;
+  components: Record<string, Component>;
+  rerender: () => void;
+  createComponent(schema: IPublicTypeProjectSchema<IPublicTypeComponentSchema>): Component | null;
   getComponent(componentName: string): Component;
-  getClosestNodeInstance(from: ComponentInstance, nodeId?: string): NodeInstance<ComponentInstance> | null;
-  findDOMNodes(instance: ComponentInstance): Array<Element | Text> | null;
+  getClosestNodeInstance(
+      from: IPublicTypeComponentInstance,
+      nodeId?: string,
+    ): IPublicTypeNodeInstance<IPublicTypeComponentInstance> | null;
+  findDOMNodes(instance: IPublicTypeComponentInstance): Array<Element | Text> | null;
   getClientRects(element: Element | Text): DOMRect[];
   setNativeSelection(enableFlag: boolean): void;
   setDraggingState(state: boolean): void;
   setCopyState(state: boolean): void;
+  loadAsyncLibrary(asyncMap: { [index: string]: any }): void;
   clearState(): void;
+  stopAutoRepaintNode(): void;
+  enableAutoRepaintNode(): void;
   run(): void;
+  load(asset: Asset): Promise<any>;
 }
 
 export function isSimulatorRenderer(obj: any): obj is BuiltinSimulatorRenderer {

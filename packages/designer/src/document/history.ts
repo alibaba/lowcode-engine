@@ -1,21 +1,27 @@
-import { EventEmitter } from 'events';
-import { autorun, reaction, mobx, untracked, globalContext, Editor } from '@alilc/lowcode-editor-core';
-import { NodeSchema } from '@alilc/lowcode-types';
-import { History as ShellHistory } from '@alilc/lowcode-shell';
+import { reaction, untracked, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
+import { IPublicTypeNodeSchema, IPublicModelHistory, IPublicTypeDisposable } from '@alilc/lowcode-types';
+import { Logger } from '@alilc/lowcode-utils';
+import { IDocumentModel } from '../designer';
 
-export interface Serialization<K = NodeSchema, T = string> {
+const logger = new Logger({ level: 'warn', bizName: 'history' });
+
+export interface Serialization<K = IPublicTypeNodeSchema, T = string> {
   serialize(data: K): T;
   unserialize(data: T): K;
 }
 
-export class History<T = NodeSchema> {
+export interface IHistory extends IPublicModelHistory {
+  onStateChange(func: () => any): IPublicTypeDisposable;
+}
+
+export class History<T = IPublicTypeNodeSchema> implements IHistory {
   private session: Session;
 
   private records: Session[];
 
   private point = 0;
 
-  private emitter = new EventEmitter();
+  private emitter: IEventBus = createModuleEventBus('History');
 
   private asleep = false;
 
@@ -28,41 +34,52 @@ export class History<T = NodeSchema> {
     },
   };
 
-  setSerialization(serialization: Serialization<T, string>) {
-    this.currentSerialization = serialization;
+  get hotData() {
+    return this.session.data;
   }
 
-  constructor(dataFn: () => T, private redoer: (data: T) => void, private timeGap: number = 1000) {
+  private timeGap: number = 1000;
+
+  constructor(
+      dataFn: () => T | null,
+      private redoer: (data: T) => void,
+      private document?: IDocumentModel,
+    ) {
     this.session = new Session(0, null, this.timeGap);
     this.records = [this.session];
 
-    reaction(() => {
+    reaction((): any => {
       return dataFn();
     }, (data: T) => {
       if (this.asleep) return;
       untracked(() => {
         const log = this.currentSerialization.serialize(data);
-          if (this.session.isActive()) {
-            this.session.log(log);
-          } else {
-            this.session.end();
-            const lastState = this.getState();
-            const cursor = this.session.cursor + 1;
-            const session = new Session(cursor, log, this.timeGap);
-            this.session = session;
-            this.records.splice(cursor, this.records.length - cursor, session);
-            const currentState = this.getState();
-            if (currentState !== lastState) {
-              this.emitter.emit('statechange', currentState);
-            }
+
+        // do not record unchanged data
+        if (this.session.data === log) {
+          return;
+        }
+
+        if (this.session.isActive()) {
+          this.session.log(log);
+        } else {
+          this.session.end();
+          const lastState = this.getState();
+          const cursor = this.session.cursor + 1;
+          const session = new Session(cursor, log, this.timeGap);
+          this.session = session;
+          this.records.splice(cursor, this.records.length - cursor, session);
+          const currentState = this.getState();
+          if (currentState !== lastState) {
+            this.emitter.emit('statechange', currentState);
           }
-        // }
+        }
       });
     }, { fireImmediately: true });
   }
 
-  get hotData() {
-    return this.session.data;
+  setSerialization(serialization: Serialization<T, string>) {
+    this.currentSerialization = serialization;
   }
 
   isSavePoint(): boolean {
@@ -77,16 +94,18 @@ export class History<T = NodeSchema> {
     this.asleep = false;
   }
 
-  go(cursor: number) {
+  go(originalCursor: number) {
     this.session.end();
 
-    const currentCursor = this.session.cursor;
+    let cursor = originalCursor;
     cursor = +cursor;
     if (cursor < 0) {
       cursor = 0;
     } else if (cursor >= this.records.length) {
       cursor = this.records.length - 1;
     }
+
+    const currentCursor = this.session.cursor;
     if (cursor === currentCursor) {
       return;
     }
@@ -99,7 +118,7 @@ export class History<T = NodeSchema> {
       this.redoer(this.currentSerialization.unserialize(hotData));
       this.emitter.emit('cursor', hotData);
     } catch (e) /* istanbul ignore next */ {
-      console.error(e);
+      logger.error(e);
     }
 
     this.wakeup();
@@ -114,11 +133,11 @@ export class History<T = NodeSchema> {
     }
     const cursor = this.session.cursor - 1;
     this.go(cursor);
-    const editor = globalContext.get(Editor);
+    const editor = this.document?.designer.editor;
     if (!editor) {
       return;
     }
-    editor.emit('history.back', cursor);
+    editor.eventBus.emit('history.back', cursor);
   }
 
   forward() {
@@ -127,11 +146,11 @@ export class History<T = NodeSchema> {
     }
     const cursor = this.session.cursor + 1;
     this.go(cursor);
-    const editor = globalContext.get(Editor);
+    const editor = this.document?.designer.editor;
     if (!editor) {
       return;
     }
-    editor.emit('history.forward', cursor);
+    editor.eventBus.emit('history.forward', cursor);
   }
 
   savePoint() {
@@ -166,14 +185,32 @@ export class History<T = NodeSchema> {
     return state;
   }
 
-  onStateChange(func: () => any) {
+  /**
+   * 监听 state 变更事件
+   * @param func
+   * @returns
+   */
+  onChangeState(func: () => any): IPublicTypeDisposable {
+    return this.onStateChange(func);
+  }
+
+  onStateChange(func: () => any): IPublicTypeDisposable {
     this.emitter.on('statechange', func);
     return () => {
       this.emitter.removeListener('statechange', func);
     };
   }
 
-  onCursor(func: () => any) {
+  /**
+   * 监听历史记录游标位置变更事件
+   * @param func
+   * @returns
+   */
+  onChangeCursor(func: () => any): IPublicTypeDisposable {
+    return this.onCursor(func);
+  }
+
+  onCursor(func: () => any): () => void {
     this.emitter.on('cursor', func);
     return () => {
       this.emitter.removeListener('cursor', func);
@@ -184,6 +221,7 @@ export class History<T = NodeSchema> {
     this.emitter.removeAllListeners();
     this.records = [];
   }
+
   /**
    *
    * @deprecated
@@ -192,10 +230,6 @@ export class History<T = NodeSchema> {
    */
   isModified() {
     return this.isSavePoint();
-  }
-
-  internalToShellHistory() {
-    return new ShellHistory(this);
   }
 }
 

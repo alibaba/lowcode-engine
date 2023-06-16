@@ -6,8 +6,12 @@ import {
   designerSymbol,
   skeletonSymbol,
   editorSymbol,
-  settingPropEntrySymbol,
+  settingFieldSymbol,
   settingTopEntrySymbol,
+  designerCabinSymbol,
+  propSymbol,
+  simulatorHostSymbol,
+  skeletonItemSymbol,
 } from '@alilc/lowcode-shell';
 
 export default {
@@ -18,6 +22,10 @@ export default {
   skeletonSymbol,
   editorSymbol,
   designerSymbol,
-  settingPropEntrySymbol,
+  settingPropEntrySymbol: settingFieldSymbol,
   settingTopEntrySymbol,
+  designerCabinSymbol,
+  propSymbol,
+  simulatorHostSymbol,
+  skeletonItemSymbol,
 };

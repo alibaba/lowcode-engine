@@ -1,5 +1,3 @@
-import './builtin-hotkey';
-
 export * from './designer';
 export * from './designer-view';
 export * from './dragon';
@@ -8,3 +6,6 @@ export * from './location';
 export * from './offset-observer';
 export * from './scroller';
 export * from './setting';
+export * from './active-tracker';
+export * from '../document';
+export * from './clipboard';

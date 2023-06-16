@@ -1,5 +1,5 @@
 
-import React, { Component, createElement, PureComponent, createContext } from 'react';
+import React, { Component, createElement, forwardRef, PureComponent, createContext } from 'react';
 const mockGetRenderers = jest.fn();
 const mockGetRuntime = jest.fn();
 const mockParseExpression = jest.fn();
@@ -59,6 +59,7 @@ describe('Base Render methods', () => {
       createElement,
       PureComponent,
       createContext,
+      forwardRef,
     });
     RendererClass = baseRendererFactory();
   })
@@ -78,7 +79,6 @@ describe('Base Render methods', () => {
     // const originalUtils = jest.requireActual('../../src/utils');
     // mockParseExpression.mockImplementation(originalUtils.parseExpression);
     const component = TestRenderer.create(
-      // @ts-ignore
       <RendererClass
         __schema={mockSchema}
         components={components as any}
@@ -120,7 +120,7 @@ describe('Base Render methods', () => {
   // it('should excute lifecycle.componentDidCatch when defined', () => {
   // });
 
-  // it('__excuteLifeCycleMethod should work', () => {
+  // it('__executeLifeCycleMethod should work', () => {
   // });
 
   // it('reloadDataSource should work', () => {

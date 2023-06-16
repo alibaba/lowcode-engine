@@ -1,20 +1,21 @@
 import * as _ from 'lodash';
 import {
-  JSExpression,
-  NodeData,
-  NodeSchema,
+  IPublicTypeJSExpression,
+  IPublicTypeNodeData,
+  IPublicTypeNodeSchema,
   isJSExpression,
   isJSSlot,
   isDOMText,
-  ContainerSchema,
-  NpmInfo,
-  CompositeValue,
+  IPublicTypeContainerSchema,
+  IPublicTypeNpmInfo,
+  IPublicTypeCompositeValue,
   isNodeSchema,
   isJSFunction,
 } from '@alilc/lowcode-types';
 import { CodeGeneratorError } from '../types/error';
+import { isJSExpressionFn } from './common';
 
-export function isContainerSchema(x: any): x is ContainerSchema {
+export function isContainerSchema(x: any): x is IPublicTypeContainerSchema {
   return (
     typeof x === 'object' &&
     x &&
@@ -23,7 +24,7 @@ export function isContainerSchema(x: any): x is ContainerSchema {
   );
 }
 
-export function isNpmInfo(x: any): x is NpmInfo {
+export function isNpmInfo(x: any): x is IPublicTypeNpmInfo {
   return typeof x === 'object' && x && typeof x.package === 'string';
 }
 
@@ -43,11 +44,11 @@ const DEFAULT_MAX_DEPTH = 100000;
  * @returns
  */
 export function handleSubNodes<T>(
-  children: NodeSchema['children'],
+  children: IPublicTypeNodeSchema['children'],
   handlers: {
     string?: (i: string) => T;
-    expression?: (i: JSExpression) => T;
-    node?: (i: NodeSchema) => T;
+    expression?: (i: IPublicTypeJSExpression) => T;
+    node?: (i: IPublicTypeNodeSchema) => T;
   },
   options?: {
     rerun?: boolean;
@@ -64,7 +65,7 @@ export function handleSubNodes<T>(
   }
 
   if (Array.isArray(children)) {
-    const list: NodeData[] = children as NodeData[];
+    const list: IPublicTypeNodeData[] = children as IPublicTypeNodeData[];
     return list
       .map((child) => handleSubNodes(child, handlers, { ...opt, maxDepth: maxDepth - 1 }))
       .reduce((p, c) => p.concat(c), []);
@@ -84,7 +85,7 @@ export function handleSubNodes<T>(
     return handleSubNodes(children.value, handlers, { ...opt, maxDepth: maxDepth - 1 });
   } else if (isNodeSchema(children)) {
     const handler = handlers.node || noop;
-    const child = children as NodeSchema;
+    const child = children as IPublicTypeNodeSchema;
     result = handler(child);
 
     if (child.children) {
@@ -100,7 +101,7 @@ export function handleSubNodes<T>(
         });
       } else {
         Object.values(child.props).forEach((value) => {
-          const childRes = handleCompositeValueInProps(value);
+          const childRes = handleCompositeValueInProps(value as IPublicTypeCompositeValue);
           childrenRes.push(...childRes);
         });
       }
@@ -115,7 +116,7 @@ export function handleSubNodes<T>(
 
   return childrenRes;
 
-  function handleCompositeValueInProps(value: CompositeValue): T[] {
+  function handleCompositeValueInProps(value: IPublicTypeCompositeValue): T[] {
     if (isJSSlot(value)) {
       return handleSubNodes(value.value, handlers, { ...opt, maxDepth: maxDepth - 1 });
     }
@@ -125,9 +126,10 @@ export function handleSubNodes<T>(
       return _.flatMap(value, (v) => handleCompositeValueInProps(v));
     }
 
-    // CompositeObject
+    // IPublicTypeCompositeObject
     if (
       !isJSExpression(value) &&
+      !isJSExpressionFn(value) &&
       !isJSFunction(value) &&
       typeof value === 'object' &&
       value !== null
@@ -137,4 +139,18 @@ export function handleSubNodes<T>(
 
     return [];
   }
+}
+
+export function isValidContainerType(schema: IPublicTypeNodeSchema) {
+  return [
+    'Page',
+    'Component',
+    'Block',
+  ].includes(schema.componentName);
+}
+
+export const enum ContainerType {
+  Page = 'Page',
+  Component = 'Component',
+  Block = 'Block',
 }

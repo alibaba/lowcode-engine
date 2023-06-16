@@ -1,17 +1,12 @@
 import '../../fixtures/window';
-import { set } from '../../utils';
 import { Editor, globalContext } from '@alilc/lowcode-editor-core';
 import { Project } from '../../../src/project/project';
 import { DocumentModel } from '../../../src/document/document-model';
 import { Designer } from '../../../src/designer/designer';
 import DragResizeEngine from '../../../src/builtin-simulator/bem-tools/drag-resize-engine';
 import formSchema from '../../fixtures/schema/form';
-import divMetadata from '../../fixtures/component-metadata/div';
-import formMetadata from '../../fixtures/component-metadata/form';
-import otherMeta from '../../fixtures/component-metadata/other';
-import pageMetadata from '../../fixtures/component-metadata/page';
 import { fireEvent, createEvent } from '@testing-library/react';
-import { create } from 'lodash';
+import { shellModelFactory } from '../../../../engine/src/modules/shell-model-factory';
 
 describe('DragResizeEngine 测试', () => {
   let editor: Editor;
@@ -26,7 +21,7 @@ describe('DragResizeEngine 测试', () => {
   });
 
   beforeEach(() => {
-    designer = new Designer({ editor });
+    designer = new Designer({ editor, shellModelFactory });
     project = designer.project;
     doc = project.createDocument(formSchema);
     doc.open();
@@ -51,7 +46,7 @@ describe('DragResizeEngine 测试', () => {
     const offResize = resizeEngine.onResize(resizeMockFn);
     const offResizeEnd = resizeEngine.onResizeEnd(resizeEndMockFn);
     const boostedNode = doc.getNode('node_k1ow3cbn');
-    const mockedBoostFn = jest
+    const mockBoostFn = jest
       .fn((e) => {
         return boostedNode;
       });
@@ -60,7 +55,7 @@ describe('DragResizeEngine 测试', () => {
     const noop = resizeEngine.from();
     noop();
 
-    const offFrom = resizeEngine.from(document, 'e', mockedBoostFn);
+    const offFrom = resizeEngine.from(document, 'e', mockBoostFn);
 
     const mouseDownEvt = createEvent.mouseDown(document, { clientX: 100, clientY: 100 });
     fireEvent(document, mouseDownEvt);
@@ -113,18 +108,18 @@ describe('DragResizeEngine 测试', () => {
   });
 
   it('has sensor', () => {
-    const mockedDoc = document.createElement('iframe').contentWindow?.document;
+    const mockDoc = document.createElement('iframe').contentWindow?.document;
     project.mountSimulator({
       sensorAvailable: true,
       contentDocument: document,
     });
 
-    const mockedBoostFn = jest
+    const mockBoostFn = jest
       .fn((e) => {
         return doc.getNode('node_k1ow3cbn');
       });
 
-    const offFrom = resizeEngine.from(document, 'e', mockedBoostFn);
+    const offFrom = resizeEngine.from(document, 'e', mockBoostFn);
 
     // TODO: 想办法 mock 一个 iframe.currentDocument
     fireEvent.mouseDown(document, { clientX: 100, clientY: 100 });

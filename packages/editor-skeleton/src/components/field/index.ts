@@ -1,11 +1,11 @@
 import { ReactNode, createElement } from 'react';
-import { TitleContent } from '@alilc/lowcode-types';
+import { IPublicTypeTitleContent } from '@alilc/lowcode-types';
 import './index.less';
 import { Field, PopupField, EntryField, PlainField } from './fields';
 
 export interface FieldProps {
   className?: string;
-  title?: TitleContent | null;
+  title?: IPublicTypeTitleContent | null;
   display?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry';
   collapsed?: boolean;
   valueState?: number;
@@ -14,7 +14,7 @@ export interface FieldProps {
   [extra: string]: any;
 }
 
-export function createField(props: FieldProps, children: ReactNode, type?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry') {
+export function createField(props: FieldProps, children: ReactNode, type?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry'): ReactNode {
   if (type === 'popup') {
     return createElement(PopupField, props, children);
   }

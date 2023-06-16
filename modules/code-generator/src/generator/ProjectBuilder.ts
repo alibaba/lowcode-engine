@@ -1,4 +1,4 @@
-import { ResultDir, ResultFile, ProjectSchema } from '@alilc/lowcode-types';
+import { ResultDir, ResultFile, IPublicTypeProjectSchema } from '@alilc/lowcode-types';
 
 import {
   IModuleBuilder,
@@ -16,6 +16,7 @@ import { createResultDir, addDirectory, addFile } from '../utils/resultHelper';
 import { createModuleBuilder } from './ModuleBuilder';
 import { ProjectPreProcessor, ProjectPostProcessor, IContextData } from '../types/core';
 import { CodeGeneratorError } from '../types/error';
+import { isBuiltinSlotName } from '../const';
 
 interface IModuleInfo {
   moduleName?: string;
@@ -24,22 +25,36 @@ interface IModuleInfo {
 }
 
 export interface ProjectBuilderInitOptions {
+
   /** 项目模板 */
   template: IProjectTemplate;
+
   /** 项目插件 */
   plugins: IProjectPlugins;
+
   /** 模块后置处理器 */
   postProcessors: PostProcessor[];
+
   /** Schema 解析器 */
   schemaParser?: ISchemaParser;
+
   /** 项目级别的前置处理器 */
   projectPreProcessors?: ProjectPreProcessor[];
+
   /** 项目级别的后置处理器 */
   projectPostProcessors?: ProjectPostProcessor[];
+
   /** 是否处于严格模式 */
   inStrictMode?: boolean;
+
   /** 一些额外的上下文数据 */
   extraContextData?: Record<string, unknown>;
+
+  /**
+   * Hook which is used to customize original options, we can reorder/add/remove plugins/processors
+   * of the existing solution.
+   */
+  customizeBuilderOptions?(originalOptions: ProjectBuilderInitOptions): ProjectBuilderInitOptions;
 }
 
 export class ProjectBuilder implements IProjectBuilder {
@@ -62,21 +77,26 @@ export class ProjectBuilder implements IProjectBuilder {
   private projectPostProcessors: ProjectPostProcessor[];
 
   /** 是否处于严格模式 */
-  public readonly inStrictMode: boolean;
+  readonly inStrictMode: boolean;
 
   /** 一些额外的上下文数据 */
-  public readonly extraContextData: IContextData;
+  readonly extraContextData: IContextData;
 
-  constructor({
-    template,
-    plugins,
-    postProcessors,
-    schemaParser = new SchemaParser(),
-    projectPreProcessors = [],
-    projectPostProcessors = [],
-    inStrictMode = false,
-    extraContextData = {},
-  }: ProjectBuilderInitOptions) {
+  constructor(builderOptions: ProjectBuilderInitOptions) {
+    let customBuilderOptions = builderOptions;
+    if (typeof builderOptions.customizeBuilderOptions === 'function') {
+      customBuilderOptions = builderOptions.customizeBuilderOptions(builderOptions);
+    }
+    const {
+      template,
+      plugins,
+      postProcessors,
+      schemaParser = new SchemaParser(),
+      projectPreProcessors = [],
+      projectPostProcessors = [],
+      inStrictMode = false,
+      extraContextData = {},
+    } = customBuilderOptions;
     this.template = template;
     this.plugins = plugins;
     this.postProcessors = postProcessors;
@@ -87,27 +107,25 @@ export class ProjectBuilder implements IProjectBuilder {
     this.extraContextData = extraContextData;
   }
 
-  async generateProject(originalSchema: ProjectSchema | string): Promise<ResultDir> {
+  async generateProject(originalSchema: IPublicTypeProjectSchema | string): Promise<ResultDir> {
     // Init
     const { schemaParser } = this;
-    const builders = this.createModuleBuilders();
 
     const projectRoot = await this.template.generateTemplate();
 
-    let schema: ProjectSchema =
+    let schema: IPublicTypeProjectSchema =
       typeof originalSchema === 'string' ? JSON.parse(originalSchema) : originalSchema;
 
-    // Validate
-    if (!schemaParser.validate(schema)) {
-      throw new CodeGeneratorError('Schema is invalid');
-    }
-
     // Parse / Format
-
     // Preprocess
     for (const preProcessor of this.projectPreProcessors) {
       // eslint-disable-next-line no-await-in-loop
       schema = await preProcessor(schema);
+    }
+
+    // Validate
+    if (!schemaParser.validate(schema)) {
+      throw new CodeGeneratorError('Schema is invalid');
     }
 
     // Collect Deps
@@ -115,6 +133,12 @@ export class ProjectBuilder implements IProjectBuilder {
     const parseResult: IParseResult = schemaParser.parse(schema);
     let buildResult: IModuleInfo[] = [];
 
+    const builders = this.createModuleBuilders({
+      extraContextData: {
+        projectRemark: parseResult?.project?.projectRemark,
+        template: this.template,
+      },
+    });
     // Generator Code module
     // components
     // pages
@@ -241,14 +265,25 @@ export class ProjectBuilder implements IProjectBuilder {
       });
     }
 
-    // TODO: 更多 slots 的处理？？是不是可以考虑把 template 中所有的 slots 都处理下？
+    // demo
+    if (parseResult.project && builders.demo) {
+      const { files } = await builders.demo.generateModule(parseResult.project);
+      buildResult.push({
+        path: this.template.slots.demo.path,
+        files,
+      });
+    }
+
+    // handle extra slots
+    await this.generateExtraSlots(builders, parseResult, buildResult);
 
     // Post Process
-
+    const isSingleComponent = parseResult?.project?.projectRemark?.isSingleComponent;
     // Combine Modules
     buildResult.forEach((moduleInfo) => {
       let targetDir = getDirFromRoot(projectRoot, moduleInfo.path);
-      if (moduleInfo.moduleName) {
+      // if project only contain single component, skip creation of directory.
+      if (moduleInfo.moduleName && !isSingleComponent) {
         const dir = createResultDir(moduleInfo.moduleName);
         addDirectory(targetDir, dir);
         targetDir = dir;
@@ -260,13 +295,17 @@ export class ProjectBuilder implements IProjectBuilder {
     let finalResult = projectRoot;
     for (const projectPostProcessor of this.projectPostProcessors) {
       // eslint-disable-next-line no-await-in-loop
-      finalResult = await projectPostProcessor(finalResult, schema, originalSchema);
+      finalResult = await projectPostProcessor(finalResult, schema, originalSchema, {
+        template: this.template,
+        parseResult,
+      });
     }
 
     return finalResult;
   }
 
-  private createModuleBuilders(): Record<string, IModuleBuilder> {
+  private createModuleBuilders(extraContextData: Record<string, unknown> = {}):
+    Record<string, IModuleBuilder> {
     const builders: Record<string, IModuleBuilder> = {};
 
     Object.keys(this.plugins).forEach((pluginName) => {
@@ -279,10 +318,12 @@ export class ProjectBuilder implements IProjectBuilder {
           plugins: this.plugins[pluginName],
           postProcessors: this.postProcessors,
           contextData: {
+            // template: this.template,
             inStrictMode: this.inStrictMode,
             tolerateEvalErrors: true,
             evalErrorsHandler: '',
             ...this.extraContextData,
+            ...extraContextData,
           },
           ...options,
         });
@@ -290,6 +331,22 @@ export class ProjectBuilder implements IProjectBuilder {
     });
 
     return builders;
+  }
+
+  private async generateExtraSlots(
+    builders: Record<string, IModuleBuilder>,
+    parseResult: IParseResult,
+    buildResult: IModuleInfo[],
+  ) {
+    for (const slotName in this.template.slots) {
+      if (!isBuiltinSlotName(slotName)) {
+        const { files } = await builders[slotName].generateModule(parseResult);
+        buildResult.push({
+          path: this.template.slots[slotName].path,
+          files,
+        });
+      }
+    }
   }
 }
 

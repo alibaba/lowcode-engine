@@ -1,35 +1,165 @@
 import { ReactElement } from 'react';
-import { EventEmitter } from 'events';
-import { obx, computed, autorun, makeObservable, runInAction, wrapWithEventSwitch, action } from '@alilc/lowcode-editor-core';
+import { obx, computed, autorun, makeObservable, runInAction, wrapWithEventSwitch, action, createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
 import {
-  isDOMText,
-  isJSExpression,
-  NodeSchema,
-  PropsMap,
-  PropsList,
-  NodeData,
-  I18nData,
-  SlotSchema,
-  PageSchema,
-  ComponentSchema,
-  NodeStatus,
-  CompositeValue,
+  IPublicTypeNodeSchema,
+  IPublicTypePropsMap,
+  IPublicTypePropsList,
+  IPublicTypeNodeData,
+  IPublicTypeI18nData,
+  IPublicTypeSlotSchema,
+  IPublicTypePageSchema,
+  IPublicTypeComponentSchema,
+  IPublicTypeCompositeValue,
   GlobalEvent,
-  ComponentAction,
+  IPublicTypeComponentAction,
+  IPublicModelNode,
+  IPublicModelExclusiveGroup,
+  IPublicEnumTransformStage,
+  IPublicTypeDisposable,
+  IBaseModelNode,
 } from '@alilc/lowcode-types';
-import { compatStage } from '@alilc/lowcode-utils';
-import { SettingTopEntry } from '@alilc/lowcode-designer';
-import { Node as ShellNode } from '@alilc/lowcode-shell';
-import { Props, getConvertedExtraKey } from './props/props';
-import { DocumentModel } from '../document-model';
-import { NodeChildren } from './node-children';
-import { Prop } from './props/prop';
-import { ComponentMeta } from '../../component-meta';
+import { compatStage, isDOMText, isJSExpression, isNode, isNodeSchema } from '@alilc/lowcode-utils';
+import { ISettingTopEntry } from '@alilc/lowcode-designer';
+import { Props, getConvertedExtraKey, IProps } from './props/props';
+import type { IDocumentModel } from '../document-model';
+import { NodeChildren, INodeChildren } from './node-children';
+import { IProp, Prop } from './props/prop';
+import type { IComponentMeta } from '../../component-meta';
 import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
-import { TransformStage } from './transform-stage';
+import type { IExclusiveGroup } from './exclusive-group';
 import { includeSlot, removeSlot } from '../../utils/slot';
 import { foreachReverse } from '../../utils/tree';
-import { NodeRemoveOptions } from '../../types';
+import { NodeRemoveOptions, EDITOR_EVENT } from '../../types';
+
+export interface NodeStatus {
+  locking: boolean;
+  pseudo: boolean;
+  inPlaceEditing: boolean;
+}
+
+export interface IBaseNode<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> extends Omit<IBaseModelNode<
+  IDocumentModel,
+  IBaseNode,
+  INodeChildren,
+  IComponentMeta,
+  ISettingTopEntry,
+  IProps,
+  IProp,
+  IExclusiveGroup
+>,
+  'isRoot' |
+  'isPage' |
+  'isComponent' |
+  'isModal' |
+  'isSlot' |
+  'isParental' |
+  'isLeaf' |
+  'settingEntry' |
+  // 在内部的 node 模型中不存在
+  'getExtraPropValue' |
+  'setExtraPropValue' |
+  'exportSchema' |
+  'visible' |
+  'importSchema' |
+  // 内外实现有差异
+  'isContainer' |
+  'isEmpty'
+> {
+  isNode: boolean;
+
+  get componentMeta(): IComponentMeta;
+
+  get settingEntry(): ISettingTopEntry;
+
+  get isPurged(): boolean;
+
+  get index(): number | undefined;
+
+  get isPurging(): boolean;
+
+  getId(): string;
+
+  getParent(): INode | null;
+
+  /**
+   * 内部方法，请勿使用
+   * @param useMutator 是否触发联动逻辑
+   */
+  internalSetParent(parent: INode | null, useMutator?: boolean): void;
+
+  setConditionGroup(grp: IPublicModelExclusiveGroup | string | null): void;
+
+  internalToShellNode(): IPublicModelNode | null;
+
+  internalPurgeStart(): void;
+
+  unlinkSlot(slotNode: INode): void;
+
+  /**
+   * 导出 schema
+   */
+  export<T = Schema>(stage: IPublicEnumTransformStage, options?: any): T;
+
+  emitPropChange(val: IPublicTypePropChangeOptions): void;
+
+  import(data: Schema, checkId?: boolean): void;
+
+  internalSetSlotFor(slotFor: Prop | null | undefined): void;
+
+  addSlot(slotNode: INode): void;
+
+  onVisibleChange(func: (flag: boolean) => any): () => void;
+
+  getSuitablePlace(node: INode, ref: any): any;
+
+  onChildrenChange(fn: (param?: { type: string; node: INode }) => void): IPublicTypeDisposable | undefined;
+
+  onPropChange(func: (info: IPublicTypePropChangeOptions) => void): IPublicTypeDisposable;
+
+  isModal(): boolean;
+
+  isRoot(): boolean;
+
+  isPage(): boolean;
+
+  isComponent(): boolean;
+
+  isSlot(): boolean;
+
+  isParental(): boolean;
+
+  isLeaf(): boolean;
+
+  isContainer(): boolean;
+
+  isEmpty(): boolean;
+
+  remove(
+    useMutator?: boolean,
+    purge?: boolean,
+    options?: NodeRemoveOptions,
+  ): void;
+
+  didDropIn(dragment: INode): void;
+
+  didDropOut(dragment: INode): void;
+
+  purge(): void;
+
+  removeSlot(slotNode: INode): boolean;
+
+  setVisible(flag: boolean): void;
+
+  getVisible(): boolean;
+
+  getChildren(): INodeChildren | null;
+
+  clearPropValue(path: string | number): void;
+
+  setProps(props?: IPublicTypePropsMap | IPublicTypePropsList | Props | null): void;
+
+  mergeProps(props: IPublicTypePropsMap): void;
+}
 
 /**
  * 基础节点
@@ -79,8 +209,8 @@ import { NodeRemoveOptions } from '../../types';
  *  isLocked
  *  hidden
  */
-export class Node<Schema extends NodeSchema = NodeSchema> {
-  private emitter: EventEmitter;
+export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> implements IBaseNode {
+  private emitter: IEventBus;
 
   /**
    * 是节点实例
@@ -94,7 +224,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   /**
    * 节点组件类型
-   * 特殊节点:
+   * 特殊节点：
    *  * Page 页面
    *  * Block 区块
    *  * Component 组件/元件
@@ -107,28 +237,28 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 属性抽象
    */
-  props: Props;
+  props: IProps;
 
-  protected _children?: NodeChildren;
+  protected _children?: INodeChildren;
 
   /**
    * @deprecated
    */
   private _addons: { [key: string]: { exportData: () => any; isProp: boolean } } = {};
 
-  @obx.ref private _parent: ParentalNode | null = null;
+  @obx.ref private _parent: INode | null = null;
 
   /**
    * 父级节点
    */
-  get parent(): ParentalNode | null {
+  get parent(): INode | null {
     return this._parent;
   }
 
   /**
    * 当前节点子集
    */
-  get children(): NodeChildren | null {
+  get children(): INodeChildren | null {
     return this._children || null;
   }
 
@@ -142,7 +272,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return 0;
   }
 
-  @computed get title(): string | I18nData | ReactElement {
+  @computed get title(): string | IPublicTypeI18nData | ReactElement {
     let t = this.getExtraProp('title');
     // TODO: 暂时走不到这个分支
     // if (!t && this.componentMeta.descriptor) {
@@ -163,7 +293,79 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   isInited = false;
 
-  constructor(readonly document: DocumentModel, nodeSchema: Schema, options: any = {}) {
+  _settingEntry: ISettingTopEntry;
+
+  get settingEntry(): ISettingTopEntry {
+    if (this._settingEntry) return this._settingEntry;
+    this._settingEntry = this.document.designer.createSettingEntry([this]);
+    return this._settingEntry;
+  }
+
+  private autoruns?: Array<() => void>;
+
+  private _isRGLContainer = false;
+
+  set isRGLContainer(status: boolean) {
+    this._isRGLContainer = status;
+  }
+
+  get isRGLContainer(): boolean {
+    return !!this._isRGLContainer;
+  }
+
+  set isRGLContainerNode(status: boolean) {
+    this._isRGLContainer = status;
+  }
+
+  get isRGLContainerNode(): boolean {
+    return !!this._isRGLContainer;
+  }
+
+  get isEmptyNode() {
+    return this.isEmpty();
+  }
+
+  private _slotFor?: IProp | null | undefined = null;
+
+  @obx.shallow _slots: INode[] = [];
+
+  get slots(): INode[] {
+    return this._slots;
+  }
+
+  /* istanbul ignore next */
+  @obx.ref private _conditionGroup: IExclusiveGroup | null = null;
+
+  /* istanbul ignore next */
+  get conditionGroup(): IExclusiveGroup | null {
+    return this._conditionGroup;
+  }
+
+  private purged = false;
+
+  /**
+   * 是否已销毁
+   */
+  get isPurged() {
+    return this.purged;
+  }
+
+  private purging: boolean = false;
+
+  /**
+   * 是否正在销毁
+   */
+  get isPurging() {
+    return this.purging;
+  }
+
+  @obx.shallow status: NodeStatus = {
+    inPlaceEditing: false,
+    locking: false,
+    pseudo: false,
+  };
+
+  constructor(readonly document: IDocumentModel, nodeSchema: Schema) {
     makeObservable(this);
     const { componentName, id, children, props, ...extras } = nodeSchema;
     this.id = document.nextId(id);
@@ -174,7 +376,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       });
     } else {
       this.props = new Props(this, props, extras);
-      this._children = new NodeChildren(this as ParentalNode, this.initialChildren(children));
+      this._children = new NodeChildren(this as INode, this.initialChildren(children));
       this._children.internalInitParent();
       this.props.merge(
         this.upgradeProps(this.initProps(props || {})),
@@ -186,15 +388,17 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this.initBuiltinProps();
 
     this.isInited = true;
-    this.emitter = new EventEmitter();
-  }
-
-  _settingEntry: SettingTopEntry;
-
-  get settingEntry(): SettingTopEntry {
-    if (this._settingEntry) return this._settingEntry;
-    this._settingEntry = this.document.designer.createSettingEntry([this]);
-    return this._settingEntry;
+    this.emitter = createModuleEventBus('Node');
+    const editor = this.document.designer.editor;
+    this.onVisibleChange((visible: boolean) => {
+      editor?.eventBus.emit(EDITOR_EVENT.NODE_VISIBLE_CHANGE, this, visible);
+    });
+    this.onChildrenChange((info?: { type: string; node: INode }) => {
+      editor?.eventBus.emit(EDITOR_EVENT.NODE_CHILDREN_CHANGE, {
+        type: info?.type,
+        node: this,
+      });
+    });
   }
 
   /**
@@ -212,87 +416,112 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   @action
   private initProps(props: any): any {
-    return this.document.designer.transformProps(props, this, TransformStage.Init);
+    return this.document.designer.transformProps(props, this, IPublicEnumTransformStage.Init);
   }
 
   @action
   private upgradeProps(props: any): any {
-    return this.document.designer.transformProps(props, this, TransformStage.Upgrade);
+    return this.document.designer.transformProps(props, this, IPublicEnumTransformStage.Upgrade);
   }
 
-  private autoruns?: Array<() => void>;
-
   private setupAutoruns() {
-    const autoruns = this.componentMeta.getMetadata().configure.advanced?.autoruns;
+    const { autoruns } = this.componentMeta.advanced;
     if (!autoruns || autoruns.length < 1) {
       return;
     }
     this.autoruns = autoruns.map((item) => {
       return autorun(() => {
-        item.autorun(this.props.get(item.name, true) as any);
+        item.autorun(this.props.getNode().settingEntry.get(item.name)?.internalToShellField());
       });
     });
   }
 
-  private initialChildren(children: any): NodeData[] {
+  private initialChildren(children: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined): IPublicTypeNodeData[] {
     // FIXME! this is dirty code
     if (children == null) {
-      const initialChildren = this.componentMeta.getMetadata().configure.advanced?.initialChildren;
+      const { initialChildren } = this.componentMeta.advanced;
       if (initialChildren) {
         if (typeof initialChildren === 'function') {
-          return initialChildren(this as any) || [];
+          return initialChildren(this.internalToShellNode()!) || [];
         }
         return initialChildren;
       }
     }
-    return children || [];
-  }
-
-  private _isRGLContainer = false;
-
-  set isRGLContainer(status: boolean) {
-    this._isRGLContainer = status;
-  }
-
-  get isRGLContainer(): boolean {
-    return !!this._isRGLContainer;
+    if (Array.isArray(children)) {
+      return children;
+    } else if (children) {
+      return [children];
+    } else {
+      return [];
+    }
   }
 
   isContainer(): boolean {
-    return this.isParental() && this.componentMeta.isContainer;
+    return this.isContainerNode;
+  }
+
+  get isContainerNode(): boolean {
+    return this.isParentalNode && this.componentMeta.isContainer;
   }
 
   isModal(): boolean {
+    return this.isModalNode;
+  }
+
+  get isModalNode(): boolean {
     return this.componentMeta.isModal;
   }
 
   isRoot(): boolean {
+    return this.isRootNode;
+  }
+
+  get isRootNode(): boolean {
     return this.document.rootNode === (this as any);
   }
 
   isPage(): boolean {
-    return this.isRoot() && this.componentName === 'Page';
+    return this.isPageNode;
+  }
+
+  get isPageNode(): boolean {
+    return this.isRootNode && this.componentName === 'Page';
   }
 
   isComponent(): boolean {
-    return this.isRoot() && this.componentName === 'Component';
+    return this.isComponentNode;
+  }
+
+  get isComponentNode(): boolean {
+    return this.isRootNode && this.componentName === 'Component';
   }
 
   isSlot(): boolean {
+    return this.isSlotNode;
+  }
+
+  get isSlotNode(): boolean {
     return this._slotFor != null && this.componentName === 'Slot';
   }
 
   /**
    * 是否一个父亲类节点
    */
-  isParental(): this is ParentalNode {
-    return !this.isLeaf();
+  isParental(): boolean {
+    return this.isParentalNode;
+  }
+
+  get isParentalNode(): boolean {
+    return !this.isLeafNode;
   }
 
   /**
    * 终端节点，内容一般为 文字 或者 表达式
    */
-  isLeaf(): this is LeafNode {
+  isLeaf(): boolean {
+    return this.isLeafNode;
+  }
+  get isLeafNode(): boolean {
     return this.componentName === 'Leaf';
   }
 
@@ -301,8 +530,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this.document.addWillPurge(this);
   }
 
-  private didDropIn(dragment: Node) {
-    const callbacks = this.componentMeta.getMetadata().configure.advanced?.callbacks;
+  didDropIn(dragment: INode) {
+    const { callbacks } = this.componentMeta.advanced;
     if (callbacks?.onNodeAdd) {
       const cbThis = this.internalToShellNode();
       callbacks?.onNodeAdd.call(cbThis, dragment.internalToShellNode(), cbThis);
@@ -312,8 +541,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
   }
 
-  private didDropOut(dragment: Node) {
-    const callbacks = this.componentMeta.getMetadata().configure.advanced?.callbacks;
+  didDropOut(dragment: INode) {
+    const { callbacks } = this.componentMeta.advanced;
     if (callbacks?.onNodeRemove) {
       const cbThis = this.internalToShellNode();
       callbacks?.onNodeRemove.call(cbThis, dragment.internalToShellNode(), cbThis);
@@ -327,7 +556,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * 内部方法，请勿使用
    * @param useMutator 是否触发联动逻辑
    */
-  internalSetParent(parent: ParentalNode | null, useMutator = false) {
+  internalSetParent(parent: INode | null, useMutator = false) {
     if (this._parent === parent) {
       return;
     }
@@ -337,7 +566,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       if (this.isSlot()) {
         this._parent.unlinkSlot(this);
       } else {
-        this._parent.children.unlinkChild(this);
+        this._parent.children?.unlinkChild(this);
       }
     }
     if (useMutator) {
@@ -362,20 +591,18 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
   }
 
-  private _slotFor?: Prop | null = null;
-
   internalSetSlotFor(slotFor: Prop | null | undefined) {
     this._slotFor = slotFor;
   }
 
-  internalToShellNode(): ShellNode | null {
-    return ShellNode.create(this);
+  internalToShellNode(): IPublicModelNode | null {
+    return this.document.designer.shellModelFactory.createNode(this);
   }
 
   /**
    * 关联属性
    */
-  get slotFor() {
+  get slotFor(): IProp | null | undefined {
     return this._slotFor;
   }
 
@@ -389,16 +616,16 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   ) {
     if (this.parent) {
       if (!options.suppressRemoveEvent) {
-        this.document.designer.editor?.emit('node.remove.topLevel', {
+        this.document.designer.editor?.eventBus.emit('node.remove.topLevel', {
           node: this,
           index: this.parent?.children?.indexOf(this),
         });
       }
       if (this.isSlot()) {
-        this.parent.removeSlot(this, purge);
-        this.parent.children.delete(this, purge, useMutator, { suppressRemoveEvent: true });
+        this.parent.removeSlot(this);
+        this.parent.children?.internalDelete(this, purge, useMutator, { suppressRemoveEvent: true });
       } else {
-        this.parent.children.delete(this, purge, useMutator, { suppressRemoveEvent: true });
+        this.parent.children?.internalDelete(this, purge, useMutator, { suppressRemoveEvent: true });
       }
     }
   }
@@ -438,37 +665,24 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 节点组件描述
    */
-  @computed get componentMeta(): ComponentMeta {
+  @computed get componentMeta(): IComponentMeta {
     return this.document.getComponentMeta(this.componentName);
   }
 
-  @computed get propsData(): PropsMap | PropsList | null {
+  @computed get propsData(): IPublicTypePropsMap | IPublicTypePropsList | null {
     if (!this.isParental() || this.componentName === 'Fragment') {
       return null;
     }
-    return this.props.export(TransformStage.Serilize).props || null;
+    return this.props.export(IPublicEnumTransformStage.Serilize).props || null;
   }
-
-  @obx.shallow _slots: Node[] = [];
 
   hasSlots() {
     return this._slots.length > 0;
   }
 
-  get slots() {
-    return this._slots;
-  }
-
   /* istanbul ignore next */
-  @obx.ref private _conditionGroup: ExclusiveGroup | null = null;
-
-  /* istanbul ignore next */
-  get conditionGroup(): ExclusiveGroup | null {
-    return this._conditionGroup;
-  }
-
-  /* istanbul ignore next */
-  setConditionGroup(grp: ExclusiveGroup | string | null) {
+  setConditionGroup(grp: IPublicModelExclusiveGroup | string | null) {
+    let _grp: IExclusiveGroup | null = null;
     if (!grp) {
       this.getExtraProp('conditionGroup', false)?.remove();
       if (this._conditionGroup) {
@@ -479,20 +693,20 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
     if (!isExclusiveGroup(grp)) {
       if (this.prevSibling?.conditionGroup?.name === grp) {
-        grp = this.prevSibling.conditionGroup;
+        _grp = this.prevSibling.conditionGroup;
       } else if (this.nextSibling?.conditionGroup?.name === grp) {
-        grp = this.nextSibling.conditionGroup;
-      } else {
-        grp = new ExclusiveGroup(grp);
+        _grp = this.nextSibling.conditionGroup;
+      } else if (typeof grp === 'string') {
+        _grp = new ExclusiveGroup(grp);
       }
     }
-    if (this._conditionGroup !== grp) {
-      this.getExtraProp('conditionGroup', true)?.setValue(grp.name);
+    if (_grp && this._conditionGroup !== _grp) {
+      this.getExtraProp('conditionGroup', true)?.setValue(_grp.name);
       if (this._conditionGroup) {
         this._conditionGroup.remove(this);
       }
-      this._conditionGroup = grp;
-      grp.add(this);
+      this._conditionGroup = _grp;
+      _grp?.add(this);
     }
   }
 
@@ -545,15 +759,19 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 替换子节点
    *
-   * @param {Node} node
+   * @param {INode} node
    * @param {object} data
    */
-  replaceChild(node: Node, data: any): Node {
+  replaceChild(node: INode, data: any): INode | null {
     if (this.children?.has(node)) {
       const selected = this.document.selection.has(node.id);
 
       delete data.id;
       const newNode = this.document.createNode(data);
+
+      if (!isNode(newNode)) {
+        return null;
+      }
 
       this.insertBefore(newNode, node, false);
       node.remove(false);
@@ -583,15 +801,15 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     };
   }
 
-  getProp(path: string, createIfNone = true): Prop | null {
+  getProp(path: string, createIfNone = true): IProp | null {
     return this.props.query(path, createIfNone) || null;
   }
 
-  getExtraProp(key: string, createIfNone = true): Prop | null {
+  getExtraProp(key: string, createIfNone = true): IProp | null {
     return this.props.get(getConvertedExtraKey(key), createIfNone) || null;
   }
 
-  setExtraProp(key: string, value: CompositeValue) {
+  setExtraProp(key: string, value: IPublicTypeCompositeValue) {
     this.getProp(getConvertedExtraKey(key), true)?.setValue(value);
   }
 
@@ -619,14 +837,14 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 设置多个属性值，和原有值合并
    */
-  mergeProps(props: PropsMap) {
+  mergeProps(props: IPublicTypePropsMap) {
     this.props.merge(props);
   }
 
   /**
    * 设置多个属性值，替换原有值
    */
-  setProps(props?: PropsMap | PropsList | Props | null) {
+  setProps(props?: IPublicTypePropsMap | IPublicTypePropsList | Props | null) {
     if (props instanceof Props) {
       this.props = props;
       return;
@@ -637,46 +855,52 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 获取节点在父容器中的索引
    */
-  @computed get index(): number {
+  @computed get index(): number | undefined {
     if (!this.parent) {
       return -1;
     }
-    return this.parent.children.indexOf(this);
+    return this.parent.children?.indexOf(this);
   }
 
   /**
    * 获取下一个兄弟节点
    */
-  get nextSibling(): Node | null {
+  get nextSibling(): INode | null | undefined {
     if (!this.parent) {
       return null;
     }
     const { index } = this;
+    if (typeof index !== 'number') {
+      return null;
+    }
     if (index < 0) {
       return null;
     }
-    return this.parent.children.get(index + 1);
+    return this.parent.children?.get(index + 1);
   }
 
   /**
    * 获取上一个兄弟节点
    */
-  get prevSibling(): Node | null {
+  get prevSibling(): INode | null | undefined {
     if (!this.parent) {
       return null;
     }
     const { index } = this;
+    if (typeof index !== 'number') {
+      return null;
+    }
     if (index < 1) {
       return null;
     }
-    return this.parent.children.get(index - 1);
+    return this.parent.children?.get(index - 1);
   }
 
   /**
    * 获取符合搭建协议-节点 schema 结构
    */
   get schema(): Schema {
-    return this.export(TransformStage.Save);
+    return this.export(IPublicEnumTransformStage.Save);
   }
 
   set schema(data: Schema) {
@@ -688,15 +912,15 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (this.isSlot()) {
       foreachReverse(
         this.children!,
-        (subNode: Node) => {
+        (subNode: INode) => {
           subNode.remove(true, true);
         },
-        (iterable, idx) => (iterable as NodeChildren).get(idx),
+        (iterable, idx) => (iterable as INodeChildren).get(idx),
       );
     }
     if (this.isParental()) {
       this.props.import(props, extras);
-      (this._children as NodeChildren).import(children, checkId);
+      this._children?.import(children, checkId);
     } else {
       this.props
         .get('children', true)!
@@ -711,16 +935,16 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 导出 schema
    */
-  export(stage: TransformStage = TransformStage.Save, options: any = {}): Schema {
+  export<T = IPublicTypeNodeSchema>(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Save, options: any = {}): T {
     stage = compatStage(stage);
     const baseSchema: any = {
       componentName: this.componentName,
     };
 
-    if (stage !== TransformStage.Clone) {
+    if (stage !== IPublicEnumTransformStage.Clone) {
       baseSchema.id = this.id;
     }
-    if (stage === TransformStage.Render) {
+    if (stage === IPublicEnumTransformStage.Render) {
       baseSchema.docId = this.document.id;
     }
 
@@ -753,7 +977,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       ...this.document.designer.transformProps(_extras_, this, stage),
     };
 
-    if (this.isParental() && this.children.size > 0 && !options.bypassChildren) {
+    if (this.isParental() && this.children && this.children.size > 0 && !options.bypassChildren) {
       schema.children = this.children.export(stage);
     }
 
@@ -763,14 +987,14 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 判断是否包含特定节点
    */
-  contains(node: Node): boolean {
+  contains(node: INode): boolean {
     return contains(this, node);
   }
 
   /**
    * 获取特定深度的父亲节点
    */
-  getZLevelTop(zLevel: number): Node | null {
+  getZLevelTop(zLevel: number): INode | null {
     return getZLevelTop(this, zLevel);
   }
 
@@ -782,11 +1006,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    *  2  thisNode before or after otherNode
    *  0  thisNode same as otherNode
    */
-  comparePosition(otherNode: Node): PositionNO {
+  comparePosition(otherNode: INode): PositionNO {
     return comparePosition(this, otherNode);
   }
 
-  unlinkSlot(slotNode: Node) {
+  unlinkSlot(slotNode: INode) {
     const i = this._slots.indexOf(slotNode);
     if (i < 0) {
       return false;
@@ -797,7 +1021,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 删除一个Slot节点
    */
-  removeSlot(slotNode: Node, purge = false): boolean {
+  removeSlot(slotNode: INode): boolean {
     // if (purge) {
     //   // should set parent null
     //   slotNode?.internalSetParent(null, false);
@@ -813,13 +1037,13 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return false;
   }
 
-  addSlot(slotNode: Node) {
+  addSlot(slotNode: INode) {
     const slotName = slotNode?.getExtraProp('name')?.getAsString();
     // 一个组件下的所有 slot，相同 slotName 的 slot 应该是唯一的
     if (includeSlot(this, slotName)) {
       removeSlot(this, slotName);
     }
-    slotNode.internalSetParent(this as ParentalNode, true);
+    slotNode.internalSetParent(this as INode, true);
     this._slots.push(slotNode);
   }
 
@@ -838,17 +1062,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * 删除一个节点
    * @param node
    */
-  removeChild(node: Node) {
+  removeChild(node: INode) {
     this.children?.delete(node);
-  }
-
-  private purged = false;
-
-  /**
-   * 是否已销毁
-   */
-  get isPurged() {
-    return this.purged;
   }
 
   /**
@@ -865,16 +1080,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     // this.document.destroyNode(this);
   }
 
-  private purging: boolean = false;
   internalPurgeStart() {
     this.purging = true;
-  }
-
-  /**
-   * 是否正在销毁
-   */
-  get isPurging() {
-    return this.purging;
   }
 
   /**
@@ -882,13 +1089,13 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    */
   canPerformAction(actionName: string): boolean {
     const availableActions =
-      this.componentMeta?.availableActions?.filter((action: ComponentAction) => {
+      this.componentMeta?.availableActions?.filter((action: IPublicTypeComponentAction) => {
         const { condition } = action;
         return typeof condition === 'function' ?
           condition(this) !== false :
           condition !== false;
       })
-      .map((action: ComponentAction) => action.name) || [];
+        .map((action: IPublicTypeComponentAction) => action.name) || [];
 
     return availableActions.indexOf(actionName) >= 0;
   }
@@ -906,18 +1113,18 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.componentName;
   }
 
-  insert(node: Node, ref?: Node, useMutator = true) {
+  insert(node: INode, ref?: INode, useMutator = true) {
     this.insertAfter(node, ref, useMutator);
   }
 
-  insertBefore(node: Node, ref?: Node, useMutator = true) {
+  insertBefore(node: INode, ref?: INode, useMutator = true) {
     const nodeInstance = ensureNode(node, this.document);
-    this.children?.insert(nodeInstance, ref ? ref.index : null, useMutator);
+    this.children?.internalInsert(nodeInstance, ref ? ref.index : null, useMutator);
   }
 
-  insertAfter(node: any, ref?: Node, useMutator = true) {
+  insertAfter(node: any, ref?: INode, useMutator = true) {
     const nodeInstance = ensureNode(node, this.document);
-    this.children?.insert(nodeInstance, ref ? ref.index + 1 : null, useMutator);
+    this.children?.internalInsert(nodeInstance, ref ? (ref.index || 0) + 1 : null, useMutator);
   }
 
   getParent() {
@@ -944,24 +1151,18 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.props;
   }
 
-  onChildrenChange(fn: (param?: { type: string; node: Node }) => void): (() => void) | undefined {
+  onChildrenChange(fn: (param?: { type: string; node: INode }) => void): IPublicTypeDisposable | undefined {
     const wrappedFunc = wrapWithEventSwitch(fn);
     return this.children?.onChange(wrappedFunc);
   }
 
   mergeChildren(
-    remover: () => any,
-    adder: (children: Node[]) => NodeData[] | null,
-    sorter: () => any,
+    remover: (node: INode, idx: number) => any,
+    adder: (children: INode[]) => IPublicTypeNodeData[] | null,
+    sorter: (firstNode: INode, secondNode: INode) => any,
   ) {
     this.children?.mergeChildren(remover, adder, sorter);
   }
-
-  @obx.shallow status: NodeStatus = {
-    inPlaceEditing: false,
-    locking: false,
-    pseudo: false,
-  };
 
   /**
    * @deprecated
@@ -1020,16 +1221,16 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   /**
-   * @deprecated
+   * @deprecated no one is using this, will be removed in a future release
    */
-  getSuitablePlace(node: Node, ref: any): any {
+  getSuitablePlace(node: INode, ref: any): any {
     const focusNode = this.document?.focusNode;
     // 如果节点是模态框，插入到根节点下
     if (node?.componentMeta?.isModal) {
       return { container: focusNode, ref };
     }
 
-    if (!ref && this.contains(focusNode)) {
+    if (!ref && focusNode && this.contains(focusNode)) {
       const rootCanDropIn = focusNode.componentMeta?.prototype?.options?.canDropIn;
       if (
         rootCanDropIn === undefined ||
@@ -1044,7 +1245,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
     if (this.isRoot() && this.children) {
       const dropElement = this.children.filter((c) => {
-        if (!c.isContainer()) {
+        if (!c.isContainerNode) {
           return false;
         }
         const canDropIn = c.componentMeta?.prototype?.options?.canDropIn;
@@ -1139,11 +1340,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.id;
   }
 
-  emitPropChange(val: PropChangeOptions) {
+  emitPropChange(val: IPublicTypePropChangeOptions) {
     this.emitter?.emit('propChange', val);
   }
 
-  onPropChange(func: (info: PropChangeOptions) => void): Function {
+  onPropChange(func: (info: IPublicTypePropChangeOptions) => void): IPublicTypeDisposable {
     const wrappedFunc = wrapWithEventSwitch(func);
     this.emitter.on('propChange', wrappedFunc);
     return () => {
@@ -1152,7 +1353,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 }
 
-function ensureNode(node: any, document: DocumentModel): Node {
+function ensureNode(node: any, document: IDocumentModel): INode {
   let nodeInstance = node;
   if (!isNode(node)) {
     if (node.getComponentName) {
@@ -1166,33 +1367,27 @@ function ensureNode(node: any, document: DocumentModel): Node {
   return nodeInstance;
 }
 
-export interface ParentalNode<T extends NodeSchema = NodeSchema> extends Node<T> {
-  readonly children: NodeChildren;
-}
 export interface LeafNode extends Node {
   readonly children: null;
 }
 
-export type PropChangeOptions = Omit<GlobalEvent.Node.Prop.ChangeOptions, 'node'>;
+export type IPublicTypePropChangeOptions = Omit<GlobalEvent.Node.Prop.ChangeOptions, 'node'>;
 
-export type SlotNode = ParentalNode<SlotSchema>;
-export type PageNode = ParentalNode<PageSchema>;
-export type ComponentNode = ParentalNode<ComponentSchema>;
-export type RootNode = PageNode | ComponentNode;
+export type ISlotNode = IBaseNode<IPublicTypeSlotSchema>;
+export type IPageNode = IBaseNode<IPublicTypePageSchema>;
+export type IComponentNode = IBaseNode<IPublicTypeComponentSchema>;
+export type IRootNode = IPageNode | IComponentNode;
+export type INode = IPageNode | ISlotNode | IComponentNode | IRootNode;
 
-export function isNode(node: any): node is Node {
-  return node && node.isNode;
+export function isRootNode(node: INode): node is IRootNode {
+  return node && node.isRootNode;
 }
 
-export function isRootNode(node: Node): node is RootNode {
-  return node && node.isRoot();
-}
-
-export function isLowCodeComponent(node: Node): boolean {
+export function isLowCodeComponent(node: INode): node is IComponentNode {
   return node.componentMeta?.getMetadata().devMode === 'lowCode';
 }
 
-export function getZLevelTop(child: Node, zLevel: number): Node | null {
+export function getZLevelTop(child: INode, zLevel: number): INode | null {
   let l = child.zLevel;
   if (l < zLevel || zLevel < 0) {
     return null;
@@ -1213,12 +1408,12 @@ export function getZLevelTop(child: Node, zLevel: number): Node | null {
  * @param node2 测试的被包含节点
  * @returns 是否包含
  */
-export function contains(node1: Node, node2: Node): boolean {
+export function contains(node1: INode, node2: INode): boolean {
   if (node1 === node2) {
     return true;
   }
 
-  if (!node1.isParental() || !node2.parent) {
+  if (!node1.isParentalNode || !node2.parent) {
     return false;
   }
 
@@ -1240,7 +1435,7 @@ export enum PositionNO {
   BeforeOrAfter = 2,
   TheSame = 0,
 }
-export function comparePosition(node1: Node, node2: Node): PositionNO {
+export function comparePosition(node1: INode, node2: INode): PositionNO {
   if (node1 === node2) {
     return PositionNO.TheSame;
   }
@@ -1268,35 +1463,39 @@ export function comparePosition(node1: Node, node2: Node): PositionNO {
 }
 
 export function insertChild(
-  container: ParentalNode,
-  thing: Node | NodeData,
+  container: INode,
+  thing: INode | IPublicTypeNodeData,
   at?: number | null,
   copy?: boolean,
-): Node {
-  let node: Node;
-  if (isNode(thing) && (copy || thing.isSlot())) {
-    thing = thing.export(TransformStage.Clone);
-  }
-  if (isNode(thing)) {
+): INode | null {
+  let node: INode | null | IRootNode | undefined;
+  let nodeSchema: IPublicTypeNodeSchema;
+  if (isNode<INode>(thing) && (copy || thing.isSlot())) {
+    nodeSchema = thing.export(IPublicEnumTransformStage.Clone);
+    node = container.document?.createNode(nodeSchema);
+  } else if (isNode<INode>(thing)) {
     node = thing;
-  } else {
-    node = container.document.createNode(thing);
+  } else if (isNodeSchema(thing)) {
+    node = container.document?.createNode(thing);
   }
 
-  container.children.insert(node, at);
+  if (isNode<INode>(node)) {
+    container.children?.insert(node, at);
+    return node;
+  }
 
-  return node;
+  return null;
 }
 
 export function insertChildren(
-  container: ParentalNode,
-  nodes: Node[] | NodeData[],
+  container: INode,
+  nodes: INode[] | IPublicTypeNodeData[],
   at?: number | null,
   copy?: boolean,
-): Node[] {
+): INode[] {
   let index = at;
   let node: any;
-  const results: Node[] = [];
+  const results: INode[] = [];
   // eslint-disable-next-line no-cond-assign
   while ((node = nodes.pop())) {
     node = insertChild(container, node, index, copy);

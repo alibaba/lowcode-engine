@@ -1,17 +1,36 @@
 import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
 import { uniqueId } from '@alilc/lowcode-utils';
-import { TitleContent } from '@alilc/lowcode-types';
-import { Node } from './node';
+import { IPublicTypeTitleContent, IPublicModelExclusiveGroup } from '@alilc/lowcode-types';
+import type { INode } from './node';
 import { intl } from '../../locale';
 
+export interface IExclusiveGroup extends IPublicModelExclusiveGroup<INode> {
+  readonly name: string;
+
+  get index(): number | undefined;
+
+  remove(node: INode): void;
+
+  add(node: INode): void;
+
+  isVisible(node: INode): boolean;
+
+  get length(): number;
+
+  get visibleNode(): INode;
+}
+
 // modals assoc x-hide value, initial: check is Modal, yes will put it in modals, cross levels
-// if-else-if assoc conditionGroup value, should be the same level, and siblings, need renderEngine support
-export class ExclusiveGroup {
+// if-else-if assoc conditionGroup value, should be the same level,
+// and siblings, need renderEngine support
+export class ExclusiveGroup implements IExclusiveGroup {
   readonly isExclusiveGroup = true;
 
   readonly id = uniqueId('exclusive');
 
-  @obx.shallow readonly children: Node[] = [];
+  readonly title: IPublicTypeTitleContent;
+
+  @obx.shallow readonly children: INode[] = [];
 
   @obx private visibleIndex = 0;
 
@@ -27,11 +46,11 @@ export class ExclusiveGroup {
     return this.children.length;
   }
 
-  @computed get visibleNode(): Node {
+  @computed get visibleNode(): INode {
     return this.children[this.visibleIndex];
   }
 
-  @computed get firstNode(): Node {
+  @computed get firstNode(): INode {
     return this.children[0]!;
   }
 
@@ -39,8 +58,16 @@ export class ExclusiveGroup {
     return this.firstNode.index;
   }
 
-  add(node: Node) {
-    if (node.nextSibling && node.nextSibling.conditionGroup === this) {
+  constructor(readonly name: string, title?: IPublicTypeTitleContent) {
+    makeObservable(this);
+    this.title = title || {
+      type: 'i18n',
+      intl: intl('Condition Group'),
+    };
+  }
+
+  add(node: INode) {
+    if (node.nextSibling && node.nextSibling.conditionGroup?.id === this.id) {
       const i = this.children.indexOf(node.nextSibling);
       this.children.splice(i, 0, node);
     } else {
@@ -48,7 +75,7 @@ export class ExclusiveGroup {
     }
   }
 
-  remove(node: Node) {
+  remove(node: INode) {
     const i = this.children.indexOf(node);
     if (i > -1) {
       this.children.splice(i, 1);
@@ -60,26 +87,16 @@ export class ExclusiveGroup {
     }
   }
 
-  setVisible(node: Node) {
+  setVisible(node: INode) {
     const i = this.children.indexOf(node);
     if (i > -1) {
       this.visibleIndex = i;
     }
   }
 
-  isVisible(node: Node) {
+  isVisible(node: INode) {
     const i = this.children.indexOf(node);
     return i === this.visibleIndex;
-  }
-
-  readonly title: TitleContent;
-
-  constructor(readonly name: string, title?: TitleContent) {
-    makeObservable(this);
-    this.title = title || {
-      type: 'i18n',
-      intl: intl('Condition Group'),
-    };
   }
 }
 
