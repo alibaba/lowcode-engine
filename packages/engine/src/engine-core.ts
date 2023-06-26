@@ -83,7 +83,6 @@ async function registryInnerPlugin(designer: IDesigner, editor: IEditor, plugins
     plugins.delete(componentMetaParserPlugin.pluginName);
     plugins.delete(setterRegistry.pluginName);
     plugins.delete(defaultPanelRegistryPlugin.pluginName);
-    plugins.delete(defaultPanelRegistryPlugin.pluginName);
     plugins.delete(builtinHotkey.pluginName);
     plugins.delete(registerDefaults.pluginName);
   };
