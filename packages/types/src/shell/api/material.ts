@@ -30,7 +30,7 @@ export interface IPublicApiMaterial {
    * @param incrementalAssets
    * @returns
    */
-  loadIncrementalAssets(incrementalAssets: IPublicTypeAssetsJson): void;
+  loadIncrementalAssets(incrementalAssets: IPublicTypeAssetsJson): Promise<void>;
 
   /**
    * 注册物料元数据管道函数，在物料信息初始化时执行。
