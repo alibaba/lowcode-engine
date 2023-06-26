@@ -167,7 +167,7 @@ export function parseExpressionGetKeywords(expr: string | null | undefined): str
       ],
     });
 
-    const addIdentifierIfNeeded = (x: Record<string, unknown> | number | null | undefined) => {
+    const addIdentifierIfNeeded = (x: Node | null | undefined) => {
       if (typeof x === 'object' && isIdentifier(x) && JS_KEYWORDS.includes(x.name)) {
         keywordVars.add(x.name);
       }
@@ -189,7 +189,7 @@ export function parseExpressionGetKeywords(expr: string | null | undefined): str
                   addIdentifierIfNeeded(item);
                 });
               } else {
-                addIdentifierIfNeeded(fieldValue as Record<string, unknown> | null);
+                addIdentifierIfNeeded(fieldValue as any);
               }
             }
           });
@@ -217,7 +217,7 @@ export function parseExpressionGetGlobalVariables(
     const ast = parser.parse(`!(${expr});`);
 
     const addUndeclaredIdentifierIfNeeded = (
-      x: Record<string, unknown> | number | null | undefined,
+      x: Node | null | undefined,
       path: NodePath<Node>,
     ) => {
       if (typeof x === 'object' && isIdentifier(x) && !path.scope.hasBinding(x.name)) {
@@ -241,7 +241,7 @@ export function parseExpressionGetGlobalVariables(
                   addUndeclaredIdentifierIfNeeded(item, path);
                 });
               } else {
-                addUndeclaredIdentifierIfNeeded(fieldValue as Record<string, unknown> | null, path);
+                addUndeclaredIdentifierIfNeeded(fieldValue as any, path);
               }
             }
           });

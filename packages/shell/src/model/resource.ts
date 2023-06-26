@@ -37,6 +37,10 @@ export class Resource implements IPublicModelResource {
     return this[resourceSymbol].category;
   }
 
+  get description() {
+    return this[resourceSymbol].description;
+  }
+
   get children() {
     return this[resourceSymbol].children.map((child) => new Resource(child));
   }

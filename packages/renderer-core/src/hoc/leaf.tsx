@@ -521,16 +521,11 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
     }
 
     get hasChildren(): boolean {
-      let { children } = this.props;
-      if (this.state.childrenInState) {
-        children = this.state.nodeChildren;
+      if (!this.state.childrenInState) {
+        return 'children' in this.props;
       }
 
-      if (Array.isArray(children)) {
-        return Boolean(children && children.length);
-      }
-
-      return Boolean(children);
+      return true;
     }
 
     get children(): any {
@@ -543,7 +538,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
       if (this.props.children && this.props.children.length) {
         return this.props.children;
       }
-      return [];
+      return this.props.children;
     }
 
     get leaf(): INode | undefined {
@@ -576,7 +571,11 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
 
       delete compProps.__inner__;
 
-      return engine.createElement(Comp, compProps, this.hasChildren ? this.children : null);
+      if (this.hasChildren) {
+        return engine.createElement(Comp, compProps, this.children);
+      }
+
+      return engine.createElement(Comp, compProps);
     }
   }
 

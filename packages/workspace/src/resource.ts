@@ -12,6 +12,8 @@ export interface IBaseResource<T> extends IBaseModelResource<T> {
 
   skeleton: ISkeleton;
 
+  description?: string;
+
   get editorViews(): IPublicTypeEditorView[];
 
   get defaultViewType(): string;

@@ -14,6 +14,7 @@ import {
   createModuleEventBus,
   IEventBus,
 } from '@alilc/lowcode-editor-core';
+
 import {
   ISimulatorHost,
   Component,
@@ -265,6 +266,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   @obx.ref private _contentDocument?: Document;
 
+  @obx.ref private _appHelper?: any;
+
   get contentDocument() {
     return this._contentDocument;
   }
@@ -310,11 +313,17 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.designer = designer;
     this.scroller = this.designer.createScroller(this.viewport);
     this.autoRender = !engineConfig.get('disableAutoRender', false);
+    this._appHelper = engineConfig.get('appHelper');
     this.componentsConsumer = new ResourceConsumer<Asset | undefined>(() => this.componentsAsset);
     this.injectionConsumer = new ResourceConsumer(() => {
       return {
-        appHelper: engineConfig.get('appHelper'),
+        appHelper: this._appHelper,
       };
+    });
+
+    engineConfig.onGot('appHelper', (data) => {
+      // appHelper被config.set修改后触发injectionConsumer.consume回调
+      this._appHelper = data;
     });
 
     this.i18nConsumer = new ResourceConsumer(() => this.project.i18n);
@@ -384,6 +393,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   purge(): void {
     // todo
+
   }
 
   mountViewport(viewport: HTMLElement | null) {
@@ -494,7 +504,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     if (Object.keys(this.asyncLibraryMap).length > 0) {
       // 加载异步 Library
       await renderer.loadAsyncLibrary(this.asyncLibraryMap);
-      Object.keys(this.asyncLibraryMap).forEach(key => {
+      Object.keys(this.asyncLibraryMap).forEach((key) => {
         delete this.asyncLibraryMap[key];
       });
     }
@@ -521,7 +531,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     if (Object.keys(this.asyncLibraryMap).length > 0) {
       // 加载异步 Library
       await this.renderer?.loadAsyncLibrary(this.asyncLibraryMap);
-      Object.keys(this.asyncLibraryMap).forEach(key => {
+      Object.keys(this.asyncLibraryMap).forEach((key) => {
         delete this.asyncLibraryMap[key];
       });
     }
@@ -680,7 +690,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         const x = new Event('click');
         x.initEvent('click', true);
         this._iframe?.dispatchEvent(x);
-        const target = e.target;
+        const { target } = e;
 
         const customizeIgnoreSelectors = engineConfig.get('customizeIgnoreSelectors');
         // TODO: need more elegant solution to ignore click events of components in designer
@@ -1497,7 +1507,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   handleAccept({ container }: DropContainer, e: ILocateEvent): boolean {
     const { dragObject } = e;
     const document = this.currentDocument!;
-    const focusNode = document.focusNode;
+    const { focusNode } = document;
     if (isRootNode(container) || container.contains(focusNode)) {
       return document.checkNesting(focusNode!, dragObject as any);
     }

@@ -139,6 +139,7 @@ export interface ConfigureSupportEventConfig {
   name: string;
   propType?: IPublicTypePropType;
   description?: string;
+  template?: string;
 }
 
 /**
@@ -195,6 +196,9 @@ export interface IPublicTypeCallbacks {
   onMoveHook?: (currentNode: IPublicModelNode) => boolean;
   // thinkof 限制性拖拽
   onHoverHook?: (currentNode: IPublicModelNode) => boolean;
+
+  /** 选中 hook，如果返回值是 false，可以控制组件不可被选中 */
+  onSelectHook?: (currentNode: IPublicModelNode) => boolean;
   onChildMoveHook?: (childNode: IPublicModelNode, currentNode: IPublicModelNode) => boolean;
 
   // events

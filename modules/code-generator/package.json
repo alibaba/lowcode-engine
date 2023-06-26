@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-code-generator",
-  "version": "1.1.2",
+  "version": "1.1.4",
   "description": "出码引擎 for LowCode Engine",
   "license": "MIT",
   "main": "lib/index.js",
@@ -144,5 +144,10 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "repository": "git@github.com:alibaba/lowcode-engine.git"
+  "repository": {
+    "type": "http",
+    "url": "https://github.com/alibaba/lowcode-engine/tree/main/modules/code-generator"
+  },
+  "bugs": "https://github.com/alibaba/lowcode-engine/issues",
+  "homepage": "https://github.com/alibaba/lowcode-engine/#readme"
 }
