@@ -144,6 +144,8 @@ export class Designer implements IDesigner {
 
   private oobxList: OffsetObserver[] = [];
 
+  private selectionDispose: undefined | (() => void);
+
   @obx.ref private _componentMetasMap = new Map<string, IComponentMeta>();
 
   @obx.ref private _simulatorComponent?: ComponentType<any>;
@@ -265,10 +267,9 @@ export class Designer implements IDesigner {
   }
 
   setupSelection = () => {
-    let selectionDispose: undefined | (() => void);
-    if (selectionDispose) {
-      selectionDispose();
-      selectionDispose = undefined;
+    if (this.selectionDispose) {
+      this.selectionDispose();
+      this.selectionDispose = undefined;
     }
     const { currentSelection } = this;
     // TODO: 避免选中 Page 组件，默认选中第一个子节点；新增规则 或 判断 Live 模式
@@ -284,7 +285,7 @@ export class Designer implements IDesigner {
     }
     this.postEvent('selection.change', currentSelection);
     if (currentSelection) {
-      selectionDispose = currentSelection.onSelectionChange(() => {
+      this.selectionDispose = currentSelection.onSelectionChange(() => {
         this.postEvent('selection.change', currentSelection);
       });
     }
