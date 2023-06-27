@@ -102,7 +102,7 @@ material.getAssets();
  * @param incrementalAssets
  * @returns
  */
-loadIncrementalAssets(incrementalAssets: IPublicTypeAssetsJson): void;
+loadIncrementalAssets(incrementalAssets: IPublicTypeAssetsJson): Promise<void>;
 ```
 相关类型：[IPublicTypeAssetsJson](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/assets-json.ts)
 

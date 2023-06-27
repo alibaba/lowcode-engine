@@ -39,12 +39,19 @@ export class Workspace implements IPublicApiWorkspace {
       const { name: resourceName, type: resourceType } = d;
       const {
         description,
+        editorViews,
       } = d.resourceTypeModel({} as any, {});
 
       return {
         resourceName,
         resourceType,
         description,
+        editorViews: editorViews.map(d => (
+          {
+            viewName: d.viewName,
+            viewType: d.viewType || 'editor',
+          }
+        )),
       };
     });
   }

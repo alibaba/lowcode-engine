@@ -24,4 +24,12 @@ export class EditorView {
       },
     });
   }
+
+  get viewName() {
+    return this[editorViewSymbol].viewName;
+  }
+
+  get viewType() {
+    return this[editorViewSymbol].viewType;
+  }
 }
