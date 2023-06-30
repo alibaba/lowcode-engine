@@ -1,5 +1,5 @@
 export interface IPublicTypePluginConfig {
-  init(): void;
-  destroy?(): void;
+  init(): Promise<void>;
+  destroy?(): Promise<void>;
   exports?(): any;
 }
