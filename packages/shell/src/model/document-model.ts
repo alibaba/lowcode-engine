@@ -164,7 +164,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * @param stage
    * @returns
    */
-  exportSchema(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Render): any {
+  exportSchema(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Render): IPublicTypeRootSchema | undefined {
     return this[documentSymbol].export(stage);
   }
 

@@ -89,7 +89,7 @@ export interface IPublicModelDocumentModel<
    * @param stage
    * @returns
    */
-  exportSchema(stage: IPublicEnumTransformStage): any;
+  exportSchema(stage: IPublicEnumTransformStage): IPublicTypeRootSchema | undefined;
 
   /**
    * 插入节点
