@@ -289,8 +289,8 @@ codealike.json
       },
       "lifeCycles": {
         "componentDidMount": {
-          "type": "JSExpression",
-          "value": "function() { console.log('componentDidMount'); }"
+          "type": "JSFunction",
+          "value": "function componentDidMount() {\\n  console.log('componentDidMount');\\n}"
         }
       },
       "methodsModule": {
