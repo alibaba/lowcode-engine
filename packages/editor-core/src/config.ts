@@ -155,6 +155,10 @@ const VALID_ENGINE_OPTIONS = {
     description: '是否开启应用级设计模式',
     default: false,
   },
+  workspaceEmptyComponent: {
+    type: 'function',
+    description: '应用级设计模式下，窗口为空时展示的占位组件',
+  },
 };
 
 const getStrictModeValue = (engineOptions: IPublicTypeEngineOptions, defaultValue: boolean): boolean => {
