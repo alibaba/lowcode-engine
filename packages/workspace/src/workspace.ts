@@ -199,7 +199,7 @@ export class Workspace implements IWorkspace {
     this.windows.splice(index, 1);
     if (this.window === window) {
       this.window = this.windows[index] || this.windows[index + 1] || this.windows[index - 1];
-      if (this.window.sleep) {
+      if (this.window?.sleep) {
         this.window.init();
       }
       this.emitChangeActiveWindow();

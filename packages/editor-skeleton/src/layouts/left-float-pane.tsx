@@ -1,6 +1,6 @@
 import { Component, Fragment } from 'react';
 import classNames from 'classnames';
-import { observer, Focusable, focusTracker } from '@alilc/lowcode-editor-core';
+import { observer, Focusable } from '@alilc/lowcode-editor-core';
 import { Area } from '../area';
 import { Panel } from '../widget/panel';
 import { PanelConfig } from '../types';
@@ -31,7 +31,7 @@ export default class LeftFloatPane extends Component<{ area: Area<PanelConfig, P
       area.skeleton.editor.removeListener('designer.drag', triggerClose);
     };
 
-    this.focusing = focusTracker.create({
+    this.focusing = area.skeleton.focusTracker.create({
       range: (e) => {
         const target = e.target as HTMLElement;
         if (!target) {

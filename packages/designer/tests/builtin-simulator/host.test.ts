@@ -24,6 +24,9 @@ import { fireEvent } from '@testing-library/react';
 import { shellModelFactory } from '../../../engine/src/modules/shell-model-factory';
 import { Setters, Workspace } from '@alilc/lowcode-shell';
 import { ILowCodePluginContextApiAssembler, ILowCodePluginContextPrivate, LowCodePluginManager } from '@alilc/lowcode-designer';
+import {
+  Skeleton as InnerSkeleton,
+} from '@alilc/lowcode-editor-skeleton';
 
 describe('Host 测试', () => {
   let editor: Editor;
@@ -45,6 +48,8 @@ describe('Host 测试', () => {
     const innerPlugins = new LowCodePluginManager(pluginContextApiAssembler);
     const innerWorkspace = new InnerWorkspace(() => {}, {});
     const workspace = new Workspace(innerWorkspace);
+    const innerSkeleton = new InnerSkeleton(editor);
+    editor.set('skeleton' as any, innerSkeleton);
     editor.set('innerHotkey', new InnerHotkey())
     editor.set('setters', new Setters(new InnerSetters()));
     editor.set('innerPlugins' as any, innerPlugins);

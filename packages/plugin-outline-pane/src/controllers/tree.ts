@@ -30,6 +30,10 @@ export class Tree {
       treeNode?.notifyExpandableChanged();
     });
 
+    doc?.history.onChangeCursor(() => {
+      this.root?.notifyExpandableChanged();
+    });
+
     doc?.onChangeNodeProp((info: IPublicTypePropChangeOptions) => {
       const { node, key } = info;
       if (key === '___title___') {
