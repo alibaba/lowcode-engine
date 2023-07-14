@@ -103,6 +103,7 @@ export class Workspace implements IWorkspace {
     readonly shellModelFactory: any,
   ) {
     this.context = new BasicContext(this, '', IPublicEnumPluginRegisterLevel.Workspace);
+    this.context.innerHotkey.activate(true);
     makeObservable(this);
   }
 
