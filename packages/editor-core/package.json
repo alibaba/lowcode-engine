@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-editor-core",
-  "version": "1.1.9-beta.4",
+  "version": "1.1.9-beta.5",
   "description": "Core Api for Ali lowCode engine",
   "license": "MIT",
   "main": "lib/index.js",
@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "@alifd/next": "^1.19.16",
-    "@alilc/lowcode-types": "1.1.9-beta.4",
-    "@alilc/lowcode-utils": "1.1.9-beta.4",
+    "@alilc/lowcode-types": "1.1.9-beta.5",
+    "@alilc/lowcode-utils": "1.1.9-beta.5",
     "classnames": "^2.2.6",
     "debug": "^4.1.1",
     "intl-messageformat": "^9.3.1",
@@ -47,7 +47,7 @@
     "type": "http",
     "url": "https://github.com/alibaba/lowcode-engine/tree/main/packages/editor-core"
   },
-  "gitHead": "2669f179e6f899d395ce1942d0fe04f9c5ed48a6",
+  "gitHead": "a78a31a7f310c7e4410f71a5845a6a297b2a9c67",
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",
   "homepage": "https://github.com/alibaba/lowcode-engine/#readme"
 }
