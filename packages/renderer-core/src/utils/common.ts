@@ -264,8 +264,7 @@ function parseExpression(a: any, b?: any, c = false) {
     if (!thisRequired) {
       code = `with($scope){${code}}`;
     }
-    const result = new Function('$scope', code)(self);
-    return typeof result === "function" ? result.bind(self): result;
+    return new Function('$scope', code)(self);
   } catch (err) {
     logger.error(`${logScope || ''} parseExpression.error`, err, str, self?.__self ?? self);
     return undefined;
