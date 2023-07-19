@@ -10,14 +10,14 @@
     "react-router-dom": "^6.9.0",
     "intl-messageformat": "^9.3.6",
     "@alifd/next": "1.26.15",
-    "@ice/runtime": "^1.0.0",
+    "@ice/runtime": "~1.1.0",
     "@alilc/lowcode-datasource-engine": "^1.0.0",
     "undefined": "*",
     "@alilc/antd-lowcode": "0.8.0",
     "@alife/container": "0.3.7"
   },
   "devDependencies": {
-    "@ice/app": "^3.0.0",
+    "@ice/app": "~3.1.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/node": "^18.11.17",
