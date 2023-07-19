@@ -67,12 +67,12 @@ const pluginFactory: BuilderComponentPluginFactory<IceJs3PackageJsonPluginConfig
         'react-router-dom': '^6.9.0',
         'intl-messageformat': '^9.3.6',
         '@alifd/next': '1.26.15',
-        '@ice/runtime': '^1.0.0',
+        '@ice/runtime': '~1.1.0',
         // 数据源相关的依赖:
         ...buildDataSourceDependencies(ir, cfg?.datasourceConfig),
       },
       devDependencies: {
-        '@ice/app': '^3.0.0',
+        '@ice/app': '~3.1.0',
         '@types/react': '^18.0.0',
         '@types/react-dom': '^18.0.0',
         '@types/node': '^18.11.17',
