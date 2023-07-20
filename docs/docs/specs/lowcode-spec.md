@@ -1252,7 +1252,7 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
 
 ### 2.8 当前应用配置信息（AA）
 
-用于描述当前应用的配置信息，比如当前应用的路由模式、Shell/Layout、主题等。
+用于描述当前应用的配置信息，比如当前应用的 Shell/Layout、主题等。
 
 > 注意：该字段为扩展字段，消费方式由各自场景自己决定，包括运行时和出码。
 
@@ -1266,6 +1266,142 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
 
 用于描述当前应用的公共数据源，数据结构跟容器结构里的 ComponentDataSource 保持一致。
 在运行时 / 出码使用时，API 和应用级数据源 API 保持一致，都是 `this.dataSourceMap['globalDSName'].load()`
+
+### 2.11 当前应用的路由信息（AA）
+
+用于描述当前应用的路径 - 页面的关系。通过声明路由信息，应用能够在不同的路径里显示对应的页面。
+
+##### 2.11.1 Router 结构描述
+
+|参数 |说明 |类型 |可选值 |默认值 |备注 |
+|----|----|---|----|----|-----|
+|baseName | 应用根路径|String|-|'/'|选填｜
+|historyMode|history 模式|枚举类型，包括'browser'、'hash'|-|'browser'|选填｜
+|routes|路径与页面的关系对照组|Route[]|-|-|必填｜
+
+##### 2.11.2 Route 结构描述
+
+|参数 | 说明|类型|可选值|默认值|备注|
+|----|----|---|----|----|-----|
+|name|该路径项的名称|String|-|-|选填|
+|path|路径|String|-|-|必填|
+|query|路径的 query 参数|Object|-|-|选填|
+|page|路径对应的页面ID|String|-|-|选填，page 与 redirect 字段中必须要有有一个存在|
+|redirect|此路径需要重定向到的路由信息|String \| Object \| Function|-|-|选填，page 与 redirect 字段中必须要有有一个存在，详见下文 **redirect**|
+|meta|路由元数据|Object|-|-|选填|
+|children|子路由|Route[]|-|-|选填|
+
+关于 **path** 字段的详细说明：
+
+
+关于 **redirect** 字段的详细说明：
+**redirect** 字段有三种填入类型，分别是 `String`、`Object`、`Function`：
+1. 字符串(`String`)格式下默认处理为重定向到路径，支持传入 '/xxx'、'/xxx?ab=c'。
+2. 对象(`String`)格式下可传入路由对象，如 { name: 'xxx' }、{ path: '/xxx' }，可重定向到对应的路由对象。
+3. 函数`Function`格式为`(to) => Route`，它的入参为当前路由项信息，支持返回一个 Route 对象或者字符串，存在一些特殊情况，在重定向的时候需要对重定向之后的路径进行处理的情况下，需要使用函数声明。
+```json
+{
+  "redirect": {
+    "type": "JSFunction",
+    "value": "(to) => { return { path: '/a', query: { fromPath: to.path } } }",
+  }
+}
+```
+
+##### 完整描述示例
+
+``` json
+{
+  "router": {
+    "baseName": "/",
+    "historyMode": "hash",
+    "routes": [
+      {
+        "path": "home",
+        "page": "home"
+      },
+      {
+        "path": "/*",
+        "redirect": "notFound"
+      }
+    ]
+  },
+  "componentsTree": [
+    {
+      "id": "home",
+      ...
+    },
+    {
+      "id": "notFound",
+      ...
+    }
+  ]
+}
+```
+
+### 2.12 当前应用的页面信息（AA）
+
+用于描述当前应用的页面信息，比如页面对应的低代码搭建内容、页面标题、页面配置等。
+在一些比较复杂的场景下，允许声明一层页面映射关系，以支持页面声明更多信息与配置，同时能够支持不同类型的产物。
+
+|  参数   | 说明  | 类型  | 可选值 | 默认值 | 备注 |
+|  ----  | ----  | ----  |  ----  | ----  | ----  | 
+| id     | 页面id | String| - | - | 必填 |
+|type|页面类型|String|-|-|选填，可用来区分页面的类型｜
+|treeId|对应的低代码树中的id|String|-|-|选填，页面对应的 componentsTree 中的子项 id｜
+|package|对应的资产包对象|String|-|-|选填，页面对应的资产包对象，一般用于微前端场景下，详细｜
+|meta|页面元信息|Object|-|-|选填，用于描述当前应用的配置信息｜
+|config|页面配置|Object|-|-|选填，用于描述当前应用的元数据信息｜
+|...|页面其他属性|-|-|-|-|
+
+关于 **package** 的详细说明：
+在微前端的场景下，可能会存在多个页面路由到同一个应用，应用可通过资产包加载，所以需要将对应的页面配置指向对应的微应用对象。
+
+**描述示例**
+
+```json
+{
+  "router": {
+    "baseName": "/",
+    "historyMode": "hash",
+    "routes": [
+      {
+        "path": "home",
+        "page": "home"
+      },
+      {
+        "page": "guide",
+        "page": "guide"
+      },
+      {
+        "path": "/*",
+        "redirect": "notFound"
+      }
+    ]
+  },
+  "pages": [
+    {
+      "id": "home",
+      "treeId": "home",
+      "meta": {
+        "title": "首页"
+      }
+    },
+    {
+      "id": "notFound",
+      "treeId": "notFound",
+      "meta": {
+        "title": "404页面"
+      }
+    },
+    {
+      "id": "guide",
+      "package": "microApp"
+    }
+  ]
+}
+```
+
 
 ## 3 应用描述
 
@@ -1320,9 +1456,56 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
 ### 3.2 应用级别 APIs
 > 下文中 `xxx` 代指任意 API
 #### 3.2.1 路由 Router API
-   - this.location.`xxx`
-   - this.history.`xxx`
-   - this.match.`xxx`
+  - this.router.xxx
+
+| API            | 函数签名                                                                | 说明    |
+| -------------- | ---------------------------------------------------------- | -------------------------------------------------------------- |
+| getCurrentRoute | () => Route | 获取当前的路由信息 |
+| push | (target: string \| Route) => void | 路由跳转方法 |
+| replace | (target: string \| Route) => void | 路由跳转方法 |
+| beforeRouteLeave | (guard: (to: Route, from: Route) => boolean \| Route) => void | 路由跳转前的守卫方法，详细 |
+| afterRouteChange | (fn: (to: Route, from: Route) => void) => void | 路由跳转后的钩子函数，会在每次路由改变后执行 |
+
+**beforeRouteLeave**
+通过 beforeRouteLeave 注册的路由守卫方法会在每次路由跳转前执行。该方法一般会在应用鉴权，路由重定向等场景下使用。
+
+> `beforeRouteLeave` 只在 `router.push/replace` 的方法调用时生效。
+
+传入守卫的入参为：
+* to: 即将要进入的目标路由
+* from: 当前导航正要离开的路由
+
+该守卫返回一个 `boolean` 或者路由对象来告知路由控制器接下来的行为。
+* 如果返回 `false`， 则停止跳转
+* 如果返回 `true`，则继续跳转
+* 如果返回路由对象，则重定向至对应的路由
+
+**使用范例：**
+
+```json
+{
+  "componentsTree": [{
+    "componentName": "Page",
+    "fileName": "Page1",
+    "props": {},
+    "children": [{
+      "componentName": "Div",
+      "props": {},
+      "children": [{
+        "componentName": "Button",
+        "props": {
+          "text": "跳转到首页",
+          "onClick": {
+            "type": "JSFunction",
+            "value": "function () { this.router.push('/home'); }"
+          }
+        },
+      }]
+    }],
+  }]
+}
+```
+
 
 #### 3.2.2 应用级别的公共函数或第三方扩展
    - this.utils.`xxx`
