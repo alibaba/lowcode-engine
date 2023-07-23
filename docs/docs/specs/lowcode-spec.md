@@ -1289,7 +1289,7 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
 | 参数     | 说明                         | 类型                         | 可选值 | 默认值 | 备注                                                                   |
 | -------- | ---------------------------- | ---------------------------- | ------ | ------ | ---------------------------------------------------------------------- |
 | name     | 该路径项的名称               | String                       | -      | -      | 选填                                                                   |
-| path     | 路径                         | String                       | -      | -      | 必填                                                                   |
+| path     | 路径                         | String                       | -      | -      | 必填，路径规则详见下面说明                                                                   |
 | query    | 路径的 query 参数            | Object                       | -      | -      | 选填                                                                   |
 | page     | 路径对应的页面 ID            | String                       | -      | -      | 选填，page 与 redirect 字段中必须要有有一个存在                        |
 | redirect | 此路径需要重定向到的路由信息 | String \| Object \| Function | -      | -      | 选填，page 与 redirect 字段中必须要有有一个存在，详见下文 **redirect** |
@@ -1298,11 +1298,30 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
 
 以上结构仅说明了路由记录需要的必需字段，如果需要更多的信息字段可以自行实现。
 
+关于 **path** 字段的详细说明：
+
+path（页面路径）是浏览器URL的组成部分，同时大部分网站的 URL 也都受到了 Restful 思想的影响，所以我们也是用类似的形式作为路径的规则基底。
+路径规则是路由配置的重要组成部分，我们希望一个路径配置的基本能力需要支持具体的路径（/xxx）与路径参数 (/:abc）。
+
+以一个 `/one/:two?/three/:four?/:five?` 路径为例，它能够解析以下路径：
+- `/one/three`
+- `/one/:two/three`
+- `/one/three/:four`
+- `/one/three/:five`
+- `/one/:two/three/:four`
+- `/one/:two/three/:five`
+- `/one/three/:four/:five`
+- `/one/:two/three/:four/:five`
+
+更多的路径规则，如路径中的通配符、多次匹配等能力如有需要可自行实现。
+
 关于 **redirect** 字段的详细说明：
+
 **redirect** 字段有三种填入类型，分别是 `String`、`Object`、`Function`：
 1. 字符串(`String`)格式下默认处理为重定向到路径，支持传入 '/xxx'、'/xxx?ab=c'。
 2. 对象(`String`)格式下可传入路由对象，如 { name: 'xxx' }、{ path: '/xxx' }，可重定向到对应的路由对象。
 3. 函数`Function`格式为`(to) => Route`，它的入参为当前路由项信息，支持返回一个 Route 对象或者字符串，存在一些特殊情况，在重定向的时候需要对重定向之后的路径进行处理的情况下，需要使用函数声明。
+
 ```json
 {
   "redirect": {
@@ -1478,20 +1497,37 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
 
 | API            | 函数签名                                                                | 说明    |
 | -------------- | ---------------------------------------------------------- | -------------------------------------------------------------- |
-| getCurrentRoute | () => Route | 获取当前的 Route 信息 |
+| getCurrentRoute | () => RouteLocation | 获取当前解析后的路由信息，RouteLocation 结构详见下面说明 |
 | push | (target: string \| Route) => void | 路由跳转方法，跳转到指定的路径或者 Route |
 | replace | (target: string \| Route) => void | 路由跳转方法，与 `push` 的区别在于不会增加一条历史记录而是替换当前的历史记录 |
-| beforeRouteLeave | (guard: (to: Route, from: Route) => boolean \| Route) => void | 路由跳转前的守卫方法，详见下面说明 |
-| afterRouteChange | (fn: (to: Route, from: Route) => void) => void | 路由跳转后的钩子函数，会在每次路由改变后执行 |
+| beforeRouteLeave | (guard: (to: RouteLocation, from: RouteLocation) => boolean \| Route) => void | 路由跳转前的守卫方法，详见下面说明 |
+| afterRouteChange | (fn: (to: RouteLocation, from: RouteLocation) => void) => void | 路由跳转后的钩子函数，会在每次路由改变后执行 |
 
-**beforeRouteLeave**
+##### 3.2.1.1 RouteLocation（路由信息）结构说明
+
+**RouteLocation** 是路由控制器匹配到对应的路由记录后进行解析产生的对象，它的结构如下：
+
+| 参数           | 说明                   | 类型   | 可选值 | 默认值 | 备注   |
+| -------------- | ---------------------- | ------ | ------ | ------ | ------ |
+| path           | 当前解析后的路径       | String | -      | -      | 必填  |
+| hash           | 当前路径的 hash 值，以 # 开头  | String | -      | -      | 必填   |
+| href           | 当前的全部路径         | String | -      | -      | 必填   |
+| params         | 匹配到的路径参数       | Object | -      | -      | 必填   |
+| query          | 当前的路径 query 对象  | Object | -      | -      | 必填，代表当前地址的 search 属性的对象   |
+| name           | 匹配到的路由记录名     | String | -      | -      | 选填   |
+| meta           | 匹配到的路由记录元数据 | Object | -      | -      | 选填   |
+| redirectedFrom | 原本指向向的路由记录         | Route  |  -      | -     | 选填，在重定向到当前地址之前，原先想访问的地址   |
+| fullPath       | 包括 search 和 hash 在内的完整地址 | String | - | - | 选填 |
+
+
+##### beforeRouteLeave
 通过 beforeRouteLeave 注册的路由守卫方法会在每次路由跳转前执行。该方法一般会在应用鉴权，路由重定向等场景下使用。
 
 > `beforeRouteLeave` 只在 `router.push/replace` 的方法调用时生效。
 
 传入守卫的入参为：
-* to: 即将要进入的目标 Route
-* from: 当前导航正要离开的 Route
+* to: 即将要进入的目标路由(RouteLocation)
+* from: 当前导航正要离开的路由(RouteLocation)
 
 该守卫返回一个 `boolean` 或者路由对象来告知路由控制器接下来的行为。
 * 如果返回 `false`， 则停止跳转
