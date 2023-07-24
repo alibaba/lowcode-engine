@@ -124,7 +124,8 @@ sidebar_position: 0
 - config: { Object } 当前应用配置信息
 - meta: { Object } 当前应用元数据信息
 - dataSource: { Array } 当前应用的公共数据源
-
+- router: { Object } 当前应用的路由配置信息
+- pages: { Array } 当前应用的所有页面信息
 
 描述举例：
 
@@ -163,6 +164,7 @@ sidebar_position: 0
     }
   }],
   "componentsTree": [{                 // 描述内容，值类型 Array
+    "id": "page1",
     "componentName": "Page",           // 单个页面，枚举类型 Page|Block|Component
     "fileName": "Page1",
     "props": {},
@@ -213,7 +215,6 @@ sidebar_position: 0
   "css": "body {font-size: 12px;} .table { width: 100px;}",
   "config": {                                          // 当前应用配置信息
     "sdkVersion": "1.0.3",                             // 渲染模块版本
-    "historyMode": "hash",                             // 浏览器路由：browser  哈希路由：hash
     "targetRootID": "J_Container",
     "layout": {
       "componentName": "BasicLayout",
@@ -250,7 +251,23 @@ sidebar_position: 0
       "i18n-jwg27yo4": "Hello",
       "i18n-jwg27yo3": "China"
     }
-  }
+  },
+  "router": {
+    "baseUrl": "/",
+    "historyMode": "hash",                             // 浏览器路由：browser  哈希路由：hash
+    "routes": [
+      {
+        "path": "home",
+        "page": "page1"
+      }
+    ]
+  },
+  "pages": [
+    {
+      "id": "page1",
+      "treeId": "page1"
+    }
+  ]
 }
 ```
 
@@ -1299,6 +1316,10 @@ export const recordEvent = function(logkey, gmkey, gokey, reqMethod) {
 以上结构仅说明了路由记录需要的必需字段，如果需要更多的信息字段可以自行实现。
 
 关于 **path** 字段的详细说明：
+
+路由记录通常通过声明 path 字段来匹配对应的浏览器 URL 来确认是否满足匹配条件，如 `path=abc` 能匹配到 `/abc` 这个 URL。
+
+> 在声明 path 字段的时候，可省略 `/`，只声明后面的字符，如 `/abc` 可声明为 `abc`。
 
 path（页面路径）是浏览器URL的组成部分，同时大部分网站的 URL 也都受到了 Restful 思想的影响，所以我们也是用类似的形式作为路径的规则基底。
 路径规则是路由配置的重要组成部分，我们希望一个路径配置的基本能力需要支持具体的路径（/xxx）与路径参数 (/:abc）。
