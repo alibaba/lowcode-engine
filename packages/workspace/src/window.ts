@@ -26,6 +26,22 @@ export interface IEditorWindow extends Omit<IPublicModelWindow<IResource>, 'chan
   sleep?: boolean;
 
   init(): void;
+
+  updateState(state: WINDOW_STATE): void;
+}
+
+export enum WINDOW_STATE {
+  // 睡眠
+  sleep = 'sleep',
+
+  // 激活
+  active = 'active',
+
+  // 未激活
+  inactive = 'inactive',
+
+  // 销毁
+  destroyed = 'destroyed'
 }
 
 export class EditorWindow implements IEditorWindow {
@@ -51,6 +67,22 @@ export class EditorWindow implements IEditorWindow {
     this.title = config.title;
     this.icon = resource.icon;
     this.sleep = config.sleep;
+    if (config.sleep) {
+      this.updateState(WINDOW_STATE.sleep);
+    }
+  }
+
+  updateState(state: WINDOW_STATE): void {
+    switch (state) {
+      case WINDOW_STATE.active:
+        this.editorView?.setActivate(true);
+        break;
+      case WINDOW_STATE.inactive:
+        this.editorView?.setActivate(false);
+        break;
+      case WINDOW_STATE.destroyed:
+        break;
+    }
   }
 
   async importSchema(schema: any) {
@@ -102,6 +134,7 @@ export class EditorWindow implements IEditorWindow {
     this.initReady = true;
     this.workspace.checkWindowQueue();
     this.sleep = false;
+    this.updateState(WINDOW_STATE.active);
   }
 
   initViewTypes = async () => {
