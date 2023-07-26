@@ -2,14 +2,13 @@ import { obx, computed, makeObservable, action, IEventBus, createModuleEventBus 
 import { IDesigner } from '../designer';
 import { DocumentModel, isDocumentModel } from '../document';
 import type { IDocumentModel } from '../document';
-import {
-  IPublicTypeComponentsMap,
-  IPublicEnumTransformStage,
-  IBaseApiProject,
-} from '@alilc/lowcode-types';
+import { IPublicEnumTransformStage } from '@alilc/lowcode-types';
 import type {
+  IBaseApiProject,
   IPublicTypeProjectSchema,
   IPublicTypeRootSchema,
+  IPublicTypeComponentsMap,
+  IPublicTypeSimulatorRenderer,
 } from '@alilc/lowcode-types';
 import { isLowCodeComponentType, isProCodeComponentType } from '@alilc/lowcode-utils';
 import { ISimulatorHost } from '../simulator';
@@ -87,6 +86,8 @@ export interface IProject extends Omit<IBaseApiProject<
   get(key: string): unknown;
 
   checkExclusive(activeDoc: DocumentModel): void;
+
+  setRendererReady(renderer: IPublicTypeSimulatorRenderer<any, any>): void;
 }
 
 export class Project implements IProject {
