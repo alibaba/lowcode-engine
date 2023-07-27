@@ -215,6 +215,7 @@ sidebar_position: 0
   "css": "body {font-size: 12px;} .table { width: 100px;}",
   "config": {                                          // 当前应用配置信息
     "sdkVersion": "1.0.3",                             // 渲染模块版本
+    "historyMode": "hash",                             // 不推荐，推荐在 router 字段中配置
     "targetRootID": "J_Container",
     "layout": {
       "componentName": "BasicLayout",
@@ -1523,9 +1524,9 @@ path（页面路径）是浏览器URL的组成部分，同时大部分网站的 
 ### 3.2 应用级别 APIs
 > 下文中 `xxx` 代指任意 API
 #### 3.2.1 路由 Router API
-  - this.location.`xxx` 「不推荐，后续会删除」
-  - this.history.`xxx` 「不推荐，后续会删除」
-  - this.match.`xxx` 「不推荐，后续会删除」
+  - this.location.`xxx` 「不推荐，推荐统一通过 this.router api」
+  - this.history.`xxx` 「不推荐，推荐统一通过 this.router api」
+  - this.match.`xxx` 「不推荐，推荐统一通过 this.router api」
   - this.router.`xxx`
 
 ##### Router 结构说明
