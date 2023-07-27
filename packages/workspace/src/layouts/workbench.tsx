@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { TipContainer, observer } from '@alilc/lowcode-editor-core';
+import { TipContainer, engineConfig, observer } from '@alilc/lowcode-editor-core';
 import { WindowView } from '../view/window-view';
 import classNames from 'classnames';
 import TopArea from './top-area';
@@ -21,17 +21,29 @@ export class Workbench extends Component<{
   components?: PluginClassSet;
   className?: string;
   topAreaItemClassName?: string;
+}, {
+  workspaceEmptyComponent: any;
 }> {
   constructor(props: any) {
     super(props);
     const { config, components, workspace } = this.props;
     const { skeleton } = workspace;
     skeleton.buildFromConfig(config, components);
+    engineConfig.onGot('workspaceEmptyComponent', (workspaceEmptyComponent) => {
+      this.setState({
+        workspaceEmptyComponent,
+      });
+    });
+    this.state = {
+      workspaceEmptyComponent: engineConfig.get('workspaceEmptyComponent'),
+    };
   }
 
   render() {
     const { workspace, className, topAreaItemClassName } = this.props;
     const { skeleton } = workspace;
+    const WorkspaceEmptyComponent = this.state.workspaceEmptyComponent;
+
     return (
       <div className={classNames('lc-workspace-workbench', className)}>
         <SkeletonContext.Provider value={skeleton}>
@@ -52,6 +64,10 @@ export class Workbench extends Component<{
                         key={d.id}
                       />
                     ))
+                  }
+
+                  {
+                    !workspace.windows.length && WorkspaceEmptyComponent ? <WorkspaceEmptyComponent /> : null
                   }
                 </div>
               </div>

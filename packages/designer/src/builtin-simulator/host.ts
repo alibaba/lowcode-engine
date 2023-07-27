@@ -4,7 +4,6 @@ import {
   reaction,
   computed,
   getPublicPath,
-  focusTracker,
   engineConfig,
   globalLocale,
   IReactionPublic,
@@ -519,7 +518,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     // bind hotkey & clipboard
     const hotkey = this.designer.editor.get('innerHotkey');
     hotkey.mount(this._contentWindow);
-    focusTracker.mount(this._contentWindow);
+    const innerSkeleton = this.designer.editor.get('skeleton');
+    innerSkeleton.focusTracker.mount(this._contentWindow);
     clipboard.injectCopyPaster(this._contentDocument);
 
     // TODO: dispose the bindings

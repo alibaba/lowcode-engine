@@ -1,4 +1,4 @@
-import { action, makeObservable, obx, engineConfig, IEditor } from '@alilc/lowcode-editor-core';
+import { action, makeObservable, obx, engineConfig, IEditor, FocusTracker } from '@alilc/lowcode-editor-core';
 import {
   DockConfig,
   PanelConfig,
@@ -83,6 +83,8 @@ export interface ISkeleton extends Omit<IPublicApiSkeleton,
 
   readonly widgets: IWidget[];
 
+  readonly focusTracker: FocusTracker;
+
   getPanel(name: string): Panel | undefined;
 
   getWidget(name: string): IWidget | undefined;
@@ -132,6 +134,8 @@ export class Skeleton {
   readonly stages: Area<StageConfig, Stage>;
 
   readonly widgets: IWidget[] = [];
+
+  readonly focusTracker = new FocusTracker();
 
   constructor(readonly editor: IEditor, readonly viewName: string = 'global') {
     makeObservable(this);
@@ -245,6 +249,7 @@ export class Skeleton {
 
     this.setupPlugins();
     this.setupEvents();
+    this.focusTracker.mount(window);
   }
 
   /**

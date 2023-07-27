@@ -22,7 +22,7 @@ export class Skeleton implements IPublicApiSkeleton {
     }
     const workspace = globalContext.get('workspace');
     if (workspace.isActive) {
-      if (!workspace.window.innerSkeleton) {
+      if (!workspace.window?.innerSkeleton) {
         logger.error('skeleton api 调用时机出现问题，请检查');
         return this[innerSkeletonSymbol];
       }

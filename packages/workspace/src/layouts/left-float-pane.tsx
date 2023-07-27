@@ -1,7 +1,8 @@
 import { Component, Fragment } from 'react';
 import classNames from 'classnames';
-import { observer, Focusable, focusTracker } from '@alilc/lowcode-editor-core';
+import { observer, Focusable } from '@alilc/lowcode-editor-core';
 import { Area, Panel } from '@alilc/lowcode-editor-skeleton';
+import { IPublicApiProject } from '@alilc/lowcode-types';
 
 @observer
 export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }> {
@@ -29,7 +30,9 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
       area.skeleton.editor.removeListener('designer.drag', triggerClose);
     };
 
-    this.focusing = focusTracker.create({
+    const project: IPublicApiProject | undefined = area.skeleton.editor.get('project');
+
+    this.focusing = area.skeleton.focusTracker.create({
       range: (e) => {
         const target = e.target as HTMLElement;
         if (!target) {
@@ -40,6 +43,9 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
         }
         // 点击了 iframe 内容，算失焦
         if ((document.querySelector('.lc-simulator-content-frame') as HTMLIFrameElement)?.contentWindow?.document.documentElement.contains(target)) {
+          return false;
+        }
+        if (project?.simulatorHost?.contentWindow?.document.documentElement.contains(target)) {
           return false;
         }
         // 点击设置区

@@ -193,8 +193,8 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
     getNode,
   });
 
-  if (curDocumentId && cache.component.has(componentCacheId)) {
-    return cache.component.get(componentCacheId);
+  if (curDocumentId && cache.component.has(componentCacheId) && (cache.component.get(componentCacheId).Comp === Comp)) {
+    return cache.component.get(componentCacheId).LeafWrapper;
   }
 
   class LeafHoc extends Component {
@@ -590,7 +590,10 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
 
   LeafWrapper.displayName = (Comp as any).displayName;
 
-  cache.component.set(componentCacheId, LeafWrapper);
+  cache.component.set(componentCacheId, {
+    LeafWrapper,
+    Comp,
+  });
 
   return LeafWrapper;
 }

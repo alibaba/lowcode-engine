@@ -2,7 +2,7 @@ import { IDesigner, ILowCodePluginManager, LowCodePluginManager } from '@alilc/l
 import { createModuleEventBus, Editor, IEditor, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
 import { IPublicApiPlugins, IPublicApiWorkspace, IPublicEnumPluginRegisterLevel, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType, IShellModelFactory } from '@alilc/lowcode-types';
 import { BasicContext } from './context/base-context';
-import { EditorWindow } from './window';
+import { EditorWindow, WINDOW_STATE } from './window';
 import type { IEditorWindow } from './window';
 import { IResource, Resource } from './resource';
 import { IResourceType, ResourceType } from './resource-type';
@@ -103,6 +103,7 @@ export class Workspace implements IWorkspace {
     readonly shellModelFactory: any,
   ) {
     this.context = new BasicContext(this, '', IPublicEnumPluginRegisterLevel.Workspace);
+    this.context.innerHotkey.activate(true);
     makeObservable(this);
   }
 
@@ -197,14 +198,16 @@ export class Workspace implements IWorkspace {
     }
     const window = this.windows[index];
     this.windows.splice(index, 1);
+    this.window?.updateState(WINDOW_STATE.destroyed);
     if (this.window === window) {
       this.window = this.windows[index] || this.windows[index + 1] || this.windows[index - 1];
-      if (this.window.sleep) {
+      if (this.window?.sleep) {
         this.window.init();
       }
       this.emitChangeActiveWindow();
     }
     this.emitChangeWindow();
+    this.window?.updateState(WINDOW_STATE.active);
   }
 
   removeEditorWindow(resourceName: string, title: string) {
@@ -214,6 +217,7 @@ export class Workspace implements IWorkspace {
 
   async openEditorWindowById(id: string) {
     const window = this.editorWindowMap.get(id);
+    this.window?.updateState(WINDOW_STATE.inactive);
     if (window) {
       this.window = window;
       if (window.sleep) {
@@ -221,6 +225,7 @@ export class Workspace implements IWorkspace {
       }
       this.emitChangeActiveWindow();
     }
+    this.window?.updateState(WINDOW_STATE.active);
   }
 
   async openEditorWindow(name: string, title: string, options: Object, viewType?: string, sleep?: boolean) {
@@ -235,6 +240,7 @@ export class Workspace implements IWorkspace {
       console.error(`${name} resourceType is not available`);
       return;
     }
+    this.window?.updateState(WINDOW_STATE.inactive);
     const filterWindows = this.windows.filter(d => (d.resource?.name === name && d.resource.title == title));
     if (filterWindows && filterWindows.length) {
       this.window = filterWindows[0];
@@ -244,6 +250,7 @@ export class Workspace implements IWorkspace {
         this.checkWindowQueue();
       }
       this.emitChangeActiveWindow();
+      this.window?.updateState(WINDOW_STATE.active);
       return;
     }
     const resource = new Resource({
@@ -265,6 +272,7 @@ export class Workspace implements IWorkspace {
     }
     this.emitChangeWindow();
     this.emitChangeActiveWindow();
+    this.window?.updateState(WINDOW_STATE.active);
   }
 
   onChangeWindows(fn: () => void) {
