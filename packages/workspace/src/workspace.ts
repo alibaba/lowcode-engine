@@ -266,10 +266,12 @@ export class Workspace implements IWorkspace {
     });
     this.windows = [...this.windows, window];
     this.editorWindowMap.set(window.id, window);
-    if (!sleep) {
-      this.window = window;
-      await this.window.init();
+    if (sleep) {
+      this.emitChangeWindow();
+      return;
     }
+    this.window = window;
+    await this.window.init();
     this.emitChangeWindow();
     this.emitChangeActiveWindow();
     this.window?.updateState(WINDOW_STATE.active);
