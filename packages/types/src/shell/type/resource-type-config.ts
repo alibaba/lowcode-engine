@@ -8,8 +8,14 @@ export interface IPublicResourceTypeConfig {
   /** 资源 icon 标识 */
   icon?: React.ReactElement;
 
+  /**
+   * 默认视图类型
+   * @deprecated
+   */
+  defaultViewType?: string;
+
   /** 默认视图类型 */
-  defaultViewType: string;
+  defaultViewName: string;
 
   /** 资源视图 */
   editorViews: IPublicTypeEditorView[];

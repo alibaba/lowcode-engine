@@ -95,7 +95,7 @@ export class Workspace implements IWorkspace {
     name: string;
     title: string;
     options: Object;
-    viewType?: string;
+    viewName?: string;
   }[] = [];
 
   constructor(
@@ -114,7 +114,7 @@ export class Workspace implements IWorkspace {
 
     const windowInfo = this.windowQueue.shift();
     if (windowInfo) {
-      this.openEditorWindow(windowInfo.name, windowInfo.title, windowInfo.options, windowInfo.viewType);
+      this.openEditorWindow(windowInfo.name, windowInfo.title, windowInfo.options, windowInfo.viewName);
     }
   }
 
@@ -228,10 +228,10 @@ export class Workspace implements IWorkspace {
     this.window?.updateState(WINDOW_STATE.active);
   }
 
-  async openEditorWindow(name: string, title: string, options: Object, viewType?: string, sleep?: boolean) {
+  async openEditorWindow(name: string, title: string, options: Object, viewName?: string, sleep?: boolean) {
     if (this.window && !this.window?.initReady && !sleep) {
       this.windowQueue.push({
-        name, title, options, viewType,
+        name, title, options, viewName,
       });
       return;
     }
@@ -261,7 +261,7 @@ export class Workspace implements IWorkspace {
     const window = new EditorWindow(resource, this, {
       title,
       options,
-      viewType,
+      viewName,
       sleep,
     });
     this.windows = [...this.windows, window];
