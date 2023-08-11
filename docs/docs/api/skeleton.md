@@ -178,6 +178,21 @@ IWidgetBaseConfig 定义如下：
 remove(config: IPublicTypeWidgetBaseConfig): number | undefined;
 ```
 
+### getPanel
+
+获取面板实例
+
+```typescript
+/**
+ * 获取面板实例
+ * @param name 面板名称
+ */
+getPanel(name: string): IPublicModelSkeletonItem | undefined;
+```
+
+相关类型：[IPublicModelSkeletonItem](https://github.com/alibaba/lowcode-engine/blob/main/packages/shell/src/model/skeleton-item.ts)
+
+@since v1.1.10
 
 ### showPanel
 
