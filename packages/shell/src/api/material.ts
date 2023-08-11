@@ -181,7 +181,7 @@ export class Material implements IPublicApiMaterial {
   onChangeAssets(fn: () => void): IPublicTypeDisposable {
     const dispose = [
       // 设置 assets，经过 setAssets 赋值
-      this[editorSymbol].onGot('assets', fn),
+      this[editorSymbol].onChange('assets', fn),
       // 增量设置 assets，经过 loadIncrementalAssets 赋值
       this[editorSymbol].eventBus.on('designer.incrementalAssetsReady', fn),
     ];
