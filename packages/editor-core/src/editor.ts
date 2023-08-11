@@ -222,6 +222,16 @@ export class Editor extends EventEmitter implements IEditor {
     };
   }
 
+  onChange<T = undefined, KeyOrType extends IPublicTypeEditorValueKey = any>(
+    keyOrType: KeyOrType,
+    fn: (data: IPublicTypeEditorGetResult<T, KeyOrType>) => void,
+  ): () => void {
+    this.setWait(keyOrType, fn);
+    return () => {
+      this.delWait(keyOrType, fn);
+    };
+  }
+
   register(data: any, key?: IPublicTypeEditorValueKey): void {
     this.context.set(key || data, data);
     this.notifyGot(key || data);
