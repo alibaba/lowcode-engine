@@ -13,4 +13,9 @@ export interface IPublicModelSkeletonItem {
   hide(): void;
 
   show(): void;
+
+  /**
+   * @since v1.1.10
+   */
+  toggle(): void;
 }
