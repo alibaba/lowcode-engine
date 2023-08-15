@@ -102,7 +102,7 @@ export class NodeChildren implements INodeChildren {
       options: any = {},
     ) {
     makeObservable(this);
-    this.children = (Array.isArray(data) ? data : [data]).map((child) => {
+    this.children = (Array.isArray(data) ? data : [data]).filter(child => !!child).map((child) => {
       return this.owner.document?.createNode(child, options.checkId);
     });
   }
@@ -127,7 +127,7 @@ export class NodeChildren implements INodeChildren {
   }
 
   import(data?: IPublicTypeNodeData | IPublicTypeNodeData[], checkId = false) {
-    data = data ? (Array.isArray(data) ? data : [data]) : [];
+    data = (data ? (Array.isArray(data) ? data : [data]) : []).filter(d => !!d);
 
     const originChildren = this.children.slice();
     this.children.forEach((child) => child.internalSetParent(null));
