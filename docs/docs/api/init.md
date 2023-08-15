@@ -118,7 +118,7 @@ init(document.getElementById('engine'), {
   enableCondition: false,
 });
 ```
-###
+
 ### 默认打开移动端画布
 ```typescript
 import { init } from '@alilc/lowcode-engine';
@@ -126,6 +126,25 @@ import { init } from '@alilc/lowcode-engine';
 init({
   device: 'mobile',
 });
+```
+### device 参数详细说明
+
+引擎默认支持的 device 类型有 `default`、`mobile`、`iphonex`、`iphone6`。
+
+插件 `@alilc/lowcode-plugin-simulator-select` 支持的 device 类型有 `default`、`phone`、`tablet`、`desktop`。
+
+如果需要自定义的 device 类型，需要补充 device 类型对应的样式，例如 device 为 phone 时，需要补充样式如下：
+
+```css
+.lc-simulator-device-phone {
+  top: 16px;
+  bottom: 16px;
+  left: 50%;
+  width: 375px;
+  transform: translateX(-50%);
+  margin: auto;
+}
+
 ```
 
 ### 使用 utils 第三方工具扩展
