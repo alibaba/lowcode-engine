@@ -51,6 +51,7 @@
   overflow: hidden;
   margin-bottom: @treeNodeHeight;
   user-select: none;
+  overflow-x: scroll;
 
   .tree-node-modal {
     margin: 5px;
@@ -80,7 +81,8 @@
       }
     }
 
-    .tree-node-modal-radio, .tree-node-modal-radio-active {
+    .tree-node-modal-radio,
+    .tree-node-modal-radio-active {
       margin-right: 4px;
       opacity: 0.8;
       position: absolute;
@@ -139,7 +141,7 @@
       content: ' ';
       z-index: 2;
     }
-    >.condition-group-title {
+    > .condition-group-title {
       text-align: center;
       background-color: #7b605b;
       height: 14px;
@@ -167,7 +169,7 @@
       content: ' ';
       z-index: 2;
     }
-    >.tree-node-slots-title {
+    > .tree-node-slots-title {
       text-align: center;
       background-color: rgb(144, 94, 190);
       height: 14px;
@@ -183,7 +185,7 @@
     &.insertion-at-slots {
       padding-bottom: @treeNodeHeight;
       border-bottom-color: rgb(182, 55, 55);
-      >.tree-node-slots-title {
+      > .tree-node-slots-title {
         background-color: rgb(182, 55, 55);
       }
       &::before {
@@ -279,7 +281,10 @@
         }
       }
 
-      .tree-node-hide-btn, .tree-node-lock-btn, .tree-node-rename-btn {
+      .tree-node-hide-btn,
+      .tree-node-lock-btn,
+      .tree-node-rename-btn,
+      .tree-node-delete-btn {
         opacity: 0;
         color: var(--color-text);
         line-height: 0;
@@ -293,18 +298,26 @@
         }
       }
       &:hover {
-        .tree-node-hide-btn, .tree-node-lock-btn, .tree-node-rename-btn {
+        .tree-node-hide-btn,
+        .tree-node-lock-btn,
+        .tree-node-rename-btn,
+        .tree-node-delete-btn {
           opacity: 0.5;
         }
       }
       html.lc-cursor-dragging & {
         // FIXME: only hide hover shows
-        .tree-node-hide-btn, .tree-node-lock-btn, .tree-node-rename-btn {
+        .tree-node-hide-btn,
+        .tree-node-lock-btn,
+        .tree-node-rename-btn {
           display: none;
         }
       }
       &.editing {
-        & > .tree-node-hide-btn, & >.tree-node-lock-btn, & >.tree-node-rename-btn {
+        & > .tree-node-hide-btn,
+        & > .tree-node-lock-btn,
+        & > .tree-node-rename-btn,
+        & > .tree-node-delete-btn {
           display: none;
         }
       }
@@ -381,7 +394,8 @@
         opacity: 0.8;
       }
       .tree-node-branches {
-        .tree-node-lock-btn, .tree-node-hide-btn {
+        .tree-node-lock-btn,
+        .tree-node-hide-btn {
           opacity: 0;
         }
       }
