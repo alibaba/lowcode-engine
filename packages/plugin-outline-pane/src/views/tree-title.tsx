@@ -228,7 +228,7 @@ export default class TreeTitle extends PureComponent<{
 
 class DeleteBtn extends PureComponent<{
   treeNode: TreeNode;
-  onClick: (e: any) => void;
+  onClick: () => void;
 }> {
   render() {
     const { intl, common } = this.props.treeNode.pluginContext;
