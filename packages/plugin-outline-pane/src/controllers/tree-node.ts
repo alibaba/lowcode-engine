@@ -182,7 +182,7 @@ export default class TreeNode {
   deleteNode(node: IPublicModelNode) {
     const { componentMeta } = node;
     const availableActions = componentMeta ? componentMeta.availableActions : [];
-    const removeAction = availableActions.find((action: { name: string }) => action?.name === 'remove');
+    const removeAction = availableActions.find((action) => action?.name === 'remove');
     const content = removeAction?.content as IPublicTypeActionContentObject;
     const action = content?.action;
     action && action(node);
