@@ -32,4 +32,8 @@ export class SkeletonItem implements IPublicModelSkeletonItem {
   show() {
     this[skeletonItemSymbol].show();
   }
+
+  toggle() {
+    this[skeletonItemSymbol].toggle();
+  }
 }

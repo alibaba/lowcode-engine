@@ -64,6 +64,11 @@ module.exports = {
             href: 'https://github.com/alibaba/lowcode-engine/releases',
           },
           ...getDocsFromDir('guide/appendix'),
+          {
+            type: 'category',
+            label: '预置设置器详情',
+            items: getDocsFromDir('guide/appendix/setterDetails'),
+          },
         ],
       },
       {

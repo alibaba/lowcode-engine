@@ -76,6 +76,15 @@ export class Skeleton implements IPublicApiSkeleton {
     return this[skeletonSymbol][normalizeArea(areaName)].container.items?.map(d => new SkeletonItem(d));
   }
 
+  getPanel(name: string) {
+    const item = this[skeletonSymbol].getPanel(name);
+    if (!item) {
+      return;
+    }
+
+    return new SkeletonItem(item);
+  }
+
   /**
    * 显示面板
    * @param name

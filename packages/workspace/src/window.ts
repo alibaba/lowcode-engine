@@ -8,7 +8,7 @@ import { IPublicModelWindow, IPublicTypeDisposable } from '@alilc/lowcode-types'
 interface IWindowCOnfig {
   title: string | undefined;
   options?: Object;
-  viewType?: string | undefined;
+  viewName?: string | undefined;
   sleep?: boolean;
 }
 
@@ -19,7 +19,7 @@ export interface IEditorWindow extends Omit<IPublicModelWindow<IResource>, 'chan
 
   editorView: IViewContext;
 
-  changeViewType: (name: string, ignoreEmit?: boolean) => void;
+  changeViewName: (name: string, ignoreEmit?: boolean) => void;
 
   initReady: boolean;
 
@@ -130,7 +130,7 @@ export class EditorWindow implements IEditorWindow {
       this.workspace.emitWindowRendererReady();
     });
     this.url = await this.resource.url();
-    this.setDefaultViewType();
+    this.setDefaultViewName();
     this.initReady = true;
     this.workspace.checkWindowQueue();
     this.sleep = false;
@@ -146,7 +146,7 @@ export class EditorWindow implements IEditorWindow {
       const name = editorViews[i].viewName;
       await this.initViewType(name);
       if (!this.editorView) {
-        this.changeViewType(name);
+        this.changeViewName(name);
       }
     }
   };
@@ -166,13 +166,13 @@ export class EditorWindow implements IEditorWindow {
     }
     for (let i = 0; i < editorViews.length; i++) {
       const name = editorViews[i].viewName;
-      this.changeViewType(name);
+      this.changeViewName(name);
       await this.editorViews.get(name)?.init();
     }
   };
 
-  setDefaultViewType = () => {
-    this.changeViewType(this.config.viewType ?? this.resource.defaultViewType);
+  setDefaultViewName = () => {
+    this.changeViewName(this.config.viewName ?? this.resource.defaultViewName!);
   };
 
   get resourceType() {
@@ -188,7 +188,7 @@ export class EditorWindow implements IEditorWindow {
     this.editorViews.set(name, editorView);
   };
 
-  changeViewType = (name: string, ignoreEmit: boolean = true) => {
+  changeViewName = (name: string, ignoreEmit: boolean = true) => {
     this.editorView?.setActivate(false);
     this.editorView = this.editorViews.get(name)!;
 

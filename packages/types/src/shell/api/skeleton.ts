@@ -21,6 +21,13 @@ export interface IPublicApiSkeleton {
   remove(config: IPublicTypeSkeletonConfig): number | undefined;
 
   /**
+   * 获取面板实例
+   * @param name 面板名称
+   * @since v1.1.10
+   */
+  getPanel(name: string): IPublicModelSkeletonItem | undefined;
+
+  /**
    * 展示指定 Panel 实例
    * show panel by name
    * @param name

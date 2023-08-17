@@ -16,7 +16,7 @@ export interface IBaseResource<T> extends IBaseModelResource<T> {
 
   get editorViews(): IPublicTypeEditorView[];
 
-  get defaultViewType(): string;
+  get defaultViewName(): string | undefined;
 
   getEditorView(name: string): IPublicTypeEditorView | undefined;
 
@@ -41,7 +41,7 @@ export class Resource implements IResource {
   }
 
   get viewName() {
-    return this.resourceData.viewName || (this.resourceData as any).viewType || this.defaultViewType;
+    return this.resourceData.viewName || (this.resourceData as any).viewType || this.defaultViewName;
   }
 
   get description() {
@@ -116,8 +116,8 @@ export class Resource implements IResource {
     return this.resourceTypeInstance.editorViews;
   }
 
-  get defaultViewType() {
-    return this.resourceTypeInstance.defaultViewType;
+  get defaultViewName() {
+    return this.resourceTypeInstance.defaultViewName || this.resourceTypeInstance.defaultViewType;
   }
 
   getEditorView(name: string) {

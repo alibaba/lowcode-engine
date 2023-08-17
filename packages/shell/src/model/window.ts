@@ -32,7 +32,7 @@ export class Window implements IPublicModelWindow {
   }
 
   changeViewType(viewName: string) {
-    this[windowSymbol].changeViewType(viewName, false);
+    this[windowSymbol].changeViewName(viewName, false);
   }
 
   onChangeViewType(fun: (viewName: string) => void): IPublicTypeDisposable {

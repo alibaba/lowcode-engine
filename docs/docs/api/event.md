@@ -25,6 +25,19 @@ on(event: string, listener: (...args: any[]) => void): IPublicTypeDisposable;
 ```
 相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
 
+### prependListener
+监听事件，会在其他回调函数之前执行
+
+```typescript
+/**
+ * 监听事件，会在其他回调函数之前执行
+ * @param event 事件名称
+ * @param listener 事件回调
+ */
+prependListener(event: string, listener: (...args: any[]) => void): IPublicTypeDisposable;
+```
+相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
+
 ### off
 取消监听事件
 

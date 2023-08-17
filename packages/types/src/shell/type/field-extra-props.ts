@@ -44,11 +44,6 @@ export interface IPublicTypeFieldExtraProps {
   autorun?: (target: IPublicModelSettingField) => void;
 
   /**
-   * is this field is a virtual field that not save to schema
-   */
-  virtual?: (target: IPublicModelSettingField) => boolean;
-
-  /**
    * default collapsed when display accordion
    */
   defaultCollapsed?: boolean;
