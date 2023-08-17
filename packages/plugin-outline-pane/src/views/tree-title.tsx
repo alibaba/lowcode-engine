@@ -135,7 +135,7 @@ export default class TreeTitle extends PureComponent<{
     const shouldShowHideBtn = isCNode && isNodeParent && !isModal && couldHide;
     const shouldShowLockBtn = config.get('enableCanvasLock', false) && isContainer && isCNode && isNodeParent && ((couldLock && !node.isLocked) || (couldUnlock && node.isLocked));
     const shouldEditBtn = isCNode && isNodeParent;
-    const shouldDeleteBtn = shouldShowHideBtn || shouldShowLockBtn;
+    const shouldDeleteBtn = isCNode && isNodeParent && !isModal;
     return (
       <div
         className={classNames('tree-node-title', { editing })}

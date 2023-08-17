@@ -3,7 +3,6 @@ import {
   IPublicTypeLocationChildrenDetail,
   IPublicModelNode,
   IPublicTypeDisposable,
-  IPublicTypeActionContentObject,
 } from '@alilc/lowcode-types';
 import { isI18nData, isLocationChildrenDetail, uniqueId } from '@alilc/lowcode-utils';
 import EventEmitter from 'events';
@@ -180,12 +179,7 @@ export default class TreeNode {
     this.event.emit(EVENT_NAMES.lockedChanged, flag);
   }
   deleteNode(node: IPublicModelNode) {
-    const { componentMeta } = node;
-    const availableActions = componentMeta ? componentMeta.availableActions : [];
-    const removeAction = availableActions.find((action) => action?.name === 'remove');
-    const content = removeAction?.content as IPublicTypeActionContentObject;
-    const action = content?.action;
-    action && action(node);
+    node && node.remove();
   }
   onFilterResultChanged(fn: () => void): IPublicTypeDisposable {
     this.event.on(EVENT_NAMES.filterResultChanged, fn);
