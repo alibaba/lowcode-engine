@@ -135,17 +135,20 @@ export default function rendererFactory(): IRenderComponent {
           return engine.createElement(engine.getFaultComponent(), {
             ...this.props,
             error: this.state.error,
+            componentName: this.props._componentName
           });
         }
         return originRender.call(this);
       };
-      const originShouldComponentUpdate = SetComponent.prototype.shouldComponentUpdate;
-      SetComponent.prototype.shouldComponentUpdate = function (nextProps: IRendererProps, nextState: any) {
-        if (nextState && nextState.engineRenderError) {
-          return true;
-        }
-        return originShouldComponentUpdate ? originShouldComponentUpdate.call(this, nextProps, nextState) : true;
-      };
+      if(!(SetComponent.prototype instanceof PureComponent)) {
+        const originShouldComponentUpdate = SetComponent.prototype.shouldComponentUpdate;
+        SetComponent.prototype.shouldComponentUpdate = function (nextProps: IRendererProps, nextState: any) {
+          if (nextState && nextState.engineRenderError) {
+            return true;
+          }
+          return originShouldComponentUpdate ? originShouldComponentUpdate.call(this, nextProps, nextState) : true;
+        };
+      }
     }
 
     createElement(SetComponent: any, props: any, children?: any) {
