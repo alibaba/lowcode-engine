@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { createIcon } from '@alilc/lowcode-utils';
 import { IPublicApiEvent } from '@alilc/lowcode-types';
 import TreeNode from '../controllers/tree-node';
-import { IconLock, IconUnlock, IconArrowRight, IconEyeClose, IconEye, IconCond, IconLoop, IconRadioActive, IconRadio, IconSetting } from '../icons';
+import { IconLock, IconUnlock, IconArrowRight, IconEyeClose, IconEye, IconCond, IconLoop, IconRadioActive, IconRadio, IconSetting, IconDelete } from '../icons';
 
 function emitOutlineEvent(event: IPublicApiEvent, type: string, treeNode: TreeNode, rest?: Record<string, unknown>) {
   const node = treeNode?.node;
@@ -100,7 +100,11 @@ export default class TreeTitle extends PureComponent<{
       });
     });
   }
-
+  deleteClick = () => {
+    const { treeNode } = this.props;
+    const { node } = treeNode;
+    treeNode.deleteNode(node);
+  };
   render() {
     const { treeNode, isModal } = this.props;
     const { pluginContext } = treeNode;
@@ -131,6 +135,7 @@ export default class TreeTitle extends PureComponent<{
     const shouldShowHideBtn = isCNode && isNodeParent && !isModal && couldHide;
     const shouldShowLockBtn = config.get('enableCanvasLock', false) && isContainer && isCNode && isNodeParent && ((couldLock && !node.isLocked) || (couldUnlock && node.isLocked));
     const shouldEditBtn = isCNode && isNodeParent;
+    const shouldDeleteBtn = isCNode && isNodeParent && node?.canPerformAction('remove');
     return (
       <div
         className={classNames('tree-node-title', { editing })}
@@ -214,8 +219,28 @@ export default class TreeTitle extends PureComponent<{
         </div>
         {shouldShowHideBtn && <HideBtn hidden={this.props.hidden} treeNode={treeNode} />}
         {shouldShowLockBtn && <LockBtn locked={this.props.locked} treeNode={treeNode} />}
-        {shouldEditBtn && <RenameBtn treeNode={treeNode} onClick={this.enableEdit} /> }
+        {shouldEditBtn && <RenameBtn treeNode={treeNode} onClick={this.enableEdit} />}
+        {shouldDeleteBtn && <DeleteBtn treeNode={treeNode} onClick={this.deleteClick} />}
+      </div>
+    );
+  }
+}
 
+class DeleteBtn extends PureComponent<{
+  treeNode: TreeNode;
+  onClick: () => void;
+}> {
+  render() {
+    const { intl, common } = this.props.treeNode.pluginContext;
+    const { Tip } = common.editorCabin;
+    return (
+      <div
+        className="tree-node-delete-btn"
+        onClick={this.props.onClick}
+      >
+        <IconDelete />
+        {/* @ts-ignore */}
+        <Tip>{intl('Delete')}</Tip>
       </div>
     );
   }
@@ -297,7 +322,6 @@ class ExpandBtn extends PureComponent<{
   expanded: boolean;
   expandable: boolean;
 }> {
-
   render() {
     const { treeNode, expanded, expandable } = this.props;
     if (!expandable) {
