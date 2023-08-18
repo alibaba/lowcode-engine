@@ -178,7 +178,9 @@ export default class TreeNode {
     this.node.lock(flag);
     this.event.emit(EVENT_NAMES.lockedChanged, flag);
   }
-
+  deleteNode(node: IPublicModelNode) {
+    node && node.remove();
+  }
   onFilterResultChanged(fn: () => void): IPublicTypeDisposable {
     this.event.on(EVENT_NAMES.filterResultChanged, fn);
     return () => {
