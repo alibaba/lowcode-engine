@@ -60,6 +60,10 @@ export class Resource implements IResource {
     return this.resourceData.title || this.resourceTypeInstance.defaultTitle;
   }
 
+  get id(): string | undefined {
+    return this.resourceData.id;
+  }
+
   get options() {
     return this.resourceData.options;
   }

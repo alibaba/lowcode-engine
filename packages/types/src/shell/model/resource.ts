@@ -5,6 +5,8 @@ export interface IBaseModelResource<
 > {
   get title(): string | undefined;
 
+  get id(): string | undefined;
+
   get icon(): ReactElement | undefined;
 
   get options(): Record<string, any>;
