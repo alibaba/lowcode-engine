@@ -8,6 +8,9 @@ export interface IPublicResourceData {
   /** 资源标题 */
   title?: string;
 
+  /** 资源 Id */
+  id?: string;
+
   /** 分类 */
   category?: string;
 
@@ -24,10 +27,6 @@ export interface IPublicResourceData {
 
   /** 资源子元素 */
   children?: IPublicResourceData[];
-
-  config?: {
-    disableBehaviors?: ('copy' | 'remove')[];
-  };
 }
 
 export type IPublicResourceList = IPublicResourceData[];

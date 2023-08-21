@@ -50,6 +50,8 @@ export interface IWorkspace extends Omit<IPublicApiWorkspace<
   onChangeActiveEditorView(fn: () => void): IPublicTypeDisposable;
 
   emitChangeActiveEditorView(): void;
+
+  openEditorWindowByResource(resource: IResource, sleep: boolean): Promise<void>;
 }
 
 export class Workspace implements IWorkspace {
@@ -91,12 +93,12 @@ export class Workspace implements IWorkspace {
 
   @obx.ref window: IEditorWindow;
 
-  windowQueue: {
+  windowQueue: ({
     name: string;
     title: string;
     options: Object;
     viewName?: string;
-  }[] = [];
+  } | IResource)[] = [];
 
   constructor(
     readonly registryInnerPlugin: (designer: IDesigner, editor: IEditor, plugins: IPublicApiPlugins) => Promise<IPublicTypeDisposable>,
@@ -192,7 +194,7 @@ export class Workspace implements IWorkspace {
     this.remove(index);
   }
 
-  private remove(index: number) {
+  private async remove(index: number) {
     if (index < 0) {
       return;
     }
@@ -202,7 +204,7 @@ export class Workspace implements IWorkspace {
     if (this.window === window) {
       this.window = this.windows[index] || this.windows[index + 1] || this.windows[index - 1];
       if (this.window?.sleep) {
-        this.window.init();
+        await this.window.init();
       }
       this.emitChangeActiveWindow();
     }
@@ -210,8 +212,8 @@ export class Workspace implements IWorkspace {
     this.window?.updateState(WINDOW_STATE.active);
   }
 
-  removeEditorWindow(resourceName: string, title: string) {
-    const index = this.windows.findIndex(d => (d.resource?.name === resourceName && d.title === title));
+  removeEditorWindow(resourceName: string, id: string) {
+    const index = this.windows.findIndex(d => (d.resource?.name === resourceName && d.title === id));
     this.remove(index);
   }
 
@@ -225,6 +227,47 @@ export class Workspace implements IWorkspace {
       }
       this.emitChangeActiveWindow();
     }
+    this.window?.updateState(WINDOW_STATE.active);
+  }
+
+  async openEditorWindowByResource(resource: IResource, sleep: boolean = false): Promise<void> {
+    if (this.window && !this.window?.initReady && !sleep) {
+      this.windowQueue.push(resource);
+      return;
+    }
+
+    this.window?.updateState(WINDOW_STATE.inactive);
+
+    const filterWindows = this.windows.filter(d => (d.resource?.id === resource.id));
+    if (filterWindows && filterWindows.length) {
+      this.window = filterWindows[0];
+      if (!sleep && this.window.sleep) {
+        await this.window.init();
+      } else {
+        this.checkWindowQueue();
+      }
+      this.emitChangeActiveWindow();
+      this.window?.updateState(WINDOW_STATE.active);
+      return;
+    }
+
+    const window = new EditorWindow(resource, this, {
+      title: resource.title,
+      options: resource.options,
+      viewName: resource.viewName,
+      sleep,
+    });
+
+    this.windows = [...this.windows, window];
+    this.editorWindowMap.set(window.id, window);
+    if (sleep) {
+      this.emitChangeWindow();
+      return;
+    }
+    this.window = window;
+    await this.window.init();
+    this.emitChangeWindow();
+    this.emitChangeActiveWindow();
     this.window?.updateState(WINDOW_STATE.active);
   }
 
