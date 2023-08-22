@@ -24,7 +24,7 @@ export interface IBaseModelResource<
   get description(): string | undefined;
 
   get config(): {
-    disableBehaviors?: ('copy' | 'remove')[];
+    [key: string]: any;
   } | undefined;
 }
 

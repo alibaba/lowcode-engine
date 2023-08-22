@@ -5,6 +5,11 @@ export interface IPublicResourceData {
   /** 资源名字 */
   resourceName: string;
 
+  /** 资源扩展配置 */
+  config?: {
+    [key: string]: any;
+  };
+
   /** 资源标题 */
   title?: string;
 
@@ -20,7 +25,7 @@ export interface IPublicResourceData {
   /** 资源 icon */
   icon?: ReactElement;
 
-  /** 资源其他配置 */
+  /** 资源其他配置，资源初始化时的第二个参数 */
   options: {
     [key: string]: any;
   };
