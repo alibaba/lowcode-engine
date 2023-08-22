@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unused-prop-types */
-import { Component, MouseEvent } from 'react';
+import { Component, ErrorInfo, MouseEvent } from 'react';
 import { isObject } from 'lodash';
 import classNames from 'classnames';
 import { Icon } from '@alifd/next';
@@ -9,6 +9,9 @@ import { PopupPipe, PopupContext } from '../popup';
 import './index.less';
 import InlineTip from './inlinetip';
 import { intl } from '../../locale';
+import { Logger } from '@alilc/lowcode-utils';
+
+const logger = new Logger({ level: 'warn', bizName: 'skeleton:field' });
 
 export interface FieldProps {
   className?: string;
@@ -31,6 +34,10 @@ export class Field extends Component<FieldProps> {
     hasError: false,
   };
 
+  private body: HTMLDivElement | null = null;
+
+  private dispose?: () => void;
+
   constructor(props: any) {
     super(props);
     this.handleClear = this.handleClear.bind(this);
@@ -46,10 +53,6 @@ export class Field extends Component<FieldProps> {
     });
     onExpandChange && onExpandChange(!collapsed);
   };
-
-  private body: HTMLDivElement | null = null;
-
-  private dispose?: () => void;
 
   private deployBlockTesting() {
     if (this.dispose) {
@@ -101,7 +104,13 @@ export class Field extends Component<FieldProps> {
   }
 
   static getDerivedStateFromError() {
-    return { hasError: true };
+    return {
+      hasError: true,
+    };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    logger.error(`${this.props.title} has error`, error, errorInfo);
   }
 
   getTipContent(propName: string, tip?: any): any {
@@ -194,6 +203,7 @@ export class Field extends Component<FieldProps> {
  */
 function createValueState(/* valueState?: number, onClear?: (e: React.MouseEvent) => void */) {
   return null;
+
   /*
   let tip: any = null;
   let className = 'lc-valuestate';
