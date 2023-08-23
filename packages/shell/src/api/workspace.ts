@@ -76,8 +76,12 @@ export class Workspace implements IPublicApiWorkspace {
     this[workspaceSymbol].openEditorWindowById(id);
   }
 
-  removeEditorWindow(resourceName: string, id: string) {
-    this[workspaceSymbol].removeEditorWindow(resourceName, id);
+  removeEditorWindow() {
+    if (typeof arguments[0] === 'string') {
+      this[workspaceSymbol].removeEditorWindow(arguments[0], arguments[1]);
+    } else {
+      this[workspaceSymbol].removeEditorWindowByResource(arguments[0]?.[resourceSymbol]);
+    }
   }
 
   removeEditorWindowById(id: string) {
