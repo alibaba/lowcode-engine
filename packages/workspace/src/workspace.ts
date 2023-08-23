@@ -22,7 +22,7 @@ const CHANGE_EVENT = 'resource.list.change';
 export interface IWorkspace extends Omit<IPublicApiWorkspace<
   LowCodePluginManager,
   IEditorWindow
->, 'resourceList' | 'plugins'> {
+>, 'resourceList' | 'plugins' | 'openEditorWindow' | 'removeEditorWindow'> {
   readonly registryInnerPlugin: (designer: IDesigner, editor: Editor, plugins: IPublicApiPlugins) => Promise<IPublicTypeDisposable>;
 
   readonly shellModelFactory: IShellModelFactory;
@@ -52,6 +52,18 @@ export interface IWorkspace extends Omit<IPublicApiWorkspace<
   emitChangeActiveEditorView(): void;
 
   openEditorWindowByResource(resource: IResource, sleep: boolean): Promise<void>;
+
+  /**
+   * @deprecated
+   */
+  removeEditorWindow(resourceName: string, id: string): void;
+
+  removeEditorWindowByResource(resource: IResource): void;
+
+  /**
+   * @deprecated
+   */
+  openEditorWindow(name: string, title: string, options: Object, viewName?: string, sleep?: boolean): Promise<void>;
 }
 
 export class Workspace implements IWorkspace {
@@ -213,7 +225,12 @@ export class Workspace implements IWorkspace {
   }
 
   removeEditorWindow(resourceName: string, id: string) {
-    const index = this.windows.findIndex(d => (d.resource?.name === resourceName && d.title === id));
+    const index = this.windows.findIndex(d => (d.resource?.name === resourceName && (d.title === id || d.resource.id === id)));
+    this.remove(index);
+  }
+
+  removeEditorWindowByResource(resource: IResource) {
+    const index = this.windows.findIndex(d => (d.resource?.id === resource.id));
     this.remove(index);
   }
 
