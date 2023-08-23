@@ -107,7 +107,16 @@ openEditorWindowById(id: string): void;
 移除视图窗口
 
 ```typescript
+/**
+ * 移除视图窗口
+ * @deprecated
+ */
 removeEditorWindow(resourceName: string, id: string): void;
+
+/**
+ * 移除视图窗口
+ */
+removeEditorWindow(resource: Resource): void;
 ```
 
 ### removeEditorWindowById

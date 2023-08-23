@@ -42,8 +42,16 @@ export interface IPublicApiWorkspace<
   /** 通过视图 id 打开窗口 */
   openEditorWindowById(id: string): void;
 
-  /** 移除视图窗口 */
+  /**
+   * 移除视图窗口
+   * @deprecated
+   */
   removeEditorWindow(resourceName: string, id: string): void;
+
+  /**
+   * 移除视图窗口
+   */
+  removeEditorWindow(resource: Resource): void;
 
   /** 通过视图 id 移除窗口 */
   removeEditorWindowById(id: string): void;
