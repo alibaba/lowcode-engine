@@ -179,7 +179,7 @@ config.set('enableCondition', false)
 
 `@type {boolean}` `@default {false}`
 
-鼠标事件在画布中是否允许冒泡
+鼠标事件（mouseover、mouseleave、mousemove）在画布中是否允许冒泡，默认不允许。
 
 #### enableReactiveContainer
 
