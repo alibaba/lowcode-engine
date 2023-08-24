@@ -126,7 +126,7 @@ config.set('enableCondition', false)
 
 #### customizeIgnoreSelectors - 点击忽略
 
-定制画布中点击被忽略的 selectors
+配置画布中，需要屏蔽点击事件的元素，即配置的元素默认点击行为均不生效。
 
 类型定义:
 
