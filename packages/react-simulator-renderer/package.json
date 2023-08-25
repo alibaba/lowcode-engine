@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-react-simulator-renderer",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "description": "react simulator renderer for alibaba lowcode designer",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -17,10 +17,10 @@
     "test:cov": "build-scripts test --config build.test.json --jest-coverage"
   },
   "dependencies": {
-    "@alilc/lowcode-designer": "1.1.9",
-    "@alilc/lowcode-react-renderer": "1.1.9",
-    "@alilc/lowcode-types": "1.1.9",
-    "@alilc/lowcode-utils": "1.1.9",
+    "@alilc/lowcode-designer": "1.1.10",
+    "@alilc/lowcode-react-renderer": "1.1.10",
+    "@alilc/lowcode-types": "1.1.10",
+    "@alilc/lowcode-utils": "1.1.10",
     "classnames": "^2.2.6",
     "mobx": "^6.3.0",
     "mobx-react": "^7.2.0",

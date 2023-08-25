@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-react-renderer",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "description": "react renderer for ali lowcode engine",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -22,7 +22,7 @@
   ],
   "dependencies": {
     "@alifd/next": "^1.21.16",
-    "@alilc/lowcode-renderer-core": "1.1.9"
+    "@alilc/lowcode-renderer-core": "1.1.10"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
