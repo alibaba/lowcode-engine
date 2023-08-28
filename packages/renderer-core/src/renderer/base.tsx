@@ -131,7 +131,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
     static contextType = AppContext;
 
-    appHelper?: IRendererAppHelper;
     i18n: any;
     getLocale: any;
     setLocale: any;
@@ -174,7 +173,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     __beforeInit(_props: IBaseRendererProps) { }
 
     __init(props: IBaseRendererProps) {
-      this.appHelper = props.__appHelper;
       this.__compScopes = {};
       this.__instanceMap = {};
       this.__bindCustomMethods(props);
@@ -1018,6 +1016,10 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       const componentNames = [builtin, ...extraComponents];
       return !isSchema(schema) || !componentNames.includes(schema?.componentName ?? '');
     };
+
+    get appHelper(): IRendererAppHelper {
+      return this.props.__appHelper;
+    }
 
     get requestHandlersMap() {
       return this.appHelper?.requestHandlersMap;
