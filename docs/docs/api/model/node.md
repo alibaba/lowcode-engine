@@ -658,3 +658,21 @@ setConditionalVisible(): void;
 getDOMNode(): HTMLElement;
 
 ```
+
+### getRGL
+
+获取磁贴相关信息
+
+```typescript
+/**
+ * 获取磁贴相关信息
+ */
+getRGL(): {
+  isContainerNode: boolean;
+  isEmptyNode: boolean;
+  isRGLContainerNode: boolean;
+  isRGLNode: boolean;
+  isRGL: boolean;
+  rglNode: Node | null;
+}
+```

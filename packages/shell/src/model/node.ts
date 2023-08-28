@@ -655,4 +655,24 @@ export class Node implements IPublicModelNode {
   setConditionalVisible(): void {
     this[nodeSymbol].setConditionalVisible();
   }
+
+  getRGL() {
+    const {
+      isContainerNode,
+      isEmptyNode,
+      isRGLContainerNode,
+      isRGLNode,
+      isRGL,
+      rglNode,
+    } = this[nodeSymbol].getRGL();
+
+    return {
+      isContainerNode,
+      isEmptyNode,
+      isRGLContainerNode,
+      isRGLNode,
+      isRGL,
+      rglNode: Node.create(rglNode),
+    };
+  }
 }
