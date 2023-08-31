@@ -3,7 +3,6 @@
   width: 100%;
   position: relative;
   z-index: 200;
-  background-color: white;
 
   > .lc-outline-tree-container {
     top: 52px;
@@ -29,8 +28,8 @@
     }
 
     .lc-outline-filter-icon {
-      background: #ebecf0;
-      border: 1px solid #c4c6cf;
+      background: var(--color-block-background-shallow, #ebecf0);
+      border: 1px solid var(--color-field-border, #c4c6cf);
       display: flex;
       align-items: center;
       border-radius: 0 2px 2px 0;
@@ -245,7 +244,6 @@
     .tree-node-title {
       font-size: var(--font-size-text);
       cursor: pointer;
-      background: var(--color-pane-background);
       border-bottom: 1px solid var(--color-line-normal, rgba(31, 56, 88, 0.1));
       display: flex;
       align-items: center;

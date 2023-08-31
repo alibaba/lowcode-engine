@@ -1225,7 +1225,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     const isRGLContainerNode = this.isRGLContainer;
     const isRGLNode = this.getParent()?.isRGLContainer;
     const isRGL = isRGLContainerNode || (isRGLNode && (!isContainerNode || !isEmptyNode));
-    let rglNode = isRGLContainerNode ? this : isRGL ? this?.getParent() : {};
+    let rglNode = isRGLContainerNode ? this : isRGL ? this?.getParent() : null;
     return { isContainerNode, isEmptyNode, isRGLContainerNode, isRGLNode, isRGL, rglNode };
   }
 

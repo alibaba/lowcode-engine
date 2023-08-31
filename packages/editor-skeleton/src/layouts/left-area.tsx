@@ -4,14 +4,14 @@ import { observer } from '@alilc/lowcode-editor-core';
 import { Area } from '../area';
 
 @observer
-export default class LeftArea extends Component<{ area: Area }> {
+export default class LeftArea extends Component<{ area: Area; className?: string }> {
   render() {
-    const { area } = this.props;
+    const { area, className = 'lc-left-area' } = this.props;
     if (area.isEmpty()) {
       return null;
     }
     return (
-      <div className={classNames('lc-left-area', {
+      <div className={classNames(className, {
         'lc-area-visible': area.visible,
       })}
       >
@@ -20,7 +20,6 @@ export default class LeftArea extends Component<{ area: Area }> {
     );
   }
 }
-
 
 @observer
 class Contents extends Component<{ area: Area }> {
