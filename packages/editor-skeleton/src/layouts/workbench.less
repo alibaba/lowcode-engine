@@ -38,7 +38,7 @@ body {
   font-family: var(--font-family);
   font-size: var(--font-size-text);
   color: var(--color-text);
-  background-color: #edeff3;
+  background-color: var(--color-background);
 }
 
 * {
@@ -49,13 +49,10 @@ body {
   width: 100%;
   height: 100%;
   position: relative;
-  background-color: #fff;
-  background-color: var(--color-pane-background);
   &.hidden {
     display: none;
   }
   .lc-panel-title {
-    // background-color: var(--pane-title-bg-color,rgba(31,56,88,.04));
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -71,7 +68,6 @@ body {
     height: 48px;
     font-size: 16px;
     padding: 0 15px;
-    // border-bottom: 1px solid var(--color-line-normal,rgba(31,56,88,.1));
     color: #0f1726;
     font-weight: bold;
   }
@@ -125,9 +121,6 @@ body {
   height: 100%;
   width: 100%;
   position: relative;
-  background-color: #fff;
-  background-color: var(--color-pane-background);
-  // overflow: auto;
   &.hidden {
     display: none;
   }
@@ -137,7 +130,7 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #edeff3;
+  background-color: var(--color-background);
   position: absolute;
   left: 0;
   top: 0;
@@ -164,47 +157,58 @@ body {
 
     &.active {
       z-index: 999;
-      background: #edeff3;
+      background: var(--color-background);
     }
   }
 }
 
-.lc-workbench {
+.lc-workbench, .lc-workspace-workbench {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #edeff3;
+  background-color: var(--color-background);
 
   &.engine-main {
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-color: #edeff3;
+    background-color: var(--color-background);
   }
-  .lc-top-area {
-    height: var(--top-area-height);
-    background-color: var(--color-pane-background);
+  .lc-top-area, .lc-sub-top-area {
     width: 100%;
     display: none;
     margin-bottom: 2px;
     padding: 8px 12px 8px 16px;
 
+    &.lc-top-area {
+      background-color: var(--color-top-area-background, var(--color-pane-background));
+      height: var(--top-area-height);
+    }
+
+    &.lc-sub-top-area {
+      background-color: var(--color-sub-top-area-background, var(--color-pane-background));
+      height: var(--sub-top-area-height, var(--top-area-height));
+      margin: var(--sub-top-area-margin, 0px 0px 2px 0px);
+      padding: var(--sub-top-area-padding, 8px 12px 8px 16px);
+    }
+
     &.lc-area-visible {
       display: flex;
     }
 
-    .lc-top-area-left {
+    .lc-top-area-left, .lc-sub-top-area-left {
       display: flex;
       align-items: center;
+      max-width: 100%;
     }
 
-    .lc-top-area-center {
+    .lc-top-area-center, .lc-sub-top-area-center {
       flex: 1;
       display: flex;
       justify-content: center;
       margin: 0 8px;
     }
-    .lc-top-area-right {
+    .lc-top-area-right, .lc-sub-top-area-right {
       display: flex;
       align-items: center;
       > * {
@@ -216,7 +220,7 @@ body {
       }
     }
   }
-  .lc-workbench-body {
+  .lc-workbench-body, .lc-workspace-workbench-body {
     flex: 1;
     display: flex;
     min-height: 0;
@@ -264,7 +268,7 @@ body {
       z-index: 2;
       .next-icon {
         line-height: 1;
-        color: rgba(0, 0, 0, 0.6);
+        color: var(--color-icon-pane);
       }
     }
 
@@ -277,7 +281,7 @@ body {
       z-index: 2;
       svg {
         vertical-align: middle;
-        color: rgba(0, 0, 0, 0.6);
+        color: var(--color-icon-pane);
       }
     }
 
@@ -288,7 +292,7 @@ body {
       width: var(--dock-pane-width);
       // min-width: var(--dock-fixed-pane-width);
       left: calc(var(--left-area-width) + 1px);
-      background-color: var(--color-pane-background);
+      background-color: var(--color-left-float-pane-background, var(--color-pane-background));
       box-shadow: 4px 6px 6px 0 rgba(31, 50, 88, 0.08);
       z-index: 820;
       display: none;
@@ -297,15 +301,20 @@ body {
         display: block;
       }
     }
-    .lc-left-area {
+    .lc-left-area, .lc-workspace-left-area {
       height: 100%;
       width: var(--left-area-width);
-      background-color: var(--color-pane-background);
       display: none;
       flex-shrink: 0;
       flex-direction: column;
       justify-content: space-between;
       overflow: hidden;
+      &.lc-left-area {
+        background-color: var(--color-left-area-background, var(--color-pane-background));
+      }
+      &.lc-workspace-left-area {
+        background-color: var(--color-workspace-left-area-background, var(--color-pane-background));
+      }
       &.lc-area-visible {
         display: flex;
       }
@@ -316,6 +325,8 @@ body {
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
+        color: var(--color-text);
+
         .lc-title {
           flex-direction: column;
           width: calc(var(--left-area-width) - 2px);
@@ -325,6 +336,9 @@ body {
           justify-content: center;
           cursor: pointer;
 
+          &.has-tip {
+            cursor: pointer;
+          }
           &.actived {
             color: #0079f2;
           }
@@ -366,6 +380,9 @@ body {
     .lc-left-area.lc-area-visible ~ .lc-workbench-center {
       margin-left: 2px;
     }
+    .lc-workspace-left-area.lc-area-visible ~ .lc-workspace-workbench-center {
+      margin-left: 2px;
+    }
     .lc-outline-pane {
       .lc-outline-tree .tree-node .tree-node-title {
         border-bottom: none;
@@ -390,7 +407,7 @@ body {
       }
       .lc-main-area {
         flex: 1;
-        background-color: #edeff3;
+        background-color: var(--color-background);
       }
       .lc-bottom-area {
         height: var(--bottom-area-height);
@@ -404,13 +421,14 @@ body {
     .lc-right-area {
       height: 100%;
       width: var(--right-area-width);
-      background-color: var(--color-pane-background);
+      background-color: var(--color-right-area-background, var(--color-pane-background));
       display: none;
       flex-shrink: 0;
       margin-left: 2px;
       position: relative;
       > .lc-panel {
         position: absolute;
+        background-color: var(--color-right-area-background, var(--color-pane-background, #fff));
         left: 0;
         top: 0;
       }
@@ -435,6 +453,70 @@ body {
       .lc-settings-tabs-content {
         top: 66px;
       }
+    }
+  }
+  .engine-actionitem {
+    max-width: 100%;
+    color: var(--color-text);
+  }
+}
+
+.lc-workspace-workbench {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-background);
+  .lc-workspace-workbench-body {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+    position: relative;
+
+    .lc-workspace-workbench-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      z-index: 10;
+      position: relative;
+      .lc-toolbar {
+        display: flex;
+        height: var(--toolbar-height);
+        background-color: var(--color-pane-background);
+        padding: 8px 16px;
+        .lc-toolbar-center {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex: 1;
+        }
+      }
+      .lc-main-area {
+        flex: 1;
+      }
+      .lc-bottom-area {
+        height: var(--bottom-area-height);
+        background-color: var(--color-pane-background);
+        display: none;
+        &.lc-area-visible {
+          display: block;
+        }
+      }
+    }
+
+    .lc-workspace-workbench-center-content {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      flex-direction: column;
+      display: flex;
+      align-content: stretch;
+    }
+
+    .lc-workspace-workbench-window {
+      position: relative;
+      height: 100%;
     }
   }
 }
