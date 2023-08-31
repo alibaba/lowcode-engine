@@ -8,3 +8,4 @@ export * from './components/popup';
 export * from './context';
 export * from './register-defaults';
 export * from './widget';
+export * from './layouts';
