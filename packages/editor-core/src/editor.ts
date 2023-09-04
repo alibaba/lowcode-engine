@@ -153,11 +153,7 @@ export class Editor extends EventEmitter implements IEditor {
               return;
             }
             if (!AssetsCache[exportName] || !npm?.version || AssetsCache[exportName].npm?.version !== npm?.version) {
-              try {
-                await (new AssetLoader()).load(url);
-              } catch (error) {
-                console.error(`${url} load error: `, error);
-              }
+              await (new AssetLoader()).load(url);
             }
             AssetsCache[exportName] = component;
             function setAssetsComponent(component: any, extraNpmInfo: any = {}) {

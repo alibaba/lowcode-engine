@@ -49,7 +49,7 @@ export class Workbench extends Component<{
         <SkeletonContext.Provider value={skeleton}>
           <TopArea area={skeleton.topArea} itemClassName={topAreaItemClassName} />
           <div className="lc-workspace-workbench-body">
-            <LeftArea className="lc-workspace-left-area" area={skeleton.leftArea} />
+            <LeftArea className="lc-workspace-left-area lc-left-area" area={skeleton.leftArea} />
             <LeftFloatPane area={skeleton.leftFloatArea} />
             <LeftFixedPane area={skeleton.leftFixedArea} />
             <div className="lc-workspace-workbench-center">
