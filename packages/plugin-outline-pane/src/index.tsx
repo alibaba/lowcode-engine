@@ -92,6 +92,7 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
           paneName: BackupPaneName,
           treeMaster,
         },
+        index: 1,
       });
 
       // 处理 master pane 和 backup pane 切换
