@@ -41,6 +41,12 @@ module.exports = {
     },
     {
       type: 'doc',
+      docId: 'video/index',
+      position: 'left',
+      label: '视频',
+    },
+    {
+      type: 'doc',
       docId: 'demoUsage/intro',
       position: 'left',
       label: 'Demo 使用文档',
