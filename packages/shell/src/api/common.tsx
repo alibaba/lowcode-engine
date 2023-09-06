@@ -176,7 +176,7 @@ class SkeletonCabin implements IPublicApiCommonSkeletonCabin {
   constructor(skeleton: InnerSkeleton) {
     this[skeletonSymbol] = skeleton;
     this[skeletonCabinSymbol] = {
-      Workbench: this.Workbench,
+      Workbench: InnerWorkbench,
       createSettingFieldView: this.createSettingFieldView,
       PopupContext: InnerPopupContext,
       PopupPipe: InnerPopupPipe,
