@@ -40,6 +40,7 @@ import {
   Designer as InnerDesigner,
   Node as InnerNode,
   LowCodePluginManager as InnerLowCodePluginManager,
+  DesignerView as InnerDesignerView,
 } from '@alilc/lowcode-designer';
 import {
   Skeleton as InnerSkeleton,
@@ -105,6 +106,7 @@ class DesignerCabin implements IPublicApiCommonDesignerCabin {
       Designer: InnerDesigner,
       Node: InnerNode,
       LowCodePluginManager: InnerLowCodePluginManager,
+      DesignerView: InnerDesignerView,
     };
   }
 
