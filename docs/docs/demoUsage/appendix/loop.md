@@ -15,3 +15,14 @@ sidebar_position: 0
 ![image.png](https://img.alicdn.com/imgextra/i4/O1CN01XQfnYL1P4wxn01oXv_!!6000000001788-2-tps-3840-1896.png)
 
 this.index 是当前循环的索引值。
+
+3.在事件绑定函数中使用
+
+在事件绑定函数中使用扩展参数设置
+![image](https://github.com/alibaba/lowcode-engine/assets/11935995/7274506e-decd-497a-b07f-c95941a706b4)
+
+绑定之后在函数中使用
+![image](https://github.com/alibaba/lowcode-engine/assets/11935995/9d52ee5c-9959-4991-91be-9391e639bb7e)
+
+按钮点击效果
+![image](https://github.com/alibaba/lowcode-engine/assets/11935995/6ca590c9-1f5f-4d48-94a5-439130a22e92)
