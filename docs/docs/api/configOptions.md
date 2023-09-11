@@ -254,6 +254,16 @@ JSExpression 是否只支持使用 this 来访问上下文变量，假如需要�
 
 自定义 loading 组件
 
+### 插件
+
+#### defaultSettingPanelProps
+
+内置设置面板插件的 panelProps
+
+#### defaultOutlinePaneProps
+
+内置大纲树面板插件的 panelProps
+
 ### 其他
 
 #### enableStrictPluginMode
@@ -281,5 +291,4 @@ customPluginTransducer: async (originPlugin: IPublicTypePlugin, ctx: IPublicMode
 `@type {object}`
 
 大纲树插件面板默认 props
-
 
