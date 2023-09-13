@@ -6,6 +6,7 @@ import { EditorWindow, WINDOW_STATE } from './window';
 import type { IEditorWindow } from './window';
 import { IResource, Resource } from './resource';
 import { IResourceType, ResourceType } from './resource-type';
+import { ISkeleton } from '@alilc/lowcode-editor-skeleton';
 
 enum EVENT {
   CHANGE_WINDOW = 'change_window',
@@ -32,6 +33,8 @@ export interface IWorkspace extends Omit<IPublicApiWorkspace<
   window: IEditorWindow;
 
   plugins: ILowCodePluginManager;
+
+  skeleton: ISkeleton;
 
   resourceTypeMap: Map<string, ResourceType>;
 

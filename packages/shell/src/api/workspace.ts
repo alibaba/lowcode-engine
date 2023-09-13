@@ -3,6 +3,7 @@ import { IWorkspace } from '@alilc/lowcode-workspace';
 import { resourceSymbol, workspaceSymbol } from '../symbols';
 import { Resource as ShellResource, Window as ShellWindow } from '../model';
 import { Plugins } from './plugins';
+import { Skeleton } from './skeleton';
 
 export class Workspace implements IPublicApiWorkspace {
   readonly [workspaceSymbol]: IWorkspace;
@@ -90,6 +91,10 @@ export class Workspace implements IPublicApiWorkspace {
 
   get plugins() {
     return new Plugins(this[workspaceSymbol].plugins, true);
+  }
+
+  get skeleton() {
+    return new Skeleton(this[workspaceSymbol].skeleton, 'workspace', true);
   }
 
   get windows() {
