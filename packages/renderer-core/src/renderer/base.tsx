@@ -649,7 +649,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           props.key = props.__id;
         }
 
-        let child = this.__getSchemaChildrenVirtualDom(schema, scope, Comp);
+        let child = this.__getSchemaChildrenVirtualDom(schema, scope, Comp, condition);
         const renderComp = (innerProps: any) => engine.createElement(Comp, innerProps, child);
         // 设计模式下的特殊处理
         if (engine && [DESIGN_MODE.EXTEND, DESIGN_MODE.BORDER].includes(engine.props.designMode)) {
@@ -709,8 +709,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       return [];
     }
 
-    __getSchemaChildrenVirtualDom = (schema: IPublicTypeNodeSchema | undefined, scope: any, Comp: any) => {
-      let children = getSchemaChildren(schema);
+    __getSchemaChildrenVirtualDom = (schema: IPublicTypeNodeSchema | undefined, scope: any, Comp: any, condition = true) => {
+      let children = condition ?  getSchemaChildren(schema): null
 
       // @todo 补完这里的 Element 定义 @承虎
       let result: any = [];
