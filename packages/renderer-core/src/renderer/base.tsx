@@ -545,6 +545,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
         if (schema.loop != null) {
           const loop = this.__parseData(schema.loop, scope);
+          if (Array.isArray(loop) && loop.length === 0) return null;
           const useLoop = isUseLoop(loop, this.__designModeIsDesign);
           if (useLoop) {
             return this.__createLoopVirtualDom(
@@ -710,7 +711,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     }
 
     __getSchemaChildrenVirtualDom = (schema: IPublicTypeNodeSchema | undefined, scope: any, Comp: any, condition = true) => {
-      let children = condition ?  getSchemaChildren(schema): null
+      let children = condition ? getSchemaChildren(schema) : null;
 
       // @todo 补完这里的 Element 定义 @承虎
       let result: any = [];
