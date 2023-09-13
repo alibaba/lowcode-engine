@@ -37,6 +37,16 @@ get plugins(): IPublicApiPlugins
 
 关联模型 [IPublicApiPlugins](./plugins)
 
+### skeleton
+
+应用级别的面板管理
+
+```typescript
+get skeleton(): IPublicApiSkeleton
+```
+
+关联模型 [IPublicApiSkeleton](./skeleton)
+
 ### windows
 
 当前设计器的编辑窗口
