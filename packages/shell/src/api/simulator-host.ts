@@ -2,7 +2,8 @@ import {
   BuiltinSimulatorHost,
 } from '@alilc/lowcode-designer';
 import { simulatorHostSymbol, nodeSymbol } from '../symbols';
-import { IPublicApiSimulatorHost, IPublicModelNode } from '@alilc/lowcode-types';
+import { IPublicApiSimulatorHost, IPublicModelNode, IPublicModelSimulatorRender } from '@alilc/lowcode-types';
+import { SimulatorRender } from '../model/simulator-render';
 
 export class SimulatorHost implements IPublicApiSimulatorHost {
   private readonly [simulatorHostSymbol]: BuiltinSimulatorHost;
@@ -30,8 +31,12 @@ export class SimulatorHost implements IPublicApiSimulatorHost {
     return this[simulatorHostSymbol].contentDocument;
   }
 
-  get renderer(): any {
-    return this[simulatorHostSymbol].renderer;
+  get renderer(): IPublicModelSimulatorRender | undefined {
+    if (this[simulatorHostSymbol].renderer) {
+      return SimulatorRender.create(this[simulatorHostSymbol].renderer);
+    }
+
+    return undefined;
   }
 
   /**
@@ -61,7 +66,7 @@ export class SimulatorHost implements IPublicApiSimulatorHost {
   }
 
   /**
-   * 刷新渲染画布
+   * 触发组件构建，并刷新渲染画布
    */
   rerender(): void {
     this[simulatorHostSymbol].rerender();

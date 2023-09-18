@@ -50,11 +50,11 @@ get(key: string): any;
 ```
 
 ### rerender
-刷新渲染画布
+触发组件构建，并刷新渲染画布
 
 ```typescript
 /**
- * 刷新渲染画布
+ * 触发组件构建，并刷新渲染画布
  * make simulator render again
  */
 rerender(): void;
