@@ -21,6 +21,7 @@ export const dragonSymbol = Symbol('dragon');
 export const componentMetaSymbol = Symbol('componentMeta');
 export const dropLocationSymbol = Symbol('dropLocation');
 export const simulatorHostSymbol = Symbol('simulatorHost');
+export const simulatorRenderSymbol = Symbol('simulatorRender');
 export const dragObjectSymbol = Symbol('dragObject');
 export const locateEventSymbol = Symbol('locateEvent');
 export const designerCabinSymbol = Symbol('designerCabin');
