@@ -14,6 +14,7 @@ import {
   skeletonItemSymbol,
   editorCabinSymbol,
   skeletonCabinSymbol,
+  simulatorRenderSymbol,
 } from '@alilc/lowcode-shell';
 
 export default {
@@ -32,4 +33,5 @@ export default {
   propSymbol,
   simulatorHostSymbol,
   skeletonItemSymbol,
+  simulatorRenderSymbol,
 };
