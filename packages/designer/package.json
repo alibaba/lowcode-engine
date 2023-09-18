@@ -15,7 +15,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@alilc/build-plugin-lce": "^0.0.4-beta.2",
     "@alilc/lowcode-editor-core": "1.1.10",
     "@alilc/lowcode-types": "1.1.10",
     "@alilc/lowcode-utils": "1.1.10",
