@@ -52,11 +52,11 @@ const bizNameColors = [
   '#2e8b57',
 ];
 const bodyColors: Record<string, string> = {
-  debug: '#666666',
-  log: '#bbbbbb',
-  info: '#ffffff',
-  warn: '#bbbbbb',
-  error: '#bbbbbb',
+  debug: '#fadb14',
+  log: '#8c8c8c',
+  info: '#52c41a',
+  warn: '#fa8c16',
+  error: '#ff4d4f',
 };
 const levelMarks: Record<string, string> = {
   debug: 'debug',
