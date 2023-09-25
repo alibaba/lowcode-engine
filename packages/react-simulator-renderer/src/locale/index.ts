@@ -9,10 +9,10 @@ const instance: Record<string, Record<string, string>> = {
 
 export function createIntl(locale: string = 'zh-CN') {
   const intl = (id: string) => {
-    return instance[locale][id];
+    return instance[locale]?.[id] || id;
   };
 
-  const intlNode = (id: string) => createElement('span', instance[locale][id]);
+  const intlNode = (id: string) => createElement('span', instance[locale]?.[id] || id);
 
   return {
     intl,
