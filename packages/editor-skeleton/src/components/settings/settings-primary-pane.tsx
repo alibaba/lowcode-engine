@@ -34,9 +34,13 @@ export class SettingsPrimaryPane extends Component<ISettingsPrimaryPaneProps, { 
 
     const editor = this.props.engineEditor;
 
-    editor.eventBus.on('designer.selection.change', () => {
+    editor.eventBus.on('designer.selection.change', (selection, tab) => {
       if (!engineConfig.get('stayOnTheSameSettingTab', false)) {
         this._activeKey = null;
+      }
+      // 选中指定tab
+      if (tab) {
+        this._activeKey = tab;
       }
     });
   }

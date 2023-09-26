@@ -26,7 +26,7 @@ export class Selection implements ISelection {
   /**
    * 选中
    */
-  select(id: string) {
+  select(id: string, tab?: string) {
     if (this._selected.length === 1 && this._selected.indexOf(id) > -1) {
       // avoid cause reaction
       return;
@@ -39,7 +39,7 @@ export class Selection implements ISelection {
     }
 
     this._selected = [id];
-    this.emitter.emit('selectionchange', this._selected);
+    this.emitter.emit('selectionchange', this._selected, tab);
   }
 
   /**

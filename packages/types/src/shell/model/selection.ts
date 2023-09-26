@@ -22,8 +22,9 @@ export interface IPublicModelSelection<
    * 选中指定节点（覆盖方式）
    * select node with id, this will override current selection
    * @param id
+   * @param tab
    */
-  select(id: string): void;
+  select(id: string, tab?: string): void;
 
   /**
    * 批量选中指定节点们
@@ -81,5 +82,5 @@ export interface IPublicModelSelection<
    * set callback which will be called when selection is changed
    * @since v1.1.0
    */
-  onSelectionChange(fn: (ids: string[]) => void): IPublicTypeDisposable;
+  onSelectionChange(fn: (ids: string[], tab?: string) => void): IPublicTypeDisposable;
 }

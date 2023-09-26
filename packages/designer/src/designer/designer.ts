@@ -285,8 +285,8 @@ export class Designer implements IDesigner {
     }
     this.postEvent('selection.change', currentSelection);
     if (currentSelection) {
-      this.selectionDispose = currentSelection.onSelectionChange(() => {
-        this.postEvent('selection.change', currentSelection);
+      this.selectionDispose = currentSelection.onSelectionChange((ids, tab) => {
+        this.postEvent('selection.change', currentSelection, tab);
       });
     }
   };

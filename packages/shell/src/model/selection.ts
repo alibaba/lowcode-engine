@@ -32,9 +32,10 @@ export class Selection implements IPublicModelSelection {
   /**
    * 选中指定节点（覆盖方式）
    * @param id
+   * @param tab
    */
-  select(id: string): void {
-    this[selectionSymbol].select(id);
+  select(id: string, tab?: string): void {
+    this[selectionSymbol].select(id, tab);
   }
 
   /**
