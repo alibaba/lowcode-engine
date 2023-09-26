@@ -130,7 +130,9 @@ export class Workspace implements IWorkspace {
     }
 
     const windowInfo = this.windowQueue.shift();
-    if (windowInfo) {
+    if (windowInfo instanceof Resource) {
+      this.openEditorWindowByResource(windowInfo);
+    } else if (windowInfo) {
       this.openEditorWindow(windowInfo.name, windowInfo.title, windowInfo.options, windowInfo.viewName);
     }
   }
@@ -251,7 +253,7 @@ export class Workspace implements IWorkspace {
   }
 
   async openEditorWindowByResource(resource: IResource, sleep: boolean = false): Promise<void> {
-    if (this.window && !this.window?.initReady && !sleep) {
+    if (this.window && !this.window.sleep && !this.window?.initReady && !sleep) {
       this.windowQueue.push(resource);
       return;
     }
@@ -292,7 +294,7 @@ export class Workspace implements IWorkspace {
   }
 
   async openEditorWindow(name: string, title: string, options: Object, viewName?: string, sleep?: boolean) {
-    if (this.window && !this.window?.initReady && !sleep) {
+    if (this.window && !this.window.sleep && !this.window?.initReady && !sleep) {
       this.windowQueue.push({
         name, title, options, viewName,
       });
@@ -304,7 +306,7 @@ export class Workspace implements IWorkspace {
       return;
     }
     this.window?.updateState(WINDOW_STATE.inactive);
-    const filterWindows = this.windows.filter(d => (d.resource?.name === name && d.resource.title == title));
+    const filterWindows = this.windows.filter(d => (d.resource?.name === name && d.resource.title == title) || (d.resource.id == title));
     if (filterWindows && filterWindows.length) {
       this.window = filterWindows[0];
       if (!sleep && this.window.sleep) {
@@ -320,6 +322,7 @@ export class Workspace implements IWorkspace {
       resourceName: name,
       title,
       options,
+      id: title?.toString(),
     }, resourceType, this);
     const window = new EditorWindow(resource, this, {
       title,
