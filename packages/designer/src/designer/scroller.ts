@@ -46,7 +46,7 @@ function easing(n: number) {
   return Math.sin((n * Math.PI) / 2);
 }
 
-const SCROLL_ACCURCY = 30;
+const SCROLL_ACCURACY = 30;
 
 export interface IScroller extends IPublicModelScroller {
 
@@ -142,15 +142,15 @@ export class Scroller implements IScroller {
     let sy = scrollTarget.top;
     let ax = 0;
     let ay = 0;
-    if (y < bounds.top + SCROLL_ACCURCY) {
-      ay = -Math.min(Math.max(bounds.top + SCROLL_ACCURCY - y, 10), 50) / scale;
-    } else if (y > bounds.bottom - SCROLL_ACCURCY) {
-      ay = Math.min(Math.max(y + SCROLL_ACCURCY - bounds.bottom, 10), 50) / scale;
+    if (y < bounds.top + SCROLL_ACCURACY) {
+      ay = -Math.min(Math.max(bounds.top + SCROLL_ACCURACY - y, 10), 50) / scale;
+    } else if (y > bounds.bottom - SCROLL_ACCURACY) {
+      ay = Math.min(Math.max(y + SCROLL_ACCURACY - bounds.bottom, 10), 50) / scale;
     }
-    if (x < bounds.left + SCROLL_ACCURCY) {
-      ax = -Math.min(Math.max(bounds.top + SCROLL_ACCURCY - y, 10), 50) / scale;
-    } else if (x > bounds.right - SCROLL_ACCURCY) {
-      ax = Math.min(Math.max(x + SCROLL_ACCURCY - bounds.right, 10), 50) / scale;
+    if (x < bounds.left + SCROLL_ACCURACY) {
+      ax = -Math.min(Math.max(bounds.top + SCROLL_ACCURACY - y, 10), 50) / scale;
+    } else if (x > bounds.right - SCROLL_ACCURACY) {
+      ax = Math.min(Math.max(x + SCROLL_ACCURACY - bounds.right, 10), 50) / scale;
     }
 
     if (!ax && !ay) {

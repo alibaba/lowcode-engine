@@ -34,18 +34,18 @@ export class AppHelper extends EventEmitter {
     }
   }
 
-  batchOn(events: Array<string | symbol>, lisenter: (...args: any[]) => void) {
+  batchOn(events: Array<string | symbol>, listener: (...args: any[]) => void) {
     if (!Array.isArray(events)) return;
-    events.forEach((event) => this.on(event, lisenter));
+    events.forEach((event) => this.on(event, listener));
   }
 
-  batchOnce(events: Array<string | symbol>, lisenter: (...args: any[]) => void) {
+  batchOnce(events: Array<string | symbol>, listener: (...args: any[]) => void) {
     if (!Array.isArray(events)) return;
-    events.forEach((event) => this.once(event, lisenter));
+    events.forEach((event) => this.once(event, listener));
   }
 
-  batchOff(events: Array<string | symbol>, lisenter: (...args: any[]) => void) {
+  batchOff(events: Array<string | symbol>, listener: (...args: any[]) => void) {
     if (!Array.isArray(events)) return;
-    events.forEach((event) => this.off(event, lisenter));
+    events.forEach((event) => this.off(event, listener));
   }
 }
