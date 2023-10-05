@@ -65,7 +65,7 @@ const levelMarks: Record<string, string> = {
   warn: 'warn',
   error: 'error',
 };
-const outputFuntion: Record<string, any> = {
+const outputFunction: Record<string, any> = {
   debug: console.log,
   log: console.log,
   info: console.log,
@@ -88,7 +88,7 @@ const shouldOutput = (
 
 const output = (logLevel: string, bizName: string) => {
   return (...args: any[]) => {
-    return outputFuntion[logLevel].apply(console, getLogArgs(args, bizName, logLevel));
+    return outputFunction[logLevel].apply(console, getLogArgs(args, bizName, logLevel));
   };
 };
 
