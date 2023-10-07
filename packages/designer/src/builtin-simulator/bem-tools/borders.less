@@ -17,7 +17,7 @@
   }
   & > &-status {
     margin-left: 5px;
-    color: #3c3c3c;
+    color: var(--color-text, #3c3c3c);
     transform: translateY(-100%);
     font-weight: lighter;
   }
@@ -46,7 +46,7 @@
     opacity: 1;
     max-height: 100%;
     overflow: hidden;
-    color: white;
+    color: var(--color-icon-reverse, white);
     &:hover {
       background: var(--color-brand-light, #006cff);
     }
@@ -56,8 +56,8 @@
     display: inline-block;
     width: 8px;
     height: 8px;
-    border: 1px solid #197aff;
-    background: #fff;
+    border: 1px solid var(--color-brand, #197aff);
+    background: var(--color-block-background-normal, #fff);
     pointer-events: auto;
     z-index: 2;
   }
@@ -73,11 +73,9 @@
     &:after {
       content: "";
       display: block;
-      border: 1px solid #197aff;
-      background: #fff;
-      // background: #738397;
+      border: 1px solid var(--color-brand, #197aff);
+      background: var(--color-block-background-normal, #fff);
       border-radius: 2px;
-      // animation: flashing 1.5s infinite linear;
     }
 
     &.e,
@@ -85,7 +83,6 @@
       cursor: ew-resize;
       &:after {
         width: 4px;
-        // height: calc(100% - 20px);
         min-height: 50%;
       }
     }
@@ -94,62 +91,24 @@
     &.s {
       cursor: ns-resize;
       &:after {
-        // width: calc(100% - 20px);
         min-width: 50%;
         height: 4px;
       }
     }
   }
 
-  // &&-hovering {
   &&-detecting {
     z-index: 1;
     border-style: dashed;
-    background: rgba(0,121,242,.04);
-
-    &.x-loop {
-      border-color: rgba(138, 93, 226, 0.8);
-      background: rgba(138, 93, 226, 0.04);
-
-      >.@{scope}-title {
-        color: rgba(138, 93, 226, 1.0);
-      }
-    }
-
-    &.x-condition {
-      border-color: rgba(255, 99, 8, 0.8);
-      background: rgba(255, 99, 8, 0.04);
-      >.@{scope}-title {
-        color: rgb(255, 99, 8);
-      }
-    }
+    background: var(--color-block-background-light, rgba(0,121,242,.04));
   }
 
   &&-selecting {
     z-index: 2;
     border-width: 2px;
 
-    &.x-loop {
-      border-color: rgba(147, 112, 219, 1.0);
-      background: rgba(147, 112, 219, 0.04);
-
-      >@{scope}-title {
-        color: rgba(147, 112, 219, 1.0);
-      }
-      &.highlight {
-        background: transparent;
-      }
-    }
-
-    &.x-condition {
-      border-color: rgb(255, 99, 8);
-      >@{scope}-title {
-        color: rgb(255, 99, 8);
-      }
-    }
-
     &.dragging {
-      background: rgba(182, 178, 178, 0.8);
+      background: var(--color-layer-mask-background, rgba(182, 178, 178, 0.8));
       border: none;
     }
   }
