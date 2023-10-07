@@ -60,7 +60,7 @@ body {
 
     .lc-help-tip {
       margin-left: 4px;
-      color: rgba(0, 0, 0, 0.4);
+      color: var(--color-icon-normal, rgba(0, 0, 0, 0.4));
       cursor: pointer;
     }
   }
@@ -68,7 +68,7 @@ body {
     height: 48px;
     font-size: 16px;
     padding: 0 15px;
-    color: #0f1726;
+    color: var(--color-title, #0f1726);
     font-weight: bold;
   }
 
@@ -79,39 +79,6 @@ body {
     left: 0;
     right: 0;
     overflow: visible;
-    /*
-    .my-tabs {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      .tabs-title {
-        display: flex;
-        height: var(--pane-title-height);
-        > .tab-title {
-          cursor: pointer;
-          padding: 0;
-          flex: 1;
-          min-width: 0;
-          justify-content: center;
-          border-bottom: 2px solid transparent;
-          &.actived {
-            cursor: default;
-            color: var(--color-text-avtived);
-            border-bottom-color: #3896ee;
-          }
-        }
-      }
-      .tabs-content {
-        position: absolute;
-        top: var(--pane-title-height);
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: calc(100% - var(--pane-title-height));
-        overflow: hidden;
-      }
-    }
-    */
   }
   .lc-outline-tree-container {
     border-top: 1px solid var(--color-line-normal, rgba(31, 56, 88, 0.1));
@@ -234,8 +201,7 @@ body {
       display: flex;
       justify-content: center;
       align-items: center;
-      // background: rgba(31,56,88,0.04);
-      border-bottom: 1px solid #edeff3;
+      border-bottom: 1px solid var(--color-line-normal, #edeff3);
       .lc-tab-title {
         flex: 1;
         height: 32px;
@@ -246,8 +212,8 @@ body {
         cursor: pointer;
         font-size: 12px;
         &.actived {
-          color: #0079f2;
-          border-bottom-color: #0079f2;
+          color: var(--color-brand, #0079f2);
+          border-bottom-color: var(--color-brand, #0079f2);
         }
       }
     }
@@ -293,7 +259,7 @@ body {
       // min-width: var(--dock-fixed-pane-width);
       left: calc(var(--left-area-width) + 1px);
       background-color: var(--color-left-float-pane-background, var(--color-pane-background));
-      box-shadow: 4px 6px 6px 0 rgba(31, 50, 88, 0.08);
+      box-shadow: 4px 6px 6px 0 var(--color-block-background-shallow, rgba(31, 50, 88, 0.08));
       z-index: 820;
       display: none;
       // padding-top: 36px;
@@ -340,7 +306,7 @@ body {
             cursor: pointer;
           }
           &.actived {
-            color: #0079f2;
+            color: var(--color-brand, #0079f2);
           }
           &.disabled {
             opacity: 0.4;

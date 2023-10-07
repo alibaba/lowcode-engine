@@ -18,7 +18,11 @@ export function createIcon(
   }
   if (typeof icon === 'string') {
     if (URL_RE.test(icon)) {
-      return <img src={icon} {...props} />;
+      return createElement('img', {
+        src: icon,
+        class: props?.className,
+        ...props,
+      });
     }
     return <Icon type={icon} {...props} />;
   }
