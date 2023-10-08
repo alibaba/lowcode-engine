@@ -203,40 +203,6 @@ export class Field extends Component<FieldProps> {
  */
 function createValueState(/* valueState?: number, onClear?: (e: React.MouseEvent) => void */) {
   return null;
-
-  /*
-  let tip: any = null;
-  let className = 'lc-valuestate';
-  let icon: any = null;
-  if (valueState) {
-    if (valueState < 0) {
-      // multiple value 橘黄色点： tip：多种值，点击清除
-      tip = intlNode('Multiple Value, Click to Clear');
-      className += ' valuestate-multiple';
-      icon = <IconClear size={6} />;
-    } else if (valueState === 10) {
-      // isset  orangered tip: 必填项
-      tip = intlNode('Required');
-      className += ' valuestate-required';
-      onClear = undefined;
-    } else if (valueState > 0) {
-      // isset  蓝点 tip: 已设置值，点击清除
-      tip = intlNode('Setted Value, Click to Clear');
-      className += ' valuestate-isset';
-      icon = <IconClear size={6} />;
-    }
-  } else {
-    onClear = undefined;
-    // unset 占位空间
-  }
-
-  return (
-    <i className={className} onClick={onClear}>
-      {icon}
-      {tip && <Tip>{tip}</Tip>}
-    </i>
-  );
-  */
 }
 
 export interface PopupFieldProps extends FieldProps {

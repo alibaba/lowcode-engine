@@ -1069,15 +1069,15 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       return null;
     }
 
-    const nodeIntance = this.getClosestNodeInstance(target);
-    if (!nodeIntance) {
+    const nodeInstance = this.getClosestNodeInstance(target);
+    if (!nodeInstance) {
       return null;
     }
-    const { docId } = nodeIntance;
+    const { docId } = nodeInstance;
     const doc = this.project.getDocument(docId)!;
-    const node = doc.getNode(nodeIntance.nodeId);
+    const node = doc.getNode(nodeInstance.nodeId);
     return {
-      ...nodeIntance,
+      ...nodeInstance,
       node,
     };
   }

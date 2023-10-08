@@ -14,54 +14,6 @@
     .lc-field-title {
       display: flex;
       align-items: center;
-      .lc-valuestate {
-        height: 6px;
-        width: 6px;
-        min-width: 6px;
-        border-radius: 100%;
-        margin-right: 2px;
-        pointer-events: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        > svg {
-          display: none;
-        }
-        &.valuestate-multiple {
-          background-color: rgb(232, 145, 83);
-          pointer-events: auto;
-          &:hover {
-            background-color: rgb(223, 139, 30);
-            cursor: pointer;
-            transform: scale(2);
-            transform-origin: center;
-            > svg {
-              display: block;
-            }
-          }
-        }
-        &.valuestate-isset {
-          background-color: rgba(124, 177, 238, 0.6);
-          pointer-events: auto;
-          &:hover {
-            background-color: rgb(45, 126, 219);
-            cursor: pointer;
-            transform: scale(2);
-            transform-origin: center;
-            > svg {
-              display: block;
-            }
-          }
-        }
-        &.valuestate-required {
-          background-color: rgb(250, 82, 76);
-          pointer-events: auto;
-          &:hover {
-            background-color: rgb(224, 46, 40);
-          }
-        }
-      }
     }
     .lc-field-icon {
       transform-origin: center;
@@ -92,11 +44,7 @@
 
   &.lc-block-field, &.lc-accordion-field, &.lc-entry-field {
     display: block;
-    &:first-child {
-      > .lc-field-head {
-        // border-top: none;
-      }
-    }
+
     > .lc-field-head {
       height: 32px;
       display: flex;
@@ -110,7 +58,7 @@
       user-select: none;
 
       > .lc-field-icon {
-        color: #8f9bb3;
+        color: var(--color-icon-normal, #8f9bb3);
       }
     }
 
@@ -128,10 +76,6 @@
         }
       }
     }
-
-    // + .lc-inline-field {
-    //   border-top: 1px solid var(--color-line-normal);
-    // }
   }
 
   &.lc-entry-field {
@@ -163,15 +107,11 @@
     > .lc-field-head {
       cursor: pointer;
     }
-    
+
     &.lc-field-is-collapsed {
       margin-bottom: 6px;
     }
 
-    // collapsed
-    // &:last-child.lc-field-is-collapsed{
-    //   border-bottom: 1px solid var(--color-line-normal);
-    // }
     &.lc-field-is-collapsed {
       > .lc-field-head .lc-field-icon {
         transform: rotate(180deg);
@@ -180,56 +120,5 @@
         display: none;
       }
     }
-
-    // 邻近的保持上下距离
-    + .lc-field {
-      // margin-top: @y-gap;
-    }
-  }
-
-  // 2rd level reset
-  .lc-field-body {
-    // .lc-inline-field {
-    //   &:first-child {
-    //     padding-top: 0;
-    //   }
-    //   + .lc-accordion-field, +.lc-block-field {
-    //     margin-top: @y-gap;
-    //   }
-    // }
-
-    // .lc-field {
-    //   border-top: none !important;
-    // }
-
-    // .lc-accordion-field, .lc-block-field {
-    //   > .lc-field-head {
-    //     padding-left: @x-gap;
-    //     background: var(--color-block-background-light);
-    //     border-bottom: none;
-    //     border-top: none;
-    //     > .lc-field-icon {
-    //       // margin-right: @x-gap/2;
-    //       margin-right: 0;
-    //     }
-    //   }
-
-    //   > .lc-field-body {
-    //     padding: 8px;
-    //   }
-    // }
-
-    // 3rd level field title width should short
-    // .lc-field-body .lc-inline-field {
-    //   > .lc-field-head {
-    //     width: 50px;
-    //     .lc-title-label {
-    //       width: 50px;
-    //     }
-    //   }
-    // }
-    // >.lc-block-setter {
-    //   flex: 1;
-    // }
   }
 }
