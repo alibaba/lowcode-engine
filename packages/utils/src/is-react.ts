@@ -10,15 +10,24 @@ export function isReactClass(obj: any): obj is ComponentClass<any> {
 }
 
 export function acceptsRef(obj: any): boolean {
-  return obj?.prototype?.isReactComponent || (obj.$$typeof && obj.$$typeof === REACT_FORWARD_REF_TYPE);
+  return obj?.prototype?.isReactComponent || isForwardOrMemoForward(obj);
 }
 
-function isForwardRefType(obj: any): boolean {
+export function isForwardRefType(obj: any): boolean {
   return obj?.$$typeof && obj?.$$typeof === REACT_FORWARD_REF_TYPE;
 }
 
 function isMemoType(obj: any): boolean {
   return obj?.$$typeof && obj.$$typeof === REACT_MEMO_TYPE;
+}
+
+export function isForwardOrMemoForward(obj: any): boolean {
+  return obj?.$$typeof && (
+    // React.forwardRef(..)
+    isForwardRefType(obj) ||
+    // React.memo(React.forwardRef(..))
+    (isMemoType(obj) && isForwardRefType(obj.type))
+  );
 }
 
 export function isReactComponent(obj: any): obj is ComponentType<any> {
