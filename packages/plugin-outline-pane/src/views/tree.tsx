@@ -43,7 +43,7 @@ export default class TreeView extends PureComponent<{
     detecting?.capture(node as any);
   }
 
-  private onClick = (e: ReactMouseEvent) => {
+  private onClick = (e: ReactMouseEvent, type?: string) => {
     if (this.ignoreUpSelected) {
       this.boostEvent = undefined;
       return;
@@ -76,6 +76,12 @@ export default class TreeView extends PureComponent<{
       }
     } else {
       selection?.select(id);
+      let tabKey;
+      // 点击条件渲染和循环图标，默认选中属性的高级面板
+      if (type === 'condition' || type === 'loop') {
+        tabKey = '#advanced';
+      }
+      tabKey && selection?.selectPropsTab(tabKey);
       const selectedNode = selection?.getNodes()?.[0];
       const npm = selectedNode?.componentMeta?.npm;
       const selected =
@@ -213,6 +219,7 @@ export default class TreeView extends PureComponent<{
           key={this.state.root?.id}
           treeNode={this.state.root}
           isRootNode
+          treeNodeClick={this.onClick}
         />
       </div>
     );

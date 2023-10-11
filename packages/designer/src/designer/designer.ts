@@ -288,6 +288,10 @@ export class Designer implements IDesigner {
       this.selectionDispose = currentSelection.onSelectionChange(() => {
         this.postEvent('selection.change', currentSelection);
       });
+
+      currentSelection.onSelectionPropsTabChange((tabKey) => {
+        this.postEvent('selection.changePropsTab', currentSelection, tabKey);
+      });
     }
   };
 

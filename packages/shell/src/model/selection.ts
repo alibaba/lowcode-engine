@@ -38,6 +38,15 @@ export class Selection implements IPublicModelSelection {
   }
 
   /**
+   * 选中指定属性Tab
+   * select tab of props with tabKey
+   * @param tabKey
+   */
+  selectPropsTab(tabKey: string): void {
+    this[selectionSymbol].selectPropsTab(tabKey);
+  }
+
+  /**
    * 批量选中指定节点们
    * @param ids
    */
@@ -114,5 +123,9 @@ export class Selection implements IPublicModelSelection {
 
   onSelectionChange(fn: (ids: string[]) => void): IPublicTypeDisposable {
     return this[selectionSymbol].onSelectionChange(fn);
+  }
+
+  onSelectionPropsTabChange(fn: (tabKey: string) => void): IPublicTypeDisposable {
+    return this[selectionSymbol].onSelectionPropsTabChange(fn);
   }
 }

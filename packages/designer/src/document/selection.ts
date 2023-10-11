@@ -43,6 +43,14 @@ export class Selection implements ISelection {
   }
 
   /**
+   * 选中元素属性的指定tab
+   * @param tabKey
+   */
+  selectPropsTab(tabKey: string) {
+    this.emitter.emit('selectionPropsTabChange', tabKey);
+  }
+
+  /**
    * 批量选中
    */
   selectAll(ids: string[]) {
@@ -185,6 +193,13 @@ export class Selection implements ISelection {
     this.emitter.on('selectionchange', fn);
     return () => {
       this.emitter.removeListener('selectionchange', fn);
+    };
+  }
+
+  onSelectionPropsTabChange(fn: (tabKey: string) => void): () => void {
+    this.emitter.on('selectionPropsTabChange', fn);
+    return () => {
+      this.emitter.removeListener('selectionPropsTabChange', fn);
     };
   }
 }

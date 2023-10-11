@@ -26,6 +26,13 @@ export interface IPublicModelSelection<
   select(id: string): void;
 
   /**
+   * 选中指定属性Tab
+   * select tab of props with tabKey
+   * @param tabKey
+   */
+  selectPropsTab(tabKey: string): void;
+
+  /**
    * 批量选中指定节点们
    * select node with ids, this will override current selection
    *
@@ -82,4 +89,11 @@ export interface IPublicModelSelection<
    * @since v1.1.0
    */
   onSelectionChange(fn: (ids: string[]) => void): IPublicTypeDisposable;
+
+  /**
+   * 注册 selection 选中属性tab的事件回调
+   * set callback which will be called when selection is changed
+   * @since v1.1.0
+   */
+  onSelectionPropsTabChange(fn: (tabKey: string) => void): IPublicTypeDisposable;
 }

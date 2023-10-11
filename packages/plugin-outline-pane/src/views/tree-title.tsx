@@ -1,4 +1,4 @@
-import { KeyboardEvent, FocusEvent, Fragment, PureComponent } from 'react';
+import { MouseEvent as ReactMouseEvent, KeyboardEvent, FocusEvent, Fragment, PureComponent } from 'react';
 import classNames from 'classnames';
 import { createIcon } from '@alilc/lowcode-utils';
 import { IPublicApiEvent } from '@alilc/lowcode-types';
@@ -23,6 +23,7 @@ export default class TreeTitle extends PureComponent<{
   hidden: boolean;
   locked: boolean;
   expandable: boolean;
+  treeNodeClick: (e: ReactMouseEvent, type?: string) => void;
 }> {
   state: {
     editing: boolean;
@@ -106,6 +107,13 @@ export default class TreeTitle extends PureComponent<{
     const { node } = treeNode;
     treeNode.deleteNode(node);
   };
+
+  treeTitleClick = (e: any, type: string) => {
+    const { treeNodeClick } = this.props;
+    treeNodeClick?.(e, type);
+    e.stopPropagation();
+ };
+
   render() {
     const { treeNode, isModal } = this.props;
     const { pluginContext } = treeNode;
@@ -200,7 +208,7 @@ export default class TreeTitle extends PureComponent<{
                 </a>
               )}
               {node.hasLoop() && (
-                <a className="tree-node-tag loop">
+                <a className="tree-node-tag loop" onClick={(e) => { this.treeTitleClick(e, 'loop'); }}>
                   {/* todo: click todo something */}
                   <IconLoop />
                   {/* @ts-ignore */}
@@ -208,7 +216,7 @@ export default class TreeTitle extends PureComponent<{
                 </a>
               )}
               {this.state.condition && (
-                <a className="tree-node-tag cond">
+                <a className="tree-node-tag cond" onClick={(e) => { this.treeTitleClick(e, 'condition'); }}>
                   {/* todo: click todo something */}
                   <IconCond />
                   {/* @ts-ignore */}

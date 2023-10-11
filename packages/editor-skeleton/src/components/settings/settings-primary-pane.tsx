@@ -39,6 +39,10 @@ export class SettingsPrimaryPane extends Component<ISettingsPrimaryPaneProps, { 
         this._activeKey = null;
       }
     });
+
+    editor.eventBus.on('designer.selection.changePropsTab', (selection, tabKey) => {
+      this._activeKey = tabKey;
+    });
   }
 
   async setShouldIgnoreRoot() {

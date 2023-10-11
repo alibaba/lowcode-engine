@@ -1,4 +1,4 @@
-import { PureComponent } from 'react';
+import { MouseEvent as ReactMouseEvent, PureComponent } from 'react';
 import classNames from 'classnames';
 import TreeNode from '../controllers/tree-node';
 import TreeTitle from './tree-title';
@@ -9,6 +9,7 @@ import { IOutlinePanelPluginContext } from '../controllers/tree-master';
 
 class ModalTreeNodeView extends PureComponent<{
   treeNode: TreeNode;
+  treeNodeClick?: (e: ReactMouseEvent, type?: string) => void;
 }, {
   treeChildren: TreeNode[] | null;
 }> {
@@ -55,6 +56,7 @@ class ModalTreeNodeView extends PureComponent<{
   render() {
     const rootTreeNode = this.rootTreeNode;
     const { expanded } = rootTreeNode;
+    const { treeNodeClick } = this.props;
 
     const hasVisibleModalNode = !!this.modalNodesManager?.getVisibleModalNode();
     return (
@@ -74,6 +76,7 @@ class ModalTreeNodeView extends PureComponent<{
             treeChildren={this.state.treeChildren}
             expanded={expanded}
             isModal
+            treeNodeClick={treeNodeClick}
           />
         </div>
       </div>
@@ -85,6 +88,7 @@ export default class TreeNodeView extends PureComponent<{
   treeNode: TreeNode;
   isModal?: boolean;
   isRootNode?: boolean;
+  treeNodeClick?: (e: ReactMouseEvent, type?: string) => void;
 }> {
   state: {
     expanded: boolean;
@@ -195,7 +199,7 @@ export default class TreeNodeView extends PureComponent<{
   }
 
   render() {
-    const { treeNode, isModal, isRootNode } = this.props;
+    const { treeNode, isModal, isRootNode, treeNodeClick } = this.props;
     const className = classNames('tree-node', {
       // 是否展开
       expanded: this.state.expanded,
@@ -234,10 +238,12 @@ export default class TreeNodeView extends PureComponent<{
           hidden={this.state.hidden}
           locked={this.state.locked}
           expandable={this.state.expandable}
+          treeNodeClick={treeNodeClick}
         />
         {shouldShowModalTreeNode &&
           <ModalTreeNodeView
             treeNode={treeNode}
+            treeNodeClick={treeNodeClick}
           />
         }
         <TreeBranches
@@ -245,6 +251,7 @@ export default class TreeNodeView extends PureComponent<{
           isModal={false}
           expanded={this.state.expanded}
           treeChildren={this.state.treeChildren}
+          treeNodeClick={treeNodeClick}
         />
       </div>
     );

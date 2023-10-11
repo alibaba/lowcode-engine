@@ -1,4 +1,4 @@
-import { PureComponent } from 'react';
+import { MouseEvent as ReactMouseEvent, PureComponent } from 'react';
 import classNames from 'classnames';
 import TreeNode from '../controllers/tree-node';
 import TreeNodeView from './tree-node';
@@ -9,6 +9,7 @@ export default class TreeBranches extends PureComponent<{
   isModal?: boolean;
   expanded: boolean;
   treeChildren: TreeNode[] | null;
+  treeNodeClick?: (e: ReactMouseEvent, type?: string) => void;
 }> {
   state = {
     filterWorking: false,
@@ -38,11 +39,10 @@ export default class TreeBranches extends PureComponent<{
   }
 
   render() {
-    const { treeNode, isModal, expanded } = this.props;
+    const { treeNode, isModal, expanded, treeNodeClick } = this.props;
     const { filterWorking, matchChild } = this.state;
     // 条件过滤生效时，如果命中了子节点，需要将该节点展开
     const expandInFilterResult = filterWorking && matchChild;
-
     if (!expandInFilterResult && !expanded) {
       return null;
     }
@@ -50,12 +50,13 @@ export default class TreeBranches extends PureComponent<{
     return (
       <div className="tree-node-branches">
         {
-          !isModal && <TreeNodeSlots treeNode={treeNode} />
+          !isModal && <TreeNodeSlots treeNode={treeNode} treeNodeClick={treeNodeClick} />
         }
         <TreeNodeChildren
           treeNode={treeNode}
           isModal={isModal || false}
           treeChildren={this.props.treeChildren}
+          treeNodeClick={treeNodeClick}
         />
       </div>
     );
@@ -72,6 +73,7 @@ class TreeNodeChildren extends PureComponent<{
     treeNode: TreeNode;
     isModal?: boolean;
     treeChildren: TreeNode[] | null;
+    treeNodeClick?: (e: ReactMouseEvent, type?: string) => void;
   }, ITreeNodeChildrenState> {
   state: ITreeNodeChildrenState = {
     filterWorking: false,
@@ -114,7 +116,7 @@ class TreeNodeChildren extends PureComponent<{
   }
 
   render() {
-    const { isModal } = this.props;
+    const { isModal, treeNodeClick } = this.props;
     const children: any = [];
     let groupContents: any[] = [];
     let currentGrp: IPublicModelExclusiveGroup;
@@ -169,12 +171,12 @@ class TreeNodeChildren extends PureComponent<{
             children.push(insertion);
           }
         }
-        groupContents.push(<TreeNodeView key={child.nodeId} treeNode={child} isModal={isModal} />);
+        groupContents.push(<TreeNodeView key={child.nodeId} treeNode={child} isModal={isModal} treeNodeClick={treeNodeClick} />);
       } else {
         if (index === dropIndex) {
           children.push(insertion);
         }
-        children.push(<TreeNodeView key={child.nodeId} treeNode={child} isModal={isModal} />);
+        children.push(<TreeNodeView key={child.nodeId} treeNode={child} isModal={isModal} treeNodeClick={treeNodeClick} />);
       }
     });
     endGroup();
@@ -189,9 +191,10 @@ class TreeNodeChildren extends PureComponent<{
 
 class TreeNodeSlots extends PureComponent<{
     treeNode: TreeNode;
+    treeNodeClick?: (e: ReactMouseEvent, type?: string) => void;
   }> {
   render() {
-    const { treeNode } = this.props;
+    const { treeNode, treeNodeClick } = this.props;
     if (!treeNode.hasSlots()) {
       return null;
     }
@@ -208,7 +211,7 @@ class TreeNodeSlots extends PureComponent<{
           <Title title={{ type: 'i18n', intl: this.props.treeNode.pluginContext.intlNode('Slots') }} />
         </div>
         {treeNode.slots.map(tnode => (
-          <TreeNodeView key={tnode.nodeId} treeNode={tnode} />
+          <TreeNodeView key={tnode.nodeId} treeNode={tnode} treeNodeClick={treeNodeClick} />
         ))}
       </div>
     );
