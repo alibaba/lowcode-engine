@@ -335,7 +335,6 @@ export interface IRenderComponent {
     componentDidCatch(e: any): Promise<void> | void;
     shouldComponentUpdate(nextProps: IRendererProps): boolean;
     isValidComponent(SetComponent: any): any;
-    patchDidCatch(SetComponent: any): void;
     createElement(SetComponent: any, props: any, children?: any): any;
     getNotFoundComponent(): any;
     getFaultComponent(): any;

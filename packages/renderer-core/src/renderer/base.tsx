@@ -23,7 +23,6 @@ import {
   transformStringToFunction,
   checkPropTypes,
   getI18n,
-  canAcceptsRef,
   getFileCssName,
   capitalizeFirstLetter,
   DataHelper,
@@ -616,11 +615,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           });
         });
 
-        // 对于不可以接收到 ref 的组件需要做特殊处理
-        if (!canAcceptsRef(Comp)) {
-          Comp = compWrapper(Comp);
-          components[schema.componentName] = Comp;
-        }
+        Comp = compWrapper(Comp, { baseRenderer: this });
+        components[schema.componentName] = Comp;
 
         otherProps.ref = (ref: any) => {
           this.$(props.fieldId || props.ref, ref); // 收集ref
