@@ -455,7 +455,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
      * @param idx 为循环渲染的循环Index
      */
     __createVirtualDom = (originalSchema: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined, originalScope: any, parentInfo: INodeInfo, idx: string | number = ''): any => {
-      if (!originalSchema) {
+      if (originalSchema === null || originalSchema === undefined) {
         return null;
       }
       let scope = originalScope;
