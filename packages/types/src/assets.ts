@@ -38,6 +38,7 @@ export interface AssetItem {
   device?: string;
   level?: AssetLevel;
   id?: string;
+  scriptType?: string;
 }
 
 export type AssetList = Array<Asset | undefined | null>;
