@@ -615,7 +615,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           });
         });
 
-        Comp = compWrapper(Comp, { baseRenderer: this });
+        Comp = compWrapper(Comp, { baseRenderer: this, schema });
         components[schema.componentName] = Comp;
 
         otherProps.ref = (ref: any) => {

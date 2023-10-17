@@ -2,7 +2,12 @@ import { cloneEnumerableProperty } from '@alilc/lowcode-utils';
 import adapter from '../adapter';
 import { IBaseRendererInstance, IRendererProps } from '../types';
 
-function patchDidCatch(Comp: any, { baseRenderer }: { baseRenderer: IBaseRendererInstance }) {
+interface Options {
+  baseRenderer: IBaseRendererInstance;
+  schema: any;
+}
+
+function patchDidCatch(Comp: any, { baseRenderer }: Options) {
   if (Comp.patchedCatch) {
     return;
   }
@@ -44,7 +49,9 @@ function patchDidCatch(Comp: any, { baseRenderer }: { baseRenderer: IBaseRendere
   }
 }
 
-export function compWrapper(Comp: any, options: { baseRenderer: IBaseRendererInstance }) {
+const cache = new Map();
+
+export function compWrapper(Comp: any, options: Options) {
   const { createElement, Component, forwardRef } = adapter.getRuntime();
   if (
     Comp?.prototype?.isReactComponent || // react
@@ -54,6 +61,11 @@ export function compWrapper(Comp: any, options: { baseRenderer: IBaseRendererIns
     patchDidCatch(Comp, options);
     return Comp;
   }
+
+  if (cache.has(options.schema.id)) {
+    return cache.get(options.schema.id);
+  }
+
   class Wrapper extends Component {
     render() {
       return createElement(Comp, { ...this.props, ref: this.props.forwardRef });
@@ -63,10 +75,14 @@ export function compWrapper(Comp: any, options: { baseRenderer: IBaseRendererIns
 
   patchDidCatch(Wrapper, options);
 
-  return cloneEnumerableProperty(
+  const WrapperComponent = cloneEnumerableProperty(
     forwardRef((props: any, ref: any) => {
       return createElement(Wrapper, { ...props, forwardRef: ref });
     }),
     Comp,
   );
+
+  cache.set(options.schema.id, WrapperComponent);
+
+  return WrapperComponent;
 }
