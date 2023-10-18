@@ -10,6 +10,14 @@ import {
 } from './icons';
 import { componentDefaults, legacyIssues } from './transducers';
 
+function deduplicateRef(node: IPublicModelNode | null | undefined) {
+  const currentRef = node?.getPropValue('ref');
+  if (currentRef) {
+    node?.setPropValue('ref', `${node.componentName.toLowerCase()}-${Math.random().toString(36).slice(2, 9)}`);
+  }
+  node?.children?.forEach(deduplicateRef);
+}
+
 export class ComponentActions {
   private metadataTransducers: IPublicTypeMetadataTransducer[] = [];
 
@@ -53,6 +61,7 @@ export class ComponentActions {
           const { document: doc, parent, index } = node;
           if (parent) {
             const newNode = doc?.insertNode(parent, node, (index ?? 0) + 1, true);
+            deduplicateRef(newNode);
             newNode?.select();
             const { isRGL, rglNode } = node?.getRGL();
             if (isRGL) {
