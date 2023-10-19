@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-utils",
-  "version": "1.1.11-beta.19",
+  "version": "1.1.11-beta.20",
   "description": "Utils for Ali lowCode engine",
   "files": [
     "lib",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@alifd/next": "^1.19.16",
-    "@alilc/lowcode-types": "1.1.11-beta.19",
+    "@alilc/lowcode-types": "1.1.11-beta.20",
     "lodash": "^4.17.21",
     "mobx": "^6.3.0",
     "react": "^16"
@@ -32,7 +32,7 @@
     "type": "http",
     "url": "https://github.com/alibaba/lowcode-engine/tree/main/packages/utils"
   },
-  "gitHead": "2669f179e6f899d395ce1942d0fe04f9c5ed48a6",
+  "gitHead": "150cb0922dcffdda31877e7717c102a7f8cc1f72",
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",
   "homepage": "https://github.com/alibaba/lowcode-engine/#readme"
 }
