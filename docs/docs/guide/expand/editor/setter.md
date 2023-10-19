@@ -1,6 +1,6 @@
 ---
 title: 设置器扩展
-sidebar_position: 5
+sidebar_position: 7
 ---
 ## 设置器简述
 

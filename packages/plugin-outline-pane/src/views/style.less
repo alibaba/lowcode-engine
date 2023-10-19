@@ -120,20 +120,20 @@
     transform: translateZ(0);
     transition: all 0.2s ease-in-out;
     &.invalid {
-      border-color: var(--color-function-error, red);
+      border-color: var(--color-error, var(--color-function-error, red));
       background-color: var(--color-block-background-error, rgba(240, 154, 154, 0.719));
     }
   }
 
   .condition-group-container {
-    border-bottom: 1px solid var(--color-function-brown, #7b605b);
+    border-bottom: 1px solid var(--color-brown, var(--color-function-brown, #7b605b));
     position: relative;
 
     &:before {
       position: absolute;
       display: block;
       width: 0;
-      border-left: 0.5px solid var(--color-function-brown, #7b605b);
+      border-left: 0.5px solid var(--color-brown, var(--color-function-brown, #7b605b));
       height: 100%;
       top: 0;
       left: 0;
@@ -142,7 +142,7 @@
     }
     > .condition-group-title {
       text-align: center;
-      background-color: var(--color-function-brown, #7b605b);
+      background-color: var(--color-brown, var(--color-function-brown, #7b605b));
       height: 14px;
       > .lc-title {
         font-size: 12px;
@@ -155,13 +155,13 @@
     }
   }
   .tree-node-slots {
-    border-bottom: 1px solid var(--color-function-purple, rgb(144, 94, 190));
+    border-bottom: 1px solid var(--color-purple, var(--color-function-purple, rgb(144, 94, 190)));
     position: relative;
     &::before {
       position: absolute;
       display: block;
       width: 0;
-      border-left: 0.5px solid var(--color-function-purple, rgb(144, 94, 190));
+      border-left: 0.5px solid var(--color-purple, var(--color-function-purple, rgb(144, 94, 190)));
       height: 100%;
       top: 0;
       left: 0;
@@ -170,7 +170,7 @@
     }
     > .tree-node-slots-title {
       text-align: center;
-      background-color: var(--color-function-purple, rgb(144, 94, 190));
+      background-color: var(--color-purple, var(--color-function-purple, rgb(144, 94, 190)));
       height: 14px;
       > .lc-title {
         font-size: 12px;
@@ -183,12 +183,12 @@
     }
     &.insertion-at-slots {
       padding-bottom: @treeNodeHeight;
-      border-bottom-color: var(--color-function-error-dark, rgb(182, 55, 55));
+      border-bottom-color: var(--color-error-dark, var(--color-function-error-dark, rgb(182, 55, 55)));
       > .tree-node-slots-title {
-        background-color: var(--color-function-error-dark, rgb(182, 55, 55));
+        background-color: var(--color-error-dark, var(--color-function-error-dark, rgb(182, 55, 55)));
       }
       &::before {
-        border-left-color: var(--color-function-error-dark, rgb(182, 55, 55));
+        border-left-color: var(--color-error-dark, var(--color-function-error-dark, rgb(182, 55, 55)));
       }
     }
   }
@@ -326,13 +326,13 @@
         align-items: center;
         line-height: 0;
         &.cond {
-          color: var(--color-function-error, rgb(179, 52, 6));
+          color: var(--color-error, var(--color-function-error, rgb(179, 52, 6)));
         }
         &.loop {
-          color: var(--color-function-success, rgb(103, 187, 187));
+          color: var(--color-success, var(--color-function-success, rgb(103, 187, 187)));
         }
         &.slot {
-          color: var(--color-function-purple, rgb(211, 90, 211));
+          color: var(--color-purple, var(--color-function-purple, rgb(211, 90, 211)));
         }
       }
     }
