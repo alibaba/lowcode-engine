@@ -13,7 +13,7 @@ export default class SubTopArea extends Component<{ area: Area; itemClassName?: 
     }
 
     return (
-      <div className={classNames('lc-sub-top-area engine-actionpane', {
+      <div className={classNames('lc-workspace-sub-top-area lc-sub-top-area engine-actionpane', {
         'lc-area-visible': area.visible,
       })}
       >
@@ -50,13 +50,13 @@ class Contents extends Component<{ area: Area; itemClassName?: string }> {
     });
     let children = [];
     if (left && left.length) {
-      children.push(<div className="lc-sub-top-area-left">{left}</div>);
+      children.push(<div className="lc-workspace-sub-top-area-left lc-sub-top-area-left">{left}</div>);
     }
     if (center && center.length) {
-      children.push(<div className="lc-sub-top-area-center">{center}</div>);
+      children.push(<div className="lc-workspace-sub-top-area-center lc-sub-top-area-center">{center}</div>);
     }
     if (right && right.length) {
-      children.push(<div className="lc-sub-top-area-right">{right}</div>);
+      children.push(<div className="lc-workspace-sub-top-area-right lc-sub-top-area-right">{right}</div>);
     }
     return (
       <Fragment>

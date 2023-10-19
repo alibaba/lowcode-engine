@@ -1,6 +1,6 @@
 ---
 title: 图编排扩展
-sidebar_position: 9
+sidebar_position: 8
 ---
 ## 项目运行
 ### 前置准备

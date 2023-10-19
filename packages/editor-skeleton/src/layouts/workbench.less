@@ -141,7 +141,7 @@ body {
     flex-direction: column;
     background-color: var(--color-background);
   }
-  .lc-top-area, .lc-sub-top-area {
+  .lc-top-area, .lc-workspace-sub-top-area {
     width: 100%;
     display: none;
     margin-bottom: 2px;
@@ -152,30 +152,34 @@ body {
       height: var(--top-area-height);
     }
 
-    &.lc-sub-top-area {
-      background-color: var(--color-sub-top-area-background, var(--color-pane-background));
-      height: var(--sub-top-area-height, var(--top-area-height));
-      margin: var(--sub-top-area-margin, 0px 0px 2px 0px);
-      padding: var(--sub-top-area-padding, 8px 12px 8px 16px);
+    &.lc-workspace-top-area {
+      background-color: var(--color-workspace-top-area-background, var(--color-pane-background));
+    }
+
+    &.lc-workspace-sub-top-area {
+      background-color: var(--color-workspace-sub-top-area-background, var(--color-pane-background));
+      height: var(--workspace-sub-top-area-height, var(--top-area-height));
+      margin: var(--workspace-sub-top-area-margin, 0px 0px 2px 0px);
+      padding: var(--workspace-sub-top-area-padding, 8px 12px 8px 16px);
     }
 
     &.lc-area-visible {
       display: flex;
     }
 
-    .lc-top-area-left, .lc-sub-top-area-left {
+    .lc-top-area-left, .lc-workspace-sub-top-area-left {
       display: flex;
       align-items: center;
       max-width: 100%;
     }
 
-    .lc-top-area-center, .lc-sub-top-area-center {
+    .lc-top-area-center, .lc-workspace-sub-top-area-center {
       flex: 1;
       display: flex;
       justify-content: center;
       margin: 0 8px;
     }
-    .lc-top-area-right, .lc-sub-top-area-right {
+    .lc-top-area-right, .lc-workspace-sub-top-area-right {
       display: flex;
       align-items: center;
       > * {
@@ -275,9 +279,8 @@ body {
       flex-direction: column;
       justify-content: space-between;
       overflow: hidden;
-      &.lc-left-area {
-        background-color: var(--color-left-area-background, var(--color-pane-background));
-      }
+      background-color: var(--color-left-area-background, var(--color-pane-background));
+
       &.lc-workspace-left-area {
         background-color: var(--color-workspace-left-area-background, var(--color-pane-background));
       }
