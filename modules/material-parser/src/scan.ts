@@ -54,7 +54,7 @@ export default async function scan(
       }
     }
     model.mainFilePath = model.mainFilePath || pkgJson.main || './index.js';
-    model.mainFileAbsolutePath = model.mainFileAbsolutePath || join(entryFilePath, pkgJson.main);
+    model.mainFileAbsolutePath = model.mainFileAbsolutePath || resolve(entryFilePath, pkgJson.main);
     const typingsPathCandidates = [
       pkgJson.typings,
       pkgJson.types,
