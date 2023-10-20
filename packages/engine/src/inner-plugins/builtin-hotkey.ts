@@ -277,6 +277,10 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
         if (isFormEvent(e) || !doc) {
           return;
         }
+        const anchorValue = document.getSelection()?.anchorNode?.nodeValue;
+        if (anchorValue && typeof anchorValue === 'string') {
+          return;
+        }
         e.preventDefault();
 
         let selected = doc.selection.getTopNodes(true);

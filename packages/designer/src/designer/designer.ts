@@ -18,7 +18,7 @@ import {
   IPublicEnumTransformStage,
   IPublicModelLocateEvent,
 } from '@alilc/lowcode-types';
-import { megreAssets, IPublicTypeAssetsJson, isNodeSchema, isDragNodeObject, isDragNodeDataObject, isLocationChildrenDetail, Logger } from '@alilc/lowcode-utils';
+import { mergeAssets, IPublicTypeAssetsJson, isNodeSchema, isDragNodeObject, isDragNodeDataObject, isLocationChildrenDetail, Logger } from '@alilc/lowcode-utils';
 import { IProject, Project } from '../project';
 import { Node, DocumentModel, insertChildren, INode } from '../document';
 import { ComponentMeta, IComponentMeta } from '../component-meta';
@@ -458,7 +458,7 @@ export class Designer implements IDesigner {
     if (components) {
       // 合并 assets
       let assets = this.editor.get('assets') || {};
-      let newAssets = megreAssets(assets, incrementalAssets);
+      let newAssets = mergeAssets(assets, incrementalAssets);
       // 对于 assets 存在需要二次网络下载的过程，必须 await 等待结束之后，再进行事件触发
       await this.editor.set('assets', newAssets);
     }

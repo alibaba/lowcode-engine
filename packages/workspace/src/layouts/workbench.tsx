@@ -2,17 +2,10 @@ import { Component } from 'react';
 import { TipContainer, engineConfig, observer } from '@alilc/lowcode-editor-core';
 import { WindowView } from '../view/window-view';
 import classNames from 'classnames';
-import TopArea from './top-area';
-import LeftArea from './left-area';
-import LeftFixedPane from './left-fixed-pane';
-import LeftFloatPane from './left-float-pane';
-import MainArea from './main-area';
-import BottomArea from './bottom-area';
-import './workbench.less';
 import { SkeletonContext } from '../skeleton-context';
 import { EditorConfig, PluginClassSet } from '@alilc/lowcode-types';
 import { Workspace } from '../workspace';
-import SubTopArea from './sub-top-area';
+import { BottomArea, LeftArea, LeftFixedPane, LeftFloatPane, MainArea, SubTopArea, TopArea } from '@alilc/lowcode-editor-skeleton';
 
 @observer
 export class Workbench extends Component<{
@@ -23,12 +16,18 @@ export class Workbench extends Component<{
   topAreaItemClassName?: string;
 }, {
   workspaceEmptyComponent: any;
+  theme?: string;
 }> {
   constructor(props: any) {
     super(props);
     const { config, components, workspace } = this.props;
     const { skeleton } = workspace;
     skeleton.buildFromConfig(config, components);
+    engineConfig.onGot('theme', (theme) => {
+      this.setState({
+        theme,
+      });
+    });
     engineConfig.onGot('workspaceEmptyComponent', (workspaceEmptyComponent) => {
       this.setState({
         workspaceEmptyComponent,
@@ -36,20 +35,21 @@ export class Workbench extends Component<{
     });
     this.state = {
       workspaceEmptyComponent: engineConfig.get('workspaceEmptyComponent'),
+      theme: engineConfig.get('theme'),
     };
   }
 
   render() {
     const { workspace, className, topAreaItemClassName } = this.props;
     const { skeleton } = workspace;
-    const WorkspaceEmptyComponent = this.state.workspaceEmptyComponent;
+    const { workspaceEmptyComponent: WorkspaceEmptyComponent, theme } = this.state;
 
     return (
-      <div className={classNames('lc-workspace-workbench', className)}>
+      <div className={classNames('lc-workspace-workbench', className, theme)}>
         <SkeletonContext.Provider value={skeleton}>
-          <TopArea area={skeleton.topArea} itemClassName={topAreaItemClassName} />
+          <TopArea className="lc-workspace-top-area" area={skeleton.topArea} itemClassName={topAreaItemClassName} />
           <div className="lc-workspace-workbench-body">
-            <LeftArea area={skeleton.leftArea} />
+            <LeftArea className="lc-workspace-left-area lc-left-area" area={skeleton.leftArea} />
             <LeftFloatPane area={skeleton.leftFloatArea} />
             <LeftFixedPane area={skeleton.leftFixedArea} />
             <div className="lc-workspace-workbench-center">

@@ -126,9 +126,10 @@ export class EditorWindow implements IEditorWindow {
   async init() {
     await this.initViewTypes();
     await this.execViewTypesInit();
-    Promise.all(Array.from(this.editorViews.values()).map((d) => d.onSimulatorRendererReady)).then(() => {
-      this.workspace.emitWindowRendererReady();
-    });
+    Promise.all(Array.from(this.editorViews.values()).map((d) => d.onSimulatorRendererReady()))
+      .then(() => {
+        this.workspace.emitWindowRendererReady();
+      });
     this.url = await this.resource.url();
     this.setDefaultViewName();
     this.initReady = true;

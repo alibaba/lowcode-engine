@@ -64,7 +64,6 @@ export class SettingsPrimaryPane extends Component<ISettingsPrimaryPaneProps, { 
         <div className="lc-settings-navigator">
           {createIcon(settings.componentMeta?.icon, {
             className: 'lc-settings-navigator-icon',
-            class: 'lc-settings-navigator-icon',
           })}
           <Title title={settings.componentMeta!.title} />
           <span> x {settings.nodes.length}</span>

@@ -23,7 +23,6 @@ import {
   transformStringToFunction,
   checkPropTypes,
   getI18n,
-  canAcceptsRef,
   getFileCssName,
   capitalizeFirstLetter,
   DataHelper,
@@ -131,7 +130,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
     static contextType = AppContext;
 
-    appHelper?: IRendererAppHelper;
     i18n: any;
     getLocale: any;
     setLocale: any;
@@ -174,7 +172,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     __beforeInit(_props: IBaseRendererProps) { }
 
     __init(props: IBaseRendererProps) {
-      this.appHelper = props.__appHelper;
       this.__compScopes = {};
       this.__instanceMap = {};
       this.__bindCustomMethods(props);
@@ -455,7 +452,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
      * @param idx 为循环渲染的循环Index
      */
     __createVirtualDom = (originalSchema: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined, originalScope: any, parentInfo: INodeInfo, idx: string | number = ''): any => {
-      if (!originalSchema) {
+      if (originalSchema === null || originalSchema === undefined) {
         return null;
       }
       let scope = originalScope;
@@ -547,6 +544,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
         if (schema.loop != null) {
           const loop = this.__parseData(schema.loop, scope);
+          if (Array.isArray(loop) && loop.length === 0) return null;
           const useLoop = isUseLoop(loop, this.__designModeIsDesign);
           if (useLoop) {
             return this.__createLoopVirtualDom(
@@ -617,11 +615,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           });
         });
 
-        // 对于不可以接收到 ref 的组件需要做特殊处理
-        if (!canAcceptsRef(Comp)) {
-          Comp = compWrapper(Comp);
-          components[schema.componentName] = Comp;
-        }
+        Comp = compWrapper(Comp, { baseRenderer: this, schema });
+        components[schema.componentName] = Comp;
 
         otherProps.ref = (ref: any) => {
           this.$(props.fieldId || props.ref, ref); // 收集ref
@@ -651,7 +646,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           props.key = props.__id;
         }
 
-        let child = this.__getSchemaChildrenVirtualDom(schema, scope, Comp);
+        let child = this.__getSchemaChildrenVirtualDom(schema, scope, Comp, condition);
         const renderComp = (innerProps: any) => engine.createElement(Comp, innerProps, child);
         // 设计模式下的特殊处理
         if (engine && [DESIGN_MODE.EXTEND, DESIGN_MODE.BORDER].includes(engine.props.designMode)) {
@@ -711,8 +706,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       return [];
     }
 
-    __getSchemaChildrenVirtualDom = (schema: IPublicTypeNodeSchema | undefined, scope: any, Comp: any) => {
-      let children = getSchemaChildren(schema);
+    __getSchemaChildrenVirtualDom = (schema: IPublicTypeNodeSchema | undefined, scope: any, Comp: any, condition = true) => {
+      let children = condition ? getSchemaChildren(schema) : null;
 
       // @todo 补完这里的 Element 定义 @承虎
       let result: any = [];
@@ -1018,6 +1013,10 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       const componentNames = [builtin, ...extraComponents];
       return !isSchema(schema) || !componentNames.includes(schema?.componentName ?? '');
     };
+
+    get appHelper(): IRendererAppHelper {
+      return this.props.__appHelper;
+    }
 
     get requestHandlersMap() {
       return this.appHelper?.requestHandlersMap;

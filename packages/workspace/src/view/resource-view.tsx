@@ -1,10 +1,10 @@
 import { PureComponent } from 'react';
 import { EditorView } from './editor-view';
 import { observer } from '@alilc/lowcode-editor-core';
-import TopArea from '../layouts/top-area';
 import { IResource } from '../resource';
 import { IEditorWindow } from '../window';
 import './resource-view.less';
+import { TopArea } from '@alilc/lowcode-editor-skeleton';
 
 @observer
 export class ResourceView extends PureComponent<{

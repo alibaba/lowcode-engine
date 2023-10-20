@@ -105,55 +105,7 @@ export default function rendererFactory(): IRenderComponent {
       return SetComponent;
     }
 
-    patchDidCatch(SetComponent: any) {
-      if (!this.isValidComponent(SetComponent)) {
-        return;
-      }
-      if (SetComponent.patchedCatch) {
-        return;
-      }
-      if (!SetComponent.prototype) {
-        return;
-      }
-      SetComponent.patchedCatch = true;
-
-      // Rax 的 getDerivedStateFromError 有 BUG，这里先用 componentDidCatch 来替代
-      // @see https://github.com/alibaba/rax/issues/2211
-      const originalDidCatch = SetComponent.prototype.componentDidCatch;
-      SetComponent.prototype.componentDidCatch = function didCatch(this: any, error: Error, errorInfo: any) {
-        this.setState({ engineRenderError: true, error });
-        if (originalDidCatch && typeof originalDidCatch === 'function') {
-          originalDidCatch.call(this, error, errorInfo);
-        }
-      };
-
-      const engine = this;
-      const originRender = SetComponent.prototype.render;
-      SetComponent.prototype.render = function () {
-        if (this.state && this.state.engineRenderError) {
-          this.state.engineRenderError = false;
-          return engine.createElement(engine.getFaultComponent(), {
-            ...this.props,
-            error: this.state.error,
-            componentName: this.props._componentName
-          });
-        }
-        return originRender.call(this);
-      };
-      if(!(SetComponent.prototype instanceof PureComponent)) {
-        const originShouldComponentUpdate = SetComponent.prototype.shouldComponentUpdate;
-        SetComponent.prototype.shouldComponentUpdate = function (nextProps: IRendererProps, nextState: any) {
-          if (nextState && nextState.engineRenderError) {
-            return true;
-          }
-          return originShouldComponentUpdate ? originShouldComponentUpdate.call(this, nextProps, nextState) : true;
-        };
-      }
-    }
-
     createElement(SetComponent: any, props: any, children?: any) {
-      // TODO: enable in runtime mode?
-      this.patchDidCatch(SetComponent);
       return (this.props.customCreateElement || createElement)(SetComponent, props, children);
     }
 

@@ -31,7 +31,7 @@
     max-height: calc(100% - 32px);
     max-width: calc(100% - 32px);
     transform: translateX(-50%);
-    box-shadow: 0 2px 10px 0 rgba(31,56,88,.15);
+    box-shadow: 0 2px 10px 0 var(--color-block-background-shallow, rgba(31,56,88,.15));
   }
 
   &-device-iphonex { // 增加默认的小程序的壳
@@ -44,7 +44,7 @@
     background: url(https://img.alicdn.com/tfs/TB1b4DHilFR4u4jSZFPXXanzFXa-750-1574.png) no-repeat top;
     background-size: 375px 812px;
     border-radius: 44px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0 36px 42px;
+    box-shadow: var(--color-block-background-shallow, rgba(0, 0, 0, 0.1)) 0 36px 42px;
     .@{scope}-canvas-viewport {
       width: auto;
       top: 50px;
@@ -78,7 +78,7 @@
     bottom: 16px;
     left: 16px;
     width: auto;
-    box-shadow: 0 1px 4px 0 rgba(31, 50, 88, 0.125);
+    box-shadow: 0 1px 4px 0 var(--color-block-background-shallow, rgba(31, 50, 88, 0.125));
   }
 
   &-content {

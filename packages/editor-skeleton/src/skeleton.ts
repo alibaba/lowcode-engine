@@ -108,7 +108,7 @@ export interface ISkeleton extends Omit<IPublicApiSkeleton,
   add(config: IPublicTypeSkeletonConfig, extraConfig?: Record<string, any>): IWidget | Widget | Panel | Stage | Dock | PanelDock | undefined;
 }
 
-export class Skeleton {
+export class Skeleton implements ISkeleton {
   private panels = new Map<string, Panel>();
 
   private containers = new Map<string, WidgetContainer<any>>();

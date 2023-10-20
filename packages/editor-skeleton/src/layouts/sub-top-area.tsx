@@ -4,7 +4,7 @@ import { observer } from '@alilc/lowcode-editor-core';
 import { Area } from '@alilc/lowcode-editor-skeleton';
 
 @observer
-export default class TopArea extends Component<{ area: Area; itemClassName?: string }> {
+export default class SubTopArea extends Component<{ area: Area; itemClassName?: string }> {
   render() {
     const { area, itemClassName } = this.props;
 
@@ -13,7 +13,7 @@ export default class TopArea extends Component<{ area: Area; itemClassName?: str
     }
 
     return (
-      <div className={classNames('lc-top-area engine-actionpane', {
+      <div className={classNames('lc-workspace-sub-top-area lc-sub-top-area engine-actionpane', {
         'lc-area-visible': area.visible,
       })}
       >
@@ -48,12 +48,19 @@ class Contents extends Component<{ area: Area; itemClassName?: string }> {
         right.push(content);
       }
     });
-
+    let children = [];
+    if (left && left.length) {
+      children.push(<div className="lc-workspace-sub-top-area-left lc-sub-top-area-left">{left}</div>);
+    }
+    if (center && center.length) {
+      children.push(<div className="lc-workspace-sub-top-area-center lc-sub-top-area-center">{center}</div>);
+    }
+    if (right && right.length) {
+      children.push(<div className="lc-workspace-sub-top-area-right lc-sub-top-area-right">{right}</div>);
+    }
     return (
       <Fragment>
-        <div className="lc-top-area-left">{left}</div>
-        <div className="lc-top-area-center">{center}</div>
-        <div className="lc-top-area-right">{right}</div>
+        {children}
       </Fragment>
     );
   }

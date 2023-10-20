@@ -83,6 +83,7 @@ export default class TreeTitle extends PureComponent<{
       editing: false,
       title: treeNode.titleLabel,
       condition: treeNode.condition,
+      visible: !treeNode.hidden,
     });
     treeNode.onTitleLabelChanged(() => {
       this.setState({

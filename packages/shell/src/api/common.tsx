@@ -1,4 +1,4 @@
-import { editorSymbol, skeletonSymbol, designerCabinSymbol, designerSymbol, settingFieldSymbol } from '../symbols';
+import { editorSymbol, skeletonSymbol, designerCabinSymbol, designerSymbol, settingFieldSymbol, editorCabinSymbol, skeletonCabinSymbol } from '../symbols';
 import {
   isFormEvent as innerIsFormEvent,
   compatibleLegaoSchema as innerCompatibleLegaoSchema,
@@ -36,6 +36,11 @@ import {
   getConvertedExtraKey as innerGetConvertedExtraKey,
   getOriginalExtraKey as innerGetOriginalExtraKey,
   IDesigner,
+  DropLocation as InnerDropLocation,
+  Designer as InnerDesigner,
+  Node as InnerNode,
+  LowCodePluginManager as InnerLowCodePluginManager,
+  DesignerView as InnerDesignerView,
 } from '@alilc/lowcode-designer';
 import {
   Skeleton as InnerSkeleton,
@@ -43,6 +48,8 @@ import {
   PopupContext as InnerPopupContext,
   PopupPipe as InnerPopupPipe,
   Workbench as InnerWorkbench,
+  SettingsPrimaryPane as InnerSettingsPrimaryPane,
+  registerDefaults as InnerRegisterDefaults,
 } from '@alilc/lowcode-editor-skeleton';
 import {
   Editor,
@@ -61,6 +68,7 @@ import {
   action as innerAction,
   runInAction as innerRunInAction,
   engineConfig as innerEngineConfig,
+  globalContext,
 } from '@alilc/lowcode-editor-core';
 import { Dragon as ShellDragon } from '../model';
 import { ReactNode } from 'react';
@@ -94,6 +102,11 @@ class DesignerCabin implements IPublicApiCommonDesignerCabin {
       DragObjectType: InnerDragObjectType,
       isDragNodeDataObject: innerIsDragNodeDataObject,
       isNode: innerIsNode,
+      DropLocation: InnerDropLocation,
+      Designer: InnerDesigner,
+      Node: InnerNode,
+      LowCodePluginManager: InnerLowCodePluginManager,
+      DesignerView: InnerDesignerView,
     };
   }
 
@@ -160,8 +173,19 @@ class DesignerCabin implements IPublicApiCommonDesignerCabin {
 class SkeletonCabin implements IPublicApiCommonSkeletonCabin {
   private readonly [skeletonSymbol]: InnerSkeleton;
 
+  readonly [skeletonCabinSymbol]: any;
+
   constructor(skeleton: InnerSkeleton) {
     this[skeletonSymbol] = skeleton;
+    this[skeletonCabinSymbol] = {
+      Workbench: InnerWorkbench,
+      createSettingFieldView: this.createSettingFieldView,
+      PopupContext: InnerPopupContext,
+      PopupPipe: InnerPopupPipe,
+      SettingsPrimaryPane: InnerSettingsPrimaryPane,
+      registerDefaults: InnerRegisterDefaults,
+      Skeleton: InnerSkeleton,
+    };
   }
 
   get Workbench(): any {
@@ -242,8 +266,33 @@ class Utils implements IPublicApiCommonUtils {
 class EditorCabin implements IPublicApiCommonEditorCabin {
   private readonly [editorSymbol]: Editor;
 
+  /**
+   * @deprecated
+   */
+  readonly [editorCabinSymbol]: any;
+
   constructor(editor: Editor) {
     this[editorSymbol] = editor;
+    this[editorCabinSymbol] = {
+      Editor,
+      globalContext,
+      runInAction: innerRunInAction,
+      Title: InnerTitle,
+      Tip: InnerTip,
+      shallowIntl: innerShallowIntl,
+      createIntl: innerCreateIntl,
+      intl: innerIntl,
+      createSetterContent: this.createSetterContent.bind(this),
+      globalLocale: innerGlobalLocale,
+      obx: innerObx,
+      action: innerAction,
+      engineConfig: innerEngineConfig,
+      observable: innerObservable,
+      makeObservable: innerMakeObservable,
+      untracked: innerUntracked,
+      computed: innerComputed,
+      observer: innerObserver,
+    };
   }
 
   /**

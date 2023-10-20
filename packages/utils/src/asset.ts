@@ -50,7 +50,7 @@ export function assetItem(type: AssetType, content?: string | null, level?: Asse
   };
 }
 
-export function megreAssets(assets: IPublicTypeAssetsJson, incrementalAssets: IPublicTypeAssetsJson): IPublicTypeAssetsJson {
+export function mergeAssets(assets: IPublicTypeAssetsJson, incrementalAssets: IPublicTypeAssetsJson): IPublicTypeAssetsJson {
   if (incrementalAssets.packages) {
     assets.packages = [...(assets.packages || []), ...incrementalAssets.packages];
   }
@@ -59,13 +59,13 @@ export function megreAssets(assets: IPublicTypeAssetsJson, incrementalAssets: IP
     assets.components = [...(assets.components || []), ...incrementalAssets.components];
   }
 
-  megreAssetsComponentList(assets, incrementalAssets, 'componentList');
-  megreAssetsComponentList(assets, incrementalAssets, 'bizComponentList');
+  mergeAssetsComponentList(assets, incrementalAssets, 'componentList');
+  mergeAssetsComponentList(assets, incrementalAssets, 'bizComponentList');
 
   return assets;
 }
 
-function megreAssetsComponentList(assets: IPublicTypeAssetsJson, incrementalAssets: IPublicTypeAssetsJson, listName: keyof IPublicTypeAssetsJson): void {
+function mergeAssetsComponentList(assets: IPublicTypeAssetsJson, incrementalAssets: IPublicTypeAssetsJson, listName: keyof IPublicTypeAssetsJson): void {
   if (incrementalAssets[listName]) {
     if (assets[listName]) {
       // 根据title进行合并
