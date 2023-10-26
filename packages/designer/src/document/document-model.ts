@@ -74,7 +74,6 @@ export interface IDocumentModel extends Omit<IPublicModelDocumentModel<
   'onRemoveNode' |
   'onChangeDetecting' |
   'onChangeSelection' |
-  'onMountNode' |
   'onChangeNodeProp' |
   'onImportSchema' |
   'isDetectingNode' |
@@ -412,6 +411,14 @@ export class DocumentModel implements IDocumentModel {
   hasNode(id: string): boolean {
     const node = this.getNode(id);
     return node ? !node.isPurged : false;
+  }
+
+  onMountNode(fn: (payload: { node: INode }) => void) {
+    this.designer.editor.eventBus.on('node.add', fn as any);
+
+    return () => {
+      this.designer.editor.eventBus.off('node.add', fn as any);
+    };
   }
 
   /**
