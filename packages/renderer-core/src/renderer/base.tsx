@@ -615,9 +615,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           });
         });
 
-        Comp = compWrapper(Comp, { baseRenderer: this, schema });
-        components[schema.componentName] = Comp;
-
         otherProps.ref = (ref: any) => {
           this.$(props.fieldId || props.ref, ref); // 收集ref
           const refProps = props.ref;
@@ -701,9 +698,9 @@ export default function baseRendererFactory(): IBaseRenderComponent {
      */
     get __componentHOCs(): IComponentConstruct[] {
       if (this.__designModeIsDesign) {
-        return [leafWrapper];
+        return [leafWrapper, compWrapper];
       }
-      return [];
+      return [compWrapper];
     }
 
     __getSchemaChildrenVirtualDom = (schema: IPublicTypeNodeSchema | undefined, scope: any, Comp: any, condition = true) => {
