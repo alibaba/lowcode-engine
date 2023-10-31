@@ -11,6 +11,12 @@ exports[`React Renderer render basic case 1`] = `
 >
   <div
     __id="node_dockcy8n9xed"
+    __inner__={
+      Object {
+        "condition": true,
+        "hidden": undefined,
+      }
+    }
     className="next-box"
     style={
       Object {
@@ -25,6 +31,12 @@ exports[`React Renderer render basic case 1`] = `
   >
     <div
       __id="node_dockcy8n9xee"
+      __inner__={
+        Object {
+          "condition": true,
+          "hidden": undefined,
+        }
+      }
       className="next-box"
       style={
         Object {
@@ -39,6 +51,12 @@ exports[`React Renderer render basic case 1`] = `
     >
       <nav
         __id="node_dockcy8n9xef"
+        __inner__={
+          Object {
+            "condition": true,
+            "hidden": undefined,
+          }
+        }
         aria-label="Breadcrumb"
         style={
           Object {
@@ -55,6 +73,12 @@ exports[`React Renderer render basic case 1`] = `
           >
             <span
               __id="node_dockcy8n9xeg"
+              __inner__={
+                Object {
+                  "condition": true,
+                  "hidden": undefined,
+                }
+              }
               className="next-breadcrumb-text"
             >
               首页
@@ -74,6 +98,12 @@ exports[`React Renderer render basic case 1`] = `
           >
             <span
               __id="node_dockcy8n9xei"
+              __inner__={
+                Object {
+                  "condition": true,
+                  "hidden": undefined,
+                }
+              }
               className="next-breadcrumb-text"
             >
               品质中台
@@ -93,6 +123,12 @@ exports[`React Renderer render basic case 1`] = `
           >
             <span
               __id="node_dockcy8n9xek"
+              __inner__={
+                Object {
+                  "condition": true,
+                  "hidden": undefined,
+                }
+              }
               className="next-breadcrumb-text"
             >
               商家品质页面管理
@@ -112,6 +148,12 @@ exports[`React Renderer render basic case 1`] = `
           >
             <span
               __id="node_dockcy8n9xem"
+              __inner__={
+                Object {
+                  "condition": true,
+                  "hidden": undefined,
+                }
+              }
               aria-current="page"
               className="next-breadcrumb-text activated"
             >
@@ -123,6 +165,12 @@ exports[`React Renderer render basic case 1`] = `
     </div>
     <div
       __id="node_dockcy8n9xeo"
+      __inner__={
+        Object {
+          "condition": true,
+          "hidden": undefined,
+        }
+      }
       className="next-box"
       style={
         Object {
@@ -138,6 +186,12 @@ exports[`React Renderer render basic case 1`] = `
       <form
         __events={Array []}
         __id="node_dockcy8n9xep"
+        __inner__={
+          Object {
+            "condition": true,
+            "hidden": undefined,
+          }
+        }
         className="next-form next-inline next-medium"
         onSubmit={[Function]}
         role="grid"
@@ -151,6 +205,12 @@ exports[`React Renderer render basic case 1`] = `
       >
         <div
           __id="node_dockcy8n9xeq"
+          __inner__={
+            Object {
+              "condition": true,
+              "hidden": undefined,
+            }
+          }
           className="next-form-item next-left next-medium"
           style={
             Object {
@@ -193,12 +253,20 @@ exports[`React Renderer render basic case 1`] = `
                   >
                     <input
                       __id="node_dockcy8n9xer"
+                      __inner__={
+                        Object {
+                          "condition": true,
+                          "hidden": undefined,
+                        }
+                      }
                       autoComplete="off"
                       disabled={false}
                       height="100%"
                       maxLength={null}
                       onBlur={[Function]}
                       onChange={[Function]}
+                      onCompositionEnd={[Function]}
+                      onCompositionStart={[Function]}
                       onFocus={[Function]}
                       onKeyDown={[Function]}
                       placeholder="请选择"
@@ -214,7 +282,14 @@ exports[`React Renderer render basic case 1`] = `
                       <span>
                         请选择
                       </span>
-                      <span>
+                      <span
+                        style={
+                          Object {
+                            "display": "inline-block",
+                            "width": 1,
+                          }
+                        }
+                      >
                          
                       </span>
                     </span>
@@ -222,6 +297,7 @@ exports[`React Renderer render basic case 1`] = `
                 </span>
                 <span
                   className="next-input-control"
+                  onClick={[Function]}
                 >
                   <span
                     aria-hidden={true}
@@ -248,6 +324,12 @@ exports[`React Renderer render basic case 1`] = `
         </div>
         <div
           __id="node_dockcy8n9xes"
+          __inner__={
+            Object {
+              "condition": true,
+              "hidden": undefined,
+            }
+          }
           className="next-form-item next-left next-medium"
           style={
             Object {
@@ -290,12 +372,20 @@ exports[`React Renderer render basic case 1`] = `
                   >
                     <input
                       __id="node_dockcy8n9xet"
+                      __inner__={
+                        Object {
+                          "condition": true,
+                          "hidden": undefined,
+                        }
+                      }
                       autoComplete="off"
                       disabled={false}
                       height="100%"
                       maxLength={null}
                       onBlur={[Function]}
                       onChange={[Function]}
+                      onCompositionEnd={[Function]}
+                      onCompositionStart={[Function]}
                       onFocus={[Function]}
                       onKeyDown={[Function]}
                       placeholder="请选择"
@@ -311,7 +401,14 @@ exports[`React Renderer render basic case 1`] = `
                       <span>
                         请选择
                       </span>
-                      <span>
+                      <span
+                        style={
+                          Object {
+                            "display": "inline-block",
+                            "width": 1,
+                          }
+                        }
+                      >
                          
                       </span>
                     </span>
@@ -319,6 +416,7 @@ exports[`React Renderer render basic case 1`] = `
                 </span>
                 <span
                   className="next-input-control"
+                  onClick={[Function]}
                 >
                   <span
                     aria-hidden={true}
@@ -345,6 +443,12 @@ exports[`React Renderer render basic case 1`] = `
         </div>
         <div
           __id="node_dockcy8n9xeu"
+          __inner__={
+            Object {
+              "condition": true,
+              "hidden": undefined,
+            }
+          }
           className="next-form-item next-left next-medium"
           style={
             Object {
@@ -372,12 +476,20 @@ exports[`React Renderer render basic case 1`] = `
             >
               <input
                 __id="node_dockcy8n9xev"
+                __inner__={
+                  Object {
+                    "condition": true,
+                    "hidden": undefined,
+                  }
+                }
                 autoComplete="off"
                 disabled={false}
                 height="100%"
                 maxLength={null}
                 onBlur={[Function]}
                 onChange={[Function]}
+                onCompositionEnd={[Function]}
+                onCompositionStart={[Function]}
                 onFocus={[Function]}
                 onKeyDown={[Function]}
                 readOnly={false}
@@ -390,10 +502,22 @@ exports[`React Renderer render basic case 1`] = `
         </div>
         <div
           __id="node_dockcy8n9xew"
+          __inner__={
+            Object {
+              "condition": true,
+              "hidden": undefined,
+            }
+          }
           className="next-btn-group"
         >
           <button
             __id="node_dockcy8n9xex"
+            __inner__={
+              Object {
+                "condition": true,
+                "hidden": undefined,
+              }
+            }
             className="next-btn next-medium next-btn-primary"
             disabled={false}
             onClick={[Function]}
@@ -413,6 +537,12 @@ exports[`React Renderer render basic case 1`] = `
           </button>
           <button
             __id="node_dockcy8n9xe10"
+            __inner__={
+              Object {
+                "condition": true,
+                "hidden": undefined,
+              }
+            }
             className="next-btn next-medium next-btn-normal"
             disabled={false}
             onClick={[Function]}
@@ -435,6 +565,12 @@ exports[`React Renderer render basic case 1`] = `
     </div>
     <div
       __id="node_dockcy8n9xe1f"
+      __inner__={
+        Object {
+          "condition": true,
+          "hidden": undefined,
+        }
+      }
       className="next-box"
       style={
         Object {
@@ -460,6 +596,12 @@ exports[`React Renderer render basic case 1`] = `
           ]
         }
         __id="node_dockd5nrh9p4"
+        __inner__={
+          Object {
+            "condition": true,
+            "hidden": undefined,
+          }
+        }
         className="next-btn next-medium next-btn-primary"
         disabled={false}
         onClick={[Function]}
@@ -476,6 +618,12 @@ exports[`React Renderer render basic case 1`] = `
     </div>
     <div
       __id="node_dockd5nrh9p5"
+      __inner__={
+        Object {
+          "condition": true,
+          "hidden": undefined,
+        }
+      }
       className="next-box"
       style={
         Object {
@@ -488,6 +636,12 @@ exports[`React Renderer render basic case 1`] = `
     >
       <div
         __id="node_dockjielosj1"
+        __inner__={
+          Object {
+            "condition": true,
+            "hidden": undefined,
+          }
+        }
         actionBar={
           Array [
             Object {
@@ -548,6 +702,9 @@ exports[`React Renderer render basic case 1`] = `
         showMiniPager={true}
         style={Object {}}
       >
+        <div
+          className="next-table-column-resize-proxy"
+        />
         <table
           role="table"
           style={
@@ -585,8 +742,6 @@ exports[`React Renderer render basic case 1`] = `
             <tr>
               <th
                 className="next-table-cell next-table-header-node"
-                dataKey="name"
-                editType="text"
                 role="gridcell"
                 rowSpan={1}
                 style={
@@ -604,7 +759,6 @@ exports[`React Renderer render basic case 1`] = `
               </th>
               <th
                 className="next-table-cell next-table-header-node"
-                dataKey="age"
                 role="gridcell"
                 rowSpan={1}
                 style={
@@ -622,7 +776,6 @@ exports[`React Renderer render basic case 1`] = `
               </th>
               <th
                 className="next-table-cell next-table-header-node"
-                dataKey="email"
                 role="gridcell"
                 rowSpan={1}
                 style={
@@ -667,6 +820,12 @@ exports[`React Renderer render basic case 1`] = `
       </div>
       <div
         __id="node_dockd5nrh9pg"
+        __inner__={
+          Object {
+            "condition": true,
+            "hidden": undefined,
+          }
+        }
         className="next-box"
         style={
           Object {
@@ -681,6 +840,12 @@ exports[`React Renderer render basic case 1`] = `
       >
         <div
           __id="node_dockd5nrh9pf"
+          __inner__={
+            Object {
+              "condition": true,
+              "hidden": undefined,
+            }
+          }
           className="next-pagination next-medium next-normal"
           style={Object {}}
         >
@@ -826,6 +991,8 @@ exports[`React Renderer render basic case 1`] = `
                 maxLength={null}
                 onBlur={[Function]}
                 onChange={[Function]}
+                onCompositionEnd={[Function]}
+                onCompositionStart={[Function]}
                 onFocus={[Function]}
                 onKeyDown={[Function]}
                 readOnly={false}
@@ -856,10 +1023,10 @@ exports[`React Renderer render basic case 1`] = `
     </div>
   </div>
   <div
-    __id="node_dockd5nrh9pr"
-    name="error"
+    componentId="node_dockd5nrh9pr"
+    componentName="ErrorComponent"
   >
-    Component Not Found
+    ErrorComponent Component Not Found
   </div>
 </div>
 `;

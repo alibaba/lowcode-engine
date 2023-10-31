@@ -557,6 +557,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
 
       const {
         forwardedRef,
+        __tag,
         ...rest
       } = this.props;
 

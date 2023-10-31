@@ -544,7 +544,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
         if (schema.loop != null) {
           const loop = this.__parseData(schema.loop, scope);
-          if (Array.isArray(loop) && loop.length === 0) return null;
           const useLoop = isUseLoop(loop, this.__designModeIsDesign);
           if (useLoop) {
             return this.__createLoopVirtualDom(
@@ -698,7 +697,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
      */
     get __componentHOCs(): IComponentConstruct[] {
       if (this.__designModeIsDesign) {
-        return [leafWrapper, compWrapper];
+        return [compWrapper, leafWrapper];
       }
       return [compWrapper];
     }
