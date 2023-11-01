@@ -214,6 +214,8 @@ function parseAsset(scripts: any, styles: any, asset: Asset | undefined | null, 
 }
 
 export class AssetLoader {
+  private stylePoints = new Map<string, StylePoint>();
+
   async load(asset: Asset) {
     const styles: any = {};
     const scripts: any = {};
@@ -237,10 +239,8 @@ export class AssetLoader {
     await Promise.all(
       styleQueue.map(({ content, level, type, id }) => this.loadStyle(content, level!, type === AssetType.CSSUrl, id)),
     );
-    await Promise.all(scriptQueue.map(({ content, type }) => this.loadScript(content, type === AssetType.JSUrl)));
+    await Promise.all(scriptQueue.map(({ content, type, scriptType }) => this.loadScript(content, type === AssetType.JSUrl, scriptType)));
   }
-
-  private stylePoints = new Map<string, StylePoint>();
 
   private loadStyle(content: string | undefined | null, level: AssetLevel, isUrl?: boolean, id?: string) {
     if (!content) {
@@ -259,11 +259,11 @@ export class AssetLoader {
     return isUrl ? point.applyUrl(content) : point.applyText(content);
   }
 
-  private loadScript(content: string | undefined | null, isUrl?: boolean) {
+  private loadScript(content: string | undefined | null, isUrl?: boolean, scriptType?: string) {
     if (!content) {
       return;
     }
-    return isUrl ? load(content) : evaluate(content);
+    return isUrl ? load(content, scriptType) : evaluate(content, scriptType);
   }
 
   // todo 补充类型
