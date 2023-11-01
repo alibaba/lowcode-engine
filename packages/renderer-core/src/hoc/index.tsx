@@ -49,7 +49,7 @@ function patchDidCatch(Comp: any, { baseRenderer }: Options) {
   }
 }
 
-const cache = new Map();
+const cache = new Map<string, { Comp: any; WrapperComponent: any }>();
 
 export function compWrapper(Comp: any, options: Options) {
   const { createElement, Component, forwardRef } = adapter.getRuntime();
@@ -62,8 +62,8 @@ export function compWrapper(Comp: any, options: Options) {
     return Comp;
   }
 
-  if (cache.has(options.schema.id)) {
-    return cache.get(options.schema.id);
+  if (cache.has(options.schema.id) && cache.get(options.schema.id)?.Comp === Comp) {
+    return cache.get(options.schema.id)?.WrapperComponent;
   }
 
   class Wrapper extends Component {
@@ -82,7 +82,7 @@ export function compWrapper(Comp: any, options: Options) {
     Comp,
   );
 
-  cache.set(options.schema.id, WrapperComponent);
+  cache.set(options.schema.id, { WrapperComponent, Comp });
 
   return WrapperComponent;
 }
