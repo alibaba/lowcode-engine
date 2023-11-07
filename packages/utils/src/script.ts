@@ -1,14 +1,15 @@
 import { createDefer } from './create-defer';
 
-export function evaluate(script: string) {
+export function evaluate(script: string, scriptType?: string) {
   const scriptEl = document.createElement('script');
+  scriptType && (scriptEl.type = scriptType);
   scriptEl.text = script;
   document.head.appendChild(scriptEl);
   document.head.removeChild(scriptEl);
 }
 
-export function load(url: string) {
-  const node: any = document.createElement('script');
+export function load(url: string, scriptType?: string) {
+  const node = document.createElement('script');
 
   // node.setAttribute('crossorigin', 'anonymous');
 
@@ -33,6 +34,8 @@ export function load(url: string) {
 
   // `async=false` is required to make sure all js resources execute sequentially.
   node.async = false;
+
+  scriptType && (node.type = scriptType);
 
   document.head.appendChild(node);
 
