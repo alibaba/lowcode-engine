@@ -340,6 +340,31 @@ function addonCombine(metadata: TransformedComponentMetadata) {
 material.registerMetadataTransducer(addonCombine, 1, 'parse-func');
 ```
 
+删除高级 Tab
+
+```typescript
+import { material } from '@alilc/lowcode-engine';
+import { IPublicTypeFieldConfig } from '@alilc/lowcode-types';
+
+material.registerMetadataTransducer((transducer) => {
+  const combined: IPublicTypeFieldConfig[] = [];
+
+  transducer.configure.combined?.forEach(d => {
+    if (d.name !== '#advanced') {
+      combined.push(d);
+    }
+  });
+
+  return {
+    ...transducer,
+    configure: {
+      ...transducer.configure,
+      combined,
+    }
+  };
+}, 111, 'parse-func');
+```
+
 #### getRegisteredMetadataTransducers
 获取所有物料元数据管道函数
 
