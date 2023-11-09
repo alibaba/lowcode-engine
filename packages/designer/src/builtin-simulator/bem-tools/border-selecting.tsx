@@ -143,7 +143,7 @@ function createAction(content: ReactNode | ComponentType<any> | IPublicTypeActio
           });
         }}
       >
-        {icon && createIcon(icon)}
+        {icon && createIcon(icon, { key, node })}
         <Tip>{title}</Tip>
       </div>
     );
