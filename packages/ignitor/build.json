@@ -1,15 +1,15 @@
 {
   "entry": {
-    "engine-core": "../engine/src/index.ts",
-    "react-simulator-renderer": "../react-simulator-renderer/src/index.ts",
-    "rax-simulator-renderer": "../rax-simulator-renderer/src/index.ts"
+    "AliLowCodeEngine": "../engine/src/index.ts",
+    "ReactSimulatorRenderer": "../react-simulator-renderer/src/index.ts",
+    "RaxSimulatorRenderer": "../rax-simulator-renderer/src/index.ts"
   },
   "vendor": false,
   "devServer": {
     "liveReload": false,
     "hot": false
   },
-  "library": "AliLowCodeEngine",
+  "library": "[name]",
   "publicPath": "/",
   "externals": {
     "react": "var window.React",
