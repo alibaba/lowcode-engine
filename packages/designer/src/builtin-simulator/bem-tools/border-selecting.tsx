@@ -143,7 +143,7 @@ function createAction(content: ReactNode | ComponentType<any> | IPublicTypeActio
           });
         }}
       >
-        {icon && createIcon(icon, { key, node })}
+        {icon && createIcon(icon, { key, node: node.internalToShellNode() })}
         <Tip>{title}</Tip>
       </div>
     );
