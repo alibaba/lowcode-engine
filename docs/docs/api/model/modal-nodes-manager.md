@@ -71,7 +71,7 @@ hideModalNodes(): void;
 /**
  * 设置指定节点为可见态
  * set specific model node as visible
- * @param node Node
+ * @param node IPublicModelNode
  */
 setVisible(node: IPublicModelNode): void;
 ```
@@ -86,7 +86,7 @@ setVisible(node: IPublicModelNode): void;
 /**
  * 设置指定节点为不可见态
  * set specific model node as invisible
- * @param node Node
+ * @param node IPublicModelNode
  */
 setInvisible(node: IPublicModelNode): void;
 ```

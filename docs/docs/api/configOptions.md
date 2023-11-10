@@ -113,7 +113,7 @@ config.set('enableCondition', false)
 类型定义
 
 ```typescript
-  focusNodeSelector?: (rootNode: Node) => Node;
+  focusNodeSelector?: (rootNode: IPublicModelNode) => Node;
 ```
 
 #### supportVariableGlobally - 全局变量配置
