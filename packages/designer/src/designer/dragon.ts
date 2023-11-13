@@ -247,9 +247,11 @@ export class Dragon implements IDragon {
       const sensor = chooseSensor(locateEvent);
 
       /* istanbul ignore next */
-      if (isRGL) {
+      // have to distinguish between the fixed point and the new component
+      const nodes = dragObject?.nodes || [];
+      if (isRGL && nodes.length > 0) {
         // 禁止被拖拽元素的阻断
-        const nodeInst = dragObject.nodes[0].getDOMNode();
+        const nodeInst = dragObject?.nodes?.[0]?.getDOMNode();
         if (nodeInst && nodeInst.style) {
           this.nodeInstPointerEvents = true;
           nodeInst.style.pointerEvents = 'none';
@@ -267,7 +269,7 @@ export class Dragon implements IDragon {
           this.emitter.emit('rgl.add.placeholder', {
             rglNode,
             fromRglNode,
-            node: locateEvent.dragObject?.nodes[0],
+            node: locateEvent.dragObject?.nodes?.[0],
             event: e,
           });
           designer.clearLocation();
@@ -276,6 +278,10 @@ export class Dragon implements IDragon {
           return;
         }
       } else {
+        // reset the flag when leave rgl
+        if (fromRglNode) {
+          fromRglNode.isRGLContainerNode = false;
+        }
         this._canDrop = false;
         this.emitter.emit('rgl.remove.placeholder');
         this.emitter.emit('rgl.sleeping', true);
