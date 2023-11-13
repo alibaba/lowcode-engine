@@ -1,4 +1,7 @@
 import { createDefer } from './create-defer';
+import { Logger } from './logger';
+
+const logger = new Logger({ level: 'warn', bizName: 'utils' });
 
 export function evaluate(script: string, scriptType?: string) {
   const scriptEl = document.createElement('script');
@@ -53,7 +56,7 @@ export function newFunction(args: string, code: string) {
     // eslint-disable-next-line no-new-func
     return new Function(args, code);
   } catch (e) {
-    console.warn('Caught error, Cant init func');
+    logger.warn('Caught error, Cant init func');
     return null;
   }
 }

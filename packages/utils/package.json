@@ -9,7 +9,7 @@
   "main": "lib/index.js",
   "module": "es/index.js",
   "scripts": {
-    "test": "build-scripts test --config build.test.json",
+    "test": "build-scripts test --config build.test.json --jest-coverage",
     "build": "build-scripts build"
   },
   "dependencies": {
@@ -21,8 +21,11 @@
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/react": "^11.2.7",
     "@types/node": "^13.7.1",
-    "@types/react": "^16"
+    "@types/react": "^16",
+    "react-dom": "^16.14.0"
   },
   "publishConfig": {
     "access": "public",
