@@ -3,7 +3,7 @@ import { IPublicTypePropConfig } from './';
 
 export type IPublicTypePropType = IPublicTypeBasicType | IPublicTypeRequiredType | IPublicTypeComplexType;
 export type IPublicTypeBasicType = 'array' | 'bool' | 'func' | 'number' | 'object' | 'string' | 'node' | 'element' | 'any';
-export type IPublicTypeComplexType = IPublicTypeOneOf | IPublicTypeOneOfType | IPublicTypeArrayOf | IPublicTypeObjectOf | IPublicTypeShape | IPublicTypeExact;
+export type IPublicTypeComplexType = IPublicTypeOneOf | IPublicTypeOneOfType | IPublicTypeArrayOf | IPublicTypeObjectOf | IPublicTypeShape | IPublicTypeExact | IPublicTypeInstanceOf;
 
 export interface IPublicTypeRequiredType {
   type: IPublicTypeBasicType;
@@ -38,5 +38,11 @@ export interface IPublicTypeShape {
 export interface IPublicTypeExact {
   type: 'exact';
   value: IPublicTypePropConfig[];
+  isRequired?: boolean;
+}
+
+export interface IPublicTypeInstanceOf {
+  type: 'instanceOf';
+  value: IPublicTypePropConfig;
   isRequired?: boolean;
 }
