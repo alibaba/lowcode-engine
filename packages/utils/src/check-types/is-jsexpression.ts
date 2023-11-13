@@ -1,4 +1,5 @@
 import { IPublicTypeJSExpression } from '@alilc/lowcode-types';
+import { isObject } from '../is-object';
 
 /**
  * 为了避免把 { type: 'JSExpression', extType: 'function' } 误判为表达式，故增加如下逻辑。
@@ -11,5 +12,8 @@ import { IPublicTypeJSExpression } from '@alilc/lowcode-types';
  * @returns
  */
 export function isJSExpression(data: any): data is IPublicTypeJSExpression {
-  return data && data.type === 'JSExpression' && data.extType !== 'function';
+  if (!isObject(data)) {
+    return false;
+  }
+  return data.type === 'JSExpression' && data.extType !== 'function';
 }

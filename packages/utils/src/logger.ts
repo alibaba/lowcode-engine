@@ -88,7 +88,7 @@ const shouldOutput = (
 
 const output = (logLevel: string, bizName: string) => {
   return (...args: any[]) => {
-    return outputFunction[logLevel].apply(console, getLogArgs(args, bizName, logLevel));
+    return outputFunction[logLevel]?.apply(console, getLogArgs(args, bizName, logLevel));
   };
 };
 
@@ -142,7 +142,6 @@ const defaultOptions: Options = {
   bizName: '*',
 };
 
-
 class Logger {
   bizName: string;
   targetBizName: string;
@@ -191,7 +190,6 @@ class Logger {
     return output('error', this.bizName)(args);
   }
 }
-
 
 export { Logger };
 
