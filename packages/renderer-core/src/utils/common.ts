@@ -183,13 +183,13 @@ export function transformArrayToMap(arr: any[], key: string, overwrite = true) {
   return res;
 }
 
-export function checkPropTypes(value: any, name: string, rule: any, componentName: string) {
+export function checkPropTypes(value: any, name: string, rule: any, componentName: string): boolean {
   let ruleFunction = rule;
   if (typeof rule === 'string') {
     ruleFunction = new Function(`"use strict"; const PropTypes = arguments[0]; return ${rule}`)(PropTypes2);
   }
   if (!ruleFunction || typeof ruleFunction !== 'function') {
-    console.warn('checkPropTypes should have a function type rule argument');
+    logger.warn('checkPropTypes should have a function type rule argument');
     return true;
   }
   const err = ruleFunction(
@@ -203,7 +203,7 @@ export function checkPropTypes(value: any, name: string, rule: any, componentNam
     ReactPropTypesSecret,
   );
   if (err) {
-    console.warn(err);
+    logger.warn(err);
   }
   return !err;
 }
