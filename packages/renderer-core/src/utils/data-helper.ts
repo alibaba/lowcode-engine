@@ -186,7 +186,7 @@ export class DataHelper {
     }
     const { headers, ...otherProps } = otherOptionsObj || {};
     if (!req) {
-      console.warn(`getDataSource API named ${id} not exist`);
+      logger.warn(`getDataSource API named ${id} not exist`);
       return;
     }
 
@@ -215,7 +215,7 @@ export class DataHelper {
       try {
         callbackFn && callbackFn(res && res[id]);
       } catch (e) {
-        console.error('load请求回调函数报错', e);
+        logger.error('load请求回调函数报错', e);
       }
       return res && res[id];
     })
@@ -223,7 +223,7 @@ export class DataHelper {
       try {
         callbackFn && callbackFn(null, err);
       } catch (e) {
-        console.error('load请求回调函数报错', e);
+        logger.error('load请求回调函数报错', e);
       }
       return err;
     });
@@ -300,9 +300,9 @@ export class DataHelper {
       return dataHandlerFun.call(this.host, data, error);
     } catch (e) {
       if (id) {
-        console.error(`[${id}]单个请求数据处理函数运行出错`, e);
+        logger.error(`[${id}]单个请求数据处理函数运行出错`, e);
       } else {
-        console.error('请求数据处理函数运行出错', e);
+        logger.error('请求数据处理函数运行出错', e);
       }
     }
   }

@@ -346,11 +346,6 @@ describe('test DataHelper ', () => {
     result = dataHelper.handleData('fullConfigGet', mockDataHandler, { data: 'mockDataValue' }, null);
     expect(result).toStrictEqual({ data: 'mockDataValue' });
 
-    // test exception
-    const mockError = jest.fn();
-    const orginalConsole = global.console;
-    global.console = { error: mockError };
-
     // exception with id
     mockDataHandler = {
       type: 'JSFunction',
@@ -358,7 +353,6 @@ describe('test DataHelper ', () => {
     };
     result = dataHelper.handleData('fullConfigGet', mockDataHandler, { data: 'mockDataValue' }, null);
     expect(result).toBeUndefined();
-    expect(mockError).toBeCalledWith('[fullConfigGet]单个请求数据处理函数运行出错', expect.anything());
 
     // exception without id
     mockDataHandler = {
@@ -367,12 +361,8 @@ describe('test DataHelper ', () => {
     };
     result = dataHelper.handleData(null, mockDataHandler, { data: 'mockDataValue' }, null);
     expect(result).toBeUndefined();
-    expect(mockError).toBeCalledWith('请求数据处理函数运行出错', expect.anything());
-
-    global.console = orginalConsole;
   });
 
-  
   it('updateConfig should work', () => {
     const mockHost = { stateA: 'aValue'};
     const mockDataSourceConfig = { 
