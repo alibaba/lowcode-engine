@@ -1,4 +1,5 @@
 import { IBaseRenderComponent } from '../types';
+import logger from '../utils/logger';
 import baseRendererFactory from './base';
 
 export default function tempRendererFactory(): IBaseRenderComponent {
@@ -41,7 +42,7 @@ export default function tempRendererFactory(): IBaseRenderComponent {
     }
 
     async componentDidCatch(e: any) {
-      console.warn(e);
+      logger.warn(e);
       this.__debug(`componentDidCatch - ${this.props.__schema.fileName}`);
     }
 

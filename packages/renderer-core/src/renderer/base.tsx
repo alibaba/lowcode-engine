@@ -56,14 +56,14 @@ export function executeLifeCycleMethod(context: any, schema: IPublicTypeNodeSche
   }
 
   if (typeof fn !== 'function') {
-    console.error(`生命周期${method}类型不符`, fn);
+    logger.error(`生命周期${method}类型不符`, fn);
     return;
   }
 
   try {
     return fn.apply(context, args);
   } catch (e) {
-    console.error(`[${schema.componentName}]生命周期${method}出错`, e);
+    logger.error(`[${schema.componentName}]生命周期${method}出错`, e);
   }
 }
 
@@ -208,7 +208,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
     async componentDidCatch(...args: any[]) {
       this.__executeLifeCycleMethod('componentDidCatch', args);
-      console.warn(args);
+      logger.warn(args);
     }
 
     reloadDataSource = () => new Promise((resolve, reject) => {
@@ -278,7 +278,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           value = this.__parseExpression(value, this);
         }
         if (typeof value !== 'function') {
-          console.error(`custom method ${key} can not be parsed to a valid function`, value);
+          logger.error(`custom method ${key} can not be parsed to a valid function`, value);
           return;
         }
         this[key] = value.bind(this);
@@ -369,7 +369,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       this.setLocale = (loc: string) => {
         const setLocaleFn = this.appHelper?.utils?.i18n?.setLocale;
         if (!setLocaleFn || typeof setLocaleFn !== 'function') {
-          console.warn('initI18nAPIs Failed, i18n only works when appHelper.utils.i18n.setLocale() exists');
+          logger.warn('initI18nAPIs Failed, i18n only works when appHelper.utils.i18n.setLocale() exists');
           return undefined;
         }
         return setLocaleFn(loc);
@@ -527,7 +527,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           : {};
 
         if (!Comp) {
-          console.error(`${schema.componentName} component is not found in components list! component list is:`, components || this.props.__container?.components);
+          logger.error(`${schema.componentName} component is not found in components list! component list is:`, components || this.props.__container?.components);
           return engine.createElement(
             engine.getNotFoundComponent(),
             {
@@ -749,7 +749,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
     __createLoopVirtualDom = (schema: IPublicTypeNodeSchema, scope: any, parentInfo: INodeInfo, idx: number | string) => {
       if (isFileSchema(schema)) {
-        console.warn('file type not support Loop');
+        logger.warn('file type not support Loop');
         return null;
       }
       if (!Array.isArray(schema.loop)) {
