@@ -41,7 +41,7 @@ npm install && npm start
     ],
     [
       "https?://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/(.*)/dist/js/react-simulator-renderer.js",
-      "http://localhost:5555/js/react-simulator-renderer.js"
+      "http://localhost:5555/js/ReactSimulatorRenderer.js"
     ],
     [
       "https?://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/(.*)/dist/css/react-simulator-renderer.css",
