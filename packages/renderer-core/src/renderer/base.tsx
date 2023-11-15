@@ -901,9 +901,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         });
         return checkProps(res);
       }
-      if (typeof props === 'string') {
-        return checkProps(props.trim());
-      }
       return checkProps(props);
     };
 
