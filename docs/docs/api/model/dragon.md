@@ -101,7 +101,7 @@ from(shell: Element, boost: (e: MouseEvent) => IPublicTypeDragNodeDataObject | n
  * @param dragObject 拖拽对象
  * @param boostEvent 拖拽初始时事件
  */
-boost(dragObject: IPublicTypeDragObject, boostEvent: MouseEvent | DragEvent, fromRglNode?: Node | IPublicModelNode): void;
+boost(dragObject: IPublicTypeDragObject, boostEvent: MouseEvent | DragEvent, fromRglNode?: IPublicModelNode): void;
 ```
 
 ### addSensor

@@ -673,6 +673,6 @@ getRGL(): {
   isRGLContainerNode: boolean;
   isRGLNode: boolean;
   isRGL: boolean;
-  rglNode: Node | null;
+  rglNode: IPublicModelNode | null;
 }
 ```
