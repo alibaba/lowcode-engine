@@ -33,27 +33,27 @@ npm install && npm start
   "proxy": [
     [
       "https://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/(.*)/dist/js/engine-core.js",
-      "http://localhost:5555/js/engine-core.js"
+      "http://localhost:5555/js/AliLowCodeEngine.js"
     ],
     [
       "https://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/(.*)/dist/css/engine-core.css",
-      "http://localhost:5555/css/engine-core.css"
+      "http://localhost:5555/css/AliLowCodeEngine.css"
     ],
     [
       "https?://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/(.*)/dist/js/react-simulator-renderer.js",
-      "http://localhost:5555/js/react-simulator-renderer.js"
+      "http://localhost:5555/js/ReactSimulatorRenderer.js"
     ],
     [
       "https?://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/(.*)/dist/css/react-simulator-renderer.css",
-      "http://localhost:5555/css/react-simulator-renderer.css"
+      "http://localhost:5555/css/ReactSimulatorRenderer.css"
     ],
     [
       "https?://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/(.*)/dist/js/rax-simulator-renderer.js",
-      "http://localhost:5555/js/rax-simulator-renderer.js"
+      "http://localhost:5555/js/RaxSimulatorRenderer.js"
     ],
     [
       "https?://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/(.*)/dist/css/rax-simulator-renderer.css",
-      "http://localhost:5555/css/rax-simulator-renderer.css"
+      "http://localhost:5555/css/RaxSimulatorRenderer.css"
     ],
   ]
 }
