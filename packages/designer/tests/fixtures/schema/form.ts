@@ -267,7 +267,7 @@ export default {
                                 labelTipsText: {
                                   type: 'i18n',
                                   use: 'zh-CN',
-                                  'en-US': null,
+                                  'en-US': '',
                                   'zh-CN': '',
                                 },
                               },
@@ -337,7 +337,7 @@ export default {
                                 labelTipsText: {
                                   type: 'i18n',
                                   use: 'zh-CN',
-                                  'en-US': null,
+                                  'en-US': '',
                                   'zh-CN': '',
                                 },
                               },
@@ -407,7 +407,7 @@ export default {
                                 labelTipsText: {
                                   type: 'i18n',
                                   use: 'zh-CN',
-                                  'en-US': null,
+                                  'en-US': '',
                                   'zh-CN': '',
                                 },
                               },
@@ -489,7 +489,7 @@ export default {
                                 labelTipsText: {
                                   type: 'i18n',
                                   use: 'zh-CN',
-                                  'en-US': null,
+                                  'en-US': '',
                                   'zh-CN': '',
                                 },
                               },
@@ -578,7 +578,7 @@ export default {
                                 labelTipsText: {
                                   type: 'i18n',
                                   use: 'zh-CN',
-                                  'en-US': null,
+                                  'en-US': '',
                                   'zh-CN': '',
                                 },
                                 searchDelay: 300,
@@ -697,7 +697,7 @@ export default {
                         labelTipsText: {
                           type: 'i18n',
                           use: 'zh-CN',
-                          'en-US': null,
+                          'en-US': '',
                           'zh-CN': '',
                         },
                       },
@@ -789,7 +789,7 @@ export default {
                                 labelTipsText: {
                                   type: 'i18n',
                                   use: 'zh-CN',
-                                  'en-US': null,
+                                  'en-US': '',
                                   'zh-CN': '',
                                 },
                               },
@@ -871,7 +871,7 @@ export default {
                                 labelTipsText: {
                                   type: 'i18n',
                                   use: 'zh-CN',
-                                  'en-US': null,
+                                  'en-US': '',
                                   'zh-CN': '',
                                 },
                               },
