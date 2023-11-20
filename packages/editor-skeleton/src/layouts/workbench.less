@@ -13,6 +13,7 @@
   --popup-border-radius: @popup-border-radius;
 
   --left-area-width: 48px;
+  --workspace-left-area-width: 48px;
   --right-area-width: 300px;
   --top-area-height: 48px;
   --toolbar-height: 36px;
@@ -273,7 +274,7 @@ body {
     }
     .lc-left-area, .lc-workspace-left-area {
       height: 100%;
-      width: var(--left-area-width);
+      width: var(--workspace-left-area-width, --left-area-width);
       display: none;
       flex-shrink: 0;
       flex-direction: column;
