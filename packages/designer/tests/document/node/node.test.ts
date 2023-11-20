@@ -29,6 +29,55 @@ import rootFooterMetadata from '../../fixtures/component-metadata/root-footer';
 import { shellModelFactory } from '../../../../engine/src/modules/shell-model-factory';
 import { isNode } from '@alilc/lowcode-utils';
 import { Setters } from '@alilc/lowcode-shell';
+import { IPublicTypeNodeData } from '@alilc/lowcode-types';
+
+//重构前的 Node 的 initialChildren 方法
+function initialChildren(children: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined): IPublicTypeNodeData[] {
+    // FIXME! this is dirty code
+    if (children == null) {
+      const { initialChildren } = {
+        callbacks: ()=>{},
+        getResizingHandlers: () => {},
+      }
+      if (initialChildren) {
+        if (typeof initialChildren === 'function') {
+          return [];
+        }
+        return initialChildren;
+      }
+    }
+    if (Array.isArray(children)) {
+      return children;
+    } else if (children) {
+      return [children];
+    } else {
+      return [];
+    }
+  }
+
+  //重构后的 Node 的 initialChildren 方法
+  function initialChildren2(children: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined): IPublicTypeNodeData[] {
+    const { initialChildren } = {
+      callbacks: ()=>{},
+      getResizingHandlers: () => {},
+    }
+  
+    if (children == null) {
+      if (initialChildren) {
+        if (typeof initialChildren === 'function') {
+          return [];
+        }
+        return initialChildren;
+      }
+      return [];
+    }
+  
+    if (Array.isArray(children)) {
+      return children;
+    }
+  
+    return [children];
+  }
 
 describe('Node 方法测试', () => {
   let editor: Editor;
@@ -52,6 +101,14 @@ describe('Node 方法测试', () => {
     editor = null;
     designer = null;
     project = null;
+  });
+  //测试 children 为 undefined 时重构前后输出结果
+  it('initialChildren and initialChildren2 should return the same result when children is undefined', () => {
+    const children: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined = undefined;
+    const result1 = initialChildren(children);
+    const result2 = initialChildren2(children);
+  
+    expect(result1).toEqual(result2);
   });
 
   it('condition group', () => {});
