@@ -72,6 +72,7 @@ sidebar_position: 9
 - `--workspace-sub-top-area-height`: 应用级二级 topArea 高度
 - `--workspace-sub-top-area-margin`: 应用级二级 topArea margin
 - `--workspace-sub-top-area-padding`: 应用级二级 topArea padding
+- `--workspace-left-area-width`: 应用级 leftArea width
 
 ### 生态使用主题色变量
 
