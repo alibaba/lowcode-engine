@@ -240,6 +240,66 @@ JSExpression 是否只支持使用 this 来访问上下文变量，假如需要�
 
 应用级设计模式下，当窗口为空时，展示的占位组件
 
+#### workspaceCustomWorkbench
+
+应用级设计器布局自定义
+
+使用示例
+
+```typescript
+
+config.set('workspaceCustomWorkbench',  ({
+    renderTopArea,
+    renderLeftArea,
+    renderMainArea,
+    renderBottomArea,
+  }) => {
+    return (
+      <>
+        {renderTopArea()}
+        <div className="lc-workspace-workbench-body">
+          {renderLeftArea()}
+          <div className="lc-workspace-workbench-center">
+            {renderMainArea()}
+            {renderBottomArea()}
+          </div>
+        </div>
+      </>
+    )
+  })
+
+```
+
+### 设计器
+
+#### windowCustomWorkbench
+
+使用示例
+
+```typescript
+config.set('windowCustomWorkbench',  ({
+    renderTopArea,
+    renderLeftArea,
+    renderMainArea,
+    renderBottomArea,
+    renderRightArea,
+  }) => {
+    return (
+      <>
+          <div className="lc-workbench-body">
+            {renderLeftArea()}
+            <div className="lc-workbench-center">
+              {renderTopArea()}
+              {renderMainArea()}
+              {renderBottomArea()}
+            </div>
+            {renderRightArea()}
+          </div>
+      </>
+    )
+  })
+```
+
 ### 定制组件
 
 #### faultComponent
@@ -263,6 +323,16 @@ JSExpression 是否只支持使用 this 来访问上下文变量，假如需要�
 #### defaultOutlinePaneProps
 
 内置大纲树面板插件的 panelProps
+
+示例
+
+```typescript
+config.set('defaultOutlinePaneProps', {
+  title: {
+    label: (<Title pluginContext={ctx} />)
+  }
+})
+```
 
 ### 其他
 
