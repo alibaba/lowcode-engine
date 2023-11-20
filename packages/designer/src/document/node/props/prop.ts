@@ -290,10 +290,6 @@ export class Prop implements IProp, IPropParent {
     }
 
     if (type === 'literal' || type === 'expression') {
-      // TODO 后端改造之后删除此逻辑
-      if (this._value === null && stage === IPublicEnumTransformStage.Save) {
-        return '';
-      }
       return this._value;
     }
 
