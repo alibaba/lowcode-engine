@@ -1,5 +1,6 @@
 # 官方视频
 - [2023/08/03 初识低代码引擎](https://www.bilibili.com/video/BV1gu411p7TC)
+- [2023/11/20 阿里开源低代码引擎及商业解决方案](https://www.bilibili.com/video/BV1Ku4y1w7Zr)
 
 # 社区视频
 - [阿里低代码引擎项目实战 (1)-引擎 demo 部署到 faas 服务](https://www.bilibili.com/video/BV1B44y1P7GM/)
