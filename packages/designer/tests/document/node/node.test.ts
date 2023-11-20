@@ -31,54 +31,6 @@ import { isNode } from '@alilc/lowcode-utils';
 import { Setters } from '@alilc/lowcode-shell';
 import { IPublicTypeNodeData } from '@alilc/lowcode-types';
 
-//重构前的 Node 的 initialChildren 方法
-function initialChildren(children: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined): IPublicTypeNodeData[] {
-    // FIXME! this is dirty code
-    if (children == null) {
-      const { initialChildren } = {
-        callbacks: ()=>{},
-        getResizingHandlers: () => {},
-      }
-      if (initialChildren) {
-        if (typeof initialChildren === 'function') {
-          return [];
-        }
-        return initialChildren;
-      }
-    }
-    if (Array.isArray(children)) {
-      return children;
-    } else if (children) {
-      return [children];
-    } else {
-      return [];
-    }
-  }
-
-  //重构后的 Node 的 initialChildren 方法
-  function initialChildren2(children: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined): IPublicTypeNodeData[] {
-    const { initialChildren } = {
-      callbacks: ()=>{},
-      getResizingHandlers: () => {},
-    }
-  
-    if (children == null) {
-      if (initialChildren) {
-        if (typeof initialChildren === 'function') {
-          return [];
-        }
-        return initialChildren;
-      }
-      return [];
-    }
-  
-    if (Array.isArray(children)) {
-      return children;
-    }
-  
-    return [children];
-  }
-
 describe('Node 方法测试', () => {
   let editor: Editor;
   let designer: Designer;
@@ -104,14 +56,61 @@ describe('Node 方法测试', () => {
   });
   //测试 children 为 undefined 时重构前后输出结果
   it('initialChildren and initialChildren2 should return the same result when children is undefined', () => {
+    //重构前的 Node 的 initialChildren 方法
+    function initialChildren(children: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined): IPublicTypeNodeData[] {
+      // FIXME! this is dirty code
+      if (children == null) {
+        const { initialChildren } = {
+          callbacks: () => { },
+          getResizingHandlers: () => { },
+        }
+        if (initialChildren) {
+          if (typeof initialChildren === 'function') {
+            return [];
+          }
+          return initialChildren;
+        }
+      }
+      if (Array.isArray(children)) {
+        return children;
+      } else if (children) {
+        return [children];
+      } else {
+        return [];
+      }
+    }
+
+    //重构后的 Node 的 initialChildren 方法
+    function initialChildren2(children: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined): IPublicTypeNodeData[] {
+      const { initialChildren } = {
+        callbacks: () => { },
+        getResizingHandlers: () => { },
+      }
+
+      if (children == null) {
+        if (initialChildren) {
+          if (typeof initialChildren === 'function') {
+            return [];
+          }
+          return initialChildren;
+        }
+        return [];
+      }
+
+      if (Array.isArray(children)) {
+        return children;
+      }
+
+      return [children];
+    }
     const children: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined = undefined;
     const result1 = initialChildren(children);
     const result2 = initialChildren2(children);
-  
+
     expect(result1).toEqual(result2);
   });
 
-  it('condition group', () => {});
+  it('condition group', () => { });
 
   it('getExtraProp / setExtraProp', () => {
     const firstBtn = doc.getNode('node_k1ow3cbn')!;
@@ -424,7 +423,7 @@ describe('Node 方法测试', () => {
     expect(mockFn).not.toHaveBeenCalled();
   });
 
-  it('addSlot / unlinkSlot / removeSlot', () => {});
+  it('addSlot / unlinkSlot / removeSlot', () => { });
 
   it('setProps', () => {
     const firstBtn = doc.getNode('node_k1ow3cbn')!;
@@ -464,7 +463,7 @@ describe('Node 方法测试', () => {
     designer.createComponentMeta(btnMetadata);
     const btn = doc.getNode('node_k1ow3cbn');
     // 从 componentMeta 中获取到 title 值
-    expect(btn.title).toEqual({ type: 'i18n', 'zh-CN': '按钮', 'en-US': 'Button' } );
+    expect(btn.title).toEqual({ type: 'i18n', 'zh-CN': '按钮', 'en-US': 'Button' });
     // 从 extraProp 中获取值
     btn.setExtraProp('title', 'hello button');
     expect(btn.title).toBe('hello button');
@@ -603,7 +602,7 @@ describe('Node 方法测试', () => {
     expect(comparePosition(firstBtn, firstCard)).toBe(PositionNO.BeforeOrAfter);
   });
 
-  it('getZLevelTop', () => {});
+  it('getZLevelTop', () => { });
   it('propsData', () => {
     expect(new Node(doc, { componentName: 'Leaf' }).propsData).toBeNull();
     expect(new Node(doc, { componentName: 'Fragment' }).propsData).toBeNull();
