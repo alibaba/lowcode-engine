@@ -29,7 +29,6 @@ import rootFooterMetadata from '../../fixtures/component-metadata/root-footer';
 import { shellModelFactory } from '../../../../engine/src/modules/shell-model-factory';
 import { isNode } from '@alilc/lowcode-utils';
 import { Setters } from '@alilc/lowcode-shell';
-import { IPublicTypeNodeData } from '@alilc/lowcode-types';
 
 describe('Node 方法测试', () => {
   let editor: Editor;
@@ -54,61 +53,41 @@ describe('Node 方法测试', () => {
     designer = null;
     project = null;
   });
-  //测试 children 为 undefined 时重构前后输出结果
-  it('initialChildren and initialChildren2 should return the same result when children is undefined', () => {
-    //重构前的 Node 的 initialChildren 方法
-    function initialChildren(children: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined): IPublicTypeNodeData[] {
-      // FIXME! this is dirty code
-      if (children == null) {
-        const { initialChildren } = {
-          callbacks: () => { },
-          getResizingHandlers: () => { },
-        }
-        if (initialChildren) {
-          if (typeof initialChildren === 'function') {
-            return [];
-          }
-          return initialChildren;
-        }
-      }
-      if (Array.isArray(children)) {
-        return children;
-      } else if (children) {
-        return [children];
-      } else {
-        return [];
-      }
-    }
 
-    //重构后的 Node 的 initialChildren 方法
-    function initialChildren2(children: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined): IPublicTypeNodeData[] {
-      const { initialChildren } = {
-        callbacks: () => { },
-        getResizingHandlers: () => { },
-      }
-
-      if (children == null) {
-        if (initialChildren) {
-          if (typeof initialChildren === 'function') {
-            return [];
-          }
-          return initialChildren;
-        }
-        return [];
-      }
-
-      if (Array.isArray(children)) {
-        return children;
-      }
-
-      return [children];
-    }
-    const children: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined = undefined;
-    const result1 = initialChildren(children);
-    const result2 = initialChildren2(children);
-
-    expect(result1).toEqual(result2);
+  // Case 1: When children is null
+  test('initialChildren returns result of initialChildren function when children is null ', () => {
+    const node = new Node(doc, { componentName: 'Button', props: { a: 1 } });
+    const result = node.initialChildren(null);
+    // 预期结果是一个空数组
+    expect(result).toEqual([]);
   });
+
+  // Case 2: When children is undefined
+  test('initialChildren returns result of initialChildren function when children is null ', () => {
+    const node = new Node(doc, { componentName: 'Button', props: { a: 1 } });
+    const result = node.initialChildren(undefined);
+    // 预期结果是一个空数组
+    expect(result).toEqual([]);
+  });
+
+  // Case 3: When children is array
+  test('initialChildren returns result of initialChildren function when children is null ', () => {
+    const node = new Node(doc, { componentName: 'Button', props: { a: 1 } });
+    const childrenArray = [{ id: 1, name: 'Child 1' }, { id: 2, name: 'Child 2' }];
+    const result = node.initialChildren(childrenArray);
+    // 预期结果是一个数组
+    expect(result).toEqual(childrenArray);
+  });
+
+  // Case 4: When children is not null and not an array
+  test('initialChildren returns result of initialChildren function when children is null ', () => {
+    const node = new Node(doc, { componentName: 'Button', props: { a: 1 } });
+    const childObject = { id: 1, name: 'Child 1' };
+    const result = node.initialChildren(childObject);
+    // 预期结果是一个数组
+    expect(result).toEqual([childObject]);
+  });
+
 
   it('condition group', () => { });
 
