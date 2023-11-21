@@ -88,6 +88,24 @@ describe('Node 方法测试', () => {
     expect(result).toEqual([childObject]);
   });
 
+  // Case 5: When children is 0
+  test('initialChildren returns result of initialChildren function when children is null ', () => {
+    const node = new Node(doc, { componentName: 'Button', props: { a: 1 } });
+    const childObject = { id: 1, name: 'Child 1' };
+    const result = node.initialChildren(childObject);
+    // 预期结果是一个数组
+    expect(result).toEqual([childObject]);
+  });
+
+  // Case 6: When children is false
+  test('initialChildren returns result of initialChildren function when children is null ', () => {
+    const node = new Node(doc, { componentName: 'Button', props: { a: 1 } });
+    const childObject = { id: 1, name: 'Child 1' };
+    const result = node.initialChildren(childObject);
+    // 预期结果是一个数组
+    expect(result).toEqual([childObject]);
+  });
+
 
   it('condition group', () => { });
 
