@@ -46,26 +46,5 @@ export default function componentRendererFactory(): IBaseRenderComponent {
 
       return this.__renderComp(Component, this.__renderContextProvider({ compContext: this }));
     }
-
-    getComponentName() {
-      return this.props?.componentName;
-    }
-
-    /** 需要重载下面几个方法，如果在低代码组件中绑定了对应的生命周期时会出现死循环 */
-    componentDidMount() {
-      this.__debug(`componentDidMount - ${this.getComponentName()}`);
-    }
-    getSnapshotBeforeUpdate() {
-      this.__debug(`getSnapshotBeforeUpdate - ${this.getComponentName()}`);
-    }
-    componentDidUpdate() {
-      this.__debug(`componentDidUpdate - ${this.getComponentName()}`);
-    }
-    componentWillUnmount() {
-      this.__debug(`componentWillUnmount - ${this.getComponentName()}`);
-    }
-    componentDidCatch() {
-      this.__debug(`componentDidCatch - ${this.getComponentName()}`);
-    }
   };
 }
