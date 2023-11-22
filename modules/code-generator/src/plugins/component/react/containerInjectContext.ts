@@ -27,9 +27,6 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       ...pre,
     };
 
-    const ir = next.ir as IContainerInfo;
-    const scope = Scope.createRootScope();
-
     const { inStrictMode } = next.contextData;
     if (!inStrictMode) {
       // 非严格模式下，上下文就是自己
