@@ -41,22 +41,19 @@ export class TreeMaster {
     this.initEvent();
     if (pluginContext.registerLevel === IPublicEnumPluginRegisterLevel.Workspace) {
       this.setPluginContext(workspace.window?.currentEditorView);
-      workspace.onWindowRendererReady(() => {
-        this.setPluginContext(workspace.window?.currentEditorView);
-        let dispose: IPublicTypeDisposable | undefined;
-        const windowViewTypeChangeEvent = () => {
-          dispose = workspace.window?.onChangeViewType(() => {
-            this.setPluginContext(workspace.window?.currentEditorView);
-          });
-        };
-
-        windowViewTypeChangeEvent();
-
-        workspace.onChangeActiveWindow(() => {
-          windowViewTypeChangeEvent();
+      let dispose: IPublicTypeDisposable | undefined;
+      const windowViewTypeChangeEvent = () => {
+        dispose = workspace.window?.onChangeViewType(() => {
           this.setPluginContext(workspace.window?.currentEditorView);
-          dispose && dispose();
         });
+      };
+
+      windowViewTypeChangeEvent();
+
+      workspace.onChangeActiveWindow(() => {
+        windowViewTypeChangeEvent();
+        this.setPluginContext(workspace.window?.currentEditorView);
+        dispose && dispose();
       });
     }
   }
