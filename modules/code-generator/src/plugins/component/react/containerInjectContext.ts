@@ -1,14 +1,11 @@
 import { CLASS_DEFINE_CHUNK_NAME } from '../../../const/generator';
 
-import { Scope } from '../../../utils/Scope';
-
 import {
   BuilderComponentPlugin,
   BuilderComponentPluginFactory,
   ChunkType,
   FileType,
   ICodeStruct,
-  IContainerInfo,
 } from '../../../types';
 import { DEFAULT_LINK_AFTER } from '../../../const';
 
