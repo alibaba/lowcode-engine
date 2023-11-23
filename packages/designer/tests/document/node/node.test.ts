@@ -88,22 +88,22 @@ describe('Node 方法测试', () => {
     expect(result).toEqual([childObject]);
   });
 
-  // Case 5: When children is not null and not an array
+  // Case 5: When children 0
   test('initialChildren returns result of initialChildren function when children is null ', () => {
     const node = new Node(doc, { componentName: 'Button', props: { a: 1 } });
-    const childObject = { id: 1, name: 'Child 1' };
+    const childObject = 0;
     const result = node.initialChildren(childObject);
     // 预期结果是一个数组
-    expect(result).toEqual([childObject]);
+    expect(result).toEqual([0]);
   });
 
-  // Case 6: When children is not null and not an array
+  // Case 6: When children false
   test('initialChildren returns result of initialChildren function when children is null ', () => {
     const node = new Node(doc, { componentName: 'Button', props: { a: 1 } });
-    const childObject = { id: 1, name: 'Child 1' };
+    const childObject = false;
     const result = node.initialChildren(childObject);
     // 预期结果是一个数组
-    expect(result).toEqual([childObject]);
+    expect(result).toEqual([false]);
   });
 
 
