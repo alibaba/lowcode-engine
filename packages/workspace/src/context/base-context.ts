@@ -170,6 +170,7 @@ export class BasicContext implements IBasicContext {
           context.editorWindow = new Window(editorWindow);
         }
         context.registerLevel = registerLevel;
+        context.isPluginRegisteredInWorkspace = registerLevel === IPublicEnumPluginRegisterLevel.Workspace;
       },
     };
 
