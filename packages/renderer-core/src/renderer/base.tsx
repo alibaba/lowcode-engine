@@ -50,6 +50,11 @@ export function executeLifeCycleMethod(context: any, schema: IPublicTypeNodeSche
     return;
   }
 
+  // avoid execute lifeCycle method from __proto__'s method (it is React class Component Class lifeCycle)
+  if (!Object.prototype.hasOwnProperty.call(context, method) && method !== 'constructor') {
+    return;
+  }
+
   // TODO: cache
   if (isJSExpression(fn) || isJSFunction(fn)) {
     fn = thisRequiredInJSE ? parseThisRequiredExpression(fn, context) : parseExpression(fn, context);

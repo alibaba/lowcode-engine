@@ -60,6 +60,7 @@ export interface ILowCodePluginContextPrivate {
   set workspace(workspace: IPublicApiWorkspace);
   set editorWindow(window: IPublicModelWindow);
   set registerLevel(level: IPublicEnumPluginRegisterLevel);
+  set isPluginRegisteredInWorkspace(flag: boolean);
 }
 export interface ILowCodePluginContextApiAssembler {
   assembleApis(

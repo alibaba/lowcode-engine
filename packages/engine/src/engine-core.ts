@@ -139,6 +139,7 @@ const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
     context.logger = new Logger({ level: 'warn', bizName: `plugin:${pluginName}` });
     context.workspace = workspace;
     context.registerLevel = IPublicEnumPluginRegisterLevel.Default;
+    context.isPluginRegisteredInWorkspace = false;
   },
 };
 
