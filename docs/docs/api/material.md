@@ -116,6 +116,21 @@ material.setAssets(assets1);
 material.loadIncrementalAssets(assets2);
 ```
 
+更新特定物料的描述文件
+
+```typescript
+import { material } from '@alilc/lowcode-engine';
+material.loadIncrementalAssets({
+  version: '',
+  components: [
+      {
+          "componentName": 'Button',
+          "props": [{ name: 'new', title: 'new', propType: 'string' }]
+      }
+  ],
+})
+```
+
 ### 设计器辅助层
 #### addBuiltinComponentAction
 在设计器辅助层增加一个扩展 action
