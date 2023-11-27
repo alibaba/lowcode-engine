@@ -69,6 +69,7 @@ skeleton.add({
   props: {
     align: "left",
     icon: "wenjian",
+    title: '标题', // 图标下方展示的标题
     description: "JS 面板",
   },
   panelProps: {
