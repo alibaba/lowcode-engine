@@ -182,7 +182,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     __afterInit(_props: IBaseRendererProps) { }
 
     static getDerivedStateFromProps(props: IBaseRendererProps, state: any) {
-      return executeLifeCycleMethod(this, props?.__schema, 'getDerivedStateFromProps', [props, state], props.thisRequiredInJSE) || null;
+      const result = executeLifeCycleMethod(this, props?.__schema, 'getDerivedStateFromProps', [props, state], props.thisRequiredInJSE);
+      return result === undefined ? null : result;
     }
 
     async getSnapshotBeforeUpdate(...args: any[]) {
