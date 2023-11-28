@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-rax-renderer",
-  "version": "1.2.3-beta.6",
+  "version": "1.2.3-beta.7",
   "description": "Rax renderer for Ali lowCode engine",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -30,8 +30,8 @@
     "build": "build-scripts build"
   },
   "dependencies": {
-    "@alilc/lowcode-renderer-core": "1.2.3-beta.6",
-    "@alilc/lowcode-utils": "1.2.3-beta.6",
+    "@alilc/lowcode-renderer-core": "1.2.3-beta.7",
+    "@alilc/lowcode-utils": "1.2.3-beta.7",
     "rax-find-dom-node": "^1.0.1"
   },
   "devDependencies": {
