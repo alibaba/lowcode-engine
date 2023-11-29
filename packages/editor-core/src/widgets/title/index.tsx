@@ -106,7 +106,7 @@ export class Title extends Component<{
       };
     }
 
-    const icon = _title.icon ? createIcon(_title.icon, { size: 20 }) : null;
+    const icon = _title.icon ? createIcon(_title.icon, { size: 20, className }) : null;
 
     let tip: any = null;
     if (_title.tip) {
