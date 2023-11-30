@@ -429,7 +429,14 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
     __createDom = () => {
       const { __schema, __ctx, __components = {} } = this.props;
-      const scope: any = {};
+      // merge defaultProps
+      const scopeProps = {
+        ...__schema.defaultProps,
+        ...this.props,
+      };
+      const scope: any = {
+        props: scopeProps,
+      };
       scope.__proto__ = __ctx || this;
 
       const _children = getSchemaChildren(__schema);
