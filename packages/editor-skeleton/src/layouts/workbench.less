@@ -443,6 +443,10 @@ body {
     min-height: 0;
     position: relative;
 
+    > .lc-left-float-pane {
+      left: calc(var(--workspace-left-area-width, var(--left-area-width)) + 1px);
+    }
+
     .lc-workspace-workbench-center {
       flex: 1;
       display: flex;
