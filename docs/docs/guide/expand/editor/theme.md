@@ -50,7 +50,6 @@ sidebar_position: 9
 - `--color-text-dark`: 文字颜色(dark)
 - `--color-text-light`: 文字颜色(light)
 - `--color-text-reverse`: 反色情况下，文字颜色
-- `--color-text-regular`: 文字颜色(regular)
 - `--color-text-disabled`: 禁用态文字颜色
 
 #### 字段和边框颜色
@@ -109,10 +108,20 @@ sidebar_position: 9
 #### 其他变量
 
 - `--workspace-sub-top-area-height`: 应用级二级 topArea 高度
+- `--top-area-height`: 顶部区域的高度
 - `--workspace-sub-top-area-margin`: 应用级二级 topArea margin
 - `--workspace-sub-top-area-padding`: 应用级二级 topArea padding
 - `--workspace-left-area-width`: 应用级 leftArea width
 - `--left-area-width`: leftArea width
+- `--simulator-top-distance`: simulator 距离容器顶部的距离
+- `--simulator-bottom-distance`:  simulator 距离容器底部的距离
+- `--simulator-left-distance`: simulator 距离容器左边的距离
+- `--simulator-right-distance`: simulator 距离容器右边的距离
+- `--toolbar-padding`: toolbar 的 padding
+- `--toolbar-height`: toolbar 的高度
+- `--pane-title-height`: 面板标题高度
+- `--pane-title-font-size`: 面板标题字体大小
+- `--pane-title-padding`: 面板标题边距
 
 
 

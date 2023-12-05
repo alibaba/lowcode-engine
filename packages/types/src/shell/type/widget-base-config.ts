@@ -15,6 +15,11 @@ export interface IPublicTypeWidgetBaseConfig {
   props?: Record<string, any>;
   content?: any;
   contentProps?: Record<string, any>;
+
+  /**
+   * 优先级，值越小，优先级越高，优先级高的会排在前面
+   */
+  index?: number;
 }
 
 export interface IPublicTypePanelDockConfig extends IPublicTypeWidgetBaseConfig {
