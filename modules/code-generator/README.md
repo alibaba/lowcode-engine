@@ -94,15 +94,25 @@ await CodeGenerator.init();
 4. 出码
 
 ```js
-const result = await CodeGenerator.generateCode({
+const project = await CodeGenerator.generateCode({
   solution: 'icejs', // 出码方案 (目前内置有 icejs 和 rax )
   schema, // 编排搭建出来的 schema
 });
 
-console.log(result); // 出码结果(默认是递归结构描述的，可以传 flattenResult: true 以生成扁平结构的结果)
+console.log(project); // 出码结果(默认是递归结构描述的，可以传 flattenResult: true 以生成扁平结构的结果)
 ```
 
 注：一般来说在浏览器中出码适合做即时预览功能。
+
+5. 下载 zip 包
+
+```js
+// 写入到 zip 包
+await CodeGenerator.publishers.zip().publish({
+  project, // 上一步生成的 project
+  projectSlug: 'your-project-slug', // 项目标识 -- 对应下载 your-project-slug.zip 文件
+});
+```
 
 ### 5）自定义出码
 
