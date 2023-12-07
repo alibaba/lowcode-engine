@@ -35,6 +35,7 @@ sidebar_position: 9
 #### Icon 相关颜色
 
 - `--color-icon-normal`: 默认状态
+- `--color-icon-light`: icon light 状态
 - `--color-icon-hover`: 鼠标悬停状态
 - `--color-icon-active`: 激活状态
 - `--color-icon-reverse`: 反色状态
@@ -82,15 +83,20 @@ sidebar_position: 9
 #### 区块背景色
 
 - `--color-block-background-normal`: 区块背景色
-- `--color-block-background-light`: 区块背景色(light), 作用于画布组件 hover 时遮罩背景色。
+- `--color-block-background-light`: 区块背景色(light)。
 - `--color-block-background-shallow`: 区块背景色 shallow
 - `--color-block-background-dark`: 区块背景色(dark)
 - `--color-block-background-disabled`: 区块背景色(disabled)
 - `--color-block-background-active`: 区块背景色(active)
+- `--color-block-background-active-light`: 区块背景色(active light)
 - `--color-block-background-warning`: 区块背景色(warning)
 - `--color-block-background-error`: 区块背景色(error)
 - `--color-block-background-success`: 区块背景色(success)
 - `--color-block-background-deep-dark`: 区块背景色(deep-dark)，作用于多个组件同时拖拽的背景色。
+
+#### 引擎相关颜色
+
+- `--color-canvas-detecting-background`: 画布组件 hover 时遮罩背景色。
 
 #### 其他区域背景色
 
