@@ -462,6 +462,9 @@ export class NodeChildren implements INodeChildren {
           const node: INode = this.owner.document?.createNode(child);
           this.children.push(node);
           node.internalSetParent(this.owner);
+          /* istanbul ignore next */
+          const editor = node.document?.designer.editor;
+          editor?.eventBus.emit('node.add', { node });
         });
         changed = true;
       }
