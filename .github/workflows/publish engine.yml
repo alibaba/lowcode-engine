@@ -4,8 +4,8 @@ on:
   push:
     # branches:
       # - 'release/[0-9]+.[0-9]+.[0-9]+-beta'
-    paths:
-      - 'packages/**'
+    # paths:
+    #   - 'packages/**'
 
 jobs:
   publish-engine:
@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: '14'
           registry-url: 'https://registry.npmjs.org'
-      - run: cd docs && npm install
+      - run: npm install && npm run setup
       - run: |
           npm run build
       - run: npm run pub:prerelease
