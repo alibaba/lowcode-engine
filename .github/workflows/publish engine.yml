@@ -20,6 +20,8 @@ jobs:
       - run: npm install && npm run setup
       - run: |
           npm run build
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
       - run: npm run pub:prerelease
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
