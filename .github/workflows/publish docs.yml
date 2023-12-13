@@ -5,7 +5,7 @@ on:
     branches:
       - develop
     paths:
-      - 'docs/**'
+      - 'docs/docs/**'
 
 jobs:
   publish-docs:
