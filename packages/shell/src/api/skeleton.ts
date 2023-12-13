@@ -4,7 +4,7 @@ import {
   SkeletonEvents,
 } from '@alilc/lowcode-editor-skeleton';
 import { skeletonSymbol } from '../symbols';
-import { IPublicApiSkeleton, IPublicModelSkeletonItem, IPublicTypeDisposable, IPublicTypeSkeletonConfig, IPublicTypeWidgetConfigArea } from '@alilc/lowcode-types';
+import { IPublicApiSkeleton, IPublicModelSkeletonItem, IPublicTypeConfigTransducer, IPublicTypeDisposable, IPublicTypeSkeletonConfig, IPublicTypeWidgetConfigArea } from '@alilc/lowcode-types';
 import { getLogger } from '@alilc/lowcode-utils';
 import { SkeletonItem } from '../model/skeleton-item';
 
@@ -207,6 +207,10 @@ export class Skeleton implements IPublicApiSkeleton {
       listener(name, rest);
     });
     return () => editor.eventBus.off(SkeletonEvents.WIDGET_HIDE, listener);
+  }
+
+  registerConfigTransducer(fn: IPublicTypeConfigTransducer, level: number, id?: string) {
+    this[skeletonSymbol].registerConfigTransducer(fn, level, id);
   }
 }
 

@@ -1,4 +1,5 @@
-let nativeSelectionEnabled = true;
+export let nativeSelectionEnabled = true;
+
 const preventSelection = (e: Event) => {
   if (nativeSelectionEnabled) {
     return null;

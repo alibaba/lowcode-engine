@@ -1,5 +1,9 @@
 import { IPublicTypeNodeSchema } from '@alilc/lowcode-types';
+import { isObject } from '../is-object';
 
 export function isNodeSchema(data: any): data is IPublicTypeNodeSchema {
-  return data && data.componentName && !data.isNode;
+  if (!isObject(data)) {
+    return false;
+  }
+  return 'componentName' in data && !data.isNode;
 }

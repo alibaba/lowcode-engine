@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import baseRendererFactory from './base';
 import { isEmpty } from '../utils';
 import { IRendererAppHelper, IBaseRendererProps, IBaseRenderComponent } from '../types';
+import logger from '../utils/logger';
 
 export default function addonRendererFactory(): IBaseRenderComponent {
   const BaseRenderer = baseRendererFactory();
@@ -32,7 +33,7 @@ export default function addonRendererFactory(): IBaseRenderComponent {
       const schema = props.__schema || {};
       this.state = this.__parseData(schema.state || {});
       if (isEmpty(props.config) || !props.config?.addonKey) {
-        console.warn('lce addon has wrong config');
+        logger.warn('lce addon has wrong config');
         this.setState({
           __hasError: true,
         });

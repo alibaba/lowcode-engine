@@ -69,6 +69,7 @@ skeleton.add({
   props: {
     align: "left",
     icon: "wenjian",
+    title: '标题', // 图标下方展示的标题
     description: "JS 面板",
   },
   panelProps: {
@@ -295,6 +296,68 @@ showArea(areaName: string): void;
  */
 hideArea(areaName: string): void;
 ```
+
+### registerConfigTransducer
+注册一个面板的配置转换器（transducer）。
+
+```typescript
+/**
+ * 注册一个面板的配置转换器（transducer）。
+ * Registers a configuration transducer for a panel.
+ * @param {IPublicTypeConfigTransducer} transducer 
+ *   - 要注册的转换器函数。该函数接受一个配置对象（类型为 IPublicTypeSkeletonConfig）作为输入，并返回修改后的配置对象。
+ *   - The transducer function to be registered. This function takes a configuration object 
+ * 
+ * @param {number} level 
+ *   - 转换器的优先级。优先级较高的转换器会先执行。
+ *   - The priority level of the transducer. Transducers with higher priority levels are executed first.
+ * 
+ * @param {string} [id] 
+ *   - （可选）转换器的唯一标识符。用于在需要时引用或操作特定的转换器。
+ *   - (Optional) A unique identifier for the transducer. Used for referencing or manipulating a specific transducer when needed.
+ */
+registerConfigTransducer(transducer: IPublicTypeConfigTransducer, level: number, id?: string): void;
+```
+
+使用示例
+
+```typescript
+import { IPublicModelPluginContext, IPublicTypeSkeletonConfig } from '@alilc/lowcode-types';
+
+function updatePanelWidth(config: IPublicTypeSkeletonConfig) {
+  if (config.type === 'PanelDock') {
+    return {
+      ...config,
+      panelProps: {
+        ...(config.panelProps || {}),
+        width: 240,
+      },
+    }
+  }
+
+  return config;
+}
+
+const controlPanelWidthPlugin = (ctx: IPublicModelPluginContext) => {
+  const { skeleton } = ctx;
+  (skeleton as any).registerConfigTransducer?.(updatePanelWidth, 1, 'update-panel-width');
+
+  return {
+    init() {},
+  };
+};
+
+controlPanelWidthPlugin.pluginName = 'controlPanelWidthPlugin';
+controlPanelWidthPlugin.meta = {
+  dependencies: [],
+  engines: {
+    lowcodeEngine: '^1.2.3', // 插件需要配合 ^1.0.0 的引擎才可运行
+  },
+};
+
+export default controlPanelWidthPlugin;
+```
+
 ## 事件
 ### onShowPanel
 

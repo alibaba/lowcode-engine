@@ -1,5 +1,10 @@
-import { IPublicModelSettingField } from "@alilc/lowcode-types";
+import { IPublicModelSettingField } from '@alilc/lowcode-types';
+import { isObject } from '../is-object';
 
 export function isSettingField(obj: any): obj is IPublicModelSettingField {
-  return obj && obj.isSettingField;
+  if (!isObject(obj)) {
+    return false;
+  }
+
+  return 'isSettingField' in obj && obj.isSettingField;
 }

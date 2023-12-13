@@ -136,7 +136,7 @@ describe('Prop 类测试', () => {
       expect(boolProp.export(IPublicEnumTransformStage.Save)).toBe(true);
       expect(strProp.export(IPublicEnumTransformStage.Save)).toBe('haha');
       expect(numProp.export(IPublicEnumTransformStage.Save)).toBe(1);
-      expect(nullProp.export(IPublicEnumTransformStage.Save)).toBe('');
+      expect(nullProp.export(IPublicEnumTransformStage.Save)).toBe(null);
       expect(nullProp.export(IPublicEnumTransformStage.Serilize)).toBe(null);
       expect(expProp.export(IPublicEnumTransformStage.Save)).toEqual({
         type: 'JSExpression',

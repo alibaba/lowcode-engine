@@ -1,5 +1,9 @@
 import { IPublicTypeLocationChildrenDetail, IPublicTypeLocationDetailType } from '@alilc/lowcode-types';
+import { isObject } from '../is-object';
 
 export function isLocationChildrenDetail(obj: any): obj is IPublicTypeLocationChildrenDetail {
-  return obj && obj.type === IPublicTypeLocationDetailType.Children;
+  if (!isObject(obj)) {
+    return false;
+  }
+  return obj.type === IPublicTypeLocationDetailType.Children;
 }

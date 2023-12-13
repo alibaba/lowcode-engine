@@ -28,6 +28,7 @@ import {
   IPublicTypeWidgetConfigArea,
   IPublicTypeSkeletonConfig,
   IPublicApiSkeleton,
+  IPublicTypeConfigTransducer,
 } from '@alilc/lowcode-types';
 
 const logger = new Logger({ level: 'warn', bizName: 'skeleton' });
@@ -110,6 +111,8 @@ export interface ISkeleton extends Omit<IPublicApiSkeleton,
 
 export class Skeleton implements ISkeleton {
   private panels = new Map<string, Panel>();
+
+  private configTransducers: IPublicTypeConfigTransducer[] = [];
 
   private containers = new Map<string, WidgetContainer<any>>();
 
@@ -448,11 +451,35 @@ export class Skeleton implements ISkeleton {
     return restConfig;
   }
 
+  registerConfigTransducer(
+    transducer: IPublicTypeConfigTransducer,
+    level = 100,
+    id?: string,
+  ) {
+    transducer.level = level;
+    transducer.id = id;
+    const i = this.configTransducers.findIndex((item) => item.level != null && item.level > level);
+    if (i < 0) {
+      this.configTransducers.push(transducer);
+    } else {
+      this.configTransducers.splice(i, 0, transducer);
+    }
+  }
+
+  getRegisteredConfigTransducers(): IPublicTypeConfigTransducer[] {
+    return this.configTransducers;
+  }
+
   add(config: IPublicTypeSkeletonConfig, extraConfig?: Record<string, any>): IWidget | Widget | Panel | Stage | Dock | PanelDock | undefined {
-    const parsedConfig = {
+    const registeredTransducers = this.getRegisteredConfigTransducers();
+
+    const parsedConfig = registeredTransducers.reduce((prevConfig, current) => {
+      return current(prevConfig);
+    }, {
       ...this.parseConfig(config),
       ...extraConfig,
-    };
+    });
+
     let { area } = parsedConfig;
     if (!area) {
       if (parsedConfig.type === 'Panel') {

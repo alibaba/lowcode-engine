@@ -2,6 +2,9 @@
 import { isI18NObject } from './is-object';
 import { get } from 'lodash';
 import { IPublicEnumTransformStage, IPublicModelComponentMeta } from '@alilc/lowcode-types';
+import { Logger } from './logger';
+
+const logger = new Logger({ level: 'warn', bizName: 'utils' });
 
 interface Variable {
   type: 'variable';
@@ -10,7 +13,10 @@ interface Variable {
 }
 
 export function isVariable(obj: any): obj is Variable {
-  return obj && obj.type === 'variable';
+  if (!obj || typeof obj !== 'object') {
+    return false;
+  }
+  return obj.type === 'variable';
 }
 
 export function isUseI18NSetter(prototype: any, propName: string) {
@@ -103,12 +109,15 @@ export function invariant(check: any, message: string, thing?: any) {
 
 export function deprecate(fail: any, message: string, alterative?: string) {
   if (fail) {
-    console.warn(`Deprecation: ${message}` + (alterative ? `, use ${alterative} instead.` : ''));
+    logger.warn(`Deprecation: ${message}` + (alterative ? `, use ${alterative} instead.` : ''));
   }
 }
 
 export function isRegExp(obj: any): obj is RegExp {
-  return obj && obj.test && obj.exec && obj.compile;
+  if (!obj || typeof obj !== 'object') {
+    return false;
+  }
+  return 'test' in obj && 'exec' in obj && 'compile' in obj;
 }
 
 /**
