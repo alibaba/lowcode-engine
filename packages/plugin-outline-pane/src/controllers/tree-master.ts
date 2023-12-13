@@ -51,9 +51,9 @@ export class TreeMaster {
       windowViewTypeChangeEvent();
 
       workspace.onChangeActiveWindow(() => {
-        windowViewTypeChangeEvent();
         this.setPluginContext(workspace.window?.currentEditorView);
         dispose && dispose();
+        windowViewTypeChangeEvent();
       });
     }
   }
