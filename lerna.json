@@ -18,7 +18,8 @@
         "main",
         "release/*",
         "daily/*",
-        "refactor/*"
+        "refactor/*",
+        "chore/publish-engine"
       ]
     },
     "publish": {
