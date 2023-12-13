@@ -15,6 +15,7 @@ tags: [FAQ]
 - [如何通过 this.utils 使用第三方工具扩展](/site/docs/faq/faq005)
 - [设置面板中的高级 tab 如何配置](/site/docs/faq/faq007)
 - [插件面板如何调整位置](/site/docs/faq/faq010)
+- [workspace 模式常见问题](/site/docs/faq/faq024)
 
 ## 源码和依赖
 - [某某 npm 包对应的源码在哪里？](/site/docs/faq/faq008)
