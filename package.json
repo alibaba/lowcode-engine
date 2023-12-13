@@ -24,7 +24,7 @@
     "pub:premajor": "npm run watchdog:build && lerna publish premajor --force-publish --exact --dist-tag beta --preid beta --no-changelog",
     "pub:preminor": "npm run watchdog:build && lerna publish preminor --force-publish --exact --dist-tag beta --preid beta --no-changelog",
     "pub:prepatch": "npm run watchdog:build && lerna publish prepatch --force-publish --exact --dist-tag beta --preid beta --no-changelog",
-    "pub:prerelease": "npm run watchdog:build && lerna publish prerelease --force-publish --exact --dist-tag beta --preid beta --no-changelog",
+    "pub:prerelease": "npm run watchdog:build && lerna publish prerelease --yes --force-publish --exact --dist-tag beta --preid beta --no-changelog",
     "setup": "node ./scripts/setup.js",
     "setup:test": "./scripts/setup-for-test.sh",
     "setup:skip-build": "./scripts/setup-skip-build.sh",
