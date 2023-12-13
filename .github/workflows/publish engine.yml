@@ -6,6 +6,9 @@ on:
 jobs:
   publish-engine:
     runs-on: ubuntu-latest
+    if: >-
+      contains(github.ref, 'refs/heads/release/') &&
+      (github.actor == 'JackLian' || github.actor == 'liujuping')
     steps:
       - uses: actions/checkout@v2
       - name: Setup Node.js
