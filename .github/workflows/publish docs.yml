@@ -16,7 +16,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          ref: 'develop'
+          node-version: '16'
           registry-url: 'https://registry.npmjs.org'
       - run: cd docs && npm install
       - run: |
@@ -27,7 +28,7 @@ jobs:
           git add package.json
           git commit -m "chore(docs): publish documentation"
           git push
-      - run: cd docs && npm build && npm publish
+      - run: cd docs && npm run build && npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Get version
