@@ -6,6 +6,7 @@ on:
       - develop
     paths:
       - 'docs/docs/**'
+  workflow_dispatch:
 
 jobs:
   publish-docs:
