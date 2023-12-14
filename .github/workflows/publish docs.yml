@@ -7,14 +7,6 @@ on:
     paths:
       - 'docs/docs/**'
   workflow_dispatch:
-    inputs:
-      branch:
-        description: 'doc is designed be published from develop'
-        required: true
-        default: 'develop'
-        type: choice
-        options:
-          - 'develop'
 
 jobs:
   publish-docs:
