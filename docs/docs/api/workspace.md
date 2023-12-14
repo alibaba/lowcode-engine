@@ -87,7 +87,7 @@ registerResourceType(resourceTypeModel: IPublicTypeResourceType): void;
 setResourceList(resourceList: IPublicResourceList) {}
 ```
 
-相关类型：[IPublicResourceOptions](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/resource-options.ts)
+相关类型：[IPublicResourceData](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/resource-list.ts)
 
 ### openEditorWindow
 
