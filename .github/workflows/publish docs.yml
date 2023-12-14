@@ -24,7 +24,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add package.json
-          git commit -m "Update package version"
+          git commit -m "chore(docs): publish documentation"
           git push
       - run: cd docs && npm publish
         env:
