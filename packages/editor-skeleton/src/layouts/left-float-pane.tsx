@@ -3,11 +3,10 @@ import classNames from 'classnames';
 import { observer, Focusable } from '@alilc/lowcode-editor-core';
 import { Area } from '../area';
 import { Panel } from '../widget/panel';
-import { PanelConfig } from '../types';
-import { IPublicApiProject } from '@alilc/lowcode-types';
+import { IPublicApiProject, IPublicTypePanelConfig } from '@alilc/lowcode-types';
 
 @observer
-export default class LeftFloatPane extends Component<{ area: Area<PanelConfig, Panel> }> {
+export default class LeftFloatPane extends Component<{ area: Area<IPublicTypePanelConfig, Panel> }> {
   private dispose?: () => void;
 
   private focusing?: Focusable;
