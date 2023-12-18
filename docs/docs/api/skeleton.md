@@ -297,7 +297,24 @@ showArea(areaName: string): void;
 hideArea(areaName: string): void;
 ```
 
+### getAreaItems
+
+获取某个区域下的所有面板实例
+
+```typescript
+/**
+  * 获取某个区域下的所有面板实例
+  * @param areaName IPublicTypeWidgetConfigArea
+  */
+getAreaItems(areaName: IPublicTypeWidgetConfigArea): IPublicModelSkeletonItem[] | undefined;
+```
+
+相关类型：[IPublicModelSkeletonItem](https://github.com/alibaba/lowcode-engine/blob/main/packages/shell/src/model/skeleton-item.ts)
+
+
+
 ### registerConfigTransducer
+
 注册一个面板的配置转换器（transducer）。
 
 ```typescript
