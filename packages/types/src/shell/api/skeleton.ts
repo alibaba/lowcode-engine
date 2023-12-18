@@ -1,5 +1,5 @@
 import { IPublicModelSkeletonItem } from '../model';
-import { IPublicTypeConfigTransducer, IPublicTypeDisposable, IPublicTypeSkeletonConfig } from '../type';
+import { IPublicTypeConfigTransducer, IPublicTypeDisposable, IPublicTypeSkeletonConfig, IPublicTypeWidgetConfigArea } from '../type';
 
 export interface IPublicApiSkeleton {
 
@@ -19,6 +19,12 @@ export interface IPublicApiSkeleton {
    * @returns
    */
   remove(config: IPublicTypeSkeletonConfig): number | undefined;
+
+  /**
+   * 获取某个区域下的所有面板实例
+   * @param areaName IPublicTypeWidgetConfigArea
+   */
+  getAreaItems(areaName: IPublicTypeWidgetConfigArea): IPublicModelSkeletonItem[] | undefined;
 
   /**
    * 获取面板实例
