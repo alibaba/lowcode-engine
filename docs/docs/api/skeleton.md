@@ -387,7 +387,7 @@ export default controlPanelWidthPlugin;
  * @param listener
  * @returns
  */
-onShowPanel(listener: (...args: any[]) => void): IPublicTypeDisposable;
+onShowPanel(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
 ```
 
 相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
@@ -403,11 +403,38 @@ onShowPanel(listener: (...args: any[]) => void): IPublicTypeDisposable;
  * @param listener
  * @returns
  */
-onHidePanel(listener: (...args: any[]) => void): IPublicTypeDisposable;
+onHidePanel(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
 ```
 
 相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
 
+### onDisableWidget
+
+监听 Widget 实例 Disable 事件
+
+```typescript
+/**
+ * 监听 Widget 实例 Disable 事件
+ * @param listener
+ */
+onDisableWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
+```
+
+相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
+
+### onEnableWidget
+
+监听 Widget 实例 Enable 事件
+
+```typescript
+/**
+ * 监听 Widget 实例 Enable 事件
+ * @param listener
+ */
+onEnableWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
+```
+
+相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
 
 ### onShowWidget
 
@@ -420,7 +447,7 @@ onHidePanel(listener: (...args: any[]) => void): IPublicTypeDisposable;
  * @param listener
  * @returns
  */
-onShowWidget(listener: (...args: any[]) => void): IPublicTypeDisposable;
+onShowWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
 ```
 
 相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
@@ -436,7 +463,7 @@ onShowWidget(listener: (...args: any[]) => void): IPublicTypeDisposable;
  * @param listener
  * @returns
  */
-onHideWidget(listener: (...args: any[]) => void): IPublicTypeDisposable;
+onHideWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
 ```
 
 相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
