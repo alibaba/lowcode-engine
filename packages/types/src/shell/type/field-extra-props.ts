@@ -64,6 +64,11 @@ export interface IPublicTypeFieldExtraProps {
   supportVariable?: boolean;
 
   /**
+   * 是否支持重置变量
+   */
+  supportResetFields?: boolean;
+
+  /**
    * compatiable vision display
    */
   display?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry';

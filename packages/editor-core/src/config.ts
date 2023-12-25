@@ -116,6 +116,11 @@ const VALID_ENGINE_OPTIONS = {
     default: false,
     description: '设置所有属性支持变量配置',
   },
+  supportResetFieldsGlobally: {
+    type: 'boolean',
+    default: false,
+    description: '设置所有属性支持重置',
+  },
   visionSettings: {
     type: 'object',
     description: 'Vision-polyfill settings',

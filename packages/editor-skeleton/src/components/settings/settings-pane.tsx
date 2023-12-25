@@ -227,7 +227,10 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
 
     let _onChange = extraProps?.onChange;
     let stageName = this.stageName;
-
+    const supportResetFields = extraProps?.supportResetFields;
+    const supportResetFieldsGlobally = engineConfig.get('supportResetFieldsGlobally', false);
+    const resetValue = supportResetFields === false ? false :
+      supportResetFields || supportResetFieldsGlobally;
     return createField(
       {
         meta: field?.componentMeta?.npm || field?.componentMeta?.componentName || '',
@@ -241,6 +244,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
         // stages,
         stageName,
         ...extraProps,
+        resetValue,
       },
       !stageName &&
       this.setters?.createSetterContent(setterType, {

@@ -10,6 +10,7 @@ import './index.less';
 import InlineTip from './inlinetip';
 import { intl } from '../../locale';
 import { Logger } from '@alilc/lowcode-utils';
+import { ResetIcon } from './resetIcon';
 
 const logger = new Logger({ level: 'warn', bizName: 'skeleton:field' });
 
@@ -25,6 +26,7 @@ export interface FieldProps {
   tip?: any;
   onExpandChange?: (expandState: boolean) => void;
   onClear?: () => void;
+  resetValue?: boolean;
 }
 
 export class Field extends Component<FieldProps> {
@@ -142,6 +144,13 @@ export class Field extends Component<FieldProps> {
     const { editor, name, title, meta } = this.props;
     editor?.eventBus.emit('setting.setter.field.click', { name, title, meta, event });
   }
+  resetIconClickHandler() {
+    const { children } = this.props;
+    if (children && (children as any).props) {
+      const { onChange, initialValue } = (children as any).props;
+      onChange(initialValue);
+    }
+  }
 
   render() {
     const { hasError } = this.state;
@@ -149,7 +158,8 @@ export class Field extends Component<FieldProps> {
       return null;
     }
 
-    const { className, children, meta, title, valueState, name: propName, tip } = this.props;
+    const { className, children, meta, title, valueState,
+      name: propName, tip, resetValue } = this.props;
     const { display, collapsed } = this.state;
     const isAccordion = display === 'accordion';
     let hostName = '';
@@ -185,6 +195,7 @@ export class Field extends Component<FieldProps> {
         <div key="body" ref={(shell) => { this.body = shell; }} className="lc-field-body">
           {children}
         </div>
+        {display !== 'block' && resetValue && <Title className="lc-reseticon" title={{ tip: '重置属性', icon: <ResetIcon fill="#8f9bb3" /> }} onClick={() => this.resetIconClickHandler()} />}
       </div>
     );
   }

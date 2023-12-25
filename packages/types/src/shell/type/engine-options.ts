@@ -118,6 +118,12 @@ export interface IPublicTypeEngineOptions {
   supportVariableGlobally?: boolean;
 
   /**
+   * 设置所有属性支持重置，默认值：false
+   *
+   */
+  supportResetFieldsGlobally?: boolean;
+
+  /**
    * 设置 simulator 相关的 url，默认值：undefined
    */
   simulatorUrl?: string[];
