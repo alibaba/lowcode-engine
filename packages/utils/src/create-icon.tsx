@@ -30,7 +30,10 @@ export function createIcon(
     return cloneElement(icon, { ...props });
   }
   if (isReactComponent(icon)) {
-    return createElement(icon, { ...props });
+    return createElement(icon, {
+      class: props?.className,
+      ...props,
+    });
   }
 
   return <Icon {...icon} {...props} />;
