@@ -1,0 +1,29 @@
+name: Publish Engine
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-engine:
+    runs-on: ubuntu-latest
+    if: >-
+      contains(github.ref, 'refs/heads/release/') &&
+      (github.actor == 'JackLian' || github.actor == 'liujuping')
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm install && npm run setup
+      - run: |
+          npm run build
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+      - run: npm run pub
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Get version
+        id: get_version
+        run: echo "::set-output name=version::$(node -p "require('./package.json').version")"

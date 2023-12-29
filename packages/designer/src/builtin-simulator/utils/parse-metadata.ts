@@ -46,13 +46,15 @@ function define(propType: any = PropTypes.any, lowcodeType: string | object = {}
   return lowcodeCheckType;
 }
 
-const LowcodeTypes: any = {
+export const LowcodeTypes: any = {
   ...PropTypes,
   define,
 };
 
 (window as any).PropTypes = LowcodeTypes;
-(window as any).React.PropTypes = LowcodeTypes;
+if ((window as any).React) {
+  (window as any).React.PropTypes = LowcodeTypes;
+}
 
 // override primitive type checkers
 primitiveTypes.forEach((type) => {

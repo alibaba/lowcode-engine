@@ -4,7 +4,7 @@ import { IPublicResourceTypeConfig } from './resource-type-config';
 export interface IPublicTypeResourceType {
   resourceName: string;
 
-  resourceType: 'editor' | 'webview';
+  resourceType: 'editor' | 'webview' | string;
 
   (ctx: IPublicModelPluginContext, options: Object): IPublicResourceTypeConfig;
 }

@@ -40,7 +40,7 @@ export default class TreeView extends PureComponent<{
       return;
     }
     const node = this.getTreeNodeFromEvent(e)?.node;
-    detecting?.capture(node as any);
+    node?.id && detecting?.capture(node.id);
   }
 
   private onClick = (e: ReactMouseEvent) => {

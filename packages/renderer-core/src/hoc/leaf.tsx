@@ -4,6 +4,7 @@ import { isReactComponent, cloneEnumerableProperty } from '@alilc/lowcode-utils'
 import { debounce } from '../utils/common';
 import adapter from '../adapter';
 import * as types from '../types/index';
+import logger from '../utils/logger';
 
 export interface IComponentHocInfo {
   schema: any;
@@ -183,7 +184,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
   }
 
   if (!isReactComponent(Comp)) {
-    console.error(`${schema.componentName} component may be has errors: `, Comp);
+    logger.error(`${schema.componentName} component may be has errors: `, Comp);
   }
 
   initRerenderEvent({

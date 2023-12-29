@@ -108,6 +108,8 @@ export interface IPublicModelPluginContext {
    */
   get registerLevel(): IPublicEnumPluginRegisterLevel;
 
+  get isPluginRegisteredInWorkspace(): boolean;
+
   get editorWindow(): IPublicModelWindow;
 }
 

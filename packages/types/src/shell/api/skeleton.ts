@@ -1,5 +1,5 @@
 import { IPublicModelSkeletonItem } from '../model';
-import { IPublicTypeDisposable, IPublicTypeSkeletonConfig } from '../type';
+import { IPublicTypeConfigTransducer, IPublicTypeDisposable, IPublicTypeSkeletonConfig, IPublicTypeWidgetConfigArea } from '../type';
 
 export interface IPublicApiSkeleton {
 
@@ -19,6 +19,12 @@ export interface IPublicApiSkeleton {
    * @returns
    */
   remove(config: IPublicTypeSkeletonConfig): number | undefined;
+
+  /**
+   * 获取某个区域下的所有面板实例
+   * @param areaName IPublicTypeWidgetConfigArea
+   */
+  getAreaItems(areaName: IPublicTypeWidgetConfigArea): IPublicModelSkeletonItem[] | undefined;
 
   /**
    * 获取面板实例
@@ -89,7 +95,7 @@ export interface IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onShowPanel(listener: (...args: any[]) => void): IPublicTypeDisposable;
+  onShowPanel(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
 
   /**
    * 监听 Panel 实例隐藏事件
@@ -97,7 +103,19 @@ export interface IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onHidePanel(listener: (...args: any[]) => void): IPublicTypeDisposable;
+  onHidePanel(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
+
+  /**
+   * 监听 Widget 实例 Disable 事件
+   * @param listener
+   */
+  onDisableWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
+
+  /**
+   * 监听 Widget 实例 Enable 事件
+   * @param listener
+   */
+  onEnableWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
 
   /**
    * 监听 Widget 显示事件
@@ -105,7 +123,7 @@ export interface IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onShowWidget(listener: (...args: any[]) => void): IPublicTypeDisposable;
+  onShowWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
 
   /**
    * 监听 Widget 隐藏事件
@@ -113,5 +131,22 @@ export interface IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onHideWidget(listener: (...args: any[]) => void): IPublicTypeDisposable;
+  onHideWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
+
+  /**
+   * 注册一个面板的配置转换器（transducer）。
+   * Registers a configuration transducer for a panel.
+   * @param {IPublicTypeConfigTransducer} transducer
+   *   - 要注册的转换器函数。该函数接受一个配置对象（类型为 IPublicTypeSkeletonConfig）作为输入，并返回修改后的配置对象。
+   *   - The transducer function to be registered. This function takes a configuration object (of type IPublicTypeSkeletonConfig) as input and returns a modified configuration object.
+   *
+   * @param {number} level
+   *   - 转换器的优先级。优先级较高的转换器会先执行。
+   *   - The priority level of the transducer. Transducers with higher priority levels are executed first.
+   *
+   * @param {string} [id]
+   *   - （可选）转换器的唯一标识符。用于在需要时引用或操作特定的转换器。
+   *   - (Optional) A unique identifier for the transducer. Used for referencing or manipulating a specific transducer when needed.
+   */
+  registerConfigTransducer(transducer: IPublicTypeConfigTransducer, level: number, id?: string): void;
 }

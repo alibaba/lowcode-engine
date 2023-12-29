@@ -440,23 +440,23 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   }
 
   private initialChildren(children: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined): IPublicTypeNodeData[] {
-    // FIXME! this is dirty code
+    const { initialChildren } = this.componentMeta.advanced;
+
     if (children == null) {
-      const { initialChildren } = this.componentMeta.advanced;
       if (initialChildren) {
         if (typeof initialChildren === 'function') {
           return initialChildren(this.internalToShellNode()!) || [];
         }
         return initialChildren;
       }
-    }
-    if (Array.isArray(children)) {
-      return children;
-    } else if (children) {
-      return [children];
-    } else {
       return [];
     }
+
+    if (Array.isArray(children)) {
+      return children;
+    }
+
+    return [children];
   }
 
   isContainer(): boolean {
@@ -1094,7 +1094,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   }
 
   /**
-   * 是否可执行某action
+   * 是否可执行某 action
    */
   canPerformAction(actionName: string): boolean {
     const availableActions =

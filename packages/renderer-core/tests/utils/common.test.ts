@@ -1,4 +1,4 @@
-// @ts-nocheck
+import factoryWithTypeCheckers from 'prop-types/factoryWithTypeCheckers';
 import {
   isSchema,
   isFileSchema,
@@ -18,8 +18,13 @@ import {
   parseThisRequiredExpression,
   parseI18n,
   parseData,
+  checkPropTypes,
 } from '../../src/utils/common';
 import logger from '../../src/utils/logger';
+
+var ReactIs = require('react-is');
+
+const PropTypes = factoryWithTypeCheckers(ReactIs.isElement, true);
 
 describe('test isSchema', () => {
   it('should be false when empty value is passed', () => {
@@ -460,5 +465,38 @@ describe('test parseData ', () => {
     expect(result.key2).toStrictEqual('this is a normal string, will be trimmed only');
     expect(result.__privateKey).toBeUndefined();
 
+  });
+});
+
+describe('checkPropTypes', () => {
+  it('should validate correctly with valid prop type', () => {
+    expect(checkPropTypes(123, 'age', PropTypes.number, 'TestComponent')).toBe(true);
+    expect(checkPropTypes('123', 'age', PropTypes.string, 'TestComponent')).toBe(true);
+  });
+
+  it('should log a warning and return false with invalid prop type', () => {
+    expect(checkPropTypes(123, 'age', PropTypes.string, 'TestComponent')).toBe(false);
+    expect(checkPropTypes('123', 'age', PropTypes.number, 'TestComponent')).toBe(false);
+  });
+
+  it('should handle custom rule functions correctly', () => {
+    const customRule = (props, propName) => {
+      if (props[propName] !== 123) {
+        return new Error('Invalid value');
+      }
+    };
+    const result = checkPropTypes(123, 'customProp', customRule, 'TestComponent');
+    expect(result).toBe(true);
+  });
+
+
+  it('should interpret and validate a rule given as a string', () => {
+    const result = checkPropTypes(123, 'age', 'PropTypes.number', 'TestComponent');
+    expect(result).toBe(true);
+  });
+
+  it('should log a warning for invalid rule type', () => {
+    const result = checkPropTypes(123, 'age', 123, 'TestComponent');
+    expect(result).toBe(true);
   });
 });

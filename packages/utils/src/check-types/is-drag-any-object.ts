@@ -1,5 +1,9 @@
 import { IPublicEnumDragObjectType } from '@alilc/lowcode-types';
+import { isObject } from '../is-object';
 
 export function isDragAnyObject(obj: any): boolean {
-  return obj && obj.type !== IPublicEnumDragObjectType.NodeData && obj.type !== IPublicEnumDragObjectType.Node;
+  if (!isObject(obj)) {
+    return false;
+  }
+  return obj.type !== IPublicEnumDragObjectType.NodeData && obj.type !== IPublicEnumDragObjectType.Node;
 }

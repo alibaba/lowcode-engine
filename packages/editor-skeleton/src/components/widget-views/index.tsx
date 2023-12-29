@@ -232,12 +232,8 @@ export class PanelView extends Component<{
       this.lastVisible = currentVisible;
       if (this.lastVisible) {
         panel.skeleton.postEvent(SkeletonEvents.PANEL_SHOW, panel.name, panel);
-        // FIXME! remove this line
-        panel.skeleton.postEvent('leftPanel.show' as any, panel.name, panel);
       } else {
         panel.skeleton.postEvent(SkeletonEvents.PANEL_HIDE, panel.name, panel);
-        // FIXME! remove this line
-        panel.skeleton.postEvent('leftPanel.hide' as any, panel.name, panel);
       }
     }
   }
@@ -270,15 +266,28 @@ export class PanelView extends Component<{
 }
 
 @observer
-export class TabsPanelView extends Component<{ container: WidgetContainer<Panel> }> {
+export class TabsPanelView extends Component<{
+  container: WidgetContainer<Panel>;
+  // shouldHideSingleTab: 一个布尔值，用于控制当 Tabs 组件只有一个标签时是否隐藏该标签。
+  shouldHideSingleTab?: boolean;
+}> {
   render() {
     const { container } = this.props;
     const titles: ReactElement[] = [];
     const contents: ReactElement[] = [];
-    container.items.forEach((item: any) => {
-      titles.push(<PanelTitle key={item.id} panel={item} className="lc-tab-title" />);
-      contents.push(<PanelView key={item.id} panel={item} hideOperationRow hideDragLine />);
-    });
+    // 如果只有一个标签且 shouldHideSingleTab 为 true，则不显示 Tabs
+    if (this.props.shouldHideSingleTab && container.items.length === 1) {
+      contents.push(<PanelView key={container.items[0].id} panel={container.items[0]} hideOperationRow hideDragLine />);
+    } else {
+      container.items.forEach((item: any) => {
+        titles.push(<PanelTitle key={item.id} panel={item} className="lc-tab-title" />);
+        contents.push(<PanelView key={item.id} panel={item} hideOperationRow hideDragLine />);
+      });
+    }
+
+    if (!titles.length) {
+      return contents;
+    }
 
     return (
       <div className="lc-tabs">

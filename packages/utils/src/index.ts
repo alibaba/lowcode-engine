@@ -30,3 +30,4 @@ export * from './is-plugin-event-name';
 export * as css from './css-helper';
 export { transactionManager } from './transaction-manager';
 export * from './check-types';
+export * from './workspace';

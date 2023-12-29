@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-utils",
-  "version": "1.2.2",
+  "version": "1.2.5",
   "description": "Utils for Ali lowCode engine",
   "files": [
     "lib",
@@ -9,20 +9,23 @@
   "main": "lib/index.js",
   "module": "es/index.js",
   "scripts": {
-    "test": "build-scripts test --config build.test.json",
+    "test": "build-scripts test --config build.test.json --jest-coverage",
     "build": "build-scripts build"
   },
   "dependencies": {
     "@alifd/next": "^1.19.16",
-    "@alilc/lowcode-types": "1.2.2",
+    "@alilc/lowcode-types": "1.2.5",
     "lodash": "^4.17.21",
     "mobx": "^6.3.0",
     "react": "^16"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/react": "^11.2.7",
     "@types/node": "^13.7.1",
-    "@types/react": "^16"
+    "@types/react": "^16",
+    "react-dom": "^16.14.0"
   },
   "publishConfig": {
     "access": "public",

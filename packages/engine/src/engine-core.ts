@@ -54,7 +54,7 @@ import {
 } from '@alilc/lowcode-shell';
 import { isPlainObject } from '@alilc/lowcode-utils';
 import './modules/live-editing';
-import classes from './modules/classes';
+import * as classes from './modules/classes';
 import symbols from './modules/symbols';
 import { componentMetaParser } from './inner-plugins/component-meta-parser';
 import { setterRegistry } from './inner-plugins/setter-registry';
@@ -139,6 +139,7 @@ const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
     context.logger = new Logger({ level: 'warn', bizName: `plugin:${pluginName}` });
     context.workspace = workspace;
     context.registerLevel = IPublicEnumPluginRegisterLevel.Default;
+    context.isPluginRegisteredInWorkspace = false;
   },
 };
 

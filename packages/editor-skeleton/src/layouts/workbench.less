@@ -13,6 +13,7 @@
   --popup-border-radius: @popup-border-radius;
 
   --left-area-width: 48px;
+  --workspace-left-area-width: 48px;
   --right-area-width: 300px;
   --top-area-height: 48px;
   --toolbar-height: 36px;
@@ -65,16 +66,16 @@ body {
     }
   }
   > .lc-panel-title {
-    height: 48px;
-    font-size: 16px;
-    padding: 0 15px;
+    height: var(--pane-title-height, 48px);
+    font-size: var(--pane-title-font-size, 16px);
+    padding: var(--pane-title-padding, 0 15px);
     color: var(--color-title, #0f1726);
     font-weight: bold;
   }
 
   .lc-panel-body {
     position: absolute;
-    top: 48px;
+    top: var(--pane-title-height, 48px);
     bottom: 0;
     left: 0;
     right: 0;
@@ -104,6 +105,7 @@ body {
   right: 0;
   bottom: 0;
   z-index: -1;
+  overflow: hidden;
 
   &.active {
     z-index: 999;
@@ -233,7 +235,7 @@ body {
     .lc-pane-icon-close {
       position: absolute;
       right: 16px;
-      top: 14px;
+      top: calc(var(--pane-title-height, 48px) / 2 - 10px);
       height: auto;
       z-index: 2;
       .next-icon {
@@ -246,7 +248,7 @@ body {
     .lc-pane-icon-float {
       position: absolute;
       right: 38px;
-      top: 14px;
+      top: calc(var(--pane-title-height, 48px) / 2 - 10px);
       height: auto;
       z-index: 2;
       svg {
@@ -273,7 +275,7 @@ body {
     }
     .lc-left-area, .lc-workspace-left-area {
       height: 100%;
-      width: var(--left-area-width);
+      width: var(--workspace-left-area-width, --left-area-width);
       display: none;
       flex-shrink: 0;
       flex-direction: column;
@@ -361,12 +363,12 @@ body {
       flex: 1;
       display: flex;
       flex-direction: column;
-      z-index: 10;
+
       .lc-toolbar {
         display: flex;
         height: var(--toolbar-height);
-        background-color: var(--color-pane-background);
-        padding: 8px 16px;
+        background-color: var(--color-toolbar-background, var(--color-pane-background));
+        padding: var(--toolbar-padding, 8px 16px);
         .lc-toolbar-center {
           display: flex;
           justify-content: center;
@@ -442,6 +444,10 @@ body {
     min-height: 0;
     position: relative;
 
+    > .lc-left-float-pane {
+      left: calc(var(--workspace-left-area-width, var(--left-area-width)) + 1px);
+    }
+
     .lc-workspace-workbench-center {
       flex: 1;
       display: flex;
@@ -451,8 +457,8 @@ body {
       .lc-toolbar {
         display: flex;
         height: var(--toolbar-height);
-        background-color: var(--color-pane-background);
-        padding: 8px 16px;
+        background-color: var(--color-toolbar-background, var(--color-pane-background));
+        padding: var(--toolbar-padding, 8px 16px);
         .lc-toolbar-center {
           display: flex;
           justify-content: center;

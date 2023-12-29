@@ -4,7 +4,7 @@ import {
   SkeletonEvents,
 } from '@alilc/lowcode-editor-skeleton';
 import { skeletonSymbol } from '../symbols';
-import { IPublicApiSkeleton, IPublicModelSkeletonItem, IPublicTypeDisposable, IPublicTypeSkeletonConfig, IPublicTypeWidgetConfigArea } from '@alilc/lowcode-types';
+import { IPublicApiSkeleton, IPublicModelSkeletonItem, IPublicTypeConfigTransducer, IPublicTypeDisposable, IPublicTypeSkeletonConfig, IPublicTypeWidgetConfigArea } from '@alilc/lowcode-types';
 import { getLogger } from '@alilc/lowcode-utils';
 import { SkeletonItem } from '../model/skeleton-item';
 
@@ -154,14 +154,28 @@ export class Skeleton implements IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onShowPanel(listener: (...args: any[]) => void): IPublicTypeDisposable {
+  onShowPanel(listener: (paneName: string, panel: IPublicModelSkeletonItem) => void): IPublicTypeDisposable {
     const { editor } = this[skeletonSymbol];
     editor.eventBus.on(SkeletonEvents.PANEL_SHOW, (name: any, panel: any) => {
-      // 不泄漏 skeleton
-      const { skeleton, ...restPanel } = panel;
-      listener(name, restPanel);
+      listener(name, new SkeletonItem(panel));
     });
     return () => editor.eventBus.off(SkeletonEvents.PANEL_SHOW, listener);
+  }
+
+  onDisableWidget(listener: (...args: any[]) => void): IPublicTypeDisposable {
+    const { editor } = this[skeletonSymbol];
+    editor.eventBus.on(SkeletonEvents.WIDGET_DISABLE, (name: any, panel: any) => {
+      listener(name, new SkeletonItem(panel));
+    });
+    return () => editor.eventBus.off(SkeletonEvents.WIDGET_DISABLE, listener);
+  }
+
+  onEnableWidget(listener: (...args: any[]) => void): IPublicTypeDisposable {
+    const { editor } = this[skeletonSymbol];
+    editor.eventBus.on(SkeletonEvents.WIDGET_ENABLE, (name: any, panel: any) => {
+      listener(name, new SkeletonItem(panel));
+    });
+    return () => editor.eventBus.off(SkeletonEvents.WIDGET_ENABLE, listener);
   }
 
   /**
@@ -172,9 +186,7 @@ export class Skeleton implements IPublicApiSkeleton {
   onHidePanel(listener: (...args: any[]) => void): IPublicTypeDisposable {
     const { editor } = this[skeletonSymbol];
     editor.eventBus.on(SkeletonEvents.PANEL_HIDE, (name: any, panel: any) => {
-      // 不泄漏 skeleton
-      const { skeleton, ...restPanel } = panel;
-      listener(name, restPanel);
+      listener(name, new SkeletonItem(panel));
     });
     return () => editor.eventBus.off(SkeletonEvents.PANEL_HIDE, listener);
   }
@@ -187,9 +199,7 @@ export class Skeleton implements IPublicApiSkeleton {
   onShowWidget(listener: (...args: any[]) => void): IPublicTypeDisposable {
     const { editor } = this[skeletonSymbol];
     editor.eventBus.on(SkeletonEvents.WIDGET_SHOW, (name: any, panel: any) => {
-      // 不泄漏 skeleton
-      const { skeleton, ...rest } = panel;
-      listener(name, rest);
+      listener(name, new SkeletonItem(panel));
     });
     return () => editor.eventBus.off(SkeletonEvents.WIDGET_SHOW, listener);
   }
@@ -202,11 +212,13 @@ export class Skeleton implements IPublicApiSkeleton {
   onHideWidget(listener: (...args: any[]) => void): IPublicTypeDisposable {
     const { editor } = this[skeletonSymbol];
     editor.eventBus.on(SkeletonEvents.WIDGET_HIDE, (name: any, panel: any) => {
-      // 不泄漏 skeleton
-      const { skeleton, ...rest } = panel;
-      listener(name, rest);
+      listener(name, new SkeletonItem(panel));
     });
     return () => editor.eventBus.off(SkeletonEvents.WIDGET_HIDE, listener);
+  }
+
+  registerConfigTransducer(fn: IPublicTypeConfigTransducer, level: number, id?: string) {
+    this[skeletonSymbol].registerConfigTransducer(fn, level, id);
   }
 }
 

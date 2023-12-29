@@ -1,7 +1,10 @@
 # 官方视频
+- [2023/11/20 云栖大会｜阿里开源低代码引擎及商业解决方案](https://www.bilibili.com/video/BV1Ku4y1w7Zr)
 - [2023/08/03 初识低代码引擎](https://www.bilibili.com/video/BV1gu411p7TC)
 
 # 社区视频
+- [低代码从入门到实战：低代码引擎实践](https://www.bilibili.com/video/BV1aP4y1Q7Xa/)
+- [低代码技术在研发团队的应用模式](https://www.bilibili.com/video/BV1L14y1Y72J/)
 - [阿里低代码引擎项目实战 (1)-引擎 demo 部署到 faas 服务](https://www.bilibili.com/video/BV1B44y1P7GM/)
 - [【有翻车】阿里低代码引擎项目实战 (2)-保存页面到远端存储](https://www.bilibili.com/video/BV1AS4y1K7DP/)
 - [阿里巴巴低代码引擎项目实战 (3)-自定义组件接入](https://www.bilibili.com/video/BV1dZ4y1m76S/)

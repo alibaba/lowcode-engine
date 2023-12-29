@@ -73,10 +73,10 @@
   }
 
   &-device-default {
-    top: 16px;
-    right: 16px;
-    bottom: 16px;
-    left: 16px;
+    top: var(--simulator-top-distance, 16px);
+    right: var(--simulator-right-distance, 16px);
+    bottom: var(--simulator-bottom-distance, 16px);
+    left: var(--simulator-left-distance, 16px);
     width: auto;
     box-shadow: 0 1px 4px 0 var(--color-block-background-shallow, rgba(31, 50, 88, 0.125));
   }
