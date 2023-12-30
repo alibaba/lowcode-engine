@@ -66,7 +66,7 @@ export interface IPublicTypeFieldExtraProps {
   /**
    * 是否支持重置变量
    */
-  supportResetFields?: boolean;
+  supportReset?: boolean;
 
   /**
    * compatiable vision display

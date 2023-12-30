@@ -151,32 +151,32 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
       }
     }
 
+    // 根据是否支持reset做相应的更改
+    const supportReset = extraProps?.supportReset;
+    const supportResetGlobally = engineConfig.get('supportResetGlobally', false);
+    const isUseResetSetter = supportReset === false ? false :
+      supportReset || supportResetGlobally;
+
     // 根据是否支持变量配置做相应的更改
     const supportVariable = this.field.extraProps?.supportVariable;
     // supportVariableGlobally 只对标准组件生效，vc 需要单独配置
     const supportVariableGlobally = engineConfig.get('supportVariableGlobally', false) && isStandardComponent(componentMeta);
     const isUseVariableSetter = shouldUseVariableSetter(supportVariable, supportVariableGlobally);
-    if (isUseVariableSetter === false) {
-      return {
-        setterProps,
-        initialValue,
-        setterType,
-      };
-    }
+    const shouldAddVariableSetter = isUseVariableSetter && !setterProps.setters?.includes('VariableSetter');
+    const shouldAddResetSetter = isUseResetSetter && !setterProps.setters?.includes('ResetSetter');
 
-    if (setterType === 'MixedSetter') {
-      // VariableSetter 不单独使用
-      if (Array.isArray(setterProps.setters) && !setterProps.setters.includes('VariableSetter')) {
+    if (shouldAddVariableSetter || shouldAddResetSetter) {
+      setterType = 'MixedSetter';
+      setterProps.setters = setterProps.setters || [];
+      setterProps.setters.push(setter);
+
+      if (shouldAddVariableSetter) {
         setterProps.setters.push('VariableSetter');
       }
-    } else {
-      setterType = 'MixedSetter';
-      setterProps = {
-        setters: [
-          setter,
-          'VariableSetter',
-        ],
-      };
+
+      if (shouldAddResetSetter) {
+        setterProps.setters.push('ResetSetter');
+      }
     }
     return {
       setterProps,
@@ -227,10 +227,6 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
 
     let _onChange = extraProps?.onChange;
     let stageName = this.stageName;
-    const supportResetFields = extraProps?.supportResetFields;
-    const supportResetFieldsGlobally = engineConfig.get('supportResetFieldsGlobally', false);
-    const resetValue = supportResetFields === false ? false :
-      supportResetFields || supportResetFieldsGlobally;
     return createField(
       {
         meta: field?.componentMeta?.npm || field?.componentMeta?.componentName || '',
@@ -244,7 +240,6 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
         // stages,
         stageName,
         ...extraProps,
-        resetValue,
       },
       !stageName &&
       this.setters?.createSetterContent(setterType, {

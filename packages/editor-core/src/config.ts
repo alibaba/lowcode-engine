@@ -116,7 +116,7 @@ const VALID_ENGINE_OPTIONS = {
     default: false,
     description: '设置所有属性支持变量配置',
   },
-  supportResetFieldsGlobally: {
+  supportResetGlobally: {
     type: 'boolean',
     default: false,
     description: '设置所有属性支持重置',
