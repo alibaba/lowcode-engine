@@ -39,6 +39,7 @@ import {
   isDragAnyObject,
   isDragNodeObject,
   isLocationData,
+  Logger,
 } from '@alilc/lowcode-utils';
 import {
   isShaken,
@@ -71,6 +72,8 @@ import { IProject, Project } from '../project';
 import { IScroller } from '../designer/scroller';
 import { isElementNode, isDOMNodeVisible } from '../utils/misc';
 import { debounce } from 'lodash';
+
+const logger = new Logger({ level: 'warn', bizName: 'designer' });
 
 export type LibraryItem = IPublicTypePackage & {
   package: string;
@@ -122,21 +125,6 @@ const defaultSimulatorUrl = (() => {
   return urls;
 })();
 
-const defaultRaxSimulatorUrl = (() => {
-  const publicPath = getPublicPath();
-  let urls;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, prefix = '', dev] = /^(.+?)(\/js)?\/?$/.exec(publicPath) || [];
-  if (dev) {
-    urls = [`${prefix}/css/rax-simulator-renderer.css`, `${prefix}/js/rax-simulator-renderer.js`];
-  } else if (process.env.NODE_ENV === 'production') {
-    urls = [`${prefix}/rax-simulator-renderer.css`, `${prefix}/rax-simulator-renderer.js`];
-  } else {
-    urls = [`${prefix}/rax-simulator-renderer.css`, `${prefix}/rax-simulator-renderer.js`];
-  }
-  return urls;
-})();
-
 const defaultEnvironment = [
   // https://g.alicdn.com/mylib/??react/16.11.0/umd/react.production.min.js,react-dom/16.8.6/umd/react-dom.production.min.js,prop-types/15.7.2/prop-types.min.js
   assetItem(
@@ -144,17 +132,6 @@ const defaultEnvironment = [
     'window.React=parent.React;window.ReactDOM=parent.ReactDOM;window.__is_simulator_env__=true;',
     undefined,
     'react',
-  ),
-  assetItem(
-    AssetType.JSText,
-    'window.PropTypes=parent.PropTypes;React.PropTypes=parent.PropTypes; window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;',
-  ),
-];
-
-const defaultRaxEnvironment = [
-  assetItem(
-    AssetType.JSText,
-    'window.Rax=parent.Rax;window.React=parent.React;window.ReactDOM=parent.ReactDOM;window.VisualEngineUtils=parent.VisualEngineUtils;window.VisualEngine=parent.VisualEngine',
   ),
   assetItem(
     AssetType.JSText,
@@ -467,11 +444,15 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     const libraryAsset: AssetList = this.buildLibrary();
 
+    if (this.renderEnv === 'rax') {
+      logger.error('After LowcodeEngine v1.3.0, Rax is no longer supported.');
+    }
+
     const vendors = [
       // required & use once
       assetBundle(
         this.get('environment') ||
-          (this.renderEnv === 'rax' ? defaultRaxEnvironment : defaultEnvironment),
+        defaultEnvironment,
         AssetLevel.Environment,
       ),
       // required & use once
@@ -484,7 +465,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       // required & use once
       assetBundle(
         this.get('simulatorUrl') ||
-          (this.renderEnv === 'rax' ? defaultRaxSimulatorUrl : defaultSimulatorUrl),
+        defaultSimulatorUrl,
         AssetLevel.Runtime,
       ),
     ];

@@ -12,8 +12,6 @@ sidebar_position: 3
 | @alilc/lowcode-engine | [https://github.com/alibaba/lowcode-engine](https://github.com/alibaba/lowcode-engine) | packages/engine |
 | @alilc/lowcode-plugin-designer | [https://github.com/alibaba/lowcode-engine](https://github.com/alibaba/lowcode-engine) | packages/plugin-designer |
 | @alilc/lowcode-plugin-outline-pane | [https://github.com/alibaba/lowcode-engine](https://github.com/alibaba/lowcode-engine) | packages/plugin-outline-pane |
-| @alilc/lowcode-rax-renderer  | [https://github.com/alibaba/lowcode-engine](https://github.com/alibaba/lowcode-engine) | packages/rax-renderer |
-| @alilc/lowcode-rax-simulator-renderer | [https://github.com/alibaba/lowcode-engine](https://github.com/alibaba/lowcode-engine) | packages/rax-simulator-renderer |
 | @alilc/lowcode-react-renderer | [https://github.com/alibaba/lowcode-engine](https://github.com/alibaba/lowcode-engine) | packages/react-renderer |
 | @alilc/lowcode-react-simulator-renderer | [https://github.com/alibaba/lowcode-engine](https://github.com/alibaba/lowcode-engine) | packages/react-simulator-renderer |
 | @alilc/lowcode-renderer-core | [https://github.com/alibaba/lowcode-engine](https://github.com/alibaba/lowcode-engine) | packages/renderer-core |
