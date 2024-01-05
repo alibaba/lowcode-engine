@@ -499,7 +499,6 @@ try {
     - 说明：组件即将从 DOM 中移除
   - componentDidCatch(error, info)
     - 说明：组件捕获到异常
-- Rax：目前没有使用生命周期，使用 hooks 替代生命周期；
 
 该对象由一系列 key-value 组成，key 为生命周期方法名，value 为 JSFunction 的描述，详见下方示例：
 

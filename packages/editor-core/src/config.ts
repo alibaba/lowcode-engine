@@ -44,7 +44,7 @@ const VALID_ENGINE_OPTIONS = {
   },
   renderEnv: {
     type: 'string',
-    enum: ['react', 'rax', 'any string value'],
+    enum: ['react', 'any string value'],
     default: 'react',
     description: '渲染器类型',
   },
