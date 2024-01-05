@@ -216,6 +216,12 @@ config.set('enableCondition', false)
 
 是否在只有一个 item 的时候隐藏设置 tabs
 
+#### hideComponentAction
+
+`@type {boolean}` `@default {false}`
+
+隐藏设计器辅助层
+
 #### thisRequiredInJSE
 
 `@type {boolean}` `@default {true}`

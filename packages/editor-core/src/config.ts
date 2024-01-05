@@ -159,6 +159,11 @@ const VALID_ENGINE_OPTIONS = {
     type: 'function',
     description: '应用级设计模式下，窗口为空时展示的占位组件',
   },
+  hideComponentAction: {
+    type: 'boolean',
+    description: '是否隐藏设计器辅助层',
+    default: false,
+  },
 };
 
 const getStrictModeValue = (engineOptions: IPublicTypeEngineOptions, defaultValue: boolean): boolean => {

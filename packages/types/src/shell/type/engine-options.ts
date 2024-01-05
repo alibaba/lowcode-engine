@@ -177,6 +177,12 @@ export interface IPublicTypeEngineOptions {
    * 应用级设计模式下，自动打开第一个窗口
    */
   enableAutoOpenFirstWindow?: boolean;
+
+  /**
+   * @default false
+   * 隐藏设计器辅助层
+   */
+  hideComponentAction?: boolean;
 }
 
 /**
