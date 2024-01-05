@@ -41,7 +41,7 @@ export interface IPublicTypeEngineOptions {
   /**
    * 渲染器类型，默认值：'react'
    */
-  renderEnv?: 'react' | 'rax' | string;
+  renderEnv?: 'react' | string;
 
   /**
    * 设备类型映射器，处理设计器与渲染器中 device 的映射

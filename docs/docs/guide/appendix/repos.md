@@ -15,15 +15,13 @@ sidebar_position: 2
 5. ignitor
 6. plugin-designer
 7. plugin-outline-pane
-8. rax-renderer
-9. rax-simulator-renderer
-10. react-renderer
-11. react-simulator-renderer
-12. renderer-core
-13. types
-14. utils
-15. material-parser
-16. code-generator
+8. react-renderer
+9. react-simulator-renderer
+10. renderer-core
+11. types
+12. utils
+13. material-parser
+14. code-generator
 
 ## 2. 引擎官方扩展包
 包含了常用的设置器（setter）、跟 setter 绑定的插件等
