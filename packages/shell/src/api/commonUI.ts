@@ -4,6 +4,7 @@ import {
   Title as InnerTitle,
  } from '@alilc/lowcode-editor-core';
 import { Balloon, Breadcrumb, Button, Card, Checkbox, DatePicker, Dialog, Dropdown, Form, Icon, Input, Loading, Message, Overlay, Pagination, Radio, Search, Select, SplitButton, Step, Switch, Tab, Table, Tree, TreeSelect, Upload, Divider } from '@alifd/next';
+import { ContextMenu } from '../components/context-menu';
 
 export class CommonUI implements IPublicApiCommonUI {
   Balloon = Balloon;
@@ -39,5 +40,8 @@ export class CommonUI implements IPublicApiCommonUI {
   }
   get Title() {
     return InnerTitle;
+  }
+  get ContextMenu() {
+    return ContextMenu;
   }
 }

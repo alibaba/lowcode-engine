@@ -1,4 +1,4 @@
-import { IPublicTypeAssetsJson, IPublicTypeMetadataTransducer, IPublicTypeComponentAction, IPublicTypeNpmInfo, IPublicTypeDisposable } from '../type';
+import { IPublicTypeAssetsJson, IPublicTypeMetadataTransducer, IPublicTypeComponentAction, IPublicTypeNpmInfo, IPublicTypeDisposable, IPublicTypeContextMenuAction, IPublicTypeContextMenuItem } from '../type';
 import { IPublicModelComponentMeta } from '../model';
 import { ComponentType } from 'react';
 
@@ -128,4 +128,22 @@ export interface IPublicApiMaterial {
    * @since v1.1.7
    */
   refreshComponentMetasMap(): void;
+
+  /**
+   * 添加右键菜单项
+   * @param action
+   */
+  addContextMenuOption(action: IPublicTypeContextMenuAction): void;
+
+  /**
+   * 删除特定右键菜单项
+   * @param name
+   */
+  removeContextMenuOption(name: string): void;
+
+  /**
+   * 调整右键菜单项布局
+   * @param actions
+   */
+  adjustContextMenuLayout(fn: (actions: IPublicTypeContextMenuItem[]) => IPublicTypeContextMenuItem[]): void;
 }

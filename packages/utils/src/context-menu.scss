@@ -1,0 +1,33 @@
+.context-menu-tree-wrap {
+  position: relative;
+  padding: 4px 10px 4px 24px;
+}
+
+.context-menu-tree-children {
+  margin-left: 8px;
+  line-height: 24px;
+}
+
+.context-menu-tree-bg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  cursor: pointer;
+}
+
+.context-menu-tree-bg-inner {
+  position: absolute;
+  height: 24px;
+  top: -24px;
+  width: 100%;
+
+  &:hover {
+    background-color: var(--color-block-background-light);
+  }
+}
+
+.context-menu-tree-selected-icon {
+  position: absolute;
+  left: 10px;
+  color: var(--color-icon-active);
+}
