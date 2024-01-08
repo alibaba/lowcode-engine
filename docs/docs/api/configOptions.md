@@ -185,6 +185,12 @@ config.set('enableCondition', false)
 
 `@type {boolean}` `@default {false}`
 
+#### enableContextMenu - 开启右键菜单
+
+`@type {boolean}` `@default {false}`
+
+是否开启右键菜单
+
 #### disableDetecting
 
 `@type {boolean}` `@default {false}`

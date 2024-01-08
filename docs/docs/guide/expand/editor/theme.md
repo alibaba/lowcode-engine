@@ -128,6 +128,7 @@ sidebar_position: 9
 - `--pane-title-height`: 面板标题高度
 - `--pane-title-font-size`: 面板标题字体大小
 - `--pane-title-padding`: 面板标题边距
+- `--context-menu-item-height`: 右键菜单项高度
 
 
 
