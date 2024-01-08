@@ -1,4 +1,5 @@
-import { IPublicTypeTitleContent } from '../type';
+import { ReactElement } from 'react';
+import { IPublicTypeContextMenuAction, IPublicTypeTitleContent } from '../type';
 import { Balloon, Breadcrumb, Button, Card, Checkbox, DatePicker, Dialog, Dropdown, Form, Icon, Input, Loading, Message, Overlay, Pagination, Radio, Search, Select, SplitButton, Step, Switch, Tab, Table, Tree, TreeSelect, Upload, Divider } from '@alifd/next';
 
 export interface IPublicApiCommonUI {
@@ -45,4 +46,9 @@ export interface IPublicApiCommonUI {
     match?: boolean;
     keywords?: string | null;
   }>;
+
+  get ContextMenu(): (props: {
+    menus: IPublicTypeContextMenuAction[];
+    children: React.ReactElement[];
+  }) => ReactElement[];
 }

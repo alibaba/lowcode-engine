@@ -6,3 +6,4 @@ export * from './project';
 export * from './builtin-simulator';
 export * from './plugin';
 export * from './types';
+export * from './context-menu-actions';

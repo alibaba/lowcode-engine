@@ -4,3 +4,4 @@ export * from './transform-stage';
 export * from './drag-object-type';
 export * from './prop-value-changed-type';
 export * from './plugin-register-level';
+export * from './context-menu';

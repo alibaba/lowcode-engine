@@ -29,6 +29,26 @@ CommonUI API 是一个专为低代码引擎设计的组件 UI 库，使用它开
 | className | className  | string (optional)           |        |
 | onClick   | 点击事件   | () => void (optional)       |        |
 
+### ContextMenu
+
+| 参数   | 说明                                               | 类型                               | 默认值 |
+|--------|----------------------------------------------------|------------------------------------|--------|
+| menus  | 定义上下文菜单的动作数组                           | IPublicTypeContextMenuAction[]     |        |
+| children | 组件的子元素                                      | React.ReactElement[]               |        |
+
+**IPublicTypeContextMenuAction Interface**
+
+| 参数       | 说明                                                         | 类型                                                                                                           | 默认值                                 |
+|------------|--------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| name       | 动作的唯一标识符<br>Unique identifier for the action         | string                                                                                                         |                                        |
+| title      | 显示的标题，可以是字符串或国际化数据<br>Display title, can be a string or internationalized data | string \| IPublicTypeI18nData (optional)                |                                        |
+| type       | 菜单项类型<br>Menu item type                                 | IPublicEnumContextMenuType (optional)                                                                          | IPublicEnumPContextMenuType.MENU_ITEM  |
+| action     | 点击时执行的动作，可选<br>Action to execute on click, optional | (nodes: IPublicModelNode[]) => void (optional)                                                                 |                                        |
+| items      | 子菜单项或生成子节点的函数，可选，仅支持两级<br>Sub-menu items or function to generate child node, optional | Omit<IPublicTypeContextMenuAction, 'items'>[] \| ((nodes: IPublicModelNode[]) => Omit<IPublicTypeContextMenuAction, 'items'>[]) (optional) |                                        |
+| condition  | 显示条件函数<br>Function to determine display condition      | (nodes: IPublicModelNode[]) => boolean (optional)                                                              |                                        |
+| disabled   | 禁用条件函数，可选<br>Function to determine disabled condition, optional | (nodes: IPublicModelNode[]) => boolean (optional)                                                              |                                        |
+
+
 ### Balloon
 详细文档: [Balloon Documentation](https://fusion.design/pc/component/balloon)
 

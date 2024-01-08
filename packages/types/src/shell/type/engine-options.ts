@@ -180,6 +180,12 @@ export interface IPublicTypeEngineOptions {
 
   /**
    * @default false
+   * 开启右键菜单能力
+   */
+  enableContextMenu?: boolean;
+
+  /**
+   * @default false
    * 隐藏设计器辅助层
    */
   hideComponentAction?: boolean;
