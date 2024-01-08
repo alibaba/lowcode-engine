@@ -22,16 +22,8 @@ const Tree = (props: {
   const { node } = props;
 
   if (!node) {
-    return null;
-  }
-
-  if (!node.parent) {
     return (
-      <div className="context-menu-tree-wrap">
-        <div className="context-menu-tree-children">
-          {props.children}
-        </div>
-      </div>
+      <div className="context-menu-tree-wrap">{ props.children }</div>
     );
   }
 

@@ -87,6 +87,9 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
       material.addContextMenuOption({
         name: 'copy',
         title: intl('Copy.1'),
+        condition(nodes) {
+          return nodes.length > 0;
+        },
         action(nodes) {
           if (!nodes || nodes.length < 1) {
             return;
@@ -159,6 +162,9 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
       material.addContextMenuOption({
         name: 'delete',
         title: intl('Delete'),
+        condition(nodes) {
+          return nodes.length > 0;
+        },
         action(nodes) {
           nodes.forEach((node) => {
             node.remove();
