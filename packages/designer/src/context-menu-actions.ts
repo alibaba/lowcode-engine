@@ -17,6 +17,8 @@ export interface IContextMenuActions {
   adjustMenuLayout: IPublicApiMaterial['adjustContextMenuLayout'];
 }
 
+let destroyFn: Function | undefined;
+
 export class ContextMenuActions implements IContextMenuActions {
   actions: IPublicTypeContextMenuAction[] = [];
 
@@ -55,7 +57,7 @@ export class ContextMenuActions implements IContextMenuActions {
     const { bounds } = designer.project.simulator?.viewport || { bounds: { left: 0, top: 0 } };
     const { left: simulatorLeft, top: simulatorTop } = bounds;
 
-    let destroyFn: Function | undefined;
+    destroyFn?.();
 
     const destroy = () => {
       destroyFn?.();
