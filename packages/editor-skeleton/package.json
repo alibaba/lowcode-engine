@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-editor-skeleton",
-  "version": "1.3.0-beta.3",
+  "version": "1.3.0-beta.4",
   "description": "alibaba lowcode editor skeleton",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -19,10 +19,10 @@
   ],
   "dependencies": {
     "@alifd/next": "^1.20.12",
-    "@alilc/lowcode-designer": "1.3.0-beta.3",
-    "@alilc/lowcode-editor-core": "1.3.0-beta.3",
-    "@alilc/lowcode-types": "1.3.0-beta.3",
-    "@alilc/lowcode-utils": "1.3.0-beta.3",
+    "@alilc/lowcode-designer": "1.3.0-beta.4",
+    "@alilc/lowcode-editor-core": "1.3.0-beta.4",
+    "@alilc/lowcode-types": "1.3.0-beta.4",
+    "@alilc/lowcode-utils": "1.3.0-beta.4",
     "classnames": "^2.2.6",
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
