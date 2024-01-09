@@ -49,6 +49,6 @@ export interface IPublicApiCommonUI {
 
   get ContextMenu(): (props: {
     menus: IPublicTypeContextMenuAction[];
-    children: React.ReactElement[];
-  }) => ReactElement[];
+    children: React.ReactElement[] | React.ReactElement;
+  }) => ReactElement;
 }

@@ -6,10 +6,12 @@ import React from 'react';
 
 export function ContextMenu({ children, menus }: {
   menus: IPublicTypeContextMenuAction[];
-  children: React.ReactElement[];
-}): React.ReactElement<any, string | React.JSXElementConstructor<any>>[] {
+  children: React.ReactElement[] | React.ReactElement;
+}): React.ReactElement<any, string | React.JSXElementConstructor<any>> {
   if (!engineConfig.get('enableContextMenu')) {
-    return children;
+    return (
+      <>{ children }</>
+    );
   }
 
   const handleContextMenu = (event: React.MouseEvent) => {
@@ -25,6 +27,10 @@ export function ContextMenu({ children, menus }: {
     const children: React.ReactNode[] = parseContextMenuAsReactNode(parseContextMenuProperties(menus, {
       destroy,
     }));
+
+    if (!children?.length) {
+      return;
+    }
 
     const menuInstance = Menu.create({
       target: event.target,
@@ -42,5 +48,7 @@ export function ContextMenu({ children, menus }: {
       { onContextMenu: handleContextMenu },
     ));
 
-  return childrenWithContextMenu;
+  return (
+    <>{childrenWithContextMenu}</>
+  );
 }

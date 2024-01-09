@@ -1,6 +1,6 @@
 import { IPublicTypeContextMenuAction, IPublicEnumContextMenuType, IPublicTypeContextMenuItem, IPublicApiMaterial } from '@alilc/lowcode-types';
 import { IDesigner, INode } from './designer';
-import { parseContextMenuAsReactNode, parseContextMenuProperties } from '@alilc/lowcode-utils';
+import { parseContextMenuAsReactNode, parseContextMenuProperties, uniqueId } from '@alilc/lowcode-utils';
 import { Menu } from '@alifd/next';
 import { engineConfig } from '@alilc/lowcode-editor-core';
 import './context-menu-actions.scss';
@@ -17,19 +17,16 @@ export interface IContextMenuActions {
   adjustMenuLayout: IPublicApiMaterial['adjustContextMenuLayout'];
 }
 
-let destroyFn: Function | undefined;
+let adjustMenuLayoutFn: Function = (actions: IPublicTypeContextMenuAction[]) => actions;
 
-export class ContextMenuActions implements IContextMenuActions {
-  actions: IPublicTypeContextMenuAction[] = [];
-
-  designer: IDesigner;
+export class GlobalContextMenuActions {
+  enableContextMenu: boolean;
 
   dispose: Function[];
 
-  enableContextMenu: boolean;
+  contextMenuActionsMap: Map<string, ContextMenuActions> = new Map();
 
-  constructor(designer: IDesigner) {
-    this.designer = designer;
+  constructor() {
     this.dispose = [];
 
     engineConfig.onGot('enableContextMenu', (enable) => {
@@ -45,6 +42,106 @@ export class ContextMenuActions implements IContextMenuActions {
   }
 
   handleContextMenu = (
+    event: MouseEvent,
+  ) => {
+    event.stopPropagation();
+    event.preventDefault();
+
+    const actions: IPublicTypeContextMenuAction[] = [];
+    this.contextMenuActionsMap.forEach((contextMenu) => {
+      actions.push(...contextMenu.actions);
+    });
+
+    let destroyFn: Function | undefined;
+
+    const destroy = () => {
+      destroyFn?.();
+    };
+
+    const menus: IPublicTypeContextMenuItem[] = parseContextMenuProperties(actions, {
+      nodes: [],
+      destroy,
+      event,
+    });
+
+    if (!menus.length) {
+      return;
+    }
+
+    const layoutMenu = adjustMenuLayoutFn(menus);
+
+    const menuNode = parseContextMenuAsReactNode(layoutMenu, {
+      destroy,
+      nodes: [],
+    });
+
+    const target = event.target;
+
+    const { top, left } = target?.getBoundingClientRect();
+
+    const menuInstance = Menu.create({
+      target: event.target,
+      offset: [event.clientX - left, event.clientY - top],
+      children: menuNode,
+      className: 'engine-context-menu',
+    });
+
+    destroyFn = (menuInstance as any).destroy;
+  };
+
+  initEvent() {
+    this.dispose.push(
+      (() => {
+        const handleContextMenu = (e: MouseEvent) => {
+          this.handleContextMenu(e);
+        };
+
+        document.addEventListener('contextmenu', handleContextMenu);
+
+        return () => {
+          document.removeEventListener('contextmenu', handleContextMenu);
+        };
+      })(),
+    );
+  }
+
+  registerContextMenuActions(contextMenu: ContextMenuActions) {
+    this.contextMenuActionsMap.set(contextMenu.id, contextMenu);
+  }
+}
+
+const globalContextMenuActions = new GlobalContextMenuActions();
+
+export class ContextMenuActions implements IContextMenuActions {
+  actions: IPublicTypeContextMenuAction[] = [];
+
+  designer: IDesigner;
+
+  dispose: Function[];
+
+  enableContextMenu: boolean;
+
+  id: string = uniqueId('contextMenu');;
+
+  constructor(designer: IDesigner) {
+    this.designer = designer;
+    this.dispose = [];
+
+    engineConfig.onGot('enableContextMenu', (enable) => {
+      if (this.enableContextMenu === enable) {
+        return;
+      }
+      this.enableContextMenu = enable;
+      this.dispose.forEach(d => d());
+      if (enable) {
+        this.initEvent();
+      }
+    });
+
+    globalContextMenuActions.registerContextMenuActions(this);
+  }
+
+  handleContextMenu = (
     nodes: INode[],
     event: MouseEvent,
   ) => {
@@ -57,7 +154,7 @@ export class ContextMenuActions implements IContextMenuActions {
     const { bounds } = designer.project.simulator?.viewport || { bounds: { left: 0, top: 0 } };
     const { left: simulatorLeft, top: simulatorTop } = bounds;
 
-    destroyFn?.();
+    let destroyFn: Function | undefined;
 
     const destroy = () => {
       destroyFn?.();
@@ -66,13 +163,14 @@ export class ContextMenuActions implements IContextMenuActions {
     const menus: IPublicTypeContextMenuItem[] = parseContextMenuProperties(actions, {
       nodes: nodes.map(d => designer.shellModelFactory.createNode(d)!),
       destroy,
+      event,
     });
 
     if (!menus.length) {
       return;
     }
 
-    const layoutMenu = designer.contextMenuActions.adjustMenuLayoutFn(menus);
+    const layoutMenu = adjustMenuLayoutFn(menus);
 
     const menuNode = parseContextMenuAsReactNode(layoutMenu, {
       destroy,
@@ -111,21 +209,8 @@ export class ContextMenuActions implements IContextMenuActions {
         const nodes = designer.currentSelection.getNodes();
         this.handleContextMenu(nodes, originalEvent);
       }),
-      (() => {
-        const handleContextMenu = (e: MouseEvent) => {
-          this.handleContextMenu([], e);
-        };
-
-        document.addEventListener('contextmenu', handleContextMenu);
-
-        return () => {
-          document.removeEventListener('contextmenu', handleContextMenu);
-        };
-      })(),
     );
   }
-
-  adjustMenuLayoutFn: (actions: IPublicTypeContextMenuItem[]) => IPublicTypeContextMenuItem[] = (actions) => actions;
 
   addMenuAction(action: IPublicTypeContextMenuAction) {
     this.actions.push({
@@ -142,6 +227,6 @@ export class ContextMenuActions implements IContextMenuActions {
   }
 
   adjustMenuLayout(fn: (actions: IPublicTypeContextMenuItem[]) => IPublicTypeContextMenuItem[]) {
-    this.adjustMenuLayoutFn = fn;
+    adjustMenuLayoutFn = fn;
   }
 }

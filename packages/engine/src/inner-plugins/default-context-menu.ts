@@ -70,7 +70,7 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
 
       material.addContextMenuOption({
         name: 'copyAndPaste',
-        title: intl('Copy'),
+        title: intl('CopyAndPaste'),
         condition: (nodes) => {
           return nodes.length === 1;
         },
@@ -86,7 +86,7 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
 
       material.addContextMenuOption({
         name: 'copy',
-        title: intl('Copy.1'),
+        title: intl('Copy'),
         condition(nodes) {
           return nodes.length > 0;
         },

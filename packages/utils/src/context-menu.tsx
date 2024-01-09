@@ -89,42 +89,61 @@ export function parseContextMenuAsReactNode(menus: IPublicTypeContextMenuItem[],
   return children;
 }
 
+let destroyFn: Function | undefined;
 export function parseContextMenuProperties(menus: (IPublicTypeContextMenuAction | Omit<IPublicTypeContextMenuAction, 'items'>)[], options: {
   nodes?: IPublicModelNode[] | null;
   destroy?: Function;
+  event?: MouseEvent;
 }, level = 1): IPublicTypeContextMenuItem[] {
+  destroyFn?.();
+  destroyFn = options.destroy;
+
   const { nodes, destroy } = options;
   if (level > MAX_LEVEL) {
     logger.warn('context menu level is too deep, please check your context menu config');
     return [];
   }
 
-  return menus.filter(menu => !menu.condition || (menu.condition && menu.condition(nodes || []))).map((menu) => {
-    const {
-      name,
-      title,
-      type = IPublicEnumContextMenuType.MENU_ITEM,
-    } = menu;
+  return menus
+    .filter(menu => !menu.condition || (menu.condition && menu.condition(nodes || [])))
+    .map((menu) => {
+      const {
+        name,
+        title,
+        type = IPublicEnumContextMenuType.MENU_ITEM,
+      } = menu;
 
-    const result: IPublicTypeContextMenuItem = {
-      name,
-      title,
-      type,
-      action: () => {
-        destroy?.();
-        menu.action?.(nodes || []);
-      },
-      disabled: menu.disabled && menu.disabled(nodes || []) || false,
-    };
+      const result: IPublicTypeContextMenuItem = {
+        name,
+        title,
+        type,
+        action: () => {
+          destroy?.();
+          menu.action?.(nodes || [], options.event);
+        },
+        disabled: menu.disabled && menu.disabled(nodes || []) || false,
+      };
 
-    if ('items' in menu && menu.items) {
-      result.items = parseContextMenuProperties(
-        typeof menu.items === 'function' ? menu.items(nodes || []) : menu.items,
-        options,
-        level + 1,
-      );
-    }
+      if ('items' in menu && menu.items) {
+        result.items = parseContextMenuProperties(
+          typeof menu.items === 'function' ? menu.items(nodes || []) : menu.items,
+          options,
+          level + 1,
+        );
+      }
 
-    return result;
-  });
+      return result;
+    })
+    .reduce((menus: IPublicTypeContextMenuItem[], currentMenu: IPublicTypeContextMenuItem) => {
+      if (!currentMenu.name) {
+        return menus.concat([currentMenu]);
+      }
+
+      const index = menus.find(item => item.name === currentMenu.name);
+      if (!index) {
+        return menus.concat([currentMenu]);
+      } else {
+        return menus;
+      }
+    }, []);
 }
