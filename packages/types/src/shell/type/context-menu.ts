@@ -26,7 +26,7 @@ export interface IPublicTypeContextMenuAction {
    * 菜单项类型
    * Menu item type
    * @see IPublicEnumContextMenuType
-   * @default IPublicEnumPContextMenuType.MENU_ITEM
+   * @default IPublicEnumContextMenuType.MENU_ITEM
    */
   type?: IPublicEnumContextMenuType;
 
@@ -34,7 +34,7 @@ export interface IPublicTypeContextMenuAction {
    * 点击时执行的动作，可选
    * Action to execute on click, optional
    */
-  action?: (nodes: IPublicModelNode[]) => void;
+  action?: (nodes: IPublicModelNode[], event?: MouseEvent) => void;
 
   /**
    * 子菜单项或生成子节点的函数，可选，仅支持两级
