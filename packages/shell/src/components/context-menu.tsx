@@ -1,5 +1,4 @@
-import { Menu } from '@alifd/next';
-import { parseContextMenuAsReactNode, parseContextMenuProperties } from '@alilc/lowcode-utils';
+import { createContextMenu, parseContextMenuAsReactNode, parseContextMenuProperties } from '@alilc/lowcode-utils';
 import { engineConfig } from '@alilc/lowcode-editor-core';
 import { IPublicTypeContextMenuAction } from '@alilc/lowcode-types';
 import React from 'react';
@@ -18,8 +17,6 @@ export function ContextMenu({ children, menus }: {
     event.preventDefault();
     event.stopPropagation();
 
-    const target = event.target;
-    const { top, left } = target?.getBoundingClientRect();
     let destroyFn: Function | undefined;
     const destroy = () => {
       destroyFn?.();
@@ -32,13 +29,9 @@ export function ContextMenu({ children, menus }: {
       return;
     }
 
-    const menuInstance = Menu.create({
-      target: event.target,
-      offset: [event.clientX - left, event.clientY - top],
-      children,
+    destroyFn = createContextMenu(children, {
+      event,
     });
-
-    destroyFn = (menuInstance as any).destroy;
   };
 
   // 克隆 children 并添加 onContextMenu 事件处理器

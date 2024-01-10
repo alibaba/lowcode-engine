@@ -1,18 +1,30 @@
 import {
   IPublicEnumContextMenuType,
+  IPublicEnumDragObjectType,
   IPublicEnumTransformStage,
   IPublicModelNode,
   IPublicModelPluginContext,
+  IPublicTypeDragNodeDataObject,
+  IPublicTypeI18nData,
   IPublicTypeNodeSchema,
 } from '@alilc/lowcode-types';
-import { isProjectSchema } from '@alilc/lowcode-utils';
+import { isI18nData, isProjectSchema } from '@alilc/lowcode-utils';
 import { Notification } from '@alifd/next';
-import { intl } from '../locale';
+import { intl, getLocale } from '../locale';
 
 function getNodesSchema(nodes: IPublicModelNode[]) {
   const componentsTree = nodes.map((node) => node?.exportSchema(IPublicEnumTransformStage.Clone));
   const data = { type: 'nodeSchema', componentsMap: {}, componentsTree };
   return data;
+}
+
+function getIntlStr(data: string | IPublicTypeI18nData) {
+  if (!isI18nData(data)) {
+    return data;
+  }
+
+  const locale = getLocale();
+  return data[locale] || data['zh-CN'] || data['zh_CN'] || data['en-US'] || data['en_US'] || '';
 }
 
 async function getClipboardText(): Promise<IPublicTypeNodeSchema[]> {
@@ -71,12 +83,18 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
       material.addContextMenuOption({
         name: 'copyAndPaste',
         title: intl('CopyAndPaste'),
+        disabled: (nodes) => {
+          return nodes?.filter((node) => !node?.canPerformAction('copy')).length > 0;
+        },
         condition: (nodes) => {
           return nodes.length === 1;
         },
         action(nodes) {
           const node = nodes[0];
           const { document: doc, parent, index } = node;
+          const data = getNodesSchema(nodes);
+          clipboard.setData(data);
+
           if (parent) {
             const newNode = doc?.insertNode(parent, node, (index ?? 0) + 1, true);
             newNode?.select();
@@ -87,6 +105,9 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
       material.addContextMenuOption({
         name: 'copy',
         title: intl('Copy'),
+        disabled: (nodes) => {
+          return nodes?.filter((node) => !node?.canPerformAction('copy')).length > 0;
+        },
         condition(nodes) {
           return nodes.length > 0;
         },
@@ -101,7 +122,7 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
       });
 
       material.addContextMenuOption({
-        name: 'zhantieToBottom',
+        name: 'pasteToBottom',
         title: intl('PasteToTheBottom'),
         condition: (nodes) => {
           return nodes.length === 1;
@@ -116,10 +137,30 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
 
           try {
             const nodeSchema = await getClipboardText();
+            if (nodeSchema.length === 0) {
+              return;
+            }
             if (parent) {
-              nodeSchema.forEach((schema, schemaIndex) => {
-                doc?.insertNode(parent, schema, (index ?? 0) + 1 + schemaIndex, true);
+              let canAddNodes = nodeSchema.filter((nodeSchema: IPublicTypeNodeSchema) => {
+                const dragNodeObject: IPublicTypeDragNodeDataObject = {
+                  type: IPublicEnumDragObjectType.NodeData,
+                  data: nodeSchema,
+                };
+                return doc?.checkNesting(parent, dragNodeObject);
               });
+              if (canAddNodes.length === 0) {
+                Notification.open({
+                  content: `${nodeSchema.map(d => getIntlStr(d.title || d.componentName)).join(',')}等组件无法放置到${getIntlStr(parent.title || parent.componentName as any)}内`,
+                  type: 'error',
+                });
+                return;
+              }
+              const nodes: IPublicModelNode[] = [];
+              canAddNodes.forEach((schema, schemaIndex) => {
+                const node = doc?.insertNode(parent, schema, (index ?? 0) + 1 + schemaIndex, true);
+                node && nodes.push(node);
+              });
+              doc?.selection.selectAll(nodes.map((node) => node?.id));
             }
           } catch (error) {
             console.error(error);
@@ -128,7 +169,7 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
       });
 
       material.addContextMenuOption({
-        name: 'zhantieToInner',
+        name: 'pasteToInner',
         title: intl('PasteToTheInside'),
         condition: (nodes) => {
           return nodes.length === 1;
@@ -140,19 +181,35 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
         },
         async action(nodes) {
           const node = nodes[0];
-          const { document: doc, parent } = node;
+          const { document: doc } = node;
 
           try {
             const nodeSchema = await getClipboardText();
-            if (parent) {
-              const index = node.children?.size || 0;
-
-              if (parent) {
-                nodeSchema.forEach((schema, schemaIndex) => {
-                  doc?.insertNode(node, schema, (index ?? 0) + 1 + schemaIndex, true);
-                });
-              }
+            const index = node.children?.size || 0;
+            if (nodeSchema.length === 0) {
+              return;
             }
+            let canAddNodes = nodeSchema.filter((nodeSchema: IPublicTypeNodeSchema) => {
+              const dragNodeObject: IPublicTypeDragNodeDataObject = {
+                type: IPublicEnumDragObjectType.NodeData,
+                data: nodeSchema,
+              };
+              return doc?.checkNesting(node, dragNodeObject);
+            });
+            if (canAddNodes.length === 0) {
+              Notification.open({
+                content: `${nodeSchema.map(d => getIntlStr(d.title || d.componentName)).join(',')}等组件无法放置到${getIntlStr(node.title || node.componentName as any)}内`,
+                type: 'error',
+              });
+              return;
+            }
+
+            const nodes: IPublicModelNode[] = [];
+            nodeSchema.forEach((schema, schemaIndex) => {
+              const newNode = doc?.insertNode(node, schema, (index ?? 0) + 1 + schemaIndex, true);
+              newNode && nodes.push(newNode);
+            });
+            doc?.selection.selectAll(nodes.map((node) => node?.id));
           } catch (error) {
             console.error(error);
           }
@@ -162,6 +219,9 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
       material.addContextMenuOption({
         name: 'delete',
         title: intl('Delete'),
+        disabled(nodes) {
+          return nodes?.filter((node) => !node?.canPerformAction('remove')).length > 0;
+        },
         condition(nodes) {
           return nodes.length > 0;
         },
