@@ -237,6 +237,43 @@ material.modifyBuiltinComponentAction('remove', (action) => {
 });
 ```
 
+### 右键菜单项
+#### addContextMenuOption
+
+添加右键菜单项
+
+```typescript
+/**
+ * 添加右键菜单项
+ * @param action
+ */
+addContextMenuOption(action: IPublicTypeContextMenuAction): void;
+```
+
+#### removeContextMenuOption
+
+删除特定右键菜单项
+
+```typescript
+/**
+ * 删除特定右键菜单项
+ * @param name
+ */
+removeContextMenuOption(name: string): void;
+```
+
+#### adjustContextMenuLayout
+
+调整右键菜单项布局，每次调用都会覆盖之前注册的调整函数，只有最后注册的函数会被应用。
+
+```typescript
+/**
+ * 调整右键菜单项布局
+ * @param actions
+ */
+adjustContextMenuLayout(fn: (actions: IPublicTypeContextMenuItem[]) => IPublicTypeContextMenuItem[]): void;
+```
+
 ### 物料元数据
 #### getComponentMeta
 获取指定名称的物料元数据

@@ -53,6 +53,8 @@ const Tree = (props: {
   );
 };
 
+let destroyFn: Function | undefined;
+
 export function parseContextMenuAsReactNode(menus: IPublicTypeContextMenuItem[], options: {
   nodes?: IPublicModelNode[] | null;
   destroy?: Function;
@@ -89,14 +91,12 @@ export function parseContextMenuAsReactNode(menus: IPublicTypeContextMenuItem[],
   return children;
 }
 
-let destroyFn: Function | undefined;
 export function parseContextMenuProperties(menus: (IPublicTypeContextMenuAction | Omit<IPublicTypeContextMenuAction, 'items'>)[], options: {
   nodes?: IPublicModelNode[] | null;
   destroy?: Function;
   event?: MouseEvent;
 }, level = 1): IPublicTypeContextMenuItem[] {
   destroyFn?.();
-  destroyFn = options.destroy;
 
   const { nodes, destroy } = options;
   if (level > MAX_LEVEL) {
@@ -146,4 +146,55 @@ export function parseContextMenuProperties(menus: (IPublicTypeContextMenuAction 
         return menus;
       }
     }, []);
+}
+
+let cachedMenuItemHeight: string | undefined;
+
+function getMenuItemHeight() {
+  if (cachedMenuItemHeight) {
+    return cachedMenuItemHeight;
+  }
+  const root = document.documentElement;
+  const styles = getComputedStyle(root);
+  // Access the value of the CSS variable
+  const menuItemHeight = styles.getPropertyValue('--context-menu-item-height').trim();
+  cachedMenuItemHeight = menuItemHeight;
+
+  return menuItemHeight;
+}
+
+export function createContextMenu(children: React.ReactNode[], {
+  event,
+  offset = [0, 0],
+}: {
+  event: MouseEvent | React.MouseEvent;
+  offset?: [number, number];
+}) {
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+  const dividerCount = React.Children.count(children.filter(child => React.isValidElement(child) && child.type === Divider));
+  const popupItemCount = React.Children.count(children.filter(child => React.isValidElement(child) && (child.type === PopupItem || child.type === Item)));
+  const menuHeight = popupItemCount * parseInt(getMenuItemHeight(), 10) + dividerCount * 8 + 16;
+  const menuWidthLimit = 200;
+  const target = event.target;
+  const { top, left } = (target as any)?.getBoundingClientRect();
+  let x = event.clientX - left + offset[0];
+  let y = event.clientY - top + offset[1];
+  if (x + menuWidthLimit + left > viewportWidth) {
+    x = x - menuWidthLimit;
+  }
+  if (y + menuHeight + top > viewportHeight) {
+    y = y - menuHeight;
+  }
+
+  const menuInstance = Menu.create({
+    target,
+    offset: [x, y, 0, 0],
+    children,
+    className: 'engine-context-menu',
+  });
+
+  destroyFn = (menuInstance as any).destroy;
+
+  return destroyFn;
 }
