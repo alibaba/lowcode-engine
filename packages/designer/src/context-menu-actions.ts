@@ -1,6 +1,6 @@
 import { IPublicTypeContextMenuAction, IPublicEnumContextMenuType, IPublicTypeContextMenuItem, IPublicApiMaterial } from '@alilc/lowcode-types';
 import { IDesigner, INode } from './designer';
-import { parseContextMenuAsReactNode, parseContextMenuProperties, uniqueId } from '@alilc/lowcode-utils';
+import { createContextMenu, parseContextMenuAsReactNode, parseContextMenuProperties, uniqueId } from '@alilc/lowcode-utils';
 import { Menu } from '@alifd/next';
 import { engineConfig } from '@alilc/lowcode-editor-core';
 import './context-menu-actions.scss';
@@ -178,18 +178,10 @@ export class ContextMenuActions implements IContextMenuActions {
       designer,
     });
 
-    const target = event.target;
-
-    const { top, left } = target?.getBoundingClientRect();
-
-    const menuInstance = Menu.create({
-      target: event.target,
-      offset: [event.clientX - left + simulatorLeft, event.clientY - top + simulatorTop],
-      children: menuNode,
-      className: 'engine-context-menu',
+    destroyFn = createContextMenu(menuNode, {
+      event,
+      offset: [simulatorLeft, simulatorTop],
     });
-
-    destroyFn = (menuInstance as any).destroy;
   };
 
   initEvent() {
