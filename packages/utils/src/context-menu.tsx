@@ -1,7 +1,7 @@
 import { Menu, Icon } from '@alifd/next';
-import { IDesigner } from '@alilc/lowcode-designer';
-import { IPublicEnumContextMenuType, IPublicModelNode, IPublicTypeContextMenuAction, IPublicTypeContextMenuItem } from '@alilc/lowcode-types';
+import { IPublicEnumContextMenuType, IPublicModelNode, IPublicModelPluginContext, IPublicTypeContextMenuAction, IPublicTypeContextMenuItem } from '@alilc/lowcode-types';
 import { Logger } from '@alilc/lowcode-utils';
+import classNames from 'classnames';
 import React from 'react';
 import './context-menu.scss';
 
@@ -10,43 +10,51 @@ const { Item, Divider, PopupItem } = Menu;
 
 const MAX_LEVEL = 2;
 
+interface IOptions {
+  nodes?: IPublicModelNode[] | null;
+  destroy?: Function;
+  pluginContext: IPublicModelPluginContext;
+}
+
 const Tree = (props: {
-  node?: IPublicModelNode;
+  node?: IPublicModelNode | null;
   children?: React.ReactNode;
-  options: {
-    nodes?: IPublicModelNode[] | null;
-    destroy?: Function;
-    designer?: IDesigner;
-  };
+  options: IOptions;
 }) => {
   const { node } = props;
 
   if (!node) {
     return (
-      <div className="context-menu-tree-wrap">{ props.children }</div>
+      <div className="engine-context-menu-tree-wrap">{ props.children }</div>
     );
   }
 
-  const commonUI = props.options.designer?.editor?.get('commonUI');
-
-  const Title = commonUI?.Title;
+  const { common } = props.options.pluginContext || {};
+  const { intl } = common?.utils || {};
+  const indent = node.zLevel * 8 + 32;
+  const style = {
+    paddingLeft: indent,
+    marginLeft: -indent,
+    marginRight: -10,
+    paddingRight: 10,
+  };
 
   return (
     <Tree {...props} node={node.parent} >
-      {props.options.nodes?.[0].id === node.id ? (<Icon className="context-menu-tree-selected-icon" size="small" type="success" />) : null}
-      <Title title={node.title} />
       <div
-        className="context-menu-tree-children"
+        className="engine-context-menu-title"
+        onClick={() => {
+          props.options.destroy?.();
+          node.select();
+        }}
+        style={style}
       >
-        <div
-          className="context-menu-tree-bg"
-          onClick={() => {
-            props.options.destroy?.();
-            node.select();
-          }}
-        >
-          <div className="context-menu-tree-bg-inner" />
-        </div>
+        {props.options.nodes?.[0].id === node.id ? (<Icon className="engine-context-menu-tree-selecte-icon" size="small" type="success" />) : null}
+        {intl(node.title)}
+      </div>
+      <div
+        className="engine-context-menu-tree-children"
+      >
         { props.children }
       </div>
     </Tree>
@@ -55,11 +63,10 @@ const Tree = (props: {
 
 let destroyFn: Function | undefined;
 
-export function parseContextMenuAsReactNode(menus: IPublicTypeContextMenuItem[], options: {
-  nodes?: IPublicModelNode[] | null;
-  destroy?: Function;
-  designer?: IDesigner;
-} = {}): React.ReactNode[] {
+export function parseContextMenuAsReactNode(menus: IPublicTypeContextMenuItem[], options: IOptions): React.ReactNode[] {
+  const { common } = options.pluginContext || {};
+  const { intl = (title: any) => title } = common?.utils || {};
+
   const children: React.ReactNode[] = [];
   menus.forEach((menu, index) => {
     if (menu.type === IPublicEnumContextMenuType.SEPARATOR) {
@@ -70,14 +77,33 @@ export function parseContextMenuAsReactNode(menus: IPublicTypeContextMenuItem[],
     if (menu.type === IPublicEnumContextMenuType.MENU_ITEM) {
       if (menu.items && menu.items.length) {
         children.push((
-          <PopupItem key={menu.name} label={menu.title}>
+          <PopupItem
+            className={classNames('engine-context-menu-item', {
+              disbale: menu.disabled,
+            })}
+            key={menu.name}
+            label={<div className="engine-context-menu-text">{intl(menu.title)}</div>}
+          >
             <Menu className="next-context engine-context-menu">
               { parseContextMenuAsReactNode(menu.items, options) }
             </Menu>
           </PopupItem>
         ));
       } else {
-        children.push((<Item disabled={menu.disabled} onClick={menu.action} key={menu.name}>{menu.title}</Item>));
+        children.push((
+          <Item
+            className={classNames('engine-context-menu-item', {
+              disbale: menu.disabled,
+            })}
+            disabled={menu.disabled}
+            onClick={menu.action}
+            key={menu.name}
+          >
+            <div className="engine-context-menu-text">
+              {intl(menu.title)}
+            </div>
+          </Item>
+        ));
       }
     }
 
@@ -91,9 +117,7 @@ export function parseContextMenuAsReactNode(menus: IPublicTypeContextMenuItem[],
   return children;
 }
 
-export function parseContextMenuProperties(menus: (IPublicTypeContextMenuAction | Omit<IPublicTypeContextMenuAction, 'items'>)[], options: {
-  nodes?: IPublicModelNode[] | null;
-  destroy?: Function;
+export function parseContextMenuProperties(menus: (IPublicTypeContextMenuAction | Omit<IPublicTypeContextMenuAction, 'items'>)[], options: IOptions & {
   event?: MouseEvent;
 }, level = 1): IPublicTypeContextMenuItem[] {
   destroyFn?.();
@@ -156,7 +180,6 @@ function getMenuItemHeight() {
   }
   const root = document.documentElement;
   const styles = getComputedStyle(root);
-  // Access the value of the CSS variable
   const menuItemHeight = styles.getPropertyValue('--context-menu-item-height').trim();
   cachedMenuItemHeight = menuItemHeight;
 

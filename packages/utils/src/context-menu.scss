@@ -1,32 +1,42 @@
-.context-menu-tree-wrap {
+.engine-context-menu-tree-wrap {
   position: relative;
   padding: 4px 10px 4px 32px;
 }
 
-.context-menu-tree-children {
+.engine-context-menu-tree-children {
   margin-left: 8px;
   line-height: 24px;
 }
 
-.context-menu-tree-bg {
-  position: absolute;
-  left: 0;
-  right: 0;
-  cursor: pointer;
-}
-
-.context-menu-tree-bg-inner {
-  position: absolute;
-  height: 24px;
-  top: -24px;
-  width: 100%;
+.engine-context-menu-item {
+  .engine-context-menu-text {
+    color: var(--color-text);
+  }
 
   &:hover {
-    background-color: var(--color-block-background-light);
+    .engine-context-menu-text {
+      color: var(--color-title);
+    }
+  }
+
+  &.disbale {
+    .engine-context-menu-text {
+      color: var(--color-text-disabled);
+    }
   }
 }
 
-.context-menu-tree-selected-icon {
+.engine-context-menu-title {
+  color: var(--color-text);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-block-background-light);
+    color: var(--color-title);
+  }
+}
+
+.engine-context-menu-tree-selecte-icon {
   position: absolute;
   left: 10px;
   color: var(--color-icon-active);
