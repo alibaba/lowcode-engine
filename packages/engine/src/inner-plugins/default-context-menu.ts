@@ -5,26 +5,16 @@ import {
   IPublicModelNode,
   IPublicModelPluginContext,
   IPublicTypeDragNodeDataObject,
-  IPublicTypeI18nData,
   IPublicTypeNodeSchema,
 } from '@alilc/lowcode-types';
-import { isI18nData, isProjectSchema } from '@alilc/lowcode-utils';
+import { isProjectSchema } from '@alilc/lowcode-utils';
 import { Notification } from '@alifd/next';
-import { intl, getLocale } from '../locale';
+import { intl } from '../locale';
 
 function getNodesSchema(nodes: IPublicModelNode[]) {
   const componentsTree = nodes.map((node) => node?.exportSchema(IPublicEnumTransformStage.Clone));
   const data = { type: 'nodeSchema', componentsMap: {}, componentsTree };
   return data;
-}
-
-function getIntlStr(data: string | IPublicTypeI18nData) {
-  if (!isI18nData(data)) {
-    return data;
-  }
-
-  const locale = getLocale();
-  return data[locale] || data['zh-CN'] || data['zh_CN'] || data['en-US'] || data['en_US'] || '';
 }
 
 async function getClipboardText(): Promise<IPublicTypeNodeSchema[]> {
@@ -61,8 +51,9 @@ async function getClipboardText(): Promise<IPublicTypeNodeSchema[]> {
 }
 
 export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
-  const { material, canvas } = ctx;
+  const { material, canvas, common } = ctx;
   const { clipboard } = canvas;
+  const { intl: utilsIntl } = common.utils;
 
   return {
     init() {
@@ -150,7 +141,7 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
               });
               if (canAddNodes.length === 0) {
                 Notification.open({
-                  content: `${nodeSchema.map(d => getIntlStr(d.title || d.componentName)).join(',')}等组件无法放置到${getIntlStr(parent.title || parent.componentName as any)}内`,
+                  content: `${nodeSchema.map(d => utilsIntl(d.title || d.componentName)).join(',')}等组件无法放置到${utilsIntl(parent.title || parent.componentName as any)}内`,
                   type: 'error',
                 });
                 return;
@@ -198,7 +189,7 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
             });
             if (canAddNodes.length === 0) {
               Notification.open({
-                content: `${nodeSchema.map(d => getIntlStr(d.title || d.componentName)).join(',')}等组件无法放置到${getIntlStr(node.title || node.componentName as any)}内`,
+                content: `${nodeSchema.map(d => utilsIntl(d.title || d.componentName)).join(',')}等组件无法放置到${utilsIntl(node.title || node.componentName as any)}内`,
                 type: 'error',
               });
               return;

@@ -48,8 +48,70 @@ CommonUI API 是一个专为低代码引擎设计的组件 UI 库，使用它开
 | condition  | 显示条件函数<br/>Function to determine display condition      | (nodes: IPublicModelNode[]) => boolean (optional)                                                              |                                        |
 | disabled   | 禁用条件函数，可选<br/>Function to determine disabled condition, optional | (nodes: IPublicModelNode[]) => boolean (optional)                                                              |                                        |
 
+**ContextMenu 示例**
+
+```typescript
+const App = () => {
+  const menuItems: IPublicTypeContextMenuAction[] = [
+    {
+      name: 'a',
+      title: '选项 1',
+      action: () => console.log('选项 1 被点击'),
+    },
+    {
+      name: 'b',
+      title: '选项 2',
+      action: () => console.log('选项 2 被点击'),
+    },
+  ];
+
+  const ContextMenu = ctx.commonUI.ContextMenu;
+
+  return (
+    <div>
+      <ContextMenu menus={menuItems}>
+        <div>右键点击这里</div>
+      </ContextMenu>
+    </div>
+  );
+};
+
+export default App;
+```
+
+**ContextMenu.create 示例**
+
+```typescript
+const App = () => {
+  const menuItems: IPublicTypeContextMenuAction[] = [
+    {
+      name: 'a',
+      title: '选项 1',
+      action: () => console.log('选项 1 被点击'),
+    },
+    {
+      name: 'b',
+      title: '选项 2',
+      action: () => console.log('选项 2 被点击'),
+    },
+  ];
+
+  const ContextMenu = ctx.commonUI.ContextMenu;
+
+  return (
+    <div>
+      <div onClick={(e) => {
+      	ContextMenu.create(menuItems, e);
+      }}>点击这里</div>
+    </div>
+  );
+};
+
+export default App;
+```
 
 ### Balloon
+
 详细文档： [Balloon Documentation](https://fusion.design/pc/component/balloon)
 
 ### Breadcrumb

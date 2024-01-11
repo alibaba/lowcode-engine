@@ -1,4 +1,4 @@
-import { IPublicTypeContextMenuAction, IPublicEnumContextMenuType, IPublicTypeContextMenuItem, IPublicApiMaterial } from '@alilc/lowcode-types';
+import { IPublicTypeContextMenuAction, IPublicEnumContextMenuType, IPublicTypeContextMenuItem, IPublicApiMaterial, IPublicModelPluginContext } from '@alilc/lowcode-types';
 import { IDesigner, INode } from './designer';
 import { createContextMenu, parseContextMenuAsReactNode, parseContextMenuProperties, uniqueId } from '@alilc/lowcode-utils';
 import { Menu } from '@alifd/next';
@@ -48,6 +48,7 @@ export class GlobalContextMenuActions {
     event.preventDefault();
 
     const actions: IPublicTypeContextMenuAction[] = [];
+    let contextMenu: ContextMenuActions = this.contextMenuActionsMap.values().next().value;
     this.contextMenuActionsMap.forEach((contextMenu) => {
       actions.push(...contextMenu.actions);
     });
@@ -57,11 +58,13 @@ export class GlobalContextMenuActions {
     const destroy = () => {
       destroyFn?.();
     };
+    const pluginContext: IPublicModelPluginContext = contextMenu.designer.editor.get('pluginContext') as IPublicModelPluginContext;
 
     const menus: IPublicTypeContextMenuItem[] = parseContextMenuProperties(actions, {
       nodes: [],
       destroy,
       event,
+      pluginContext,
     });
 
     if (!menus.length) {
@@ -73,6 +76,7 @@ export class GlobalContextMenuActions {
     const menuNode = parseContextMenuAsReactNode(layoutMenu, {
       destroy,
       nodes: [],
+      pluginContext,
     });
 
     const target = event.target;
@@ -160,10 +164,13 @@ export class ContextMenuActions implements IContextMenuActions {
       destroyFn?.();
     };
 
+    const pluginContext: IPublicModelPluginContext = this.designer.editor.get('pluginContext') as IPublicModelPluginContext;
+
     const menus: IPublicTypeContextMenuItem[] = parseContextMenuProperties(actions, {
       nodes: nodes.map(d => designer.shellModelFactory.createNode(d)!),
       destroy,
       event,
+      pluginContext,
     });
 
     if (!menus.length) {
@@ -175,7 +182,7 @@ export class ContextMenuActions implements IContextMenuActions {
     const menuNode = parseContextMenuAsReactNode(layoutMenu, {
       destroy,
       nodes: nodes.map(d => designer.shellModelFactory.createNode(d)!),
-      designer,
+      pluginContext,
     });
 
     destroyFn = createContextMenu(menuNode, {
