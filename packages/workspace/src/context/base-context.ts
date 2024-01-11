@@ -128,13 +128,12 @@ export class BasicContext implements IBasicContext {
     const logger = getLogger({ level: 'warn', bizName: 'common' });
     const skeleton = new Skeleton(innerSkeleton, 'any', true);
     const canvas = new Canvas(editor, true);
-    const commonUI = new CommonUI();
+    const commonUI = new CommonUI(editor);
     editor.set('setters', setters);
     editor.set('project', project);
     editor.set('material', material);
     editor.set('hotkey', hotkey);
     editor.set('innerHotkey', innerHotkey);
-    editor.set('commonUI' as any, commonUI);
     this.innerSetters = innerSetters;
     this.innerSkeleton = innerSkeleton;
     this.skeleton = skeleton;
@@ -175,6 +174,7 @@ export class BasicContext implements IBasicContext {
         }
         context.registerLevel = registerLevel;
         context.isPluginRegisteredInWorkspace = registerLevel === IPublicEnumPluginRegisterLevel.Workspace;
+        editor.set('pluginContext', context);
       },
     };
 

@@ -145,6 +145,22 @@ const { intl, getLocale, setLocale } = common.utils.createIntl({
 
 ```
 
+#### intl
+
+i18n 转换方法
+
+```typescript
+/**
+ * i18n 转换方法
+ */
+intl(data: IPublicTypeI18nData | string, params?: object): string;
+```
+
+##### 示例
+```
+const title = common.utils.intl(node.title)
+```
+
 ### skeletonCabin
 #### Workbench
 编辑器框架 View

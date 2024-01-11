@@ -115,12 +115,11 @@ const innerSetters = new InnerSetters();
 const setters = new Setters(innerSetters);
 
 const material = new Material(editor);
-const commonUI = new CommonUI();
+const commonUI = new CommonUI(editor);
 editor.set('project', project);
 editor.set('setters' as any, setters);
 editor.set('material', material);
 editor.set('innerHotkey', innerHotkey);
-editor.set('commonUI' as any, commonUI);
 const config = new Config(engineConfig);
 const event = new Event(commonEvent, { prefix: 'common' });
 const logger = new Logger({ level: 'warn', bizName: 'common' });
@@ -147,6 +146,7 @@ const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
     context.commonUI = commonUI;
     context.registerLevel = IPublicEnumPluginRegisterLevel.Default;
     context.isPluginRegisteredInWorkspace = false;
+    editor.set('pluginContext', context);
   },
 };
 

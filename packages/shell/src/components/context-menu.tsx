@@ -1,11 +1,12 @@
 import { createContextMenu, parseContextMenuAsReactNode, parseContextMenuProperties } from '@alilc/lowcode-utils';
 import { engineConfig } from '@alilc/lowcode-editor-core';
-import { IPublicTypeContextMenuAction } from '@alilc/lowcode-types';
+import { IPublicModelPluginContext, IPublicTypeContextMenuAction } from '@alilc/lowcode-types';
 import React from 'react';
 
-export function ContextMenu({ children, menus }: {
+export function ContextMenu({ children, menus, pluginContext }: {
   menus: IPublicTypeContextMenuAction[];
   children: React.ReactElement[] | React.ReactElement;
+  pluginContext: IPublicModelPluginContext;
 }): React.ReactElement<any, string | React.JSXElementConstructor<any>> {
   if (!engineConfig.get('enableContextMenu')) {
     return (
@@ -23,7 +24,10 @@ export function ContextMenu({ children, menus }: {
     };
     const children: React.ReactNode[] = parseContextMenuAsReactNode(parseContextMenuProperties(menus, {
       destroy,
-    }));
+      pluginContext,
+    }), {
+      pluginContext,
+    });
 
     if (!children?.length) {
       return;
@@ -45,3 +49,19 @@ export function ContextMenu({ children, menus }: {
     <>{childrenWithContextMenu}</>
   );
 }
+
+ContextMenu.create = (pluginContext: IPublicModelPluginContext, menus: IPublicTypeContextMenuAction[], event: MouseEvent) => {
+  const children: React.ReactNode[] = parseContextMenuAsReactNode(parseContextMenuProperties(menus, {
+    pluginContext,
+  }), {
+    pluginContext,
+  });
+
+  if (!children?.length) {
+    return;
+  }
+
+  return createContextMenu(children, {
+    event,
+  });
+};
