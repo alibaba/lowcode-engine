@@ -162,20 +162,34 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
     // supportVariableGlobally 只对标准组件生效，vc 需要单独配置
     const supportVariableGlobally = engineConfig.get('supportVariableGlobally', false) && isStandardComponent(componentMeta);
     const isUseVariableSetter = shouldUseVariableSetter(supportVariable, supportVariableGlobally);
-    const shouldAddVariableSetter = isUseVariableSetter && !setterProps.setters?.includes('VariableSetter');
-    const shouldAddResetSetter = isUseResetSetter && !setterProps.setters?.includes('ResetSetter');
-
-    if (shouldAddVariableSetter || shouldAddResetSetter) {
-      setterType = 'MixedSetter';
-      setterProps.setters = setterProps.setters || [];
-      setterProps.setters.push(setter);
-
+    const shouldAddVariableSetter = isUseVariableSetter && Array.isArray(setterProps.setters) && !setterProps.setters?.includes('VariableSetter');
+    const shouldAddResetSetter = isUseResetSetter && Array.isArray(setterProps.setters) && !setterProps.setters?.includes('ResetSetter');
+    if (!isUseResetSetter && !isUseVariableSetter) {
+      return {
+        setterProps,
+        initialValue,
+        setterType,
+      };
+    }
+    if (setterType === 'MixedSetter') {
       if (shouldAddVariableSetter) {
-        setterProps.setters.push('VariableSetter');
+        setterProps.setters?.push('VariableSetter');
       }
-
       if (shouldAddResetSetter) {
-        setterProps.setters.push('ResetSetter');
+        setterProps.setters?.push('ResetSetter');
+      }
+    } else {
+      setterType = 'MixedSetter';
+      setterProps = {
+        setters: [
+          setter,
+        ],
+      };
+      if (isUseVariableSetter) {
+        setterProps.setters?.push('VariableSetter');
+      }
+      if (isUseResetSetter) {
+        setterProps.setters?.push('ResetSetter');
       }
     }
     return {
