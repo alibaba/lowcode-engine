@@ -187,6 +187,12 @@ config.set('enableCondition', false)
 
 `@type {boolean}` `@default {false}`
 
+#### enableContextMenu - 开启右键菜单
+
+`@type {boolean}` `@default {false}`
+
+是否开启右键菜单
+
 #### disableDetecting
 
 `@type {boolean}` `@default {false}`
@@ -217,6 +223,12 @@ config.set('enableCondition', false)
 `@type {boolean}` `@default {false}`
 
 是否在只有一个 item 的时候隐藏设置 tabs
+
+#### hideComponentAction
+
+`@type {boolean}` `@default {false}`
+
+隐藏设计器辅助层
 
 #### thisRequiredInJSE
 

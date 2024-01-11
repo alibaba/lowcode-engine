@@ -1,0 +1,43 @@
+.engine-context-menu-tree-wrap {
+  position: relative;
+  padding: 4px 10px 4px 32px;
+}
+
+.engine-context-menu-tree-children {
+  margin-left: 8px;
+  line-height: 24px;
+}
+
+.engine-context-menu-item {
+  .engine-context-menu-text {
+    color: var(--color-text);
+  }
+
+  &:hover {
+    .engine-context-menu-text {
+      color: var(--color-title);
+    }
+  }
+
+  &.disbale {
+    .engine-context-menu-text {
+      color: var(--color-text-disabled);
+    }
+  }
+}
+
+.engine-context-menu-title {
+  color: var(--color-text);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-block-background-light);
+    color: var(--color-title);
+  }
+}
+
+.engine-context-menu-tree-selecte-icon {
+  position: absolute;
+  left: 10px;
+  color: var(--color-icon-active);
+}

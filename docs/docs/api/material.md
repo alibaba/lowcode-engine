@@ -237,7 +237,90 @@ material.modifyBuiltinComponentAction('remove', (action) => {
 });
 ```
 
+### 右键菜单项
+#### addContextMenuOption
+
+添加右键菜单项
+
+```typescript
+/**
+ * 添加右键菜单项
+ * @param action
+ */
+addContextMenuOption(action: IPublicTypeContextMenuAction): void;
+```
+
+示例
+
+```typescript
+import { IPublicEnumContextMenuType } from '@alilc/lowcode-types';
+
+material.addContextMenuOption({
+  name: 'parentItem',
+  title: 'Parent Item',
+  condition: (nodes) => true,
+  items: [
+    {
+      name: 'childItem1',
+      title: 'Child Item 1',
+      action: (nodes) => console.log('Child Item 1 clicked', nodes),
+      condition: (nodes) => true
+    },
+    // 分割线
+    {
+      type: IPublicEnumContextMenuType.SEPARATOR
+      name: 'separator.1'
+    }
+    // 更多子菜单项...
+  ]
+});
+
+```
+
+#### removeContextMenuOption
+
+删除特定右键菜单项
+
+```typescript
+/**
+ * 删除特定右键菜单项
+ * @param name
+ */
+removeContextMenuOption(name: string): void;
+```
+
+#### adjustContextMenuLayout
+
+调整右键菜单项布局，每次调用都会覆盖之前注册的调整函数，只有最后注册的函数会被应用。
+
+```typescript
+/**
+ * 调整右键菜单项布局
+ * @param actions
+ */
+adjustContextMenuLayout(fn: (actions: IPublicTypeContextMenuItem[]) => IPublicTypeContextMenuItem[]): void;
+```
+
+**示例**
+
+通过 adjustContextMenuLayout 补充分割线
+
+```typescript
+material.adjustContextMenuLayout((actions: IPublicTypeContextMenuAction) => {
+  const names = ['a', 'b'];
+  const newActions = [];
+  actions.forEach(d => {
+    newActions.push(d);
+    if (names.include(d.name)) {
+      newActions.push({ type: 'separator' })
+    }
+  });
+  return newActions
+})
+```
+
 ### 物料元数据
+
 #### getComponentMeta
 获取指定名称的物料元数据
 

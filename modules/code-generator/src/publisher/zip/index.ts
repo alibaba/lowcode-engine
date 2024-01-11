@@ -2,9 +2,9 @@ import { ResultDir } from '@alilc/lowcode-types';
 import { PublisherFactory, IPublisher, IPublisherFactoryParams, PublisherError } from '../../types';
 import { getErrorMessage } from '../../utils/errors';
 import { isNodeProcess, writeZipToDisk, generateProjectZip } from './utils';
+import { saveAs } from 'file-saver';
 
-// export type ZipBuffer = Buffer | Blob;
-export type ZipBuffer = Buffer;
+export type ZipBuffer = Buffer | Blob;
 
 declare type ZipPublisherResponse = string | ZipBuffer;
 
@@ -44,10 +44,16 @@ export const createZipPublisher: PublisherFactory<ZipFactoryParams, ZipPublisher
     try {
       const zipContent = await generateProjectZip(projectToPublish);
 
-      // If not output path is provided, zip is not written to disk
-      const projectOutputPath = options.outputPath || outputPath;
-      if (projectOutputPath && isNodeProcess()) {
-        await writeZipToDisk(projectOutputPath, zipContent, zipName);
+      if (isNodeProcess()) {
+        // If not output path is provided on the node side, zip is not written to disk
+        const projectOutputPath = options.outputPath || outputPath;
+        if (projectOutputPath) {
+          await writeZipToDisk(projectOutputPath, zipContent, zipName);
+        }
+      } else {
+        // the browser end does not require a path
+        // auto download zip files
+        saveAs(zipContent as Blob, `${zipName}.zip`);
       }
 
       return { success: true, payload: zipContent };

@@ -1,7 +1,7 @@
 import { Component, isValidElement, ReactNode } from 'react';
 import classNames from 'classnames';
 import { createIcon, isI18nData, isTitleConfig } from '@alilc/lowcode-utils';
-import { IPublicTypeTitleContent, IPublicTypeI18nData, IPublicTypeTitleConfig } from '@alilc/lowcode-types';
+import { IPublicTypeI18nData, IPublicTypeTitleConfig, IPublicTypeTitleProps } from '@alilc/lowcode-types';
 import { intl } from '../../intl';
 import { Tip } from '../tip';
 import './title.less';
@@ -36,13 +36,7 @@ import './title.less';
   return fragments;
 }
 
-export class Title extends Component<{
-  title: IPublicTypeTitleContent;
-  className?: string;
-  onClick?: () => void;
-  match?: boolean;
-  keywords?: string;
-}> {
+export class Title extends Component<IPublicTypeTitleProps> {
   constructor(props: any) {
     super(props);
     this.handleClick = this.handleClick.bind(this);

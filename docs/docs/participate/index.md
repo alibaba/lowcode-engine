@@ -47,15 +47,7 @@ npm install && npm run setup
     [
       "https?://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/(.*)/dist/css/react-simulator-renderer.css",
       "http://localhost:5555/css/ReactSimulatorRenderer.css"
-    ],
-    [
-      "https?://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/(.*)/dist/js/rax-simulator-renderer.js",
-      "http://localhost:5555/js/RaxSimulatorRenderer.js"
-    ],
-    [
-      "https?://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/(.*)/dist/css/rax-simulator-renderer.css",
-      "http://localhost:5555/css/RaxSimulatorRenderer.css"
-    ],
+    ]
   ]
 }
 ```

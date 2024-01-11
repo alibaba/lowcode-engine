@@ -29,9 +29,15 @@ export default class TreeTitle extends PureComponent<{
     title: string;
     condition?: boolean;
     visible?: boolean;
+    filterWorking: boolean;
+    keywords: string;
+    matchSelf: boolean;
   } = {
     editing: false,
     title: '',
+    filterWorking: false,
+    keywords: '',
+    matchSelf: false,
   };
 
   private lastInput?: HTMLInputElement;
@@ -100,6 +106,10 @@ export default class TreeTitle extends PureComponent<{
         visible: !hidden,
       });
     });
+    treeNode.onFilterResultChanged(() => {
+      const { filterWorking: newFilterWorking, keywords: newKeywords, matchSelf: newMatchSelf } = treeNode.filterReult;
+      this.setState({ filterWorking: newFilterWorking, keywords: newKeywords, matchSelf: newMatchSelf });
+    });
   }
   deleteClick = () => {
     const { treeNode } = this.props;
@@ -109,7 +119,7 @@ export default class TreeTitle extends PureComponent<{
   render() {
     const { treeNode, isModal } = this.props;
     const { pluginContext } = treeNode;
-    const { editing } = this.state;
+    const { editing, filterWorking, matchSelf, keywords } = this.state;
     const isCNode = !treeNode.isRoot();
     const { node } = treeNode;
     const { componentMeta } = node;
@@ -125,11 +135,9 @@ export default class TreeTitle extends PureComponent<{
         marginLeft: -indent,
       };
     }
-    const { filterWorking, matchSelf, keywords } = treeNode.filterReult;
     const Extra = pluginContext.extraTitle;
     const { intlNode, common, config } = pluginContext;
-    const Tip = common.editorCabin.Tip;
-    const Title = common.editorCabin.Title;
+    const { Tip, Title } = common.editorCabin;
     const couldHide = availableActions.includes('hide');
     const couldLock = availableActions.includes('lock');
     const couldUnlock = availableActions.includes('unlock');
@@ -253,7 +261,7 @@ class RenameBtn extends PureComponent<{
 }> {
   render() {
     const { intl, common } = this.props.treeNode.pluginContext;
-    const Tip = common.editorCabin.Tip;
+    const { Tip } = common.editorCabin;
     return (
       <div
         className="tree-node-rename-btn"
@@ -274,7 +282,7 @@ class LockBtn extends PureComponent<{
   render() {
     const { treeNode, locked } = this.props;
     const { intl, common } = this.props.treeNode.pluginContext;
-    const Tip = common.editorCabin.Tip;
+    const { Tip } = common.editorCabin;
     return (
       <div
         className="tree-node-lock-btn"
@@ -300,7 +308,7 @@ class HideBtn extends PureComponent<{
   render() {
     const { treeNode, hidden } = this.props;
     const { intl, common } = treeNode.pluginContext;
-    const Tip = common.editorCabin.Tip;
+    const { Tip } = common.editorCabin;
     return (
       <div
         className="tree-node-hide-btn"

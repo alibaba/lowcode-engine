@@ -41,7 +41,7 @@ export interface IPublicTypeEngineOptions {
   /**
    * 渲染器类型，默认值：'react'
    */
-  renderEnv?: 'react' | 'rax' | string;
+  renderEnv?: 'react' | string;
 
   /**
    * 设备类型映射器，处理设计器与渲染器中 device 的映射
@@ -183,6 +183,18 @@ export interface IPublicTypeEngineOptions {
    * 应用级设计模式下，自动打开第一个窗口
    */
   enableAutoOpenFirstWindow?: boolean;
+
+  /**
+   * @default false
+   * 开启右键菜单能力
+   */
+  enableContextMenu?: boolean;
+
+  /**
+   * @default false
+   * 隐藏设计器辅助层
+   */
+  hideComponentAction?: boolean;
 }
 
 /**

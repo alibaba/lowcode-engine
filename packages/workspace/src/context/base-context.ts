@@ -32,6 +32,7 @@ import {
   Workspace,
   Window,
   Canvas,
+  CommonUI,
 } from '@alilc/lowcode-shell';
 import {
   IPluginPreferenceMananger,
@@ -127,6 +128,7 @@ export class BasicContext implements IBasicContext {
     const logger = getLogger({ level: 'warn', bizName: 'common' });
     const skeleton = new Skeleton(innerSkeleton, 'any', true);
     const canvas = new Canvas(editor, true);
+    const commonUI = new CommonUI(editor);
     editor.set('setters', setters);
     editor.set('project', project);
     editor.set('material', material);
@@ -166,11 +168,13 @@ export class BasicContext implements IBasicContext {
         context.plugins = plugins;
         context.logger = new Logger({ level: 'warn', bizName: `plugin:${pluginName}` });
         context.canvas = canvas;
+        context.commonUI = commonUI;
         if (editorWindow) {
           context.editorWindow = new Window(editorWindow);
         }
         context.registerLevel = registerLevel;
         context.isPluginRegisteredInWorkspace = registerLevel === IPublicEnumPluginRegisterLevel.Workspace;
+        editor.set('pluginContext', context);
       },
     };
 

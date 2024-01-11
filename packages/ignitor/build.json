@@ -1,8 +1,7 @@
 {
   "entry": {
     "AliLowCodeEngine": "../engine/src/index.ts",
-    "ReactSimulatorRenderer": "../react-simulator-renderer/src/index.ts",
-    "RaxSimulatorRenderer": "../rax-simulator-renderer/src/index.ts"
+    "ReactSimulatorRenderer": "../react-simulator-renderer/src/index.ts"
   },
   "vendor": false,
   "devServer": {
