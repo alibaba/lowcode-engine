@@ -3,6 +3,7 @@ import { IntlMessageFormat } from 'intl-messageformat';
 import { globalLocale } from './global-locale';
 import { isI18nData } from '@alilc/lowcode-utils';
 import { observer } from '../utils';
+import { IPublicTypeI18nData } from '@alilc/lowcode-types';
 
 function generateTryLocales(locale: string) {
   const tries = [locale, locale.replace('-', '_')];
@@ -26,18 +27,9 @@ function injectVars(msg: string, params: any, locale: string): string {
   }
   const formater = new IntlMessageFormat(msg, locale);
   return formater.format(params as any) as string;
-  /*
-
-  return template.replace(/({\w+})/g, (_, $1) => {
-    const key = (/\d+/.exec($1) || [])[0] as any;
-    if (key && params[key] != null) {
-      return params[key];
-    }
-    return $1;
-  }); */
 }
 
-export function intl(data: any, params?: object): ReactNode {
+export function intl(data: IPublicTypeI18nData | string, params?: object): ReactNode {
   if (!isI18nData(data)) {
     return data;
   }

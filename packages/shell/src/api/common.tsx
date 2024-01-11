@@ -26,6 +26,7 @@ import {
   IPublicApiCommonEditorCabin,
   IPublicModelDragon,
   IPublicModelSettingField,
+  IPublicTypeI18nData,
 } from '@alilc/lowcode-types';
 import {
   SettingField as InnerSettingField,
@@ -260,6 +261,10 @@ class Utils implements IPublicApiCommonUtils {
       setLocale(locale: string): void;
     } {
     return innerCreateIntl(instance);
+  }
+
+  intl(data: IPublicTypeI18nData | string, params?: object): any {
+    return innerIntl(data, params);
   }
 }
 
