@@ -10,24 +10,31 @@
 
 .engine-context-menu-item {
   .engine-context-menu-text {
-    color: var(--color-text);
+    color: var(--color-context-menu-text, var(--color-text));
+    display: flex;
+    align-items: center;
+
+    .lc-help-tip {
+      margin-left: 4px;
+      opacity: 0.8;
+    }
+  }
+
+  &.disabled {
+    &:hover .engine-context-menu-text, .engine-context-menu-text {
+      color: var(--color-context-menu-text-disabled, var(--color-text-disabled));
+    }
   }
 
   &:hover {
     .engine-context-menu-text {
-      color: var(--color-title);
-    }
-  }
-
-  &.disbale {
-    .engine-context-menu-text {
-      color: var(--color-text-disabled);
+      color: var(--color-context-menu-text-hover, var(--color-title));
     }
   }
 }
 
 .engine-context-menu-title {
-  color: var(--color-text);
+  color: var(--color-context-menu-text, var(--color-text));
   cursor: pointer;
 
   &:hover {

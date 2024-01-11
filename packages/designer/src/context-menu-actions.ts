@@ -201,6 +201,8 @@ export class ContextMenuActions implements IContextMenuActions {
         node: INode;
         originalEvent: MouseEvent;
       }) => {
+        originalEvent.stopPropagation();
+        originalEvent.preventDefault();
         // 如果右键的节点不在 当前选中的节点中，选中该节点
         if (!designer.currentSelection.has(node.id)) {
           designer.currentSelection.select(node.id);

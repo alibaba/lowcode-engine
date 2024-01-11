@@ -64,8 +64,9 @@ const Tree = (props: {
 let destroyFn: Function | undefined;
 
 export function parseContextMenuAsReactNode(menus: IPublicTypeContextMenuItem[], options: IOptions): React.ReactNode[] {
-  const { common } = options.pluginContext || {};
+  const { common, commonUI } = options.pluginContext || {};
   const { intl = (title: any) => title } = common?.utils || {};
+  const { HelpTip } = commonUI || {};
 
   const children: React.ReactNode[] = [];
   menus.forEach((menu, index) => {
@@ -79,7 +80,7 @@ export function parseContextMenuAsReactNode(menus: IPublicTypeContextMenuItem[],
         children.push((
           <PopupItem
             className={classNames('engine-context-menu-item', {
-              disbale: menu.disabled,
+              disabled: menu.disabled,
             })}
             key={menu.name}
             label={<div className="engine-context-menu-text">{intl(menu.title)}</div>}
@@ -93,14 +94,17 @@ export function parseContextMenuAsReactNode(menus: IPublicTypeContextMenuItem[],
         children.push((
           <Item
             className={classNames('engine-context-menu-item', {
-              disbale: menu.disabled,
+              disabled: menu.disabled,
             })}
             disabled={menu.disabled}
-            onClick={menu.action}
+            onClick={() => {
+              menu.action?.();
+            }}
             key={menu.name}
           >
             <div className="engine-context-menu-text">
-              {intl(menu.title)}
+              { menu.title ? intl(menu.title) : null }
+              { menu.help ? <HelpTip size="xs" help={menu.help} direction="right" /> : null }
             </div>
           </Item>
         ));
@@ -135,12 +139,14 @@ export function parseContextMenuProperties(menus: (IPublicTypeContextMenuAction 
         name,
         title,
         type = IPublicEnumContextMenuType.MENU_ITEM,
+        help,
       } = menu;
 
       const result: IPublicTypeContextMenuItem = {
         name,
         title,
         type,
+        help,
         action: () => {
           destroy?.();
           menu.action?.(nodes || [], options.event);
@@ -193,26 +199,27 @@ export function createContextMenu(children: React.ReactNode[], {
   event: MouseEvent | React.MouseEvent;
   offset?: [number, number];
 }) {
+  event.preventDefault();
+  event.stopPropagation();
+
   const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight;
   const dividerCount = React.Children.count(children.filter(child => React.isValidElement(child) && child.type === Divider));
   const popupItemCount = React.Children.count(children.filter(child => React.isValidElement(child) && (child.type === PopupItem || child.type === Item)));
   const menuHeight = popupItemCount * parseInt(getMenuItemHeight(), 10) + dividerCount * 8 + 16;
   const menuWidthLimit = 200;
-  const target = event.target;
-  const { top, left } = (target as any)?.getBoundingClientRect();
-  let x = event.clientX - left + offset[0];
-  let y = event.clientY - top + offset[1];
-  if (x + menuWidthLimit + left > viewportWidth) {
+  let x = event.clientX + offset[0];
+  let y = event.clientY + offset[1];
+  if (x + menuWidthLimit > viewportWidth) {
     x = x - menuWidthLimit;
   }
-  if (y + menuHeight + top > viewportHeight) {
+  if (y + menuHeight > viewportHeight) {
     y = y - menuHeight;
   }
 
   const menuInstance = Menu.create({
-    target,
-    offset: [x, y, 0, 0],
+    target: document.body,
+    offset: [x, y],
     children,
     className: 'engine-context-menu',
   });
