@@ -1,5 +1,6 @@
 import { IPublicApiCommonUI, IPublicModelPluginContext, IPublicTypeContextMenuAction } from '@alilc/lowcode-types';
 import {
+  HelpTip,
   IEditor,
   Tip as InnerTip,
   Title as InnerTitle,
@@ -46,6 +47,11 @@ export class CommonUI implements IPublicApiCommonUI {
   get Tip() {
     return InnerTip;
   }
+
+  get HelpTip() {
+    return HelpTip;
+  }
+
   get Title() {
     return InnerTitle;
   }

@@ -1,6 +1,7 @@
-import { ReactElement } from 'react';
-import { IPublicTypeContextMenuAction, IPublicTypeTitleContent } from '../type';
+import React, { ReactElement } from 'react';
+import { IPublicTypeContextMenuAction, IPublicTypeHelpTipConfig, IPublicTypeTipConfig, IPublicTypeTitleContent } from '../type';
 import { Balloon, Breadcrumb, Button, Card, Checkbox, DatePicker, Dialog, Dropdown, Form, Icon, Input, Loading, Message, Overlay, Pagination, Radio, Search, Select, SplitButton, Step, Switch, Tab, Table, Tree, TreeSelect, Upload, Divider } from '@alifd/next';
+import { IconProps } from '@alifd/next/types/icon';
 
 export interface IPublicApiCommonUI {
   Balloon: typeof Balloon;
@@ -33,13 +34,30 @@ export interface IPublicApiCommonUI {
 
   /**
    * Title 组件
-   * @experimental unstable API, pay extra caution when trying to use this
    */
-  get Tip(): React.ComponentClass<{}>;
+  get Tip(): React.ComponentClass<IPublicTypeTipConfig>;
+
+  /**
+   * HelpTip 组件
+   */
+  get HelpTip(): React.VFC<{
+    help: IPublicTypeHelpTipConfig;
+
+    /**
+     * 方向
+     * @default 'top'
+     */
+    direction: IPublicTypeTipConfig['direction'];
+
+    /**
+     * 大小
+     * @default 'small'
+     */
+    size: IconProps['size'];
+  }>;
 
   /**
    * Tip 组件
-   * @experimental unstable API, pay extra caution when trying to use this
    */
   get Title(): React.ComponentClass<{
     title: IPublicTypeTitleContent | undefined;
@@ -47,8 +65,10 @@ export interface IPublicApiCommonUI {
     keywords?: string | null;
   }>;
 
-  get ContextMenu(): (props: {
+  get ContextMenu(): ((props: {
     menus: IPublicTypeContextMenuAction[];
     children: React.ReactElement[] | React.ReactElement;
-  }) => ReactElement;
+  }) => ReactElement) & {
+    create(menus: IPublicTypeContextMenuAction[], event: MouseEvent | React.MouseEvent): void;
+  };
 }

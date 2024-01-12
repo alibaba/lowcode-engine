@@ -19,6 +19,16 @@ CommonUI API 是一个专为低代码引擎设计的组件 UI 库，使用它开
 | direction | tip 的方向   | 'top' \| 'bottom' \| 'left' \| 'right' |        |
 
 
+### HelpTip
+
+带 help icon 的提示组件
+
+| 参数      | 说明   | 类型                              | 默认值 |
+|-----------|--------|-----------------------------------|--------|
+| help      | 描述   | IPublicTypeHelpTipConfig          |        |
+| direction | 方向   | IPublicTypeTipConfig['direction'] | 'top'  |
+| size      | 方向   | IconProps['size']                 | 'small'|
+
 ### Title
 
 标题组件
