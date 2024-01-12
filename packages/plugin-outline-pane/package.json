@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-plugin-outline-pane",
-  "version": "1.3.0-beta.8",
+  "version": "1.3.0-beta.9",
   "description": "Outline pane for Ali lowCode engine",
   "files": [
     "es",
@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@alifd/next": "^1.19.16",
-    "@alilc/lowcode-types": "1.3.0-beta.8",
-    "@alilc/lowcode-utils": "1.3.0-beta.8",
+    "@alilc/lowcode-types": "1.3.0-beta.9",
+    "@alilc/lowcode-utils": "1.3.0-beta.9",
     "classnames": "^2.2.6",
     "react": "^16",
     "react-dom": "^16.7.0",
