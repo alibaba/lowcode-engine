@@ -53,6 +53,11 @@ sidebar_position: 9
 - `--color-text-reverse`: 反色情况下，文字颜色
 - `--color-text-disabled`: 禁用态文字颜色
 
+#### 菜单颜色
+- `--color-context-menu-text`: 菜单项颜色
+- `--color-context-menu-text-hover`: 菜单项 hover 颜色
+- `--color-context-menu-text-disabled`: 菜单项 disabled 颜色
+
 #### 字段和边框颜色
 
 - `--color-field-label`: field 标签颜色

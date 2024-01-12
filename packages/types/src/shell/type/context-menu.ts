@@ -1,6 +1,7 @@
 import { IPublicEnumContextMenuType } from '../enum';
 import { IPublicModelNode } from '../model';
 import { IPublicTypeI18nData } from './i8n-data';
+import { IPublicTypeHelpTipConfig } from './widget-base-config';
 
 export interface IPublicTypeContextMenuItem extends Omit<IPublicTypeContextMenuAction, 'condition' | 'disabled' | 'items'> {
   disabled?: boolean;
@@ -34,24 +35,29 @@ export interface IPublicTypeContextMenuAction {
    * 点击时执行的动作，可选
    * Action to execute on click, optional
    */
-  action?: (nodes: IPublicModelNode[], event?: MouseEvent) => void;
+  action?: (nodes?: IPublicModelNode[], event?: MouseEvent) => void;
 
   /**
    * 子菜单项或生成子节点的函数，可选，仅支持两级
    * Sub-menu items or function to generate child node, optional
    */
-  items?: Omit<IPublicTypeContextMenuAction, 'items'>[] | ((nodes: IPublicModelNode[]) => Omit<IPublicTypeContextMenuAction, 'items'>[]);
+  items?: Omit<IPublicTypeContextMenuAction, 'items'>[] | ((nodes?: IPublicModelNode[]) => Omit<IPublicTypeContextMenuAction, 'items'>[]);
 
   /**
    * 显示条件函数
    * Function to determine display condition
    */
-  condition?: (nodes: IPublicModelNode[]) => boolean;
+  condition?: (nodes?: IPublicModelNode[]) => boolean;
 
   /**
    * 禁用条件函数，可选
    * Function to determine disabled condition, optional
    */
-  disabled?: (nodes: IPublicModelNode[]) => boolean;
+  disabled?: (nodes?: IPublicModelNode[]) => boolean;
+
+  /**
+   * 帮助提示，可选
+   */
+  help?: IPublicTypeHelpTipConfig;
 }
 

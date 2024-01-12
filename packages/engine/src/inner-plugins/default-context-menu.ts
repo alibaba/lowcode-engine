@@ -60,7 +60,7 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
       material.addContextMenuOption({
         name: 'selectComponent',
         title: intl('SelectComponents'),
-        condition: (nodes) => {
+        condition: (nodes = []) => {
           return nodes.length === 1;
         },
         items: [
@@ -74,14 +74,17 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
       material.addContextMenuOption({
         name: 'copyAndPaste',
         title: intl('CopyAndPaste'),
-        disabled: (nodes) => {
+        disabled: (nodes = []) => {
           return nodes?.filter((node) => !node?.canPerformAction('copy')).length > 0;
         },
         condition: (nodes) => {
-          return nodes.length === 1;
+          return nodes?.length === 1;
         },
         action(nodes) {
-          const node = nodes[0];
+          const node = nodes?.[0];
+          if (!node) {
+            return;
+          }
           const { document: doc, parent, index } = node;
           const data = getNodesSchema(nodes);
           clipboard.setData(data);
@@ -96,11 +99,11 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
       material.addContextMenuOption({
         name: 'copy',
         title: intl('Copy'),
-        disabled: (nodes) => {
+        disabled: (nodes = []) => {
           return nodes?.filter((node) => !node?.canPerformAction('copy')).length > 0;
         },
-        condition(nodes) {
-          return nodes.length > 0;
+        condition(nodes = []) {
+          return nodes?.length > 0;
         },
         action(nodes) {
           if (!nodes || nodes.length < 1) {
@@ -116,7 +119,7 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
         name: 'pasteToBottom',
         title: intl('PasteToTheBottom'),
         condition: (nodes) => {
-          return nodes.length === 1;
+          return nodes?.length === 1;
         },
         async action(nodes) {
           if (!nodes || nodes.length < 1) {
@@ -163,15 +166,18 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
         name: 'pasteToInner',
         title: intl('PasteToTheInside'),
         condition: (nodes) => {
-          return nodes.length === 1;
+          return nodes?.length === 1;
         },
-        disabled: (nodes) => {
+        disabled: (nodes = []) => {
           // 获取粘贴数据
-          const node = nodes[0];
+          const node = nodes?.[0];
           return !node.isContainerNode;
         },
         async action(nodes) {
-          const node = nodes[0];
+          const node = nodes?.[0];
+          if (!node) {
+            return;
+          }
           const { document: doc } = node;
 
           try {
@@ -210,14 +216,14 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
       material.addContextMenuOption({
         name: 'delete',
         title: intl('Delete'),
-        disabled(nodes) {
+        disabled(nodes = []) {
           return nodes?.filter((node) => !node?.canPerformAction('remove')).length > 0;
         },
-        condition(nodes) {
+        condition(nodes = []) {
           return nodes.length > 0;
         },
         action(nodes) {
-          nodes.forEach((node) => {
+          nodes?.forEach((node) => {
             node.remove();
           });
         },

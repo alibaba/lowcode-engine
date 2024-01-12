@@ -832,16 +832,22 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     doc.addEventListener('contextmenu', (e: MouseEvent) => {
       const targetElement = e.target as HTMLElement;
       const nodeInst = this.getNodeInstanceFromElement(targetElement);
+      const editor = this.designer?.editor;
       if (!nodeInst) {
+        editor?.eventBus.emit('designer.builtinSimulator.contextmenu', {
+          originalEvent: e,
+        });
         return;
       }
       const node = nodeInst.node || this.project.currentDocument?.focusNode;
       if (!node) {
+        editor?.eventBus.emit('designer.builtinSimulator.contextmenu', {
+          originalEvent: e,
+        });
         return;
       }
 
       // dirty code should refector
-      const editor = this.designer?.editor;
       const npm = node?.componentMeta?.npm;
       const selected =
         [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||

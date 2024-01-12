@@ -25,17 +25,13 @@ export function ContextMenu({ children, menus, pluginContext }: {
     const children: React.ReactNode[] = parseContextMenuAsReactNode(parseContextMenuProperties(menus, {
       destroy,
       pluginContext,
-    }), {
-      pluginContext,
-    });
+    }), { pluginContext });
 
     if (!children?.length) {
       return;
     }
 
-    destroyFn = createContextMenu(children, {
-      event,
-    });
+    destroyFn = createContextMenu(children, { event });
   };
 
   // 克隆 children 并添加 onContextMenu 事件处理器
