@@ -8,7 +8,7 @@ import {
   IPublicTypeNodeSchema,
 } from '@alilc/lowcode-types';
 import { isProjectSchema } from '@alilc/lowcode-utils';
-import { Notification } from '@alifd/next';
+import { Message } from '@alifd/next';
 import { intl } from '../locale';
 
 function getNodesSchema(nodes: IPublicModelNode[]) {
@@ -27,19 +27,13 @@ async function getClipboardText(): Promise<IPublicTypeNodeSchema[]> {
           if (isProjectSchema(data)) {
             resolve(data.componentsTree);
           } else {
-            Notification.open({
-              content: intl('NotValidNodeData'),
-              type: 'error',
-            });
+            Message.error(intl('NotValidNodeData'));
             reject(
               new Error(intl('NotValidNodeData')),
             );
           }
         } catch (error) {
-          Notification.open({
-            content: intl('NotValidNodeData'),
-            type: 'error',
-          });
+          Message.error(intl('NotValidNodeData'));
           reject(error);
         }
       },
@@ -143,10 +137,7 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
                 return doc?.checkNesting(parent, dragNodeObject);
               });
               if (canAddNodes.length === 0) {
-                Notification.open({
-                  content: `${nodeSchema.map(d => utilsIntl(d.title || d.componentName)).join(',')}等组件无法放置到${utilsIntl(parent.title || parent.componentName as any)}内`,
-                  type: 'error',
-                });
+                Message.error(`${nodeSchema.map(d => utilsIntl(d.title || d.componentName)).join(',')}等组件无法放置到${utilsIntl(parent.title || parent.componentName as any)}内`);
                 return;
               }
               const nodes: IPublicModelNode[] = [];
@@ -194,10 +185,7 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
               return doc?.checkNesting(node, dragNodeObject);
             });
             if (canAddNodes.length === 0) {
-              Notification.open({
-                content: `${nodeSchema.map(d => utilsIntl(d.title || d.componentName)).join(',')}等组件无法放置到${utilsIntl(node.title || node.componentName as any)}内`,
-                type: 'error',
-              });
+              Message.error(`${nodeSchema.map(d => utilsIntl(d.title || d.componentName)).join(',')}等组件无法放置到${utilsIntl(node.title || node.componentName as any)}内`);
               return;
             }
 
