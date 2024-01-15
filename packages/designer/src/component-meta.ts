@@ -48,13 +48,17 @@ export function buildFilter(rule?: string | string[] | RegExp | IPublicTypeNesti
     return rule;
   }
   if (isRegExp(rule)) {
-    return (testNode: Node | IPublicTypeNodeSchema) => rule.test(testNode.componentName);
+    return (testNode: Node | IPublicTypeNodeSchema) => {
+      return rule.test(testNode.componentName);
+    };
   }
   const list = ensureAList(rule);
   if (!list) {
     return null;
   }
-  return (testNode: Node | IPublicTypeNodeSchema) => list.includes(testNode.componentName);
+  return (testNode: Node | IPublicTypeNodeSchema) => {
+    return list.includes(testNode.componentName);
+  };
 }
 
 export interface IComponentMeta extends IPublicModelComponentMeta<INode> {

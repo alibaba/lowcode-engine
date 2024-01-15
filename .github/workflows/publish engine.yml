@@ -30,4 +30,4 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Get version
         id: get_version
-        run: echo "::set-output name=version::$(node -p "require('./package.json').version")"
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT

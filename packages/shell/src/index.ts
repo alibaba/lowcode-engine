@@ -28,6 +28,7 @@ import {
   Workspace,
   SimulatorHost,
   Config,
+  CommonUI,
 } from './api';
 
 export * from './symbols';
@@ -68,4 +69,5 @@ export {
   Config,
   SettingField,
   SkeletonItem,
+  CommonUI,
 };

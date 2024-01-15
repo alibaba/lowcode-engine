@@ -34,7 +34,7 @@ class ModalTreeNodeView extends PureComponent<{
   }
 
   componentDidMount(): void {
-    const rootTreeNode = this.rootTreeNode;
+    const { rootTreeNode } = this;
     rootTreeNode.onExpandableChanged(() => {
       this.setState({
         treeChildren: rootTreeNode.children,
@@ -53,7 +53,7 @@ class ModalTreeNodeView extends PureComponent<{
   }
 
   render() {
-    const rootTreeNode = this.rootTreeNode;
+    const { rootTreeNode } = this;
     const { expanded } = rootTreeNode;
 
     const hasVisibleModalNode = !!this.modalNodesManager?.getVisibleModalNode();
@@ -98,6 +98,9 @@ export default class TreeNodeView extends PureComponent<{
     conditionFlow: boolean;
     expandable: boolean;
     treeChildren: TreeNode[] | null;
+    filterWorking: boolean;
+    matchChild: boolean;
+    matchSelf: boolean;
   } = {
     expanded: false,
     selected: false,
@@ -110,6 +113,9 @@ export default class TreeNodeView extends PureComponent<{
     conditionFlow: false,
     expandable: false,
     treeChildren: [],
+    filterWorking: false,
+    matchChild: false,
+    matchSelf: false,
   };
 
   eventOffCallbacks: Array<IPublicTypeDisposable | undefined> = [];
@@ -153,6 +159,10 @@ export default class TreeNodeView extends PureComponent<{
         expandable,
         treeChildren: treeNode.children,
       });
+    });
+    treeNode.onFilterResultChanged(() => {
+      const { filterWorking: newFilterWorking, matchChild: newMatchChild, matchSelf: newMatchSelf } = treeNode.filterReult;
+      this.setState({ filterWorking: newFilterWorking, matchChild: newMatchChild, matchSelf: newMatchSelf });
     });
     this.eventOffCallbacks.push(
       doc?.onDropLocationChanged(() => {
@@ -216,7 +226,7 @@ export default class TreeNodeView extends PureComponent<{
     let shouldShowModalTreeNode: boolean = this.shouldShowModalTreeNode();
 
     // filter 处理
-    const { filterWorking, matchChild, matchSelf } = treeNode.filterReult;
+    const { filterWorking, matchChild, matchSelf } = this.state;
     if (!isRootNode && filterWorking && !matchChild && !matchSelf) {
       // 条件过滤生效时，如果未命中本节点或子节点，则不展示该节点
       // 根节点始终展示

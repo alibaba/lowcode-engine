@@ -51,6 +51,7 @@ import {
   Canvas,
   Workspace,
   Config,
+  CommonUI,
 } from '@alilc/lowcode-shell';
 import { isPlainObject } from '@alilc/lowcode-utils';
 import './modules/live-editing';
@@ -61,6 +62,7 @@ import { setterRegistry } from './inner-plugins/setter-registry';
 import { defaultPanelRegistry } from './inner-plugins/default-panel-registry';
 import { shellModelFactory } from './modules/shell-model-factory';
 import { builtinHotkey } from './inner-plugins/builtin-hotkey';
+import { defaultContextMenu } from './inner-plugins/default-context-menu';
 import { OutlinePlugin } from '@alilc/lowcode-plugin-outline-pane';
 
 export * from './modules/skeleton-types';
@@ -77,6 +79,7 @@ async function registryInnerPlugin(designer: IDesigner, editor: IEditor, plugins
   await plugins.register(defaultPanelRegistryPlugin);
   await plugins.register(builtinHotkey);
   await plugins.register(registerDefaults, {}, { autoInit: true });
+  await plugins.register(defaultContextMenu);
 
   return () => {
     plugins.delete(OutlinePlugin.pluginName);
@@ -85,6 +88,7 @@ async function registryInnerPlugin(designer: IDesigner, editor: IEditor, plugins
     plugins.delete(defaultPanelRegistryPlugin.pluginName);
     plugins.delete(builtinHotkey.pluginName);
     plugins.delete(registerDefaults.pluginName);
+    plugins.delete(defaultContextMenu.pluginName);
   };
 }
 
@@ -111,6 +115,7 @@ const innerSetters = new InnerSetters();
 const setters = new Setters(innerSetters);
 
 const material = new Material(editor);
+const commonUI = new CommonUI(editor);
 editor.set('project', project);
 editor.set('setters' as any, setters);
 editor.set('material', material);
@@ -138,8 +143,10 @@ const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
     context.plugins = plugins;
     context.logger = new Logger({ level: 'warn', bizName: `plugin:${pluginName}` });
     context.workspace = workspace;
+    context.commonUI = commonUI;
     context.registerLevel = IPublicEnumPluginRegisterLevel.Default;
     context.isPluginRegisteredInWorkspace = false;
+    editor.set('pluginContext', context);
   },
 };
 
@@ -161,6 +168,7 @@ export {
   common,
   workspace,
   canvas,
+  commonUI,
 };
 // declare this is open-source version
 export const isOpenSource = true;

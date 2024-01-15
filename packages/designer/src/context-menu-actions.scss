@@ -1,0 +1,10 @@
+.engine-context-menu {
+  &.next-menu.next-ver .next-menu-item {
+    padding-right: 30px;
+
+    .next-menu-item-inner {
+      height: var(--context-menu-item-height, 30px);
+      line-height: var(--context-menu-item-height, 30px);
+    }
+  }
+}

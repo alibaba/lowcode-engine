@@ -40,8 +40,7 @@ export const writeZipToDisk = (
 export const generateProjectZip = async (project: ResultDir): Promise<ZipBuffer> => {
   let zip = new JSZip();
   zip = writeFolderToZip(project, zip, true);
-  // const zipType = isNodeProcess() ? 'nodebuffer' : 'blob';
-  const zipType = 'nodebuffer'; // 目前先只支持 node 调用
+  const zipType = isNodeProcess() ? 'nodebuffer' : 'blob';
   return zip.generateAsync({ type: zipType });
 };
 

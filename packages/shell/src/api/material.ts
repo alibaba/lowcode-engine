@@ -13,6 +13,8 @@ import {
   IPublicTypeNpmInfo,
   IPublicModelEditor,
   IPublicTypeDisposable,
+  IPublicTypeContextMenuAction,
+  IPublicTypeContextMenuItem,
 } from '@alilc/lowcode-types';
 import { Workspace as InnerWorkspace } from '@alilc/lowcode-workspace';
 import { editorSymbol, designerSymbol } from '../symbols';
@@ -189,5 +191,17 @@ export class Material implements IPublicApiMaterial {
     return () => {
       dispose.forEach(d => d && d());
     };
+  }
+
+  addContextMenuOption(option: IPublicTypeContextMenuAction) {
+    this[designerSymbol].contextMenuActions.addMenuAction(option);
+  }
+
+  removeContextMenuOption(name: string) {
+    this[designerSymbol].contextMenuActions.removeMenuAction(name);
+  }
+
+  adjustContextMenuLayout(fn: (actions: IPublicTypeContextMenuItem[]) => IPublicTypeContextMenuItem[]) {
+    this[designerSymbol].contextMenuActions.adjustMenuLayout(fn);
   }
 }

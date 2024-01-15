@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-code-generator",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "出码引擎 for LowCode Engine",
   "license": "MIT",
   "main": "lib/index.js",
@@ -80,6 +80,7 @@
     "change-case": "^3.1.0",
     "commander": "^6.1.0",
     "debug": "^4.3.2",
+    "file-saver": "^2.0.5",
     "fp-ts": "^2.11.9",
     "fs-extra": "9.x",
     "glob": "^7.2.0",
@@ -109,6 +110,7 @@
   "devDependencies": {
     "@iceworks/spec": "^1.4.2",
     "@types/babel__traverse": "^7.11.0",
+    "@types/file-saver": "^2.0.7",
     "@types/jest": "^27.0.2",
     "@types/lodash": "^4.14.162",
     "@types/node": "^14.14.20",
