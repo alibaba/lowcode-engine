@@ -392,7 +392,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
 
     this.isInited = true;
     this.emitter = createModuleEventBus('Node');
-    const editor = this.document.designer.editor;
+    const { editor } = this.document.designer;
     this.onVisibleChange((visible: boolean) => {
       editor?.eventBus.emit(EDITOR_EVENT.NODE_VISIBLE_CHANGE, this, visible);
     });
@@ -1219,11 +1219,18 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 获取磁贴相关信息
    */
-  getRGL() {
+  getRGL(): {
+    isContainerNode: boolean;
+    isEmptyNode: boolean;
+    isRGLContainerNode: boolean;
+    isRGLNode: boolean;
+    isRGL: boolean;
+    rglNode: Node | null;
+  } {
     const isContainerNode = this.isContainer();
     const isEmptyNode = this.isEmpty();
     const isRGLContainerNode = this.isRGLContainer;
-    const isRGLNode = this.getParent()?.isRGLContainer;
+    const isRGLNode = (this.getParent()?.isRGLContainer) as boolean;
     const isRGL = isRGLContainerNode || (isRGLNode && (!isContainerNode || !isEmptyNode));
     let rglNode = isRGLContainerNode ? this : isRGL ? this?.getParent() : null;
     return { isContainerNode, isEmptyNode, isRGLContainerNode, isRGLNode, isRGL, rglNode };
