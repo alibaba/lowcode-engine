@@ -15,7 +15,7 @@ export interface IPublicApiMaterial {
    * set data for Assets
    * @returns void
    */
-  setAssets(assets: IPublicTypeAssetsJson): void;
+  setAssets(assets: IPublicTypeAssetsJson): Promise<void>;
 
   /**
    * 获取「资产包」结构
