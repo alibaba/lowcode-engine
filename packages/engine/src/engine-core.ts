@@ -249,8 +249,6 @@ export async function destroy() {
     documents.forEach(((doc: IPublicModelDocumentModel) => project.removeDocument(doc)));
   }
 
-  // TODO: delete plugins except for core plugins
-
   // unmount DOM container, this will trigger React componentWillUnmount lifeCycle,
   // so necessary cleanups will be done.
   engineContainer && unmountComponentAtNode(engineContainer);
