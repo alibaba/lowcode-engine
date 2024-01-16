@@ -23,7 +23,7 @@ export class CommonUI implements IPublicApiCommonUI {
   Form = Form;
   Icon = Icon;
   Input = Input;
-  Loading = Loading;
+  Loading = Loading as any;
   Message = Message;
   Overlay = Overlay;
   Pagination = Pagination;

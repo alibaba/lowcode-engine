@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 lerna run build \
   --scope @alilc/lowcode-types \
   --scope @alilc/lowcode-utils \
