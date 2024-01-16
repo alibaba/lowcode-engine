@@ -1,20 +1,14 @@
 import { createContextMenu, parseContextMenuAsReactNode, parseContextMenuProperties } from '@alilc/lowcode-utils';
 import { engineConfig } from '@alilc/lowcode-editor-core';
 import { IPublicModelPluginContext, IPublicTypeContextMenuAction } from '@alilc/lowcode-types';
-import React from 'react';
+import React, { useCallback } from 'react';
 
 export function ContextMenu({ children, menus, pluginContext }: {
   menus: IPublicTypeContextMenuAction[];
   children: React.ReactElement[] | React.ReactElement;
   pluginContext: IPublicModelPluginContext;
 }): React.ReactElement<any, string | React.JSXElementConstructor<any>> {
-  if (!engineConfig.get('enableContextMenu')) {
-    return (
-      <>{ children }</>
-    );
-  }
-
-  const handleContextMenu = (event: React.MouseEvent) => {
+  const handleContextMenu = useCallback((event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -32,7 +26,19 @@ export function ContextMenu({ children, menus, pluginContext }: {
     }
 
     destroyFn = createContextMenu(children, { event });
-  };
+  }, [menus]);
+
+  if (!engineConfig.get('enableContextMenu')) {
+    return (
+      <>{ children }</>
+    );
+  }
+
+  if (!menus || !menus.length) {
+    return (
+      <>{ children }</>
+    );
+  }
 
   // 克隆 children 并添加 onContextMenu 事件处理器
   const childrenWithContextMenu = React.Children.map(children, (child) =>
