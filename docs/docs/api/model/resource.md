@@ -15,6 +15,12 @@ sidebar_position: 13
 
 `@type {string}`
 
+### id
+
+资源 id
+
+`@type {string}`
+
 ### name
 
 资源名字
@@ -40,6 +46,12 @@ sidebar_position: 13
 `@type {ReactElement}`
 
 ### options
+
+资源配置信息
+
+`@type {Object}`
+
+### config
 
 资源配置信息
 
