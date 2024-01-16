@@ -1,0 +1,34 @@
+name: Pre Build
+
+on:
+  push:
+    paths:
+      - 'packages/**'
+      - '!packages/**.md'
+  pull_request:
+    paths:
+      - 'packages/**'
+      - '!packages/**.md'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install dependencies and setup
+      run: npm install && npm run setup
+
+    - name: Build
+      run: npm run build
+
+    - name: Check build status
+      run: |
+        if [ $? -eq 0 ]; then
+          echo "Build succeeded!"
+        else
+          echo "Build failed!"
+          exit 1
+        fi
