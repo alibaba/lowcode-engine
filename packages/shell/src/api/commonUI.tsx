@@ -8,6 +8,7 @@ import {
 import { Balloon, Breadcrumb, Button, Card, Checkbox, DatePicker, Dialog, Dropdown, Form, Icon, Input, Loading, Message, Overlay, Pagination, Radio, Search, Select, SplitButton, Step, Switch, Tab, Table, Tree, TreeSelect, Upload, Divider } from '@alifd/next';
 import { ContextMenu } from '../components/context-menu';
 import { editorSymbol } from '../symbols';
+import { ReactElement } from 'react';
 
 export class CommonUI implements IPublicApiCommonUI {
   [editorSymbol]: IEditor;
@@ -40,8 +41,27 @@ export class CommonUI implements IPublicApiCommonUI {
   Upload = Upload;
   Divider = Divider;
 
+  ContextMenu: ((props: {
+    menus: IPublicTypeContextMenuAction[];
+    children: React.ReactElement[] | React.ReactElement;
+  }) => ReactElement) & {
+    create(menus: IPublicTypeContextMenuAction[], event: MouseEvent | React.MouseEvent): void;
+  };
+
   constructor(editor: IEditor) {
     this[editorSymbol] = editor;
+
+    const innerContextMenu = (props: any) => {
+      const pluginContext: IPublicModelPluginContext = editor.get('pluginContext') as IPublicModelPluginContext;
+      return <ContextMenu {...props} pluginContext={pluginContext} />;
+    };
+
+    innerContextMenu.create = (menus: IPublicTypeContextMenuAction[], event: MouseEvent) => {
+      const pluginContext: IPublicModelPluginContext = editor.get('pluginContext') as IPublicModelPluginContext;
+      return ContextMenu.create(pluginContext, menus, event);
+    };
+
+    this.ContextMenu = innerContextMenu;
   }
 
   get Tip() {
@@ -54,20 +74,5 @@ export class CommonUI implements IPublicApiCommonUI {
 
   get Title() {
     return InnerTitle;
-  }
-
-  get ContextMenu() {
-    const editor = this[editorSymbol];
-    const innerContextMenu = (props: any) => {
-      const pluginContext: IPublicModelPluginContext = editor.get('pluginContext') as IPublicModelPluginContext;
-      return <ContextMenu {...props} pluginContext={pluginContext} />;
-    };
-
-    innerContextMenu.create = (menus: IPublicTypeContextMenuAction[], event: MouseEvent) => {
-      const pluginContext: IPublicModelPluginContext = editor.get('pluginContext') as IPublicModelPluginContext;
-      return ContextMenu.create(pluginContext, menus, event);
-    };
-
-    return innerContextMenu;
   }
 }
