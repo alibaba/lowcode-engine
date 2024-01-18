@@ -24,7 +24,7 @@ sidebar_position: 8
  */
 get(key: string, defaultValue?: any): any;
 ```
-#### 示例
+**示例**
 ```typescript
 import { config } from '@alilc/lowcode-engine';
 
@@ -43,7 +43,7 @@ config.get('keyB', { a: 1 });
  */
 set(key: string, value: any): void;
 ```
-#### 示例
+**示例**
 ```typescript
 import { config } from '@alilc/lowcode-engine';
 
@@ -63,7 +63,7 @@ config.set('keyC', 1);
 has(key: string): boolean;
 ```
 
-#### 示例
+**示例**
 ```typescript
 import { config } from '@alilc/lowcode-engine';
 
@@ -81,7 +81,7 @@ config.has('keyD');
  */
 setConfig(config: { [key: string]: any }): void;
 ```
-#### 示例
+**示例**
 ```typescript
 import { config } from '@alilc/lowcode-engine';
 
@@ -134,7 +134,7 @@ config.getPreference().set(`${panelName}-pinned-status-isFloat`, false, 'skeleto
  */
 onceGot(key: string): Promise<any>;
 ```
-#### 示例
+**示例**
 ```typescript
 import { config } from '@alilc/lowcode-engine';
 
@@ -160,7 +160,7 @@ const value = await config.onceGot('keyA');
    */
   onGot(key: string, fn: (data: any) => void): () => void;
 ```
-#### 示例
+**示例**
 ```typescript
 import { config } from '@alilc/lowcode-engine';
 

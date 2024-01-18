@@ -39,7 +39,7 @@ setAssets(assets: IPublicTypeAssetsJson): void;
 相关类型：[IPublicTypeAssetsJson](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/assets-json.ts)
 
 
-##### 示例
+**示例**
 直接在项目中引用 npm 包
 ```javascript
 import { material } from '@alilc/lowcode-engine';
@@ -85,7 +85,7 @@ getAssets(): IPublicTypeAssetsJson;
 相关类型：[IPublicTypeAssetsJson](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/assets-json.ts)
 
 
-##### 示例
+**示例**
 ```typescript
 import { material } from '@alilc/lowcode-engine';
 
@@ -106,7 +106,7 @@ loadIncrementalAssets(incrementalAssets: IPublicTypeAssetsJson): Promise<void>;
 ```
 相关类型：[IPublicTypeAssetsJson](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/assets-json.ts)
 
-##### 示例
+**示例**
 ```typescript
 import { material } from '@alilc/lowcode-engine';
 import assets1 from '@alilc/mc-assets-<siteId>/assets.json';
@@ -146,7 +146,7 @@ addBuiltinComponentAction(action: IPublicTypeComponentAction): void;
 相关类型：[IPublicTypeComponentAction](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/component-action.ts)
 
 
-##### 示例
+**示例**
 新增设计扩展位，并绑定事件
 ```typescript
 import { material } from '@alilc/lowcode-engine';
@@ -186,7 +186,7 @@ removeBuiltinComponentAction(name: string): void;
 - lock：锁定，不可编辑
 - unlock：解锁，可编辑
 
-##### 示例
+**示例**
 ```typescript
 import { material } from '@alilc/lowcode-engine';
 
@@ -222,7 +222,7 @@ modifyBuiltinComponentAction(
 
 
 
-##### 示例
+**示例**
 给原始的 remove 扩展时间添加执行前后的日志
 ```typescript
 import { material } from '@alilc/lowcode-engine';
@@ -335,7 +335,7 @@ getComponentMeta(componentName: string): IPublicModelComponentMeta | null;
 ```
 相关类型：[IPublicModelComponentMeta](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/component-meta.ts)
 
-##### 示例
+**示例**
 ```typescript
 import { material } from '@alilc/lowcode-engine';
 
@@ -356,7 +356,7 @@ material.getComponentMeta('Input');
 ```
 相关类型：[IPublicModelComponentMeta](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/component-meta.ts)
 
-##### 示例
+**示例**
 ```typescript
 import { material } from '@alilc/lowcode-engine';
 
@@ -393,7 +393,7 @@ registerMetadataTransducer(
 ): void;
 ```
 
-##### 示例
+**示例**
 给每一个组件的配置添加高级配置面板，其中有一个是否渲染配置项
 ```typescript
 import { material } from '@alilc/lowcode-engine'
@@ -475,7 +475,7 @@ material.registerMetadataTransducer((transducer) => {
 getRegisteredMetadataTransducers(): IPublicTypeMetadataTransducer[];
 ```
 
-##### 示例
+**示例**
 ```typescript
 import { material } from '@alilc/lowcode-engine'
 
@@ -496,7 +496,7 @@ onChangeAssets(fn: () => void): IPublicTypeDisposable;
 
 相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
 
-##### 示例
+**示例**
 ```typescript
 import { material } from '@alilc/lowcode-engine';
 
