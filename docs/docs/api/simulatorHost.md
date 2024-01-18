@@ -20,7 +20,7 @@ sidebar_position: 3
  */
 set(key: string, value: any): void;
 ```
-#### 示例
+**示例**
 设置若干用于画布渲染的变量，比如画布大小、locale 等。
 
 以设置画布大小为例：

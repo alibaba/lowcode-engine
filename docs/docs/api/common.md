@@ -82,7 +82,7 @@ executeTransaction(fn: () => void, type: IPublicEnumTransitionType): void;
 ```
 **@since v1.0.16**
 
-##### 示例
+**示例**
 ```typescript
 import { common } from '@alilc/lowcode-engine';
 import { IPublicEnumTransitionType } from '@alilc/lowcode-types';
@@ -132,7 +132,8 @@ createIntl(instance: string | object): {
 
 **@since v1.0.17**
 
-##### 示例
+**示例**
+
 ```typescript
 import { common } from '@alilc/lowcode-engine';
 import enUS from './en-US.json';
@@ -156,7 +157,7 @@ i18n 转换方法
 intl(data: IPublicTypeI18nData | string, params?: object): string;
 ```
 
-##### 示例
+**示例**
 ```
 const title = common.utils.intl(node.title)
 ```
