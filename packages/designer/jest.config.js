@@ -21,6 +21,7 @@ const jestConfig = {
   // testMatch: ['**/builtin-hotkey.test.ts'],
   // testMatch: ['**/selection.test.ts'],
   // testMatch: ['**/plugin/sequencify.test.ts'],
+  // testMatch: ['**/builtin-simulator/utils/parse-metadata.test.ts'],
   transformIgnorePatterns: [
     `/node_modules/(?!${esModules})/`,
   ],
