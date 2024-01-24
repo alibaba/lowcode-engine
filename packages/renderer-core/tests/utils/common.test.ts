@@ -19,6 +19,9 @@ import {
   parseI18n,
   parseData,
   checkPropTypes,
+  transformPropTypesRuleToString,
+  isRequiredType,
+  isBasicType,
 } from '../../src/utils/common';
 import logger from '../../src/utils/logger';
 
@@ -283,7 +286,7 @@ describe('test capitalizeFirstLetter ', () => {
 describe('test forEach ', () => {
   it('should work', () => {
     const mockFn = jest.fn();
-    
+
     forEach(null, mockFn);
     expect(mockFn).toBeCalledTimes(0);
 
@@ -298,7 +301,7 @@ describe('test forEach ', () => {
 
     forEach({ a: 1, b: 2, c: 3 }, mockFn);
     expect(mockFn).toBeCalledTimes(3);
-    
+
     const mockFn2 = jest.fn();
     forEach({ a: 1 }, mockFn2, { b: 'bbb' });
     expect(mockFn2).toHaveBeenCalledWith(1, 'a');
@@ -468,6 +471,28 @@ describe('test parseData ', () => {
   });
 });
 
+describe('test isBasicType ', () => {
+  it('should work', () => {
+    expect(isBasicType(null)).toBeFalsy();
+    expect(isBasicType(undefined)).toBeFalsy();
+    expect(isBasicType({})).toBeFalsy();
+    expect(isBasicType({ type: 'any other type' })).toBeFalsy();
+    expect(isBasicType('string')).toBeTruthy();
+  });
+});
+
+describe('test isRequiredType', () => {
+  it('should work', () => {
+    expect(isRequiredType(null)).toBeFalsy();
+    expect(isRequiredType(undefined)).toBeFalsy();
+    expect(isRequiredType({})).toBeFalsy();
+    expect(isRequiredType({ type: 'any other type' })).toBeFalsy();
+    expect(isRequiredType('string')).toBeFalsy();
+    expect(isRequiredType({ type: 'string' })).toBeTruthy();
+    expect(isRequiredType({ type: 'string', isRequired: true })).toBeTruthy();
+  });
+})
+
 describe('checkPropTypes', () => {
   it('should validate correctly with valid prop type', () => {
     expect(checkPropTypes(123, 'age', PropTypes.number, 'TestComponent')).toBe(true);
@@ -498,5 +523,160 @@ describe('checkPropTypes', () => {
   it('should log a warning for invalid rule type', () => {
     const result = checkPropTypes(123, 'age', 123, 'TestComponent');
     expect(result).toBe(true);
+  });
+
+  // oneOf
+  it('should validate correctly with valid oneOf prop type', () => {
+    const rule = {
+      type: 'oneOf',
+      value: ['News', 'Photos'],
+    }
+    expect(transformPropTypesRuleToString(rule)).toBe(`PropTypes.oneOf(["News","Photos"])`);
+    expect(checkPropTypes('News', 'type', rule, 'TestComponent')).toBe(true);
+    expect(checkPropTypes('Others', 'type', rule, 'TestComponent')).toBe(false);
+  });
+
+  // oneOfType
+  it('should validate correctly with valid oneOfType prop type', () => {
+    const rule = {
+      type: 'oneOfType',
+      value: ['string', 'number', {
+        type: 'array',
+        isRequired: true,
+      }],
+    };
+    expect(transformPropTypesRuleToString(rule)).toBe('PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.array.isRequired])');
+    expect(checkPropTypes(['News', 'Photos'], 'type', rule, 'TestComponent')).toBe(true);
+    expect(checkPropTypes('News', 'type', rule, 'TestComponent')).toBe(true);
+    expect(checkPropTypes(123, 'type', rule, 'TestComponent')).toBe(true);
+    expect(checkPropTypes({}, 'type', rule, 'TestComponent')).toBe(false);
+  });
+
+  // arrayOf
+  it('should validate correctly with valid arrayOf prop type', () => {
+    const rule = {
+      type: 'arrayOf',
+      value: {
+        type: 'string',
+        isRequired: true,
+      },
+    };
+    expect(transformPropTypesRuleToString(rule)).toBe('PropTypes.arrayOf(PropTypes.string.isRequired)');
+    expect(checkPropTypes(['News', 'Photos'], 'type', rule, 'TestComponent')).toBe(true);
+    expect(checkPropTypes(['News', 123], 'type', rule, 'TestComponent')).toBe(false);
+  });
+
+  // objectOf
+  it('should validate correctly with valid objectOf prop type', () => {
+    const rule = {
+      type: 'objectOf',
+      value: {
+        type: 'string',
+        isRequired: true,
+      },
+    };
+    expect(transformPropTypesRuleToString(rule)).toBe('PropTypes.objectOf(PropTypes.string.isRequired)');
+    expect(checkPropTypes({ a: 'News', b: 'Photos' }, 'type', rule, 'TestComponent')).toBe(true);
+    expect(checkPropTypes({ a: 'News', b: 123 }, 'type', rule, 'TestComponent')).toBe(false);
+  });
+
+  // shape
+  it('should validate correctly with valid shape prop type', () => {
+    const rule = {
+      type: 'shape',
+      value: [
+        {
+          name: 'a',
+          propType: {
+            type: 'string',
+            isRequired: true,
+          },
+        },
+        {
+          name: 'b',
+          propType: {
+            type: 'number',
+            isRequired: true,
+          },
+        },
+      ],
+    };
+    expect(transformPropTypesRuleToString(rule)).toBe('PropTypes.shape({a: PropTypes.string.isRequired,b: PropTypes.number.isRequired})');
+    expect(checkPropTypes({ a: 'News', b: 123 }, 'type', rule, 'TestComponent')).toBe(true);
+    expect(checkPropTypes({ a: 'News', b: 'Photos' }, 'type', rule, 'TestComponent')).toBe(false);
+
+    // isRequired
+    const rule2 = {
+      type: 'shape',
+      value: [
+        {
+          name: 'a',
+          propType: {
+            type: 'string',
+            isRequired: true,
+          },
+        },
+        {
+          name: 'b',
+          propType: {
+            type: 'number',
+            isRequired: false,
+          },
+        },
+      ],
+    };
+    expect(transformPropTypesRuleToString(rule2)).toBe('PropTypes.shape({a: PropTypes.string.isRequired,b: PropTypes.number})');
+    expect(checkPropTypes({ a: 'News', b: 123 }, 'type', rule2, 'TestComponent')).toBe(true);
+    expect(checkPropTypes({ b: 123 }, 'type', rule2, 'TestComponent')).toBe(false);
+  });
+
+  // exact
+  it('should validate correctly with valid exact prop type', () => {
+    const rule = {
+      type: 'exact',
+      value: [
+        {
+          name: 'a',
+          propType: {
+            type: 'string',
+            isRequired: true,
+          },
+        },
+        {
+          name: 'b',
+          propType: {
+            type: 'number',
+            isRequired: true,
+          },
+        },
+      ],
+    };
+    expect(transformPropTypesRuleToString(rule)).toBe('PropTypes.exact({a: PropTypes.string.isRequired,b: PropTypes.number.isRequired})');
+    expect(checkPropTypes({ a: 'News', b: 123 }, 'type', rule, 'TestComponent')).toBe(true);
+    expect(checkPropTypes({ a: 'News', b: 'Photos' }, 'type', rule, 'TestComponent')).toBe(false);
+
+    // isRequired
+    const rule2 = {
+      type: 'exact',
+      value: [
+        {
+          name: 'a',
+          propType: {
+            type: 'string',
+            isRequired: true,
+          },
+        },
+        {
+          name: 'b',
+          propType: {
+            type: 'number',
+            isRequired: false,
+          },
+        },
+      ],
+    };
+    expect(transformPropTypesRuleToString(rule2)).toBe('PropTypes.exact({a: PropTypes.string.isRequired,b: PropTypes.number})');
+    expect(checkPropTypes({ a: 'News', b: 123 }, 'type', rule2, 'TestComponent')).toBe(true);
+    expect(checkPropTypes({ b: 123 }, 'type', rule2, 'TestComponent')).toBe(false);
   });
 });

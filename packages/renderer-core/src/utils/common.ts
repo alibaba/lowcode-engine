@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-new-func */
 import logger from './logger';
-import { IPublicTypeRootSchema, IPublicTypeNodeSchema, IPublicTypeJSSlot } from '@alilc/lowcode-types';
+import { IPublicTypeRootSchema, IPublicTypeNodeSchema, IPublicTypeJSSlot, IPublicTypePropType, IPublicTypeRequiredType, IPublicTypeBasicType } from '@alilc/lowcode-types';
 import { isI18nData, isJSExpression } from '@alilc/lowcode-utils';
 import { isEmpty } from 'lodash';
 import IntlMessageFormat from 'intl-messageformat';
@@ -183,8 +183,54 @@ export function transformArrayToMap(arr: any[], key: string, overwrite = true) {
   return res;
 }
 
+export function isBasicType(propType: IPublicTypePropType): propType is IPublicTypeBasicType {
+  if (!propType) {
+    return false;
+  }
+  return typeof propType === 'string';
+}
+
+export function isRequiredType(propType: IPublicTypePropType): propType is IPublicTypeRequiredType {
+  if (!propType) {
+    return false;
+  }
+  return typeof propType === 'object' && propType.type && ['array', 'bool', 'func', 'number', 'object', 'string', 'node', 'element', 'any'].includes(propType.type);
+}
+
+export function transformPropTypesRuleToString(rule: IPublicTypePropType): string {
+  if (!rule) {
+    return 'PropTypes.any';
+  }
+
+  if (typeof rule === 'string') {
+    return `PropTypes.${rule}`;
+  }
+
+  if (isRequiredType(rule)) {
+    const { type, isRequired } = rule;
+    return `PropTypes.${type}${isRequired ? '.isRequired' : ''}`;
+  }
+
+  const { type, value } = rule;
+  switch (type) {
+    case 'oneOf':
+      return `PropTypes.oneOf([${value.map((item: any) => `"${item}"`).join(',')}])`;
+    case 'oneOfType':
+      return `PropTypes.oneOfType([${value.map((item: any) => transformPropTypesRuleToString(item)).join(', ')}])`;
+    case 'arrayOf':
+    case 'objectOf':
+      return `PropTypes.${type}(${transformPropTypesRuleToString(value)})`;
+    case 'shape':
+    case 'exact':
+      return `PropTypes.${type}({${value.map((item: any) => `${item.name}: ${transformPropTypesRuleToString(item.propType)}`).join(',')}})`;
+  }
+}
+
 export function checkPropTypes(value: any, name: string, rule: any, componentName: string): boolean {
   let ruleFunction = rule;
+  if (typeof rule === 'object') {
+    ruleFunction = new Function(`"use strict"; const PropTypes = arguments[0]; return ${transformPropTypesRuleToString(rule)}`)(PropTypes2);
+  }
   if (typeof rule === 'string') {
     ruleFunction = new Function(`"use strict"; const PropTypes = arguments[0]; return ${rule}`)(PropTypes2);
   }
