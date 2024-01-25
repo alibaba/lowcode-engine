@@ -8,13 +8,13 @@ import { Logger } from './logger';
 const PropTypes2 = factoryWithTypeCheckers(ReactIs.isElement, true);
 const logger = new Logger({ level: 'warn', bizName: 'utils' });
 
-export function transformPropTypesRuleToString(rule: IPublicTypePropType): string {
+export function transformPropTypesRuleToString(rule: IPublicTypePropType | string): string {
   if (!rule) {
     return 'PropTypes.any';
   }
 
   if (typeof rule === 'string') {
-    return `PropTypes.${rule}`;
+    return rule.startsWith('PropTypes.') ? rule : `PropTypes.${rule}`;
   }
 
   if (isRequiredPropType(rule)) {
@@ -34,7 +34,11 @@ export function transformPropTypesRuleToString(rule: IPublicTypePropType): strin
     case 'shape':
     case 'exact':
       return `PropTypes.${type}({${value.map((item: any) => `${item.name}: ${transformPropTypesRuleToString(item.propType)}`).join(',')}})`;
+    default:
+      logger.error(`Unknown prop type: ${type}`);
   }
+
+  return 'PropTypes.any';
 }
 
 export function checkPropTypes(value: any, name: string, rule: any, componentName: string): boolean {
@@ -45,7 +49,7 @@ export function checkPropTypes(value: any, name: string, rule: any, componentNam
   }
   if (typeof rule === 'string') {
     // eslint-disable-next-line no-new-func
-    ruleFunction = new Function(`"use strict"; const PropTypes = arguments[0]; return ${rule}`)(PropTypes2);
+    ruleFunction = new Function(`"use strict"; const PropTypes = arguments[0]; return ${transformPropTypesRuleToString(rule)}`)(PropTypes2);
   }
   if (!ruleFunction || typeof ruleFunction !== 'function') {
     logger.warn('checkPropTypes should have a function type rule argument');
