@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import React from 'react';
 import './context-menu.scss';
 
-const logger = new Logger({ level: 'warn', bizName: 'designer' });
+const logger = new Logger({ level: 'warn', bizName: 'utils' });
 const { Item, Divider, PopupItem } = Menu;
 
 const MAX_LEVEL = 2;
