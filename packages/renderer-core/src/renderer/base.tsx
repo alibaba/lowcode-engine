@@ -4,7 +4,7 @@
 import classnames from 'classnames';
 import { create as createDataSourceEngine } from '@alilc/lowcode-datasource-engine/interpret';
 import { IPublicTypeNodeSchema, IPublicTypeNodeData, IPublicTypeJSONValue, IPublicTypeCompositeValue } from '@alilc/lowcode-types';
-import { isI18nData, isJSExpression, isJSFunction } from '@alilc/lowcode-utils';
+import { checkPropTypes, isI18nData, isJSExpression, isJSFunction } from '@alilc/lowcode-utils';
 import adapter from '../adapter';
 import divFactory from '../components/Div';
 import visualDomFactory from '../components/VisualDom';
@@ -21,7 +21,6 @@ import {
   isFileSchema,
   transformArrayToMap,
   transformStringToFunction,
-  checkPropTypes,
   getI18n,
   getFileCssName,
   capitalizeFirstLetter,

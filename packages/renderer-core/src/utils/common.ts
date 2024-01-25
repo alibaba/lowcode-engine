@@ -6,15 +6,10 @@ import { isI18nData, isJSExpression } from '@alilc/lowcode-utils';
 import { isEmpty } from 'lodash';
 import IntlMessageFormat from 'intl-messageformat';
 import pkg from '../../package.json';
-import * as ReactIs from 'react-is';
-import { default as ReactPropTypesSecret } from 'prop-types/lib/ReactPropTypesSecret';
-import { default as factoryWithTypeCheckers } from 'prop-types/factoryWithTypeCheckers';
 
 (window as any).sdkVersion = pkg.version;
 
 export { pick, isEqualWith as deepEqual, cloneDeep as clone, isEmpty, throttle, debounce } from 'lodash';
-
-const PropTypes2 = factoryWithTypeCheckers(ReactIs.isElement, true);
 
 const EXPRESSION_TYPE = {
   JSEXPRESSION: 'JSExpression',
@@ -181,77 +176,6 @@ export function transformArrayToMap(arr: any[], key: string, overwrite = true) {
     res[curKey] = item;
   });
   return res;
-}
-
-export function isBasicType(propType: IPublicTypePropType): propType is IPublicTypeBasicType {
-  if (!propType) {
-    return false;
-  }
-  return typeof propType === 'string';
-}
-
-export function isRequiredType(propType: IPublicTypePropType): propType is IPublicTypeRequiredType {
-  if (!propType) {
-    return false;
-  }
-  return typeof propType === 'object' && propType.type && ['array', 'bool', 'func', 'number', 'object', 'string', 'node', 'element', 'any'].includes(propType.type);
-}
-
-export function transformPropTypesRuleToString(rule: IPublicTypePropType): string {
-  if (!rule) {
-    return 'PropTypes.any';
-  }
-
-  if (typeof rule === 'string') {
-    return `PropTypes.${rule}`;
-  }
-
-  if (isRequiredType(rule)) {
-    const { type, isRequired } = rule;
-    return `PropTypes.${type}${isRequired ? '.isRequired' : ''}`;
-  }
-
-  const { type, value } = rule;
-  switch (type) {
-    case 'oneOf':
-      return `PropTypes.oneOf([${value.map((item: any) => `"${item}"`).join(',')}])`;
-    case 'oneOfType':
-      return `PropTypes.oneOfType([${value.map((item: any) => transformPropTypesRuleToString(item)).join(', ')}])`;
-    case 'arrayOf':
-    case 'objectOf':
-      return `PropTypes.${type}(${transformPropTypesRuleToString(value)})`;
-    case 'shape':
-    case 'exact':
-      return `PropTypes.${type}({${value.map((item: any) => `${item.name}: ${transformPropTypesRuleToString(item.propType)}`).join(',')}})`;
-  }
-}
-
-export function checkPropTypes(value: any, name: string, rule: any, componentName: string): boolean {
-  let ruleFunction = rule;
-  if (typeof rule === 'object') {
-    ruleFunction = new Function(`"use strict"; const PropTypes = arguments[0]; return ${transformPropTypesRuleToString(rule)}`)(PropTypes2);
-  }
-  if (typeof rule === 'string') {
-    ruleFunction = new Function(`"use strict"; const PropTypes = arguments[0]; return ${rule}`)(PropTypes2);
-  }
-  if (!ruleFunction || typeof ruleFunction !== 'function') {
-    logger.warn('checkPropTypes should have a function type rule argument');
-    return true;
-  }
-  const err = ruleFunction(
-    {
-      [name]: value,
-    },
-    name,
-    componentName,
-    'prop',
-    null,
-    ReactPropTypesSecret,
-  );
-  if (err) {
-    logger.warn(err);
-  }
-  return !err;
 }
 
 /**
