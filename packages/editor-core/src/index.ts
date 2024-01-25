@@ -6,3 +6,4 @@ export * from './hotkey';
 export * from './widgets';
 export * from './config';
 export * from './event-bus';
+export * from './command';

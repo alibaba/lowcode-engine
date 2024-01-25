@@ -93,3 +93,4 @@ export * from './scrollable';
 export * from './simulator-renderer';
 export * from './config-transducer';
 export * from './context-menu';
+export * from './command';

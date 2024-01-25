@@ -10,6 +10,7 @@ import {
   Setters as InnerSetters,
   Hotkey as InnerHotkey,
   IEditor,
+  Command as InnerCommand,
 } from '@alilc/lowcode-editor-core';
 import {
   IPublicTypeEngineOptions,
@@ -19,6 +20,7 @@ import {
   IPublicApiPlugins,
   IPublicApiWorkspace,
   IPublicEnumPluginRegisterLevel,
+  IPublicModelPluginContext,
 } from '@alilc/lowcode-types';
 import {
   Designer,
@@ -52,6 +54,7 @@ import {
   Workspace,
   Config,
   CommonUI,
+  Command,
 } from '@alilc/lowcode-shell';
 import { isPlainObject } from '@alilc/lowcode-utils';
 import './modules/live-editing';
@@ -63,6 +66,7 @@ import { defaultPanelRegistry } from './inner-plugins/default-panel-registry';
 import { shellModelFactory } from './modules/shell-model-factory';
 import { builtinHotkey } from './inner-plugins/builtin-hotkey';
 import { defaultContextMenu } from './inner-plugins/default-context-menu';
+import { defaultCommand } from './inner-plugins/default-command';
 import { OutlinePlugin } from '@alilc/lowcode-plugin-outline-pane';
 
 export * from './modules/skeleton-types';
@@ -80,6 +84,7 @@ async function registryInnerPlugin(designer: IDesigner, editor: IEditor, plugins
   await plugins.register(builtinHotkey);
   await plugins.register(registerDefaults, {}, { autoInit: true });
   await plugins.register(defaultContextMenu);
+  await plugins.register(defaultCommand, {});
 
   return () => {
     plugins.delete(OutlinePlugin.pluginName);
@@ -89,6 +94,7 @@ async function registryInnerPlugin(designer: IDesigner, editor: IEditor, plugins
     plugins.delete(builtinHotkey.pluginName);
     plugins.delete(registerDefaults.pluginName);
     plugins.delete(defaultContextMenu.pluginName);
+    plugins.delete(defaultCommand.pluginName);
   };
 }
 
@@ -98,6 +104,8 @@ const editor = new Editor();
 globalContext.register(editor, Editor);
 globalContext.register(editor, 'editor');
 globalContext.register(innerWorkspace, 'workspace');
+
+const engineContext: Partial<ILowCodePluginContextPrivate> = {};
 
 const innerSkeleton = new InnerSkeleton(editor);
 editor.set('skeleton' as any, innerSkeleton);
@@ -113,6 +121,8 @@ const project = new Project(innerProject);
 const skeleton = new Skeleton(innerSkeleton, 'any', false);
 const innerSetters = new InnerSetters();
 const setters = new Setters(innerSetters);
+const innerCommand = new InnerCommand();
+const command = new Command(innerCommand, engineContext as IPublicModelPluginContext);
 
 const material = new Material(editor);
 const commonUI = new CommonUI(editor);
@@ -136,6 +146,7 @@ const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
     context.setters = setters;
     context.material = material;
     const eventPrefix = meta?.eventPrefix || 'common';
+    const commandScope = meta?.commandScope;
     context.event = new Event(commonEvent, { prefix: eventPrefix });
     context.config = config;
     context.common = common;
@@ -144,6 +155,9 @@ const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
     context.logger = new Logger({ level: 'warn', bizName: `plugin:${pluginName}` });
     context.workspace = workspace;
     context.commonUI = commonUI;
+    context.command = new Command(innerCommand, context as IPublicModelPluginContext, {
+      commandScope,
+    });
     context.registerLevel = IPublicEnumPluginRegisterLevel.Default;
     context.isPluginRegisteredInWorkspace = false;
     editor.set('pluginContext', context);
@@ -154,6 +168,20 @@ const innerPlugins = new LowCodePluginManager(pluginContextApiAssembler);
 plugins = new Plugins(innerPlugins).toProxy();
 editor.set('innerPlugins' as any, innerPlugins);
 editor.set('plugins' as any, plugins);
+
+engineContext.skeleton = skeleton;
+engineContext.plugins = plugins;
+engineContext.project = project;
+engineContext.setters = setters;
+engineContext.material = material;
+engineContext.event = event;
+engineContext.logger = logger;
+engineContext.hotkey = hotkey;
+engineContext.common = common;
+engineContext.workspace = workspace;
+engineContext.canvas = canvas;
+engineContext.commonUI = commonUI;
+engineContext.command = command;
 
 export {
   skeleton,
@@ -169,6 +197,7 @@ export {
   workspace,
   canvas,
   commonUI,
+  command,
 };
 // declare this is open-source version
 export const isOpenSource = true;

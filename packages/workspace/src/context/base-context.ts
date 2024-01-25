@@ -5,6 +5,7 @@ import {
   commonEvent,
   IEngineConfig,
   IHotKey,
+  Command as InnerCommand,
 } from '@alilc/lowcode-editor-core';
 import {
   Designer,
@@ -33,6 +34,7 @@ import {
   Window,
   Canvas,
   CommonUI,
+  Command,
 } from '@alilc/lowcode-shell';
 import {
   IPluginPreferenceMananger,
@@ -129,6 +131,7 @@ export class BasicContext implements IBasicContext {
     const skeleton = new Skeleton(innerSkeleton, 'any', true);
     const canvas = new Canvas(editor, true);
     const commonUI = new CommonUI(editor);
+    const innerCommand = new InnerCommand();
     editor.set('setters', setters);
     editor.set('project', project);
     editor.set('material', material);
@@ -162,6 +165,7 @@ export class BasicContext implements IBasicContext {
         context.setters = setters;
         context.material = material;
         const eventPrefix = meta?.eventPrefix || 'common';
+        const commandScope = meta?.commandScope;
         context.event = new Event(commonEvent, { prefix: eventPrefix });
         context.config = config;
         context.common = common;
@@ -172,6 +176,9 @@ export class BasicContext implements IBasicContext {
         if (editorWindow) {
           context.editorWindow = new Window(editorWindow);
         }
+        context.command = new Command(innerCommand, context as IPublicModelPluginContext, {
+          commandScope,
+        });
         context.registerLevel = registerLevel;
         context.isPluginRegisteredInWorkspace = registerLevel === IPublicEnumPluginRegisterLevel.Workspace;
         editor.set('pluginContext', context);
