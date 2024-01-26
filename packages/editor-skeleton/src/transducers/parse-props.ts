@@ -9,6 +9,7 @@ import {
   IPublicTypeTransformedComponentMetadata,
   IPublicTypeOneOfType,
   ConfigureSupportEvent,
+  IPublicModelSettingField,
 } from '@alilc/lowcode-types';
 
 function propConfigToFieldConfig(propConfig: IPublicTypePropConfig): IPublicTypeFieldConfig {
@@ -102,7 +103,7 @@ function propTypeToSetter(propType: IPublicTypePropType): IPublicTypeSetterType 
           },
         },
         isRequired,
-        initialValue: (field: any) => {
+        initialValue: (field: IPublicModelSettingField) => {
           const data: any = {};
           items.forEach((item: any) => {
             let initial = item.defaultValue;

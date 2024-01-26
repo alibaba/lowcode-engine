@@ -77,5 +77,5 @@ export interface IPublicTypeFieldExtraProps {
   /**
    * onChange 事件
    */
-  onChange?: (value: any, field: any) => void;
+  onChange?: (value: any, field: IPublicModelSettingField) => void;
 }
