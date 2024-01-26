@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { IPublicApiSetters, IPublicTypeCustomView, IPublicTypeRegisteredSetter } from '@alilc/lowcode-types';
+import { IPublicApiSetters, IPublicModelSettingField, IPublicTypeCustomView, IPublicTypeRegisteredSetter } from '@alilc/lowcode-types';
 import { createContent, isCustomView } from '@alilc/lowcode-utils';
 
 const settersMap = new Map<string, IPublicTypeRegisteredSetter & {
@@ -28,7 +28,7 @@ export function registerSetter(
   if (!setter.initialValue) {
     const initial = getInitialFromSetter(setter.component);
     if (initial) {
-      setter.initialValue = (field: any) => {
+      setter.initialValue = (field: IPublicModelSettingField) => {
         return initial.call(field, field.getValue());
       };
     }
@@ -81,7 +81,7 @@ export class Setters implements ISetters {
     if (!setter.initialValue) {
       const initial = getInitialFromSetter(setter.component);
       if (initial) {
-        setter.initialValue = (field: any) => {
+        setter.initialValue = (field: IPublicModelSettingField) => {
           return initial.call(field, field.getValue());
         };
       }
