@@ -3,7 +3,7 @@ import { Editor, engineConfig } from '@alilc/lowcode-editor-core';
 import { Designer } from '../../../../src/designer/designer';
 import { DocumentModel } from '../../../../src/document/document-model';
 import { Prop, isProp, isValidArrayIndex } from '../../../../src/document/node/props/prop';
-import { IPublicEnumTransformStage } from '@alilc/lowcode-types';
+import { GlobalEvent, IPublicEnumTransformStage } from '@alilc/lowcode-types';
 import { shellModelFactory } from '../../../../../engine/src/modules/shell-model-factory';
 
 const slotNodeImportMockFn = jest.fn();
@@ -24,9 +24,16 @@ const mockOwner = {
         remove: slotNodeRemoveMockFn,
       };
     },
-    designer: {},
+    designer: {
+      editor: {
+        eventBus: {
+          emit: jest.fn(),
+        },
+      },
+    },
   },
   isInited: true,
+  emitPropChange: jest.fn(),
 };
 
 const mockPropsInst = {
@@ -562,5 +569,100 @@ describe('其他导出函数', () => {
     expect(isValidArrayIndex('1')).toBeTruthy();
     expect(isValidArrayIndex('1', 2)).toBeTruthy();
     expect(isValidArrayIndex('2', 1)).toBeFalsy();
+  });
+});
+
+describe('setValue with event', () => {
+  let propInstance;
+  let mockEmitChange;
+  let mockEventBusEmit;
+  let mockEmitPropChange;
+
+  beforeEach(() => {
+    // Initialize the instance of your class
+    propInstance = new Prop(mockPropsInst, true, 'stringProp');;
+
+    // Mock necessary methods and properties
+    mockEmitChange = jest.spyOn(propInstance, 'emitChange');
+    propInstance.owner = {
+      document: {
+        designer: {
+          editor: {
+            eventBus: {
+              emit: jest.fn(),
+            },
+          },
+        },
+      },
+      emitPropChange: jest.fn(),
+    };
+    mockEventBusEmit = jest.spyOn(propInstance.owner.document.designer.editor.eventBus, 'emit');
+    mockEmitPropChange = jest.spyOn(propInstance.owner, 'emitPropChange');
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it('should correctly handle string values and emit changes', () => {
+    const oldValue = propInstance._value;
+    const newValue = 'new string value';
+
+    propInstance.setValue(newValue);
+
+    const expectedPartialPropsInfo = expect.objectContaining({
+      key: propInstance.key,
+      newValue, // You can specifically test only certain keys
+      oldValue,
+    });
+
+    expect(propInstance.getValue()).toBe(newValue);
+    expect(propInstance.type).toBe('literal');
+    expect(mockEmitChange).toHaveBeenCalledWith({ oldValue });
+    expect(mockEventBusEmit).toHaveBeenCalledWith(GlobalEvent.Node.Prop.InnerChange, expectedPartialPropsInfo);
+    expect(mockEmitPropChange).toHaveBeenCalledWith(expectedPartialPropsInfo);
+  });
+
+  it('should handle object values and set type to map', () => {
+    const oldValue = propInstance._value;
+    const newValue = 234;
+
+    const expectedPartialPropsInfo = expect.objectContaining({
+      key: propInstance.key,
+      newValue, // You can specifically test only certain keys
+      oldValue,
+    });
+
+    propInstance.setValue(newValue);
+
+    expect(propInstance.getValue()).toEqual(newValue);
+    expect(propInstance.type).toBe('literal');
+    expect(mockEmitChange).toHaveBeenCalledWith({ oldValue });
+    expect(mockEventBusEmit).toHaveBeenCalledWith(GlobalEvent.Node.Prop.InnerChange, expectedPartialPropsInfo);
+    expect(mockEmitPropChange).toHaveBeenCalledWith(expectedPartialPropsInfo);
+  });
+
+  it('should has event when unset call', () => {
+    const oldValue = propInstance._value;
+
+    propInstance.unset();
+
+    const expectedPartialPropsInfo = expect.objectContaining({
+      key: propInstance.key,
+      newValue: undefined, // You can specifically test only certain keys
+      oldValue,
+    });
+
+    expect(propInstance.getValue()).toEqual(undefined);
+    expect(propInstance.type).toBe('unset');
+    expect(mockEmitChange).toHaveBeenCalledWith({
+      oldValue,
+      newValue: undefined,
+    });
+    expect(mockEventBusEmit).toHaveBeenCalledWith(GlobalEvent.Node.Prop.InnerChange, expectedPartialPropsInfo);
+    expect(mockEmitPropChange).toHaveBeenCalledWith(expectedPartialPropsInfo);
+
+    propInstance.unset();
+    expect(mockEmitChange).toHaveBeenCalledTimes(1);
   });
 });

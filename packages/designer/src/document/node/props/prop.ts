@@ -353,7 +353,6 @@ export class Prop implements IProp, IPropParent {
   @action
   setValue(val: IPublicTypeCompositeValue) {
     if (val === this._value) return;
-    const editor = this.owner.document?.designer.editor;
     const oldValue = this._value;
     this._value = val;
     this._code = null;
@@ -386,21 +385,30 @@ export class Prop implements IProp, IPropParent {
     this.setupItems();
 
     if (oldValue !== this._value) {
-      const propsInfo = {
-        key: this.key,
-        prop: this,
-        oldValue,
-        newValue: this._value,
-      };
-
-      editor?.eventBus.emit(GlobalEvent.Node.Prop.InnerChange, {
-        node: this.owner as any,
-        ...propsInfo,
-      });
-
-      this.owner?.emitPropChange?.(propsInfo);
+      this.emitChange({ oldValue });
     }
   }
+
+  emitChange = ({
+    oldValue,
+  }: {
+    oldValue: IPublicTypeCompositeValue | UNSET;
+  }) => {
+    const editor = this.owner.document?.designer.editor;
+    const propsInfo = {
+      key: this.key,
+      prop: this,
+      oldValue,
+      newValue: this.type === 'unset' ? undefined : this._value,
+    };
+
+    editor?.eventBus.emit(GlobalEvent.Node.Prop.InnerChange, {
+      node: this.owner as any,
+      ...propsInfo,
+    });
+
+    this.owner?.emitPropChange?.(propsInfo);
+  };
 
   getValue(): IPublicTypeCompositeValue {
     return this.export(IPublicEnumTransformStage.Serilize);
@@ -462,7 +470,12 @@ export class Prop implements IProp, IPropParent {
    */
   @action
   unset() {
-    this._type = 'unset';
+    if (this._type !== 'unset') {
+      this._type = 'unset';
+      this.emitChange({
+        oldValue: this._value,
+      });
+    }
   }
 
   /**
