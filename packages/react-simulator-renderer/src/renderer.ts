@@ -614,7 +614,7 @@ function getNodeInstance(fiberNode: any, specId?: string): IPublicTypeNodeInstan
 
 function checkInstanceMounted(instance: any): boolean {
   if (isElement(instance)) {
-    return instance.parentElement != null;
+    return instance.parentElement != null && window.document.contains(instance);
   }
   return true;
 }
