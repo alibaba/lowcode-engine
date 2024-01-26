@@ -2,6 +2,8 @@
 title: 3. 如何通过按钮展示/隐藏弹窗
 sidebar_position: 1
 ---
+> 说明：这个方式依赖低代码弹窗组件是否对外保留了相关的 API，不同的物料支持的方式不一样，这里只针对综合场景的弹窗物料。
+
 ## 1.拖拽一个按钮
 
 ![image.png](https://img.alicdn.com/imgextra/i1/O1CN01kLaWA31D6WwTui9VW_!!6000000000167-2-tps-3584-1812.png)
