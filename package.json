@@ -42,19 +42,19 @@
     }
   },
   "devDependencies": {
+    "@alilc/build-plugin-lce": "^0.0.3",
+    "@alilc/lowcode-test-mate": "^1.0.1",
+    "@types/react-router": "5.1.18",
+    "babel-jest": "^26.5.2",
     "del": "^6.1.1",
     "execa": "^5.1.1",
     "f2elint": "^2.0.1",
     "gulp": "^4.0.2",
     "husky": "^7.0.4",
     "lerna": "^4.0.0",
-    "typescript": "4.6.2",
-    "yarn": "^1.22.17",
     "rimraf": "^3.0.2",
-    "@types/react-router": "5.1.18",
-    "@alilc/build-plugin-lce": "^0.0.3",
-    "babel-jest": "^26.5.2",
-    "@alilc/lowcode-test-mate": "^1.0.1"
+    "typescript": "4.6.2",
+    "yarn": "^1.22.17"
   },
   "engines": {
     "node": ">=14.17.0 <18"
@@ -67,5 +67,8 @@
     "typescript": "4.6.2",
     "react-error-overlay": "6.0.9"
   },
-  "repository": "git@github.com:alibaba/lowcode-engine.git"
+  "repository": "git@github.com:alibaba/lowcode-engine.git",
+  "dependencies": {
+    "split-pane-react": "file:../split-pane-react"
+  }
 }

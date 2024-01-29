@@ -14,7 +14,7 @@
 
   --left-area-width: 48px;
   --workspace-left-area-width: 48px;
-  --right-area-width: 300px;
+  --right-area-width: 100%;
   --top-area-height: 48px;
   --toolbar-height: 36px;
   --dock-pane-width: 300px;
@@ -23,7 +23,7 @@
 
 @media (min-width: 1860px) {
   :root {
-    --right-area-width: 400px;
+    --right-area-width: 100%;
     --dock-pane-width: 452px;
     --dock-fixed-pane-width: 350px;
   }
@@ -363,6 +363,7 @@ body {
       flex: 1;
       display: flex;
       flex-direction: column;
+      height: 100%;
       z-index: 10;
       .lc-toolbar {
         display: flex;
@@ -378,6 +379,7 @@ body {
       }
       .lc-main-area {
         flex: 1;
+        height: 100%;
         background-color: var(--color-background);
       }
       .lc-bottom-area {
