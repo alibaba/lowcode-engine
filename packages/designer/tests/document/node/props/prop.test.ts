@@ -34,11 +34,14 @@ const mockOwner = {
   },
   isInited: true,
   emitPropChange: jest.fn(),
+  delete() {},
 };
 
 const mockPropsInst = {
   owner: mockOwner,
+  delete() {},
 };
+
 mockPropsInst.props = mockPropsInst;
 
 describe('Prop 类测试', () => {
@@ -595,6 +598,7 @@ describe('setValue with event', () => {
         },
       },
       emitPropChange: jest.fn(),
+      delete() {},
     };
     mockEventBusEmit = jest.spyOn(propInstance.owner.document.designer.editor.eventBus, 'emit');
     mockEmitPropChange = jest.spyOn(propInstance.owner, 'emitPropChange');
@@ -663,6 +667,31 @@ describe('setValue with event', () => {
     expect(mockEmitPropChange).toHaveBeenCalledWith(expectedPartialPropsInfo);
 
     propInstance.unset();
+    expect(mockEmitChange).toHaveBeenCalledTimes(1);
+  });
+
+  // remove
+  it('should has event when remove call', () => {
+    const oldValue = propInstance._value;
+
+    propInstance.remove();
+
+    const expectedPartialPropsInfo = expect.objectContaining({
+      key: propInstance.key,
+      newValue: undefined, // You can specifically test only certain keys
+      oldValue,
+    });
+
+    expect(propInstance.getValue()).toEqual(undefined);
+    // expect(propInstance.type).toBe('unset');
+    expect(mockEmitChange).toHaveBeenCalledWith({
+      oldValue,
+      newValue: undefined,
+    });
+    expect(mockEventBusEmit).toHaveBeenCalledWith(GlobalEvent.Node.Prop.InnerChange, expectedPartialPropsInfo);
+    expect(mockEmitPropChange).toHaveBeenCalledWith(expectedPartialPropsInfo);
+
+    propInstance.remove();
     expect(mockEmitChange).toHaveBeenCalledTimes(1);
   });
 });

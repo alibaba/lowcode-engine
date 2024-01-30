@@ -570,6 +570,7 @@ export class Prop implements IProp, IPropParent {
   @action
   remove() {
     this.parent.delete(this);
+    this.unset();
   }
 
   /**
