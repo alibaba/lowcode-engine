@@ -90,7 +90,7 @@ export class Workspace implements IPublicApiWorkspace {
   }
 
   get plugins() {
-    return new Plugins(this[workspaceSymbol].plugins, true);
+    return new Plugins(this[workspaceSymbol].plugins, true).toProxy();
   }
 
   get skeleton() {
