@@ -10,10 +10,7 @@ const sampleNodeSchema: IPublicTypePropType = {
   value: [
     {
       name: 'id',
-      propType: {
-        type: 'string',
-        isRequired: true,
-      },
+      propType: 'string',
     },
     {
       name: 'componentName',
@@ -277,10 +274,12 @@ export const nodeCommand = (ctx: IPublicModelPluginContext) => {
         handler: (param: {
           parentNodeId: string;
           nodeSchema: IPublicTypeNodeSchema;
+          index: number;
         }) => {
           const {
             parentNodeId,
             nodeSchema,
+            index,
           } = param;
           const { project } = ctx;
           const parentNode = project.currentDocument?.getNodeById(parentNodeId);
@@ -296,7 +295,11 @@ export const nodeCommand = (ctx: IPublicModelPluginContext) => {
             throw new Error('Invalid node.');
           }
 
-          project.currentDocument?.insertNode(parentNode, nodeSchema);
+          if (index < 0 || index > (parentNode.children?.size || 0)) {
+            throw new Error(`Invalid index '${index}'.`);
+          }
+
+          project.currentDocument?.insertNode(parentNode, nodeSchema, index);
         },
         parameters: [
           {
@@ -308,6 +311,11 @@ export const nodeCommand = (ctx: IPublicModelPluginContext) => {
             name: 'nodeSchema',
             propType: nodeSchemaPropType,
             description: 'The node to be added.',
+          },
+          {
+            name: 'index',
+            propType: 'number',
+            description: 'The index of the node to be added.',
           },
         ],
       });
@@ -325,6 +333,14 @@ export const nodeCommand = (ctx: IPublicModelPluginContext) => {
             targetNodeId,
             index = 0,
           } = param;
+
+          if (!nodeId) {
+            throw new Error('Invalid node id.');
+          }
+
+          if (!targetNodeId) {
+            throw new Error('Invalid target node id.');
+          }
 
           const node = project.currentDocument?.getNodeById(nodeId);
           const targetNode = project.currentDocument?.getNodeById(targetNodeId);
@@ -350,12 +366,18 @@ export const nodeCommand = (ctx: IPublicModelPluginContext) => {
         parameters: [
           {
             name: 'nodeId',
-            propType: 'string',
+            propType: {
+              type: 'string',
+              isRequired: true,
+            },
             description: 'The id of the node to be moved.',
           },
           {
             name: 'targetNodeId',
-            propType: 'string',
+            propType: {
+              type: 'string',
+              isRequired: true,
+            },
             description: 'The id of the target node.',
           },
           {
@@ -393,8 +415,8 @@ export const nodeCommand = (ctx: IPublicModelPluginContext) => {
       });
 
       command.registerCommand({
-        name: 'replace',
-        description: 'Replace a node with another node.',
+        name: 'update',
+        description: 'Update a node.',
         handler(param: {
           nodeId: string;
           nodeSchema: IPublicTypeNodeSchema;
@@ -419,12 +441,12 @@ export const nodeCommand = (ctx: IPublicModelPluginContext) => {
           {
             name: 'nodeId',
             propType: 'string',
-            description: 'The id of the node to be replaced.',
+            description: 'The id of the node to be updated.',
           },
           {
             name: 'nodeSchema',
             propType: nodeSchemaPropType,
-            description: 'The node to replace.',
+            description: 'The node to be updated.',
           },
         ],
       });
