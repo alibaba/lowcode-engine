@@ -34,7 +34,7 @@ export function ContextMenu({ children, menus, pluginContext }: {
     );
   }
 
-  if (!menus || !menus.length) {
+  if (!menus) {
     return (
       <>{ children }</>
     );
@@ -53,6 +53,9 @@ export function ContextMenu({ children, menus, pluginContext }: {
 }
 
 ContextMenu.create = (pluginContext: IPublicModelPluginContext, menus: IPublicTypeContextMenuAction[], event: MouseEvent) => {
+  event.preventDefault();
+  event.stopPropagation();
+
   const children: React.ReactNode[] = parseContextMenuAsReactNode(parseContextMenuProperties(menus, {
     pluginContext,
   }), {
