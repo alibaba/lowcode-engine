@@ -15,12 +15,12 @@ export interface IPublicApiCommand {
   /**
    * 通过名称和给定参数执行一个命令，会校验参数是否符合命令定义
    */
-  executeCommand(name: string, args: IPublicTypeCommandHandlerArgs): void;
+  executeCommand(name: string, args?: IPublicTypeCommandHandlerArgs): void;
 
   /**
    * 批量执行命令，执行完所有命令后再进行一次重绘，历史记录中只会记录一次
    */
-  batchExecuteCommand(commands: { name: string; args: IPublicTypeCommandHandlerArgs }[]): void;
+  batchExecuteCommand(commands: { name: string; args?: IPublicTypeCommandHandlerArgs }[]): void;
 
   /**
    * 列出所有已注册的命令
