@@ -1,8 +1,9 @@
 import { IPublicModelWindow } from '../model';
-import { IPublicApiPlugins, IPublicModelResource, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType } from '@alilc/lowcode-types';
+import { IPublicApiPlugins, IPublicApiSkeleton, IPublicModelResource, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType } from '@alilc/lowcode-types';
 
 export interface IPublicApiWorkspace<
   Plugins = IPublicApiPlugins,
+  Skeleton = IPublicApiSkeleton,
   ModelWindow = IPublicModelWindow,
   Resource = IPublicModelResource,
 > {
@@ -14,6 +15,8 @@ export interface IPublicApiWorkspace<
   window: ModelWindow | null;
 
   plugins: Plugins;
+
+  skeleton: Skeleton;
 
   /** 当前设计器的编辑窗口 */
   windows: ModelWindow[];
