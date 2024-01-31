@@ -1,20 +1,8 @@
+import { IPublicTypePropType } from './prop-types';
+
 // 定义命令处理函数的参数类型
 export interface IPublicTypeCommandHandlerArgs {
   [key: string]: any;
-}
-
-// 定义复杂参数类型的接口
-export interface IPublicTypeCommandPropType {
-
-  /**
-   * 参数基础类型
-   */
-  type: string;
-
-  /**
-   * 参数是否必需（可选）
-   */
-  isRequired?: boolean;
 }
 
 // 定义命令参数的接口
@@ -28,7 +16,7 @@ export interface IPublicTypeCommandParameter {
   /**
    * 参数类型或详细类型描述
    */
-  propType: string | IPublicTypeCommandPropType;
+  propType: string | IPublicTypePropType;
 
   /**
    * 参数描述
