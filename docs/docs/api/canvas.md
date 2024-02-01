@@ -1,6 +1,6 @@
 ---
 title: canvas - 画布 API
-sidebar_position: 12
+sidebar_position: 10
 ---
 
 > **@types** [IPublicApiCanvas](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/api/canvas.ts)<br/>

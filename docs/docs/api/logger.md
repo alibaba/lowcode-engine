@@ -1,6 +1,6 @@
 ---
 title: logger - 日志 API
-sidebar_position: 9
+sidebar_position: 10
 ---
 
 > **@types** [IPublicApiLogger](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/api/logger.ts)<br/>
