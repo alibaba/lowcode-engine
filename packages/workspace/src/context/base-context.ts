@@ -96,7 +96,7 @@ export class BasicContext implements IBasicContext {
   designer: IDesigner;
   registerInnerPlugins: () => Promise<void>;
   innerSetters: InnerSetters;
-  innerSkeleton: InnerSkeleton;
+  innerSkeleton: ISkeleton;
   innerHotkey: IHotKey;
   innerPlugins: ILowCodePluginManager;
   canvas: IPublicApiCanvas;
