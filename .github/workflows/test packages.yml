@@ -123,7 +123,7 @@ jobs:
       - name: test
         run: cd packages/editor-core && npm test
 
-  test-plugin-command
+  test-plugin-command:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
