@@ -1,8 +1,4 @@
-import {
-  IPublicModelPluginContext,
-  IPublicTypeNodeSchema,
-  IPublicTypePropType,
-} from '@alilc/lowcode-types';
+import { IPublicModelPluginContext, IPublicTypeNodeSchema, IPublicTypePlugin, IPublicTypePropType } from '@alilc/lowcode-types';
 import { isNodeSchema } from '@alilc/lowcode-utils';
 
 const sampleNodeSchema: IPublicTypePropType = {
@@ -226,45 +222,7 @@ export const nodeSchemaPropType: IPublicTypePropType = {
   ],
 };
 
-export const historyCommand = (ctx: IPublicModelPluginContext) => {
-  const { command, project } = ctx;
-  return {
-    init() {
-      command.registerCommand({
-        name: 'undo',
-        description: 'Undo the last operation.',
-        handler: () => {
-          const state = project.currentDocument?.history.getState() || 0;
-          const enable = !!(state & 1);
-          if (!enable) {
-            throw new Error('Can not undo.');
-          }
-          project.currentDocument?.history.back();
-        },
-      });
-
-      command.registerCommand({
-        name: 'redo',
-        description: 'Redo the last operation.',
-        handler: () => {
-          const state = project.currentDocument?.history.getState() || 0;
-          const enable = !!(state & 2);
-          if (!enable) {
-            throw new Error('Can not redo.');
-          }
-          project.currentDocument?.history.forward();
-        },
-      });
-    },
-  };
-};
-
-historyCommand.pluginName = '___history_command___';
-historyCommand.meta = {
-  commandScope: 'history',
-};
-
-export const nodeCommand = (ctx: IPublicModelPluginContext) => {
+export const nodeCommand: IPublicTypePlugin = (ctx: IPublicModelPluginContext) => {
   const { command, project } = ctx;
   return {
     init() {
@@ -521,6 +479,14 @@ export const nodeCommand = (ctx: IPublicModelPluginContext) => {
         ],
       });
     },
+    destroy() {
+      command.unregisterCommand('node:add');
+      command.unregisterCommand('node:move');
+      command.unregisterCommand('node:remove');
+      command.unregisterCommand('node:update');
+      command.unregisterCommand('node:updateProps');
+      command.unregisterCommand('node:removeProps');
+    },
   };
 };
 
@@ -529,18 +495,3 @@ nodeCommand.meta = {
   commandScope: 'node',
 };
 
-export const defaultCommand = (ctx: IPublicModelPluginContext) => {
-  const { plugins } = ctx;
-  plugins.register(nodeCommand);
-  plugins.register(historyCommand);
-
-  return {
-    init() {
-    },
-  };
-};
-
-defaultCommand.pluginName = '___default_command___';
-defaultCommand.meta = {
-  commandScope: 'common',
-};

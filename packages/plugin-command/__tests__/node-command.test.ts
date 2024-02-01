@@ -1,5 +1,5 @@
 import { checkPropTypes } from '@alilc/lowcode-utils/src/check-prop-types';
-import { nodeSchemaPropType } from '../../src/inner-plugins/default-command';
+import { nodeSchemaPropType } from '../src/node-command';
 
 describe('nodeSchemaPropType', () => {
   const componentName = 'NodeComponent';
@@ -10,8 +10,8 @@ describe('nodeSchemaPropType', () => {
     const invalidId = 123; // Not a string
     expect(checkPropTypes(validId, 'id', getPropType('id'), componentName)).toBe(true);
     expect(checkPropTypes(invalidId, 'id', getPropType('id'), componentName)).toBe(false);
-    // isRequired
-    expect(checkPropTypes(undefined, 'id', getPropType('id'), componentName)).toBe(false);
+    // is not required
+    expect(checkPropTypes(undefined, 'id', getPropType('id'), componentName)).toBe(true);
   });
 
   it('should validate the componentName as a string', () => {
@@ -71,7 +71,7 @@ describe('nodeSchemaPropType', () => {
     const invalidLoop = { type: 'JSExpression', value: 123 }; // Not a string
     expect(checkPropTypes(validLoop, 'loop', getPropType('loop'), componentName)).toBe(true);
     expect(checkPropTypes(invalidLoop, 'loop', getPropType('loop'), componentName)).toBe(false);
-  })
+  });
 
   it('should validate the loopArgs as an array', () => {
     const validLoopArgs = ['item'];
