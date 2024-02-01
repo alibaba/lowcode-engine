@@ -10,6 +10,7 @@ lerna run build \
   --scope @alilc/lowcode-editor-skeleton \
   --scope @alilc/lowcode-designer \
   --scope @alilc/lowcode-plugin-designer \
+  --scope @alilc/lowcode-plugin-command \
   --scope @alilc/lowcode-plugin-outline-pane \
   --scope @alilc/lowcode-react-renderer \
   --scope @alilc/lowcode-react-simulator-renderer \

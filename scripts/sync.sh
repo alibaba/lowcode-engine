@@ -14,3 +14,4 @@ tnpm sync @alilc/lowcode-react-renderer
 tnpm sync @alilc/lowcode-react-simulator-renderer
 tnpm sync @alilc/lowcode-engine
 tnpm sync @alilc/lowcode-workspace
+tnpm sync @alilc/lowcode-plugin-command
