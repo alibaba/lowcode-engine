@@ -1,0 +1,34 @@
+{
+  "name": "@alilc/lowcode-plugin-command",
+  "version": "1.3.1",
+  "description": "> TODO: description",
+  "author": "liujuping <liujup@foxmail.com>",
+  "homepage": "https://github.com/alibaba/lowcode-engine#readme",
+  "license": "ISC",
+  "main": "lib/plugin-command.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/lowcode-engine.git"
+  },
+  "scripts": {
+    "test": "build-scripts test --config build.test.json --jest-passWithNoTests",
+    "build": "build-scripts build"
+  },
+  "bugs": {
+    "url": "https://github.com/alibaba/lowcode-engine/issues"
+  },
+  "dependencies": {
+    "@alilc/lowcode-types": "^1.3.1",
+    "@alilc/lowcode-utils": "^1.3.1"
+  }
+}

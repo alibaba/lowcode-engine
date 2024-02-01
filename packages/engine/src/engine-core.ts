@@ -66,7 +66,7 @@ import { defaultPanelRegistry } from './inner-plugins/default-panel-registry';
 import { shellModelFactory } from './modules/shell-model-factory';
 import { builtinHotkey } from './inner-plugins/builtin-hotkey';
 import { defaultContextMenu } from './inner-plugins/default-context-menu';
-import { defaultCommand } from './inner-plugins/default-command';
+import { defaultCommand } from '@alilc/lowcode-plugin-command';
 import { OutlinePlugin } from '@alilc/lowcode-plugin-outline-pane';
 
 export * from './modules/skeleton-types';
