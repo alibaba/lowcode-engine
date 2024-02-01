@@ -1,6 +1,6 @@
 ---
 title: config options - 配置列表
-sidebar_position: 13
+sidebar_position: 5
 ---
 
 > **@types** [IPublicTypeEngineOptions](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/engine-options.ts)<br/>

@@ -1,6 +1,6 @@
 ---
 title: commonUI - UI 组件库
-sidebar_position: 11
+sidebar_position: 10
 ---
 
 ## 简介

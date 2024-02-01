@@ -1,6 +1,6 @@
 ---
 title: event - 事件 API
-sidebar_position: 7
+sidebar_position: 10
 ---
 
 > **@types** [IPublicApiEvent](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/api/event.ts)<br/>

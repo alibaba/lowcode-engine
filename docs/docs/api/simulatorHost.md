@@ -1,6 +1,6 @@
 ---
 title: simulatorHost - 模拟器 API
-sidebar_position: 3
+sidebar_position: 10
 ---
 > **@types** [IPublicApiSimulatorHost](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/api/simulator-host.ts)<br/>
 > **@since** v1.0.0

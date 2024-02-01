@@ -1,6 +1,6 @@
 ---
 title: skeleton - 面板 API
-sidebar_position: 1
+sidebar_position: 10
 ---
 > **@types** [IPublicApiSkeleton](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/api/skeleton.ts)<br/>
 > **@since** v1.0.0

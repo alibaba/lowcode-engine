@@ -1,6 +1,6 @@
 ---
 title: common - 通用 API
-sidebar_position: 11
+sidebar_position: 10
 ---
 
 > **@types** [IPublicApiCommon](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/api/common.ts)<br/>
