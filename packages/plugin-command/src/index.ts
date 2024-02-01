@@ -2,7 +2,7 @@ import { IPublicModelPluginContext, IPublicTypePlugin } from '@alilc/lowcode-typ
 import { nodeCommand } from './node-command';
 import { historyCommand } from './history-command';
 
-export const defaultCommand: IPublicTypePlugin = (ctx: IPublicModelPluginContext) => {
+export const CommandPlugin: IPublicTypePlugin = (ctx: IPublicModelPluginContext) => {
   const { plugins } = ctx;
 
   return {
@@ -17,7 +17,9 @@ export const defaultCommand: IPublicTypePlugin = (ctx: IPublicModelPluginContext
   };
 };
 
-defaultCommand.pluginName = '___default_command___';
-defaultCommand.meta = {
+CommandPlugin.pluginName = '___default_command___';
+CommandPlugin.meta = {
   commandScope: 'common',
 };
+
+export default CommandPlugin;

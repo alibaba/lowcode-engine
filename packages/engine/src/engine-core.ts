@@ -66,7 +66,7 @@ import { defaultPanelRegistry } from './inner-plugins/default-panel-registry';
 import { shellModelFactory } from './modules/shell-model-factory';
 import { builtinHotkey } from './inner-plugins/builtin-hotkey';
 import { defaultContextMenu } from './inner-plugins/default-context-menu';
-import { defaultCommand } from '@alilc/lowcode-plugin-command';
+import { CommandPlugin } from '@alilc/lowcode-plugin-command';
 import { OutlinePlugin } from '@alilc/lowcode-plugin-outline-pane';
 
 export * from './modules/skeleton-types';
@@ -84,7 +84,7 @@ async function registryInnerPlugin(designer: IDesigner, editor: IEditor, plugins
   await plugins.register(builtinHotkey);
   await plugins.register(registerDefaults, {}, { autoInit: true });
   await plugins.register(defaultContextMenu);
-  await plugins.register(defaultCommand, {});
+  await plugins.register(CommandPlugin, {});
 
   return () => {
     plugins.delete(OutlinePlugin.pluginName);
@@ -94,7 +94,7 @@ async function registryInnerPlugin(designer: IDesigner, editor: IEditor, plugins
     plugins.delete(builtinHotkey.pluginName);
     plugins.delete(registerDefaults.pluginName);
     plugins.delete(defaultContextMenu.pluginName);
-    plugins.delete(defaultCommand.pluginName);
+    plugins.delete(CommandPlugin.pluginName);
   };
 }
 
