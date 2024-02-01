@@ -1,6 +1,6 @@
 ---
 title: workspace - 应用级 API
-sidebar_position: 12
+sidebar_position: 10
 ---
 
 > **[@experimental](./#experimental)**<br/>

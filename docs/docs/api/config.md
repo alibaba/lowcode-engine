@@ -1,6 +1,6 @@
 ---
 title: config - 配置 API
-sidebar_position: 8
+sidebar_position: 5
 ---
 
 > **@types** [IPublicModelEngineConfig](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/engine-config.ts)<br/>

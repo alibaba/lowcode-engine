@@ -1,6 +1,6 @@
 ---
 title: setters - 设置器 API
-sidebar_position: 6
+sidebar_position: 10
 ---
 > **@types** [IPublicApiSetters](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/api/setters.ts)<br/>
 > **@since** v1.0.0

@@ -1,6 +1,6 @@
 ---
 title:  hotkey - 快捷键 API
-sidebar_position: 5
+sidebar_position: 10
 ---
 
 > **@types** [IPublicApiHotkey](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/api/hotkey.ts)<br/>

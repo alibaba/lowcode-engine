@@ -1,6 +1,6 @@
 ---
 title: material - 物料 API
-sidebar_position: 2
+sidebar_position: 10
 ---
 
 > **@types** [IPublicApiMaterial](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/api/material.ts)<br/>
