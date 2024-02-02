@@ -70,7 +70,7 @@ export class Transducer {
     }
     if (isDynamicSetter(setter) && isDynamic) {
       try {
-        setter = setter.call(context, context);
+        setter = setter.call(context.internalToShellField(), context.internalToShellField());
       } catch (e) { console.error(e); }
     }
 
