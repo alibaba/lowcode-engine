@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { IPublicTypeDisposable, IPublicTypeNodeSchema } from '../type';
+import { IPublicTypeDisposable, IPublicTypeRootSchema } from '../type';
 import { IPublicModelResource } from './resource';
 import { IPublicModelEditorView } from './editor-view';
 
@@ -32,7 +32,7 @@ export interface IPublicModelWindow<
   editorViews: IPublicModelEditorView[];
 
   /** 当前窗口导入 schema */
-  importSchema(schema: IPublicTypeNodeSchema): void;
+  importSchema(schema: IPublicTypeRootSchema): void;
 
   /** 修改当前窗口视图类型 */
   changeViewType(viewName: string): void;

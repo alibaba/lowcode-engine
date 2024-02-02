@@ -34,4 +34,5 @@ export default {
   simulatorHostSymbol,
   skeletonItemSymbol,
   simulatorRenderSymbol,
+  settingFieldSymbol,
 };
