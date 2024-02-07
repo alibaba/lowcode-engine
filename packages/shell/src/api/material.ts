@@ -3,7 +3,7 @@ import {
   IDesigner,
   isComponentMeta,
 } from '@alilc/lowcode-designer';
-import { IPublicTypeAssetsJson } from '@alilc/lowcode-utils';
+import { IPublicTypeAssetsJson, getLogger } from '@alilc/lowcode-utils';
 import {
   IPublicTypeComponentAction,
   IPublicTypeComponentMetadata,
@@ -21,6 +21,8 @@ import { editorSymbol, designerSymbol } from '../symbols';
 import { ComponentMeta as ShellComponentMeta } from '../model';
 import { ComponentType } from 'react';
 
+const logger = getLogger({ level: 'warn', bizName: 'shell-material' });
+
 const innerEditorSymbol = Symbol('editor');
 export class Material implements IPublicApiMaterial {
   private readonly [innerEditorSymbol]: IPublicModelEditor;
@@ -31,6 +33,10 @@ export class Material implements IPublicApiMaterial {
     }
     const workspace: InnerWorkspace = globalContext.get('workspace');
     if (workspace.isActive) {
+      if (!workspace.window.editor) {
+        logger.error('Material api 调用时机出现问题，请检查');
+        return this[innerEditorSymbol];
+      }
       return workspace.window.editor;
     }
 
