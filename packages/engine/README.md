@@ -176,3 +176,9 @@ Special thanks to everyone who contributed to this project.
 <p>
 <a href="https://github.com/alibaba/lowcode-engine/graphs/contributors"><img src="https://contrib.rocks/image?repo=alibaba/lowcode-engine" /></a>
 </p>
+
+## ⭐️ Star History
+
+<a href="https://star-history.com/#alibaba/lowcode-engine">
+  <img src="https://api.star-history.com/svg?repos=alibaba/lowcode-engine&type=Date" alt="Star History Chart" width="100%" />
+</a>
