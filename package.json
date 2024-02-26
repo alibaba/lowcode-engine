@@ -21,6 +21,8 @@
     "lint:modules": "f2elint scan -q -i ./modules/*/src",
     "lint:modules:fix": "f2elint fix -i ./modules/*/src",
     "pub": "npm run watchdog:build && lerna publish patch --yes --force-publish --exact --no-changelog",
+    "pub:minor": "npm run watchdog:build && lerna publish minor --yes --force-publish --exact --no-changelog",
+    "pub:major": "npm run watchdog:build && lerna publish major --yes --force-publish --exact --no-changelog",
     "pub:premajor": "npm run watchdog:build && lerna publish premajor --force-publish --exact --dist-tag beta --preid beta --no-changelog",
     "pub:preminor": "npm run watchdog:build && lerna publish preminor --force-publish --exact --dist-tag beta --preid beta --no-changelog",
     "pub:prepatch": "npm run watchdog:build && lerna publish prepatch --force-publish --exact --dist-tag beta --preid beta --no-changelog",
@@ -42,19 +44,19 @@
     }
   },
   "devDependencies": {
-    "@alilc/build-plugin-lce": "^0.0.3",
-    "@alilc/lowcode-test-mate": "^1.0.1",
-    "@types/react-router": "5.1.18",
-    "babel-jest": "^26.5.2",
     "del": "^6.1.1",
     "execa": "^5.1.1",
     "f2elint": "^2.0.1",
     "gulp": "^4.0.2",
     "husky": "^7.0.4",
     "lerna": "^4.0.0",
-    "rimraf": "^3.0.2",
     "typescript": "4.6.2",
-    "yarn": "^1.22.17"
+    "yarn": "^1.22.17",
+    "rimraf": "^3.0.2",
+    "@types/react-router": "5.1.18",
+    "@alilc/build-plugin-lce": "^0.0.5",
+    "babel-jest": "^26.5.2",
+    "@alilc/lowcode-test-mate": "^1.0.1"
   },
   "engines": {
     "node": ">=14.17.0 <18"

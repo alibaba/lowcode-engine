@@ -28,6 +28,8 @@ import {
   Workspace,
   SimulatorHost,
   Config,
+  CommonUI,
+  Command,
 } from './api';
 
 export * from './symbols';
@@ -68,4 +70,6 @@ export {
   Config,
   SettingField,
   SkeletonItem,
+  CommonUI,
+  Command,
 };

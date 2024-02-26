@@ -1,6 +1,6 @@
 ---
 title: init - 初始化 API
-sidebar_position: 10
+sidebar_position: 0
 ---
 
 > **@since** v1.0.0

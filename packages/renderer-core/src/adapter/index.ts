@@ -2,7 +2,6 @@ import { IRuntime, IRendererModules, IGeneralConstructor } from '../types';
 
 export enum Env {
   React = 'react',
-  Rax = 'rax',
 }
 
 class Adapter {
@@ -22,22 +21,22 @@ class Adapter {
 
   initRuntime() {
     const Component: IGeneralConstructor = class <T = any, S = any> {
-      setState() {}
-      forceUpdate() {}
-      render() {}
       state: Readonly<S>;
       props: Readonly<T> & Readonly<{ children?: any | undefined }>;
       refs: Record<string, unknown>;
       context: Record<string, unknown>;
+      setState() {}
+      forceUpdate() {}
+      render() {}
     };
     const PureComponent = class <T = any, S = any> {
-      setState() {}
-      forceUpdate() {}
-      render() {}
       state: Readonly<S>;
       props: Readonly<T> & Readonly<{ children?: any | undefined }>;
       refs: Record<string, unknown>;
       context: Record<string, unknown>;
+      setState() {}
+      forceUpdate() {}
+      render() {}
     };
     const createElement = () => {};
     const createContext = () => {};
@@ -83,10 +82,6 @@ class Adapter {
 
   isReact() {
     return this.env === Env.React;
-  }
-
-  isRax() {
-    return this.env === Env.Rax;
   }
 
   setRenderers(renderers: IRendererModules) {

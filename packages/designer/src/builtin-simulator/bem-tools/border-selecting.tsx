@@ -9,7 +9,7 @@ import {
   ComponentType,
 } from 'react';
 import classNames from 'classnames';
-import { observer, computed, Tip } from '@alilc/lowcode-editor-core';
+import { observer, computed, Tip, engineConfig } from '@alilc/lowcode-editor-core';
 import { createIcon, isReactComponent, isActionContentObject } from '@alilc/lowcode-utils';
 import { IPublicTypeActionContentObject } from '@alilc/lowcode-types';
 import { BuiltinSimulatorHost } from '../host';
@@ -47,14 +47,18 @@ export class BorderSelectingInstance extends Component<{
     });
 
     const { hideSelectTools } = observed.node.componentMeta.advanced;
+    const hideComponentAction = engineConfig.get('hideComponentAction');
 
     if (hideSelectTools) {
       return null;
     }
 
     return (
-      <div className={className} style={style}>
-        {!dragging && <Toolbar observed={observed} />}
+      <div
+        className={className}
+        style={style}
+      >
+        {(!dragging && !hideComponentAction) ? <Toolbar observed={observed} /> : null}
       </div>
     );
   }

@@ -18,6 +18,8 @@ import {
   IPublicTypePluginRegisterOptions,
   IPublicModelWindow,
   IPublicEnumPluginRegisterLevel,
+  IPublicApiCommonUI,
+  IPublicApiCommand,
 } from '@alilc/lowcode-types';
 import PluginContext from './plugin-context';
 
@@ -61,6 +63,8 @@ export interface ILowCodePluginContextPrivate {
   set editorWindow(window: IPublicModelWindow);
   set registerLevel(level: IPublicEnumPluginRegisterLevel);
   set isPluginRegisteredInWorkspace(flag: boolean);
+  set commonUI(commonUI: IPublicApiCommonUI);
+  set command(command: IPublicApiCommand);
 }
 export interface ILowCodePluginContextApiAssembler {
   assembleApis(

@@ -108,3 +108,5 @@ typings/
 # codealike
 codealike.json
 .node
+
+.must.config.js

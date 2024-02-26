@@ -11,6 +11,8 @@ import {
   IPluginPreferenceMananger,
   IPublicApiPlugins,
   IPublicApiWorkspace,
+  IPublicApiCommonUI,
+  IPublicApiCommand,
 } from '../api';
 import { IPublicEnumPluginRegisterLevel } from '../enum';
 import { IPublicModelEngineConfig, IPublicModelWindow } from './';
@@ -101,6 +103,14 @@ export interface IPublicModelPluginContext {
    * @tutorial https://lowcode-engine.cn/site/docs/api/workspace
    */
   get workspace(): IPublicApiWorkspace;
+
+  /**
+   * commonUI API
+   * @tutorial https://lowcode-engine.cn/site/docs/api/commonUI
+   */
+  get commonUI(): IPublicApiCommonUI;
+
+  get command(): IPublicApiCommand;
 
   /**
    * 插件注册层级

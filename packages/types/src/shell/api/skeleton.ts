@@ -1,5 +1,5 @@
 import { IPublicModelSkeletonItem } from '../model';
-import { IPublicTypeConfigTransducer, IPublicTypeDisposable, IPublicTypeSkeletonConfig } from '../type';
+import { IPublicTypeConfigTransducer, IPublicTypeDisposable, IPublicTypeSkeletonConfig, IPublicTypeWidgetConfigArea } from '../type';
 
 export interface IPublicApiSkeleton {
 
@@ -19,6 +19,12 @@ export interface IPublicApiSkeleton {
    * @returns
    */
   remove(config: IPublicTypeSkeletonConfig): number | undefined;
+
+  /**
+   * 获取某个区域下的所有面板实例
+   * @param areaName IPublicTypeWidgetConfigArea
+   */
+  getAreaItems(areaName: IPublicTypeWidgetConfigArea): IPublicModelSkeletonItem[] | undefined;
 
   /**
    * 获取面板实例
@@ -89,7 +95,7 @@ export interface IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onShowPanel(listener: (...args: any[]) => void): IPublicTypeDisposable;
+  onShowPanel(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
 
   /**
    * 监听 Panel 实例隐藏事件
@@ -97,7 +103,19 @@ export interface IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onHidePanel(listener: (...args: any[]) => void): IPublicTypeDisposable;
+  onHidePanel(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
+
+  /**
+   * 监听 Widget 实例 Disable 事件
+   * @param listener
+   */
+  onDisableWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
+
+  /**
+   * 监听 Widget 实例 Enable 事件
+   * @param listener
+   */
+  onEnableWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
 
   /**
    * 监听 Widget 显示事件
@@ -105,7 +123,7 @@ export interface IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onShowWidget(listener: (...args: any[]) => void): IPublicTypeDisposable;
+  onShowWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
 
   /**
    * 监听 Widget 隐藏事件
@@ -113,7 +131,7 @@ export interface IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onHideWidget(listener: (...args: any[]) => void): IPublicTypeDisposable;
+  onHideWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
 
   /**
    * 注册一个面板的配置转换器（transducer）。

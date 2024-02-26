@@ -16,8 +16,16 @@ export const primitiveTypes = [
   'any',
 ];
 
+interface LowcodeCheckType {
+  // isRequired, props, propName, componentName, location, propFullName, secret
+  (props: any, propName: string, componentName: string, ...rest: any[]): Error | null;
+  // (...reset: any[]): Error | null;
+  isRequired?: LowcodeCheckType;
+  type?: string | object;
+}
+
 // eslint-disable-next-line @typescript-eslint/ban-types
-function makeRequired(propType: any, lowcodeType: string | object) {
+function makeRequired(propType: any, lowcodeType: string | object): LowcodeCheckType {
   function lowcodeCheckTypeIsRequired(...rest: any[]) {
     return propType.isRequired(...rest);
   }
@@ -34,7 +42,7 @@ function makeRequired(propType: any, lowcodeType: string | object) {
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-function define(propType: any = PropTypes.any, lowcodeType: string | object = {}) {
+function define(propType: any = PropTypes.any, lowcodeType: string | object = {}): LowcodeCheckType {
   if (!propType._inner && propType.name !== 'lowcodeCheckType') {
     propType.lowcodeType = lowcodeType;
   }

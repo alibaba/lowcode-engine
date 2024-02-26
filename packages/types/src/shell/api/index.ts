@@ -10,3 +10,5 @@ export * from './plugins';
 export * from './logger';
 export * from './canvas';
 export * from './workspace';
+export * from './commonUI';
+export * from './command';

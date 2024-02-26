@@ -1,6 +1,6 @@
 ---
 title: material - 物料 API
-sidebar_position: 2
+sidebar_position: 10
 ---
 
 > **@types** [IPublicApiMaterial](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/api/material.ts)<br/>
@@ -39,7 +39,7 @@ setAssets(assets: IPublicTypeAssetsJson): void;
 相关类型：[IPublicTypeAssetsJson](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/assets-json.ts)
 
 
-##### 示例
+**示例**
 直接在项目中引用 npm 包
 ```javascript
 import { material } from '@alilc/lowcode-engine';
@@ -85,7 +85,7 @@ getAssets(): IPublicTypeAssetsJson;
 相关类型：[IPublicTypeAssetsJson](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/assets-json.ts)
 
 
-##### 示例
+**示例**
 ```typescript
 import { material } from '@alilc/lowcode-engine';
 
@@ -106,7 +106,7 @@ loadIncrementalAssets(incrementalAssets: IPublicTypeAssetsJson): Promise<void>;
 ```
 相关类型：[IPublicTypeAssetsJson](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/assets-json.ts)
 
-##### 示例
+**示例**
 ```typescript
 import { material } from '@alilc/lowcode-engine';
 import assets1 from '@alilc/mc-assets-<siteId>/assets.json';
@@ -146,7 +146,7 @@ addBuiltinComponentAction(action: IPublicTypeComponentAction): void;
 相关类型：[IPublicTypeComponentAction](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/component-action.ts)
 
 
-##### 示例
+**示例**
 新增设计扩展位，并绑定事件
 ```typescript
 import { material } from '@alilc/lowcode-engine';
@@ -186,7 +186,7 @@ removeBuiltinComponentAction(name: string): void;
 - lock：锁定，不可编辑
 - unlock：解锁，可编辑
 
-##### 示例
+**示例**
 ```typescript
 import { material } from '@alilc/lowcode-engine';
 
@@ -222,7 +222,7 @@ modifyBuiltinComponentAction(
 
 
 
-##### 示例
+**示例**
 给原始的 remove 扩展时间添加执行前后的日志
 ```typescript
 import { material } from '@alilc/lowcode-engine';
@@ -237,7 +237,90 @@ material.modifyBuiltinComponentAction('remove', (action) => {
 });
 ```
 
+### 右键菜单项
+#### addContextMenuOption
+
+添加右键菜单项
+
+```typescript
+/**
+ * 添加右键菜单项
+ * @param action
+ */
+addContextMenuOption(action: IPublicTypeContextMenuAction): void;
+```
+
+示例
+
+```typescript
+import { IPublicEnumContextMenuType } from '@alilc/lowcode-types';
+
+material.addContextMenuOption({
+  name: 'parentItem',
+  title: 'Parent Item',
+  condition: (nodes) => true,
+  items: [
+    {
+      name: 'childItem1',
+      title: 'Child Item 1',
+      action: (nodes) => console.log('Child Item 1 clicked', nodes),
+      condition: (nodes) => true
+    },
+    // 分割线
+    {
+      type: IPublicEnumContextMenuType.SEPARATOR
+      name: 'separator.1'
+    }
+    // 更多子菜单项...
+  ]
+});
+
+```
+
+#### removeContextMenuOption
+
+删除特定右键菜单项
+
+```typescript
+/**
+ * 删除特定右键菜单项
+ * @param name
+ */
+removeContextMenuOption(name: string): void;
+```
+
+#### adjustContextMenuLayout
+
+调整右键菜单项布局，每次调用都会覆盖之前注册的调整函数，只有最后注册的函数会被应用。
+
+```typescript
+/**
+ * 调整右键菜单项布局
+ * @param actions
+ */
+adjustContextMenuLayout(fn: (actions: IPublicTypeContextMenuItem[]) => IPublicTypeContextMenuItem[]): void;
+```
+
+**示例**
+
+通过 adjustContextMenuLayout 补充分割线
+
+```typescript
+material.adjustContextMenuLayout((actions: IPublicTypeContextMenuAction) => {
+  const names = ['a', 'b'];
+  const newActions = [];
+  actions.forEach(d => {
+    newActions.push(d);
+    if (names.include(d.name)) {
+      newActions.push({ type: 'separator' })
+    }
+  });
+  return newActions
+})
+```
+
 ### 物料元数据
+
 #### getComponentMeta
 获取指定名称的物料元数据
 
@@ -252,7 +335,7 @@ getComponentMeta(componentName: string): IPublicModelComponentMeta | null;
 ```
 相关类型：[IPublicModelComponentMeta](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/component-meta.ts)
 
-##### 示例
+**示例**
 ```typescript
 import { material } from '@alilc/lowcode-engine';
 
@@ -273,7 +356,7 @@ material.getComponentMeta('Input');
 ```
 相关类型：[IPublicModelComponentMeta](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/component-meta.ts)
 
-##### 示例
+**示例**
 ```typescript
 import { material } from '@alilc/lowcode-engine';
 
@@ -310,7 +393,7 @@ registerMetadataTransducer(
 ): void;
 ```
 
-##### 示例
+**示例**
 给每一个组件的配置添加高级配置面板，其中有一个是否渲染配置项
 ```typescript
 import { material } from '@alilc/lowcode-engine'
@@ -392,7 +475,7 @@ material.registerMetadataTransducer((transducer) => {
 getRegisteredMetadataTransducers(): IPublicTypeMetadataTransducer[];
 ```
 
-##### 示例
+**示例**
 ```typescript
 import { material } from '@alilc/lowcode-engine'
 
@@ -413,7 +496,7 @@ onChangeAssets(fn: () => void): IPublicTypeDisposable;
 
 相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
 
-##### 示例
+**示例**
 ```typescript
 import { material } from '@alilc/lowcode-engine';
 

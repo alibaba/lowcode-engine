@@ -2,6 +2,10 @@ name: Publish Engine
 
 on:
   workflow_dispatch:
+    inputs:
+      publishCommand:
+        description: 'publish command'
+        required: true
 
 jobs:
   publish-engine:
@@ -21,9 +25,9 @@ jobs:
           npm run build
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-      - run: npm run pub
+      - run: npm run ${{ github.event.inputs.publishCommand }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Get version
         id: get_version
-        run: echo "::set-output name=version::$(node -p "require('./package.json').version")"
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT

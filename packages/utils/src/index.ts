@@ -31,3 +31,5 @@ export * as css from './css-helper';
 export { transactionManager } from './transaction-manager';
 export * from './check-types';
 export * from './workspace';
+export * from './context-menu';
+export { checkPropTypes } from './check-prop-types';

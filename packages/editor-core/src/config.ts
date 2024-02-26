@@ -44,7 +44,7 @@ const VALID_ENGINE_OPTIONS = {
   },
   renderEnv: {
     type: 'string',
-    enum: ['react', 'rax', 'any string value'],
+    enum: ['react', 'any string value'],
     default: 'react',
     description: '渲染器类型',
   },
@@ -158,6 +158,16 @@ const VALID_ENGINE_OPTIONS = {
   workspaceEmptyComponent: {
     type: 'function',
     description: '应用级设计模式下，窗口为空时展示的占位组件',
+  },
+  enableContextMenu: {
+    type: 'boolean',
+    description: '是否开启右键菜单',
+    default: false,
+  },
+  hideComponentAction: {
+    type: 'boolean',
+    description: '是否隐藏设计器辅助层',
+    default: false,
   },
 };
 

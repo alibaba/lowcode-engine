@@ -40,3 +40,4 @@ export const conditionGroupSymbol = Symbol('conditionGroup');
 export const editorViewSymbol = Symbol('editorView');
 export const pluginContextSymbol = Symbol('pluginContext');
 export const skeletonItemSymbol = Symbol('skeletonItem');
+export const commandSymbol = Symbol('command');

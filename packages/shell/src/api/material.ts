@@ -3,7 +3,7 @@ import {
   IDesigner,
   isComponentMeta,
 } from '@alilc/lowcode-designer';
-import { IPublicTypeAssetsJson } from '@alilc/lowcode-utils';
+import { IPublicTypeAssetsJson, getLogger } from '@alilc/lowcode-utils';
 import {
   IPublicTypeComponentAction,
   IPublicTypeComponentMetadata,
@@ -13,11 +13,15 @@ import {
   IPublicTypeNpmInfo,
   IPublicModelEditor,
   IPublicTypeDisposable,
+  IPublicTypeContextMenuAction,
+  IPublicTypeContextMenuItem,
 } from '@alilc/lowcode-types';
 import { Workspace as InnerWorkspace } from '@alilc/lowcode-workspace';
 import { editorSymbol, designerSymbol } from '../symbols';
 import { ComponentMeta as ShellComponentMeta } from '../model';
 import { ComponentType } from 'react';
+
+const logger = getLogger({ level: 'warn', bizName: 'shell-material' });
 
 const innerEditorSymbol = Symbol('editor');
 export class Material implements IPublicApiMaterial {
@@ -29,6 +33,10 @@ export class Material implements IPublicApiMaterial {
     }
     const workspace: InnerWorkspace = globalContext.get('workspace');
     if (workspace.isActive) {
+      if (!workspace.window.editor) {
+        logger.error('Material api 调用时机出现问题，请检查');
+        return this[innerEditorSymbol];
+      }
       return workspace.window.editor;
     }
 
@@ -189,5 +197,17 @@ export class Material implements IPublicApiMaterial {
     return () => {
       dispose.forEach(d => d && d());
     };
+  }
+
+  addContextMenuOption(option: IPublicTypeContextMenuAction) {
+    this[designerSymbol].contextMenuActions.addMenuAction(option);
+  }
+
+  removeContextMenuOption(name: string) {
+    this[designerSymbol].contextMenuActions.removeMenuAction(name);
+  }
+
+  adjustContextMenuLayout(fn: (actions: IPublicTypeContextMenuItem[]) => IPublicTypeContextMenuItem[]) {
+    this[designerSymbol].contextMenuActions.adjustMenuLayout(fn);
   }
 }

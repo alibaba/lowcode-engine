@@ -36,6 +36,10 @@ class Clipboard implements IClipboard {
 
   private waitFn?: (data: any, e: ClipboardEvent) => void;
 
+  constructor() {
+    this.injectCopyPaster(document);
+  }
+
   isCopyPasteEvent(e: Event) {
     this.isCopyPaster(e.target);
   }
@@ -69,7 +73,13 @@ class Clipboard implements IClipboard {
     }
     const copyPaster = document.createElement<'textarea'>('textarea');
     copyPaster.style.cssText = 'position: absolute;left: -9999px;top:-100px';
-    document.body.appendChild(copyPaster);
+    if (document.body) {
+      document.body.appendChild(copyPaster);
+    } else {
+      document.addEventListener('DOMContentLoaded', () => {
+        document.body.appendChild(copyPaster);
+      });
+    }
     const dispose = this.initCopyPaster(copyPaster);
     return () => {
       dispose();

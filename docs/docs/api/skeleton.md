@@ -1,6 +1,6 @@
 ---
 title: skeleton - 面板 API
-sidebar_position: 1
+sidebar_position: 10
 ---
 > **@types** [IPublicApiSkeleton](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/api/skeleton.ts)<br/>
 > **@since** v1.0.0
@@ -297,7 +297,24 @@ showArea(areaName: string): void;
 hideArea(areaName: string): void;
 ```
 
+### getAreaItems
+
+获取某个区域下的所有面板实例
+
+```typescript
+/**
+  * 获取某个区域下的所有面板实例
+  * @param areaName IPublicTypeWidgetConfigArea
+  */
+getAreaItems(areaName: IPublicTypeWidgetConfigArea): IPublicModelSkeletonItem[] | undefined;
+```
+
+相关类型：[IPublicModelSkeletonItem](https://github.com/alibaba/lowcode-engine/blob/main/packages/shell/src/model/skeleton-item.ts)
+
+
+
 ### registerConfigTransducer
+
 注册一个面板的配置转换器（transducer）。
 
 ```typescript
@@ -370,7 +387,7 @@ export default controlPanelWidthPlugin;
  * @param listener
  * @returns
  */
-onShowPanel(listener: (...args: any[]) => void): IPublicTypeDisposable;
+onShowPanel(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
 ```
 
 相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
@@ -386,11 +403,38 @@ onShowPanel(listener: (...args: any[]) => void): IPublicTypeDisposable;
  * @param listener
  * @returns
  */
-onHidePanel(listener: (...args: any[]) => void): IPublicTypeDisposable;
+onHidePanel(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
 ```
 
 相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
 
+### onDisableWidget
+
+监听 Widget 实例 Disable 事件
+
+```typescript
+/**
+ * 监听 Widget 实例 Disable 事件
+ * @param listener
+ */
+onDisableWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
+```
+
+相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
+
+### onEnableWidget
+
+监听 Widget 实例 Enable 事件
+
+```typescript
+/**
+ * 监听 Widget 实例 Enable 事件
+ * @param listener
+ */
+onEnableWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
+```
+
+相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
 
 ### onShowWidget
 
@@ -403,7 +447,7 @@ onHidePanel(listener: (...args: any[]) => void): IPublicTypeDisposable;
  * @param listener
  * @returns
  */
-onShowWidget(listener: (...args: any[]) => void): IPublicTypeDisposable;
+onShowWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
 ```
 
 相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
@@ -419,7 +463,7 @@ onShowWidget(listener: (...args: any[]) => void): IPublicTypeDisposable;
  * @param listener
  * @returns
  */
-onHideWidget(listener: (...args: any[]) => void): IPublicTypeDisposable;
+onHideWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
 ```
 
 相关类型：[IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)

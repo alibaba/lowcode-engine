@@ -225,7 +225,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
 
     const value = this.value;
 
-    let _onChange = extraProps?.onChange;
+    let onChangeAPI = extraProps?.onChange;
     let stageName = this.stageName;
 
     return createField(
@@ -261,7 +261,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
             value,
           });
           field.setValue(value, true);
-          if (_onChange) _onChange(value, field);
+          if (onChangeAPI) onChangeAPI(value, field.internalToShellField());
         },
         onInitial: () => {
           if (initialValue == null) {

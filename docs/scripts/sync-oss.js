@@ -19,7 +19,7 @@ const onResponse = function (res) {
     chunks.push(chunk);
   });
 
-  res.on('end', (chunk) => {
+  res.on('end', () => {
     const body = Buffer.concat(chunks);
     console.table(JSON.stringify(JSON.parse(body.toString()), null, 2));
   });
@@ -39,7 +39,7 @@ const postData = JSON.stringify({
     },
   ],
   // 可以发布指定源的 npm 包，默认公网 npm
-  useTnpm: false,
+  useTnpm: true,
 });
 
 req.write(postData);

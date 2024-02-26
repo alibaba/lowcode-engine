@@ -1,7 +1,6 @@
 import { action, makeObservable, obx, engineConfig, IEditor, FocusTracker } from '@alilc/lowcode-editor-core';
 import {
   DockConfig,
-  PanelConfig,
   WidgetConfig,
   PanelDockConfig,
   DialogDockConfig,
@@ -29,6 +28,7 @@ import {
   IPublicTypeSkeletonConfig,
   IPublicApiSkeleton,
   IPublicTypeConfigTransducer,
+  IPublicTypePanelConfig,
 } from '@alilc/lowcode-types';
 
 const logger = new Logger({ level: 'warn', bizName: 'skeleton' });
@@ -70,15 +70,15 @@ export interface ISkeleton extends Omit<IPublicApiSkeleton,
 
   readonly toolbar: Area<DockConfig | DividerConfig | PanelDockConfig | DialogDockConfig>;
 
-  readonly leftFixedArea: Area<PanelConfig, Panel>;
+  readonly leftFixedArea: Area<IPublicTypePanelConfig, Panel>;
 
-  readonly leftFloatArea: Area<PanelConfig, Panel>;
+  readonly leftFloatArea: Area<IPublicTypePanelConfig, Panel>;
 
-  readonly rightArea: Area<PanelConfig, Panel>;
+  readonly rightArea: Area<IPublicTypePanelConfig, Panel>;
 
-  readonly mainArea: Area<WidgetConfig | PanelConfig, Widget | Panel>;
+  readonly mainArea: Area<WidgetConfig | IPublicTypePanelConfig, Widget | Panel>;
 
-  readonly bottomArea: Area<PanelConfig, Panel>;
+  readonly bottomArea: Area<IPublicTypePanelConfig, Panel>;
 
   readonly stages: Area<StageConfig, Stage>;
 
@@ -104,7 +104,7 @@ export interface ISkeleton extends Omit<IPublicApiSkeleton,
     defaultSetCurrent?: boolean,
   ): WidgetContainer;
 
-  createPanel(config: PanelConfig): Panel;
+  createPanel(config: IPublicTypePanelConfig): Panel;
 
   add(config: IPublicTypeSkeletonConfig, extraConfig?: Record<string, any>): IWidget | Widget | Panel | Stage | Dock | PanelDock | undefined;
 }
@@ -124,15 +124,15 @@ export class Skeleton implements ISkeleton {
 
   readonly toolbar: Area<DockConfig | DividerConfig | PanelDockConfig | DialogDockConfig>;
 
-  readonly leftFixedArea: Area<PanelConfig, Panel>;
+  readonly leftFixedArea: Area<IPublicTypePanelConfig, Panel>;
 
-  readonly leftFloatArea: Area<PanelConfig, Panel>;
+  readonly leftFloatArea: Area<IPublicTypePanelConfig, Panel>;
 
-  readonly rightArea: Area<PanelConfig, Panel>;
+  readonly rightArea: Area<IPublicTypePanelConfig, Panel>;
 
-  @obx readonly mainArea: Area<WidgetConfig | PanelConfig, Widget | Panel>;
+  @obx readonly mainArea: Area<WidgetConfig | IPublicTypePanelConfig, Widget | Panel>;
 
-  readonly bottomArea: Area<PanelConfig, Panel>;
+  readonly bottomArea: Area<IPublicTypePanelConfig, Panel>;
 
   readonly stages: Area<StageConfig, Stage>;
 
@@ -388,9 +388,9 @@ export class Skeleton implements ISkeleton {
     return this.widgets.find(widget => widget.name === name);
   }
 
-  createPanel(config: PanelConfig) {
+  createPanel(config: IPublicTypePanelConfig) {
     const parsedConfig = this.parseConfig(config);
-    const panel = new Panel(this, parsedConfig as PanelConfig);
+    const panel = new Panel(this, parsedConfig as IPublicTypePanelConfig);
     this.panels.set(panel.name, panel);
     logger.debug(`Panel created with name: ${panel.name} \nconfig:`, config, '\n current panels: ', this.panels);
     return panel;
@@ -496,7 +496,7 @@ export class Skeleton implements ISkeleton {
         return this.leftArea.add(parsedConfig as PanelDockConfig);
       case 'rightArea':
       case 'right':
-        return this.rightArea.add(parsedConfig as PanelConfig);
+        return this.rightArea.add(parsedConfig as IPublicTypePanelConfig);
       case 'topArea':
       case 'top':
         return this.topArea.add(parsedConfig as PanelDockConfig);
@@ -508,14 +508,14 @@ export class Skeleton implements ISkeleton {
       case 'main':
       case 'center':
       case 'centerArea':
-        return this.mainArea.add(parsedConfig as PanelConfig);
+        return this.mainArea.add(parsedConfig as IPublicTypePanelConfig);
       case 'bottomArea':
       case 'bottom':
-        return this.bottomArea.add(parsedConfig as PanelConfig);
+        return this.bottomArea.add(parsedConfig as IPublicTypePanelConfig);
       case 'leftFixedArea':
-        return this.leftFixedArea.add(parsedConfig as PanelConfig);
+        return this.leftFixedArea.add(parsedConfig as IPublicTypePanelConfig);
       case 'leftFloatArea':
-        return this.leftFloatArea.add(parsedConfig as PanelConfig);
+        return this.leftFloatArea.add(parsedConfig as IPublicTypePanelConfig);
       case 'stages':
         return this.stages.add(parsedConfig as StageConfig);
       default:
