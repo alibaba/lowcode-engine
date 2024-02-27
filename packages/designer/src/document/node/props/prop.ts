@@ -1,6 +1,6 @@
 import { untracked, computed, obx, engineConfig, action, makeObservable, mobx, runInAction } from '@alilc/lowcode-editor-core';
 import { GlobalEvent, IPublicEnumTransformStage } from '@alilc/lowcode-types';
-import type { IPublicTypeCompositeValue, IPublicTypeJSSlot, IPublicTypeSlotSchema, IPublicModelProp } from '@alilc/lowcode-types';
+import type { IPublicTypeCompositeValue, IPublicTypeJSSlot, IPublicTypeSlotSchema, IPublicModelProp, IPublicTypeNodeData } from '@alilc/lowcode-types';
 import { uniqueId, isPlainObject, hasOwnProperty, compatStage, isJSExpression, isJSSlot, isNodeSchema } from '@alilc/lowcode-utils';
 import { valueToSource } from './value-to-source';
 import { IPropParent } from './props';
@@ -227,7 +227,7 @@ export class Prop implements IProp, IPropParent {
 
   constructor(
     public parent: IPropParent,
-    value: IPublicTypeCompositeValue | UNSET = UNSET,
+    value: IPublicTypeCompositeValue | IPublicTypeNodeData | IPublicTypeNodeData[] | UNSET = UNSET,
     key?: string | number,
     spread = false,
     options = {},
@@ -351,7 +351,7 @@ export class Prop implements IProp, IPropParent {
    * set value, val should be JSON Object
    */
   @action
-  setValue(val: IPublicTypeCompositeValue) {
+  setValue(val: IPublicTypeCompositeValue | IPublicTypeNodeData | IPublicTypeNodeData[]) {
     if (val === this._value) return;
     const oldValue = this._value;
     this._value = val;

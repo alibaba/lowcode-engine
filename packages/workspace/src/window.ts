@@ -1,6 +1,6 @@
 import { uniqueId } from '@alilc/lowcode-utils';
 import { createModuleEventBus, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
-import { Context, IViewContext } from './context/view-context';
+import { Context } from './context/view-context';
 import { IWorkspace } from './workspace';
 import { IResource } from './resource';
 import { IPublicModelWindow, IPublicTypeDisposable } from '@alilc/lowcode-types';
@@ -12,23 +12,7 @@ interface IWindowCOnfig {
   sleep?: boolean;
 }
 
-export interface IEditorWindow extends Omit<IPublicModelWindow<IResource>, 'changeViewType' | 'currentEditorView' | 'editorViews'> {
-  readonly resource: IResource;
-
-  editorViews: Map<string, IViewContext>;
-
-  _editorView: IViewContext;
-
-  changeViewName: (name: string, ignoreEmit?: boolean) => void;
-
-  initReady: boolean;
-
-  sleep?: boolean;
-
-  init(): void;
-
-  updateState(state: WINDOW_STATE): void;
-}
+export interface IEditorWindow extends EditorWindow {}
 
 export enum WINDOW_STATE {
   // 睡眠
@@ -44,7 +28,7 @@ export enum WINDOW_STATE {
   destroyed = 'destroyed'
 }
 
-export class EditorWindow implements IEditorWindow {
+export class EditorWindow implements Omit<IPublicModelWindow<IResource>, 'changeViewType' | 'currentEditorView' | 'editorViews'> {
   id: string = uniqueId('window');
   icon: React.ReactElement | undefined;
 

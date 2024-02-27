@@ -56,104 +56,30 @@ export type GetDataType<T, NodeType> = T extends undefined
   : any
   : T;
 
-export interface IDocumentModel extends Omit<IPublicModelDocumentModel<
-  ISelection,
-  IHistory,
-  INode,
-  IDropLocation,
-  IModalNodesManager,
-  IProject
+export class DocumentModel implements Omit<IPublicModelDocumentModel<
+ISelection,
+IHistory,
+INode,
+IDropLocation,
+IModalNodesManager,
+IProject
 >,
-  'detecting' |
-  'checkNesting' |
-  'getNodeById' |
-  // 以下属性在内部的 document 中不存在
-  'exportSchema' |
-  'importSchema' |
-  'onAddNode' |
-  'onRemoveNode' |
-  'onChangeDetecting' |
-  'onChangeSelection' |
-  'onChangeNodeProp' |
-  'onImportSchema' |
-  'isDetectingNode' |
-  'onFocusNodeChanged' |
-  'onDropLocationChanged'
+'detecting' |
+'checkNesting' |
+'getNodeById' |
+// 以下属性在内部的 document 中不存在
+'exportSchema' |
+'importSchema' |
+'onAddNode' |
+'onRemoveNode' |
+'onChangeDetecting' |
+'onChangeSelection' |
+'onChangeNodeProp' |
+'onImportSchema' |
+'isDetectingNode' |
+'onFocusNodeChanged' |
+'onDropLocationChanged'
 > {
-
-  readonly designer: IDesigner;
-
-  selection: ISelection;
-
-  get rootNode(): INode | null;
-
-  get simulator(): ISimulatorHost | null;
-
-  get active(): boolean;
-
-  get nodesMap(): Map<string, INode>;
-
-  /**
-   * 是否为非激活状态
-   */
-  get suspensed(): boolean;
-
-  get fileName(): string;
-
-  get currentRoot(): INode | null;
-
-  isBlank(): boolean;
-
-  /**
-   * 根据 id 获取节点
-   */
-  getNode(id: string): INode | null;
-
-  getRoot(): INode | null;
-
-  getHistory(): IHistory;
-
-  checkNesting(
-    dropTarget: INode,
-    dragObject: IPublicTypeDragNodeObject | IPublicTypeNodeSchema | INode | IPublicTypeDragNodeDataObject,
-  ): boolean;
-
-  getNodeCount(): number;
-
-  nextId(possibleId: string | undefined): string;
-
-  import(schema: IPublicTypeRootSchema, checkId?: boolean): void;
-
-  export(stage: IPublicEnumTransformStage): IPublicTypeRootSchema | undefined;
-
-  onNodeCreate(func: (node: INode) => void): IPublicTypeDisposable;
-
-  onNodeDestroy(func: (node: INode) => void): IPublicTypeDisposable;
-
-  onChangeNodeVisible(fn: (node: INode, visible: boolean) => void): IPublicTypeDisposable;
-
-  addWillPurge(node: INode): void;
-
-  removeWillPurge(node: INode): void;
-
-  getComponentMeta(componentName: string): IComponentMeta;
-
-  insertNodes(parent: INode, thing: INode[] | IPublicTypeNodeData[], at?: number | null, copy?: boolean): INode[];
-
-  open(): IDocumentModel;
-
-  remove(): void;
-
-  suspense(): void;
-
-  close(): void;
-
-  unlinkNode(node: INode): void;
-
-  destroyNode(node: INode): void;
-}
-
-export class DocumentModel implements IDocumentModel {
   /**
    * 根节点 类型有：Page/Component/Block
    */
@@ -322,7 +248,7 @@ export class DocumentModel implements IDocumentModel {
     // 兼容 vision
     this.id = project.getSchema()?.id || this.id;
 
-    this.rootNode = this.createNode(
+    this.rootNode = this.createNode<IRootNode, IPublicTypeRootSchema>(
       schema || {
         componentName: 'Page',
         id: 'root',
@@ -425,7 +351,7 @@ export class DocumentModel implements IDocumentModel {
    * 根据 schema 创建一个节点
    */
   @action
-  createNode<T extends INode = INode, C = undefined>(data: GetDataType<C, T>): T {
+  createNode<T = INode, S = IPublicTypeNodeSchema>(data: S): T {
     let schema: any;
     if (isDOMText(data) || isJSExpression(data)) {
       schema = {
@@ -529,7 +455,7 @@ export class DocumentModel implements IDocumentModel {
       return null;
     }
     const wrapper = this.createNode(schema);
-    if (wrapper.isParental()) {
+    if (wrapper?.isParental()) {
       const first = nodes[0];
       // TODO: check nesting rules x 2
       insertChild(first.parent!, wrapper, first.index);
@@ -538,7 +464,7 @@ export class DocumentModel implements IDocumentModel {
       return wrapper;
     }
 
-    this.removeNode(wrapper);
+    wrapper && this.removeNode(wrapper);
     return null;
   }
 
@@ -928,3 +854,5 @@ export function isDocumentModel(obj: any): obj is IDocumentModel {
 export function isPageSchema(obj: any): obj is IPublicTypePageSchema {
   return obj?.componentName === 'Page';
 }
+
+export interface IDocumentModel extends DocumentModel {}
