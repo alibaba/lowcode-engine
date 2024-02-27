@@ -1,0 +1,56 @@
+{
+  "name": "split-pane-react",
+  "version": "0.1.3",
+  "description": "Resizable split panes for React.js.",
+  "module": "./esm/index.js",
+  "typings": "./esm/index.d.ts",
+  "files": [
+    "esm",
+    "src"
+  ],
+  "scripts": {
+    "dev": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "build": "gulp --gulpfile ./build/gulpfile.js"
+  },
+  "keywords": [
+    "react",
+    "multipane",
+    "split pane",
+    "ui",
+    "resize",
+    "resizeable",
+    "layout",
+    "flexbox",
+    "components"
+  ],
+  "author": "yyllff",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.18.0",
+    "@storybook/addon-actions": "^6.5.3",
+    "@storybook/addon-essentials": "^6.5.3",
+    "@storybook/addon-interactions": "^6.5.2",
+    "@storybook/addon-links": "^6.5.3",
+    "@storybook/builder-vite": "^0.1.35",
+    "@storybook/react": "^6.5.3",
+    "@storybook/testing-library": "^0.0.11",
+    "@vitejs/plugin-react": "^1.3.0",
+    "babel-loader": "^8.2.5",
+    "gulp": "^4.0.2",
+    "gulp-sass": "^5.1.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "rimraf": "^3.0.2",
+    "sass": "^1.52.0",
+    "typescript": "^4.6.3",
+    "vite": "^2.9.9"
+  },
+  "repository": "https://github.com/yyllff/split-pane-react",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "peerDependencies": {
+    "react": "^16.8 || ^17.0 || ^18.0",
+    "react-dom": "^16.8 || ^17.0 || ^18.0"
+  }
+}

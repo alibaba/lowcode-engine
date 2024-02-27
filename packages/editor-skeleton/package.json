@@ -25,7 +25,8 @@
     "@alilc/lowcode-utils": "1.3.2",
     "classnames": "^2.2.6",
     "react": "^16.8.1",
-    "react-dom": "^16.8.1"
+    "react-dom": "^16.8.1",
+    "split-pane-react": "0.1.3"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.3",

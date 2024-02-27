@@ -3,6 +3,7 @@
 set -e
 
 lerna run build \
+  --scope split-pane-react \
   --scope @alilc/lowcode-types \
   --scope @alilc/lowcode-utils \
   --scope @alilc/lowcode-shell \
