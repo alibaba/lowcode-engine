@@ -5,18 +5,6 @@ import { Menu } from '@alifd/next';
 import { engineConfig } from '@alilc/lowcode-editor-core';
 import './context-menu-actions.scss';
 
-export interface IContextMenuActions {
-  actions: IPublicTypeContextMenuAction[];
-
-  adjustMenuLayoutFn: (actions: IPublicTypeContextMenuItem[]) => IPublicTypeContextMenuItem[];
-
-  addMenuAction: IPublicApiMaterial['addContextMenuOption'];
-
-  removeMenuAction: IPublicApiMaterial['removeContextMenuOption'];
-
-  adjustMenuLayout: IPublicApiMaterial['adjustContextMenuLayout'];
-}
-
 let adjustMenuLayoutFn: Function = (actions: IPublicTypeContextMenuAction[]) => actions;
 
 export class GlobalContextMenuActions {
@@ -116,7 +104,7 @@ export class GlobalContextMenuActions {
 
 const globalContextMenuActions = new GlobalContextMenuActions();
 
-export class ContextMenuActions implements IContextMenuActions {
+export class ContextMenuActions {
   actions: IPublicTypeContextMenuAction[] = [];
 
   designer: IDesigner;
@@ -204,30 +192,32 @@ export class ContextMenuActions implements IContextMenuActions {
         originalEvent.stopPropagation();
         originalEvent.preventDefault();
         // 如果右键的节点不在 当前选中的节点中，选中该节点
-        if (!designer.currentSelection.has(node.id)) {
-          designer.currentSelection.select(node.id);
+        if (!designer.currentSelection?.has(node.id)) {
+          designer.currentSelection?.select(node.id);
         }
-        const nodes = designer.currentSelection.getNodes();
+        const nodes = designer.currentSelection?.getNodes();
         this.handleContextMenu(nodes, originalEvent);
       }),
     );
   }
 
-  addMenuAction(action: IPublicTypeContextMenuAction) {
+  addMenuAction: IPublicApiMaterial['addContextMenuOption'] = (action: IPublicTypeContextMenuAction) => {
     this.actions.push({
       type: IPublicEnumContextMenuType.MENU_ITEM,
       ...action,
     });
-  }
+  };
 
-  removeMenuAction(name: string) {
+  removeMenuAction: IPublicApiMaterial['removeContextMenuOption'] = (name: string) => {
     const i = this.actions.findIndex((action) => action.name === name);
     if (i > -1) {
       this.actions.splice(i, 1);
     }
-  }
+  };
 
-  adjustMenuLayout(fn: (actions: IPublicTypeContextMenuItem[]) => IPublicTypeContextMenuItem[]) {
+  adjustMenuLayout: IPublicApiMaterial['adjustContextMenuLayout'] = (fn: (actions: IPublicTypeContextMenuItem[]) => IPublicTypeContextMenuItem[]) => {
     adjustMenuLayoutFn = fn;
-  }
+  };
 }
+
+export interface IContextMenuActions extends ContextMenuActions {}

@@ -6,7 +6,6 @@ import {
   IPublicTypeComponentAction,
   IPublicTypeNpmInfo,
   IPublicModelEditor,
-  IPublicTypeCompositeObject,
   IPublicTypePropsList,
   IPublicTypeNodeSchema,
   IPublicTypePropsTransducer,
@@ -17,15 +16,16 @@ import {
   IPublicTypeLocationData,
   IPublicEnumTransformStage,
   IPublicModelLocateEvent,
+  IPublicTypePropsMap,
 } from '@alilc/lowcode-types';
 import { mergeAssets, IPublicTypeAssetsJson, isNodeSchema, isDragNodeObject, isDragNodeDataObject, isLocationChildrenDetail, Logger } from '@alilc/lowcode-utils';
 import { IProject, Project } from '../project';
-import { Node, DocumentModel, insertChildren, INode, ISelection } from '../document';
+import { Node, DocumentModel, insertChildren, INode } from '../document';
 import { ComponentMeta, IComponentMeta } from '../component-meta';
 import { INodeSelector, Component } from '../simulator';
 import { Scroller } from './scroller';
 import { Dragon, IDragon } from './dragon';
-import { ActiveTracker, IActiveTracker } from './active-tracker';
+import { ActiveTracker } from './active-tracker';
 import { Detecting } from './detecting';
 import { DropLocation } from './location';
 import { OffsetObserver, createOffsetObserver } from './offset-observer';
@@ -47,7 +47,7 @@ export interface DesignerProps {
   viewName?: string;
   simulatorProps?: Record<string, any> | ((document: DocumentModel) => object);
   simulatorComponent?: ComponentType<any>;
-  dragGhostComponent?: ComponentType<any>;
+  dragGhostComponent?: ComponentType<{ designer: IDesigner }>;
   suspensed?: boolean;
   componentMetadatas?: IPublicTypeComponentMetadata[];
   globalComponentActions?: IPublicTypeComponentAction[];
@@ -60,70 +60,10 @@ export interface DesignerProps {
     ) => void;
 }
 
-export interface IDesigner {
-  readonly shellModelFactory: IShellModelFactory;
-
-  viewName: string | undefined;
-
-  readonly project: IProject;
-
-  get dragon(): IDragon;
-
-  get activeTracker(): IActiveTracker;
-
-  get componentActions(): ComponentActions;
-
-  get contextMenuActions(): ContextMenuActions;
-
-  get editor(): IPublicModelEditor;
-
-  get detecting(): Detecting;
-
-  get simulatorComponent(): ComponentType<any> | undefined;
-
-  get currentSelection(): ISelection;
-
-  createScroller(scrollable: IPublicTypeScrollable): IPublicModelScroller;
-
-  refreshComponentMetasMap(): void;
-
-  createOffsetObserver(nodeInstance: INodeSelector): OffsetObserver | null;
-
-  /**
-   * 创建插入位置，考虑放到 dragon 中
-   */
-  createLocation(locationData: IPublicTypeLocationData<INode>): DropLocation;
-
-  get componentsMap(): { [key: string]: IPublicTypeNpmInfo | Component };
-
-  loadIncrementalAssets(incrementalAssets: IPublicTypeAssetsJson): Promise<void>;
-
-  getComponentMeta(
-    componentName: string,
-    generateMetadata?: () => IPublicTypeComponentMetadata | null,
-  ): IComponentMeta;
-
-  clearLocation(): void;
-
-  createComponentMeta(data: IPublicTypeComponentMetadata): IComponentMeta | null;
-
-  getComponentMetasMap(): Map<string, IComponentMeta>;
-
-  addPropsReducer(reducer: IPublicTypePropsTransducer, stage: IPublicEnumTransformStage): void;
-
-  postEvent(event: string, ...args: any[]): void;
-
-  transformProps(props: IPublicTypeCompositeObject | IPublicTypePropsList, node: Node, stage: IPublicEnumTransformStage): IPublicTypeCompositeObject | IPublicTypePropsList;
-
-  createSettingEntry(nodes: INode[]): ISettingTopEntry;
-
-  autorun(effect: (reaction: IReactionPublic) => void, options?: IReactionOptions<any, any>): IReactionDisposer;
-}
-
-export class Designer implements IDesigner {
+export class Designer {
   dragon: IDragon;
 
-  viewName: string | undefined;
+  readonly viewName: string | undefined;
 
   readonly componentActions = new ComponentActions();
 
@@ -423,7 +363,7 @@ export class Designer implements IDesigner {
       if (props.simulatorProps !== this.props.simulatorProps) {
         this._simulatorProps = props.simulatorProps;
         // 重新 setupSelection
-        if (props.simulatorProps?.designMode !== this.props.simulatorProps?.designMode) {
+        if ((props.simulatorProps as any)?.designMode !== (this.props.simulatorProps as any)?.designMode) {
           this.setupSelection();
         }
       }
@@ -612,7 +552,7 @@ export class Designer implements IDesigner {
     return maps;
   }
 
-  transformProps(props: IPublicTypeCompositeObject | IPublicTypePropsList, node: Node, stage: IPublicEnumTransformStage) {
+  transformProps(props: IPublicTypePropsMap | IPublicTypePropsList, node: Node, stage: IPublicEnumTransformStage): IPublicTypePropsMap | IPublicTypePropsList {
     if (Array.isArray(props)) {
       // current not support, make this future
       return props;
@@ -623,7 +563,7 @@ export class Designer implements IDesigner {
       return props;
     }
 
-    return reducers.reduce((xprops, reducer) => {
+    return reducers.reduce((xprops, reducer: IPublicTypePropsTransducer) => {
       try {
         return reducer(xprops, node.internalToShellNode() as any, { stage });
       } catch (e) {
@@ -655,3 +595,5 @@ export class Designer implements IDesigner {
     // TODO:
   }
 }
+
+export interface IDesigner extends Designer {}
