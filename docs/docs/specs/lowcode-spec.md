@@ -20,7 +20,7 @@ sidebar_position: 0
 ### 1.2 协议草案起草人
 
 - 撰写：月飞、康为、林熠
-- 审阅：大果、潕量、九神、元彦、戊子、屹凡、金禅、前道、天晟、戊子、游鹿、光弘、力皓
+- 审阅：大果、潕量、九神、元彦、戊子、屹凡、金禅、前道、天晟、游鹿、光弘、力皓
 
 
 ### 1.3 版本号
@@ -430,7 +430,7 @@ import { Input as CustomInput } from '@ali/custom/lib/input';
 | 参数        | 说明                   | 类型                                   | 支持变量 | 默认值 | 备注                                                                                                        |
 | ----------- | ---------------------- | -------------------------------------- | -------- | ------ | ----------------------------------------------------------------------------------------------------------- |
 | list[]     | 数据源列表             | **ComponentDataSourceItem**[] | -        | -      | 成为为单个请求配置, 内容定义详见 [ComponentDataSourceItem 对象描述](#2314-componentdatasourceitem-对象描述) |
-| dataHandler | 所有请求数据的处理函数 | Function                               | -        | -      | 详见 [dataHandler Function 描述](#2317-datahandler-function 描述)                                           |
+| dataHandler | 所有请求数据的处理函数 | Function                               | -        | -      | 详见 [dataHandler Function 描述](#2317-datahandler-function-描述)                                           |
 
 ##### 2.3.1.4 ComponentDataSourceItem 对象描述
 
@@ -447,7 +447,7 @@ import { Input as CustomInput } from '@ali/custom/lib/input';
 | errorHandler   | request 失败后的回调函数     | Function                                             | -        | -                           | 参数：请求出错 promise 的 error 内容                                                                                                                                 |
 | options {}     | 请求参数                     | **ComponentDataSourceItemOptions**| -        | -                           | 每种请求类型对应不同参数，详见 | 每种请求类型对应不同参数，详见 [ComponentDataSourceItemOptions 对象描述](#2315-componentdatasourceitemoptions-对象描述)                                              |
 
-**关于 dataHandler 于 errorHandler 的细节说明：**
+**关于 dataHandler 与 errorHandler 的细节说明：**
 
 request 返回的是一个 promise，dataHandler 和 errorHandler 遵循 Promise 对象的 then 方法，实际使用方式如下：
 
@@ -560,7 +560,7 @@ try {
 | 参数          | 说明                   | 类型             | 支持变量 | 默认值            | 备注                                                                                                       |
 | ------------- | ---------------------- | ---------------- | -------- | ----------------- | ---------------------------------------------------------------------------------------------------------- |
 | id            | 组件唯一标识           | String           | -        |                   | 可选，组件 id 由引擎随机生成（UUID），并保证唯一性，消费方为上层应用平台，在组件发生移动等场景需保持 id 不变 |
-| componentName | 组件名称               | String           | -        | Div               | 必填，首字母大写，同 [componentsMap](#22-组件映射关系 a) 中的要求                                           |
+| componentName | 组件名称               | String           | -        | Div               | 必填，首字母大写，同 [componentsMap](#22-组件映射关系a) 中的要求                                           |
 | props {}      | 组件属性对象           | **Props**| -        | {}                | 必填，详见 | 必填，详见 [Props 结构描述](#2311-props-结构描述)                                                          |
 | condition     | 渲染条件               | Boolean          | ✅        | true              | 选填，根据表达式结果判断是否渲染物料；支持变量表达式                                                       |
 | loop          | 循环数据               | Array            | ✅        | -                 | 选填，默认不进行循环渲染；支持变量表达式                                                                   |
@@ -797,7 +797,7 @@ try {
 | 参数   | 说明       | 值类型                | 默认值   | 备注                                                           |
 | ------ | ---------- | --------------------- | -------- | -------------------------------------------------------------- |
 | type   | 值类型描述 | String                | 'JSSlot' | 固定值                                                         |
-| value  | 具体的值   | NodeSchema \| NodeSchema[] | null     | 内容为 NodeSchema 类型，详见[组件结构描述](#232-组件结构描述 a) |
+| value  | 具体的值   | NodeSchema \| NodeSchema[] | null     | 内容为 NodeSchema 类型，详见[组件结构描述](#232-组件结构描述（A）) |
 | params | 函数的参数 | String[]     | null     | 函数的入参，其子节点可以通过 `this[参数名]` 来获取对应的参数。 |
 
 
@@ -1124,7 +1124,7 @@ this.setState((prevState) => ({ count: prevState.count + 1 }));
 | utils[]           | 工具类扩展映射关系 | **UtilItem**[]                                                                                          | -        |        |
 | *UtilItem*.name    | 工具类扩展项名称   | String                                                                                                           | -        |        |
 | *UtilItem*.type    | 工具类扩展项类型   | 枚举， `'npm'` （代表公网 npm 类型） / `'tnpm'` （代表阿里巴巴内部 npm 类型） / `'function'` （代表 Javascript 函数类型） | -        |        |
-| *UtilItem*.content | 工具类扩展项内容   | [ComponentMap 类型](#22-组件映射关系 a) 或 [JSFunction](#2432事件函数类型 a)                                        | -        |        |
+| *UtilItem*.content | 工具类扩展项内容   | [ComponentMap 类型](#22-组件映射关系a) 或 [JSFunction](#2342事件函数类型a)                                        | -        |        |
 
 描述示例：
 
