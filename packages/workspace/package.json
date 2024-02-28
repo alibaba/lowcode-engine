@@ -24,7 +24,8 @@
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
     "react": "^16",
-    "react-dom": "^16.7.0"
+    "react-dom": "^16.7.0",
+    "split-pane-react": "file:../../../split-pane-react"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.29",
