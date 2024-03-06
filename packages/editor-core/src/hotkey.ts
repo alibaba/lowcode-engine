@@ -541,8 +541,6 @@ export class Hotkey implements Omit<IPublicApiHotkey, 'bind' | 'callbacks'> {
   }
 
   private handleKeyEvent(e: KeyboardEvent): void {
-    console.log(e);
-    // debugger;
     if (!this.isActivate) {
       return;
     }

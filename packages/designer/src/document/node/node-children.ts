@@ -91,11 +91,16 @@ export class NodeChildren implements Omit<IPublicModelNodeChildren<INode>,
         node.import(item);
       } else {
         node = this.owner.document?.createNode(item);
+        child?.purge();
       }
 
       if (node) {
         children[i] = node;
       }
+    }
+
+    for (let i = data.length; i < originChildren.length; i++) {
+      originChildren[i].purge();
     }
 
     this.children = children;

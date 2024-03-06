@@ -987,7 +987,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     this.autoruns?.forEach((dispose) => dispose());
     this.props.purge();
     this.settingEntry?.purge();
-    // this.document.destroyNode(this);
+    this.children?.purge();
   }
 
   internalPurgeStart() {
