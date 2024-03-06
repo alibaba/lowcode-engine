@@ -197,7 +197,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
 
   isInited = false;
 
-  _settingEntry: ISettingTopEntry;
+  _settingEntry?: ISettingTopEntry;
 
   get settingEntry(): ISettingTopEntry {
     if (this._settingEntry) return this._settingEntry;
@@ -988,6 +988,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     this.props.purge();
     this.settingEntry?.purge();
     this.children?.purge();
+    this._settingEntry = undefined;
   }
 
   internalPurgeStart() {
