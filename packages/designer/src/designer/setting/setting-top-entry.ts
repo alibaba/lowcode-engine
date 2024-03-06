@@ -1,6 +1,6 @@
 import { IPublicTypeCustomView, IPublicModelEditor, IPublicModelSettingTopEntry, IPublicApiSetters } from '@alilc/lowcode-types';
 import { isCustomView } from '@alilc/lowcode-utils';
-import { computed, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
+import { computed, IEventBus, createModuleEventBus, obx, makeObservable } from '@alilc/lowcode-editor-core';
 import { ISettingEntry } from './setting-entry-type';
 import { ISettingField, SettingField } from './setting-field';
 import { INode } from '../../document';
@@ -14,33 +14,17 @@ function generateSessionId(nodes: INode[]) {
     .join(',');
 }
 
-export interface ISettingTopEntry extends ISettingEntry, IPublicModelSettingTopEntry<
+export interface ISettingTopEntry extends SettingTopEntry {}
+
+export class SettingTopEntry implements ISettingEntry, IPublicModelSettingTopEntry<
   INode,
   ISettingField
 > {
-  readonly top: ISettingTopEntry;
-
-  readonly parent: ISettingTopEntry;
-
-  readonly path: never[];
-
-  items: Array<ISettingField | IPublicTypeCustomView>;
-
-  componentMeta: IComponentMeta | null;
-
-  purge(): void;
-
-  getExtraPropValue(propName: string): void;
-
-  setExtraPropValue(propName: string, value: any): void;
-}
-
-export class SettingTopEntry implements ISettingTopEntry {
   private emitter: IEventBus = createModuleEventBus('SettingTopEntry');
 
-  private _items: Array<SettingField | IPublicTypeCustomView> = [];
+  private _items: Array<ISettingField | IPublicTypeCustomView> = [];
 
-  private _componentMeta: IComponentMeta | null = null;
+  private _componentMeta: IComponentMeta | null | undefined = null;
 
   private _isSame = true;
 
@@ -75,7 +59,7 @@ export class SettingTopEntry implements ISettingTopEntry {
   }
 
   get isLocked(): boolean {
-    return this.first.isLocked;
+    return this.first?.isLocked ?? false;
   }
 
   /**
@@ -87,7 +71,11 @@ export class SettingTopEntry implements ISettingTopEntry {
 
   readonly id: string;
 
-  readonly first: INode;
+  @computed get first(): INode | null {
+    return this._first;
+  }
+
+  @obx.ref _first: INode | null;
 
   readonly designer: IDesigner | undefined;
 
@@ -96,12 +84,14 @@ export class SettingTopEntry implements ISettingTopEntry {
   disposeFunctions: any[] = [];
 
   constructor(readonly editor: IPublicModelEditor, readonly nodes: INode[]) {
+    makeObservable(this);
+
     if (!Array.isArray(nodes) || nodes.length < 1) {
       throw new ReferenceError('nodes should not be empty');
     }
     this.id = generateSessionId(nodes);
-    this.first = nodes[0];
-    this.designer = this.first.document?.designer;
+    this._first = nodes[0];
+    this.designer = this._first.document?.designer;
     this.setters = editor.get('setters') as IPublicApiSetters;
 
     // setups
@@ -116,7 +106,7 @@ export class SettingTopEntry implements ISettingTopEntry {
   private setupComponentMeta() {
     // todo: enhance compile a temp configure.compiled
     const { first } = this;
-    const meta = first.componentMeta;
+    const meta = first?.componentMeta;
     const l = this.nodes.length;
     let theSame = true;
     for (let i = 1; i < l; i++) {
@@ -160,7 +150,7 @@ export class SettingTopEntry implements ISettingTopEntry {
   /**
    * 获取当前属性值
    */
-  @computed getValue(): any {
+  getValue(): any {
     return this.first?.propsData;
   }
 
@@ -202,14 +192,14 @@ export class SettingTopEntry implements ISettingTopEntry {
    * 获取子级属性值
    */
   getPropValue(propName: string | number): any {
-    return this.first.getProp(propName.toString(), true)?.getValue();
+    return this.first?.getProp(propName.toString(), true)?.getValue();
   }
 
   /**
    * 获取顶层附属属性值
    */
   getExtraPropValue(propName: string) {
-    return this.first.getExtraProp(propName, false)?.getValue();
+    return this.first?.getExtraProp(propName, false)?.getValue();
   }
 
   /**
@@ -244,8 +234,9 @@ export class SettingTopEntry implements ISettingTopEntry {
     this.disposeItems();
     this._settingFieldMap = {};
     this.emitter.removeAllListeners();
-    this.disposeFunctions.forEach(f => f());
+    this.disposeFunctions.forEach(f => f?.());
     this.disposeFunctions = [];
+    this._first = null;
   }
 
   getProp(propName: string | number) {
@@ -274,7 +265,7 @@ export class SettingTopEntry implements ISettingTopEntry {
   }
 
   getPage() {
-    return this.first.document;
+    return this.first?.document;
   }
 
   /**
@@ -292,6 +283,7 @@ export class SettingTopEntry implements ISettingTopEntry {
 interface Purgeable {
   purge(): void;
 }
+
 function isPurgeable(obj: any): obj is Purgeable {
   return obj && obj.purge;
 }
