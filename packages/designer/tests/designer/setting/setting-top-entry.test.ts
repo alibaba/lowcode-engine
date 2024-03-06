@@ -1,8 +1,9 @@
 import '../../fixtures/window';
-import { Editor, Setters } from '@alilc/lowcode-editor-core';
+import { Editor, Setters, reaction } from '@alilc/lowcode-editor-core';
 import { Node } from '../../../src/document/node/node';
 import { Designer } from '../../../src/designer/designer';
 import settingSchema from '../../fixtures/schema/setting';
+import { SettingTopEntry } from '../../../src/designer/setting/setting-top-entry';
 import divMeta from '../../fixtures/component-metadata/div';
 import { shellModelFactory } from '../../../../engine/src/modules/shell-model-factory';
 
@@ -107,6 +108,26 @@ describe('setting-top-entry 测试', () => {
       expect(settingEntry.items).toHaveLength(3);
       settingEntry.purge();
       expect(settingEntry.items).toHaveLength(0);
+    });
+
+    it('should notify when _first is set to null', (done) => {
+      // 创建一个简单的INode数组用于初始化SettingTopEntry实例
+      const nodes = [{ id: '1', propsData: {} }, { id: '2', propsData: {} }];
+      const entry = new SettingTopEntry(editor as any, nodes as any);
+
+      // 使用MobX的reaction来观察_first属性的变化
+      const dispose = reaction(
+        () => entry.first,
+        (first) => {
+          if (first === null) {
+            dispose(); // 清理reaction监听
+            done(); // 结束测试
+          }
+        }
+      );
+
+      // 执行purge方法，期望_first被设置为null，触发reaction回调
+      entry.purge();
     });
 
     it('vision 兼容测试', () => {
