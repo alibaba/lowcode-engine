@@ -97,8 +97,9 @@ export class NodeChildren implements IPublicModelNodeChildren {
    * @param deleteCount
    * @param node
    */
-  splice(start: number, deleteCount: number, node?: IPublicModelNode): any {
-    this[nodeChildrenSymbol].splice(start, deleteCount, (node as any)?.[nodeSymbol]);
+  splice(start: number, deleteCount: number, node?: IPublicModelNode): IPublicModelNode[] {
+    const removedNode = this[nodeChildrenSymbol].splice(start, deleteCount, (node as any)?.[nodeSymbol]);
+    return removedNode.map((item: InnerNode) => ShellNode.create(item)!);
   }
 
   /**

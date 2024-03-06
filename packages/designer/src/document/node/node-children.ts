@@ -307,10 +307,16 @@ export class NodeChildren implements Omit<IPublicModelNodeChildren<INode>,
    *
    */
   splice(start: number, deleteCount: number, node?: INode): INode[] {
+    let removedNode;
     if (node) {
-      return this.children.splice(start, deleteCount, node);
+      removedNode = this.children.splice(start, deleteCount, node);
+    } else {
+      removedNode = this.children.splice(start, deleteCount);
     }
-    return this.children.splice(start, deleteCount);
+
+    removedNode.forEach(d => d?.purge());
+
+    return removedNode;
   }
 
   /**
