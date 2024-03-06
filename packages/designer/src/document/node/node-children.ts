@@ -310,6 +310,7 @@ export class NodeChildren implements Omit<IPublicModelNodeChildren<INode>,
     let removedNode;
     if (node) {
       removedNode = this.children.splice(start, deleteCount, node);
+      node.internalSetParent(this.owner);
     } else {
       removedNode = this.children.splice(start, deleteCount);
     }

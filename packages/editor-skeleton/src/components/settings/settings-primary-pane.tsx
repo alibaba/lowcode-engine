@@ -134,7 +134,7 @@ export class SettingsPrimaryPane extends Component<ISettingsPrimaryPaneProps, { 
   render() {
     const { settings } = this.main;
     const editor = this.props.engineEditor;
-    if (!settings) {
+    if (!settings || !settings.first) {
       // 未选中节点，提示选中 或者 显示根节点设置
       return (
         <div className="lc-settings-main">
