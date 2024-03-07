@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unused-prop-types */
-import { Component, ErrorInfo, MouseEvent } from 'react';
+import { Component, ErrorInfo, MouseEvent, ReactNode } from 'react';
 import { isObject } from 'lodash';
 import classNames from 'classnames';
 import { Icon } from '@alifd/next';
@@ -25,6 +25,7 @@ export interface FieldProps {
   tip?: any;
   onExpandChange?: (expandState: boolean) => void;
   onClear?: () => void;
+  children: ReactNode;
 }
 
 export class Field extends Component<FieldProps> {
@@ -149,7 +150,8 @@ export class Field extends Component<FieldProps> {
       return null;
     }
 
-    const { className, children, meta, title, valueState, name: propName, tip } = this.props;
+    const { className, children, meta, title, valueState,
+      name: propName, tip } = this.props;
     const { display, collapsed } = this.state;
     const isAccordion = display === 'accordion';
     let hostName = '';
