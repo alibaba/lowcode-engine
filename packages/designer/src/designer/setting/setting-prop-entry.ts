@@ -1,12 +1,12 @@
 import { obx, computed, makeObservable, runInAction, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { GlobalEvent, IPublicApiSetters, IPublicModelEditor, IPublicModelSettingField, IPublicTypeFieldExtraProps, IPublicTypeSetValueOptions } from '@alilc/lowcode-types';
-import { uniqueId, isJSExpression } from '@alilc/lowcode-utils';
-import { ISettingEntry } from './setting-entry-type';
-import { INode } from '../../document';
+import { uniqueId, isJSExpression, isSettingField } from '@alilc/lowcode-utils';
+import type { ISettingEntry } from './setting-entry-type';
+import type { INode } from '../../document';
 import type { IComponentMeta } from '../../component-meta';
-import { IDesigner } from '../designer';
-import { ISettingTopEntry } from './setting-top-entry';
-import { ISettingField, isSettingField } from './setting-field';
+import type { IDesigner } from '../designer';
+import type { ISettingTopEntry } from './setting-top-entry';
+import type { ISettingField } from './setting-field';
 
 export interface ISettingPropEntry extends ISettingEntry {
   readonly isGroup: boolean;

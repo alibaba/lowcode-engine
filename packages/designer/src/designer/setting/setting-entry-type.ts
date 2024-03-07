@@ -1,7 +1,7 @@
-import { IPublicApiSetters, IPublicModelEditor } from '@alilc/lowcode-types';
-import { IDesigner } from '../designer';
-import { INode } from '../../document';
-import { ISettingField } from './setting-field';
+import type { IPublicApiSetters, IPublicModelEditor } from '@alilc/lowcode-types';
+import type { IDesigner } from '../designer';
+import type { INode } from '../../document';
+import type { ISettingField } from './setting-field';
 
 export interface ISettingEntry {
   readonly designer: IDesigner | undefined;

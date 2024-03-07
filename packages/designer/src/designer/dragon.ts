@@ -13,7 +13,7 @@ import {
 import { setNativeSelection, cursor } from '@alilc/lowcode-utils';
 import { INode, Node } from '../document';
 import { ISimulatorHost, isSimulatorHost } from '../simulator';
-import { IDesigner } from './designer';
+import type { IDesigner } from './designer';
 import { makeEventsHandler } from '../utils/misc';
 
 export interface ILocateEvent extends IPublicModelLocateEvent {
