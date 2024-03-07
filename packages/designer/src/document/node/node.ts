@@ -18,11 +18,11 @@ import {
   IBaseModelNode,
 } from '@alilc/lowcode-types';
 import { compatStage, isDOMText, isJSExpression, isNode, isNodeSchema } from '@alilc/lowcode-utils';
-import { ISettingTopEntry } from '@alilc/lowcode-designer';
+import type { ISettingTopEntry } from '@alilc/lowcode-designer';
 import { Props, getConvertedExtraKey, IProps } from './props/props';
 import type { IDocumentModel } from '../document-model';
 import { NodeChildren, INodeChildren } from './node-children';
-import { IProp, Prop } from './props/prop';
+import type { IProp } from './props/prop';
 import type { IComponentMeta } from '../../component-meta';
 import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
 import type { IExclusiveGroup } from './exclusive-group';
@@ -495,7 +495,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     }
   }
 
-  internalSetSlotFor(slotFor: Prop | null | undefined) {
+  internalSetSlotFor(slotFor: IProp | null | undefined) {
     this._slotFor = slotFor;
   }
 

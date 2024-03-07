@@ -1,11 +1,12 @@
 import { IPublicTypeCustomView, IPublicModelEditor, IPublicModelSettingTopEntry, IPublicApiSetters } from '@alilc/lowcode-types';
 import { isCustomView } from '@alilc/lowcode-utils';
 import { computed, IEventBus, createModuleEventBus, obx, makeObservable } from '@alilc/lowcode-editor-core';
-import { ISettingEntry } from './setting-entry-type';
-import { ISettingField, SettingField } from './setting-field';
-import { INode } from '../../document';
+import { SettingField } from './setting-field';
+import type { ISettingEntry } from './setting-entry-type';
+import type { ISettingField } from './setting-field';
+import type { INode } from '../../document';
 import type { IComponentMeta } from '../../component-meta';
-import { IDesigner } from '../designer';
+import type { IDesigner } from '../designer';
 
 function generateSessionId(nodes: INode[]) {
   return nodes

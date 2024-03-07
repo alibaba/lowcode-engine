@@ -37,10 +37,10 @@ import {
   isDragNodeDataObject,
   isNode,
 } from '@alilc/lowcode-utils';
-import { IProject } from '../project';
-import { ISimulatorHost } from '../simulator';
+import type { IProject } from '../project';
+import type { ISimulatorHost } from '../simulator';
 import type { IComponentMeta } from '../component-meta';
-import { IDesigner, IHistory } from '../designer';
+import type { IDesigner, IHistory } from '../designer';
 import { insertChildren, insertChild, IRootNode } from './node/node';
 import type { INode } from './node/node';
 import { Selection, ISelection } from './selection';

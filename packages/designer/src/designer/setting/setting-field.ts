@@ -14,7 +14,7 @@ import { Transducer } from './utils';
 import { SettingPropEntry } from './setting-prop-entry';
 import { computed, obx, makeObservable, action, untracked, intl } from '@alilc/lowcode-editor-core';
 import { cloneDeep, isCustomView, isDynamicSetter, isJSExpression } from '@alilc/lowcode-utils';
-import { ISettingTopEntry } from './setting-top-entry';
+import type { ISettingTopEntry } from './setting-top-entry';
 
 function getSettingFieldCollectorKey(parent: ISettingTopEntry | ISettingField, config: IPublicTypeFieldConfig) {
   let cur = parent;
@@ -27,8 +27,6 @@ function getSettingFieldCollectorKey(parent: ISettingTopEntry | ISettingField, c
   }
   return path.join('.');
 }
-
-export interface ISettingField extends SettingField {}
 
 export class SettingField extends SettingPropEntry {
   readonly isSettingField = true;
@@ -273,3 +271,5 @@ export class SettingField extends SettingPropEntry {
 export function isSettingField(obj: any): obj is ISettingField {
   return obj && obj.isSettingField;
 }
+
+export type ISettingField = typeof SettingField;

@@ -1,5 +1,5 @@
 import { obx, computed, makeObservable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
-import { Node, INode } from './node';
+import type { INode } from './node';
 import { IPublicTypeNodeData, IPublicModelNodeChildren, IPublicEnumTransformStage, IPublicTypeDisposable } from '@alilc/lowcode-types';
 import { shallowEqual, compatStage, isNodeSchema } from '@alilc/lowcode-utils';
 import { foreachReverse } from '../../utils/tree';
@@ -7,7 +7,7 @@ import { NodeRemoveOptions } from '../../types';
 
 export interface IOnChangeOptions {
   type: string;
-  node: Node;
+  node: INode;
 }
 
 export class NodeChildren implements Omit<IPublicModelNodeChildren<INode>,
@@ -80,7 +80,7 @@ export class NodeChildren implements Omit<IPublicModelNodeChildren<INode>,
     const originChildren = this.children.slice();
     this.children.forEach((child) => child.internalSetParent(null));
 
-    const children = new Array<Node>(data.length);
+    const children = new Array<INode>(data.length);
     for (let i = 0, l = data.length; i < l; i++) {
       const child = originChildren[i];
       const item = data[i];
@@ -169,14 +169,14 @@ export class NodeChildren implements Omit<IPublicModelNodeChildren<INode>,
     if (node.isParentalNode) {
       foreachReverse(
         node.children!,
-        (subNode: Node) => {
+        (subNode: INode) => {
           subNode.remove(useMutator, purge, options);
         },
         (iterable, idx) => (iterable as NodeChildren).get(idx),
       );
       foreachReverse(
         node.slots,
-        (slotNode: Node) => {
+        (slotNode: INode) => {
           slotNode.remove(useMutator, purge);
         },
         (iterable, idx) => (iterable as [])[idx],
