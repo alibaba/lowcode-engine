@@ -1,9 +1,9 @@
 import { Component, MouseEvent, Fragment, ReactNode } from 'react';
 import { shallowIntl, observer, obx, engineConfig, runInAction } from '@alilc/lowcode-editor-core';
-import { createContent, isJSSlot, isSetterConfig, shouldUseVariableSetter } from '@alilc/lowcode-utils';
+import { createContent, isJSSlot, isSetterConfig, shouldUseVariableSetter, isSettingField } from '@alilc/lowcode-utils';
 import { Skeleton, Stage } from '@alilc/lowcode-editor-skeleton';
 import { IPublicApiSetters, IPublicTypeCustomView, IPublicTypeDynamicProps } from '@alilc/lowcode-types';
-import { ISettingEntry, IComponentMeta, ISettingField, isSettingField, ISettingTopEntry } from '@alilc/lowcode-designer';
+import type { ISettingEntry, IComponentMeta, ISettingField, ISettingTopEntry } from '@alilc/lowcode-designer';
 import { createField } from '../field';
 import PopupService, { PopupPipe } from '../popup';
 import { SkeletonContext } from '../../context';
