@@ -1,9 +1,0 @@
-{
-  "version": "independent",
-  "npmClient": "yarn",
-  "registry": "http://registry.npm.alibaba-inc.com",
-  "useWorkspaces": true,
-  "packages": [
-    "packages/*"
-  ]
-}
