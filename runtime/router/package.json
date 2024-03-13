@@ -1,0 +1,8 @@
+{
+  "name": "@alilc/runtime-router",
+  "version": "1.0.0-beta.0",
+  "description": "",
+  "type": "module",
+  "bugs": "https://github.com/alibaba/lowcode-engine/issues",
+  "homepage": "https://github.com/alibaba/lowcode-engine/#readme"
+}
