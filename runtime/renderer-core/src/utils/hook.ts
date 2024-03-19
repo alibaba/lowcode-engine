@@ -1,11 +1,43 @@
-import { useCallbacks, type Callback } from '@alilc/runtime-shared';
+import type { AnyFunction } from '../types';
 
-export type HookCallback = (...args: any) => Promise<void> | void;
+export type EventName = string | number | symbol;
+
+export function useEvent<T = AnyFunction>() {
+  let events: T[] = [];
+
+  function add(fn: T) {
+    events.push(fn);
+
+    return () => {
+      events = events.filter((e) => e !== fn);
+    };
+  }
+
+  function remove(fn: T) {
+    events = events.filter((f) => fn !== f);
+  }
+
+  function list() {
+    return [...events];
+  }
+
+  return {
+    add,
+    remove,
+    list,
+    clear() {
+      events.length = 0;
+    },
+  };
+}
+
+export type Event<F = AnyFunction> = ReturnType<typeof useEvent<F>>;
+
+export type HookCallback = (...args: any) => Promise<any> | any;
+
 type HookKeys<T> = keyof T & PropertyKey;
 
-type InferCallback<HT, HN extends keyof HT> = HT[HN] extends HookCallback
-  ? HT[HN]
-  : never;
+type InferCallback<HT, HN extends keyof HT> = HT[HN] extends HookCallback ? HT[HN] : never;
 
 declare global {
   interface Console {
@@ -18,19 +50,16 @@ declare global {
 
 // https://developer.chrome.com/blog/devtools-modern-web-debugging/#linked-stack-traces
 type CreateTask = typeof console.createTask;
-const defaultTask: ReturnType<CreateTask> = { run: fn => fn() };
+const defaultTask: ReturnType<CreateTask> = { run: (fn) => fn() };
 const _createTask: CreateTask = () => defaultTask;
-const createTask =
-  typeof console.createTask !== 'undefined' ? console.createTask : _createTask;
+const createTask = typeof console.createTask !== 'undefined' ? console.createTask : _createTask;
 
-export interface Hooks<
+export interface HookStore<
   HooksT extends Record<PropertyKey, any> = Record<PropertyKey, HookCallback>,
-  HookNameT extends HookKeys<HooksT> = HookKeys<HooksT>
+  HookNameT extends HookKeys<HooksT> = HookKeys<HooksT>,
 > {
-  hook<NameT extends HookNameT>(
-    name: NameT,
-    fn: InferCallback<HooksT, NameT>
-  ): () => void;
+  hook<NameT extends HookNameT>(name: NameT, fn: InferCallback<HooksT, NameT>): () => void;
+
   call<NameT extends HookNameT>(
     name: NameT,
     ...args: Parameters<InferCallback<HooksT, NameT>>
@@ -43,29 +72,28 @@ export interface Hooks<
     name: NameT,
     ...args: Parameters<InferCallback<HooksT, NameT>>
   ): Promise<void[]>;
-  remove<NameT extends HookNameT>(
-    name: NameT,
-    fn?: InferCallback<HooksT, NameT>
-  ): void;
+
+  remove<NameT extends HookNameT>(name: NameT, fn?: InferCallback<HooksT, NameT>): void;
+
+  clear<NameT extends HookNameT>(name?: NameT): void;
+
+  getHooks<NameT extends HookNameT>(name: NameT): InferCallback<HooksT, NameT>[] | undefined;
 }
 
-export function createHooks<
+export function createHookStore<
   HooksT extends Record<PropertyKey, any> = Record<PropertyKey, HookCallback>,
-  HookNameT extends HookKeys<HooksT> = HookKeys<HooksT>
->(): Hooks<HooksT, HookNameT> {
-  const hooksMap = new Map<HookNameT, Callback<HookCallback>>();
+  HookNameT extends HookKeys<HooksT> = HookKeys<HooksT>,
+>(): HookStore<HooksT, HookNameT> {
+  const hooksMap = new Map<HookNameT, Event<HookCallback>>();
 
-  function hook<NameT extends HookNameT>(
-    name: NameT,
-    fn: InferCallback<HooksT, NameT>
-  ) {
+  function hook<NameT extends HookNameT>(name: NameT, fn: InferCallback<HooksT, NameT>) {
     if (!name || typeof fn !== 'function') {
       return () => {};
     }
 
     let hooks = hooksMap.get(name);
     if (!hooks) {
-      hooks = useCallbacks();
+      hooks = useEvent();
       hooksMap.set(name, hooks);
     }
 
@@ -92,9 +120,8 @@ export function createHooks<
     const task = createTask(name.toString());
 
     return hooks.reduce(
-      (promise, hookFunction) =>
-        promise.then(() => task.run(() => hookFunction(...args))),
-      Promise.resolve()
+      (promise, hookFunction) => promise.then(() => task.run(() => hookFunction(...args))),
+      Promise.resolve(),
     );
   }
 
@@ -104,19 +131,16 @@ export function createHooks<
   ) {
     const hooks = hooksMap.get(name)?.list() ?? [];
     const task = createTask(name.toString());
-    return Promise.all(hooks.map(hook => task.run(() => hook(...args))));
+    return Promise.all(hooks.map((hook) => task.run(() => hook(...args))));
   }
 
-  function remove<NameT extends HookNameT>(
-    name: NameT,
-    fn?: InferCallback<HooksT, NameT>
-  ) {
+  function remove<NameT extends HookNameT>(name: NameT, fn?: InferCallback<HooksT, NameT>) {
     const hooks = hooksMap.get(name);
     if (!hooks) return;
 
     if (fn) {
       hooks.remove(fn);
-      if (hooks.list.length === 0) {
+      if (hooks.list().length === 0) {
         hooksMap.delete(name);
       }
     } else {
@@ -124,11 +148,30 @@ export function createHooks<
     }
   }
 
+  function clear<NameT extends HookNameT>(name?: NameT) {
+    if (name) {
+      remove(name);
+    } else {
+      hooksMap.clear();
+    }
+  }
+
+  function getHooks<NameT extends HookNameT>(
+    name: NameT,
+  ): InferCallback<HooksT, NameT>[] | undefined {
+    return hooksMap.get(name)?.list() as InferCallback<HooksT, NameT>[] | undefined;
+  }
+
   return {
     hook,
+
     call,
     callAsync,
     callParallel,
+
     remove,
+    clear,
+
+    getHooks,
   };
 }

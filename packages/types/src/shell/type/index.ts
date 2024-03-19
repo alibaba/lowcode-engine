@@ -24,7 +24,7 @@ export * from './widget-base-config';
 export * from './node-data';
 export * from './icon-type';
 export * from './transformed-component-metadata';
-export * from './i8n-data';
+export * from './i18n-data';
 export * from './npm-info';
 export * from './drag-node-data-object';
 export * from './drag-node-object';

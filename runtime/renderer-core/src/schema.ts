@@ -1,43 +1,33 @@
-import type {
-  ProjectSchema,
-  RootSchema,
-  ComponentMap,
-  PageSchema,
-} from '@alilc/runtime-shared';
-import { throwRuntimeError } from './error';
+import type { Project, ComponentTree, ComponentMap, PageConfig } from './types';
+import { throwRuntimeError } from './utils/error';
 import { set, get } from 'lodash-es';
 
-type AppSchemaType = ProjectSchema<RootSchema>;
-
 export interface AppSchema {
-  getComponentsTrees(): RootSchema[];
-  addComponentsTree(tree: RootSchema): void;
+  getComponentsTrees(): ComponentTree[];
+  addComponentsTree(tree: ComponentTree): void;
   removeComponentsTree(id: string): void;
 
   getComponentsMaps(): ComponentMap[];
   addComponentsMap(componentName: ComponentMap): void;
   removeComponentsMap(componentName: string): void;
 
-  getPages(): PageSchema[];
-  addPage(page: PageSchema): void;
+  getPages(): PageConfig[];
+  addPage(page: PageConfig): void;
   removePage(id: string): void;
 
-  getByKey<K extends keyof AppSchemaType>(key: K): AppSchemaType[K] | undefined;
-  updateByKey<K extends keyof AppSchemaType>(
+  getByKey<K extends keyof Project>(key: K): Project[K] | undefined;
+  updateByKey<K extends keyof Project>(
     key: K,
-    updater: AppSchemaType[K] | ((value: AppSchemaType[K]) => AppSchemaType[K])
+    updater: Project[K] | ((value: Project[K]) => Project[K]),
   ): void;
 
   getByPath(path: string | string[]): any;
-  updateByPath(
-    path: string | string[],
-    updater: any | ((value: any) => any)
-  ): void;
+  updateByPath(path: string | string[], updater: any | ((value: any) => any)): void;
 
-  find(predicate: (schema: AppSchemaType) => any): any;
+  find(predicate: (schema: Project) => any): any;
 }
 
-export function createAppSchema(schema: ProjectSchema): AppSchema {
+export function createAppSchema(schema: Project): AppSchema {
   if (!schema.version.startsWith('1.')) {
     throwRuntimeError('core', 'schema version must be 1.x.x');
   }
@@ -93,21 +83,13 @@ export function createAppSchema(schema: ProjectSchema): AppSchema {
       return get(schemaRef, path);
     },
     updateByPath(path, updater) {
-      set(
-        schemaRef,
-        path,
-        typeof updater === 'function' ? updater(this.getByPath(path)) : updater
-      );
+      set(schemaRef, path, typeof updater === 'function' ? updater(this.getByPath(path)) : updater);
     },
   };
 }
 
-function addArrayItem<T extends Record<string, any>>(
-  target: T[],
-  item: T,
-  comparison: string
-) {
-  const idx = target.findIndex(_ => _[comparison] === item[comparison]);
+function addArrayItem<T extends Record<string, any>>(target: T[], item: T, comparison: string) {
+  const idx = target.findIndex((_) => _[comparison] === item[comparison]);
   if (idx > -1) {
     target.splice(idx, 1, item);
   } else {
@@ -118,8 +100,8 @@ function addArrayItem<T extends Record<string, any>>(
 function removeArrayItem<T extends Record<string, any>>(
   target: T[],
   comparison: string,
-  comparisonValue: any
+  comparisonValue: any,
 ) {
-  const idx = target.findIndex(item => item[comparison] === comparisonValue);
+  const idx = target.findIndex((item) => item[comparison] === comparisonValue);
   if (idx > -1) target.splice(idx, 1);
 }

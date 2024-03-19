@@ -1,16 +1,19 @@
 import { IPublicEnumContextMenuType } from '../enum';
 import { IPublicModelNode } from '../model';
-import { IPublicTypeI18nData } from './i8n-data';
+import { IPublicTypeI18nData } from './i18n-data';
 import { IPublicTypeHelpTipConfig } from './widget-base-config';
 
-export interface IPublicTypeContextMenuItem extends Omit<IPublicTypeContextMenuAction, 'condition' | 'disabled' | 'items'> {
+export interface IPublicTypeContextMenuItem
+  extends Omit<
+    IPublicTypeContextMenuAction,
+    'condition' | 'disabled' | 'items'
+  > {
   disabled?: boolean;
 
   items?: Omit<IPublicTypeContextMenuItem, 'items'>[];
 }
 
 export interface IPublicTypeContextMenuAction {
-
   /**
    * 动作的唯一标识符
    * Unique identifier for the action
@@ -41,7 +44,11 @@ export interface IPublicTypeContextMenuAction {
    * 子菜单项或生成子节点的函数，可选，仅支持两级
    * Sub-menu items or function to generate child node, optional
    */
-  items?: Omit<IPublicTypeContextMenuAction, 'items'>[] | ((nodes?: IPublicModelNode[]) => Omit<IPublicTypeContextMenuAction, 'items'>[]);
+  items?:
+    | Omit<IPublicTypeContextMenuAction, 'items'>[]
+    | ((
+        nodes?: IPublicModelNode[],
+      ) => Omit<IPublicTypeContextMenuAction, 'items'>[]);
 
   /**
    * 显示条件函数
@@ -60,4 +67,3 @@ export interface IPublicTypeContextMenuAction {
    */
   help?: IPublicTypeHelpTipConfig;
 }
-

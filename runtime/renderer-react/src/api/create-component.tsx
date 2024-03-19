@@ -11,12 +11,12 @@ import {
   type CodeRuntime,
   createCodeRuntime,
 } from '@alilc/runtime-core';
+import { isPlainObject } from 'lodash-es';
 import {
   type AnyObject,
   type Package,
   type JSSlot,
   type JSFunction,
-  isPlainObject,
   isJsExpression,
   isJsSlot,
   isLowCodeComponentPackage,
@@ -79,8 +79,7 @@ export interface ConvertedTreeNode {
   setReactNode(element: ReactNode): void;
 }
 
-export interface CreateComponentOptions<C = ComponentType<any>>
-  extends ComponentOptionsBase<C> {
+export interface CreateComponentOptions<C = ComponentType<any>> extends ComponentOptionsBase<C> {
   displayName?: string;
 
   beforeNodeCreateComponent?(convertedNode: ConvertedTreeNode): void;
@@ -124,7 +123,7 @@ export const createComponent = createComponentFunction<
 
     function getComponentByName(
       componentName: string,
-      componentsRecord: Record<string, ComponentType<any> | Package>
+      componentsRecord: Record<string, ComponentType<any> | Package>,
     ) {
       const Component = componentsRecord[componentName];
       if (!Component) {
@@ -154,7 +153,7 @@ export const createComponent = createComponentFunction<
 
     function createConvertedTreeNode(
       rawNode: ComponentTreeNode,
-      codeRuntime: CodeRuntime
+      codeRuntime: CodeRuntime,
     ): ConvertedTreeNode {
       let elementValue: ReactNode = null;
 
@@ -172,10 +171,7 @@ export const createComponent = createComponentFunction<
       };
 
       if (rawNode.type === 'component') {
-        node.rawComponent = getComponentByName(
-          rawNode.data.componentName,
-          componentsRecord
-        );
+        node.rawComponent = getComponentByName(rawNode.data.componentName, componentsRecord);
       }
 
       return node;
@@ -185,7 +181,7 @@ export const createComponent = createComponentFunction<
       node: ComponentTreeNode,
       codeRuntime: CodeRuntime,
       instance: ContainerInstance,
-      componentsRecord: Record<string, ComponentType<any> | Package>
+      componentsRecord: Record<string, ComponentType<any> | Package>,
     ) {
       const convertedNode = createConvertedTreeNode(node, codeRuntime);
 
@@ -206,7 +202,7 @@ export const createComponent = createComponentFunction<
             target: {
               text: rawValue,
             },
-            valueGetter: node => codeRuntime.parseExprOrFn(node),
+            valueGetter: (node) => codeRuntime.parseExprOrFn(node),
           });
 
           convertedNode.setReactNode(<ReactivedText key={rawValue.value} />);
@@ -235,7 +231,7 @@ export const createComponent = createComponentFunction<
               props: AnyObject,
               codeRuntime: CodeRuntime,
               key: string,
-              children: ReactNode[] = []
+              children: ReactNode[] = [],
             ) {
               const { ref, ...componentProps } = props;
 
@@ -249,45 +245,29 @@ export const createComponent = createComponentFunction<
               // 先将 jsslot, jsFunction 对象转换
               const finalProps = processValue(
                 componentProps,
-                node => isJsSlot(node) || isJsFunction(node),
+                (node) => isJsSlot(node) || isJsFunction(node),
                 (node: JSSlot | JSFunction) => {
                   if (isJsSlot(node)) {
                     if (node.value) {
-                      const nodes = (
-                        Array.isArray(node.value) ? node.value : [node.value]
-                      ).map(n => createNode(n, undefined));
+                      const nodes = (Array.isArray(node.value) ? node.value : [node.value]).map(
+                        (n) => createNode(n, undefined),
+                      );
 
                       if (node.params?.length) {
                         return (...args: any[]) => {
-                          const params = node.params!.reduce(
-                            (prev, cur, idx) => {
-                              return (prev[cur] = args[idx]);
-                            },
-                            {} as AnyObject
-                          );
-                          const subCodeScope = codeRuntime
-                            .getScope()
-                            .createSubScope(params);
-                          const subCodeRuntime =
-                            createCodeRuntime(subCodeScope);
+                          const params = node.params!.reduce((prev, cur, idx) => {
+                            return (prev[cur] = args[idx]);
+                          }, {} as AnyObject);
+                          const subCodeScope = codeRuntime.getScope().createSubScope(params);
+                          const subCodeRuntime = createCodeRuntime(subCodeScope);
 
-                          return nodes.map(n =>
-                            createReactElement(
-                              n,
-                              subCodeRuntime,
-                              instance,
-                              componentsRecord
-                            )
+                          return nodes.map((n) =>
+                            createReactElement(n, subCodeRuntime, instance, componentsRecord),
                           );
                         };
                       } else {
-                        return nodes.map(n =>
-                          createReactElement(
-                            n,
-                            codeRuntime,
-                            instance,
-                            componentsRecord
-                          )
+                        return nodes.map((n) =>
+                          createReactElement(n, codeRuntime, instance, componentsRecord),
                         );
                       }
                     }
@@ -296,7 +276,7 @@ export const createComponent = createComponentFunction<
                   }
 
                   return null;
-                }
+                },
               );
 
               if (someValue(finalProps, isJsExpression)) {
@@ -308,14 +288,14 @@ export const createComponent = createComponentFunction<
                       key,
                       ref: refFunction,
                     },
-                    children
+                    children,
                   );
                 }
                 Props.displayName = 'Props';
 
                 const Reactived = reactive(Props, {
                   target: finalProps,
-                  valueGetter: node => codeRuntime.parseExprOrFn(node),
+                  valueGetter: (node) => codeRuntime.parseExprOrFn(node),
                 });
 
                 return <Reactived key={key} />;
@@ -327,7 +307,7 @@ export const createComponent = createComponentFunction<
                     key,
                     ref: refFunction,
                   },
-                  children
+                  children,
                 );
               }
             }
@@ -339,9 +319,9 @@ export const createComponent = createComponentFunction<
               nodeProps,
               codeRuntime,
               currentComponentKey,
-              rawNode.children?.map(n =>
-                createReactElement(n, codeRuntime, instance, componentsRecord)
-              )
+              rawNode.children?.map((n) =>
+                createReactElement(n, codeRuntime, instance, componentsRecord),
+              ),
             );
 
             if (loop) {
@@ -360,14 +340,9 @@ export const createComponent = createComponentFunction<
                     nodeProps,
                     subCodeRuntime,
                     `loop-${currentComponentKey}-${idx}`,
-                    rawNode.children?.map(n =>
-                      createReactElement(
-                        n,
-                        subCodeRuntime,
-                        instance,
-                        componentsRecord
-                      )
-                    )
+                    rawNode.children?.map((n) =>
+                      createReactElement(n, subCodeRuntime, instance, componentsRecord),
+                    ),
                   );
                 });
               };
@@ -386,7 +361,7 @@ export const createComponent = createComponentFunction<
                   target: {
                     loop,
                   },
-                  valueGetter: expr => codeRuntime.parseExprOrFn(expr),
+                  valueGetter: (expr) => codeRuntime.parseExprOrFn(expr),
                 });
 
                 element = createElement(ReactivedLoop, {
@@ -410,7 +385,7 @@ export const createComponent = createComponentFunction<
                 target: {
                   condition,
                 },
-                valueGetter: expr => codeRuntime.parseExprOrFn(expr),
+                valueGetter: (expr) => codeRuntime.parseExprOrFn(expr),
               });
 
               return createElement(ReactivedCondition, {
@@ -434,7 +409,7 @@ export const createComponent = createComponentFunction<
 
     const LowCodeComponent = forwardRef(function (
       props: LowCodeComponentProps,
-      ref: ForwardedRef<any>
+      ref: ForwardedRef<any>,
     ) {
       const { id, className, style, ...extraProps } = props;
       const isMounted = useRef(false);
@@ -451,7 +426,7 @@ export const createComponent = createComponentFunction<
         scopeValue.reloadDataSource();
 
         if (instance.cssText) {
-          appendExternalStyle(instance.cssText).then(el => {
+          appendExternalStyle(instance.cssText).then((el) => {
             styleEl = el;
           });
         }
@@ -484,9 +459,7 @@ export const createComponent = createComponentFunction<
         <div id={id} className={className} style={style} ref={ref}>
           {instance
             .getComponentTreeNodes()
-            .map(n =>
-              createReactElement(n, codeRuntime, instance, componentsRecord)
-            )}
+            .map((n) => createReactElement(n, codeRuntime, instance, componentsRecord))}
         </div>
       );
     });

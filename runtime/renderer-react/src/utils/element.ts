@@ -1,4 +1,6 @@
-import { addLeadingSlash } from '@alilc/runtime-shared';
+const addLeadingSlash = (path: string): string => {
+  return path.charAt(0) === '/' ? path : `/${path}`;
+};
 
 export function getElementById(id: string, tag: string = 'div') {
   let el = document.getElementById(id);
@@ -44,13 +46,13 @@ export async function loadPackageUrls(urls: string[]) {
     }
   }
 
-  await Promise.all(styles.map(item => appendExternalCss(item)));
-  await Promise.all(scripts.map(item => appendExternalScript(item)));
+  await Promise.all(styles.map((item) => appendExternalCss(item)));
+  await Promise.all(scripts.map((item) => appendExternalScript(item)));
 }
 
 async function appendExternalScript(
   url: string,
-  root: HTMLElement = document.body
+  root: HTMLElement = document.body,
 ): Promise<HTMLElement> {
   if (url) {
     const el = getIfExistAssetByUrl(url, 'script');
@@ -73,9 +75,9 @@ async function appendExternalScript(
       () => {
         resolve(scriptElement);
       },
-      false
+      false,
     );
-    scriptElement.addEventListener('error', error => {
+    scriptElement.addEventListener('error', (error) => {
       if (root.contains(scriptElement)) {
         root.removeChild(scriptElement);
       }
@@ -88,7 +90,7 @@ async function appendExternalScript(
 
 async function appendExternalCss(
   url: string,
-  root: HTMLElement = document.head
+  root: HTMLElement = document.head,
 ): Promise<HTMLElement> {
   if (url) {
     const el = getIfExistAssetByUrl(url, 'link');
@@ -105,9 +107,9 @@ async function appendExternalCss(
       () => {
         resolve(el);
       },
-      false
+      false,
     );
-    el.addEventListener('error', error => {
+    el.addEventListener('error', (error) => {
       reject(error);
     });
 
@@ -117,7 +119,7 @@ async function appendExternalCss(
 
 export async function appendExternalStyle(
   cssText: string,
-  root: HTMLElement = document.head
+  root: HTMLElement = document.head,
 ): Promise<HTMLElement> {
   return new Promise((resolve, reject) => {
     let el: HTMLStyleElement = document.createElement('style');
@@ -128,9 +130,9 @@ export async function appendExternalStyle(
       () => {
         resolve(el);
       },
-      false
+      false,
     );
-    el.addEventListener('error', error => {
+    el.addEventListener('error', (error) => {
       reject(error);
     });
 
@@ -140,11 +142,10 @@ export async function appendExternalStyle(
 
 function getIfExistAssetByUrl(
   url: string,
-  tag: 'link' | 'script'
+  tag: 'link' | 'script',
 ): HTMLLinkElement | HTMLScriptElement | undefined {
-  return Array.from(document.getElementsByTagName(tag)).find(item => {
-    const elUrl =
-      (item as HTMLLinkElement).href || (item as HTMLScriptElement).src;
+  return Array.from(document.getElementsByTagName(tag)).find((item) => {
+    const elUrl = (item as HTMLLinkElement).href || (item as HTMLScriptElement).src;
 
     if (/^(https?:)?\/\/([\w.]+\/?)\S*/gi.test(url)) {
       // if url === http://xxx.xxx

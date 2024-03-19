@@ -1,24 +1,22 @@
-import {
-  type AnyFunction,
-  type AnyObject,
-  JSExpression,
-  JSFunction,
-  isJsExpression,
-  isJsFunction,
-} from '@alilc/runtime-shared';
-import { processValue } from '../utils/value';
+import type { AnyFunction, PlainObject, JSExpression, JSFunction } from './types';
+import { isJSExpression, isJSFunction } from './utils/type-guard';
+import { processValue } from './utils/value';
 
 export interface CodeRuntime {
   run<T = unknown>(code: string): T | undefined;
   createFnBoundScope(code: string): AnyFunction | undefined;
-  parseExprOrFn(value: AnyObject): any;
+  parseExprOrFn(value: PlainObject): any;
 
   bindingScope(scope: CodeScope): void;
   getScope(): CodeScope;
 }
 
-export function createCodeRuntime(scope?: CodeScope): CodeRuntime {
-  let runtimeScope = scope ?? createScope({});
+const SYMBOL_SIGN = '__code__scope';
+
+export function createCodeRuntime(scopeOrValue: PlainObject = {}): CodeRuntime {
+  let runtimeScope = scopeOrValue[Symbol.for(SYMBOL_SIGN)]
+    ? (scopeOrValue as CodeScope)
+    : createScope(scopeOrValue);
 
   function run<T = unknown>(code: string): T | undefined {
     if (!code) return undefined;
@@ -26,16 +24,11 @@ export function createCodeRuntime(scope?: CodeScope): CodeRuntime {
     try {
       return new Function(
         'scope',
-        `"use strict";return (function(){return (${code})}).bind(scope)();`
+        `"use strict";return (function(){return (${code})}).bind(scope)();`,
       )(runtimeScope.value) as T;
     } catch (err) {
-      console.log(
-        '%c eval error',
-        'font-size:13px; background:pink; color:#bf2c9f;',
-        code,
-        scope.value,
-        err
-      );
+      // todo
+      console.error('%c eval error', code, runtimeScope.value, err);
       return undefined;
     }
   }
@@ -46,11 +39,11 @@ export function createCodeRuntime(scope?: CodeScope): CodeRuntime {
     return fn.bind(runtimeScope.value);
   }
 
-  function parseExprOrFn(value: AnyObject) {
+  function parseExprOrFn(value: PlainObject) {
     return processValue(
       value,
-      data => {
-        return isJsExpression(data) || isJsFunction(data);
+      (data) => {
+        return isJSExpression(data) || isJSFunction(data);
       },
       (node: JSExpression | JSFunction) => {
         let v;
@@ -65,7 +58,7 @@ export function createCodeRuntime(scope?: CodeScope): CodeRuntime {
           return (node as any).mock;
         }
         return v;
-      }
+      },
     );
   }
 
@@ -84,14 +77,14 @@ export function createCodeRuntime(scope?: CodeScope): CodeRuntime {
 }
 
 export interface CodeScope {
-  readonly value: AnyObject;
+  readonly value: PlainObject;
 
   inject(name: string, value: any, force?: boolean): void;
-  setValue(value: AnyObject, replace?: boolean): void;
-  createSubScope(initValue: AnyObject): CodeScope;
+  setValue(value: PlainObject, replace?: boolean): void;
+  createSubScope(initValue?: PlainObject): CodeScope;
 }
 
-export function createScope(initValue: AnyObject): CodeScope {
+export function createScope(initValue: PlainObject = {}): CodeScope {
   const innerScope = { value: initValue };
   const proxyValue = new Proxy(Object.create(null), {
     set(target, p, newValue, receiver) {
@@ -120,7 +113,7 @@ export function createScope(initValue: AnyObject): CodeScope {
     innerScope.value[name] = value;
   }
 
-  function createSubScope(initValue: AnyObject) {
+  function createSubScope(initValue: PlainObject = {}) {
     const childScope = createScope(initValue);
 
     (childScope as any).__raw.__parent = innerScope;
@@ -144,6 +137,8 @@ export function createScope(initValue: AnyObject): CodeScope {
     createSubScope,
   };
 
+  Object.defineProperty(scope, Symbol.for(SYMBOL_SIGN), { get: () => true });
+  // development env
   Object.defineProperty(scope, '__raw', { get: () => innerScope });
 
   return scope;

@@ -10,13 +10,7 @@ import {
   isReactive,
   isShallow,
 } from '@vue/reactivity';
-import {
-  noop,
-  isObject,
-  isPlainObject,
-  isSet,
-  isMap,
-} from '@alilc/runtime-shared';
+import { noop, isObject, isPlainObject, isSet, isMap } from 'lodash-es';
 
 export { ref as createSignal, computed, effect };
 export type { Ref as Signal, ComputedRef as ComputedSignal };
@@ -32,7 +26,7 @@ export function watch<T = any>(
   }: {
     deep?: boolean;
     immediate?: boolean;
-  } = {}
+  } = {},
 ) {
   let getter: () => any;
   let forceTrigger = false;
@@ -42,9 +36,7 @@ export function watch<T = any>(
     forceTrigger = isShallow(source);
   } else if (isReactive(source)) {
     getter = () => {
-      return deep === true
-        ? source
-        : traverse(source, deep === false ? 1 : undefined);
+      return deep === true ? source : traverse(source, deep === false ? 1 : undefined);
     };
     forceTrigger = true;
   } else {
@@ -93,12 +85,7 @@ export function watch<T = any>(
   return unwatch;
 }
 
-function traverse(
-  value: unknown,
-  depth?: number,
-  currentDepth = 0,
-  seen?: Set<unknown>
-) {
+function traverse(value: unknown, depth?: number, currentDepth = 0, seen?: Set<unknown>) {
   if (!isObject(value)) {
     return value;
   }

@@ -3,12 +3,12 @@ import { someValue } from '@alilc/runtime-core';
 import { isJsExpression } from '@alilc/runtime-shared';
 import { definePlugin } from '../../renderer';
 import { PAGE_EVENTS } from '../../events';
-import { reactive } from '../../helper/reactive';
+import { reactive } from '../../utils/reactive';
 import { createIntl } from './intl';
 
 export { createIntl };
 
-declare module '@alilc/runtime-core' {
+declare module '@alilc/renderer-core' {
   interface AppBoosts {
     intl: ReturnType<typeof createIntl>;
   }
@@ -24,7 +24,7 @@ export const intlPlugin = definePlugin({
     appScope.setValue(intl);
     boosts.add('intl', intl);
 
-    boosts.hooks.hook(PAGE_EVENTS.COMPONENT_BEFORE_NODE_CREATE, node => {
+    boosts.hooks.hook(PAGE_EVENTS.COMPONENT_BEFORE_NODE_CREATE, (node) => {
       if (node.type === 'i18n') {
         const { key, params } = node.raw.data;
 

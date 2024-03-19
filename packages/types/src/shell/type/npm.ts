@@ -12,5 +12,7 @@ export interface IPublicTypeLowCodeComponent {
 }
 
 export type IPublicTypeProCodeComponent = IPublicTypeNpmInfo;
-export type IPublicTypeComponentMap = IPublicTypeProCodeComponent | IPublicTypeLowCodeComponent;
+export type IPublicTypeComponentMap =
+  | IPublicTypeProCodeComponent
+  | IPublicTypeLowCodeComponent;
 export type IPublicTypeComponentsMap = IPublicTypeComponentMap[];

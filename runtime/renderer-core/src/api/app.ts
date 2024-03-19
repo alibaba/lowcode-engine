@@ -1,26 +1,18 @@
-import {
-  type ProjectSchema,
-  type Package,
-  type AnyObject,
-} from '@alilc/runtime-shared';
-import { type PackageManager, createPackageManager } from '../core/package';
-import { createPluginManager, type Plugin } from '../core/plugin';
-import { createScope, type CodeScope } from '../core/codeRuntime';
-import {
-  appBoosts,
-  type AppBoosts,
-  type AppBoostsManager,
-} from '../core/boosts';
-import { type AppSchema, createAppSchema } from '../core/schema';
+import type { Project, Package, PlainObject } from '../types';
+import { type PackageManager, createPackageManager } from '../package';
+import { createPluginManager, type Plugin } from '../plugin';
+import { createScope, type CodeScope } from '../code-runtime';
+import { appBoosts, type AppBoosts, type AppBoostsManager } from '../boosts';
+import { type AppSchema, createAppSchema } from '../schema';
 
 export interface AppOptionsBase {
-  schema: ProjectSchema;
+  schema: Project;
   packages?: Package[];
   plugins?: Plugin[];
-  appScopeValue?: AnyObject;
+  appScopeValue?: PlainObject;
 }
 
-export interface RenderBase {
+export interface AppBase {
   mount: (el: HTMLElement) => void | Promise<void>;
   unmount: () => void | Promise<void>;
 }
@@ -36,13 +28,13 @@ export interface AppContext {
   boosts: AppBoostsManager;
 }
 
-type AppCreator<O, T> = (
+type AppCreator<O, T extends AppBase> = (
   appContext: Omit<AppContext, 'renderer'>,
-  appOptions: O
-) => Promise<{ renderBase: T; renderer?: any }>;
+  appOptions: O,
+) => Promise<{ appBase: T; renderer?: any }>;
 
-export type App<T extends RenderBase = RenderBase> = {
-  schema: ProjectSchema;
+export type App<T extends AppBase = AppBase> = {
+  schema: Project;
   config: Map<string, any>;
   readonly boosts: AppBoosts;
 
@@ -55,11 +47,14 @@ export type App<T extends RenderBase = RenderBase> = {
  * @param options
  * @returns
  */
-export function createAppFunction<
-  O extends AppOptionsBase,
-  T extends RenderBase = RenderBase
->(appCreator: AppCreator<O, T>): (options: O) => Promise<App<T>> {
-  return async options => {
+export function createAppFunction<O extends AppOptionsBase, T extends AppBase = AppBase>(
+  appCreator: AppCreator<O, T>,
+): (options: O) => Promise<App<T>> {
+  if (typeof appCreator !== 'function') {
+    throw Error('The first parameter must be a function.');
+  }
+
+  return async (options) => {
     const { schema, appScopeValue = {} } = options;
     const appSchema = createAppSchema(schema);
     const appConfig = new Map<string, any>();
@@ -77,14 +72,19 @@ export function createAppFunction<
       boosts: appBoosts,
     };
 
-    const { renderBase, renderer } = await appCreator(appContext, options);
+    const { appBase, renderer } = await appCreator(appContext, options);
+
+    if (!('mount' in appBase) || !('unmount' in appBase)) {
+      throw Error('appBase 必须返回 mount 和 unmount 方法');
+    }
+
     const pluginManager = createPluginManager({
       ...appContext,
       renderer,
     });
 
     if (options.plugins?.length) {
-      await Promise.all(options.plugins.map(p => pluginManager.add(p)));
+      await Promise.all(options.plugins.map((p) => pluginManager.add(p)));
     }
 
     if (options.packages?.length) {
@@ -100,7 +100,7 @@ export function createAppFunction<
           return appBoosts.value;
         },
       },
-      renderBase
+      appBase,
     );
   };
 }

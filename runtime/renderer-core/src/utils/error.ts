@@ -1,11 +1,14 @@
-import { appBoosts } from './boosts';
+import { appBoosts } from '../boosts';
 
 export type ErrorType = string;
 
 export class RuntimeError extends Error {
-  constructor(public type: ErrorType, message: string) {
+  constructor(
+    public type: ErrorType,
+    message: string,
+  ) {
     super(message);
-    appBoosts.hooks.call(`app:error`, this);
+    appBoosts.hookStore.call(`app:error`, this);
   }
 }
 

@@ -4,5 +4,13 @@
   "description": "",
   "type": "module",
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",
-  "homepage": "https://github.com/alibaba/lowcode-engine/#readme"
+  "homepage": "https://github.com/alibaba/lowcode-engine/#readme",
+  "license": "MIT",
+  "scripts": {
+    "build": "",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@alilc/renderer-core": "^2.0.0-beta.0"
+  }
 }

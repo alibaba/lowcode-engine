@@ -5,6 +5,12 @@
   "type": "module",
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",
   "homepage": "https://github.com/alibaba/lowcode-engine/#readme",
+  "license": "MIT",
+  "scripts": {
+    "build": "",
+    "test": "vitest --run",
+    "test:watch": "vitest"
+  },
   "dependencies": {
     "@alilc/lowcode-types": "1.3.2",
     "lodash-es": "^4.17.21"

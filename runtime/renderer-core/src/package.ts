@@ -1,13 +1,6 @@
-import {
-  type Package,
-  type ProCodeComponent,
-  type ComponentMap,
-  type LowCodeComponent,
-  isLowCodeComponentPackage,
-} from '@alilc/runtime-shared';
+import { type Package, type ComponentMap, type LowCodeComponent } from './types';
 
-const packageStore: Map<string, any> = ((window as any).__PACKAGE_STORE__ ??=
-  new Map());
+const packageStore: Map<string, any> = ((window as any).__PACKAGE_STORE__ ??= new Map());
 
 export interface PackageLoader {
   name?: string;
@@ -31,9 +24,7 @@ export interface PackageManager {
   /** 解析组件映射 */
   resolveComponentMaps(componentMaps: ComponentMap[]): void;
   /** 获取组件映射对象，key = componentName value = component */
-  getComponentsNameRecord<C = unknown>(
-    componentMaps?: ComponentMap[]
-  ): Record<string, C>;
+  getComponentsNameRecord<C = unknown>(componentMaps?: ComponentMap[]): Record<string, C>;
   /** 通过组件名获取对应的组件  */
   getComponent<C = unknown>(componentName: string): C | undefined;
   /** 注册组件 */
@@ -48,8 +39,10 @@ export function createPackageManager(): PackageManager {
 
   async function addPackages(packages: Package[]) {
     for (const item of packages) {
-      const newId = item.package ?? item.id;
-      const isExist = packagesRef.some(_ => {
+      if (!item.package && !item.id) continue;
+
+      const newId = item.package ?? item.id!;
+      const isExist = packagesRef.some((_) => {
         const itemId = _.package ?? _.id;
         return itemId === newId;
       });
@@ -58,7 +51,7 @@ export function createPackageManager(): PackageManager {
         packagesRef.push(item);
 
         if (!packageStore.has(newId)) {
-          const loader = packageLoaders.find(loader => loader.active(item));
+          const loader = packageLoaders.find((loader) => loader.active(item));
           if (!loader) continue;
 
           try {
@@ -73,14 +66,14 @@ export function createPackageManager(): PackageManager {
   }
 
   function getPackageInfo(packageName: string) {
-    return packagesRef.find(p => p.package === packageName);
+    return packagesRef.find((p) => p.package === packageName);
   }
 
   function getLibraryByPackageName(packageName: string) {
     const packageInfo = getPackageInfo(packageName);
 
     if (packageInfo) {
-      return packageStore.get(packageInfo.package ?? packageInfo.id);
+      return packageStore.get(packageInfo.package ?? packageInfo.id!);
     }
   }
 
@@ -90,31 +83,26 @@ export function createPackageManager(): PackageManager {
 
   function resolveComponentMaps(componentMaps: ComponentMap[]) {
     for (const map of componentMaps) {
-      if ((map as LowCodeComponent).devMode === 'lowCode') {
-        const packageInfo = packagesRef.find(_ => {
+      if (map.devMode === 'lowCode') {
+        const packageInfo = packagesRef.find((_) => {
           return _.id === (map as LowCodeComponent).id;
         });
 
-        if (isLowCodeComponentPackage(packageInfo)) {
+        if (packageInfo) {
           componentsRecord[map.componentName] = packageInfo;
         }
       } else {
-        const npmInfo = map as ProCodeComponent;
-
-        if (packageStore.has(npmInfo.package)) {
-          const library = packageStore.get(npmInfo.package);
+        if (packageStore.has(map.package!)) {
+          const library = packageStore.get(map.package!);
           // export { exportName } from xxx exportName === global.libraryName.exportName
           // export exportName from xxx exportName === global.libraryName.default || global.libraryName
           // export { exportName as componentName } from package
           // if exportName == null exportName === componentName;
           // const componentName = exportName.subName, if exportName empty subName donot use
-          const paths =
-            npmInfo.exportName && npmInfo.subName
-              ? npmInfo.subName.split('.')
-              : [];
-          const exportName = npmInfo.exportName ?? npmInfo.componentName;
+          const paths = map.exportName && map.subName ? map.subName.split('.') : [];
+          const exportName = map.exportName ?? map.componentName;
 
-          if (npmInfo.destructuring) {
+          if (map.destructuring) {
             paths.unshift(exportName);
           }
 
@@ -123,7 +111,7 @@ export function createPackageManager(): PackageManager {
             result = result[path] || result;
           }
 
-          const recordName = npmInfo.componentName ?? npmInfo.exportName;
+          const recordName = map.componentName ?? map.exportName;
           componentsRecord[recordName] = result;
         }
       }
@@ -152,7 +140,7 @@ export function createPackageManager(): PackageManager {
     getLibraryByPackageName,
     setLibraryByPackageName,
     addPackageLoader(loader) {
-      if (!loader.name || !packageLoaders.some(_ => _.name === loader.name)) {
+      if (!loader.name || !packageLoaders.some((_) => _.name === loader.name)) {
         packageLoaders.push(loader);
       }
     },

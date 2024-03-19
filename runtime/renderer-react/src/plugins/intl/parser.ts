@@ -1,4 +1,4 @@
-import { isObject } from '@alilc/runtime-shared';
+import { isObject } from 'lodash-es';
 
 const RE_TOKEN_LIST_VALUE: RegExp = /^(?:\d)+/;
 const RE_TOKEN_NAMED_VALUE: RegExp = /^(?:\w)+/;
@@ -32,8 +32,8 @@ export function parse(format: string): Array<Token> {
       const type = RE_TOKEN_LIST_VALUE.test(sub)
         ? 'list'
         : isClosed && RE_TOKEN_NAMED_VALUE.test(sub)
-        ? 'named'
-        : 'unknown';
+          ? 'named'
+          : 'unknown';
       tokens.push({ value: sub, type });
     } else if (char === '%') {
       // when found rails i18n syntax, skip text capture
@@ -50,18 +50,11 @@ export function parse(format: string): Array<Token> {
   return tokens;
 }
 
-export function compile(
-  tokens: Token[],
-  values: Record<string, any> | any[] = {}
-): string[] {
+export function compile(tokens: Token[], values: Record<string, any> | any[] = {}): string[] {
   const compiled: string[] = [];
   let index: number = 0;
 
-  const mode: string = Array.isArray(values)
-    ? 'list'
-    : isObject(values)
-    ? 'named'
-    : 'unknown';
+  const mode: string = Array.isArray(values) ? 'list' : isObject(values) ? 'named' : 'unknown';
   if (mode === 'unknown') {
     return compiled;
   }
@@ -81,7 +74,7 @@ export function compile(
         } else {
           if (process.env.NODE_ENV !== 'production') {
             console.warn(
-              `Type of token '${token.type}' and format of value '${mode}' don't match!`
+              `Type of token '${token.type}' and format of value '${mode}' don't match!`,
             );
           }
         }
