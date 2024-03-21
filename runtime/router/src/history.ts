@@ -1,6 +1,6 @@
 import { useEvent } from '@alilc/renderer-core';
 
-export type HistoryState = Record<string | number, any>;
+export type HistoryState = History['state'];
 export type HistoryLocation = string;
 
 export enum NavigationType {

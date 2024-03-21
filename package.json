@@ -3,7 +3,8 @@
   "workspaces": {
     "packages": [
       "packages/*",
-      "runtime/*"
+      "runtime/*",
+      "examples/*"
     ],
     "nohoist": [
       "**/css-modules-typescript-loader",
