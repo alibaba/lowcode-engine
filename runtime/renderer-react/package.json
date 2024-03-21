@@ -6,8 +6,10 @@
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",
   "homepage": "https://github.com/alibaba/lowcode-engine/#readme",
   "license": "MIT",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "",
+    "build": "tsc",
     "test": "vitest"
   },
   "dependencies": {
@@ -20,8 +22,11 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@alilc/runtime-router": "1.0.0-beta.0",
     "@testing-library/react": "^14.2.0",
     "@types/lodash-es": "^4.17.12",
+    "@types/hoist-non-react-statics": "^3.3.5",
+    "@types/use-sync-external-store": "^0.0.6",
     "@types/react": "^18.2.67",
     "@types/react-dom": "^18.2.22",
     "jsdom": "^24.0.0"

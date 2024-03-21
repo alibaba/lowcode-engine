@@ -1,10 +1,10 @@
-import { type AnyObject } from '@alilc/runtime-shared';
-import { parse, stringify } from 'qs';
-import { type LocationQuery } from '../types';
+/**
+ * todo: replace to URL API
+ */
 
 export function parseURL(location: string) {
   let path = '';
-  let query: LocationQuery = {};
+  let searchParams: URLSearchParams | undefined;
   let searchString = '';
   let hash = '';
 
@@ -16,12 +16,9 @@ export function parseURL(location: string) {
 
   if (searchPos > -1) {
     path = location.slice(0, searchPos);
-    searchString = location.slice(
-      searchPos + 1,
-      hashPos > -1 ? hashPos : location.length
-    );
+    searchString = location.slice(searchPos + 1, hashPos > -1 ? hashPos : location.length);
 
-    query = parse(searchString);
+    searchParams = new URLSearchParams(searchString);
   }
 
   if (hashPos > -1) {
@@ -35,16 +32,16 @@ export function parseURL(location: string) {
   return {
     fullPath: path + (searchString && '?') + searchString + hash,
     path,
-    query,
+    searchParams,
     hash,
   };
 }
 
 export function stringifyURL(location: {
   path: string;
-  query?: AnyObject;
+  searchParams?: URLSearchParams;
   hash?: string;
 }): string {
-  const query: string = location.query ? stringify(location.query) : '';
-  return location.path + (query && '?') + query + (location.hash || '');
+  const searchStr = location.searchParams ? location.searchParams.toString() : '';
+  return location.path + (searchStr && '?') + searchStr + (location.hash || '');
 }

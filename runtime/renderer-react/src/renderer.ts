@@ -2,7 +2,7 @@ import {
   definePlugin as definePluginFn,
   type Plugin,
   type PluginSetupContext,
-} from '@alilc/runtime-core';
+} from '@alilc/renderer-core';
 import { type ComponentType, type PropsWithChildren } from 'react';
 import { type OutletProps } from './components/outlet';
 

@@ -24,9 +24,11 @@ export interface PackageManager {
   /** 解析组件映射 */
   resolveComponentMaps(componentMaps: ComponentMap[]): void;
   /** 获取组件映射对象，key = componentName value = component */
-  getComponentsNameRecord<C = unknown>(componentMaps?: ComponentMap[]): Record<string, C>;
+  getComponentsNameRecord<C = unknown>(
+    componentMaps?: ComponentMap[],
+  ): Record<string, C | LowCodeComponent>;
   /** 通过组件名获取对应的组件  */
-  getComponent<C = unknown>(componentName: string): C | undefined;
+  getComponent<C = unknown>(componentName: string): C | LowCodeComponent | undefined;
   /** 注册组件 */
   registerComponentByName(componentName: string, Component: unknown): void;
 }

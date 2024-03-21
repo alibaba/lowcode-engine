@@ -1,11 +1,11 @@
 import {
-  type RouterSchema,
-  useCallbacks,
+  type RouterApi,
+  type RouterConfig,
   type RouteLocation,
-  type RouteLocationRaw,
-  type RouteLocationOptions,
-  noop,
-} from '@alilc/runtime-shared';
+  useEvent,
+  type RawRouteLocation,
+  type RawLocationOptions,
+} from '@alilc/renderer-core';
 import {
   createBrowserHistory,
   createHashHistory,
@@ -13,46 +13,42 @@ import {
   type RouterHistory,
   type HistoryState,
 } from './history';
-import { createRouterMatcher, type MatcherLocationRaw } from './matcher';
+import { createRouterMatcher } from './matcher';
 import { type PathParserOptions } from './utils/path-parser';
 import { parseURL, stringifyURL } from './utils/url';
-import { normalizeQuery } from './utils/query';
 import { isSameRouteLocation } from './utils/helper';
-import type { RouteParams, RouteRecord } from './types';
-import {
-  type NavigationHookAfter,
-  type NavigationGuard,
-  guardToPromiseFn,
-} from './guard';
+import type { RouteParams, RouteRecord, RouteLocationNormalized } from './types';
+import { type NavigationHookAfter, type NavigationGuard, guardToPromiseFn } from './guard';
 
-export interface Router {
+export interface RouterOptions extends RouterConfig, PathParserOptions {
+  routes: RouteRecord[];
+}
+
+export interface Router extends RouterApi {
   readonly options: RouterOptions;
   readonly history: RouterHistory;
 
-  getCurrentRoute: () => RouteLocation;
+  getCurrentLocation(): RouteLocationNormalized;
 
-  addRoute: {
-    (parentName: string, route: RouteRecord): void;
-    (route: RouteRecord): void;
-  };
+  resolve(
+    rawLocation: RawRouteLocation,
+    currentLocation?: RouteLocationNormalized,
+  ): RouteLocationNormalized;
+
+  addRoute(route: RouteRecord): void;
   removeRoute(name: string): void;
-  hasRoute(name: string): boolean;
   getRoutes(): RouteRecord[];
-
-  push: (to: RouteLocationRaw) => void;
-  replace: (to: RouteLocationRaw) => void;
+  hasRoute(name: string): boolean;
 
   beforeRouteLeave: (fn: NavigationGuard) => () => void;
   afterRouteChange: (fn: NavigationHookAfter) => () => void;
 }
 
-export type RouterOptions = RouterSchema & PathParserOptions;
-
-const START_LOCATION_NORMALIZED: RouteLocation = {
+const START_LOCATION: RouteLocationNormalized = {
   path: '/',
   name: undefined,
   params: {},
-  query: {},
+  searchParams: undefined,
   hash: '',
   fullPath: '/',
   matched: [],
@@ -60,54 +56,50 @@ const START_LOCATION_NORMALIZED: RouteLocation = {
   redirectedFrom: undefined,
 };
 
-export function createRouter(options: RouterOptions): Router {
-  const {
-    baseName = '/',
-    historyMode = 'browser',
-    routes = [],
-    ...globalOptions
-  } = options;
+const defaultRouterOptions: RouterOptions = {
+  historyMode: 'browser',
+  baseName: '/',
+  routes: [],
+};
+
+export function createRouter(options: RouterOptions = defaultRouterOptions): Router {
+  const { baseName = '/', historyMode = 'browser', routes = [], ...globalOptions } = options;
   const matcher = createRouterMatcher(routes, globalOptions);
   const routerHistory =
     historyMode === 'hash'
       ? createHashHistory(baseName)
       : historyMode === 'memory'
-      ? createMemoryHistory(baseName)
-      : createBrowserHistory(baseName);
+        ? createMemoryHistory(baseName)
+        : createBrowserHistory(baseName);
 
-  const beforeGuards = useCallbacks<NavigationGuard>();
-  const afterGuards = useCallbacks<NavigationHookAfter>();
+  const beforeGuards = useEvent<NavigationGuard>();
+  const afterGuards = useEvent<NavigationHookAfter>();
 
-  let currentRoute: RouteLocation = START_LOCATION_NORMALIZED;
-  let pendingLocation = currentRoute;
+  let currentLocation: RouteLocationNormalized = START_LOCATION;
+  let pendingLocation = currentLocation;
 
   function resolve(
-    rawLocation: RouteLocationRaw,
-    currentLocation?: RouteLocation
-  ): RouteLocation & {
+    rawLocation: RawRouteLocation,
+    currentLocation?: RouteLocationNormalized,
+  ): RouteLocationNormalized & {
     href: string;
   } {
-    currentLocation = Object.assign({}, currentLocation || currentRoute);
+    currentLocation = Object.assign({}, currentLocation || currentLocation);
 
     if (typeof rawLocation === 'string') {
       const locationNormalized = parseURL(rawLocation);
-
-      const matchedRoute = matcher.resolve(
-        { path: locationNormalized.path },
-        currentLocation
-      );
-
+      const matchedRoute = matcher.resolve({ path: locationNormalized.path }, currentLocation);
       const href = routerHistory.createHref(locationNormalized.fullPath);
 
       return Object.assign(locationNormalized, matchedRoute, {
-        query: locationNormalized.query as any,
+        searchParams: locationNormalized.searchParams,
         hash: decodeURIComponent(locationNormalized.hash),
         redirectedFrom: undefined,
         href,
       });
     }
 
-    let matcherLocation: MatcherLocationRaw;
+    let matcherLocation: RawRouteLocation;
 
     if ('path' in rawLocation) {
       matcherLocation = { ...rawLocation };
@@ -140,13 +132,13 @@ export function createRouter(options: RouterOptions): Router {
       {
         fullPath,
         hash,
-        query: normalizeQuery(rawLocation.query) as any,
+        searchParams: rawLocation.searchParams,
       },
       matchedRoute,
       {
         redirectedFrom: undefined,
         href,
-      }
+      },
     );
   }
 
@@ -169,34 +161,33 @@ export function createRouter(options: RouterOptions): Router {
     }
   }
   function getRoutes() {
-    return matcher.getRoutes().map(item => item.record);
+    return matcher.getRecordMatchers().map((item) => item.record);
   }
   function hasRoute(name: string) {
     return !!matcher.getRecordMatcher(name);
   }
 
-  function push(to: RouteLocationRaw) {
+  function push(to: RawRouteLocation) {
     return pushOrRedirect(to);
   }
-  function replace(to: RouteLocationRaw) {
-    return pushOrRedirect({ ...locationAsObject(to), replace: true });
+  function replace(to: RawRouteLocation) {
+    return pushOrRedirect({ ...locationAsObject(to) }, true);
   }
 
   function locationAsObject(
-    to: RouteLocationRaw | RouteLocation
-  ): Exclude<RouteLocationRaw, string> | RouteLocation {
+    to: RawRouteLocation | RouteLocation,
+  ): Exclude<RawRouteLocation, string> | RouteLocation {
     return typeof to === 'string' ? parseURL(to) : { ...to };
   }
 
   async function pushOrRedirect(
-    to: RouteLocationRaw | RouteLocation,
-    redirectedFrom?: RouteLocation
+    to: RawRouteLocation | RouteLocation,
+    replace = false,
+    redirectedFrom?: RouteLocation,
   ) {
     const targetLocation = (pendingLocation = resolve(to));
-    const from = currentRoute;
-    const data: HistoryState | undefined = (to as RouteLocationOptions).state;
-    const force: boolean | undefined = (to as RouteLocationOptions).force;
-    const replace = (to as RouteLocationOptions).replace === true;
+    const from = currentLocation;
+    const data: HistoryState | undefined = (to as RawLocationOptions).state;
 
     const shouldRedirect = getRedirectRecordIfShould(targetLocation);
     if (shouldRedirect) {
@@ -204,20 +195,17 @@ export function createRouter(options: RouterOptions): Router {
         {
           ...shouldRedirect,
           state: Object.assign({}, data, shouldRedirect.state),
-          force,
-          replace,
         },
-        redirectedFrom || targetLocation
+        replace,
+        redirectedFrom || targetLocation,
       );
     }
 
-    const toLocation = targetLocation as RouteLocation;
+    const toLocation = targetLocation as RouteLocationNormalized;
     toLocation.redirectedFrom = redirectedFrom;
 
-    if (!force && isSameRouteLocation(from, toLocation)) {
-      throw Error(
-        '路由错误：重复请求' + JSON.stringify({ to: toLocation, from })
-      );
+    if (isSameRouteLocation(from, toLocation)) {
+      throw Error('路由错误：重复请求' + JSON.stringify({ to: toLocation, from }));
     }
 
     return navigateTriggerBeforeGuards(toLocation, from)
@@ -231,21 +219,21 @@ export function createRouter(options: RouterOptions): Router {
       });
   }
 
-  function getRedirectRecordIfShould(to: RouteLocation) {
+  function getRedirectRecordIfShould(
+    to: RouteLocationNormalized,
+  ): Exclude<RawRouteLocation, string> | undefined {
     const lastMatched = to.matched[to.matched.length - 1];
 
     if (lastMatched?.redirect) {
       const { redirect } = lastMatched;
-      let newTargetLocation =
-        typeof redirect === 'function' ? redirect(to) : redirect;
+      let newTargetLocation = typeof redirect === 'function' ? redirect(to) : redirect;
 
       if (typeof newTargetLocation === 'string') {
         newTargetLocation =
           newTargetLocation.includes('?') || newTargetLocation.includes('#')
             ? locationAsObject(newTargetLocation)
             : { path: newTargetLocation };
-        // @ts-expect-error 强制清空参数
-        newTargetLocation.params = {};
+        (newTargetLocation as any).params = {};
       }
 
       if (!('path' in newTargetLocation) && !('name' in newTargetLocation)) {
@@ -254,27 +242,25 @@ export function createRouter(options: RouterOptions): Router {
 
       return Object.assign(
         {
-          query: to.query,
+          searchParams: to.searchParams,
           hash: to.hash,
           // path 存在的时候 清空 params
           params: 'path' in newTargetLocation ? {} : to.params,
         },
-        newTargetLocation
+        newTargetLocation,
       );
     }
   }
 
   async function navigateTriggerBeforeGuards(
-    to: RouteLocation,
-    from: RouteLocation
+    to: RouteLocationNormalized,
+    from: RouteLocationNormalized,
   ): Promise<any> {
     let guards: ((...args: any[]) => Promise<any>)[] = [];
 
     const canceledNavigationCheck = async (): Promise<any> => {
       if (pendingLocation !== to) {
-        throw Error(
-          `路由错误：重复导航，from: ${from.fullPath}, to: ${to.fullPath}`
-        );
+        throw Error(`路由错误：重复导航，from: ${from.fullPath}, to: ${to.fullPath}`);
       }
       return Promise.resolve();
     };
@@ -288,31 +274,26 @@ export function createRouter(options: RouterOptions): Router {
       }
       if (beforeGuardsList.length > 0) guards.push(canceledNavigationCheck);
 
-      return guards.reduce(
-        (promise, guard) => promise.then(() => guard()),
-        Promise.resolve()
-      );
+      return guards.reduce((promise, guard) => promise.then(() => guard()), Promise.resolve());
     } catch (err) {
       throw err;
     }
   }
 
   function finalizeNavigation(
-    toLocation: RouteLocation,
-    from: RouteLocation,
+    toLocation: RouteLocationNormalized,
+    from: RouteLocationNormalized,
     isPush: boolean,
     replace?: boolean,
-    data?: HistoryState
+    data?: HistoryState,
   ) {
     // 重复导航
     if (pendingLocation !== toLocation) {
-      throw Error(
-        `路由错误：重复导航，from: ${from.fullPath}, to: ${toLocation.fullPath}`
-      );
+      throw Error(`路由错误：重复导航，from: ${from.fullPath}, to: ${toLocation.fullPath}`);
     }
 
     // 如果不是第一次启动的话 只需要考虑 push
-    const isFirstNavigation = from === START_LOCATION_NORMALIZED;
+    const isFirstNavigation = from === START_LOCATION;
 
     if (isPush) {
       if (replace || isFirstNavigation) {
@@ -322,7 +303,7 @@ export function createRouter(options: RouterOptions): Router {
       }
     }
 
-    currentRoute = toLocation;
+    currentLocation = toLocation;
     // markAsReady();
   }
 
@@ -335,18 +316,15 @@ export function createRouter(options: RouterOptions): Router {
       // 判断是否需要重定向
       const shouldRedirect = getRedirectRecordIfShould(toLocation);
       if (shouldRedirect) {
-        return pushOrRedirect(
-          Object.assign(shouldRedirect, { replace: true }),
-          toLocation
-        ).catch(() => {});
+        return pushOrRedirect(shouldRedirect, true, toLocation).catch(() => {});
       }
 
       pendingLocation = toLocation;
-      const from = currentRoute;
+      const from = currentLocation;
 
       // 触发路由守卫
       navigateTriggerBeforeGuards(toLocation, from)
-        .catch(error => {
+        .catch((error) => {
           if (info.delta) {
             routerHistory.go(-info.delta, false);
           }
@@ -366,25 +344,30 @@ export function createRouter(options: RouterOptions): Router {
             guard(toLocation, from);
           }
         })
-        .catch(noop);
+        .catch(() => {});
     });
   }
 
   // init
   setupListeners();
-  if (currentRoute === START_LOCATION_NORMALIZED) {
-    push(routerHistory.location).catch(err => {
+  if (currentLocation === START_LOCATION) {
+    push(routerHistory.location).catch((err) => {
       console.warn('Unexpected error when starting the router:', err);
     });
   }
 
+  const go = (delta: number) => routerHistory.go(delta);
+
   return {
-    options,
+    get options() {
+      return options;
+    },
     get history() {
       return routerHistory;
     },
+    getCurrentLocation: () => currentLocation,
 
-    getCurrentRoute: () => currentRoute,
+    resolve,
     addRoute,
     removeRoute,
     getRoutes,
@@ -392,6 +375,9 @@ export function createRouter(options: RouterOptions): Router {
 
     push,
     replace,
+    back: () => go(-1),
+    forward: () => go(1),
+    go,
 
     beforeRouteLeave: beforeGuards.add,
     afterRouteChange: afterGuards.add,

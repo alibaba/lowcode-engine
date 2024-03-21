@@ -1,4 +1,4 @@
-import { useCallbacks } from '@alilc/runtime-shared';
+import { useEvent } from '@alilc/renderer-core';
 
 export type HistoryState = Record<string | number, any>;
 export type HistoryLocation = string;
@@ -23,7 +23,7 @@ export type NavigationInformation = {
 export type NavigationCallback = (
   to: HistoryLocation,
   from: HistoryLocation,
-  info: NavigationInformation
+  info: NavigationInformation,
 ) => void;
 
 /**
@@ -94,7 +94,7 @@ function buildState(
   current: HistoryLocation,
   forward: HistoryLocation | null,
   replaced = false,
-  position = window.history.length
+  position = window.history.length,
 ): RouterHistoryState {
   return {
     name: '__ROUTER_STATE__',
@@ -110,25 +110,14 @@ export function createBrowserHistory(base?: string): RouterHistory {
   const finalBase = normalizeBase(base);
   const { history, location } = window;
 
-  let currentLocation: HistoryLocation = createCurrentLocation(
-    finalBase,
-    location
-  );
+  let currentLocation: HistoryLocation = createCurrentLocation(finalBase, location);
   let historyState: RouterHistoryState = history.state;
 
   if (!historyState) {
-    doDomHistoryEvent(
-      currentLocation,
-      buildState(null, currentLocation, null, true),
-      true
-    );
+    doDomHistoryEvent(currentLocation, buildState(null, currentLocation, null, true), true);
   }
 
-  function doDomHistoryEvent(
-    to: HistoryLocation,
-    state: RouterHistoryState,
-    replace: boolean
-  ) {
+  function doDomHistoryEvent(to: HistoryLocation, state: RouterHistoryState, replace: boolean) {
     // 处理 hash 情况下的 url
     const hashIndex = finalBase.indexOf('#');
     const url =
@@ -150,7 +139,7 @@ export function createBrowserHistory(base?: string): RouterHistory {
       history.state,
       buildState(historyState.back, to, historyState.forward, true),
       data,
-      { position: historyState.position }
+      { position: historyState.position },
     );
 
     doDomHistoryEvent(to, state, true);
@@ -158,14 +147,9 @@ export function createBrowserHistory(base?: string): RouterHistory {
   }
 
   function push(to: HistoryLocation, data?: HistoryState) {
-    const currentState: RouterHistoryState = Object.assign(
-      {},
-      historyState,
-      history.state,
-      {
-        forward: to,
-      }
-    );
+    const currentState: RouterHistoryState = Object.assign({}, historyState, history.state, {
+      forward: to,
+    });
 
     // 防止当前浏览器的 state 被修改先 replace 一次
     // 将上次的state 的 forward 修改为 to
@@ -175,15 +159,15 @@ export function createBrowserHistory(base?: string): RouterHistory {
       {},
       buildState(currentLocation, to, null),
       { position: currentState.position + 1 },
-      data
+      data,
     );
 
     doDomHistoryEvent(to, state, false);
     currentLocation = to;
   }
 
-  let listeners = useCallbacks<NavigationCallback>();
-  let teardowns = useCallbacks<() => void>();
+  let listeners = useEvent<NavigationCallback>();
+  let teardowns = useEvent<() => void>();
 
   let pauseState: HistoryLocation | null = null;
 
@@ -293,8 +277,7 @@ function normalizeBase(base?: string) {
 }
 
 const TRAILING_SLASH_RE = /\/$/;
-export const removeTrailingSlash = (path: string) =>
-  path.replace(TRAILING_SLASH_RE, '');
+export const removeTrailingSlash = (path: string) => path.replace(TRAILING_SLASH_RE, '');
 
 function createCurrentLocation(base: string, location: Location) {
   const { pathname, search, hash } = location;
@@ -302,9 +285,7 @@ function createCurrentLocation(base: string, location: Location) {
   // hash bases like #, /#, #/, #!, #!/, /#!/, or even /folder#end
   const hashPos = base.indexOf('#');
   if (hashPos > -1) {
-    let slicePos = hash.includes(base.slice(hashPos))
-      ? base.slice(hashPos).length
-      : 1;
+    let slicePos = hash.includes(base.slice(hashPos)) ? base.slice(hashPos).length : 1;
     let pathFromHash = hash.slice(slicePos);
     // prepend the starting slash to hash so the url starts with /#
     if (pathFromHash[0] !== '/') pathFromHash = '/' + pathFromHash;
@@ -339,10 +320,7 @@ export function createHashHistory(base?: string): RouterHistory {
 
   if (!base.endsWith('#/') && !base.endsWith('#')) {
     console.warn(
-      `A hash base must end with a "#":\n"${base}" should be "${base.replace(
-        /#.*$/,
-        '#'
-      )}".`
+      `A hash base must end with a "#":\n"${base}" should be "${base.replace(/#.*$/, '#')}".`,
     );
   }
 
@@ -370,12 +348,12 @@ export function createMemoryHistory(base = ''): RouterHistory {
     historyStack.push({ location, state });
   }
 
-  const listeners = useCallbacks<NavigationCallback>();
+  const listeners = useEvent<NavigationCallback>();
 
   function triggerListeners(
     to: HistoryLocation,
     from: HistoryLocation,
-    { direction, delta }: Pick<NavigationInformation, 'direction' | 'delta'>
+    { direction, delta }: Pick<NavigationInformation, 'direction' | 'delta'>,
   ): void {
     const info: NavigationInformation = {
       direction,
@@ -411,7 +389,7 @@ export function createMemoryHistory(base = ''): RouterHistory {
           current: to,
         },
         data,
-        { position }
+        { position },
       );
 
       // remove current entry and decrement position
@@ -428,12 +406,9 @@ export function createMemoryHistory(base = ''): RouterHistory {
       historyStack.splice(position, 1);
       pushStack(prevState.current, prevState);
 
-      const currentState = Object.assign(
-        {},
-        buildState(prevState.current, to, null, false),
-        data,
-        { position: ++position }
-      );
+      const currentState = Object.assign({}, buildState(prevState.current, to, null, false), data, {
+        position: ++position,
+      });
 
       pushStack(to, currentState);
     },
@@ -442,10 +417,7 @@ export function createMemoryHistory(base = ''): RouterHistory {
       const direction: NavigationDirection =
         delta < 0 ? NavigationDirection.back : NavigationDirection.forward;
 
-      position = Math.max(
-        0,
-        Math.min(position + delta, historyStack.length - 1)
-      );
+      position = Math.max(0, Math.min(position + delta, historyStack.length - 1));
 
       if (shouldTriggerListeners) {
         triggerListeners(this.location, from, {
@@ -459,9 +431,7 @@ export function createMemoryHistory(base = ''): RouterHistory {
     destroy() {
       listeners.clear();
       position = 0;
-      historyStack = [
-        { location: '', state: buildState(null, '', null, false, position) },
-      ];
+      historyStack = [{ location: '', state: buildState(null, '', null, false, position) }];
     },
   };
 }

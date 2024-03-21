@@ -11,9 +11,9 @@ export interface AppSchema {
   addComponentsMap(componentName: ComponentMap): void;
   removeComponentsMap(componentName: string): void;
 
-  getPages(): PageConfig[];
-  addPage(page: PageConfig): void;
-  removePage(id: string): void;
+  getPageConfigs(): PageConfig[];
+  addPageConfig(page: PageConfig): void;
+  removePageConfig(id: string): void;
 
   getByKey<K extends keyof Project>(key: K): Project[K] | undefined;
   updateByKey<K extends keyof Project>(
@@ -55,14 +55,14 @@ export function createAppSchema(schema: Project): AppSchema {
       removeArrayItem(schemaRef.componentsMap, 'componentName', componentName);
     },
 
-    getPages() {
+    getPageConfigs() {
       return schemaRef.pages ?? [];
     },
-    addPage(page) {
+    addPageConfig(page) {
       schemaRef.pages ??= [];
       addArrayItem(schemaRef.pages, page, 'id');
     },
-    removePage(id) {
+    removePageConfig(id) {
       schemaRef.pages ??= [];
       removeArrayItem(schemaRef.pages, 'id', id);
     },
@@ -72,8 +72,7 @@ export function createAppSchema(schema: Project): AppSchema {
     },
     updateByKey(key, updater) {
       const value = schemaRef[key];
-
-      schemaRef[key] = typeof updater === 'function' ? updater(value) : updater;
+      schemaRef[key] = typeof updater === 'function' ? (updater as any)(value) : updater;
     },
 
     find(predicate) {

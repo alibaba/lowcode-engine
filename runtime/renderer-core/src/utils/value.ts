@@ -14,14 +14,14 @@ export function someValue(obj: any, predicate: (data: any) => boolean) {
 export function processValue(
   obj: any,
   predicate: (obj: any) => boolean,
-  processor: (node: any, paths: Array<string | number>) => any
+  processor: (node: any, paths: Array<string | number>) => any,
 ): any {
   const innerProcess = (target: any, paths: Array<string | number>): any => {
     if (Array.isArray(target)) {
       return target.map((item, idx) => innerProcess(item, [...paths, idx]));
     }
 
-    if (!isPlainObject(target) || isEmptyObject(target)) return target;
+    if (!isPlainObject(target) || isEmpty(target)) return target;
     if (!someValue(target, predicate)) return target;
 
     if (predicate(target)) {

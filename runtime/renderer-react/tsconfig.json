@@ -1,8 +1,11 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "outDir": "dist",
     "paths": {
-      "@alilc/*": ["runtime/*/src"]
+      "@alilc/*": ["runtime/*"],
+      "@alilc/runtime-router": ["runtime/router"]
     }
-  }
+  },
+  "include": ["src"]
 }

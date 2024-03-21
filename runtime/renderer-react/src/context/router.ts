@@ -1,5 +1,5 @@
-import { type Router, type RouteLocation } from '@alilc/runtime-router';
-import { type PageSchema } from '@alilc/runtime-shared';
+import { type Router, type RouteLocationNormalized } from '@alilc/runtime-router';
+import { type PageConfig } from '@alilc/renderer-core';
 import { createContext, useContext } from 'react';
 
 export const RouterContext = createContext<Router>({} as any);
@@ -8,10 +8,10 @@ RouterContext.displayName = 'RouterContext';
 
 export const useRouter = () => useContext(RouterContext);
 
-export const RouteLocationContext = createContext<RouteLocation>({
+export const RouteLocationContext = createContext<RouteLocationNormalized>({
   name: undefined,
   path: '/',
-  query: {},
+  searchParams: undefined,
   params: {},
   hash: '',
   fullPath: '/',
@@ -24,10 +24,8 @@ RouteLocationContext.displayName = 'RouteLocationContext';
 
 export const useRouteLocation = () => useContext(RouteLocationContext);
 
-export const PageSchemaContext = createContext<PageSchema | undefined>(
-  undefined
-);
+export const PageConfigContext = createContext<PageConfig | undefined>(undefined);
 
-PageSchemaContext.displayName = 'PageContext';
+PageConfigContext.displayName = 'PageConfigContext';
 
-export const usePageSchema = () => useContext(PageSchemaContext);
+export const usePageConfig = () => useContext(PageConfigContext);

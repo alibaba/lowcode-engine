@@ -1,3 +1,4 @@
+import { type PlainObject } from '@alilc/renderer-core';
 import {
   ref,
   computed,
@@ -114,7 +115,7 @@ function traverse(value: unknown, depth?: number, currentDepth = 0, seen?: Set<u
     });
   } else if (isPlainObject(value)) {
     for (const key in value) {
-      traverse(value[key], depth, currentDepth, seen);
+      traverse((value as PlainObject)[key], depth, currentDepth, seen);
     }
   }
   return value;

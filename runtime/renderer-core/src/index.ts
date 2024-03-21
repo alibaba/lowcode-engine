@@ -5,11 +5,14 @@ export { createCodeRuntime, createScope } from './code-runtime';
 export { definePlugin } from './plugin';
 export { createWidget } from './widget';
 export { createContainer } from './container';
+export { createHookStore, useEvent } from './utils/hook';
+export * from './utils/type-guard';
+export * from './utils/value';
+export * from './widget';
 
 /* --------------- types ---------------- */
 export * from './types';
 export type { CodeRuntime, CodeScope } from './code-runtime';
 export type { Plugin, PluginSetupContext } from './plugin';
 export type { PackageManager, PackageLoader } from './package';
-export type { Container } from './container';
-export type { Widget, TextWidget, ComponentWidget } from './widget';
+export type { Container, CreateContainerOptions } from './container';

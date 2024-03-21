@@ -1,15 +1,13 @@
-import {
-  type RouteLocation,
-  type RouteLocationRaw,
-} from '@alilc/runtime-shared';
+import type { RawRouteLocation } from '@alilc/renderer-core';
+import type { RouteLocationNormalized } from '../types';
 
-export function isRouteLocation(route: any): route is RouteLocationRaw {
+export function isRouteLocation(route: any): route is RawRouteLocation {
   return typeof route === 'string' || (route && typeof route === 'object');
 }
 
 export function isSameRouteLocation(
-  a: RouteLocation,
-  b: RouteLocation
+  a: RouteLocationNormalized,
+  b: RouteLocationNormalized,
 ): boolean {
   const aLastIndex = a.matched.length - 1;
   const bLastIndex = b.matched.length - 1;
@@ -19,15 +17,18 @@ export function isSameRouteLocation(
     aLastIndex === bLastIndex &&
     a.matched[aLastIndex] === b.matched[bLastIndex] &&
     isSameRouteLocationParams(a.params, b.params) &&
-    a.query?.toString() === b.query?.toString() &&
+    a.searchParams?.toString() === b.searchParams?.toString() &&
     a.hash === b.hash
   );
 }
 
 export function isSameRouteLocationParams(
-  a: RouteLocation['params'],
-  b: RouteLocation['params']
+  a: RouteLocationNormalized['params'],
+  b: RouteLocationNormalized['params'],
 ): boolean {
+  if (!a && !b) return true;
+  if (!a || !b) return false;
+
   if (Object.keys(a).length !== Object.keys(b).length) return false;
 
   for (const key in a) {
@@ -38,14 +39,14 @@ export function isSameRouteLocationParams(
 }
 
 function isSameRouteLocationParamsValue(
-  a: string | readonly string[],
-  b: string | readonly string[]
+  a: undefined | string | string[],
+  b: undefined | string | string[],
 ): boolean {
   return Array.isArray(a)
     ? isEquivalentArray(a, b)
     : Array.isArray(b)
-    ? isEquivalentArray(b, a)
-    : a === b;
+      ? isEquivalentArray(b, a)
+      : a === b;
 }
 
 function isEquivalentArray<T>(a: readonly T[], b: readonly T[] | T): boolean {

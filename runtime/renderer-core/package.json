@@ -6,8 +6,10 @@
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",
   "homepage": "https://github.com/alibaba/lowcode-engine/#readme",
   "license": "MIT",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "",
+    "build": "tsc",
     "test": "vitest --run",
     "test:watch": "vitest"
   },

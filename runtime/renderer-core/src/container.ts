@@ -4,6 +4,7 @@ import type {
   ComponentTree,
   InstanceDataSourceApi,
   InstanceStateApi,
+  NodeType,
 } from './types';
 import { type CodeScope, type CodeRuntime, createCodeRuntime, createScope } from './code-runtime';
 import { isJSFunction } from './utils/type-guard';
@@ -48,7 +49,13 @@ export interface CreateContainerOptions<LifeCycleNameT extends string> {
 export function createContainer<InstanceT, LifeCycleNameT extends string>(
   options: CreateContainerOptions<LifeCycleNameT>,
 ): Container<InstanceT, LifeCycleNameT> {
-  const { componentsTree, supCodeScope, initScopeValue, stateCreator, dataSourceCreator } = options;
+  const {
+    componentsTree,
+    supCodeScope,
+    initScopeValue = {},
+    stateCreator,
+    dataSourceCreator,
+  } = options;
 
   validContainerSchema(componentsTree);
 
@@ -151,7 +158,6 @@ export function createContainer<InstanceT, LifeCycleNameT extends string>(
 
     createWidgets<Element>() {
       if (!componentsTree.children) return [];
-
       return componentsTree.children.map((item) => createWidget<Element>(item));
     },
   };

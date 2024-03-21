@@ -1,28 +1,21 @@
-import { usePageSchema } from '../context/router';
+import { usePageConfig } from '../context/router';
 import { useAppContext } from '../context/app';
+import RouteOutlet from './outlet';
 
 export default function Route(props: any) {
   const { schema, renderer } = useAppContext();
-  const pageSchema = usePageSchema();
-  const Outlet = renderer.getOutlet();
+  const pageConfig = usePageConfig();
+  const Outlet = renderer.getOutlet() ?? RouteOutlet;
 
-  if (Outlet && pageSchema) {
+  if (Outlet && pageConfig) {
     let componentsTree;
-    const { type = 'lowCode', treeId } = pageSchema;
+    const { type = 'lowCode', mappingId } = pageConfig;
 
     if (type === 'lowCode') {
-      componentsTree = schema
-        .getComponentsTrees()
-        .find(item => item.id === treeId);
+      componentsTree = schema.getComponentsTrees().find((item) => item.id === mappingId);
     }
 
-    return (
-      <Outlet
-        {...props}
-        pageSchema={pageSchema}
-        componentsTree={componentsTree}
-      />
-    );
+    return <Outlet {...props} pageConfig={pageConfig} componentsTree={componentsTree} />;
   }
 
   return null;

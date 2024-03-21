@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "lib": ["es2015", "dom"],
+    "lib": ["DOM", "ESNext", "DOM.Iterable"],
     // Target latest version of ECMAScript.
     "target": "esnext",
     // Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.

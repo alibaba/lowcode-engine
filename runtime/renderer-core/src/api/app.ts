@@ -22,7 +22,7 @@ export interface AppBase {
  */
 export interface AppContext {
   schema: AppSchema;
-  config: Map<string, any>;
+  config: PlainObject;
   appScope: CodeScope;
   packageManager: PackageManager;
   boosts: AppBoostsManager;
@@ -35,14 +35,14 @@ type AppCreator<O, T extends AppBase> = (
 
 export type App<T extends AppBase = AppBase> = {
   schema: Project;
-  config: Map<string, any>;
+  config: PlainObject;
   readonly boosts: AppBoosts;
 
   use(plugin: Plugin): Promise<void>;
 } & T;
 
 /**
- * 创建应用
+ * 创建 createApp 的辅助函数
  * @param schema
  * @param options
  * @returns
@@ -55,9 +55,9 @@ export function createAppFunction<O extends AppOptionsBase, T extends AppBase = 
   }
 
   return async (options) => {
-    const { schema, appScopeValue = {} } = options;
+    const { schema, appScopeValue } = options;
     const appSchema = createAppSchema(schema);
-    const appConfig = new Map<string, any>();
+    const appConfig = {};
     const packageManager = createPackageManager();
     const appScope = createScope({
       ...appScopeValue,

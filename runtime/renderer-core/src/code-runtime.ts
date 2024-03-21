@@ -76,17 +76,20 @@ export function createCodeRuntime(scopeOrValue: PlainObject = {}): CodeRuntime {
   };
 }
 
-export interface CodeScope {
-  readonly value: PlainObject;
+export interface CodeScope<T extends PlainObject = PlainObject, K extends keyof T = keyof T> {
+  readonly value: T;
 
-  inject(name: string, value: any, force?: boolean): void;
-  setValue(value: PlainObject, replace?: boolean): void;
-  createSubScope(initValue?: PlainObject): CodeScope;
+  inject(name: K, value: T[K], force?: boolean): void;
+  setValue(value: T, replace?: boolean): void;
+  createSubScope<O extends PlainObject = PlainObject>(initValue: O): CodeScope<T & O>;
 }
 
-export function createScope(initValue: PlainObject = {}): CodeScope {
+export function createScope<T extends PlainObject = PlainObject, K extends keyof T = keyof T>(
+  initValue: T,
+): CodeScope<T, K> {
   const innerScope = { value: initValue };
-  const proxyValue = new Proxy(Object.create(null), {
+
+  const proxyValue: T = new Proxy(Object.create(null), {
     set(target, p, newValue, receiver) {
       return Reflect.set(target, p, newValue, receiver);
     },
@@ -104,29 +107,17 @@ export function createScope(initValue: PlainObject = {}): CodeScope {
     },
   });
 
-  function inject(name: string, value: any, force = false): void {
-    if (innerScope.value[name] && !force) {
-      console.warn(`${name} 已存在值`);
-      return;
-    }
-
-    innerScope.value[name] = value;
-  }
-
-  function createSubScope(initValue: PlainObject = {}) {
-    const childScope = createScope(initValue);
-
-    (childScope as any).__raw.__parent = innerScope;
-
-    return childScope;
-  }
-
-  const scope: CodeScope = {
+  const scope: CodeScope<T, K> = {
     get value() {
       // dev return value
       return proxyValue;
     },
-    inject,
+    inject(name, value, force = false): void {
+      if (innerScope.value[name] && !force) {
+        return;
+      }
+      innerScope.value[name] = value;
+    },
     setValue(value, replace = false) {
       if (replace) {
         innerScope.value = { ...value };
@@ -134,7 +125,13 @@ export function createScope(initValue: PlainObject = {}): CodeScope {
         innerScope.value = Object.assign({}, innerScope.value, value);
       }
     },
-    createSubScope,
+    createSubScope<O extends PlainObject = PlainObject>(initValue: O) {
+      const childScope = createScope<O & T>(initValue);
+
+      (childScope as any).__raw.__parent = innerScope;
+
+      return childScope;
+    },
   };
 
   Object.defineProperty(scope, Symbol.for(SYMBOL_SIGN), { get: () => true });

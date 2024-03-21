@@ -1,34 +1,47 @@
 import {
   type App,
-  type RenderBase,
+  type AppBase,
   createAppFunction,
   type AppOptionsBase,
 } from '@alilc/renderer-core';
 import { type ComponentType } from 'react';
 import { type Root, createRoot } from 'react-dom/client';
+import { createRouter } from '@alilc/runtime-router';
 import { createRenderer } from '../renderer';
 import AppComponent from '../components/app';
-import { intlPlugin } from '../plugins/intl';
-import { globalUtilsPlugin } from '../plugins/utils';
-import { initRouter } from '../router';
+import { createIntl } from '../runtime-api/intl';
+import { createRuntimeUtils } from '../runtime-api/utils';
 
 export interface AppOptions extends AppOptionsBase {
-  dataSourceCreator: DataSourceCreator;
+  dataSourceCreator: any;
   faultComponent?: ComponentType<any>;
 }
 
-export interface ReactRender extends RenderBase {}
+export interface ReactRender extends AppBase {}
 
 export type ReactApp = App<ReactRender>;
 
 export const createApp = createAppFunction<AppOptions, ReactRender>(async (context, options) => {
-  const renderer = createRenderer();
-  const appContext = { ...context, renderer };
+  const { schema, packageManager, appScope, boosts } = context;
 
-  initRouter(appContext);
+  // router
+  // todo: transform config
+  const router = createRouter(schema.getByKey('router') as any);
 
-  options.plugins ??= [];
-  options.plugins!.unshift(globalUtilsPlugin, intlPlugin);
+  appScope.inject('router', router);
+
+  // i18n
+  const i18nMessages = schema.getByKey('i18n') ?? {};
+  const defaultLocale = schema.getByPath('config.defaultLocale') ?? 'zh-CN';
+  const intl = createIntl(i18nMessages, defaultLocale);
+
+  appScope.inject('intl', intl);
+
+  // utils
+  const runtimeUtils = createRuntimeUtils(schema.getByKey('utils') ?? [], packageManager);
+
+  appScope.inject('utils', runtimeUtils.utils);
+  boosts.add('runtimeUtils', runtimeUtils);
 
   // set config
   if (options.faultComponent) {
@@ -37,6 +50,8 @@ export const createApp = createAppFunction<AppOptions, ReactRender>(async (conte
   context.config.set('dataSourceCreator', options.dataSourceCreator);
 
   let root: Root | undefined;
+  const renderer = createRenderer();
+  const appContext = { ...context, renderer };
 
   const reactRender: ReactRender = {
     async mount(el) {
@@ -56,7 +71,7 @@ export const createApp = createAppFunction<AppOptions, ReactRender>(async (conte
   };
 
   return {
-    renderBase: reactRender,
+    appBase: reactRender,
     renderer,
   };
 });

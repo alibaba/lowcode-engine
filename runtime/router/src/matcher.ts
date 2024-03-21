@@ -1,76 +1,69 @@
-import { type AnyObject, pick } from '@alilc/runtime-shared';
-import type { RouteRecord, RouteParams } from './types';
-import {
-  createRouteRecordMatcher,
-  type RouteRecordMatcher,
-} from './utils/record-matcher';
+import { type PlainObject, type RawLocation } from '@alilc/renderer-core';
+import { pick } from 'lodash-es';
+import { createRouteRecordMatcher, type RouteRecordMatcher } from './utils/record-matcher';
 import { type PathParserOptions } from './utils/path-parser';
 
-export interface MatcherLocationAsPath {
-  path: string;
-}
-export interface MatcherLocationAsRelative {
-  params?: Record<string, string | string[]>;
-}
-export interface MatcherLocationAsName {
-  name: string;
-  params?: RouteParams;
-}
+import type { RouteRecord, RouteParams, RouteLocationNormalized } from './types';
 
-/**
- * 匹配器的路由参数
- */
-export type MatcherLocationRaw =
-  | MatcherLocationAsPath
-  | MatcherLocationAsName
-  | MatcherLocationAsRelative;
-
-export type RouteRecordNormalized = Required<
-  Pick<RouteRecord, 'path' | 'page' | 'children'>
-> & {
+export interface RouteRecordNormalized {
   /**
    * {@link RouteRecord.name}
    */
-  name: string | undefined;
+  name: RouteRecord['name'];
+  path: RouteRecord['path'];
+  page: string;
+  meta: PlainObject;
   /**
    * {@link RouteRecord.redirect}
    */
-  redirect: RouteRecord['redirect'] | undefined;
-};
-
-export interface MatcherLocation {
-  name: string | undefined;
-  path: string;
-  params: RouteParams;
-  matched: RouteRecord[];
-  meta: AnyObject;
+  redirect: RouteRecord['redirect'];
+  children: RouteRecord[];
 }
 
+/**
+ * 作为 matcher 解析 location  的关键参数及输出内容
+ */
+export type MatcherLocation = Pick<
+  RouteLocationNormalized,
+  'name' | 'path' | 'params' | 'matched' | 'meta'
+>;
+
+/**
+ * 路由匹配器
+ */
 export interface RouterMatcher {
+  /**
+   * 新增路由记录
+   */
   addRoute: (record: RouteRecord, parent?: RouteRecordMatcher) => void;
+  /**
+   * 删除路由记录
+   */
   removeRoute: {
     (matcher: RouteRecordMatcher): void;
     (name: string): void;
   };
-  getRoutes: () => RouteRecordMatcher[];
+  /**
+   * 获取所有的路由匹配对象
+   */
+  getRecordMatchers: () => RouteRecordMatcher[];
+  /**
+   * 获取路由匹配对象
+   */
   getRecordMatcher: (name: string) => RouteRecordMatcher | undefined;
-
   /**
    * Resolves a location.
-   * Gives access to the route record that corresponds to the actual path as well as filling the corresponding params objects
+   * 允许访问与实际路径对应的路由记录并加入相应的 params
    *
    * @param location - MatcherLocationRaw to resolve to a url
    * @param currentLocation - MatcherLocation of the current location
    */
-  resolve: (
-    location: MatcherLocationRaw,
-    currentLocation: MatcherLocation
-  ) => MatcherLocation;
+  resolve: (location: RawLocation, currentLocation: MatcherLocation) => MatcherLocation;
 }
 
 export function createRouterMatcher(
   records: RouteRecord[],
-  globalOptions: PathParserOptions
+  globalOptions: PathParserOptions,
 ): RouterMatcher {
   const matchers: RouteRecordMatcher[] = [];
   const matcherMap = new Map<string, RouteRecordMatcher>();
@@ -80,7 +73,7 @@ export function createRouterMatcher(
     const options: PathParserOptions = Object.assign(
       {},
       globalOptions,
-      pick(record, ['end', 'sensitive', 'strict'])
+      pick(record, ['end', 'sensitive', 'strict']),
     );
 
     // 如果子路由不是绝对路径，则构建嵌套路由的路径。
@@ -88,10 +81,9 @@ export function createRouterMatcher(
     const { path } = normalizedRecord;
     if (parent && path[0] !== '/') {
       const parentPath = parent.record.path;
-      const connectingSlash =
-        parentPath[parentPath.length - 1] === '/' ? '' : '/';
-      normalizedRecord.path =
-        parent.record.path + (path && connectingSlash + path);
+      const connectingSlash = parentPath[parentPath.length - 1] === '/' ? '' : '/';
+
+      normalizedRecord.path = parent.record.path + (path && connectingSlash + path);
     }
 
     const matcher = createRouteRecordMatcher(normalizedRecord, parent, options);
@@ -130,18 +122,11 @@ export function createRouterMatcher(
     }
   }
 
-  function getRoutes() {
-    return matchers;
-  }
-
   function getRecordMatcher(name: string) {
     return matcherMap.get(name);
   }
 
-  function resolve(
-    location: MatcherLocationRaw,
-    currentLocation: MatcherLocation
-  ): MatcherLocation {
+  function resolve(location: RawLocation, currentLocation: MatcherLocation): MatcherLocation {
     let matcher: RouteRecordMatcher | undefined;
     let params: RouteParams = {};
     let path: MatcherLocation['path'];
@@ -151,34 +136,32 @@ export function createRouterMatcher(
       matcher = matcherMap.get(location.name);
 
       if (!matcher) {
-        throw new Error(
-          `Router error: no match for ${JSON.stringify(location)}`
-        );
+        throw new Error(`Router error: no match for ${JSON.stringify(location)}`);
       }
 
       name = matcher.record.name;
       // 从当前路径与传入的参数中获取 params
       params = Object.assign(
         paramsFromLocation(
-          currentLocation.params,
+          currentLocation.params ?? {},
           matcher.keys
-            .filter(k => {
+            .filter((k) => {
               return !(k.modifier === '?' || k.modifier === '*');
             })
-            .map(k => k.name)
+            .map((k) => k.name),
         ),
         location.params
           ? paramsFromLocation(
               location.params,
-              matcher.keys.map(k => k.name)
+              matcher.keys.map((k) => k.name),
             )
-          : {}
+          : {},
       );
       // throws if cannot be stringified
       path = matcher.stringify(params);
     } else if ('path' in location) {
       path = location.path;
-      matcher = matchers.find(m => m.re.test(path));
+      matcher = matchers.find((m) => m.re.test(path));
 
       if (matcher) {
         name = matcher.record.name;
@@ -187,13 +170,11 @@ export function createRouterMatcher(
     } else {
       matcher = currentLocation.name
         ? matcherMap.get(currentLocation.name)
-        : matchers.find(m => m.re.test(currentLocation.path));
+        : matchers.find((m) => m.re.test(currentLocation.path));
 
       if (!matcher) {
         throw new Error(
-          `no match for ${JSON.stringify(location)}, ${JSON.stringify(
-            currentLocation
-          )}`
+          `no match for ${JSON.stringify(location)}, ${JSON.stringify(currentLocation)}`,
         );
       }
 
@@ -218,24 +199,23 @@ export function createRouterMatcher(
     };
   }
 
-  records.forEach(r => addRoute(r));
+  records.forEach((r) => addRoute(r));
 
   return {
     resolve,
 
     addRoute,
     removeRoute,
-    getRoutes,
+
+    getRecordMatchers() {
+      return matchers;
+    },
     getRecordMatcher,
   };
 }
 
-function paramsFromLocation(
-  params: RouteParams,
-  keys: (string | number)[]
-): RouteParams {
+function paramsFromLocation(params: RouteParams, keys: (string | number)[]): RouteParams {
   const newParams = {} as RouteParams;
-
   for (const key of keys) {
     if (key in params) newParams[key] = params[key];
   }
@@ -243,14 +223,13 @@ function paramsFromLocation(
   return newParams;
 }
 
-export function normalizeRouteRecord(
-  record: RouteRecord
-): RouteRecordNormalized {
+export function normalizeRouteRecord(record: RouteRecord): RouteRecordNormalized {
   return {
     path: record.path,
     redirect: record.redirect,
     name: record.name,
-    page: record.page,
+    page: record.page || '',
+    meta: record['meta'] || {},
     children: record.children || [],
   };
 }

@@ -1,6 +1,7 @@
 import { AppContext, type AppContextObject } from '../context/app';
-import { createComponent } from '../api/createComponent';
+import { createComponent } from '../component';
 import Route from './route';
+import { createRouterProvider } from './router-view';
 
 export default function App({ context }: { context: AppContextObject }) {
   const { schema, config, renderer, packageManager, appScope } = context;
@@ -15,8 +16,7 @@ export default function App({ context }: { context: AppContextObject }) {
 
       if (Component?.devMode === 'lowCode') {
         const componentsMap = schema.getComponentsMaps();
-        const componentsRecord =
-          packageManager.getComponentsNameRecord<any>(componentsMap);
+        const componentsRecord = packageManager.getComponentsNameRecord<any>(componentsMap);
 
         const Layout = createComponent({
           componentsTree: Component.schema,
@@ -24,6 +24,7 @@ export default function App({ context }: { context: AppContextObject }) {
 
           dataSourceCreator: config.get('dataSourceCreator'),
           supCodeScope: appScope,
+          intl: appScope.value.intl,
         });
 
         return Layout;
@@ -54,5 +55,11 @@ export default function App({ context }: { context: AppContextObject }) {
     }, element);
   }
 
-  return <AppContext.Provider value={context}>{element}</AppContext.Provider>;
+  const RouterProvider = createRouterProvider(appScope.value.router);
+
+  return (
+    <AppContext.Provider value={context}>
+      <RouterProvider>{element}</RouterProvider>
+    </AppContext.Provider>
+  );
 }

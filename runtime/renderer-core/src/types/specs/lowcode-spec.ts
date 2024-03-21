@@ -189,20 +189,28 @@ export interface ComponentTreeNodeProps {
   /**  组件内联样式	 */
   style?: JSONObject | JSExpression;
   /** 组件 ref 名称	 */
-  ref?: string | JSExpression;
+  ref?: string;
 
   [key: string]: any;
+}
+
+export interface NPMUtil {
+  name: string;
+  type: 'npm';
+  content: Omit<ComponentMap, 'componentName'>;
+}
+
+export interface FunctionUtil {
+  name: string;
+  type: 'function';
+  content: JSFunction;
 }
 
 /**
  * https://lowcode-engine.cn/site/docs/specs/lowcode-spec#24-%E5%B7%A5%E5%85%B7%E7%B1%BB%E6%89%A9%E5%B1%95%E6%8F%8F%E8%BF%B0aa
  * 用于描述物料开发过程中，自定义扩展或引入的第三方工具类（例如：lodash 及 moment），增强搭建基础协议的扩展性，提供通用的工具类方法的配置方案及调用 API。
  */
-export interface Util {
-  name: string;
-  type: 'npm' | 'function';
-  content: ComponentMap | JSFunction;
-}
+export type Util = NPMUtil | FunctionUtil;
 
 /**
  * https://lowcode-engine.cn/site/docs/specs/lowcode-spec#25-%E5%9B%BD%E9%99%85%E5%8C%96%E5%A4%9A%E8%AF%AD%E8%A8%80%E6%94%AF%E6%8C%81aa
@@ -307,7 +315,7 @@ export interface JSONObject {
  */
 export interface JSSlot {
   type: 'JSSlot';
-  value: 1;
+  value: ComponentTreeNode | ComponentTreeNode[];
   params?: string[];
 }
 

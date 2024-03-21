@@ -6,11 +6,20 @@
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",
   "homepage": "https://github.com/alibaba/lowcode-engine/#readme",
   "license": "MIT",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "",
+    "build": "tsc",
     "test": "vitest"
   },
   "dependencies": {
-    "@alilc/renderer-core": "^2.0.0-beta.0"
+    "@alilc/renderer-core": "^2.0.0-beta.0",
+    "lodash-es": "^4.17.21",
+    "path-to-regexp": "^6.2.1",
+    "qs": "^6.12.0"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
+    "@types/qs": "^6.9.13"
   }
 }
