@@ -45,7 +45,7 @@ n 14.17.0
 
 ### 下载 Demo
 
-可以前往 github（<https://github.com/alibaba/lowcode-demo>）将 DEMO 下载到本地。
+可以前往 Github [lowcode-demo](https://github.com/alibaba/lowcode-demo)将 DEMO 下载到本地。
 
 #### git clone
 

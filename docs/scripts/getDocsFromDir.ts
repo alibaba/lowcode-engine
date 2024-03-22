@@ -1,9 +1,9 @@
-const fs = require('fs');
-const path = require('path');
-const glob = require('glob');
-const matter = require('gray-matter');
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import * as glob from 'fast-glob';
+import matter from 'gray-matter';
 
-module.exports = function getDocsFromDir(dir, cateList) {
+export default function getDocsFromDir(dir: string, cateList: any[] = []) {
   // docs/
   const baseDir = path.join(__dirname, '../docs/');
   const docsDir = path.join(baseDir, dir);
@@ -43,7 +43,7 @@ module.exports = function getDocsFromDir(dir, cateList) {
       return id;
     });
 
-  (cateList || []).forEach((item) => {
+  cateList.forEach((item) => {
     const { dir, subCategory, ...otherConfig } = item;
     const indexList = glob.sync('index.md?(x)', {
       cwd: path.join(baseDir, dir),
@@ -63,4 +63,4 @@ module.exports = function getDocsFromDir(dir, cateList) {
   });
 
   return result;
-};
+}

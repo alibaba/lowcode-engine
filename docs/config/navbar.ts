@@ -1,7 +1,6 @@
-/**
- * 此配置的修改，如未生效，可以重新启动下即可
- */
-module.exports = {
+import type * as Preset from '@docusaurus/preset-classic';
+
+const navbar: Preset.ThemeConfig['navbar'] = {
   title: '',
   logo: {
     alt: 'LowCode-Engine',
@@ -63,7 +62,6 @@ module.exports = {
     //   position: 'right',
     //   dropdownActiveClassDisabled: true,
     // },
-    // {
     {
       href: 'https://github.com/alibaba/lowcode-engine',
       position: 'right',
@@ -82,3 +80,5 @@ module.exports = {
     },
   ],
 };
+
+export default navbar;

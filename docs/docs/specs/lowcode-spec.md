@@ -114,7 +114,7 @@ sidebar_position: 0
 - utils { Array } 工具类扩展映射关系
 - i18n { Object } 国际化语料
 - constants { Object } 应用范围内的全局常量
-- css { string } 应用范围内的全局样式
+- css { String } 应用范围内的全局样式
 - config: { Object } 当前应用配置信息
 - meta: { Object } 当前应用元数据信息
 - dataSource: { Array } 当前应用的公共数据源
@@ -427,18 +427,18 @@ import { Input as CustomInput } from '@ali/custom/lib/input';
 
 ##### 2.3.1.4 ComponentDataSourceItem 对象描述
 
-| 参数           | 说明                         | 类型                                                 | 支持变量 | 默认值                      | 备注                                                                                                                                                                 |
-| -------------- | ---------------------------- | ---------------------------------------------------- | -------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| id             | 数据请求 ID 标识             | String                                               | -        | -                           |                                                                                                                                                                      |
-| isInit         | 是否为初始数据               | Boolean                                              | ✅       | true                        | 值为 true 时，将在组件初始化渲染时自动发送当前数据请求                                                                                                               |
-| isSync         | 是否需要串行执行             | Boolean                                              | ✅       | false                       | 值为 true 时，当前请求将被串行执行                                                                                                                                   |
-| type           | 数据请求类型                 | String                                               | -        | fetch                       | 支持四种类型：fetch/mtop/jsonp/custom                                                                                                                                |
-| shouldFetch    | 本次请求是否可以正常请求     | (options: ComponentDataSourceItemOptions) => boolean | -        | `() => true`                | function 参数参考 [ComponentDataSourceItemOptions 对象描述](#2315-componentdatasourceitemoptions-对象描述)                                                           |
-| willFetch      | 单个数据结果请求参数处理函数 | Function                                             | -        | options => options          | 只接受一个参数（options），返回值作为请求的 options，当处理异常时，使用原 options。也可以返回一个 Promise，resolve 的值作为请求的 options，reject 时，使用原 options |
-| requestHandler | 自定义扩展的外部请求处理器   | Function                                             | -        | -                           | 仅 type='custom' 时生效                                                                                                                                              |
-| dataHandler    | request 成功后的回调函数     | Function                                             | -        | `response => response.data` | 参数：请求成功后 promise 的 value 值                                                                                                                                 |                                                                                                                         |
-| errorHandler   | request 失败后的回调函数     | Function                                             | -        | -                           | 参数：请求出错 promise 的 error 内容                                                                                                                                 |
-| options {}     | 请求参数                     | **ComponentDataSourceItemOptions**                   | -        | -                           | 每种请求类型对应不同参数，详见                                                                                                                                       | 每种请求类型对应不同参数，详见 [ComponentDataSourceItemOptions 对象描述](#2315-componentdatasourceitemoptions-对象描述) |
+| 参数           | 说明                         | 类型                                                   | 支持变量 | 默认值                      | 备注                                                                                                                                                                 |
+| -------------- | ---------------------------- | ------------------------------------------------------ | -------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| id             | 数据请求 ID 标识             | String                                                 | -        | -                           |                                                                                                                                                                      |
+| isInit         | 是否为初始数据               | Boolean                                                | ✅       | true                        | 值为 true 时，将在组件初始化渲染时自动发送当前数据请求                                                                                                               |
+| isSync         | 是否需要串行执行             | Boolean                                                | ✅       | false                       | 值为 true 时，当前请求将被串行执行                                                                                                                                   |
+| type           | 数据请求类型                 | String                                                 | -        | fetch                       | 支持四种类型：fetch/mtop/jsonp/custom                                                                                                                                |
+| shouldFetch    | 本次请求是否可以正常请求     | `(options: ComponentDataSourceItemOptions) => boolean` | -        | `() => true`                | function 参数参考 [ComponentDataSourceItemOptions 对象描述](#2315-componentdatasourceitemoptions-对象描述)                                                           |
+| willFetch      | 单个数据结果请求参数处理函数 | Function                                               | -        | `options => options`        | 只接受一个参数（options），返回值作为请求的 options，当处理异常时，使用原 options。也可以返回一个 Promise，resolve 的值作为请求的 options，reject 时，使用原 options |
+| requestHandler | 自定义扩展的外部请求处理器   | Function                                               | -        | -                           | 仅 type='custom' 时生效                                                                                                                                              |
+| dataHandler    | request 成功后的回调函数     | Function                                               | -        | `response => response.data` | 参数：请求成功后 promise 的 value 值                                                                                                                                 |
+| errorHandler   | request 失败后的回调函数     | Function                                               | -        | -                           | 参数：请求出错 promise 的 error 内容                                                                                                                                 |
+| options        | 请求参数                     | **ComponentDataSourceItemOptions**                     | -        | -                           | 每种请求类型对应不同参数，详见 [ComponentDataSourceItemOptions 对象描述](#2315-componentdatasourceitemoptions-对象描述)                                              |
 
 **关于 dataHandler 与 errorHandler 的细节说明：**
 
@@ -1051,7 +1051,7 @@ type Ti18n = {
 | _this_.dataSourceMap                | 三种容器实例的数据源对象 Map             | Object                       | 单个请求的 id 为 key, value 详见下文 [DataSourceMapItem 结构描述](#datasourcemapitem-结构描述)                 |
 | _this_.reloadDataSource             | 三种容器实例的初始化异步数据请求重载     | Function                     | 返回 Promise                                                                                                   |
 | **this.page**                       | 当前页面容器的实例对象                   | Class Instance               |                                                                                                                |
-| _this.page_.props                   | 读取页面路由，参数等相关信息             | Object                       | query 查询参数 { key: value } 形式；path 路径；uri 页面唯一标识；其它扩展字段                                  |
+| _this.page_.props                   | 读取页面路由，参数等相关信息             | Object                       | query 查询参数 `{ key: value }` 形式；path 路径；uri 页面唯一标识；其它扩展字段                                |
 | _this.page_.xxx                     | 继承 this 对象所有 API                   |                              | 此处 `xxx` 代指 `this.page` 中的其他 API                                                                       |
 | **this.component**                  | 当前低代码业务组件容器的实例对象         | Class Instance               |                                                                                                                |
 | _this.component_.props              | 读取低代码业务组件容器的外部传入的 props | Object                       |                                                                                                                |
@@ -1333,7 +1333,7 @@ path（页面路径）是浏览器URL的组成部分，同时大部分网站的 
 **redirect** 字段有三种填入类型，分别是 `String`、`Object`、`Function`：
 
 1. 字符串(`String`)格式下默认处理为重定向到路径，支持传入 '/xxx'、'/xxx?ab=c'。
-2. 对象(`String`)格式下可传入路由对象，如 { name: 'xxx' }、{ path: '/xxx' }，可重定向到对应的路由对象。
+2. 对象(`String`)格式下可传入路由对象，如 `{ name: 'xxx' }`、`{ path: '/xxx' }`，可重定向到对应的路由对象。
 3. 函数`Function`格式为`(to) => Route`，它的入参为当前路由项信息，支持返回一个 Route 对象或者字符串，存在一些特殊情况，在重定向的时候需要对重定向之后的路径进行处理的情况下，需要使用函数声明。
 
 ```json
@@ -1497,13 +1497,13 @@ webpack.config.js # 项目工程配置，包含插件配置及自定义 webpack 
 
 ##### Router 结构说明
 
-| API              | 函数签名                                                                      | 说明                                                                         |
-| ---------------- | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| getCurrentRoute  | () => RouteLocation                                                           | 获取当前解析后的路由信息，RouteLocation 结构详见下面说明                     |
-| push             | (target: string \| Route) => void                                             | 路由跳转方法，跳转到指定的路径或者 Route                                     |
-| replace          | (target: string \| Route) => void                                             | 路由跳转方法，与 `push` 的区别在于不会增加一条历史记录而是替换当前的历史记录 |
-| beforeRouteLeave | (guard: (to: RouteLocation, from: RouteLocation) => boolean \| Route) => void | 路由跳转前的守卫方法，详见下面说明                                           |
-| afterRouteChange | (fn: (to: RouteLocation, from: RouteLocation) => void) => void                | 路由跳转后的钩子函数，会在每次路由改变后执行                                 |
+| API              | 函数签名                                                                        | 说明                                                     |
+| ---------------- | ------------------------------------------------------------------------------- | -------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| getCurrentRoute  | () => RouteLocation                                                             | 获取当前解析后的路由信息，RouteLocation 结构详见下面说明 |
+| push             | `(target: string                                                                | Route) => void`                                          | 路由跳转方法，跳转到指定的路径或者 Route                                     |
+| replace          | `(target: string                                                                | Route) => void`                                          | 路由跳转方法，与 `push` 的区别在于不会增加一条历史记录而是替换当前的历史记录 |
+| beforeRouteLeave | `(guard: (to: RouteLocation, from: RouteLocation) => boolean \| Route) => void` | 路由跳转前的守卫方法，详见下面说明                       |
+| afterRouteChange | `(fn: (to: RouteLocation, from: RouteLocation) => void) => void`                | 路由跳转后的钩子函数，会在每次路由改变后执行             |
 
 ##### 3.2.1.1 RouteLocation（路由信息）结构说明
 
@@ -1575,11 +1575,11 @@ webpack.config.js # 项目工程配置，包含插件配置及自定义 webpack 
 
 #### 3.2.3 国际化相关 API
 
-| API            | 函数签名                                                               | 说明                                                                          |
-| -------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| this.i18n      | (i18nKey: string, params?: { [paramName: string]: string; }) => string | i18nKey 是语料的标识符，params 可选，是用来做模版字符串替换的。返回语料字符串 |
-| this.getLocale | () => string                                                           | 返回当前环境语言 code                                                         |
-| this.setLocale | (locale: string) => void                                               | 设置当前环境语言 code                                                         |
+| API            | 函数签名                                                                 | 说明                                                                          |
+| -------------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| this.i18n      | `(i18nKey: string, params?: { [paramName: string]: string; }) => string` | i18nKey 是语料的标识符，params 可选，是用来做模版字符串替换的。返回语料字符串 |
+| this.getLocale | `() => string`                                                           | 返回当前环境语言 code                                                         |
+| this.setLocale | `(locale: string) => void`                                               | 设置当前环境语言 code                                                         |
 
 **使用范例：**
 

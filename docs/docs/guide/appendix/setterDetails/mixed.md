@@ -1,7 +1,9 @@
 ---
 title: MixedSetter
 ---
+
 ## 简介
+
 可以让属性同时支持多个 setter
 
 ## 展示
@@ -10,6 +12,6 @@ title: MixedSetter
 
 ## 配置
 
-| **属性名** | **类型** | **说明** |
-| --- | --- | --- |
-| setters | Array<String\> | SetterName |
+| **属性名** | **类型**        | **说明**   |
+| ---------- | --------------- | ---------- |
+| setters    | `Array<String>` | SetterName |

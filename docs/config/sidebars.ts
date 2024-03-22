@@ -1,23 +1,6 @@
-/*
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-const getDocsFromDir = require('../scripts/getDocsFromDir');
+import getDocsFromDir from '../scripts/getDocsFromDir';
 
-module.exports = {
-  // 手动配置的导航
-  // guide: [
-  //   'guide/quickStart/intro',
-  //   'guide/quickStart/start',
-  //   {
-  //     type: 'category',
-  //     label: 'FAQ',
-  //     collapsed: false,
-  //     items: getDocsFromDir('guide/quickStart/faq'),
-  //   },
-  // ],
+const sidebars = {
   /**
    * 根据当前目录自动生成导航配置
    */
@@ -39,7 +22,9 @@ module.exports = {
         type: 'category',
         label: '扩展编辑器',
         collapsed: false,
-        items: getDocsFromDir('guide/expand/editor', [{ dir: 'guide/expand/editor/parts', label: 'Parts·造物' }]),
+        items: getDocsFromDir('guide/expand/editor', [
+          { dir: 'guide/expand/editor/parts', label: 'Parts·造物' },
+        ]),
       },
       {
         type: 'category',
@@ -109,3 +94,5 @@ module.exports = {
     },
   ],
 };
+
+export default sidebars;

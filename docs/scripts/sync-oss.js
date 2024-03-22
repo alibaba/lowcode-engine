@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-const http = require('http');
-const package = require('../package.json');
-const { version, name } = package;
+import http from 'node:http';
+import packageJson from '../package.json';
+
+const { version, name } = packageJson;
 const options = {
   method: 'PUT',
   hostname: 'uipaas-node.alibaba-inc.com',

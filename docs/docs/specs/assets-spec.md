@@ -2,6 +2,7 @@
 title: 《低代码引擎资产包协议规范》
 sidebar_position: 2
 ---
+
 ## 1 介绍
 
 ### 1.1 本协议规范涉及的问题域
@@ -75,26 +76,26 @@ sidebar_position: 2
 
 定义低代码编辑器中加载的资源列表，包含公共库和组件 (库) cdn 资源等；
 
-| 字段                 | 字段描述                                                        | 字段类型      | 规范等级 | 备注                                                                                                     |
-| -------------------- | --------------------------------------------------------------- | ------------- | -------- | -------------------------------------------------------------------------------------------------------- |
-| packages[].id?       | 资源唯一标识                                                    | String        | A        | 资源唯一标识，如果为空，则以 package 为唯一标识                                                          |
-| packages[].title?    | 资源标题                                                        | String        | A        | 资源标题                                                                                                 |
-| packages[].package   | npm 包名                                                        | String        | A        | 组件资源唯一标识                                                                                         |
-| packages[].version   | npm 包版本号                                                    | String        | A        | 组件资源版本号                                                                                           |
-| packages[].type      | 资源包类型                                                      | String        | AA       | 取值为: proCode（源码）、lowCode（低代码，默认为 proCode                                                 |
-| packages[].schema    | 低代码组件 schema 内容                                          | object        | AA       | 取值为: proCode（源码）、lowCode（低代码）                                                               |
-| packages[].deps      | 当前资源包的依赖资源的唯一标识列表                              | Array<String\> | A        | 唯一标识为 id 或者 package 对应的值                                                                      |
-| packages[].library   | 作为全局变量引用时的名称，用来定义全局变量名                    | String        | A        | 低代码引擎通过该字段获取组件实例                                                                         |
-| packages[].editUrls  | 组件编辑态视图打包后的 CDN url 列表，包含 js 和 css             | Array<String\> | A        | 低代码引擎编辑器会加载这些 url                                                                           |
-| packages[].urls      | 组件渲染态视图打包后的 CDN url 列表，包含 js 和 css             | Array<String\> | AA       | 低代码引擎渲染模块会加载这些 url                                                                         |
-| packages[].advancedEditUrls | 组件多个编辑态视图打包后的 CDN url 列表集合，包含 js 和 css     | Object        | AAA      | 上层平台根据特定标识提取某个编辑态的资源，低代码引擎编辑器会加载这些资源，优先级高于 packages[].editUrls |
-| packages[].advancedUrls     | 组件多个端的渲染态视图打包后的 CDN url 列表集合，包含 js 和 css | Object        | AAA      | 上层平台根据特定标识提取某个渲染态的资源， 低代码引擎渲染模块会加载这些资源，优先级高于 packages[].urls  |
-| packages[].external  | 当前资源在作为其他资源的依赖，在其他依赖打包时时是否被排除了(同 webpack 中 external 概念)                            | Boolean       | AAA      | 某些资源会被单独提取出来，是其他依赖的前置依赖，根据这个字段决定是否提前加载该资源                       |
-| packages[].loadEnv   | 指定当前资源加载的环境                                          | Array<String\> | AAA      | 主要用于指定 external 资源加载的环境，取值为 design(设计态)、runtime(预览态) 中的一个或多个               |
-| packages[].exportSourceId     | 标识当前 package 内容是从哪个 package 导出来的   | String | AAA       | 此时 urls 无效 |
-| packages[].exportSourceLibrary     | 标识当前 package 是从 window 上的哪个属性导出来的   | String | AAA       | exportSourceId 的优先级高于exportSourceLibrary ,此时 urls 无效 |
-| packages[].async     | 标识当前 package 资源加载在 window.library 上的是否是一个异步对象   | Boolean | A       | async 为 true 时，需要通过 await 才能拿到真正内容 |
-| packages[].exportMode     | 标识当前 package 从其他 package 的导出方式   | String | A       | 目前只支持 `"functionCall"`, exportMode等于 `"functionCall"` 时，当前package 的内容以函数的方式从其他 package 中导出，具体导出接口如: (library: string, packageName: string, isRuntime?: boolean) => any | Promise<any\>, library 为当前 package 的 library, packageName 为当前的包名，返回值为当前 package 的导出内容  |
+| 字段                           | 字段描述                                                                                  | 字段类型        | 规范等级 | 备注                                                                                                                                                                                                      |
+| ------------------------------ | ----------------------------------------------------------------------------------------- | --------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| packages[].id?                 | 资源唯一标识                                                                              | String          | A        | 资源唯一标识，如果为空，则以 package 为唯一标识                                                                                                                                                           |
+| packages[].title?              | 资源标题                                                                                  | String          | A        | 资源标题                                                                                                                                                                                                  |
+| packages[].package             | npm 包名                                                                                  | String          | A        | 组件资源唯一标识                                                                                                                                                                                          |
+| packages[].version             | npm 包版本号                                                                              | String          | A        | 组件资源版本号                                                                                                                                                                                            |
+| packages[].type                | 资源包类型                                                                                | String          | AA       | 取值为: proCode（源码）、lowCode（低代码，默认为 proCode                                                                                                                                                  |
+| packages[].schema              | 低代码组件 schema 内容                                                                    | object          | AA       | 取值为: proCode（源码）、lowCode（低代码）                                                                                                                                                                |
+| packages[].deps                | 当前资源包的依赖资源的唯一标识列表                                                        | `Array<String>` | A        | 唯一标识为 id 或者 package 对应的值                                                                                                                                                                       |
+| packages[].library             | 作为全局变量引用时的名称，用来定义全局变量名                                              | String          | A        | 低代码引擎通过该字段获取组件实例                                                                                                                                                                          |
+| packages[].editUrls            | 组件编辑态视图打包后的 CDN url 列表，包含 js 和 css                                       | `Array<String>` | A        | 低代码引擎编辑器会加载这些 url                                                                                                                                                                            |
+| packages[].urls                | 组件渲染态视图打包后的 CDN url 列表，包含 js 和 css                                       | `Array<String>` | AA       | 低代码引擎渲染模块会加载这些 url                                                                                                                                                                          |
+| packages[].advancedEditUrls    | 组件多个编辑态视图打包后的 CDN url 列表集合，包含 js 和 css                               | Object          | AAA      | 上层平台根据特定标识提取某个编辑态的资源，低代码引擎编辑器会加载这些资源，优先级高于 packages[].editUrls                                                                                                  |
+| packages[].advancedUrls        | 组件多个端的渲染态视图打包后的 CDN url 列表集合，包含 js 和 css                           | Object          | AAA      | 上层平台根据特定标识提取某个渲染态的资源， 低代码引擎渲染模块会加载这些资源，优先级高于 packages[].urls                                                                                                   |
+| packages[].external            | 当前资源在作为其他资源的依赖，在其他依赖打包时时是否被排除了(同 webpack 中 external 概念) | Boolean         | AAA      | 某些资源会被单独提取出来，是其他依赖的前置依赖，根据这个字段决定是否提前加载该资源                                                                                                                        |
+| packages[].loadEnv             | 指定当前资源加载的环境                                                                    | `Array<String>` | AAA      | 主要用于指定 external 资源加载的环境，取值为 design(设计态)、runtime(预览态) 中的一个或多个                                                                                                               |
+| packages[].exportSourceId      | 标识当前 package 内容是从哪个 package 导出来的                                            | String          | AAA      | 此时 urls 无效                                                                                                                                                                                            |
+| packages[].exportSourceLibrary | 标识当前 package 是从 window 上的哪个属性导出来的                                         | String          | AAA      | exportSourceId 的优先级高于exportSourceLibrary ,此时 urls 无效                                                                                                                                            |
+| packages[].async               | 标识当前 package 资源加载在 window.library 上的是否是一个异步对象                         | Boolean         | A        | async 为 true 时，需要通过 await 才能拿到真正内容                                                                                                                                                         |
+| packages[].exportMode          | 标识当前 package 从其他 package 的导出方式                                                | String          | A        | 目前只支持 `"functionCall"`, exportMode等于 `"functionCall"` 时，当前package 的内容以函数的方式从其他 package 中导出，具体导出接口如: `(library: string, packageName: string, isRuntime?: boolean) => any \| Promise<any>`, library 为当前 package 的 library, packageName 为当前的包名，返回值为当前 package 的导出内容 |
 
 描述举例：
 
@@ -272,25 +273,25 @@ sidebar_position: 2
       "library": "Atest1"
     },
     {
-      "library":"UiPaaSServerless3",
-      "advancedUrls":{
-          "default":[
-              "https://g.alicdn.com/legao-comp/serverless3/1.1.0/env-staging-d224466e-0614-497d-8cd5-e4036dc50b70/main.js"
-          ]
+      "library": "UiPaaSServerless3",
+      "advancedUrls": {
+        "default": [
+          "https://g.alicdn.com/legao-comp/serverless3/1.1.0/env-staging-d224466e-0614-497d-8cd5-e4036dc50b70/main.js"
+        ]
       },
-      "id":"UiPaaSServerless3-view",
-      "type":"procode",
-      "version":"1.0.0"
+      "id": "UiPaaSServerless3-view",
+      "type": "procode",
+      "version": "1.0.0"
     },
     {
-      "package":"react-color",
-      "library":"ReactColor",
-      "id":"react-color",
-      "type":"procode",
-      "version":"2.19.3",
-      "async":true,
-      "exportMode":"functionCall",
-      "exportSourceId":"UiPaaSServerless3-view"
+      "package": "react-color",
+      "library": "ReactColor",
+      "id": "react-color",
+      "type": "procode",
+      "version": "2.19.3",
+      "async": true,
+      "exportMode": "functionCall",
+      "exportSourceId": "UiPaaSServerless3-view"
     }
   ]
 }

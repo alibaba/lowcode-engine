@@ -1,7 +1,9 @@
 ---
 title: SlotSetter
 ---
+
 ## 简介
+
 通过一个开启一个 slot（插槽），可以在物料特定的一个位置渲染一个或者多个节点。slot 比较适合物料的局部自定义渲染。
 
 ## 展示
@@ -15,14 +17,15 @@ title: SlotSetter
 
 ## setter 配置
 
-| 属性名 | 类型 | 说明 |
-| --- | --- | --- |
-| initialValue | Object | 默认值 { "type": "JSSlot", "params": [ "module" ], "value": [] } params:接收函数的入参，可以直接在slot节点中消费，通过this.module (这里module是示例值，可根据实际函数入参更改) value:可以定义一个节点，每次打开插槽的时候默认填充一个节点 |
-| hideParams | boolean | 是否隐藏入参，注意该值只能隐藏入参的输入框，适合单行展示，实际渲染的时候，还是会传入 params 的参数，和 params:[]不同 |
-| checkedText | string | switch 选中文案，默认显示"启用" |
-| unCheckedText | string | switch 取消文案，默认显示"关闭" |
+| 属性名        | 类型    | 说明                                                                                                                                                                                                                                        |
+| ------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| initialValue  | Object  | 默认值 `{ "type": "JSSlot", "params": [ "module" ], "value": [] }` params:接收函数的入参，可以直接在slot节点中消费，通过this.module (这里module是示例值，可根据实际函数入参更改) value:可以定义一个节点，每次打开插槽的时候默认填充一个节点 |
+| hideParams    | boolean | 是否隐藏入参，注意该值只能隐藏入参的输入框，适合单行展示，实际渲染的时候，还是会传入 params 的参数，和 params:[] 不同                                                                                                                       |
+| checkedText   | string  | switch 选中文案，默认显示"启用"                                                                                                                                                                                                             |
+| unCheckedText | string  | switch 取消文案，默认显示"关闭"                                                                                                                                                                                                             |
 
 ## 配置示例
+
 ### 配置
 
 ```typescript
@@ -40,6 +43,7 @@ title: SlotSetter
     }
   }
 ```
+
 ### 组件
 
 ```typescript
@@ -47,7 +51,9 @@ function A(props) {
   return props.propName;
 }
 ```
+
 ## 带参数的插槽示例
+
 ### 配置
 
 ```typescript
@@ -66,6 +72,7 @@ function A(props) {
   }
 }
 ```
+
 ### 组件
 
 组件需要传参数进行渲染，和普通示例的使用不一样。
@@ -76,6 +83,7 @@ function A(props) {
   return props.propName(module);
 }
 ```
+
 ### param 使用示例
 
 1.开启插槽
