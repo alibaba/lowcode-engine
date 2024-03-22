@@ -27,6 +27,11 @@ export function OutlinePaneContext(props: {
     });
   }, []);
 
+  useEffect(() => {
+    return props.pluginContext?.project?.currentDocument?.history.onChangeCursor(() => {
+      setMasterPaneController(new PaneController(props.paneName || MasterPaneName, treeMaster));
+    });
+  }, [treeMaster]);
   return (
     <Pane
       treeMaster={treeMaster}
@@ -77,6 +82,8 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
           treeTitleExtra: config.get('treeTitleExtra'),
           treeMaster,
           paneName: MasterPaneName,
+          pluginContext: ctx,
+          options,
         },
       });
 
@@ -91,6 +98,8 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
         contentProps: {
           paneName: BackupPaneName,
           treeMaster,
+          pluginContext: ctx,
+          options,
         },
         index: 1,
       });
