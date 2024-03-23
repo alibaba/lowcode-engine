@@ -1,4 +1,6 @@
 packages:
   - 'runtime/*'
+  - 'packages/types'
+  - 'packages/utils'
   - 'playground'
   - 'docs'

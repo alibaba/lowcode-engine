@@ -1,5 +1,9 @@
 import { ComponentType, forwardRef, createElement, FunctionComponent } from 'react';
-import { IPublicTypeNpmInfo, IPublicTypeComponentSchema, IPublicTypeProjectSchema } from '@alilc/lowcode-types';
+import {
+  IPublicTypeNpmInfo,
+  IPublicTypeComponentSchema,
+  IPublicTypeProjectSchema,
+} from '@alilc/lowcode-types';
 import { isESModule } from './is-es-module';
 import { isReactComponent, acceptsRef, wrapReactClass } from './is-react';
 import { isObject } from './is-object';
@@ -19,9 +23,9 @@ export function accessLibrary(library: string | Record<string, unknown>) {
   return (window as any)[library] || generateHtmlComp(library);
 }
 
-export function generateHtmlComp(library: string) {
+export function generateHtmlComp(library: string): any {
   if (['a', 'img', 'div', 'span', 'svg'].includes(library)) {
-    return forwardRef((props, ref) => {
+    return forwardRef((props: any, ref) => {
       return createElement(library, { ref, ...props }, props.children);
     });
   }
@@ -92,12 +96,20 @@ function isMixinComponent(components: any) {
     return false;
   }
 
-  return Object.keys(components).some(componentName => isReactComponent(components[componentName]));
+  return Object.keys(components).some((componentName) =>
+    isReactComponent(components[componentName]),
+  );
 }
 
-export function buildComponents(libraryMap: LibraryMap,
-  componentsMap: { [componentName: string]: IPublicTypeNpmInfo | ComponentType<any> | IPublicTypeComponentSchema },
-  createComponent: (schema: IPublicTypeProjectSchema<IPublicTypeComponentSchema>) => Component | null) {
+export function buildComponents(
+  libraryMap: LibraryMap,
+  componentsMap: {
+    [componentName: string]: IPublicTypeNpmInfo | ComponentType<any> | IPublicTypeComponentSchema;
+  },
+  createComponent: (
+    schema: IPublicTypeProjectSchema<IPublicTypeComponentSchema>,
+  ) => Component | null,
+) {
   const components: any = {};
   Object.keys(componentsMap).forEach((componentName) => {
     let component = componentsMap[componentName];
@@ -150,14 +162,17 @@ interface LibrayMap {
 interface ProjectUtils {
   [packageName: string]: any;
 }
-export function getProjectUtils(librayMap: LibrayMap, utilsMetadata: UtilsMetadata[]): ProjectUtils {
+export function getProjectUtils(
+  librayMap: LibrayMap,
+  utilsMetadata: UtilsMetadata[],
+): ProjectUtils {
   const projectUtils: ProjectUtils = {};
   if (utilsMetadata) {
-    utilsMetadata.forEach(meta => {
+    utilsMetadata.forEach((meta) => {
       if (librayMap[meta?.npm?.package]) {
         const lib = accessLibrary(librayMap[meta?.npm.package]);
         if (lib?.destructuring) {
-          Object.keys(lib).forEach(name => {
+          Object.keys(lib).forEach((name) => {
             if (name === 'destructuring') return;
             projectUtils[name] = lib[name];
           });

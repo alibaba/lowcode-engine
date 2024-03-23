@@ -7,9 +7,9 @@ import { isESModule } from './is-es-module';
 const URL_RE = /^(https?:)\/\//i;
 
 export function createIcon(
-    icon?: IPublicTypeIconType | null,
-    props?: Record<string, unknown>,
-  ): ReactNode {
+  icon?: IPublicTypeIconType | null,
+  props?: Record<string, unknown>,
+): ReactNode {
   if (!icon) {
     return null;
   }
@@ -36,5 +36,5 @@ export function createIcon(
     });
   }
 
-  return <Icon {...icon} {...props} />;
+  return <Icon {...(icon as any)} {...props} />;
 }

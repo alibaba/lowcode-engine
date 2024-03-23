@@ -1,5 +1,11 @@
-import { ReactElement, ComponentType } from 'react';
-import { IPublicTypeI18nData, IPublicTypeIconType, IPublicTypeTitleContent, IPublicTypeWidgetConfigArea, TipContent } from './';
+import type { ReactElement, ComponentType } from 'react';
+import type {
+  IPublicTypeI18nData,
+  IPublicTypeIconType,
+  IPublicTypeTitleContent,
+  IPublicTypeWidgetConfigArea,
+  TipContent,
+} from './';
 
 export type IPublicTypeHelpTipConfig = string | { url?: string; content?: string | ReactElement };
 
@@ -36,7 +42,12 @@ export interface IPublicTypeWidgetBaseConfig {
    */
   area?: IPublicTypeWidgetConfigArea;
   props?: Record<string, any>;
-  content?: string | ReactElement | ComponentType<any> | IPublicTypePanelConfig[] | IPublicTypePanelConfig;
+  content?:
+    | string
+    | ReactElement
+    | ComponentType<any>
+    | IPublicTypePanelConfig[]
+    | IPublicTypePanelConfig;
   contentProps?: Record<string, any>;
 
   /**

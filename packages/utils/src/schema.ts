@@ -23,7 +23,7 @@ export function compatibleLegaoSchema(props: any): any {
   }
 
   if (Array.isArray(props)) {
-    return props.map(k => compatibleLegaoSchema(k));
+    return props.map((k) => compatibleLegaoSchema(k));
   }
 
   if (!isPlainObject(props)) {
@@ -78,7 +78,10 @@ export function compatibleLegaoSchema(props: any): any {
   return newProps;
 }
 
-export function getNodeSchemaById(schema: IPublicTypeNodeSchema, nodeId: string): IPublicTypeNodeSchema | undefined {
+export function getNodeSchemaById(
+  schema: IPublicTypeNodeSchema,
+  nodeId: string,
+): IPublicTypeNodeSchema | undefined {
   let found: IPublicTypeNodeSchema | undefined;
   if (schema.id === nodeId) {
     return schema;
@@ -123,7 +126,10 @@ function getNodeSchemaFromPropsById(props: any, nodeId: string): IPublicTypeNode
  * TODO: not sure if this is used anywhere
  * @deprecated
  */
-export function applyActivities(pivotSchema: IPublicTypeRootSchema, activities: any): IPublicTypeRootSchema {
+export function applyActivities(
+  pivotSchema: IPublicTypeRootSchema,
+  activities: any,
+): IPublicTypeRootSchema {
   let schema = { ...pivotSchema };
   if (!Array.isArray(activities)) {
     activities = [activities];

@@ -14,10 +14,13 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@alilc/lowcode-types": "1.3.2",
     "lodash-es": "^4.17.21"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.12"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

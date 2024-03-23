@@ -4,7 +4,7 @@
  */
 // 需要通过 Env 来判断是否需要
 
-import { some } from 'lodash';
+import { some } from 'lodash-es';
 
 const pseudoMap = ['hover', 'focus', 'active', 'visited'];
 
@@ -37,7 +37,7 @@ function isString(str: any): str is string {
 }
 
 function hyphenate(str: string): string {
-  return str.replace(RE_CAMEL, w => `-${w}`).toLowerCase();
+  return str.replace(RE_CAMEL, (w) => `-${w}`).toLowerCase();
 }
 
 function camelize(str: string): string {
@@ -63,30 +63,30 @@ function toNativeStyle(runtime: Record<string, string> | undefined) {
     return {};
   }
   if (runtime.default) {
-    const normalized: Record<string, string> = {};
+    const normalized: any = {};
     Object.keys(runtime).forEach((pseudo) => {
       if (pseudo === 'extra') {
         normalized[pseudo] = runtime[pseudo];
         return;
       }
-      normalized[pseudo] = toNativeStyle(runtime[pseudo]);
+      normalized[pseudo] = toNativeStyle(runtime[pseudo] as any);
     });
     return normalized;
   }
 
-  const normalized = {};
+  const normalized: any = {};
   Object.keys(runtime).forEach((key) => {
     normalized[camelize(key)] = runtime[key];
   });
   return normalized;
 }
 
-function normalizeStyle(style) {
+function normalizeStyle(style: any): any {
   if (!style) {
     return {};
   }
   if (style.default) {
-    const normalized = {};
+    const normalized: Record<string, string> = {};
     Object.keys(style).forEach((pseudo) => {
       if (pseudo === 'extra') {
         normalized[pseudo] = style[pseudo];
@@ -104,12 +104,11 @@ function normalizeStyle(style) {
   return normalized;
 }
 
-function toCss(runtime) {
+function toCss(runtime: Record<string, string>) {
   if (!runtime) {
-    return (
-      `:root {
+    return `:root {
 
-}`);
+}`;
   }
 
   if (runtime.default) {
@@ -125,17 +124,15 @@ function toCss(runtime) {
         `:root${pseudo === 'default' ? '' : `${prefix}${pseudo}`} {
 ${runtimeToCss(normalizeStyle(runtime[pseudo]))}
 }\n`,
-);
+      );
     });
     return css.join('\n');
   }
 
-  return (
-    `:root {
+  return `:root {
 ${runtimeToCss(normalizeStyle(runtime))}
 }
-`
-  );
+`;
 }
 
 function cssToRuntime(css: string) {
@@ -152,45 +149,48 @@ function cssToRuntime(css: string) {
       runtime.extra = runtime.extra || [];
       runtime.extra.push(cssItem.trim());
     } else {
-      const res = /:root:?(.*)?{(.*)/ig.exec(cssItem.replace(/[\r\n]+/ig, '').trim());
+      const res = /:root:?(.*)?{(.*)/gi.exec(cssItem.replace(/[\r\n]+/gi, '').trim());
       if (res) {
         let pseudo: string | undefined;
 
-        if (res[1] && res[1].trim() && some(pseudoMap, pse => res[1].indexOf(pse) === 0)) {
+        if (res[1] && res[1].trim() && some(pseudoMap, (pse) => res[1].indexOf(pse) === 0)) {
           pseudo = res[1].trim();
         } else if (res[1] && res[1].trim()) {
           pseudo = res[1];
         }
 
         const s: Record<string, string> = {};
-        res[2].split(';').reduce<string[]>((prev, next) => {
-          if (next.indexOf('base64') > -1) {
-            prev[prev.length - 1] += `;${next}`;
-          } else {
-            prev.push(next);
-          }
-          return prev;
-        }, []).forEach((item) => {
-          if (item) {
-            if (PROPS_REG.test(item)) {
-              const props = item.match(PROPS_REG);
-              const key = props?.[1];
-              const value = props?.[2];
-              if (key && value) {
-                s[key.trim()] = value.trim();
+        res[2]
+          .split(';')
+          .reduce<string[]>((prev, next) => {
+            if (next.indexOf('base64') > -1) {
+              prev[prev.length - 1] += `;${next}`;
+            } else {
+              prev.push(next);
+            }
+            return prev;
+          }, [])
+          .forEach((item) => {
+            if (item) {
+              if (PROPS_REG.test(item)) {
+                const props = item.match(PROPS_REG);
+                const key = props?.[1];
+                const value = props?.[2];
+                if (key && value) {
+                  s[key.trim()] = value.trim();
+                }
               }
             }
-          }
-        });
+          });
 
-        runtime[pseudo || 'default'] = s;
+        (runtime as any)[pseudo || 'default'] = s;
       }
     }
   });
   return runtime;
 }
 
-function cssToStyle(css) {
+function cssToStyle(css: any) {
   try {
     if (isString(css)) {
       return toNativeStyle(cssToRuntime(css).default);
@@ -205,12 +205,4 @@ function cssToStyle(css) {
   return {};
 }
 
-export {
-  hyphenate,
-  camelize,
-  toNativeStyle,
-  normalizeStyle,
-  toCss,
-  cssToRuntime,
-  cssToStyle,
-};
+export { hyphenate, camelize, toNativeStyle, normalizeStyle, toCss, cssToRuntime, cssToStyle };

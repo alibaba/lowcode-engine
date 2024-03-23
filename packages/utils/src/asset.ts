@@ -1,12 +1,24 @@
 import { AssetType, AssetLevels, AssetLevel } from '@alilc/lowcode-types';
-import type { AssetItem, Asset, AssetList, AssetBundle, IPublicTypeAssetsJson } from '@alilc/lowcode-types';
+import type {
+  AssetItem,
+  Asset,
+  AssetList,
+  AssetBundle,
+  IPublicTypeAssetsJson,
+} from '@alilc/lowcode-types';
 import { isCSSUrl } from './is-css-url';
 import { createDefer } from './create-defer';
 import { load, evaluate } from './script';
 
 // API 向下兼容
 export { AssetType, AssetLevels, AssetLevel } from '@alilc/lowcode-types';
-export type { AssetItem, Asset, AssetList, AssetBundle, IPublicTypeAssetsJson } from '@alilc/lowcode-types';
+export type {
+  AssetItem,
+  Asset,
+  AssetList,
+  AssetBundle,
+  IPublicTypeAssetsJson,
+} from '@alilc/lowcode-types';
 
 export function isAssetItem(obj: any): obj is AssetItem {
   return obj && obj.type;
@@ -17,9 +29,9 @@ export function isAssetBundle(obj: any): obj is AssetBundle {
 }
 
 export function assetBundle(
-    assets?: Asset | AssetList | null,
-    level?: AssetLevel,
-  ): AssetBundle | null {
+  assets?: Asset | AssetList | null,
+  level?: AssetLevel,
+): AssetBundle | null {
   if (!assets) {
     return null;
   }
@@ -38,7 +50,12 @@ urls: [
   "view1.js mobile|pc",
   "view2.js <device selector>"
 ] */
-export function assetItem(type: AssetType, content?: string | null, level?: AssetLevel, id?: string): AssetItem | null {
+export function assetItem(
+  type: AssetType,
+  content?: string | null,
+  level?: AssetLevel,
+  id?: string,
+): AssetItem | null {
   if (!content) {
     return null;
   }
@@ -50,7 +67,10 @@ export function assetItem(type: AssetType, content?: string | null, level?: Asse
   };
 }
 
-export function mergeAssets(assets: IPublicTypeAssetsJson, incrementalAssets: IPublicTypeAssetsJson): IPublicTypeAssetsJson {
+export function mergeAssets(
+  assets: IPublicTypeAssetsJson,
+  incrementalAssets: IPublicTypeAssetsJson,
+): IPublicTypeAssetsJson {
   if (incrementalAssets.packages) {
     assets.packages = [...(assets.packages || []), ...incrementalAssets.packages];
   }
@@ -65,7 +85,11 @@ export function mergeAssets(assets: IPublicTypeAssetsJson, incrementalAssets: IP
   return assets;
 }
 
-function mergeAssetsComponentList(assets: IPublicTypeAssetsJson, incrementalAssets: IPublicTypeAssetsJson, listName: keyof IPublicTypeAssetsJson): void {
+function mergeAssetsComponentList(
+  assets: IPublicTypeAssetsJson,
+  incrementalAssets: IPublicTypeAssetsJson,
+  listName: keyof Omit<IPublicTypeAssetsJson, 'version' | 'sort'>,
+): void {
   if (incrementalAssets[listName]) {
     if (assets[listName]) {
       // 根据title进行合并
@@ -131,7 +155,10 @@ export class StylePoint {
       element.setAttribute('data-id', this.id);
     }
     element.appendChild(document.createTextNode(content));
-    document.head.insertBefore(element, this.placeholder.parentNode === document.head ? this.placeholder.nextSibling : null);
+    document.head.insertBefore(
+      element,
+      this.placeholder.parentNode === document.head ? this.placeholder.nextSibling : null,
+    );
     document.head.removeChild(this.placeholder);
     this.placeholder = element;
   }
@@ -162,7 +189,10 @@ export class StylePoint {
     if (this.id) {
       element.setAttribute('data-id', this.id);
     }
-    document.head.insertBefore(element, this.placeholder.parentNode === document.head ? this.placeholder.nextSibling : null);
+    document.head.insertBefore(
+      element,
+      this.placeholder.parentNode === document.head ? this.placeholder.nextSibling : null,
+    );
     document.head.removeChild(this.placeholder);
     this.placeholder = element;
     return i.promise();
@@ -175,7 +205,12 @@ function parseAssetList(scripts: any, styles: any, assets: AssetList, level?: As
   }
 }
 
-function parseAsset(scripts: any, styles: any, asset: Asset | undefined | null, level?: AssetLevel) {
+function parseAsset(
+  scripts: any,
+  styles: any,
+  asset: Asset | undefined | null,
+  level?: AssetLevel,
+) {
   if (!asset) {
     return;
   }
@@ -219,7 +254,7 @@ export class AssetLoader {
   async load(asset: Asset) {
     const styles: any = {};
     const scripts: any = {};
-    AssetLevels.forEach(lv => {
+    AssetLevels.forEach((lv) => {
       styles[lv] = [];
       scripts[lv] = [];
     });
@@ -237,12 +272,23 @@ export class AssetLoader {
       scripts[AssetLevel.App],
     );
     await Promise.all(
-      styleQueue.map(({ content, level, type, id }) => this.loadStyle(content, level!, type === AssetType.CSSUrl, id)),
+      styleQueue.map(({ content, level, type, id }) =>
+        this.loadStyle(content, level!, type === AssetType.CSSUrl, id),
+      ),
     );
-    await Promise.all(scriptQueue.map(({ content, type, scriptType }) => this.loadScript(content, type === AssetType.JSUrl, scriptType)));
+    await Promise.all(
+      scriptQueue.map(({ content, type, scriptType }) =>
+        this.loadScript(content, type === AssetType.JSUrl, scriptType),
+      ),
+    );
   }
 
-  private loadStyle(content: string | undefined | null, level: AssetLevel, isUrl?: boolean, id?: string) {
+  private loadStyle(
+    content: string | undefined | null,
+    level: AssetLevel,
+    isUrl?: boolean,
+    id?: string,
+  ) {
     if (!content) {
       return;
     }

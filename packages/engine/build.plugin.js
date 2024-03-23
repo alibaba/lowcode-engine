@@ -1,6 +1,5 @@
 const { execSync } = require('child_process');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const fse = require('fs-extra');
 
 // get version from git branch name,
 //  e.g. release/1.0.7 => 1.0.7
@@ -25,16 +24,16 @@ const releaseVersion = getVersion();
 
 module.exports = ({ context, onGetWebpackConfig }) => {
   onGetWebpackConfig((config) => {
-    config.resolve
-      .plugin('tsconfigpaths')
-      .use(TsconfigPathsPlugin, [{
+    config.resolve.plugin('tsconfigpaths').use(TsconfigPathsPlugin, [
+      {
         configFile: './tsconfig.json',
-      }]);
-    config
-      .plugin('define')
-      .use(context.webpack.DefinePlugin, [{
+      },
+    ]);
+    config.plugin('define').use(context.webpack.DefinePlugin, [
+      {
         VERSION_PLACEHOLDER: JSON.stringify(releaseVersion),
-      }]);
+      },
+    ]);
     config.plugins.delete('hot');
     config.devServer.hot(false);
   });

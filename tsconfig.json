@@ -31,11 +31,7 @@
     // skip type checking of declaration files
     "skipLibCheck": true,
     "baseUrl": "./packages",
-    "useDefineForClassFields": true,
-    "paths": {
-      "@alilc/lowcode-*": ["./*/src"]
-    },
-    "outDir": "lib"
+    "useDefineForClassFields": true
   },
   "exclude": ["**/tests/*", "**/*.test.ts", "**/lib", "**/es", "node_modules"]
 }

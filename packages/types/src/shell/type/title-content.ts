@@ -1,5 +1,10 @@
-import { ReactElement, ReactNode } from 'react';
-import { IPublicTypeI18nData, IPublicTypeTitleConfig } from './';
+import type { ReactElement, ReactNode } from 'react';
+import type { IPublicTypeI18nData, IPublicTypeTitleConfig } from './';
 
 // eslint-disable-next-line max-len
-export type IPublicTypeTitleContent = string | IPublicTypeI18nData | ReactElement | ReactNode | IPublicTypeTitleConfig;
+export type IPublicTypeTitleContent =
+  | string
+  | IPublicTypeI18nData
+  | ReactElement
+  | ReactNode
+  | IPublicTypeTitleConfig;

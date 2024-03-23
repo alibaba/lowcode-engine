@@ -57,11 +57,13 @@ export function isReactComponent(obj: any): obj is ComponentType<any> {
     return false;
   }
 
-  return Boolean(isReactClass(obj) || typeof obj === 'function' || isForwardRefType(obj) || isMemoType(obj));
+  return Boolean(
+    isReactClass(obj) || typeof obj === 'function' || isForwardRefType(obj) || isMemoType(obj),
+  );
 }
 
 export function wrapReactClass(view: FunctionComponent) {
-  let ViewComponentClass = class extends Component {
+  let ViewComponentClass = class extends Component<any, any> {
     render() {
       const { children, ...other } = this.props;
       return createElement(view, other, children);

@@ -1,6 +1,6 @@
 import { isObject } from './is-object';
 
-export function isPlainObject<T extends object = object>(value: any): value is T {
+export function isPlainObject<T extends object = Record<PropertyKey, any>>(value: any): value is T {
   if (!isObject(value)) {
     return false;
   }

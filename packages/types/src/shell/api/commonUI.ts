@@ -1,7 +1,41 @@
-import React, { ReactElement } from 'react';
-import { IPublicTypeContextMenuAction, IPublicTypeHelpTipConfig, IPublicTypeTipConfig, IPublicTypeTitleContent } from '../type';
-import { Balloon, Breadcrumb, Button, Card, Checkbox, DatePicker, Dialog, Dropdown, Form, Icon, Input, Loading, Message, Overlay, Pagination, Radio, Search, Select, SplitButton, Step, Switch, Tab, Table, Tree, TreeSelect, Upload, Divider } from '@alifd/next';
-import { IconProps } from '@alifd/next/types/icon';
+import React, { ReactElement, ComponentProps } from 'react';
+import {
+  IPublicTypeContextMenuAction,
+  IPublicTypeHelpTipConfig,
+  IPublicTypeTipConfig,
+  IPublicTypeTitleContent,
+} from '../type';
+import {
+  Balloon,
+  Breadcrumb,
+  Button,
+  Card,
+  Checkbox,
+  DatePicker,
+  Dialog,
+  Dropdown,
+  Form,
+  Icon,
+  Input,
+  Loading,
+  Message,
+  Overlay,
+  Pagination,
+  Radio,
+  Search,
+  Select,
+  SplitButton,
+  Step,
+  Switch,
+  Tab,
+  Table,
+  Tree,
+  TreeSelect,
+  Upload,
+  Divider,
+} from '@alifd/next';
+
+type IconProps = ComponentProps<typeof Icon>;
 
 export interface IPublicApiCommonUI {
   Balloon: typeof Balloon;
