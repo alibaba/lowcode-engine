@@ -1,4 +1,6 @@
-export * as Prop from './prop';
+import * as Prop from './prop';
+
+export type { Prop };
 
 export interface RerenderOptions {
   time: number;

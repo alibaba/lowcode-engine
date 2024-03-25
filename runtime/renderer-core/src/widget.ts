@@ -1,4 +1,4 @@
-import type { NodeType, ComponentTreeNode, ComponentTreeNodeProps } from './types';
+import type { NodeType, ComponentTreeNode, ComponentTreeNodeProps, JSExpression } from './types';
 import { isJSExpression, isI18nNode } from './utils/type-guard';
 import { guid } from './utils/guid';
 
@@ -67,7 +67,7 @@ export class ComponentWidget<E = unknown> extends Widget<ComponentTreeNode, E> {
   get condition() {
     return this.raw.condition !== false;
   }
-  get loop() {
+  get loop(): unknown[] | JSExpression | undefined {
     return this.raw.loop;
   }
   get loopArgs() {

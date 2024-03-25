@@ -1,5 +1,12 @@
 import { IPublicModelWindow } from '../model';
-import { IPublicApiPlugins, IPublicApiSkeleton, IPublicModelResource, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType } from '@alilc/lowcode-types';
+import {
+  IPublicApiPlugins,
+  IPublicApiSkeleton,
+  IPublicModelResource,
+  IPublicResourceList,
+  IPublicTypeDisposable,
+  IPublicTypeResourceType,
+} from '..';
 
 export interface IPublicApiWorkspace<
   Plugins = IPublicApiPlugins,
@@ -7,7 +14,6 @@ export interface IPublicApiWorkspace<
   ModelWindow = IPublicModelWindow,
   Resource = IPublicModelResource,
 > {
-
   /** 是否启用 workspace 模式 */
   isActive: boolean;
 
@@ -37,7 +43,13 @@ export interface IPublicApiWorkspace<
    * 打开视图窗口
    * @deprecated
    */
-  openEditorWindow(resourceName: string, id: string, extra: Object, viewName?: string, sleep?: boolean): Promise<void>;
+  openEditorWindow(
+    resourceName: string,
+    id: string,
+    extra: Object,
+    viewName?: string,
+    sleep?: boolean,
+  ): Promise<void>;
 
   /** 打开视图窗口 */
   openEditorWindow(resource: Resource, sleep?: boolean): Promise<void>;

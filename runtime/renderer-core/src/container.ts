@@ -4,7 +4,6 @@ import type {
   ComponentTree,
   InstanceDataSourceApi,
   InstanceStateApi,
-  NodeType,
 } from './types';
 import { type CodeScope, type CodeRuntime, createCodeRuntime, createScope } from './code-runtime';
 import { isJSFunction } from './utils/type-guard';

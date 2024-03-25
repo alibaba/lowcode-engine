@@ -1,6 +1,12 @@
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash-es';
 import { globalContext } from './di';
-import { IPublicTypeHotkeyCallback, IPublicTypeHotkeyCallbackConfig, IPublicTypeHotkeyCallbacks, IPublicApiHotkey, IPublicTypeDisposable } from '@alilc/lowcode-types';
+import {
+  IPublicTypeHotkeyCallback,
+  IPublicTypeHotkeyCallbackConfig,
+  IPublicTypeHotkeyCallbacks,
+  IPublicApiHotkey,
+  IPublicTypeDisposable,
+} from '@alilc/lowcode-types';
 
 interface KeyMap {
   [key: number]: string;
@@ -110,7 +116,7 @@ let REVERSE_MAP: CtrlKeyMap;
  * programatically
  */
 for (let i = 1; i < 20; ++i) {
-  MAP[111 + i] = `f${ i}`;
+  MAP[111 + i] = `f${i}`;
 }
 
 /**
@@ -314,7 +320,12 @@ function getKeyInfo(combination: string, action?: string): KeyInfo {
  * if your callback function returns false this will use the jquery
  * convention - prevent default and stop propogation on the event
  */
-function fireCallback(callback: IPublicTypeHotkeyCallback, e: KeyboardEvent, combo?: string, sequence?: string): void {
+function fireCallback(
+  callback: IPublicTypeHotkeyCallback,
+  e: KeyboardEvent,
+  combo?: string,
+  sequence?: string,
+): void {
   try {
     const workspace = globalContext.get('workspace');
     const editor = workspace.isActive ? workspace.window?.editor : globalContext.get('editor');
@@ -322,7 +333,9 @@ function fireCallback(callback: IPublicTypeHotkeyCallback, e: KeyboardEvent, com
     const node = designer?.currentSelection?.getNodes()?.[0];
     const npm = node?.componentMeta?.npm;
     const selected =
-      [npm?.package, npm?.componentName].filter((item) => !!item).join('-') || node?.componentMeta?.componentName || '';
+      [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+      node?.componentMeta?.componentName ||
+      '';
     if (callback(e, combo) === false) {
       e.preventDefault();
       e.stopPropagation();
@@ -335,12 +348,11 @@ function fireCallback(callback: IPublicTypeHotkeyCallback, e: KeyboardEvent, com
       selected,
     });
   } catch (err) {
-    console.error(err.message);
+    console.error((err as Error).message);
   }
 }
 
-export interface IHotKey extends Hotkey {
-}
+export interface IHotKey extends Hotkey {}
 
 export class Hotkey implements Omit<IPublicApiHotkey, 'bind' | 'callbacks'> {
   callBacks: IPublicTypeHotkeyCallbacks = {};
@@ -388,10 +400,10 @@ export class Hotkey implements Omit<IPublicApiHotkey, 'bind' | 'callbacks'> {
   unbind(combos: string[] | string, callback: IPublicTypeHotkeyCallback, action?: string) {
     const combinations = Array.isArray(combos) ? combos : [combos];
 
-    combinations.forEach(combination => {
+    combinations.forEach((combination) => {
       const info: KeyInfo = getKeyInfo(combination, action);
       const { key, modifiers } = info;
-      const idx = this.callBacks[key].findIndex(info => {
+      const idx = this.callBacks[key].findIndex((info) => {
         return isEqual(info.modifiers, modifiers) && info.callback === callback;
       });
       if (idx !== -1) {
@@ -470,9 +482,13 @@ export class Hotkey implements Omit<IPublicApiHotkey, 'bind' | 'callbacks'> {
       // chrome will not fire a keypress if meta or control is down
       // safari will fire a keypress if meta or meta+shift is down
       // firefox will fire a keypress if meta or control is down
-      if ((isPressEvent(e) && !e.metaKey && !e.ctrlKey) || modifiersMatch(modifiers, callback.modifiers)) {
+      if (
+        (isPressEvent(e) && !e.metaKey && !e.ctrlKey) ||
+        modifiersMatch(modifiers, callback.modifiers)
+      ) {
         const deleteCombo = !sequenceName && callback.combo === combination;
-        const deleteSequence = sequenceName && callback.seq === sequenceName && callback.level === level;
+        const deleteSequence =
+          sequenceName && callback.seq === sequenceName && callback.level === level;
         if (deleteCombo || deleteSequence) {
           this.callBacks[character].splice(i, 1);
         }
@@ -569,7 +585,12 @@ export class Hotkey implements Omit<IPublicApiHotkey, 'bind' | 'callbacks'> {
     this.resetTimer = window.setTimeout(this.resetSequences, 1000);
   }
 
-  private bindSequence(combo: string, keys: string[], callback: IPublicTypeHotkeyCallback, action?: string): void {
+  private bindSequence(
+    combo: string,
+    keys: string[],
+    callback: IPublicTypeHotkeyCallback,
+    action?: string,
+  ): void {
     // const self: any = this;
     this.sequenceLevels[combo] = 0;
     const increaseSequence = (nextAction: string) => {
@@ -590,7 +611,9 @@ export class Hotkey implements Omit<IPublicApiHotkey, 'bind' | 'callbacks'> {
     };
     for (let i = 0; i < keys.length; ++i) {
       const isFinal = i + 1 === keys.length;
-      const wrappedCallback = isFinal ? callbackAndReset : increaseSequence(action || getKeyInfo(keys[i + 1]).action);
+      const wrappedCallback = isFinal
+        ? callbackAndReset
+        : increaseSequence(action || getKeyInfo(keys[i + 1]).action);
       this.bindSingle(keys[i], wrappedCallback, action, combo, i);
     }
   }
@@ -624,7 +647,14 @@ export class Hotkey implements Omit<IPublicApiHotkey, 'bind' | 'callbacks'> {
     this.callBacks[info.key] = this.callBacks[info.key] || [];
 
     // remove an existing match if there is one
-    this.getMatches(info.key, info.modifiers, { type: info.action }, sequenceName, combination, level);
+    this.getMatches(
+      info.key,
+      info.modifiers,
+      { type: info.action },
+      sequenceName,
+      combination,
+      level,
+    );
 
     // add this call back to the array
     // if it is a sequence put it at the beginning
@@ -642,7 +672,11 @@ export class Hotkey implements Omit<IPublicApiHotkey, 'bind' | 'callbacks'> {
     });
   }
 
-  private bindMultiple(combinations: string[], callback: IPublicTypeHotkeyCallback, action?: string) {
+  private bindMultiple(
+    combinations: string[],
+    callback: IPublicTypeHotkeyCallback,
+    action?: string,
+  ) {
     for (const item of combinations) {
       this.bindSingle(item, callback, action);
     }

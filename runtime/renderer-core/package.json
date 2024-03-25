@@ -6,10 +6,19 @@
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",
   "homepage": "https://github.com/alibaba/lowcode-engine/#readme",
   "license": "MIT",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "dist/rendererCore.js",
+  "module": "dist/rendererCore.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/rendererCore.js"
+  },
+  "files": [
+    "dist",
+    "src",
+    "package.json"
+  ],
   "scripts": {
-    "build": "tsc",
+    "build": "vite build",
     "test": "vitest --run",
     "test:watch": "vitest"
   },

@@ -68,7 +68,6 @@ export interface IEditor extends IPublicModelEditor {
 
 // eslint-disable-next-line no-redeclare
 export class Editor extends EventEmitter implements IEditor {
-
   /**
    * Ioc Container
    */
@@ -96,7 +95,10 @@ export class Editor extends EventEmitter implements IEditor {
     }>
   >();
 
-  constructor(readonly viewName: string = 'global', readonly workspaceMode: boolean = false) {
+  constructor(
+    readonly viewName: string = 'global',
+    readonly workspaceMode: boolean = false,
+  ) {
     // eslint-disable-next-line constructor-super
     super();
     // set global emitter maxListeners
@@ -105,8 +107,8 @@ export class Editor extends EventEmitter implements IEditor {
   }
 
   get<T = undefined, KeyOrType = any>(
-      keyOrType: KeyOrType,
-    ): IPublicTypeEditorGetResult<T, KeyOrType> | undefined {
+    keyOrType: KeyOrType,
+  ): IPublicTypeEditorGetResult<T, KeyOrType> | undefined {
     return this.context.get(keyOrType as any);
   }
 
@@ -147,59 +149,75 @@ export class Editor extends EventEmitter implements IEditor {
       // 如果有远程组件描述协议，则自动加载并补充到资产包中，同时出发 designer.incrementalAssetsReady 通知组件面板更新数据
       if (remoteComponentDescriptions && remoteComponentDescriptions.length) {
         await Promise.all(
-          remoteComponentDescriptions.map(async (component: IPublicTypeRemoteComponentDescription) => {
-            const { exportName, url, npm } = component;
-            if (!url || !exportName) {
-              return;
-            }
-            if (!AssetsCache[exportName] || !npm?.version || AssetsCache[exportName].npm?.version !== npm?.version) {
-              await (new AssetLoader()).load(url);
-            }
-            AssetsCache[exportName] = component;
-            function setAssetsComponent(component: any, extraNpmInfo: any = {}) {
-              const components = component.components;
-              assets.componentList = assets.componentList?.concat(component.componentList || []);
-              if (Array.isArray(components)) {
-                components.forEach(d => {
-                  assets.components = assets.components.concat({
-                    npm: {
-                      ...npm,
-                      ...extraNpmInfo,
-                    },
-                    ...d,
-                  } || []);
-                });
+          remoteComponentDescriptions.map(
+            async (component: IPublicTypeRemoteComponentDescription) => {
+              const { exportName, url, npm } = component;
+              if (!url || !exportName) {
                 return;
               }
-              if (component.components) {
-                assets.components = assets.components.concat({
-                  npm: {
-                    ...npm,
-                    ...extraNpmInfo,
-                  },
-                  ...component.components,
-                } || []);
+              if (
+                !AssetsCache[exportName] ||
+                !npm?.version ||
+                AssetsCache[exportName].npm?.version !== npm?.version
+              ) {
+                await new AssetLoader().load(url);
               }
-            }
-            function setArrayAssets(value: any[], preExportName: string = '', preSubName: string = '') {
-              value.forEach((d: any, i: number) => {
-                const exportName = [preExportName, i.toString()].filter(d => !!d).join('.');
-                const subName = [preSubName, i.toString()].filter(d => !!d).join('.');
-                Array.isArray(d) ? setArrayAssets(d, exportName, subName) : setAssetsComponent(d, {
-                  exportName,
-                  subName,
+              AssetsCache[exportName] = component;
+              function setAssetsComponent(component: any, extraNpmInfo: any = {}) {
+                const components = component.components;
+                assets.componentList = assets.componentList?.concat(component.componentList || []);
+                if (Array.isArray(components)) {
+                  components.forEach((d) => {
+                    assets.components = assets.components.concat(
+                      {
+                        npm: {
+                          ...npm,
+                          ...extraNpmInfo,
+                        },
+                        ...d,
+                      } || [],
+                    );
+                  });
+                  return;
+                }
+                if (component.components) {
+                  assets.components = assets.components.concat(
+                    {
+                      npm: {
+                        ...npm,
+                        ...extraNpmInfo,
+                      },
+                      ...component.components,
+                    } || [],
+                  );
+                }
+              }
+              function setArrayAssets(
+                value: any[],
+                preExportName: string = '',
+                preSubName: string = '',
+              ) {
+                value.forEach((d: any, i: number) => {
+                  const exportName = [preExportName, i.toString()].filter((d) => !!d).join('.');
+                  const subName = [preSubName, i.toString()].filter((d) => !!d).join('.');
+                  Array.isArray(d)
+                    ? setArrayAssets(d, exportName, subName)
+                    : setAssetsComponent(d, {
+                        exportName,
+                        subName,
+                      });
                 });
-              });
-            }
-            if ((window as any)[exportName]) {
-              if (Array.isArray((window as any)[exportName])) {
-                setArrayAssets((window as any)[exportName] as any);
-              } else {
-                setAssetsComponent((window as any)[exportName] as any);
               }
-            }
-            return (window as any)[exportName];
-          }),
+              if ((window as any)[exportName]) {
+                if (Array.isArray((window as any)[exportName])) {
+                  setArrayAssets((window as any)[exportName] as any);
+                } else {
+                  setAssetsComponent((window as any)[exportName] as any);
+                }
+              }
+              return (window as any)[exportName];
+            },
+          ),
         );
       }
     }
@@ -208,7 +226,9 @@ export class Editor extends EventEmitter implements IEditor {
     this.notifyGot('assets');
   }
 
-  onceGot<T = undefined, KeyOrType extends IPublicTypeEditorValueKey = any>(keyOrType: KeyOrType): Promise<IPublicTypeEditorGetResult<T, KeyOrType>> {
+  onceGot<T = undefined, KeyOrType extends IPublicTypeEditorValueKey = any>(
+    keyOrType: KeyOrType,
+  ): Promise<IPublicTypeEditorGetResult<T, KeyOrType>> {
     const x = this.context.get(keyOrType);
     if (x !== undefined) {
       return Promise.resolve(x);
@@ -253,7 +273,7 @@ export class Editor extends EventEmitter implements IEditor {
     const { hooks = [], lifeCycles } = this.config;
 
     this.emit('editor.beforeInit');
-    const init = (lifeCycles && lifeCycles.init) || ((): void => { });
+    const init = (lifeCycles && lifeCycles.init) || ((): void => {});
 
     try {
       await init(this);
@@ -298,7 +318,7 @@ export class Editor extends EventEmitter implements IEditor {
   registerHooks = (hooks: HookConfig[]) => {
     this.initHooks(hooks).forEach(({ message, type, handler }) => {
       if (['on', 'once'].indexOf(type) !== -1) {
-        this[type]((message as any), handler);
+        this[type](message as any, handler);
       }
     });
   };

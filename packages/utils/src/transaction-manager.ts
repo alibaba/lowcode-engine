@@ -5,20 +5,29 @@ import EventEmitter from 'events';
 class TransactionManager {
   emitter = new EventEmitter();
 
-  executeTransaction = (fn: () => void, type: IPublicEnumTransitionType = IPublicEnumTransitionType.REPAINT): void => {
+  executeTransaction = (
+    fn: () => void,
+    type: IPublicEnumTransitionType = IPublicEnumTransitionType.REPAINT,
+  ): void => {
     this.emitter.emit(`[${type}]startTransaction`);
     runInAction(fn);
     this.emitter.emit(`[${type}]endTransaction`);
   };
 
-  onStartTransaction = (fn: () => void, type: IPublicEnumTransitionType = IPublicEnumTransitionType.REPAINT): () => void => {
+  onStartTransaction = (
+    fn: () => void,
+    type: IPublicEnumTransitionType = IPublicEnumTransitionType.REPAINT,
+  ): (() => void) => {
     this.emitter.on(`[${type}]startTransaction`, fn);
     return () => {
       this.emitter.off(`[${type}]startTransaction`, fn);
     };
   };
 
-  onEndTransaction = (fn: () => void, type: IPublicEnumTransitionType = IPublicEnumTransitionType.REPAINT): () => void => {
+  onEndTransaction = (
+    fn: () => void,
+    type: IPublicEnumTransitionType = IPublicEnumTransitionType.REPAINT,
+  ): (() => void) => {
     this.emitter.on(`[${type}]endTransaction`, fn);
     return () => {
       this.emitter.off(`[${type}]endTransaction`, fn);

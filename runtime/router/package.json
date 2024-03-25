@@ -6,10 +6,13 @@
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",
   "homepage": "https://github.com/alibaba/lowcode-engine/#readme",
   "license": "MIT",
-  "module": "dist/index.js",
+  "module": "dist/runtimeRouter.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/runtimeRouter.js"
+  },
   "scripts": {
-    "build": "tsc",
+    "build": "vite build",
     "test": "vitest"
   },
   "dependencies": {
@@ -21,6 +24,9 @@
   "devDependencies": {
     "@types/lodash-es": "^4.17.12",
     "@types/qs": "^6.9.13"
+  },
+  "peerDependencies": {
+    "@alilc/renderer-core": "workspace:*"
   },
   "publishConfig": {
     "access": "public",

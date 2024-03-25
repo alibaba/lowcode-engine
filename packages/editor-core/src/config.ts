@@ -1,4 +1,4 @@
-import { get as lodashGet } from 'lodash';
+import { get as lodashGet } from 'lodash-es';
 import { isPlainObject } from '@alilc/lowcode-utils';
 import {
   IPublicTypeEngineOptions,
@@ -55,7 +55,8 @@ const VALID_ENGINE_OPTIONS = {
   enableStrictPluginMode: {
     type: 'boolean',
     default: STRICT_PLUGIN_MODE_DEFAULT,
-    description: '开启严格插件模式，默认值：STRICT_PLUGIN_MODE_DEFAULT , 严格模式下，插件将无法通过 engineOptions 传递自定义配置项',
+    description:
+      '开启严格插件模式，默认值：STRICT_PLUGIN_MODE_DEFAULT , 严格模式下，插件将无法通过 engineOptions 传递自定义配置项',
   },
   enableReactiveContainer: {
     type: 'boolean',
@@ -75,7 +76,8 @@ const VALID_ENGINE_OPTIONS = {
   customizeIgnoreSelectors: {
     type: 'function',
     default: undefined,
-    description: '定制画布中点击被忽略的 selectors, eg. (defaultIgnoreSelectors: string[], e: MouseEvent) => string[]',
+    description:
+      '定制画布中点击被忽略的 selectors, eg. (defaultIgnoreSelectors: string[], e: MouseEvent) => string[]',
   },
   disableDefaultSettingPanel: {
     type: 'boolean',
@@ -171,19 +173,23 @@ const VALID_ENGINE_OPTIONS = {
   },
 };
 
-const getStrictModeValue = (engineOptions: IPublicTypeEngineOptions, defaultValue: boolean): boolean => {
+const getStrictModeValue = (
+  engineOptions: IPublicTypeEngineOptions,
+  defaultValue: boolean,
+): boolean => {
   if (!engineOptions || !isPlainObject(engineOptions)) {
     return defaultValue;
   }
-  if (engineOptions.enableStrictPluginMode === undefined
-    || engineOptions.enableStrictPluginMode === null) {
+  if (
+    engineOptions.enableStrictPluginMode === undefined ||
+    engineOptions.enableStrictPluginMode === null
+  ) {
     return defaultValue;
   }
   return engineOptions.enableStrictPluginMode;
 };
 
 export interface IEngineConfig extends IPublicModelEngineConfig {
-
   /**
    * if engineOptions.strictPluginMode === true, only accept propertied predefined in EngineOptions.
    *
@@ -202,11 +208,11 @@ export class EngineConfig implements IEngineConfig {
   private config: { [key: string]: any } = {};
 
   private waits = new Map<
-  string,
-  Array<{
-    once?: boolean;
-    resolve: (data: any) => void;
-  }>
+    string,
+    Array<{
+      once?: boolean;
+      resolve: (data: any) => void;
+    }>
   >();
 
   /**
@@ -278,7 +284,10 @@ export class EngineConfig implements IEngineConfig {
         if (isValidKey(key)) {
           this.set(key, (engineOptions as any)[key]);
         } else {
-          logger.warn(`failed to config ${key} to engineConfig, only predefined options can be set under strict mode, predefined options: `, VALID_ENGINE_OPTIONS);
+          logger.warn(
+            `failed to config ${key} to engineConfig, only predefined options can be set under strict mode, predefined options: `,
+            VALID_ENGINE_OPTIONS,
+          );
         }
       });
     } else {

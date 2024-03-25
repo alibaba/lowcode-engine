@@ -2,15 +2,24 @@
   "name": "@alilc/lowcode-utils",
   "version": "2.0.0-beta.0",
   "description": "Utils for Ali lowCode engine",
-  "files": [
-    "lib",
-    "es"
-  ],
+  "type": "module",
   "main": "lib/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/lowCodeUtils.js"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "dist",
+    "src",
+    "package.json"
+  ],
   "scripts": {
-    "build": "tsc"
+    "build": "vite build",
+    "test": "vitest"
   },
   "dependencies": {
     "@alifd/next": "^1.27.8",
@@ -20,16 +29,19 @@
     "mobx": "^6.12.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
-    "react-is": "^18.2.0"
+    "react-is": "^18.2.0",
+    "events": "^3.3.0"
   },
   "devDependencies": {
     "@testing-library/react": "^14.2.2",
     "@types/lodash-es": "^4.17.12",
     "@types/react": "^18.2.67",
     "@types/react-is": "^18.2.4",
-    "@types/prop-types": "^15.7.12"
+    "@types/prop-types": "^15.7.12",
+    "@types/events": "^3.0.3"
   },
   "peerDependencies": {
+    "@alifd/next": "^1.27.8",
     "react": "^18.2.0"
   },
   "publishConfig": {

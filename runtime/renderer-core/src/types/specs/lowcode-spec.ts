@@ -167,7 +167,7 @@ export interface ComponentTreeNode {
   /**
    * 循环数据
    */
-  loop?: any[] | JSExpression;
+  loop?: unknown[] | JSExpression;
   /**
    * 循环迭代对象、索引名称，默认为 ["item", "index"]
    */

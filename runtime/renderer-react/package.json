@@ -6,10 +6,17 @@
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",
   "homepage": "https://github.com/alibaba/lowcode-engine/#readme",
   "license": "MIT",
-  "module": "dist/index.js",
+  "main": "dist/rendererReact.cjs",
+  "module": "dist/rendererReact.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/rendererReact.js",
+      "require": "./dist/rendererReact.cjs"
+    }
+  },
   "scripts": {
-    "build": "tsc",
+    "build": "vite build",
     "test": "vitest"
   },
   "dependencies": {
@@ -17,6 +24,7 @@
     "@alilc/runtime-router": "workspace:*",
     "@vue/reactivity": "^3.4.21",
     "lodash-es": "^4.17.21",
+    "immer": "^10.0.4",
     "hoist-non-react-statics": "^3.3.2",
     "use-sync-external-store": "^1.2.0",
     "react": "^18.2.0",

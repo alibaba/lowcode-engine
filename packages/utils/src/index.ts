@@ -1,3 +1,5 @@
+import * as css from './css-helper';
+
 export * from './asset';
 export * from './clone-deep';
 export * from './create-content';
@@ -27,7 +29,7 @@ export * from './clone-enumerable-property';
 export * from './logger';
 export * from './is-shaken';
 export * from './is-plugin-event-name';
-export * as css from './css-helper';
+export { css };
 export { transactionManager } from './transaction-manager';
 export * from './check-types';
 export * from './workspace';

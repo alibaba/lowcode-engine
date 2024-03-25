@@ -1,8 +1,21 @@
-import { IPublicTypeRootSchema, IPublicTypeDragNodeDataObject, IPublicTypeDragNodeObject, IPublicTypePropChangeOptions, IPublicTypeDisposable } from '../type';
+import {
+  IPublicTypeRootSchema,
+  IPublicTypeDragNodeDataObject,
+  IPublicTypeDragNodeObject,
+  IPublicTypePropChangeOptions,
+  IPublicTypeDisposable,
+} from '../type';
 import { IPublicEnumTransformStage } from '../enum';
 import { IPublicApiProject } from '../api';
-import { IPublicModelDropLocation, IPublicModelDetecting, IPublicModelNode, IPublicModelSelection, IPublicModelHistory, IPublicModelModalNodesManager } from './';
-import { IPublicTypeNodeData, IPublicTypeNodeSchema, IPublicTypeOnChangeOptions } from '@alilc/lowcode-types';
+import {
+  IPublicModelDropLocation,
+  IPublicModelDetecting,
+  IPublicModelNode,
+  IPublicModelSelection,
+  IPublicModelHistory,
+  IPublicModelModalNodesManager,
+} from './';
+import { IPublicTypeNodeData, IPublicTypeNodeSchema, IPublicTypeOnChangeOptions } from '../type';
 
 export interface IPublicModelDocumentModel<
   Selection = IPublicModelSelection,
@@ -10,13 +23,12 @@ export interface IPublicModelDocumentModel<
   Node = IPublicModelNode,
   DropLocation = IPublicModelDropLocation,
   ModalNodesManager = IPublicModelModalNodesManager,
-  Project = IPublicApiProject
+  Project = IPublicApiProject,
 > {
-
   /**
-     * 节点选中区模型实例
-     * instance of selection
-     */
+   * 节点选中区模型实例
+   * instance of selection
+   */
   selection: Selection;
 
   /**
@@ -99,7 +111,7 @@ export interface IPublicModelDocumentModel<
     parent: Node,
     thing: Node | IPublicTypeNodeData,
     at?: number | null | undefined,
-    copy?: boolean | undefined
+    copy?: boolean | undefined,
   ): Node | null;
 
   /**
@@ -134,7 +146,7 @@ export interface IPublicModelDocumentModel<
    */
   checkNesting(
     dropTarget: Node,
-    dragObject: IPublicTypeDragNodeObject | IPublicTypeDragNodeDataObject
+    dragObject: IPublicTypeDragNodeObject | IPublicTypeDragNodeDataObject,
   ): boolean;
 
   /**

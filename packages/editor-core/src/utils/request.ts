@@ -1,7 +1,3 @@
-import Debug from 'debug';
-
-const debug = Debug('request');
-
 export function serialize(obj?: object): string {
   if (!obj) {
     return '';
@@ -23,7 +19,12 @@ export function buildUrl(dataAPI: string, params?: object): string {
   return dataAPI;
 }
 
-export function get(dataAPI: string, params?: object, headers?: object, otherProps?: object): Promise<any> {
+export function get(
+  dataAPI: string,
+  params?: object,
+  headers?: object,
+  otherProps?: object,
+): Promise<any> {
   const fetchHeaders = {
     Accept: 'application/json',
     ...headers,
@@ -31,7 +32,12 @@ export function get(dataAPI: string, params?: object, headers?: object, otherPro
   return request(buildUrl(dataAPI, params), 'GET', undefined, fetchHeaders, otherProps);
 }
 
-export function post(dataAPI: string, params?: object, headers?: object, otherProps?: object): Promise<any> {
+export function post(
+  dataAPI: string,
+  params?: object,
+  headers?: object,
+  otherProps?: object,
+): Promise<any> {
   const fetchHeaders = {
     Accept: 'application/json',
     'Content-Type': 'application/x-www-form-urlencoded',
@@ -121,7 +127,6 @@ export function request(
         }
       })
       .catch((err: Error): void => {
-        debug(err);
         reject(err);
       });
   });

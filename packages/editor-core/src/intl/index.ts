@@ -29,12 +29,12 @@ function injectVars(msg: string, params: any, locale: string): string {
   return formater.format(params as any) as string;
 }
 
-export function intl(data: IPublicTypeI18nData | string, params?: object): ReactNode {
+export function intl(data: IPublicTypeI18nData | string, params?: object) {
   if (!isI18nData(data)) {
     return data;
   }
   if (data.intl) {
-    return data.intl;
+    return data.intl as any;
   }
   const locale = globalLocale.getLocale();
   const tries = generateTryLocales(locale);
@@ -56,7 +56,7 @@ export function shallowIntl(data: any): any {
     return data;
   }
   const maps: any = {};
-  Object.keys(data).forEach(key => {
+  Object.keys(data).forEach((key) => {
     maps[key] = intl(data[key]);
   });
   return maps;
@@ -81,14 +81,12 @@ class IntlElement extends Component<{ data: any; params?: object }> {
   }
 }
 
-export function createIntl(
-  instance: string | object,
-): {
-    intlNode(id: string, params?: object): ReactNode;
-    intl(id: string, params?: object): string;
-    getLocale(): string;
-    setLocale(locale: string): void;
-  } {
+export function createIntl(instance: string | object): {
+  intlNode(id: string, params?: object): ReactNode;
+  intl(id: string, params?: object): string;
+  getLocale(): string;
+  setLocale(locale: string): void;
+} {
   // TODO: make reactive
   const data = (() => {
     const locale = globalLocale.getLocale();

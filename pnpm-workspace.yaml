@@ -2,5 +2,6 @@ packages:
   - 'runtime/*'
   - 'packages/types'
   - 'packages/utils'
+  - 'packages/editor-core'
   - 'playground'
   - 'docs'

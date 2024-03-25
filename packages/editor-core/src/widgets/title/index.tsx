@@ -1,7 +1,11 @@
 import { Component, isValidElement, ReactNode } from 'react';
 import classNames from 'classnames';
 import { createIcon, isI18nData, isTitleConfig } from '@alilc/lowcode-utils';
-import { IPublicTypeI18nData, IPublicTypeTitleConfig, IPublicTypeTitleProps } from '@alilc/lowcode-types';
+import {
+  IPublicTypeI18nData,
+  IPublicTypeTitleConfig,
+  IPublicTypeTitleProps,
+} from '@alilc/lowcode-types';
 import { intl } from '../../intl';
 import { Tip } from '../tip';
 import './title.less';
@@ -13,7 +17,7 @@ import './title.less';
  * @param keywords 关键字
  * @returns 文字片段列表
  */
- function splitLabelByKeywords(label: string, keywords: string): string[] {
+function splitLabelByKeywords(label: string, keywords: string): string[] {
   const len = keywords.length;
   const fragments = [];
   let str = label;
@@ -61,27 +65,26 @@ export class Title extends Component<IPublicTypeTitleProps> {
       return null;
     }
 
-    const intlLabel = intl(label);
+    const intlLabel = intl(String(label));
 
     if (typeof intlLabel !== 'string') {
       return <span className="lc-title-txt">{intlLabel}</span>;
     }
 
-    let labelToRender: ReactNode = intlLabel;
+    let labelToRender: any = intlLabel;
 
     if (match && keywords) {
       const fragments = splitLabelByKeywords(intlLabel as string, keywords);
 
-      labelToRender = fragments.map(f => <span style={{ color: f === keywords ? 'red' : 'inherit' }}>{f}</span>);
+      labelToRender = fragments.map((f) => (
+        <span style={{ color: f === keywords ? 'red' : 'inherit' }}>{f}</span>
+      ));
     }
 
-    return (
-      <span className="lc-title-txt">{labelToRender}</span>
-    );
+    return <span className="lc-title-txt">{labelToRender}</span>;
   };
 
   render() {
-    // eslint-disable-next-line prefer-const
     const { title, className } = this.props;
     let _title: IPublicTypeTitleConfig;
     if (title == null) {
@@ -107,7 +110,7 @@ export class Title extends Component<IPublicTypeTitleProps> {
       if (isValidElement(_title.tip) && _title.tip.type === Tip) {
         tip = _title.tip;
       } else {
-        const tipProps =
+        const tipProps: any =
           typeof _title.tip === 'object' && !(isValidElement(_title.tip) || isI18nData(_title.tip))
             ? _title.tip
             : { children: _title.tip };
