@@ -85,11 +85,15 @@ export default class TreeTitle extends PureComponent<{
 
   componentDidMount() {
     const { treeNode } = this.props;
+    const { filterWorking, matchSelf, keywords } = treeNode.filterReult;
     this.setState({
       editing: false,
       title: treeNode.titleLabel,
       condition: treeNode.condition,
       visible: !treeNode.hidden,
+      filterWorking,
+      matchSelf,
+      keywords,
     });
     treeNode.onTitleLabelChanged(() => {
       this.setState({
