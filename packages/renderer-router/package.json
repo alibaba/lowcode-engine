@@ -1,36 +1,36 @@
 {
-  "name": "@alilc/renderer-core",
-  "version": "2.0.0-beta.0",
+  "name": "@alilc/lowcode-renderer-router",
+  "version": "1.0.0-beta.0",
   "description": "",
   "type": "module",
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",
   "homepage": "https://github.com/alibaba/lowcode-engine/#readme",
   "license": "MIT",
-  "main": "dist/rendererCore.js",
-  "module": "dist/rendererCore.js",
+  "module": "dist/runtimeRouter.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/rendererCore.js",
+      "import": "./dist/runtimeRouter.js",
       "types": "./dist/index.d.ts"
     }
   },
-  "files": [
-    "dist",
-    "src",
-    "package.json"
-  ],
   "scripts": {
     "build": "vite build",
     "build-dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.mjs",
-    "test": "vitest --run",
-    "test:watch": "vitest"
+    "test": "vitest"
   },
   "dependencies": {
-    "lodash-es": "^4.17.21"
+    "@alilc/renderer-core": "workspace:*",
+    "lodash-es": "^4.17.21",
+    "path-to-regexp": "^6.2.1",
+    "qs": "^6.12.0"
   },
   "devDependencies": {
-    "@types/lodash-es": "^4.17.12"
+    "@types/lodash-es": "^4.17.12",
+    "@types/qs": "^6.9.13"
+  },
+  "peerDependencies": {
+    "@alilc/renderer-core": "workspace:*"
   },
   "publishConfig": {
     "access": "public",

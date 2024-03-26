@@ -31,7 +31,10 @@
     "skipLibCheck": true,
     "useDefineForClassFields": true,
     "baseUrl": ".",
-    "rootDir": "."
+    "rootDir": ".",
+    "paths": {
+      "@alilc/lowcode-*": ["packages/*/src"]
+    }
   },
   "exclude": ["**/dist", "node_modules"]
 }

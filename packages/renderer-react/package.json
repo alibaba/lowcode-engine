@@ -1,5 +1,5 @@
 {
-  "name": "@alilc/renderer-react",
+  "name": "@alilc/lowcode-renderer-react",
   "version": "2.0.0-beta.0",
   "description": "react renderer for ali lowcode engine",
   "type": "module",
@@ -22,8 +22,8 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@alilc/renderer-core": "workspace:*",
-    "@alilc/runtime-router": "workspace:*",
+    "@alilc/lowcode-renderer-core": "workspace:*",
+    "@alilc/lowcode-renderer-router": "workspace:*",
     "@vue/reactivity": "^3.4.21",
     "lodash-es": "^4.17.21",
     "immer": "^10.0.4",
