@@ -10,7 +10,10 @@
   "module": "dist/rendererCore.js",
   "types": "dist/index.d.ts",
   "exports": {
-    ".": "./dist/rendererCore.js"
+    ".": {
+      "import": "./dist/rendererCore.js",
+      "types": "./dist/index.d.ts"
+    }
   },
   "files": [
     "dist",
@@ -19,6 +22,7 @@
   ],
   "scripts": {
     "build": "vite build",
+    "build-dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.mjs",
     "test": "vitest --run",
     "test:watch": "vitest"
   },

@@ -9,10 +9,14 @@
   "module": "dist/runtimeRouter.js",
   "types": "dist/index.d.ts",
   "exports": {
-    ".": "./dist/runtimeRouter.js"
+    ".": {
+      "import": "./dist/runtimeRouter.js",
+      "types": "./dist/index.d.ts"
+    }
   },
   "scripts": {
     "build": "vite build",
+    "build-dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.mjs",
     "test": "vitest"
   },
   "dependencies": {

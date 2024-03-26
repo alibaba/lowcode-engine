@@ -7,7 +7,11 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
-    ".": "./dist/lowCodeUtils.js"
+    ".": {
+      "import": "./dist/lowCodeUtils.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./package.json": "./package.json"
   },
   "sideEffects": [
     "*.css"
@@ -19,6 +23,7 @@
   ],
   "scripts": {
     "build": "vite build",
+    "build-dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.mjs",
     "test": "vitest"
   },
   "dependencies": {

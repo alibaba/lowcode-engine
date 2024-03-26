@@ -6,4 +6,4 @@ export interface EventConfig {
   [eventName: string]: any;
 }
 
-export type { Node };
+export { Node };

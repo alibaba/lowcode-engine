@@ -7,7 +7,12 @@
   "module": "dist/lowcodeTypes.js",
   "types": "dist/index.d.ts",
   "exports": {
-    ".": "./dist/lowcodeTypes.js"
+    ".": {
+      "import": "./dist/lowcodeTypes.js",
+      "module": "./dist/lowcodeTypes.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",
@@ -16,6 +21,7 @@
   ],
   "scripts": {
     "build": "vite build",
+    "build-dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.mjs",
     "test": "vitest"
   },
   "dependencies": {

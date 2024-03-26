@@ -22,6 +22,7 @@ export default defineConfig({
     react(),
     dts({
       rollupTypes: true,
+      tsconfigPath: resolve(import.meta.dirname, 'tsconfig.declaration.json'),
       compilerOptions: {
         stripInternal: true,
         paths: {},

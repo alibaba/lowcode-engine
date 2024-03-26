@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'node:path';
-import dts from 'vite-plugin-dts';
 
 export default defineConfig({
   build: {
@@ -13,12 +12,4 @@ export default defineConfig({
       fileName: 'lowcodeTypes',
     },
   },
-  plugins: [
-    dts({
-      rollupTypes: true,
-      compilerOptions: {
-        stripInternal: true,
-      },
-    }),
-  ],
 });

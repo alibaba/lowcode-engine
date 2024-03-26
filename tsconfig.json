@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "declaration": true,
     "lib": ["DOM", "ESNext", "DOM.Iterable"],
     // Target latest version of ECMAScript.
     "target": "esnext",

@@ -12,11 +12,13 @@
   "exports": {
     ".": {
       "import": "./dist/rendererReact.js",
-      "require": "./dist/rendererReact.cjs"
+      "require": "./dist/rendererReact.cjs",
+      "types": "./dist/index.d.ts"
     }
   },
   "scripts": {
     "build": "vite build",
+    "build-dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.mjs",
     "test": "vitest"
   },
   "dependencies": {
