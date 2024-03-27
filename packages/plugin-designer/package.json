@@ -19,8 +19,8 @@
     "package.json"
   ],
   "scripts": {
-    "build": "vite build",
-    "build-dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.mjs",
+    "build:target": "vite build",
+    "build:dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.mjs",
     "test": "vitest"
   },
   "keywords": [

@@ -1,8 +1,5 @@
 import { globalContext } from '@alilc/lowcode-editor-core';
-import {
-  IDesigner,
-  isComponentMeta,
-} from '@alilc/lowcode-designer';
+import { IDesigner, isComponentMeta } from '@alilc/lowcode-designer';
 import { IPublicTypeAssetsJson, getLogger } from '@alilc/lowcode-utils';
 import {
   IPublicTypeComponentAction,
@@ -47,7 +44,10 @@ export class Material implements IPublicApiMaterial {
     return this[editorSymbol].get('designer')!;
   }
 
-  constructor(editor: IPublicModelEditor, readonly workspaceMode: boolean = false) {
+  constructor(
+    editor: IPublicModelEditor,
+    readonly workspaceMode: boolean = false,
+  ) {
     this[innerEditorSymbol] = editor;
   }
 
@@ -176,9 +176,9 @@ export class Material implements IPublicApiMaterial {
    * @param handle
    */
   modifyBuiltinComponentAction(
-      actionName: string,
-      handle: (action: IPublicTypeComponentAction) => void,
-    ) {
+    actionName: string,
+    handle: (action: IPublicTypeComponentAction) => void,
+  ) {
     this[designerSymbol].componentActions.modifyBuiltinComponentAction(actionName, handle);
   }
 
@@ -195,7 +195,7 @@ export class Material implements IPublicApiMaterial {
     ];
 
     return () => {
-      dispose.forEach(d => d && d());
+      dispose.forEach((d) => d && d());
     };
   }
 
@@ -207,7 +207,9 @@ export class Material implements IPublicApiMaterial {
     this[designerSymbol].contextMenuActions.removeMenuAction(name);
   }
 
-  adjustContextMenuLayout(fn: (actions: IPublicTypeContextMenuItem[]) => IPublicTypeContextMenuItem[]) {
+  adjustContextMenuLayout(
+    fn: (actions: IPublicTypeContextMenuItem[]) => IPublicTypeContextMenuItem[],
+  ) {
     this[designerSymbol].contextMenuActions.adjustMenuLayout(fn);
   }
 }

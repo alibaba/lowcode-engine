@@ -3,13 +3,13 @@
   "version": "2.0.0-beta.0",
   "description": "alibaba lowcode editor skeleton",
   "type": "module",
-  "main": "dist/designer.cjs",
-  "module": "dist/designer.js",
+  "main": "dist/editorSkeleton.cjs",
+  "module": "dist/editorSkeleton.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/designer.js",
-      "require": "./dist/designer.cjs",
+      "import": "./dist/editorSkeleton.js",
+      "require": "./dist/editorSkeleton.cjs",
       "types": "./dist/index.d.ts"
     }
   },
@@ -22,8 +22,9 @@
     "package.json"
   ],
   "scripts": {
-    "build": "vite build",
-    "build-dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.mjs",
+    "build": "pnpm run --stream \"/^build:.*/\"",
+    "build:target": "vite build",
+    "build:dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.mjs",
     "test": "vitest"
   },
   "keywords": [
