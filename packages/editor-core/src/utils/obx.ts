@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react';
 import { configure } from 'mobx';
+import * as mobx from 'mobx';
 
 configure({ enforceActions: 'never' });
 
@@ -19,5 +20,4 @@ export {
 } from 'mobx';
 export type { IReactionDisposer, IReactionPublic, IReactionOptions } from 'mobx';
 
-export * as mobx from 'mobx';
-export { observer };
+export { observer, mobx };

@@ -4,7 +4,10 @@
   "mainEntryPointFilePath": "<projectFolder>/temp/index.d.ts",
 
   "compiler": {
-    "tsconfigFilePath": "<projectFolder>/tsconfig.declaration.json"
+    "tsconfigFilePath": "<projectFolder>/tsconfig.declaration.json",
+    "overrideTsconfig": {
+      "baseUrl": "<projectFolder>/temp"
+    }
   },
 
   "dtsRollup": {

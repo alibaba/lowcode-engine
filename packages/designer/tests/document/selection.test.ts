@@ -1,11 +1,7 @@
-import set from 'lodash/set';
-import cloneDeep from 'lodash/cloneDeep';
 import '../fixtures/window';
 import { Project } from '../../src/project/project';
-import { Node } from '../../src/document/node/node';
 import { Designer } from '../../src/designer/designer';
 import formSchema from '../fixtures/schema/form';
-import { getIdsFromSchema, getNodeFromSchemaById } from '../utils';
 
 const mockCreateSettingEntry = jest.fn();
 jest.mock('../../src/designer/designer', () => {
@@ -22,7 +18,9 @@ jest.mock('../../src/designer/designer', () => {
             },
           };
         },
-        transformProps(props) { return props; },
+        transformProps(props) {
+          return props;
+        },
         createSettingEntry: mockCreateSettingEntry,
         postEvent() {},
       };
@@ -38,9 +36,7 @@ beforeAll(() => {
 describe('选择区测试', () => {
   it('常规方法', () => {
     const project = new Project(designer, {
-      componentsTree: [
-        formSchema,
-      ],
+      componentsTree: [formSchema],
     });
     project.open();
     expect(project).toBeTruthy();
@@ -92,9 +88,7 @@ describe('选择区测试', () => {
 
   it('add 方法', () => {
     const project = new Project(designer, {
-      componentsTree: [
-        formSchema,
-      ],
+      componentsTree: [formSchema],
     });
     project.open();
     expect(project).toBeTruthy();
@@ -124,9 +118,7 @@ describe('选择区测试', () => {
 
   it('selectAll 包含不存在的 id', () => {
     const project = new Project(designer, {
-      componentsTree: [
-        formSchema,
-      ],
+      componentsTree: [formSchema],
     });
     project.open();
     expect(project).toBeTruthy();
@@ -140,9 +132,7 @@ describe('选择区测试', () => {
 
   it('dispose 方法 - 选中的节点没有被删除的', () => {
     const project = new Project(designer, {
-      componentsTree: [
-        formSchema,
-      ],
+      componentsTree: [formSchema],
     });
     project.open();
     expect(project).toBeTruthy();
@@ -160,9 +150,7 @@ describe('选择区测试', () => {
 
   it('containsNode 方法', () => {
     const project = new Project(designer, {
-      componentsTree: [
-        formSchema,
-      ],
+      componentsTree: [formSchema],
     });
     project.open();
     expect(project).toBeTruthy();
@@ -190,9 +178,7 @@ describe('选择区测试', () => {
 
   it('containsNode 方法 - excludeRoot: true', () => {
     const project = new Project(designer, {
-      componentsTree: [
-        formSchema,
-      ],
+      componentsTree: [formSchema],
     });
     project.open();
     expect(project).toBeTruthy();
@@ -213,9 +199,7 @@ describe('选择区测试', () => {
 
   it('containsNode 方法 - excludeRoot: true', () => {
     const project = new Project(designer, {
-      componentsTree: [
-        formSchema,
-      ],
+      componentsTree: [formSchema],
     });
     project.open();
     expect(project).toBeTruthy();
@@ -239,9 +223,7 @@ describe('选择区测试', () => {
 
   it('getNodes', () => {
     const project = new Project(designer, {
-      componentsTree: [
-        formSchema,
-      ],
+      componentsTree: [formSchema],
     });
     project.open();
     const { currentDocument } = project;
@@ -255,9 +237,7 @@ describe('选择区测试', () => {
 
   it('getTopNodes - BeforeOrAfter', () => {
     const project = new Project(designer, {
-      componentsTree: [
-        formSchema,
-      ],
+      componentsTree: [formSchema],
     });
     project.open();
     const { currentDocument } = project;
@@ -269,9 +249,7 @@ describe('选择区测试', () => {
   });
   it('getTopNodes', () => {
     const project = new Project(designer, {
-      componentsTree: [
-        formSchema,
-      ],
+      componentsTree: [formSchema],
     });
     project.open();
     const { currentDocument } = project;

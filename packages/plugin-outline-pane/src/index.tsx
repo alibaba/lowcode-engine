@@ -67,7 +67,7 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
             description: treeMaster.pluginContext.intlNode('Outline Tree'),
           },
           content: OutlinePaneContext,
-        },
+        } as any,
         panelProps: {
           area: isInFloatArea ? 'leftFloatArea' : 'leftFixedArea',
           keepVisibleWhileDragging: true,
@@ -113,7 +113,7 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
       canvas.dragon?.onDragend(() => {
         switchPanes();
       });
-      skeleton.onShowPanel((key: string) => {
+      skeleton.onShowPanel((key?: string) => {
         if (key === MasterPaneName) {
           showingPanes.masterPane = true;
         }
@@ -121,7 +121,7 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
           showingPanes.backupPane = true;
         }
       });
-      skeleton.onHidePanel((key: string) => {
+      skeleton.onHidePanel((key?: string) => {
         if (key === MasterPaneName) {
           showingPanes.masterPane = false;
           switchPanes();

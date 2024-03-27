@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import { Tab, Breadcrumb } from '@alifd/next';
-import { Title, observer, Editor, obx, globalContext, engineConfig, makeObservable } from '@alilc/lowcode-editor-core';
+import {
+  Title,
+  observer,
+  Editor,
+  obx,
+  globalContext,
+  engineConfig,
+  makeObservable,
+} from '@alilc/lowcode-editor-core';
 import { Node, SettingField, isSettingField, INode } from '@alilc/lowcode-designer';
 import classNames from 'classnames';
 import { SettingsMain } from './main';
@@ -16,7 +24,10 @@ interface ISettingsPrimaryPaneProps {
 }
 
 @observer
-export class SettingsPrimaryPane extends Component<ISettingsPrimaryPaneProps, { shouldIgnoreRoot: boolean }> {
+export class SettingsPrimaryPane extends Component<
+  ISettingsPrimaryPaneProps,
+  { shouldIgnoreRoot: boolean }
+> {
   state = {
     shouldIgnoreRoot: false,
   };
@@ -93,27 +104,29 @@ export class SettingsPrimaryPane extends Component<ISettingsPrimaryPaneProps, { 
         l === 2
           ? {}
           : {
-            onMouseOver: hoverNode.bind(null, _node, true),
-            onMouseOut: hoverNode.bind(null, _node, false),
-            onClick: () => {
-              if (!_node) {
-                return;
-              }
-              selectNode.call(null, _node);
-              const getName = (node: any) => {
-                const npm = node?.componentMeta?.npm;
-                return [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
-                  node?.componentMeta?.componentName ||
-                  '';
-              };
-              const selected = getName(current);
-              const target = getName(_node);
-              editor?.eventBus.emit('skeleton.settingsPane.Breadcrumb', {
-                selected,
-                target,
-              });
-            },
-          };
+              onMouseOver: hoverNode.bind(null, _node, true),
+              onMouseOut: hoverNode.bind(null, _node, false),
+              onClick: () => {
+                if (!_node) {
+                  return;
+                }
+                selectNode.call(null, _node);
+                const getName = (node: any) => {
+                  const npm = node?.componentMeta?.npm;
+                  return (
+                    [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+                    node?.componentMeta?.componentName ||
+                    ''
+                  );
+                };
+                const selected = getName(current);
+                const target = getName(_node);
+                editor?.eventBus.emit('skeleton.settingsPane.Breadcrumb', {
+                  selected,
+                  target,
+                });
+              },
+            };
       items.unshift(
         <Breadcrumb.Item {...props} key={node.id}>
           <Title title={node.title} />
@@ -179,7 +192,7 @@ export class SettingsPrimaryPane extends Component<ISettingsPrimaryPaneProps, { 
     }
 
     const { items } = settings;
-    if (items.length > 5 || items.some((item) => !isSettingField(item) || !item.isGroup)) {
+    if (items.length > 5 || items.some((item: any) => !isSettingField(item) || !item.isGroup)) {
       return (
         <div className="lc-settings-main">
           {this.renderBreadcrumb()}
@@ -188,6 +201,7 @@ export class SettingsPrimaryPane extends Component<ISettingsPrimaryPaneProps, { 
               {(skeleton) => {
                 if (skeleton) {
                   return (
+                    // @ts-ignore
                     <StageBox skeleton={skeleton} target={settings} key={settings.id}>
                       <SettingsPane target={settings} usePopup={false} />
                     </StageBox>
@@ -211,19 +225,18 @@ export class SettingsPrimaryPane extends Component<ISettingsPrimaryPaneProps, { 
           className="lc-settings-tab-item"
           title={<Title title={field.title} />}
           key={field.name}
-          onClick={
-            () => {
-              editor?.eventBus.emit('skeleton.settingsPane.change', {
-                name: field.name,
-                title: field.title,
-              });
-            }
-          }
+          onClick={() => {
+            editor?.eventBus.emit('skeleton.settingsPane.change', {
+              name: field.name,
+              title: field.title,
+            });
+          }}
         >
           <SkeletonContext.Consumer>
             {(skeleton) => {
               if (skeleton) {
                 return (
+                  // @ts-ignore
                   <StageBox skeleton={skeleton} target={field} key={field.id}>
                     <SettingsPane target={field} key={field.id} usePopup={false} />
                   </StageBox>
@@ -243,7 +256,7 @@ export class SettingsPrimaryPane extends Component<ISettingsPrimaryPaneProps, { 
     });
     return (
       <div className={className}>
-        { this.renderBreadcrumb() }
+        {this.renderBreadcrumb()}
         <Tab
           activeKey={activeKey}
           onChange={(tabKey) => {

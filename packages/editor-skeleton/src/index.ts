@@ -9,3 +9,4 @@ export * from './context';
 export * from './register-defaults';
 export * from './widget';
 export * from './layouts';
+export * from './event';

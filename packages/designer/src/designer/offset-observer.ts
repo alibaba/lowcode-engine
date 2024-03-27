@@ -75,14 +75,14 @@ export class OffsetObserver {
 
   @computed get offsetHeight() {
     if (!this.viewport?.scrolling || this.lastOffsetHeight == null) {
-      this.lastOffsetHeight = this.isRoot ? (this.viewport?.height || 0) : this.height;
+      this.lastOffsetHeight = this.isRoot ? this.viewport?.height || 0 : this.height;
     }
     return this.lastOffsetHeight;
   }
 
   @computed get offsetWidth() {
     if (!(this.viewport?.scrolling || 0) || this.lastOffsetWidth == null) {
-      this.lastOffsetWidth = this.isRoot ? (this.viewport?.width || 0) : this.width;
+      this.lastOffsetWidth = this.isRoot ? this.viewport?.width || 0 : this.width;
     }
     return this.lastOffsetWidth;
   }

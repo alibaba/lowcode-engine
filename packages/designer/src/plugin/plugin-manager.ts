@@ -23,7 +23,25 @@ import {
 const logger = getLogger({ level: 'warn', bizName: 'designer:pluginManager' });
 
 // 保留的事件前缀
-const RESERVED_EVENT_PREFIX = ['designer', 'editor', 'skeleton', 'renderer', 'render', 'utils', 'plugin', 'engine', 'editor-core', 'engine-core', 'plugins', 'event', 'events', 'log', 'logger', 'ctx', 'context'];
+const RESERVED_EVENT_PREFIX = [
+  'designer',
+  'editor',
+  'skeleton',
+  'renderer',
+  'render',
+  'utils',
+  'plugin',
+  'engine',
+  'editor-core',
+  'engine-core',
+  'plugins',
+  'event',
+  'events',
+  'log',
+  'logger',
+  'ctx',
+  'context',
+];
 
 export class LowCodePluginManager implements ILowCodePluginManager {
   private plugins: ILowCodePluginRuntime[] = [];
@@ -35,7 +53,10 @@ export class LowCodePluginManager implements ILowCodePluginManager {
 
   contextApiAssembler: ILowCodePluginContextApiAssembler;
 
-  constructor(contextApiAssembler: ILowCodePluginContextApiAssembler, readonly viewName = 'global') {
+  constructor(
+    contextApiAssembler: ILowCodePluginContextApiAssembler,
+    readonly viewName = 'global',
+  ) {
     this.contextApiAssembler = contextApiAssembler;
   }
 
@@ -79,24 +100,30 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     const isReservedPrefix = RESERVED_EVENT_PREFIX.find((item) => item === eventPrefix);
     if (isReservedPrefix) {
       meta.eventPrefix = undefined;
-      logger.warn(`plugin ${pluginName} is trying to use ${eventPrefix} as event prefix, which is a reserved event prefix, please use another one`);
+      logger.warn(
+        `plugin ${pluginName} is trying to use ${eventPrefix} as event prefix, which is a reserved event prefix, please use another one`,
+      );
     }
     const ctx = this._getLowCodePluginContext({ pluginName, meta });
-    const customFilterValidOptions = engineConfig.get('customPluginFilterOptions', filterValidOptions);
+    const customFilterValidOptions = engineConfig.get(
+      'customPluginFilterOptions',
+      filterValidOptions,
+    );
     const pluginTransducer = engineConfig.get('customPluginTransducer', null);
-    const newPluginModel = pluginTransducer ? await pluginTransducer(pluginModel, ctx, options) : pluginModel;
-    const newOptions = customFilterValidOptions(options, newPluginModel.meta?.preferenceDeclaration);
+    const newPluginModel = pluginTransducer
+      ? await pluginTransducer(pluginModel, ctx, options)
+      : pluginModel;
+    const newOptions = customFilterValidOptions(
+      options,
+      newPluginModel.meta?.preferenceDeclaration,
+    );
     const config = newPluginModel(ctx, newOptions);
     // compat the legacy way to declare pluginName
     // @ts-ignore
     pluginName = pluginName || config.name;
-    invariant(
-      pluginName,
-      'pluginConfigCreator.pluginName required',
-      config,
-    );
+    invariant(pluginName, 'pluginConfigCreator.pluginName required', config);
 
-    ctx.setPreference(pluginName, preferenceDeclaration);
+    ctx.setPreference(pluginName, preferenceDeclaration!);
 
     const allowOverride = registerOptions?.override === true;
 
@@ -119,7 +146,9 @@ export class LowCodePluginManager implements ILowCodePluginManager {
 
     const engineVersionExp = engines && engines.lowcodeEngine;
     if (engineVersionExp && !this.isEngineVersionMatched(engineVersionExp)) {
-      throw new Error(`plugin ${pluginName} skipped, engine check failed, current engine version is ${engineConfig.get('ENGINE_VERSION')}, meta.engines.lowcodeEngine is ${engineVersionExp}`);
+      throw new Error(
+        `plugin ${pluginName} skipped, engine check failed, current engine version is ${engineConfig.get('ENGINE_VERSION')}, meta.engines.lowcodeEngine is ${engineVersionExp}`,
+      );
     }
 
     const plugin = new LowCodePluginRuntime(pluginName, this, config, meta);
@@ -188,7 +217,9 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     return this.pluginsMap.size;
   }
 
-  getPluginPreference(pluginName: string): Record<string, IPublicTypePreferenceValueType> | null | undefined {
+  getPluginPreference(
+    pluginName: string,
+  ): Record<string, IPublicTypePreferenceValueType> | null | undefined {
     if (!this.pluginPreference) {
       return null;
     }

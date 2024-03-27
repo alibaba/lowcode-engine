@@ -30,6 +30,7 @@
     // skip type checking of declaration files
     "skipLibCheck": true,
     "useDefineForClassFields": true,
+    "removeComments": false,
     "baseUrl": ".",
     "rootDir": ".",
     "paths": {

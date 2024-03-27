@@ -106,7 +106,11 @@ export class TipItem extends Component {
 
   render() {
     const tip: IPublicTypeTipConfig = tipHandler.tip || ({} as any);
-    const className = classNames('lc-tip', tip.className, tip && tip.theme ? `lc-theme-${tip.theme}` : null);
+    const className = classNames(
+      'lc-tip',
+      tip.className,
+      tip && tip.theme ? `lc-theme-${tip.theme}` : null,
+    );
 
     this.originClassName = className;
 
@@ -118,7 +122,7 @@ export class TipItem extends Component {
         }}
       >
         <i className="lc-arrow" />
-        <div className="lc-tip-content">{intl(tip.children)}</div>
+        <div className="lc-tip-content">{intl((tip as any).children)}</div>
       </div>
     );
   }

@@ -18,11 +18,7 @@ import { deprecate, isRegExp, isTitleConfig, isNode } from '@alilc/lowcode-utils
 import { computed, createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
 import { Node, INode } from './document';
 import { Designer } from './designer';
-import {
-  IconContainer,
-  IconPage,
-  IconComponent,
-} from './icons';
+import { IconContainer, IconPage, IconComponent } from './icons';
 
 export function ensureAList(list?: string | string[]): string[] | null {
   if (!list) {
@@ -138,7 +134,7 @@ export class ComponentMeta implements IComponentMeta {
   private _isTopFixed?: boolean;
 
   get isTopFixed(): boolean {
-    return !!(this._isTopFixed);
+    return !!this._isTopFixed;
   }
 
   private parentWhitelist?: IPublicTypeNestingFilter | null;
@@ -155,7 +151,7 @@ export class ComponentMeta implements IComponentMeta {
     if (isTitleConfig(this._title)) {
       return (this._title?.label as any) || this.componentName;
     }
-    return this._title || this.componentName;
+    return (this._title as any) || this.componentName;
   }
 
   @computed get icon() {
@@ -184,7 +180,10 @@ export class ComponentMeta implements IComponentMeta {
    */
   prototype?: any;
 
-  constructor(readonly designer: Designer, metadata: IPublicTypeComponentMetadata) {
+  constructor(
+    readonly designer: Designer,
+    metadata: IPublicTypeComponentMetadata,
+  ) {
     this.parseMetadata(metadata);
   }
 
@@ -287,8 +286,8 @@ export class ComponentMeta implements IComponentMeta {
   }
 
   private transformMetadata(
-      metadta: IPublicTypeComponentMetadata,
-    ): IPublicTypeTransformedComponentMetadata {
+    metadta: IPublicTypeComponentMetadata,
+  ): IPublicTypeTransformedComponentMetadata {
     const registeredTransducers = this.designer.componentActions.getRegisteredMetadataTransducers();
     const result = registeredTransducers.reduce((prevMetadata, current) => {
       return current(prevMetadata);
@@ -351,7 +350,10 @@ export class ComponentMeta implements IComponentMeta {
     return true;
   }
 
-  checkNestingDown(my: INode, target: INode | IPublicTypeNodeSchema | IPublicTypeNodeSchema[]): boolean {
+  checkNestingDown(
+    my: INode,
+    target: INode | IPublicTypeNodeSchema | IPublicTypeNodeSchema[],
+  ): boolean {
     // 检查父子关系，直接约束型，在画布中拖拽直接掠过目标容器
     if (this.childWhitelist) {
       const _target: any = !Array.isArray(target) ? [target] : target;
@@ -372,14 +374,15 @@ export class ComponentMeta implements IComponentMeta {
       this.emitter.removeListener('metadata_change', fn);
     };
   }
-
 }
 
 export function isComponentMeta(obj: any): obj is ComponentMeta {
   return obj && obj.isComponentMeta;
 }
 
-function preprocessMetadata(metadata: IPublicTypeComponentMetadata): IPublicTypeTransformedComponentMetadata {
+function preprocessMetadata(
+  metadata: IPublicTypeComponentMetadata,
+): IPublicTypeTransformedComponentMetadata {
   if (metadata.configure) {
     if (Array.isArray(metadata.configure)) {
       return {

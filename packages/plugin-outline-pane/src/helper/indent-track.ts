@@ -1,7 +1,6 @@
 import { isLocationChildrenDetail } from '@alilc/lowcode-utils';
 import { IPublicModelDropLocation, IPublicModelNode } from '@alilc/lowcode-types';
 
-
 const IndentSensitive = 15;
 export class IndentTrack {
   private indentStart: number | null = null;
@@ -11,12 +10,15 @@ export class IndentTrack {
   }
 
   // eslint-disable-next-line max-len
-  getIndentParent(lastLoc: IPublicModelDropLocation, loc: IPublicModelDropLocation): [IPublicModelNode, number | undefined] | null {
+  getIndentParent(
+    lastLoc: IPublicModelDropLocation,
+    loc: IPublicModelDropLocation,
+  ): [IPublicModelNode, number | undefined] | null {
     if (
       lastLoc.target !== loc.target ||
       !isLocationChildrenDetail(lastLoc.detail) ||
       !isLocationChildrenDetail(loc.detail) ||
-      lastLoc.source !== loc.source ||
+      (lastLoc as any).source !== (loc as any).source ||
       lastLoc.detail.index !== loc.detail.index ||
       loc.detail.index == null
     ) {
@@ -34,14 +36,14 @@ export class IndentTrack {
     this.indentStart = loc.event.globalX;
     const direction = delta < 0 ? 'left' : 'right';
 
-    let parent: IPublicModelNode = loc.target;
+    let parent: IPublicModelNode = loc.target as any;
     const { index } = loc.detail;
 
     if (direction === 'left') {
       if (!parent.parent || index < (parent.children?.size || 0) || parent.isSlotNode) {
         return null;
       }
-      return [(parent as any).parent, parent.index + 1];
+      return [(parent as any).parent, parent.index! + 1];
     } else {
       if (index === 0) {
         return null;

@@ -1,14 +1,15 @@
 import { Component } from 'react';
 import { observer } from '@alilc/lowcode-editor-core';
 import { BuiltinSimulatorHost } from '../host';
-import {
-  DropLocation,
-  isVertical,
-} from '../../designer';
+import { DropLocation, isVertical } from '../../designer';
 import { ISimulatorHost } from '../../simulator';
 import { INode } from '../../document';
 import './insertion.less';
-import { IPublicTypeNodeData, IPublicTypeNodeSchema, IPublicTypeLocationChildrenDetail, IPublicTypeRect } from '@alilc/lowcode-types';
+import {
+  IPublicTypeNodeData,
+  IPublicTypeLocationChildrenDetail,
+  IPublicTypeRect,
+} from '@alilc/lowcode-types';
 import { isLocationChildrenDetail } from '@alilc/lowcode-utils';
 
 interface InsertionData {
@@ -23,7 +24,11 @@ interface InsertionData {
 /**
  * 处理拖拽子节点(INode)情况
  */
-function processChildrenDetail(sim: ISimulatorHost, container: INode, detail: IPublicTypeLocationChildrenDetail): InsertionData {
+function processChildrenDetail(
+  sim: ISimulatorHost,
+  container: INode,
+  detail: IPublicTypeLocationChildrenDetail,
+): InsertionData {
   let edge = detail.edge || null;
 
   if (!edge) {
@@ -40,7 +45,7 @@ function processChildrenDetail(sim: ISimulatorHost, container: INode, detail: IP
 
   if (detail.near) {
     const { node, pos, rect, align } = detail.near;
-    ret.nearRect = rect || sim.computeRect(node);
+    ret.nearRect = rect || sim.computeRect(node as any);
     ret.nearNode = node;
     if (pos === 'replace') {
       // FIXME: ret.nearRect mybe null
@@ -65,10 +70,10 @@ function processChildrenDetail(sim: ISimulatorHost, container: INode, detail: IP
     ret.insertType = 'cover';
     return ret;
   }
-  let nearNode = container.children.get(index);
+  let nearNode = container.children?.get(index);
   if (!nearNode) {
     // index = 0, eg. nochild,
-    nearNode = container.children.get(index > 0 ? index - 1 : 0);
+    nearNode = container.children?.get(index > 0 ? index - 1 : 0);
     if (!nearNode) {
       ret.insertType = 'cover';
       ret.coverRect = edge;
@@ -95,7 +100,7 @@ function processChildrenDetail(sim: ISimulatorHost, container: INode, detail: IP
  * 将 detail 信息转换为页面"坐标"信息
  */
 function processDetail({ target, detail, document }: DropLocation): InsertionData {
-  const sim = document.simulator;
+  const sim = document!.simulator;
   if (!sim) {
     return {};
   }
@@ -126,7 +131,7 @@ export class InsertionView extends Component<{ host: BuiltinSimulatorHost }> {
     }
 
     const { scale, scrollX, scrollY } = host.viewport;
-    const { edge, insertType, coverRect, nearRect, vertical, nearNode } = processDetail(loc);
+    const { edge, insertType, coverRect, nearRect, vertical, nearNode } = processDetail(loc as any);
 
     if (!edge) {
       return null;
@@ -159,7 +164,7 @@ export class InsertionView extends Component<{ host: BuiltinSimulatorHost }> {
         y = ((insertType === 'before' ? nearRect.top : nearRect.bottom) + scrollY) * scale;
         style.width = nearRect.width * scale;
       }
-      if (y === 0 && (nearNode as IPublicTypeNodeSchema)?.componentMeta?.isTopFixed) {
+      if (y === 0 && (nearNode as any)?.componentMeta?.isTopFixed) {
         return null;
       }
     }

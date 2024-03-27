@@ -1,5 +1,9 @@
 import { computed, makeObservable, obx } from '@alilc/lowcode-editor-core';
-import { IPublicEditorViewConfig, IPublicEnumPluginRegisterLevel, IPublicTypeEditorView } from '@alilc/lowcode-types';
+import {
+  IPublicEditorViewConfig,
+  IPublicEnumPluginRegisterLevel,
+  IPublicTypeEditorView,
+} from '@alilc/lowcode-types';
 import { flow } from 'mobx';
 import { IWorkspace } from '../workspace';
 import { BasicContext, IBasicContext } from './base-context';
@@ -37,13 +41,21 @@ export class Context extends BasicContext implements IViewContext {
     this.isInit = true;
   });
 
-  constructor(public workspace: IWorkspace, public editorWindow: IEditorWindow, public editorView: IPublicTypeEditorView, options: Object | undefined) {
+  constructor(
+    public workspace: IWorkspace,
+    public editorWindow: IEditorWindow,
+    public editorView: IPublicTypeEditorView,
+    options: Object | undefined,
+  ) {
     super(workspace, editorView.viewName, IPublicEnumPluginRegisterLevel.EditorView, editorWindow);
     this.viewType = editorView.viewType || 'editor';
     this.viewName = editorView.viewName;
-    this.instance = editorView(this.innerPlugins._getLowCodePluginContext({
-      pluginName: 'any',
-    }), options);
+    this.instance = editorView(
+      this.innerPlugins._getLowCodePluginContext({
+        pluginName: 'any',
+      }),
+      options,
+    );
     makeObservable(this);
   }
 

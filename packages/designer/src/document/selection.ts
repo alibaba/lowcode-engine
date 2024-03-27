@@ -48,7 +48,7 @@ export class Selection implements ISelection {
   selectAll(ids: string[]) {
     const selectIds: string[] = [];
 
-    ids.forEach(d => {
+    ids.forEach((d) => {
       const node = this.doc.getNode(d);
 
       if (node?.canSelect()) {
@@ -125,7 +125,7 @@ export class Selection implements ISelection {
   containsNode(node: INode, excludeRoot = false) {
     for (const id of this._selected) {
       const parent = this.doc.getNode(id);
-      if (excludeRoot && parent?.contains(this.doc.focusNode)) {
+      if (excludeRoot && parent?.contains(this.doc.focusNode!)) {
         continue;
       }
       if (parent?.contains(node)) {
@@ -157,7 +157,7 @@ export class Selection implements ISelection {
     for (const id of this._selected) {
       const node = this.doc.getNode(id);
       // 排除根节点
-      if (!node || (!includeRoot && node.contains(this.doc.focusNode))) {
+      if (!node || (!includeRoot && node.contains(this.doc.focusNode!))) {
         continue;
       }
       let i = nodes.length;

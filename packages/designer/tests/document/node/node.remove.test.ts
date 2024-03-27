@@ -1,5 +1,4 @@
-import set from 'lodash/set';
-import cloneDeep from 'lodash/cloneDeep';
+import { set, cloneDeep } from 'lodash-es';
 import '../../fixtures/window';
 import { Project } from '../../../src/project/project';
 import { Designer } from '../../../src/designer/designer';
@@ -21,7 +20,9 @@ jest.mock('../../../src/designer/designer', () => {
             },
           };
         },
-        transformProps(props) { return props; },
+        transformProps(props) {
+          return props;
+        },
         createSettingEntry: mockCreateSettingEntry,
         postEvent() {},
       };
@@ -37,9 +38,7 @@ beforeAll(() => {
 describe('节点模型删除测试', () => {
   it('删除叶子节点', () => {
     const project = new Project(designer, {
-      componentsTree: [
-        formSchema,
-      ],
+      componentsTree: [formSchema],
     });
     project.open();
     expect(project).toBeTruthy();
@@ -62,12 +61,13 @@ describe('节点模型删除测试', () => {
   });
 
   it('删除叶子节点，带有 slot', () => {
-    const formSchemaWithSlot = set(cloneDeep(formSchema),
-      'children[1].children[0].children[2].children[1].props.greeting.type', 'JSSlot');
+    const formSchemaWithSlot = set(
+      cloneDeep(formSchema),
+      'children[1].children[0].children[2].children[1].props.greeting.type',
+      'JSSlot',
+    );
     const project = new Project(designer, {
-      componentsTree: [
-        formSchemaWithSlot,
-      ],
+      componentsTree: [formSchemaWithSlot],
     });
     project.open();
     expect(project).toBeTruthy();
@@ -84,9 +84,7 @@ describe('节点模型删除测试', () => {
 
   it('删除分支节点', () => {
     const project = new Project(designer, {
-      componentsTree: [
-        formSchema,
-      ],
+      componentsTree: [formSchema],
     });
     project.open();
     expect(project).toBeTruthy();
@@ -102,12 +100,13 @@ describe('节点模型删除测试', () => {
   });
 
   it('删除分支节点，带有 slot', () => {
-    const formSchemaWithSlot = set(cloneDeep(formSchema),
-      'children[1].children[0].children[2].children[1].props.greeting.type', 'JSSlot');
+    const formSchemaWithSlot = set(
+      cloneDeep(formSchema),
+      'children[1].children[0].children[2].children[1].props.greeting.type',
+      'JSSlot',
+    );
     const project = new Project(designer, {
-      componentsTree: [
-        formSchemaWithSlot,
-      ],
+      componentsTree: [formSchemaWithSlot],
     });
     project.open();
     expect(project).toBeTruthy();

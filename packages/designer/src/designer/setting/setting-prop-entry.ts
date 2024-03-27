@@ -1,5 +1,19 @@
-import { obx, computed, makeObservable, runInAction, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
-import { GlobalEvent, IPublicApiSetters, IPublicModelEditor, IPublicModelSettingField, IPublicTypeFieldExtraProps, IPublicTypeSetValueOptions } from '@alilc/lowcode-types';
+import {
+  obx,
+  computed,
+  makeObservable,
+  runInAction,
+  IEventBus,
+  createModuleEventBus,
+} from '@alilc/lowcode-editor-core';
+import {
+  GlobalEvent,
+  IPublicApiSetters,
+  IPublicModelEditor,
+  IPublicModelSettingField,
+  IPublicTypeFieldExtraProps,
+  IPublicTypeSetValueOptions,
+} from '@alilc/lowcode-types';
 import { uniqueId, isJSExpression } from '@alilc/lowcode-utils';
 import { ISettingEntry } from './setting-entry-type';
 import { INode } from '../../document';
@@ -33,7 +47,12 @@ export interface ISettingPropEntry extends ISettingEntry {
 
   remove(): void;
 
-  setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: IPublicTypeSetValueOptions): void;
+  setValue(
+    val: any,
+    isHotValue?: boolean,
+    force?: boolean,
+    extraOptions?: IPublicTypeSetValueOptions,
+  ): void;
 
   internalToShellField(): IPublicModelSettingField;
 }
@@ -83,7 +102,11 @@ export class SettingPropEntry implements ISettingPropEntry {
 
   extraProps: IPublicTypeFieldExtraProps = {};
 
-  constructor(readonly parent: ISettingTopEntry | ISettingField, name: string | number | undefined, type?: 'field' | 'group') {
+  constructor(
+    readonly parent: ISettingTopEntry | ISettingField,
+    name: string | number | undefined,
+    type?: 'field' | 'group',
+  ) {
     makeObservable(this);
     if (type == null) {
       const c = typeof name === 'string' ? name.slice(0, 1) : '';
@@ -206,7 +229,12 @@ export class SettingPropEntry implements ISettingPropEntry {
   /**
    * 设置当前属性值
    */
-  setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: IPublicTypeSetValueOptions) {
+  setValue(
+    val: any,
+    isHotValue?: boolean,
+    force?: boolean,
+    extraOptions?: IPublicTypeSetValueOptions,
+  ) {
     const oldValue = this.getValue();
     if (this.type === 'field') {
       this.name?.toString() && this.parent.setPropValue(this.name, val);
@@ -329,7 +357,7 @@ export class SettingPropEntry implements ISettingPropEntry {
   }
 
   notifyValueChange(oldValue: any, newValue: any) {
-    this.editor.eventBus.emit(GlobalEvent.Node.Prop.Change, {
+    this.editor.eventBus.emit(GlobalEvent.Node.Prop.InnerChange, {
       node: this.getNode(),
       prop: this,
       oldValue,

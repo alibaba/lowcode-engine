@@ -89,7 +89,12 @@ export class BoxResizingForNode extends Component<{ host: BuiltinSimulatorHost; 
             return null;
           }
           return (
-            <BoxResizingInstance key={observed.id} dragging={this.dragging} designer={designer} observed={observed} />
+            <BoxResizingInstance
+              key={observed.id}
+              dragging={this.dragging}
+              designer={designer}
+              observed={observed}
+            />
           );
         })}
       </Fragment>
@@ -135,41 +140,38 @@ export class BoxResizingInstance extends Component<{
     // this.hoveringCapture.setBoundary(this.outline);
     this.willBind();
 
-    const resize = (e: MouseEvent, direction: string, node: INode, moveX: number, moveY: number) => {
+    const resize = (
+      e: MouseEvent,
+      direction: string,
+      node: INode,
+      moveX: number,
+      moveY: number,
+    ) => {
       const { advanced } = node.componentMeta;
-      if (
-        advanced.callbacks &&
-        typeof advanced.callbacks.onResize === 'function'
-      ) {
+      if (advanced.callbacks && typeof advanced.callbacks.onResize === 'function') {
         (e as any).trigger = direction;
         (e as any).deltaX = moveX;
         (e as any).deltaY = moveY;
         const cbNode = node?.isNode ? node.internalToShellNode() : node;
-        advanced.callbacks.onResize(e, cbNode);
+        advanced.callbacks.onResize(e as any, cbNode);
       }
     };
 
     const resizeStart = (e: MouseEvent, direction: string, node: INode) => {
       const { advanced } = node.componentMeta;
-      if (
-        advanced.callbacks &&
-        typeof advanced.callbacks.onResizeStart === 'function'
-      ) {
+      if (advanced.callbacks && typeof advanced.callbacks.onResizeStart === 'function') {
         (e as any).trigger = direction;
         const cbNode = node?.isNode ? node.internalToShellNode() : node;
-        advanced.callbacks.onResizeStart(e, cbNode);
+        advanced.callbacks.onResizeStart(e as any, cbNode);
       }
     };
 
     const resizeEnd = (e: MouseEvent, direction: string, node: INode) => {
       const { advanced } = node.componentMeta;
-      if (
-        advanced.callbacks &&
-        typeof advanced.callbacks.onResizeEnd === 'function'
-      ) {
+      if (advanced.callbacks && typeof advanced.callbacks.onResizeEnd === 'function') {
         (e as any).trigger = direction;
         const cbNode = node?.isNode ? node.internalToShellNode() : node;
-        advanced.callbacks.onResizeEnd(e, cbNode);
+        advanced.callbacks.onResizeEnd(e as any, cbNode as any);
       }
 
       const editor = node.document?.designer.editor;
@@ -241,14 +243,16 @@ export class BoxResizingInstance extends Component<{
     let offsetTop = 0;
     let offsetLeft = 0;
     if (observed.hasOffset) {
-      offsetWidth = observed.offsetWidth;
-      offsetHeight = observed.offsetHeight;
+      offsetWidth = observed.offsetWidth!;
+      offsetHeight = observed.offsetHeight!;
       offsetTop = observed.offsetTop;
       offsetLeft = observed.offsetLeft;
       const { node } = observed;
       const metadata = node.componentMeta.getMetadata();
       if (metadata.configure?.advanced?.getResizingHandlers) {
-        triggerVisible = metadata.configure.advanced.getResizingHandlers(node.internalToShellNode());
+        triggerVisible = metadata.configure.advanced.getResizingHandlers(
+          node.internalToShellNode(),
+        );
       }
     }
     triggerVisible = normalizeTriggers(triggerVisible);

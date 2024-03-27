@@ -7,17 +7,18 @@ import { IconEyeClose } from '../icons/eye-close';
 import { IPublicModelModalNodesManager, IPublicTypeDisposable } from '@alilc/lowcode-types';
 import { IOutlinePanelPluginContext } from '../controllers/tree-master';
 
-class ModalTreeNodeView extends PureComponent<{
-  treeNode: TreeNode;
-}, {
-  treeChildren: TreeNode[] | null;
-}> {
+class ModalTreeNodeView extends PureComponent<
+  {
+    treeNode: TreeNode;
+  },
+  {
+    treeChildren: TreeNode[] | null;
+  }
+> {
   private modalNodesManager: IPublicModelModalNodesManager | undefined | null;
   readonly pluginContext: IOutlinePanelPluginContext;
 
-  constructor(props: {
-    treeNode: TreeNode;
-  }) {
+  constructor(props: { treeNode: TreeNode }) {
     super(props);
 
     // 模态管理对象
@@ -136,7 +137,7 @@ export default class TreeNodeView extends PureComponent<{
       highlight: treeNode.isFocusingNode(),
       expandable: treeNode.expandable,
       treeChildren: treeNode.children,
-    };
+    } as any;
   }
 
   componentDidMount() {
@@ -145,9 +146,9 @@ export default class TreeNodeView extends PureComponent<{
 
     const doc = project.currentDocument;
 
-    treeNode.onExpandedChanged(((expanded: boolean) => {
+    treeNode.onExpandedChanged((expanded: boolean) => {
       this.setState({ expanded });
-    }));
+    });
     treeNode.onHiddenChanged((hidden: boolean) => {
       this.setState({ hidden });
     });
@@ -161,8 +162,16 @@ export default class TreeNodeView extends PureComponent<{
       });
     });
     treeNode.onFilterResultChanged(() => {
-      const { filterWorking: newFilterWorking, matchChild: newMatchChild, matchSelf: newMatchSelf } = treeNode.filterReult;
-      this.setState({ filterWorking: newFilterWorking, matchChild: newMatchChild, matchSelf: newMatchSelf });
+      const {
+        filterWorking: newFilterWorking,
+        matchChild: newMatchChild,
+        matchSelf: newMatchSelf,
+      } = treeNode.filterReult;
+      this.setState({
+        filterWorking: newFilterWorking,
+        matchChild: newMatchChild,
+        matchSelf: newMatchSelf,
+      });
     });
     this.eventOffCallbacks.push(
       doc?.onDropLocationChanged(() => {
@@ -233,10 +242,7 @@ export default class TreeNodeView extends PureComponent<{
       return null;
     }
     return (
-      <div
-        className={className}
-        data-id={treeNode.nodeId}
-      >
+      <div className={className} data-id={treeNode.nodeId}>
         <TreeTitle
           treeNode={treeNode}
           isModal={isModal}
@@ -245,11 +251,7 @@ export default class TreeNodeView extends PureComponent<{
           locked={this.state.locked}
           expandable={this.state.expandable}
         />
-        {shouldShowModalTreeNode &&
-          <ModalTreeNodeView
-            treeNode={treeNode}
-          />
-        }
+        {shouldShowModalTreeNode && <ModalTreeNodeView treeNode={treeNode} />}
         <TreeBranches
           treeNode={treeNode}
           isModal={false}

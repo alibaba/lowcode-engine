@@ -22,8 +22,6 @@ import {
   Setters,
   Hotkey,
   Common,
-  getEvent,
-  Event,
   Canvas,
   Workspace,
   SimulatorHost,
@@ -31,6 +29,7 @@ import {
   CommonUI,
   Command,
 } from './api';
+import { getEvent, type Event } from '@alilc/lowcode-editor-skeleton';
 
 export * from './symbols';
 

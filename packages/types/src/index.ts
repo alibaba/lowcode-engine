@@ -1,6 +1,6 @@
 import * as GlobalEvent from './event';
 
-export type { GlobalEvent };
+export { GlobalEvent };
 
 export * from '@alilc/lowcode-datasource-types';
 export * from './editor';

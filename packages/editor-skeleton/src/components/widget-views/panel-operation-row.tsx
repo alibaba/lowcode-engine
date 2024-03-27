@@ -6,7 +6,7 @@ import { IconFloat } from '../../icons/float';
 import { Panel } from '../../widget/panel';
 
 export default class PanelOperationRow extends Component<{ panel: Panel }> {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     makeObservable(this);
   }
@@ -36,8 +36,8 @@ export default class PanelOperationRow extends Component<{ panel: Panel }> {
 
     const hideTitleBar = panel?.config.props?.hideTitleBar;
 
-    const areaName = panel?.parent?.name;
-    const area = panel.skeleton[areaName];
+    const areaName = panel?.parent?.name ?? '';
+    const area = (panel.skeleton as any)[areaName];
 
     return (
       <Fragment>

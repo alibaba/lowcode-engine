@@ -1,10 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "dist",
-    "paths": {
-      "@alilc/renderer-core": ["runtime/renderer-core"],
-    }
+    "outDir": "dist"
   },
   "include": ["src"]
 }

@@ -1,6 +1,5 @@
-/* eslint-disable react/no-unused-prop-types */
-import { Component, ErrorInfo, MouseEvent } from 'react';
-import { isObject } from 'lodash';
+import { Component, ErrorInfo, MouseEvent, type ReactNode } from 'react';
+import { isObject } from 'lodash-es';
 import classNames from 'classnames';
 import { Icon } from '@alifd/next';
 import { Title } from '@alilc/lowcode-editor-core';
@@ -25,6 +24,7 @@ export interface FieldProps {
   tip?: any;
   onExpandChange?: (expandState: boolean) => void;
   onClear?: () => void;
+  children?: ReactNode;
 }
 
 export class Field extends Component<FieldProps> {
@@ -116,22 +116,37 @@ export class Field extends Component<FieldProps> {
   getTipContent(propName: string, tip?: any): any {
     let tipContent = (
       <div>
-        <div>{intl('Attribute: ')}{propName}</div>
+        <div>
+          {intl('Attribute: ')}
+          {propName}
+        </div>
       </div>
     );
 
     if (isObject(tip)) {
       tipContent = (
         <div>
-          <div>{intl('Attribute: ')}{propName}</div>
-          <div>{intl('Description: ')}{(tip as any).content}</div>
+          <div>
+            {intl('Attribute: ')}
+            {propName}
+          </div>
+          <div>
+            {intl('Description: ')}
+            {(tip as any).content}
+          </div>
         </div>
       );
     } else if (tip) {
       tipContent = (
         <div>
-          <div>{intl('Attribute: ')}{propName}</div>
-          <div>{intl('Description: ')}{tip}</div>
+          <div>
+            {intl('Attribute: ')}
+            {propName}
+          </div>
+          <div>
+            {intl('Description: ')}
+            {tip}
+          </div>
         </div>
       );
     }
@@ -149,7 +164,7 @@ export class Field extends Component<FieldProps> {
       return null;
     }
 
-    const { className, children, meta, title, valueState, name: propName, tip } = this.props;
+    const { className, children, meta, title, name: propName, tip } = this.props;
     const { display, collapsed } = this.state;
     const isAccordion = display === 'accordion';
     let hostName = '';
@@ -167,22 +182,23 @@ export class Field extends Component<FieldProps> {
         })}
         id={id}
       >
-        {
-          display !== 'plain' && (
-            <div className="lc-field-head" onClick={isAccordion ? this.toggleExpand : undefined}>
-              <div className="lc-field-title">
-                {createValueState(valueState, this.handleClear)}
-                <Title
-                  title={title || ''}
-                  onClick={this.clickHandler}
-                />
-                <InlineTip position="top">{tipContent}</InlineTip>
-              </div>
-              {isAccordion && <Icon className="lc-field-icon" type="arrow-up" size="xs" />}
+        {display !== 'plain' && (
+          <div className="lc-field-head" onClick={isAccordion ? this.toggleExpand : undefined}>
+            <div className="lc-field-title">
+              {createValueState()}
+              <Title title={title || ''} onClick={this.clickHandler} />
+              <InlineTip position="top">{tipContent}</InlineTip>
             </div>
-          )
-        }
-        <div key="body" ref={(shell) => { this.body = shell; }} className="lc-field-body">
+            {isAccordion && <Icon className="lc-field-icon" type="arrow-up" size="xs" />}
+          </div>
+        )}
+        <div
+          key="body"
+          ref={(shell) => {
+            this.body = shell;
+          }}
+          className="lc-field-body"
+        >
           {children}
         </div>
       </div>

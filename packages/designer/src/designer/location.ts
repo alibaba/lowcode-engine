@@ -60,7 +60,10 @@ export function isChildInline(child: Element | Text, win?: Window) {
     return true;
   }
   const style = (win || getWindow(child)).getComputedStyle(child);
-  return /^inline/.test(style.getPropertyValue('display')) || /^(left|right)$/.test(style.getPropertyValue('float'));
+  return (
+    /^inline/.test(style.getPropertyValue('display')) ||
+    /^(left|right)$/.test(style.getPropertyValue('float'))
+  );
 }
 
 export function getRectTarget(rect: IPublicTypeRect | null) {
@@ -99,7 +102,6 @@ export function getWindow(elem: Element | Document): Window {
   return (isDocument(elem) ? elem : elem.ownerDocument!).defaultView!;
 }
 export interface IDropLocation extends Omit<IPublicModelDropLocation, 'target' | 'clone'> {
-
   readonly source: string;
 
   get target(): INode;
@@ -126,7 +128,7 @@ export class DropLocation implements IDropLocation {
     this.target = target;
     this.detail = detail;
     this.source = source;
-    this.event = event;
+    this.event = event as any;
   }
 
   clone(event: ILocateEvent): IDropLocation {

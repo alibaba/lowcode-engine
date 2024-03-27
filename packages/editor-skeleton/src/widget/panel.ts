@@ -1,9 +1,19 @@
 import { createElement, ReactNode } from 'react';
-import { obx, computed, makeObservable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
+import {
+  obx,
+  computed,
+  makeObservable,
+  IEventBus,
+  createModuleEventBus,
+} from '@alilc/lowcode-editor-core';
 import { uniqueId, createContent } from '@alilc/lowcode-utils';
-import { IPublicTypeHelpTipConfig, IPublicTypePanelConfig, IPublicTypeTitleContent } from '@alilc/lowcode-types';
+import {
+  IPublicTypeHelpTipConfig,
+  IPublicTypePanelConfig,
+  IPublicTypeTitleContent,
+} from '@alilc/lowcode-types';
 import { WidgetContainer } from './widget-container';
-import { getEvent } from '@alilc/lowcode-shell';
+import { getEvent } from '../event';
 import { TitledPanelView, TabsPanelView, PanelView } from '../components/widget-views';
 import { ISkeleton } from '../skeleton';
 import { composeTitle } from './utils';
@@ -49,7 +59,7 @@ export class Panel implements IWidget {
     }
 
     const { content, contentProps } = this.config;
-    return createContent(content, {
+    return createContent(content as any, {
       ...contentProps,
       editor: getEvent(this.skeleton.editor),
       config: this.config,
@@ -80,7 +90,10 @@ export class Panel implements IWidget {
 
   @obx.ref public parent?: WidgetContainer;
 
-  constructor(readonly skeleton: ISkeleton, readonly config: IPublicTypePanelConfig) {
+  constructor(
+    readonly skeleton: ISkeleton,
+    readonly config: IPublicTypePanelConfig,
+  ) {
     makeObservable(this);
     const { name, content, props = {} } = config;
     const { hideTitleBar, title, icon, description, help } = props;
@@ -108,8 +121,8 @@ export class Panel implements IWidget {
       props.onInit.call(this, this);
     }
 
-    if (typeof content !== 'string' && content && content.onInit) {
-      content.onInit.call(this, this);
+    if (typeof content !== 'string' && content && (content as any).onInit) {
+      (content as any).onInit.call(this, this);
     }
     // todo: process shortcut
   }
@@ -217,7 +230,7 @@ export class Panel implements IWidget {
   }
 
   getAssocDocks(): PanelDock[] {
-    return this.skeleton.widgets.filter(item => {
+    return this.skeleton.widgets.filter((item) => {
       return isPanelDock(item) && item.panelName === this.name;
     }) as any;
   }

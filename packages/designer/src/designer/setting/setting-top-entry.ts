@@ -1,4 +1,9 @@
-import { IPublicTypeCustomView, IPublicModelEditor, IPublicModelSettingTopEntry, IPublicApiSetters } from '@alilc/lowcode-types';
+import {
+  IPublicTypeCustomView,
+  IPublicModelEditor,
+  IPublicModelSettingTopEntry,
+  IPublicApiSetters,
+} from '@alilc/lowcode-types';
 import { isCustomView } from '@alilc/lowcode-utils';
 import { computed, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { ISettingEntry } from './setting-entry-type';
@@ -14,10 +19,9 @@ function generateSessionId(nodes: INode[]) {
     .join(',');
 }
 
-export interface ISettingTopEntry extends ISettingEntry, IPublicModelSettingTopEntry<
-  INode,
-  ISettingField
-> {
+export interface ISettingTopEntry
+  extends ISettingEntry,
+    IPublicModelSettingTopEntry<INode, ISettingField> {
   readonly top: ISettingTopEntry;
 
   readonly parent: ISettingTopEntry;
@@ -48,16 +52,16 @@ export class SettingTopEntry implements ISettingTopEntry {
 
   readonly path = [];
 
-  readonly top = this;
+  readonly top = this as ISettingTopEntry;
 
-  readonly parent = this;
+  readonly parent = this as ISettingTopEntry;
 
   get componentMeta() {
     return this._componentMeta;
   }
 
   get items() {
-    return this._items;
+    return this._items as any;
   }
 
   /**
@@ -95,7 +99,10 @@ export class SettingTopEntry implements ISettingTopEntry {
 
   disposeFunctions: any[] = [];
 
-  constructor(readonly editor: IPublicModelEditor, readonly nodes: INode[]) {
+  constructor(
+    readonly editor: IPublicModelEditor,
+    readonly nodes: INode[],
+  ) {
     if (!Array.isArray(nodes) || nodes.length < 1) {
       throw new ReferenceError('nodes should not be empty');
     }
@@ -145,7 +152,7 @@ export class SettingTopEntry implements ISettingTopEntry {
         if (isCustomView(item)) {
           return item;
         }
-        return new SettingField(this, item as any, settingFieldCollector);
+        return new SettingField(this as ISettingTopEntry, item as any, settingFieldCollector);
       });
       this._settingFieldMap = settingFieldMap;
     }
@@ -177,7 +184,10 @@ export class SettingTopEntry implements ISettingTopEntry {
    */
   get(propName: string | number): ISettingField | null {
     if (!propName) return null;
-    return this._settingFieldMap[propName] || (new SettingField(this, { name: propName }));
+    return (
+      this._settingFieldMap[propName] ||
+      new SettingField(this as ISettingTopEntry, { name: propName })
+    );
   }
 
   /**
@@ -244,7 +254,7 @@ export class SettingTopEntry implements ISettingTopEntry {
     this.disposeItems();
     this._settingFieldMap = {};
     this.emitter.removeAllListeners();
-    this.disposeFunctions.forEach(f => f());
+    this.disposeFunctions.forEach((f) => f());
     this.disposeFunctions = [];
   }
 
@@ -253,21 +263,15 @@ export class SettingTopEntry implements ISettingTopEntry {
   }
 
   // ==== copy some Node api =====
-  getStatus() {
+  getStatus() {}
 
-  }
-
-  setStatus() {
-
-  }
+  setStatus() {}
 
   getChildren() {
     // this.nodes.map()
   }
 
-  getDOMNode() {
-
-  }
+  getDOMNode() {}
 
   getId() {
     return this.id;

@@ -36,26 +36,28 @@ function transformStringToFunction(str: string) {
     fn = new Function(fnBody)();
   } catch (e) {
     logger.error(str);
-    logger.error(e.message);
+    logger.error((e as Error).message);
   }
   return fn;
 }
 
 function parseJSFunc(obj: any, enableAllowedKeys = true) {
   if (!obj) return;
-  Object.keys(obj).forEach(key => {
+  Object.keys(obj).forEach((key) => {
     const item = obj[key];
     if (isJSFunction(item)) {
       obj[key] = transformStringToFunction(item.value);
     } else if (Array.isArray(item)) {
-      item.forEach(o => parseJSFunc(o, enableAllowedKeys));
+      item.forEach((o) => parseJSFunc(o, enableAllowedKeys));
     } else if (isPlainObject(item)) {
       parseJSFunc(item, enableAllowedKeys);
     }
   });
 }
 
-export default function (metadata: IPublicTypeTransformedComponentMetadata): IPublicTypeTransformedComponentMetadata {
+export default function (
+  metadata: IPublicTypeTransformedComponentMetadata,
+): IPublicTypeTransformedComponentMetadata {
   parseJSFunc(metadata, false);
 
   return metadata;

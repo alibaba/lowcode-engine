@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'node:path';
-import dts from 'vite-plugin-dts';
 import react from '@vitejs/plugin-react';
 import { devDependencies, peerDependencies } from './package.json';
 
@@ -27,14 +26,5 @@ export default defineConfig({
       },
     },
   },
-  plugins: [
-    react(),
-    dts({
-      rollupTypes: true,
-      compilerOptions: {
-        stripInternal: true,
-        paths: {},
-      },
-    }),
-  ],
+  plugins: [react()],
 });

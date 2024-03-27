@@ -1,6 +1,17 @@
-import { IPublicTypeContextMenuAction, IPublicEnumContextMenuType, IPublicTypeContextMenuItem, IPublicApiMaterial, IPublicModelPluginContext } from '@alilc/lowcode-types';
+import {
+  IPublicTypeContextMenuAction,
+  IPublicEnumContextMenuType,
+  IPublicTypeContextMenuItem,
+  IPublicApiMaterial,
+  IPublicModelPluginContext,
+} from '@alilc/lowcode-types';
 import { IDesigner, INode } from './designer';
-import { createContextMenu, parseContextMenuAsReactNode, parseContextMenuProperties, uniqueId } from '@alilc/lowcode-utils';
+import {
+  createContextMenu,
+  parseContextMenuAsReactNode,
+  parseContextMenuProperties,
+  uniqueId,
+} from '@alilc/lowcode-utils';
 import { Menu } from '@alifd/next';
 import { engineConfig } from '@alilc/lowcode-editor-core';
 import './context-menu-actions.scss';
@@ -22,16 +33,14 @@ export class GlobalContextMenuActions {
         return;
       }
       this.enableContextMenu = enable;
-      this.dispose.forEach(d => d());
+      this.dispose.forEach((d) => d());
       if (enable) {
         this.initEvent();
       }
     });
   }
 
-  handleContextMenu = (
-    event: MouseEvent,
-  ) => {
+  handleContextMenu = (event: MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
 
@@ -46,7 +55,9 @@ export class GlobalContextMenuActions {
     const destroy = () => {
       destroyFn?.();
     };
-    const pluginContext: IPublicModelPluginContext = contextMenu.designer.editor.get('pluginContext') as IPublicModelPluginContext;
+    const pluginContext: IPublicModelPluginContext = contextMenu.designer.editor.get(
+      'pluginContext',
+    ) as IPublicModelPluginContext;
 
     const menus: IPublicTypeContextMenuItem[] = parseContextMenuProperties(actions, {
       nodes: [],
@@ -69,7 +80,7 @@ export class GlobalContextMenuActions {
 
     const target = event.target;
 
-    const { top, left } = target?.getBoundingClientRect();
+    const { top, left } = (target as any)?.getBoundingClientRect();
 
     const menuInstance = Menu.create({
       target: event.target,
@@ -113,7 +124,7 @@ export class ContextMenuActions {
 
   enableContextMenu: boolean;
 
-  id: string = uniqueId('contextMenu');;
+  id: string = uniqueId('contextMenu');
 
   constructor(designer: IDesigner) {
     this.designer = designer;
@@ -124,7 +135,7 @@ export class ContextMenuActions {
         return;
       }
       this.enableContextMenu = enable;
-      this.dispose.forEach(d => d());
+      this.dispose.forEach((d) => d());
       if (enable) {
         this.initEvent();
       }
@@ -133,10 +144,7 @@ export class ContextMenuActions {
     globalContextMenuActions.registerContextMenuActions(this);
   }
 
-  handleContextMenu = (
-    nodes: INode[],
-    event: MouseEvent,
-  ) => {
+  handleContextMenu = (nodes: INode[], event: MouseEvent) => {
     const designer = this.designer;
     event.stopPropagation();
     event.preventDefault();
@@ -152,10 +160,12 @@ export class ContextMenuActions {
       destroyFn?.();
     };
 
-    const pluginContext: IPublicModelPluginContext = this.designer.editor.get('pluginContext') as IPublicModelPluginContext;
+    const pluginContext: IPublicModelPluginContext = this.designer.editor.get(
+      'pluginContext',
+    ) as IPublicModelPluginContext;
 
     const menus: IPublicTypeContextMenuItem[] = parseContextMenuProperties(actions, {
-      nodes: nodes.map(d => designer.shellModelFactory.createNode(d)!),
+      nodes: nodes.map((d) => designer.shellModelFactory.createNode(d)!),
       destroy,
       event,
       pluginContext,
@@ -169,7 +179,7 @@ export class ContextMenuActions {
 
     const menuNode = parseContextMenuAsReactNode(layoutMenu, {
       destroy,
-      nodes: nodes.map(d => designer.shellModelFactory.createNode(d)!),
+      nodes: nodes.map((d) => designer.shellModelFactory.createNode(d)!),
       pluginContext,
     });
 
@@ -182,26 +192,25 @@ export class ContextMenuActions {
   initEvent() {
     const designer = this.designer;
     this.dispose.push(
-      designer.editor.eventBus.on('designer.builtinSimulator.contextmenu', ({
-        node,
-        originalEvent,
-      }: {
-        node: INode;
-        originalEvent: MouseEvent;
-      }) => {
-        originalEvent.stopPropagation();
-        originalEvent.preventDefault();
-        // 如果右键的节点不在 当前选中的节点中，选中该节点
-        if (!designer.currentSelection?.has(node.id)) {
-          designer.currentSelection?.select(node.id);
-        }
-        const nodes = designer.currentSelection?.getNodes();
-        this.handleContextMenu(nodes, originalEvent);
-      }),
+      designer.editor.eventBus.on(
+        'designer.builtinSimulator.contextmenu',
+        ({ node, originalEvent }: { node: INode; originalEvent: MouseEvent }) => {
+          originalEvent.stopPropagation();
+          originalEvent.preventDefault();
+          // 如果右键的节点不在 当前选中的节点中，选中该节点
+          if (!designer.currentSelection?.has(node.id)) {
+            designer.currentSelection?.select(node.id);
+          }
+          const nodes = designer.currentSelection?.getNodes() ?? [];
+          this.handleContextMenu(nodes, originalEvent);
+        },
+      ),
     );
   }
 
-  addMenuAction: IPublicApiMaterial['addContextMenuOption'] = (action: IPublicTypeContextMenuAction) => {
+  addMenuAction: IPublicApiMaterial['addContextMenuOption'] = (
+    action: IPublicTypeContextMenuAction,
+  ) => {
     this.actions.push({
       type: IPublicEnumContextMenuType.MENU_ITEM,
       ...action,
@@ -215,7 +224,9 @@ export class ContextMenuActions {
     }
   };
 
-  adjustMenuLayout: IPublicApiMaterial['adjustContextMenuLayout'] = (fn: (actions: IPublicTypeContextMenuItem[]) => IPublicTypeContextMenuItem[]) => {
+  adjustMenuLayout: IPublicApiMaterial['adjustContextMenuLayout'] = (
+    fn: (actions: IPublicTypeContextMenuItem[]) => IPublicTypeContextMenuItem[],
+  ) => {
     adjustMenuLayoutFn = fn;
   };
 }

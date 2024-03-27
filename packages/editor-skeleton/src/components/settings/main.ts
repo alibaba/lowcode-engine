@@ -1,5 +1,13 @@
 import { Node, Designer, Selection, SettingTopEntry } from '@alilc/lowcode-designer';
-import { Editor, obx, computed, makeObservable, action, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
+import {
+  Editor,
+  obx,
+  computed,
+  makeObservable,
+  action,
+  IEventBus,
+  createModuleEventBus,
+} from '@alilc/lowcode-editor-core';
 
 function generateSessionId(nodes: Node[]) {
   return nodes
@@ -72,9 +80,9 @@ export class SettingsMain {
     // 当节点只有一个时，复用 node 上挂载的 settingEntry，不会产生平行的两个实例，这样在整个系统中对
     // 某个节点操作的 SettingTopEntry 只有一个实例，后续的 getProp() 也会拿到相同的 SettingField 实例
     if (nodes.length === 1) {
-      this._settings = nodes[0].settingEntry;
+      this._settings = nodes[0].settingEntry as any;
     } else {
-      this._settings = this.designer.createSettingEntry(nodes);
+      this._settings = this.designer.createSettingEntry(nodes) as any;
     }
   }
 

@@ -1,5 +1,4 @@
 export * from './common';
-export * from './event';
 export * from './hotkey';
 export * from './logger';
 export * from './material';

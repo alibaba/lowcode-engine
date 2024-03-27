@@ -28,7 +28,7 @@ export function sequence({
     }
     const node = tasks[name];
     if (!node) {
-      missing.push([parentName, name].filter((d => !!d)).join('.'));
+      missing.push([parentName, name].filter((d) => !!d).join('.'));
     } else if (nest.indexOf(name) > -1) {
       nest.push(name);
       recursive.push(nest.slice(0));
@@ -64,7 +64,7 @@ export default function (tasks: ITaks, names: string[]) {
     missing,
     recursive,
     nest: [],
-  });
+  } as any);
 
   if (missing.length || recursive.length) {
     results = []; // results are incomplete at best, completely wrong at worst, remove them to avoid confusion

@@ -4,11 +4,11 @@ import { IPublicTypeFieldConfig, IPublicTypeSetterConfig } from '@alilc/lowcode-
 import { isSetterConfig, isDynamicSetter } from '@alilc/lowcode-utils';
 import { ISettingField } from './setting-field';
 
-function getHotterFromSetter(setter) {
-  return setter && (setter.Hotter || (setter.type && setter.type.Hotter)) || []; // eslint-disable-line
+function getHotterFromSetter(setter: any) {
+  return (setter && (setter.Hotter || (setter.type && setter.type.Hotter))) || []; // eslint-disable-line
 }
 
-function getTransducerFromSetter(setter) {
+function getTransducerFromSetter(setter: any) {
   return (
     (setter &&
       (setter.transducer ||
@@ -18,15 +18,15 @@ function getTransducerFromSetter(setter) {
   ); // eslint-disable-line
 }
 
-function combineTransducer(transducer, arr, context) {
+function combineTransducer(transducer: any, arr: any, context: any) {
   if (!transducer && Array.isArray(arr)) {
     const [toHot, toNative] = arr;
     transducer = { toHot, toNative };
   }
 
   return {
-    toHot: (transducer && transducer.toHot || (x => x)).bind(context), // eslint-disable-line
-    toNative: (transducer && transducer.toNative || (x => x)).bind(context), // eslint-disable-line
+    toHot: ((transducer && transducer.toHot) || ((x: any) => x)).bind(context), // eslint-disable-line
+    toNative: ((transducer && transducer.toNative) || ((x: any) => x)).bind(context), // eslint-disable-line
   };
 }
 
@@ -43,9 +43,9 @@ export class Transducer {
     // 3. IPublicTypeSetterConfig[]
     if (Array.isArray(setter)) {
       setter = setter[0];
-    } else if (isValidElement(setter) && setter.type.displayName === 'MixedSetter') {
-      setter = setter.props?.setters?.[0];
-    } else if (typeof setter === 'object' && setter.componentName === 'MixedSetter') {
+    } else if (isValidElement(setter) && (setter.type as any).displayName === 'MixedSetter') {
+      setter = (setter.props as any)?.setters?.[0];
+    } else if (typeof setter === 'object' && (setter as any).componentName === 'MixedSetter') {
       setter = Array.isArray(setter?.props?.setters) && setter.props.setters[0];
     }
 
@@ -71,18 +71,24 @@ export class Transducer {
     if (isDynamicSetter(setter) && isDynamic) {
       try {
         setter = setter.call(context.internalToShellField(), context.internalToShellField());
-      } catch (e) { console.error(e); }
+      } catch (e) {
+        console.error(e);
+      }
     }
 
-    this.setterTransducer = combineTransducer(getTransducerFromSetter(setter), getHotterFromSetter(setter), context);
+    this.setterTransducer = combineTransducer(
+      getTransducerFromSetter(setter),
+      getHotterFromSetter(setter),
+      context,
+    );
     this.context = context;
   }
 
-  toHot(data) {
+  toHot(data: any) {
     return this.setterTransducer.toHot(data);
   }
 
-  toNative(data) {
+  toNative(data: any) {
     return this.setterTransducer.toNative(data);
   }
 }

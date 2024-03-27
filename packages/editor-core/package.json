@@ -3,18 +3,30 @@
   "version": "2.0.0-beta.0",
   "description": "Core Api for Ali lowCode engine",
   "license": "MIT",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
   "type": "module",
+  "main": "dist/editorCore.js",
+  "module": "dist/editorCore.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/editorCore.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "sideEffects": [
+    "*.css",
+    "*.less"
+  ],
   "files": [
-    "lib",
-    "es"
+    "dist",
+    "src",
+    "package.json"
   ],
   "scripts": {
-    "build": "tsc",
-    "test": "build-scripts test --config build.test.json",
-    "test:cov": "build-scripts test --config build.test.json --jest-coverage"
+    "build": "vite build",
+    "build-dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.mjs",
+    "test": "vitest",
+    "test:cov": ""
   },
   "dependencies": {
     "@alifd/next": "^1.27.8",
@@ -29,16 +41,18 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "store": "^2.0.12",
-    "strict-event-emitter-types": "^2.0.0"
+    "strict-event-emitter-types": "^2.0.0",
+    "events": "^3.3.0"
   },
   "devDependencies": {
-    "@alilc/lowcode-datasource-types": "^1.0.1",
     "@types/lodash-es": "^4.17.12",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
-    "@types/store": "^2.0.2"
+    "@types/store": "^2.0.2",
+    "less": "^4.2.0"
   },
   "peerDependencies": {
+    "@alifd/next": "^1.27.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

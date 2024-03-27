@@ -8,7 +8,7 @@ import { BuiltinSimulatorHostView } from '../builtin-simulator';
 export class DocumentView extends Component<{ document: IDocumentModel }> {
   render() {
     const { document } = this.props;
-    const { simulatorProps } = document;
+    const { simulatorProps } = document as any;
     const Simulator = document.designer.simulatorComponent || BuiltinSimulatorHostView;
     return (
       <div

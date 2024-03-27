@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable max-len */
 import { StrictEventEmitter } from 'strict-event-emitter-types';
 import { EventEmitter } from 'events';
 import { EventBus, IEventBus } from './event-bus';
@@ -39,6 +37,7 @@ const AssetsCache: {
   [key: string]: IPublicTypeRemoteComponentDescription;
 } = {};
 
+// @ts-ignore
 export declare interface Editor extends StrictEventEmitter<EventEmitter, GlobalEvent.EventConfig> {
   addListener(event: string | symbol, listener: (...args: any[]) => void): this;
   once(event: string | symbol, listener: (...args: any[]) => void): this;

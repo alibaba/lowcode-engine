@@ -2,9 +2,8 @@ import { Overlay } from '@alifd/next';
 import React, { MouseEvent } from 'react';
 import { Title, observer } from '@alilc/lowcode-editor-core';
 import { canClickNode } from '@alilc/lowcode-utils';
+import { INode } from '../../document';
 import './index.less';
-
-import { INode } from '@alilc/lowcode-designer';
 
 const { Popup } = Overlay;
 
@@ -80,17 +79,21 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
     }
   };
 
-  onMouseOver = (node: INode) => (_: any, flag = true) => {
-    if (node && typeof node.hover === 'function') {
-      node.hover(flag);
-    }
-  };
+  onMouseOver =
+    (node: INode) =>
+    (_: any, flag = true) => {
+      if (node && typeof node.hover === 'function') {
+        node.hover(flag);
+      }
+    };
 
-  onMouseOut = (node: INode) => (_: any, flag = false) => {
-    if (node && typeof node.hover === 'function') {
-      node.hover(flag);
-    }
-  };
+  onMouseOut =
+    (node: INode) =>
+    (_: any, flag = false) => {
+      if (node && typeof node.hover === 'function') {
+        node.hover(flag);
+      }
+    };
 
   renderNodes = () => {
     const nodes = this.state.parentNodes;

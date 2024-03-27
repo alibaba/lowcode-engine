@@ -6,33 +6,42 @@ import TreeNode from '../controllers/tree-node';
 import { Tree } from '../controllers/tree';
 import { matchTreeNode, FILTER_OPTIONS } from './filter-tree';
 
-export default class Filter extends PureComponent<{
-  tree: Tree;
-}, {
-  keywords: string;
-  filterOps: string[];
-}> {
+export default class Filter extends PureComponent<
+  {
+    tree: Tree;
+  },
+  {
+    keywords: string;
+    filterOps: string[];
+  }
+> {
   state = {
     keywords: '',
     filterOps: [],
   };
 
   handleSearchChange = (val: string) => {
-    this.setState({
-      keywords: val.trim(),
-    }, this.filterTree);
+    this.setState(
+      {
+        keywords: val.trim(),
+      },
+      this.filterTree,
+    );
   };
 
   handleOptionChange = (val: string[]) => {
-    this.setState({
-      filterOps: val,
-    }, this.filterTree);
+    this.setState(
+      {
+        filterOps: val,
+      },
+      this.filterTree,
+    );
   };
 
   handleCheckAll = () => {
     const { filterOps } = this.state;
-    const final = filterOps.length === FILTER_OPTIONS.length
-      ? [] : FILTER_OPTIONS.map((op) => op.value);
+    const final =
+      filterOps.length === FILTER_OPTIONS.length ? [] : FILTER_OPTIONS.map((op) => op.value);
 
     this.handleOptionChange(final);
   };
@@ -64,31 +73,23 @@ export default class Filter extends PureComponent<{
           align="br"
           closable={false}
           triggerType="hover"
-          trigger={(
+          trigger={
             <div className="lc-outline-filter-icon">
               <IconFilter />
             </div>
-          )}
+          }
         >
-          <Checkbox
-            checked={checkAll}
-            indeterminate={indeterminate}
-            onChange={this.handleCheckAll}
-          >
+          <Checkbox checked={checkAll} indeterminate={indeterminate} onChange={this.handleCheckAll}>
             {this.props.tree.pluginContext.intlNode('Check All')}
           </Checkbox>
           <Divider />
           <Checkbox.Group
             value={filterOps}
             direction="ver"
-            onChange={this.handleOptionChange}
+            onChange={this.handleOptionChange as any}
           >
             {FILTER_OPTIONS.map((op) => (
-              <Checkbox
-                id={op.value}
-                value={op.value}
-                key={op.value}
-              >
+              <Checkbox id={op.value} value={op.value} key={op.value}>
                 {this.props.tree.pluginContext.intlNode(op.label)}
               </Checkbox>
             ))}

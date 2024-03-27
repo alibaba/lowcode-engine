@@ -1,5 +1,15 @@
 import { ReactElement } from 'react';
-import { obx, computed, autorun, makeObservable, runInAction, wrapWithEventSwitch, action, createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
+import {
+  obx,
+  computed,
+  autorun,
+  makeObservable,
+  runInAction,
+  wrapWithEventSwitch,
+  action,
+  createModuleEventBus,
+  IEventBus,
+} from '@alilc/lowcode-editor-core';
 import {
   IPublicTypeNodeSchema,
   IPublicTypePropsMap,
@@ -18,7 +28,7 @@ import {
   IBaseModelNode,
 } from '@alilc/lowcode-types';
 import { compatStage, isDOMText, isJSExpression, isNode, isNodeSchema } from '@alilc/lowcode-utils';
-import { ISettingTopEntry } from '@alilc/lowcode-designer';
+import { ISettingTopEntry } from '../../designer/setting/setting-top-entry';
 import { Props, getConvertedExtraKey, IProps } from './props/props';
 import type { IDocumentModel } from '../document-model';
 import { NodeChildren, INodeChildren } from './node-children';
@@ -86,34 +96,38 @@ export interface IBaseNode extends Node {}
  *  isLocked
  *  hidden
  */
-export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> implements Omit<IBaseModelNode<
-  IDocumentModel,
-  IBaseNode,
-  INodeChildren,
-  IComponentMeta,
-  ISettingTopEntry,
-  IProps,
-  IProp,
-  IExclusiveGroup
->,
-'isRoot' |
-'isPage' |
-'isComponent' |
-'isModal' |
-'isSlot' |
-'isParental' |
-'isLeaf' |
-'settingEntry' |
-// 在内部的 node 模型中不存在
-'getExtraPropValue' |
-'setExtraPropValue' |
-'exportSchema' |
-'visible' |
-'importSchema' |
-// 内外实现有差异
-'isContainer' |
-'isEmpty'
-> {
+export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema>
+  implements
+    Omit<
+      IBaseModelNode<
+        IDocumentModel,
+        IBaseNode,
+        INodeChildren,
+        IComponentMeta,
+        ISettingTopEntry,
+        IProps,
+        IProp,
+        IExclusiveGroup
+      >,
+      | 'isRoot'
+      | 'isPage'
+      | 'isComponent'
+      | 'isModal'
+      | 'isSlot'
+      | 'isParental'
+      | 'isLeaf'
+      | 'settingEntry'
+      // 在内部的 node 模型中不存在
+      | 'getExtraPropValue'
+      | 'setExtraPropValue'
+      | 'exportSchema'
+      | 'visible'
+      | 'importSchema'
+      // 内外实现有差异
+      | 'isContainer'
+      | 'isEmpty'
+    >
+{
   private emitter: IEventBus;
 
   /**
@@ -269,7 +283,10 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     pseudo: false,
   };
 
-  constructor(readonly document: IDocumentModel, nodeSchema: Schema) {
+  constructor(
+    readonly document: IDocumentModel,
+    nodeSchema: Schema,
+  ) {
     makeObservable(this);
     const { componentName, id, children, props, ...extras } = nodeSchema;
     this.id = document.nextId(id);
@@ -282,10 +299,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
       this.props = new Props(this, props, extras);
       this._children = new NodeChildren(this as INode, this.initialChildren(children));
       this._children.internalInitParent();
-      this.props.merge(
-        this.upgradeProps(this.initProps(props || {})),
-        this.upgradeProps(extras),
-      );
+      this.props.merge(this.upgradeProps(this.initProps(props || {})), this.upgradeProps(extras));
       this.setupAutoruns();
     }
 
@@ -310,12 +324,18 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
    */
   @action
   private initBuiltinProps() {
-    this.props.has(getConvertedExtraKey('hidden')) || this.props.add(false, getConvertedExtraKey('hidden'));
-    this.props.has(getConvertedExtraKey('title')) || this.props.add('', getConvertedExtraKey('title'));
-    this.props.has(getConvertedExtraKey('isLocked')) || this.props.add(false, getConvertedExtraKey('isLocked'));
-    this.props.has(getConvertedExtraKey('condition')) || this.props.add(true, getConvertedExtraKey('condition'));
-    this.props.has(getConvertedExtraKey('conditionGroup')) || this.props.add('', getConvertedExtraKey('conditionGroup'));
-    this.props.has(getConvertedExtraKey('loop')) || this.props.add(undefined, getConvertedExtraKey('loop'));
+    this.props.has(getConvertedExtraKey('hidden')) ||
+      this.props.add(false, getConvertedExtraKey('hidden'));
+    this.props.has(getConvertedExtraKey('title')) ||
+      this.props.add('', getConvertedExtraKey('title'));
+    this.props.has(getConvertedExtraKey('isLocked')) ||
+      this.props.add(false, getConvertedExtraKey('isLocked'));
+    this.props.has(getConvertedExtraKey('condition')) ||
+      this.props.add(true, getConvertedExtraKey('condition'));
+    this.props.has(getConvertedExtraKey('conditionGroup')) ||
+      this.props.add('', getConvertedExtraKey('conditionGroup'));
+    this.props.has(getConvertedExtraKey('loop')) ||
+      this.props.add(undefined, getConvertedExtraKey('loop'));
   }
 
   @action
@@ -340,7 +360,9 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     });
   }
 
-  private initialChildren(children: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined): IPublicTypeNodeData[] {
+  private initialChildren(
+    children: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined,
+  ): IPublicTypeNodeData[] {
     const { initialChildren } = this.componentMeta.advanced;
 
     if (children == null) {
@@ -527,9 +549,13 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
       }
       if (this.isSlot()) {
         this.parent.removeSlot(this);
-        this.parent.children?.internalDelete(this, purge, useMutator, { suppressRemoveEvent: true });
+        this.parent.children?.internalDelete(this, purge, useMutator, {
+          suppressRemoveEvent: true,
+        });
       } else {
-        this.parent.children?.internalDelete(this, purge, useMutator, { suppressRemoveEvent: true });
+        this.parent.children?.internalDelete(this, purge, useMutator, {
+          suppressRemoveEvent: true,
+        });
       }
     }
   }
@@ -550,7 +576,8 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
 
   canSelect(): boolean {
     const onSelectHook = this.componentMeta?.advanced?.callbacks?.onSelectHook;
-    const canSelect = typeof onSelectHook === 'function' ? onSelectHook(this.internalToShellNode()!) : true;
+    const canSelect =
+      typeof onSelectHook === 'function' ? onSelectHook(this.internalToShellNode()!) : true;
     return canSelect;
   }
 
@@ -845,7 +872,10 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 导出 schema
    */
-  export<T = IPublicTypeNodeSchema>(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Save, options: any = {}): T {
+  export<T = IPublicTypeNodeSchema>(
+    stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Save,
+    options: any = {},
+  ): T {
     stage = compatStage(stage);
     const baseSchema: any = {
       componentName: this.componentName,
@@ -999,12 +1029,11 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
    */
   canPerformAction(actionName: string): boolean {
     const availableActions =
-      this.componentMeta?.availableActions?.filter((action: IPublicTypeComponentAction) => {
-        const { condition } = action;
-        return typeof condition === 'function' ?
-          condition(this) !== false :
-          condition !== false;
-      })
+      this.componentMeta?.availableActions
+        ?.filter((action: IPublicTypeComponentAction) => {
+          const { condition } = action;
+          return typeof condition === 'function' ? condition(this) !== false : condition !== false;
+        })
         .map((action: IPublicTypeComponentAction) => action.name) || [];
 
     return availableActions.indexOf(actionName) >= 0;
@@ -1061,7 +1090,9 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     return this.props;
   }
 
-  onChildrenChange(fn: (param?: { type: string; node: INode }) => void): IPublicTypeDisposable | undefined {
+  onChildrenChange(
+    fn: (param?: { type: string; node: INode }) => void,
+  ): IPublicTypeDisposable | undefined {
     const wrappedFunc = wrapWithEventSwitch(fn);
     return this.children?.onChange(wrappedFunc);
   }
@@ -1131,7 +1162,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     const isContainerNode = this.isContainer();
     const isEmptyNode = this.isEmpty();
     const isRGLContainerNode = this.isRGLContainer;
-    const isRGLNode = (this.getParent()?.isRGLContainer) as boolean;
+    const isRGLNode = this.getParent()?.isRGLContainer as boolean;
     const isRGL = isRGLContainerNode || (isRGLNode && (!isContainerNode || !isEmptyNode));
     let rglNode = isRGLContainerNode ? this : isRGL ? this?.getParent() : null;
     return { isContainerNode, isEmptyNode, isRGLContainerNode, isRGLNode, isRGL, rglNode };
@@ -1294,7 +1325,13 @@ export interface ISlotNode extends Node<IPublicTypeSlotSchema> {}
 export interface IPageNode extends Node<IPublicTypePageSchema> {}
 export interface IComponentNode extends Node<IPublicTypeComponentSchema> {}
 export interface IRootNode extends Node<IPublicTypePageSchema | IPublicTypeComponentSchema> {}
-export interface INode extends Node<IPublicTypePageSchema | IPublicTypeSlotSchema | IPublicTypeComponentSchema | IPublicTypeNodeSchema> {}
+export interface INode
+  extends Node<
+    | IPublicTypePageSchema
+    | IPublicTypeSlotSchema
+    | IPublicTypeComponentSchema
+    | IPublicTypeNodeSchema
+  > {}
 
 export function isRootNode(node: INode): node is IRootNode {
   return node && node.isRootNode;

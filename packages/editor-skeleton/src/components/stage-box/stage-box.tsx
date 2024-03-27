@@ -104,8 +104,12 @@ export default class StageBox extends Component<StageBoxProps> {
     let contentRefer = null;
 
     if (refer) {
-      contentCurrent = <Stage key={stage.getId()} stage={stage} direction={refer.direction} current />;
-      contentRefer = <Stage key={refer?.stage?.getId()} stage={refer?.stage} direction={refer.direction} />;
+      contentCurrent = (
+        <Stage key={stage.getId()} stage={stage} direction={refer.direction} current />
+      );
+      contentRefer = (
+        <Stage key={refer?.stage?.getId()} stage={refer?.stage} direction={refer.direction} />
+      );
     } else {
       contentCurrent = <Stage key={stage.getId()} stage={stage} current />;
     }
@@ -117,12 +121,10 @@ export default class StageBox extends Component<StageBoxProps> {
         }}
         className={className}
       >
-
+        {/* @ts-ignore */}
         <PopupService popupPipe={this.popupPipe}>
-
           {contentRefer}
           {contentCurrent}
-
         </PopupService>
       </div>
     );

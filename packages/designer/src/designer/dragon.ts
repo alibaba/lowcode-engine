@@ -43,7 +43,11 @@ export function isDragNodeDataObject(obj: any): obj is IPublicTypeDragNodeDataOb
  * @deprecated use same function in @alilc/lowcode-utils
  */
 export function isDragAnyObject(obj: any): obj is IPublicTypeDragAnyObject {
-  return obj && obj.type !== IPublicEnumDragObjectType.NodeData && obj.type !== IPublicEnumDragObjectType.Node;
+  return (
+    obj &&
+    obj.type !== IPublicEnumDragObjectType.NodeData &&
+    obj.type !== IPublicEnumDragObjectType.Node
+  );
 }
 
 export function isLocateEvent(e: any): e is ILocateEvent {
@@ -88,7 +92,7 @@ function getSourceSensor(dragObject: IPublicModelDragObject): ISimulatorHost | n
   if (!isDragNodeObject(dragObject)) {
     return null;
   }
-  return dragObject.nodes[0]?.document?.simulator || null;
+  return (dragObject.nodes[0]?.document as any)?.simulator || null;
 }
 
 function isDragEvent(e: any): e is DragEvent {
@@ -98,10 +102,7 @@ function isDragEvent(e: any): e is DragEvent {
 /**
  * Drag-on 拖拽引擎
  */
-export class Dragon implements IPublicModelDragon<
-  INode,
-  ILocateEvent
-> {
+export class Dragon implements IPublicModelDragon<INode, ILocateEvent> {
   private sensors: IPublicModelSensor[] = [];
 
   private nodeInstPointerEvents: boolean;
@@ -139,6 +140,7 @@ export class Dragon implements IPublicModelDragon<
    * @param shell container element
    * @param boost boost got a drag object
    */
+  // @ts-ignore
   from(shell: Element, boost: (e: MouseEvent) => IPublicModelDragObject | null) {
     const mousedown = (e: MouseEvent) => {
       // ESC or RightClick
@@ -166,13 +168,20 @@ export class Dragon implements IPublicModelDragon<
    * @param dragObject 拖拽对象
    * @param boostEvent 拖拽初始时事件
    */
-  boost(dragObject: IPublicModelDragObject, boostEvent: MouseEvent | DragEvent, fromRglNode?: INode | IPublicModelNode) {
+  boost(
+    dragObject: IPublicModelDragObject,
+    boostEvent: MouseEvent | DragEvent,
+    fromRglNode?: INode | IPublicModelNode,
+  ) {
     const { designer } = this;
     const masterSensors = this.getMasterSensors();
     const handleEvents = makeEventsHandler(boostEvent, masterSensors);
     const newBie = !isDragNodeObject(dragObject);
     const forceCopyState =
-      isDragNodeObject(dragObject) && dragObject.nodes.some((node: Node | IPublicModelNode) => (typeof node.isSlot === 'function' ? node.isSlot() : node.isSlot));
+      isDragNodeObject(dragObject) &&
+      dragObject.nodes.some((node: Node | IPublicModelNode) =>
+        typeof node.isSlot === 'function' ? node.isSlot() : node.isSlot,
+      );
     const isBoostFromDragAPI = isDragEvent(boostEvent);
     let lastSensor: IPublicModelSensor | undefined;
 
@@ -238,14 +247,14 @@ export class Dragon implements IPublicModelDragon<
       }
       lastArrive = e;
 
-      const { isRGL, rglNode } = getRGL(e);
+      const { isRGL, rglNode } = getRGL(e) as any;
       const locateEvent = createLocateEvent(e);
       const sensor = chooseSensor(locateEvent);
 
       /* istanbul ignore next */
       if (isRGL) {
         // 禁止被拖拽元素的阻断
-        const nodeInst = dragObject.nodes[0].getDOMNode();
+        const nodeInst = dragObject?.nodes?.[0]?.getDOMNode();
         if (nodeInst && nodeInst.style) {
           this.nodeInstPointerEvents = true;
           nodeInst.style.pointerEvents = 'none';
@@ -263,7 +272,7 @@ export class Dragon implements IPublicModelDragon<
           this.emitter.emit('rgl.add.placeholder', {
             rglNode,
             fromRglNode,
-            node: locateEvent.dragObject?.nodes[0],
+            node: locateEvent.dragObject?.nodes?.[0],
             event: e,
           });
           designer.clearLocation();
@@ -337,7 +346,7 @@ export class Dragon implements IPublicModelDragon<
     const over = (e?: any) => {
       // 禁止被拖拽元素的阻断
       if (this.nodeInstPointerEvents) {
-        const nodeInst = dragObject.nodes[0].getDOMNode();
+        const nodeInst = dragObject?.nodes?.[0]?.getDOMNode();
         if (nodeInst && nodeInst.style) {
           nodeInst.style.pointerEvents = '';
         }
@@ -346,18 +355,18 @@ export class Dragon implements IPublicModelDragon<
 
       // 发送drop事件
       if (e) {
-        const { isRGL, rglNode } = getRGL(e);
+        const { isRGL, rglNode } = getRGL(e) as any;
         /* istanbul ignore next */
         if (isRGL && this._canDrop && this._dragging) {
-          const tarNode = dragObject.nodes[0];
-          if (rglNode.id !== tarNode.id) {
+          const tarNode = dragObject?.nodes?.[0];
+          if (rglNode.id !== tarNode?.id) {
             // 避免死循环
             this.emitter.emit('rgl.drop', {
               rglNode,
               node: tarNode,
             });
             const selection = designer.project.currentDocument?.selection;
-            selection?.select(tarNode.id);
+            selection?.select(tarNode!.id);
           }
         }
       }
@@ -429,7 +438,7 @@ export class Dragon implements IPublicModelDragon<
       if (!sourceDocument || sourceDocument === document) {
         evt.globalX = e.clientX;
         evt.globalY = e.clientY;
-      } else /* istanbul ignore next */ {
+      } /* istanbul ignore next */ else {
         // event from simulator sandbox
         let srcSim: ISimulatorHost | undefined;
         const lastSim = lastSensor && isSimulatorHost(lastSensor) ? lastSensor : null;
@@ -463,7 +472,9 @@ export class Dragon implements IPublicModelDragon<
     /* istanbul ignore next */
     const chooseSensor = (e: ILocateEvent) => {
       // this.sensors will change on dragstart
-      const sensors: IPublicModelSensor[] = this.sensors.concat(masterSensors as IPublicModelSensor[]);
+      const sensors: IPublicModelSensor[] = this.sensors.concat(
+        masterSensors as IPublicModelSensor[],
+      );
       let sensor =
         e.sensor && e.sensor.isEnter(e)
           ? e.sensor
@@ -475,7 +486,7 @@ export class Dragon implements IPublicModelDragon<
         } else if (e.sensor) {
           sensor = e.sensor;
         } else if (sourceSensor) {
-          sensor = sourceSensor;
+          sensor = sourceSensor as any;
         }
       }
       if (sensor !== lastSensor) {
@@ -634,4 +645,4 @@ export class Dragon implements IPublicModelDragon<
   }
 }
 
-export interface IDragon extends Dragon { }
+export interface IDragon extends Dragon {}

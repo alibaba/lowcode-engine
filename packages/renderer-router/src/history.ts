@@ -1,4 +1,4 @@
-import { useEvent } from '@alilc/renderer-core';
+import { useEvent } from '@alilc/lowcode-renderer-core';
 
 export type HistoryState = History['state'];
 export type HistoryLocation = string;

@@ -13,6 +13,7 @@ export interface PluginProps {
 interface DesignerPluginState {
   componentMetadatas?: any[] | null;
   library?: any[] | null;
+  utilsMetadata?: any[] | null;
   extraEnvironment?: any[] | null;
   renderEnv?: string;
   device?: string;
@@ -29,6 +30,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
 
   state: DesignerPluginState = {
     componentMetadatas: null,
+    utilsMetadata: null,
     library: null,
     extraEnvironment: null,
     renderEnv: 'default',
@@ -58,7 +60,8 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
       const deviceClassName = engineConfig.get('deviceClassName') || editor.get('deviceClassName');
       const simulatorUrl = engineConfig.get('simulatorUrl') || editor.get('simulatorUrl');
       // @TODO setupAssets 里设置 requestHandlersMap 不太合适
-      const requestHandlersMap = engineConfig.get('requestHandlersMap') || editor.get('requestHandlersMap');
+      const requestHandlersMap =
+        engineConfig.get('requestHandlersMap') || editor.get('requestHandlersMap');
       if (!this._mounted) {
         return;
       }
@@ -139,6 +142,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
         name={editor.viewName}
         designer={editor.get('designer')}
         componentMetadatas={componentMetadatas}
+        shellModelFactory={{} as any}
         simulatorProps={{
           library,
           utilsMetadata,

@@ -2,13 +2,19 @@ import { IPublicTypeIconType, IPublicTypeTitleContent, TipContent } from '@alilc
 import { isI18nData, isTitleConfig } from '@alilc/lowcode-utils';
 import { isValidElement } from 'react';
 
-export function composeTitle(title?: IPublicTypeTitleContent, icon?: IPublicTypeIconType, tip?: TipContent, tipAsTitle?: boolean, noIcon?: boolean) {
+export function composeTitle(
+  title?: IPublicTypeTitleContent,
+  icon?: IPublicTypeIconType,
+  tip?: TipContent,
+  tipAsTitle?: boolean,
+  noIcon?: boolean,
+) {
   let _title: IPublicTypeTitleContent | undefined;
   if (!title) {
     _title = {};
     if (!icon || tipAsTitle) {
       _title = {
-        label: tip,
+        label: tip as any,
       };
       tip = undefined;
     }
@@ -19,7 +25,7 @@ export function composeTitle(title?: IPublicTypeTitleContent, icon?: IPublicType
   if (icon || tip) {
     if (typeof _title !== 'object' || isValidElement(_title) || isI18nData(_title)) {
       if (isValidElement(_title)) {
-        if (_title.type === 'svg' || _title.type.getIcon) {
+        if (_title.type === 'svg' || (_title.type as any).getIcon) {
           if (!icon) {
             icon = _title;
           }
@@ -32,7 +38,7 @@ export function composeTitle(title?: IPublicTypeTitleContent, icon?: IPublicType
         }
       }
       _title = {
-        label: _title,
+        label: _title as any,
         icon,
         tip,
       };
@@ -41,7 +47,7 @@ export function composeTitle(title?: IPublicTypeTitleContent, icon?: IPublicType
         ..._title,
         icon,
         tip,
-      };
+      } as any;
     }
   }
   if (isTitleConfig(_title) && noIcon) {

@@ -1,5 +1,4 @@
-import set from 'lodash/set';
-import cloneDeep from 'lodash/cloneDeep';
+import { set, cloneDeep } from 'lodash-es';
 import '../fixtures/window';
 import { Editor } from '@alilc/lowcode-editor-core';
 import { Project } from '../../src/project/project';
@@ -22,7 +21,9 @@ jest.mock('../../src/designer/designer', () => {
             },
           };
         },
-        transformProps(props) { return props; },
+        transformProps(props) {
+          return props;
+        },
         createSettingEntry: mockCreateSettingEntry,
         postEvent() {},
       };
@@ -44,9 +45,7 @@ describe('schema 生成节点模型测试', () => {
 
     it('基本的节点模型初始化，模型导出，初始化传入 schema', () => {
       const project = new Project(designer, {
-        componentsTree: [
-          formSchema,
-        ],
+        componentsTree: [formSchema],
       });
       project.open();
       expect(project).toBeTruthy();
@@ -55,13 +54,15 @@ describe('schema 生成节点模型测试', () => {
       const ids = getIdsFromSchema(formSchema);
       const expectedNodeCnt = ids.length;
       expect(nodesMap.size).toBe(expectedNodeCnt);
-      ids.forEach(id => {
-        expect(nodesMap.get(id).componentName).toBe(getNodeFromSchemaById(formSchema, id).componentName);
+      ids.forEach((id) => {
+        expect(nodesMap.get(id).componentName).toBe(
+          getNodeFromSchemaById(formSchema, id).componentName,
+        );
       });
 
       const exportSchema = currentDocument?.export(1);
       expect(getIdsFromSchema(exportSchema).length).toBe(expectedNodeCnt);
-      nodesMap.forEach(node => {
+      nodesMap.forEach((node) => {
         // 触发 getter
         node.settingEntry;
       });
@@ -70,9 +71,7 @@ describe('schema 生成节点模型测试', () => {
 
     it('onSimulatorReady works', () => {
       const project = new Project(designer, {
-        componentsTree: [
-          formSchema,
-        ],
+        componentsTree: [formSchema],
       });
       project.open();
       expect(project).toBeTruthy();
@@ -103,23 +102,26 @@ describe('schema 生成节点模型测试', () => {
       const project = new Project(designer);
       expect(project).toBeTruthy();
       // trigger autoOpen case
-      project.load({
-        componentsTree: [
-          formSchema,
-        ],
-      }, true);
+      project.load(
+        {
+          componentsTree: [formSchema],
+        },
+        true,
+      );
       const { currentDocument } = project;
       const { nodesMap } = currentDocument;
       const ids = getIdsFromSchema(formSchema);
       const expectedNodeCnt = ids.length;
       expect(nodesMap.size).toBe(expectedNodeCnt);
-      ids.forEach(id => {
-        expect(nodesMap.get(id).componentName).toBe(getNodeFromSchemaById(formSchema, id).componentName);
+      ids.forEach((id) => {
+        expect(nodesMap.get(id).componentName).toBe(
+          getNodeFromSchemaById(formSchema, id).componentName,
+        );
       });
 
       const exportSchema = currentDocument?.export(1);
       expect(getIdsFromSchema(exportSchema).length).toBe(expectedNodeCnt);
-      nodesMap.forEach(node => {
+      nodesMap.forEach((node) => {
         // 触发 getter
         node.settingEntry;
       });
@@ -129,31 +131,34 @@ describe('schema 生成节点模型测试', () => {
       const project = new Project(designer);
       expect(project).toBeTruthy();
       // trigger autoOpen case
-      project.load({
-        componentsTree: [
-          {
-            ...formSchema,
-            fileName: 'demoFile1',
+      project.load(
+        {
+          componentsTree: [
+            {
+              ...formSchema,
+              fileName: 'demoFile1',
+            },
+            {
+              ...formSchema,
+              fileName: 'demoFile2',
+            },
+          ],
+          config: {
+            layout: {
+              props: {
+                tabBar: {
+                  items: [
+                    {
+                      path: '/demoFile2',
+                    },
+                  ],
+                },
+              },
+            },
           },
-          {
-            ...formSchema,
-            fileName: 'demoFile2',
-          }
-        ],
-        config: {
-          layout: {
-            props: {
-              tabBar: {
-                items: [
-                  {
-                    path: '/demoFile2',
-                  }
-                ],
-              }
-            }
-          }
-        }
-      }, true);
+        },
+        true,
+      );
       const { currentDocument } = project;
       expect(currentDocument.fileName).toBe('demoFile2');
     });
@@ -162,22 +167,24 @@ describe('schema 生成节点模型测试', () => {
       const project = new Project(designer);
       expect(project).toBeTruthy();
       // trigger autoOpen case
-      project.load({
-        componentsTree: [
-          {
-            ...formSchema,
-            fileName: 'demoFile1',
-          },
-          {
-            ...formSchema,
-            fileName: 'demoFile2',
-          }
-        ],
-      }, 'demoFile2');
+      project.load(
+        {
+          componentsTree: [
+            {
+              ...formSchema,
+              fileName: 'demoFile1',
+            },
+            {
+              ...formSchema,
+              fileName: 'demoFile2',
+            },
+          ],
+        },
+        'demoFile2',
+      );
       const { currentDocument } = project;
       expect(currentDocument.fileName).toBe('demoFile2');
     });
-
 
     it('setSchema works', () => {
       const project = new Project(designer);
@@ -204,13 +211,15 @@ describe('schema 生成节点模型测试', () => {
       const ids = getIdsFromSchema(formSchema);
       const expectedNodeCnt = ids.length;
       expect(nodesMap.size).toBe(expectedNodeCnt);
-      ids.forEach(id => {
-        expect(nodesMap.get(id).componentName).toBe(getNodeFromSchemaById(formSchema, id).componentName);
+      ids.forEach((id) => {
+        expect(nodesMap.get(id).componentName).toBe(
+          getNodeFromSchemaById(formSchema, id).componentName,
+        );
       });
 
       const exportSchema = currentDocument?.export(1);
       expect(getIdsFromSchema(exportSchema).length).toBe(expectedNodeCnt);
-      nodesMap.forEach(node => {
+      nodesMap.forEach((node) => {
         // 触发 getter
         node.settingEntry;
       });
@@ -271,11 +280,13 @@ describe('schema 生成节点模型测试', () => {
 
   describe('block ❌ | component ❌ | slot ✅', () => {
     it('基本的节点模型初始化，模型导出，初始化传入 schema', () => {
-      const formSchemaWithSlot = set(cloneDeep(formSchema), 'children[0].children[0].props.title.type', 'JSSlot');
+      const formSchemaWithSlot = set(
+        cloneDeep(formSchema),
+        'children[0].children[0].props.title.type',
+        'JSSlot',
+      );
       const project = new Project(designer, {
-        componentsTree: [
-          formSchemaWithSlot,
-        ],
+        componentsTree: [formSchemaWithSlot],
       });
       project.open();
       expect(project).toBeTruthy();
@@ -290,7 +301,5 @@ describe('schema 生成节点模型测试', () => {
     });
   });
 
-  describe.skip('多 document 测试', () => {
-
-  });
+  describe.skip('多 document 测试', () => {});
 });

@@ -20,7 +20,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@alilc/renderer-core": "workspace:*",
+    "@alilc/lowcode-renderer-core": "workspace:*",
     "lodash-es": "^4.17.21",
     "path-to-regexp": "^6.2.1",
     "qs": "^6.12.0"
@@ -30,7 +30,7 @@
     "@types/qs": "^6.9.13"
   },
   "peerDependencies": {
-    "@alilc/renderer-core": "workspace:*"
+    "@alilc/lowcode-renderer-core": "workspace:*"
   },
   "publishConfig": {
     "access": "public",

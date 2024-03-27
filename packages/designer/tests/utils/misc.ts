@@ -1,4 +1,4 @@
-import lodashSet from 'lodash/set';
+import { set as lodashSet } from 'lodash-es';
 
 export function set(obj: any, path: any, val: any) {
   if (typeof path === 'string' && path.startsWith('prototype')) {
@@ -17,7 +17,7 @@ export function set(obj: any, path: any, val: any) {
 }
 
 export function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export function delayObxTick() {

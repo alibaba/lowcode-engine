@@ -4,7 +4,11 @@ import { Designer } from '../designer';
 import { isDragNodeObject } from '../dragon';
 import { isSimulatorHost } from '../../simulator';
 import './ghost.less';
-import { IPublicTypeI18nData, IPublicTypeNodeSchema, IPublicModelDragObject } from '@alilc/lowcode-types';
+import {
+  IPublicTypeI18nData,
+  IPublicTypeNodeSchema,
+  IPublicModelDragObject,
+} from '@alilc/lowcode-types';
 
 type offBinding = () => any;
 
@@ -26,15 +30,15 @@ export default class DragGhost extends Component<{ designer: Designer }> {
     super(props);
     makeObservable(this);
     this.dispose = [
-      this.dragon.onDragstart(e => {
+      this.dragon.onDragstart((e) => {
         if (e.originalEvent.type.slice(0, 4) === 'drag') {
           return;
         }
-        this.titles = this.getTitles(e.dragObject);
+        this.titles = this.getTitles(e.dragObject!) as any;
         this.x = e.globalX;
         this.y = e.globalY;
       }),
-      this.dragon.onDrag(e => {
+      this.dragon.onDrag((e) => {
         this.x = e.globalX;
         this.y = e.globalY;
         if (isSimulatorHost(e.sensor)) {
@@ -56,17 +60,20 @@ export default class DragGhost extends Component<{ designer: Designer }> {
 
   getTitles(dragObject: IPublicModelDragObject) {
     if (isDragNodeObject(dragObject)) {
-      return dragObject.nodes.map((node) => node.title);
+      return dragObject.nodes.map((node) => node?.title);
     }
 
-    const dataList = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
+    const dataList = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data!];
 
-    return dataList.map((item: IPublicTypeNodeSchema, i) => (this.props.designer.getComponentMeta(item.componentName).title));
+    return dataList.map(
+      (item: IPublicTypeNodeSchema) =>
+        this.props.designer.getComponentMeta(item.componentName).title,
+    );
   }
 
   componentWillUnmount() {
     if (this.dispose) {
-      this.dispose.forEach(off => off());
+      this.dispose.forEach((off) => off());
     }
   }
 

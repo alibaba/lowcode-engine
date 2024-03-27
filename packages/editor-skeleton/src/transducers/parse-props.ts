@@ -21,7 +21,7 @@ function propConfigToFieldConfig(propConfig: IPublicTypePropConfig): IPublicType
       'zh-CN': description?.slice(0, 10) || name,
     },
     tip: description ? `${name} | ${description}` : undefined,
-  };
+  } as any;
   return {
     title,
     ...propConfig,
@@ -65,7 +65,8 @@ function propTypeToSetter(propType: IPublicTypePropType): IPublicTypeSetterType 
       const dataSource = ((propType as IPublicTypeOneOf).value || []).map((value, index) => {
         const t = typeof value;
         return {
-          label: t === 'string' || t === 'number' || t === 'boolean' ? String(value) : `value ${index}`,
+          label:
+            t === 'string' || t === 'number' || t === 'boolean' ? String(value) : `value ${index}`,
           value,
         };
       });
@@ -93,7 +94,9 @@ function propTypeToSetter(propType: IPublicTypePropType): IPublicTypeSetterType 
       };
     case 'shape':
     case 'exact':
-      const items = ((propType as any).value || []).map((item: any) => propConfigToFieldConfig(item));
+      const items = ((propType as any).value || []).map((item: any) =>
+        propConfigToFieldConfig(item),
+      );
       return {
         componentName: 'ObjectSetter',
         props: {
@@ -110,7 +113,11 @@ function propTypeToSetter(propType: IPublicTypePropType): IPublicTypeSetterType 
             if (initial == null && item.setter && typeof item.setter === 'object') {
               initial = (item.setter as any).initialValue;
             }
-            data[item.name] = initial ? (typeof initial === 'function' ? initial(field) : initial) : null;
+            data[item.name] = initial
+              ? typeof initial === 'function'
+                ? initial(field)
+                : initial
+              : null;
           });
           return data;
         },
@@ -121,7 +128,9 @@ function propTypeToSetter(propType: IPublicTypePropType): IPublicTypeSetterType 
         componentName: 'ObjectSetter',
         props: {
           config: {
-            extraSetter: propTypeToSetter(typeName === 'objectOf' ? (propType as IPublicTypeObjectOf).value : 'any'),
+            extraSetter: propTypeToSetter(
+              typeName === 'objectOf' ? (propType as IPublicTypeObjectOf).value : 'any',
+            ),
           },
         },
         isRequired,
@@ -132,7 +141,9 @@ function propTypeToSetter(propType: IPublicTypePropType): IPublicTypeSetterType 
       return {
         componentName: 'ArraySetter',
         props: {
-          itemSetter: propTypeToSetter(typeName === 'arrayOf' ? (propType as IPublicTypeArrayOf).value : 'any'),
+          itemSetter: propTypeToSetter(
+            typeName === 'arrayOf' ? (propType as IPublicTypeArrayOf).value : 'any',
+          ),
         },
         isRequired,
         initialValue: [],
@@ -157,7 +168,7 @@ function propTypeToSetter(propType: IPublicTypePropType): IPublicTypeSetterType 
         isRequired,
       };
     default:
-      // do nothing
+    // do nothing
   }
   return {
     componentName: 'MixedSetter',
@@ -168,7 +179,9 @@ function propTypeToSetter(propType: IPublicTypePropType): IPublicTypeSetterType 
 
 const EVENT_RE = /^on|after|before[A-Z][\w]*$/;
 
-export default function (metadata: IPublicTypeTransformedComponentMetadata): IPublicTypeTransformedComponentMetadata {
+export default function (
+  metadata: IPublicTypeTransformedComponentMetadata,
+): IPublicTypeTransformedComponentMetadata {
   const { configure = {} } = metadata;
   // TODO types后续补充
   let extendsProps: any = null;

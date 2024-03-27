@@ -1,7 +1,6 @@
 import {
   Component,
   Fragment,
-  ReactNodeArray,
   isValidElement,
   cloneElement,
   createElement,
@@ -54,11 +53,8 @@ export class BorderSelectingInstance extends Component<{
     }
 
     return (
-      <div
-        className={className}
-        style={style}
-      >
-        {(!dragging && !hideComponentAction) ? <Toolbar observed={observed} /> : null}
+      <div className={className} style={style}>
+        {!dragging && !hideComponentAction ? <Toolbar observed={observed} /> : null}
       </div>
     );
   }
@@ -68,7 +64,7 @@ export class BorderSelectingInstance extends Component<{
 class Toolbar extends Component<{ observed: OffsetObserver }> {
   render() {
     const { observed } = this.props;
-    const { height, width } = observed.viewport;
+    const { height, width } = observed.viewport!;
     const BAR_HEIGHT = 20;
     const MARGIN = 1;
     const BORDER = 2;
@@ -81,7 +77,7 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
         top: -SPACE_HEIGHT,
         height: BAR_HEIGHT,
       };
-    } else if (observed.bottom + SPACE_HEIGHT < height) {
+    } else if (observed.bottom! + SPACE_HEIGHT < height) {
       style = {
         bottom: -SPACE_HEIGHT,
         height: BAR_HEIGHT,
@@ -93,21 +89,24 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
       };
     }
     // 计算 toolbar 的左/右位置
-    if (SPACE_MINIMUM_WIDTH > observed.left + observed.width) {
+    if (SPACE_MINIMUM_WIDTH > observed.left + observed.width!) {
       style.left = Math.max(-BORDER, observed.left - width - BORDER);
     } else {
-      style.right = Math.max(-BORDER, observed.right - width - BORDER);
+      style.right = Math.max(-BORDER, observed.right! - width - BORDER);
       style.justifyContent = 'flex-start';
     }
     const { node } = observed;
-    const actions: ReactNodeArray = [];
+    const actions: ReactNode[] = [];
     node.componentMeta.availableActions.forEach((action) => {
       const { important = true, condition, content, name } = action;
       if (node.isSlot() && (name === 'copy' || name === 'remove')) {
         // FIXME: need this?
         return;
       }
-      if (important && (typeof condition === 'function' ? condition(node) !== false : condition !== false)) {
+      if (
+        important &&
+        (typeof condition === 'function' ? condition(node) !== false : condition !== false)
+      ) {
         actions.push(createAction(content, name, node));
       }
     });
@@ -120,7 +119,11 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
   }
 }
 
-function createAction(content: ReactNode | ComponentType<any> | IPublicTypeActionContentObject, key: string, node: INode) {
+function createAction(
+  content: ReactNode | ComponentType<any> | IPublicTypeActionContentObject,
+  key: string,
+  node: INode,
+) {
   if (isValidElement<{ key: string; node: INode }>(content)) {
     return cloneElement(content, { key, node });
   }
@@ -148,7 +151,7 @@ function createAction(content: ReactNode | ComponentType<any> | IPublicTypeActio
         }}
       >
         {icon && createIcon(icon, { key, node: node.internalToShellNode() })}
-        <Tip>{title}</Tip>
+        <Tip>{title as any}</Tip>
       </div>
     );
   }
@@ -187,7 +190,13 @@ export class BorderSelectingForNode extends Component<{ host: ISimulatorHost; no
           if (!observed) {
             return null;
           }
-          return <BorderSelectingInstance key={observed.id} dragging={this.dragging} observed={observed} />;
+          return (
+            <BorderSelectingInstance
+              key={observed.id}
+              dragging={this.dragging}
+              observed={observed}
+            />
+          );
         })}
       </Fragment>
     );

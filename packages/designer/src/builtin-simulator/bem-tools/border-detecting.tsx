@@ -35,9 +35,7 @@ export class BorderDetectingInstance extends PureComponent<{
     return (
       <div className={className} style={style}>
         <Title title={title} className="lc-borders-title" />
-        {
-          isLocked ? (<Title title={intl('locked')} className="lc-borders-status" />) : null
-        }
+        {isLocked ? <Title title={intl('locked')} className="lc-borders-status" /> : null}
       </div>
     );
   }
@@ -77,7 +75,10 @@ export class BorderDetecting extends Component<{ host: BuiltinSimulatorHost }> {
     const { current } = this;
 
     const canHoverHook = current?.componentMeta.advanced.callbacks?.onHoverHook;
-    const canHover = (canHoverHook && typeof canHoverHook === 'function') ? canHoverHook(current.internalToShellNode()) : true;
+    const canHover =
+      canHoverHook && typeof canHoverHook === 'function'
+        ? canHoverHook(current.internalToShellNode()!)
+        : true;
 
     if (!canHover || !current || host.viewport.scrolling || host.liveEditing.editing) {
       return null;
@@ -104,7 +105,7 @@ export class BorderDetecting extends Component<{ host: BuiltinSimulatorHost }> {
       );
     }
 
-    const lockedNode = getClosestNode(current, (n) => {
+    const lockedNode = getClosestNode(current as any, (n) => {
       // 假如当前节点就是 locked 状态，要从当前节点的父节点开始查找
       return !!(current?.isLocked ? n.parent?.isLocked : n.isLocked);
     });
@@ -118,7 +119,10 @@ export class BorderDetecting extends Component<{ host: BuiltinSimulatorHost }> {
           scrollX={this.scrollX}
           scrollY={this.scrollY}
           // @ts-ignore
-          rect={host.computeComponentInstanceRect(host.getComponentInstances(lockedNode)[0], lockedNode.componentMeta.rootSelector)}
+          rect={host.computeComponentInstanceRect(
+            host.getComponentInstances(lockedNode)![0],
+            lockedNode.componentMeta.rootSelector,
+          )}
           isLocked={lockedNode?.getId() !== current.getId()}
         />
       );
