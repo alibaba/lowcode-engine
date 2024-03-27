@@ -20,15 +20,12 @@
 
 [npm-image]: https://img.shields.io/npm/v/@alilc/lowcode-engine.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/@alilc/lowcode-engine
-
 [download-image]: https://img.shields.io/npm/dm/@alilc/lowcode-engine.svg?style=flat-square
 [download-url]: https://npmjs.org/package/@alilc/lowcode-engine
 [help-wanted-image]: https://flat.badgen.net/github/label-issues/alibaba/lowcode-engine/help%20wanted/open
 [help-wanted-url]: https://github.com/alibaba/lowcode-engine/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22
-
 [issues-helper-image]: https://img.shields.io/badge/using-issues--helper-orange?style=flat-square
 [issues-helper-url]: https://github.com/actions-cool/issues-helper
-
 [codecov-image-url]: https://codecov.io/gh/alibaba/lowcode-engine/branch/main/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/alibaba/lowcode-engine
 
@@ -73,8 +70,7 @@ skeleton.add({
   name: 'logo',
   content: YourFantasticLogo,
   contentProps: {
-    logo:
-      'https://img.alicdn.com/tfs/TB1_SocGkT2gK0jSZFkXXcIQFXa-66-66.png',
+    logo: 'https://img.alicdn.com/tfs/TB1_SocGkT2gK0jSZFkXXcIQFXa-66-66.png',
     href: '/',
   },
   props: {
@@ -87,6 +83,7 @@ init(document.getElementById('lce'));
 ```
 
 ### 工程化配置：
+
 ```json
 {
   "externals": {
@@ -97,35 +94,37 @@ init(document.getElementById('lce'));
 ```
 
 ### cdn 可选方式：
+
 #### 方式 1（推荐）：alifd cdn
+
 ```html
 https://alifd.alicdn.com/npm/@alilc/lowcode-engine@1.0.18/dist/js/engine-core.js
-
 https://alifd.alicdn.com/npm/@alilc/lowcode-react-simulator-renderer@1.0.18/dist/js/react-simulator-renderer.js
 ```
 
 #### 方式 2（推荐）：uipaas cdn
+
 ```html
 https://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/1.0.18/dist/js/engine-core.js
-
 https://uipaas-assets.com/prod/npm/@alilc/lowcode-react-simulator-renderer/1.0.18/dist/js/react-simulator-renderer.js
 ```
 
 #### 方式 3：unpkg
+
 ```html
 https://unpkg.com/@alilc/lowcode-engine@1.0.18/dist/js/engine-core.js
-
 https://unpkg.com/@alilc/lowcode-react-simulator-renderer@1.0.18/dist/js/react-simulator-renderer.js
 ```
 
 #### 方式 4：jsdelivr
+
 ```html
 https://cdn.jsdelivr.net/npm/@alilc/lowcode-engine@1.0.18/dist/js/engine-core.js
-
 https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.18/dist/js/react-simulator-renderer.js
 ```
 
 #### 方式 5：使用自有 cdn
+
 将源码中 packages/engine/dist 和 packages/react-simulator-renderer/dist 下的文件传至你的 cdn 提供商
 
 ## 🔗 相关链接
@@ -146,9 +145,8 @@ https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.18/dist
 ```bash
 $ git clone git@github.com:alibaba/lowcode-engine.git
 $ cd lowcode-engine
-$ npm install
-$ npm run setup
-$ npm start
+$ pnpm install
+$ pnpm playground
 ```
 
 > 📢 npm 访问速度较慢，阿里员工可以使用 tnpm，其他同学建议使用 cnpm 或者指定镜像 registry。
@@ -160,6 +158,7 @@ lowcode-engine 启动后，提供了几个 umd 文件，可以结合 [lowcode-de
 ## 🤝 参与共建
 
 请先阅读：
+
 1. [如何配置引擎调试环境？](https://lowcode-engine.cn/site/docs/participate/prepare)
 2. [关于引擎的研发协作流程](https://lowcode-engine.cn/site/docs/participate/flow)
 3. [引擎的工程化配置](https://lowcode-engine.cn/site/docs/participate/config)

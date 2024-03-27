@@ -1,6 +1,7 @@
 import {
   Editor,
-  engineConfig, Setters as InnerSetters,
+  engineConfig,
+  Setters as InnerSetters,
   Hotkey as InnerHotkey,
   commonEvent,
   IEngineConfig,
@@ -16,10 +17,7 @@ import {
   IDesigner,
   ILowCodePluginManager,
 } from '@alilc/lowcode-designer';
-import {
-  ISkeleton,
-  Skeleton as InnerSkeleton,
-} from '@alilc/lowcode-editor-skeleton';
+import { ISkeleton, Skeleton as InnerSkeleton } from '@alilc/lowcode-editor-skeleton';
 import {
   Hotkey,
   Plugins,
@@ -55,10 +53,15 @@ import { getLogger, Logger as InnerLogger } from '@alilc/lowcode-utils';
 import { IWorkspace } from '../workspace';
 import { IEditorWindow } from '../window';
 
-export interface IBasicContext extends BasicContext {
-}
+export interface IBasicContext extends BasicContext {}
 
-export class BasicContext implements Omit<IPublicModelPluginContext, 'workspace' | 'commonUI' | 'command' | 'isPluginRegisteredInWorkspace' | 'editorWindow'> {
+export class BasicContext
+  implements
+    Omit<
+      IPublicModelPluginContext,
+      'workspace' | 'commonUI' | 'command' | 'isPluginRegisteredInWorkspace' | 'editorWindow'
+    >
+{
   skeleton: IPublicApiSkeleton;
   plugins: IPublicApiPlugins;
   project: IPublicApiProject;
@@ -82,7 +85,12 @@ export class BasicContext implements Omit<IPublicModelPluginContext, 'workspace'
   preference: IPluginPreferenceMananger;
   workspace: IWorkspace;
 
-  constructor(innerWorkspace: IWorkspace, viewName: string, readonly registerLevel: IPublicEnumPluginRegisterLevel, public editorWindow?: IEditorWindow) {
+  constructor(
+    innerWorkspace: IWorkspace,
+    viewName: string,
+    readonly registerLevel: IPublicEnumPluginRegisterLevel,
+    public editorWindow?: IEditorWindow,
+  ) {
     const editor = new Editor(viewName, true);
 
     const innerSkeleton = new InnerSkeleton(editor, viewName);
@@ -135,7 +143,11 @@ export class BasicContext implements Omit<IPublicModelPluginContext, 'workspace'
     let plugins: IPublicApiPlugins;
 
     const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
-      assembleApis: (context: ILowCodePluginContextPrivate, pluginName: string, meta: IPublicTypePluginMeta) => {
+      assembleApis: (
+        context: ILowCodePluginContextPrivate,
+        pluginName: string,
+        meta: IPublicTypePluginMeta,
+      ) => {
         context.workspace = workspace;
         context.hotkey = hotkey;
         context.project = project;
@@ -158,7 +170,8 @@ export class BasicContext implements Omit<IPublicModelPluginContext, 'workspace'
           commandScope,
         });
         context.registerLevel = registerLevel;
-        context.isPluginRegisteredInWorkspace = registerLevel === IPublicEnumPluginRegisterLevel.Workspace;
+        context.isPluginRegisteredInWorkspace =
+          registerLevel === IPublicEnumPluginRegisterLevel.Workspace;
         editor.set('pluginContext', context);
       },
     };

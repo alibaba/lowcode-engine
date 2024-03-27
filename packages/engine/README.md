@@ -20,15 +20,12 @@ An enterprise-class low-code technology stack with scale-out design
 
 [npm-image]: https://img.shields.io/npm/v/@alilc/lowcode-engine.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/@alilc/lowcode-engine
-
 [download-image]: https://img.shields.io/npm/dm/@alilc/lowcode-engine.svg?style=flat-square
 [download-url]: https://npmjs.org/package/@alilc/lowcode-engine
 [help-wanted-image]: https://flat.badgen.net/github/label-issues/alibaba/lowcode-engine/help%20wanted/open
 [help-wanted-url]: https://github.com/alibaba/lowcode-engine/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22
-
 [issues-helper-image]: https://img.shields.io/badge/using-issues--helper-orange?style=flat-square
 [issues-helper-url]: https://github.com/actions-cool/issues-helper
-
 [codecov-image-url]: https://codecov.io/gh/alibaba/lowcode-engine/branch/main/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/alibaba/lowcode-engine
 
@@ -73,8 +70,7 @@ skeleton.add({
   name: 'logo',
   content: YourFantasticLogo,
   contentProps: {
-    logo:
-      'https://img.alicdn.com/tfs/TB1_SocGkT2gK0jSZFkXXcIQFXa-66-66.png',
+    logo: 'https://img.alicdn.com/tfs/TB1_SocGkT2gK0jSZFkXXcIQFXa-66-66.png',
     href: '/',
   },
   props: {
@@ -87,6 +83,7 @@ init(document.getElementById('lce'));
 ```
 
 ### Engineering configuration:
+
 ```json
 {
   "externals": {
@@ -97,35 +94,37 @@ init(document.getElementById('lce'));
 ```
 
 ### cdn optional method:
+
 #### Method 1: alifd cdn
+
 ```html
 https://alifd.alicdn.com/npm/@alilc/lowcode-engine@1.0.18/dist/js/engine-core.js
-
 https://alifd.alicdn.com/npm/@alilc/lowcode-react-simulator-renderer@1.0.18/dist/js/react-simulator-renderer.js
 ```
 
 #### Method 2: uipaas cdn
+
 ```html
 https://uipaas-assets.com/prod/npm/@alilc/lowcode-engine/1.0.18/dist/js/engine-core.js
-
 https://uipaas-assets.com/prod/npm/@alilc/lowcode-react-simulator-renderer/1.0.18/dist/js/react-simulator-renderer.js
 ```
 
 #### Method 3: unpkg
+
 ```html
 https://unpkg.com/@alilc/lowcode-engine@1.0.18/dist/js/engine-core.js
-
 https://unpkg.com/@alilc/lowcode-react-simulator-renderer@1.0.18/dist/js/react-simulator-renderer.js
 ```
 
 #### Method 4: jsdelivr
+
 ```html
 https://cdn.jsdelivr.net/npm/@alilc/lowcode-engine@1.0.18/dist/js/engine-core.js
-
 https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.18/dist/js/react-simulator-renderer.js
 ```
 
 #### Method 5: Use your own cdn
+
 Pass the files under packages/engine/dist and packages/react-simulator-renderer/dist in the source code to your cdn provider
 
 ## 🔗 Related Links
@@ -146,9 +145,8 @@ This [awesome-lowcode-engine](https://github.com/lowcode-workspace/awesome-lowco
 ```bash
 $ git clone git@github.com:alibaba/lowcode-engine.git
 $ cd lowcode-engine
-$ npm install
-$ npm run setup
-$ npm start
+$ pnpm install
+$ pnpm playground
 ```
 
 > 📢 npm access speed is slow, Alibaba employees can use tnpm, other students recommend using cnpm or specifying a mirror registry.
@@ -160,6 +158,7 @@ After lowcode-engine is started, several umd files are provided, which can be de
 ## 🤝 Participation
 
 Please read first:
+
 1. [How to configure the engine debugging environment? ](https://lowcode-engine.cn/site/docs/participate/prepare)
 2. [About the R&D collaboration process of the engine](https://lowcode-engine.cn/site/docs/participate/flow)
 3. [Engineering Configuration of Engine](https://lowcode-engine.cn/site/docs/participate/config)
@@ -167,6 +166,7 @@ Please read first:
 > Strongly recommend reading ["The Wisdom of Asking Questions"](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way), ["How to Ask Questions to the Open Source Community"](https: //github.com/seajs/seajs/issues/545) and [How to Report Bugs Effectively](http://www.chiark.greenend.org.uk/%7Esgtatham/bugs-cn.html), [ "How to Submit Unanswerable Questions to Open Source Projects"](https://zhuanlan.zhihu.com/p/25795393), better questions are easier to get help. (This paragraph refers to [antd](https://github.com/ant-design/ant-design))
 
 About Pull Request:
+
 - set the target branch to **develop** other than **main**
 
 ## ❤️ Contributors
