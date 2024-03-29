@@ -1,6 +1,6 @@
 import { IPublicEnumTransitionType } from '@alilc/lowcode-types';
 import { runInAction } from 'mobx';
-import EventEmitter from 'events';
+import { EventEmitter } from 'events';
 
 class TransactionManager {
   emitter = new EventEmitter();

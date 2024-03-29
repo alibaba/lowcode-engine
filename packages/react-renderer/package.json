@@ -1,18 +1,18 @@
 {
-  "name": "@alilc/lowcode-renderer-react",
+  "name": "@alilc/lowcode-react-renderer",
   "version": "2.0.0-beta.0",
   "description": "react renderer for ali lowcode engine",
   "type": "module",
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",
   "homepage": "https://github.com/alibaba/lowcode-engine/#readme",
   "license": "MIT",
-  "main": "dist/rendererReact.cjs",
-  "module": "dist/rendererReact.js",
+  "main": "dist/reactRenderer.cjs",
+  "module": "dist/reactRenderer.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/rendererReact.js",
-      "require": "./dist/rendererReact.cjs",
+      "import": "./dist/reactRenderer.js",
+      "require": "./dist/reactRenderer.cjs",
       "types": "./dist/index.d.ts"
     }
   },
