@@ -7,7 +7,8 @@ import { IPublicModelSettingField } from '../../../types/src/shell/model/setting
 import {
   Node,
   SettingField,
-} from '@alilc/lowcode-shell';
+} from '../shell';
+
 class ShellModelFactory implements IShellModelFactory {
   createNode(node: INode | null | undefined): IPublicModelNode | null {
     return Node.create(node);
@@ -16,4 +17,5 @@ class ShellModelFactory implements IShellModelFactory {
     return SettingField.create(prop);
   }
 }
+
 export const shellModelFactory = new ShellModelFactory();

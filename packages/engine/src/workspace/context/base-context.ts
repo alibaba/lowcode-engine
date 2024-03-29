@@ -33,7 +33,7 @@ import {
   Canvas,
   CommonUI,
   Command,
-} from '@alilc/lowcode-shell';
+} from '../../shell';
 import {
   IPluginPreferenceMananger,
   IPublicApiCanvas,

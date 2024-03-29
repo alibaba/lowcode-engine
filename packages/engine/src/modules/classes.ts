@@ -11,6 +11,6 @@ export {
   Prop,
   SimulatorHost,
   SkeletonItem,
-} from '@alilc/lowcode-shell';
+} from '../shell';
 export { Node as InnerNode } from '@alilc/lowcode-designer';
 

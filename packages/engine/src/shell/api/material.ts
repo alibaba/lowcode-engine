@@ -13,7 +13,7 @@ import {
   IPublicTypeContextMenuAction,
   IPublicTypeContextMenuItem,
 } from '@alilc/lowcode-types';
-import { Workspace as InnerWorkspace } from '@alilc/lowcode-workspace';
+import { Workspace as InnerWorkspace } from '../../workspace';
 import { editorSymbol, designerSymbol } from '../symbols';
 import { ComponentMeta as ShellComponentMeta } from '../model';
 import { ComponentType } from 'react';

@@ -7,8 +7,7 @@ export const componentMetaParser = (designer: any) => {
         const { material } = ctx;
         material.onChangeAssets(() => {
           const assets = material.getAssets();
-          const { components = [] } = assets;
-          designer.buildComponentMetasMap(components);
+          designer.buildComponentMetasMap(assets?.components ?? []);
         });
       },
     };

@@ -38,7 +38,7 @@ import {
   Workspace as InnerWorkspace,
   Workbench as WorkSpaceWorkbench,
   IWorkspace,
-} from '@alilc/lowcode-workspace';
+} from './workspace';
 
 import {
   Hotkey,
@@ -55,7 +55,7 @@ import {
   Config,
   CommonUI,
   Command,
-} from '@alilc/lowcode-shell';
+} from './shell';
 import { isPlainObject } from '@alilc/lowcode-utils';
 import './modules/live-editing';
 import * as classes from './modules/classes';
@@ -68,6 +68,7 @@ import { builtinHotkey } from './inner-plugins/builtin-hotkey';
 import { defaultContextMenu } from './inner-plugins/default-context-menu';
 import { CommandPlugin } from '@alilc/lowcode-plugin-command';
 import { OutlinePlugin } from '@alilc/lowcode-plugin-outline-pane';
+import { version } from '../package.json'
 
 export * from './modules/skeleton-types';
 export * from './modules/designer-types';
@@ -210,7 +211,8 @@ engineConfig.set('isOpenSource', isOpenSource);
 // container which will host LowCodeEngine DOM
 let engineContainer: HTMLElement;
 // @ts-ignore webpack Define variable
-export const version = VERSION_PLACEHOLDER;
+
+export { version }
 engineConfig.set('ENGINE_VERSION', version);
 
 const pluginPromise = registryInnerPlugin(designer, editor, plugins);

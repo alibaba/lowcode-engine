@@ -38,7 +38,7 @@ export class Canvas implements IPublicApiCanvas {
   }
 
   get activeTracker(): IPublicModelActiveTracker | null {
-    const activeTracker = new ShellActiveTracker(this[designerSymbol].activeTracker);
+    const activeTracker = new ShellActiveTracker(this[designerSymbol].activeTracker as any);
     return activeTracker;
   }
 

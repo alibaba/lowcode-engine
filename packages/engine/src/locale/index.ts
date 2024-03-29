@@ -7,6 +7,7 @@ const { intl, getLocale } = createIntl?.({
   'zh-CN': zhCN,
 }) || {
   intl: (id) => {
+    // @ts-ignore
     return zhCN[id];
   },
 };

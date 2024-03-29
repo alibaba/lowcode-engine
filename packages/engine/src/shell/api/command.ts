@@ -25,7 +25,7 @@ export class Command implements IPublicApiCommand {
   }
 
   batchExecuteCommand(commands: { name: string; args: IPublicTypeCommandHandlerArgs }[]): void {
-    this[commandSymbol].batchExecuteCommand(commands, this[pluginContextSymbol]);
+    this[commandSymbol].batchExecuteCommand(commands, this[pluginContextSymbol]!);
   }
 
   executeCommand(name: string, args: IPublicTypeCommandHandlerArgs): void {

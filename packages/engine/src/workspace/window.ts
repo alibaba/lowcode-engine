@@ -56,7 +56,7 @@ export class EditorWindow implements Omit<IPublicModelWindow<IResource>, 'change
   constructor(readonly resource: IResource, readonly workspace: IWorkspace, private config: IWindowCOnfig) {
     makeObservable(this);
     this.title = config.title;
-    this.icon = resource.icon;
+    this.icon = resource.icon as any;
     this.sleep = config.sleep;
     if (config.sleep) {
       this.updateState(WINDOW_STATE.sleep);

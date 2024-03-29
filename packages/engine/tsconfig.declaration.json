@@ -4,7 +4,6 @@
     "emitDeclarationOnly": true,
     "declaration": true,
     "outDir": "temp",
-    "stripInternal": true,
-    "paths": {}
+    "stripInternal": true
   }
 }

@@ -96,7 +96,7 @@ export class Dragon implements IPublicModelDragon {
    * @param boost 拖拽转换函数
    */
   from(shell: Element, boost: (e: MouseEvent) => IPublicTypeDragNodeDataObject | null): any {
-    return this[dragonSymbol].from(shell, boost);
+    return this[dragonSymbol].from(shell, boost as any);
   }
 
   /**
@@ -111,7 +111,7 @@ export class Dragon implements IPublicModelDragon {
     return this[dragonSymbol].boost({
       ...dragObject,
       nodes: dragObject.nodes.map((node: any) => node[nodeSymbol]),
-    }, boostEvent, fromRglNode?.[nodeSymbol]);
+    } as any, boostEvent, fromRglNode?.[nodeSymbol]);
   }
 
   /**

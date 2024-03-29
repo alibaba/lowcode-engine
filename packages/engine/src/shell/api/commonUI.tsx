@@ -59,7 +59,7 @@ export class CommonUI implements IPublicApiCommonUI {
   Search = Search;
   Select = Select;
   SplitButton = SplitButton;
-  Step = Step;
+  Step = Step as any;
   Switch = Switch;
   Tab = Tab;
   Table = Table;

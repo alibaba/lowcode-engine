@@ -29,7 +29,7 @@ import {
   CommonUI,
   Command,
 } from './api';
-import { getEvent, type Event } from '@alilc/lowcode-editor-skeleton';
+import { getEvent, Event } from '@alilc/lowcode-editor-skeleton';
 
 export * from './symbols';
 

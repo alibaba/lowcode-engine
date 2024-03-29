@@ -1,6 +1,6 @@
 import { editorViewSymbol, pluginContextSymbol } from '../symbols';
 import { IPublicModelPluginContext } from '@alilc/lowcode-types';
-import { IViewContext } from '@alilc/lowcode-workspace';
+import { IViewContext } from '../../workspace';
 
 export class EditorView {
   [editorViewSymbol]: IViewContext;

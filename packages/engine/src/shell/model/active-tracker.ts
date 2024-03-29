@@ -19,7 +19,7 @@ export class ActiveTracker implements IPublicModelActiveTracker {
       return null;
     }
 
-    const { node: innerNode, detail, instance } = _target;
+    const { node: innerNode, detail, instance } = _target as any;
     const publicNode = ShellNode.create(innerNode);
     return {
       node: publicNode!,

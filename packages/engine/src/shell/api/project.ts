@@ -199,6 +199,7 @@ export class Project implements IPublicApiProject {
    * 当前 project 的模拟器 ready 事件
    */
   onSimulatorHostReady(fn: (host: IPublicApiSimulatorHost) => void): IPublicTypeDisposable {
+    // @ts-ignore
     const offFn = this[projectSymbol].onSimulatorReady((simulator: BuiltinSimulatorHost) => {
       fn(SimulatorHost.create(simulator)!);
     });

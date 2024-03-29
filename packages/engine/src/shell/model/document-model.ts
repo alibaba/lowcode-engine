@@ -71,6 +71,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
     const shellDoc = new DocumentModel(document);
     // @ts-ignore 直接返回已挂载的 shell doc 实例
     document[shellDocSymbol] = shellDoc;
+    // @ts-ignore
     return shellDoc;
   }
 
@@ -138,7 +139,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
   }
 
   set dropLocation(loc: IPublicModelDropLocation | null) {
-    this[documentSymbol].dropLocation = loc;
+    this[documentSymbol].dropLocation = loc as any;
   }
 
   /**
@@ -196,7 +197,9 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * @param data
    * @returns
    */
+  // @ts-ignore
   createNode<IPublicModelNode>(data: IPublicTypeNodeSchema): IPublicModelNode | null {
+    // @ts-ignore
     return ShellNode.create(this[documentSymbol].createNode(data));
   }
 

@@ -1,6 +1,6 @@
 import { windowSymbol } from '../symbols';
 import { IPublicModelResource, IPublicModelWindow, IPublicTypeDisposable } from '@alilc/lowcode-types';
-import { IEditorWindow } from '@alilc/lowcode-workspace';
+import { IEditorWindow } from '../../workspace';
 import { Resource as ShellResource } from './resource';
 import { EditorView } from './editor-view';
 

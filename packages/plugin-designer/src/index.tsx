@@ -8,6 +8,8 @@ const logger = getLogger({ level: 'warn', bizName: 'plugin:plugin-designer' });
 
 export interface PluginProps {
   engineEditor: Editor;
+  // ??
+  engineConfig?: any;
 }
 
 interface DesignerPluginState {

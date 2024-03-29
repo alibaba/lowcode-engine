@@ -1,5 +1,5 @@
 import { IPublicApiWorkspace, IPublicModelResource, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType } from '@alilc/lowcode-types';
-import { IWorkspace } from '@alilc/lowcode-workspace';
+import { IWorkspace } from '../../workspace';
 import { resourceSymbol, workspaceSymbol } from '../symbols';
 import { Resource as ShellResource, Window as ShellWindow } from '../model';
 import { Plugins } from './plugins';

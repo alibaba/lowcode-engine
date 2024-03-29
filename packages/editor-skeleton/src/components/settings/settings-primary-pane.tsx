@@ -20,7 +20,7 @@ import { createIcon } from '@alilc/lowcode-utils';
 
 interface ISettingsPrimaryPaneProps {
   engineEditor: Editor;
-  config: any;
+  config?: any;
 }
 
 @observer

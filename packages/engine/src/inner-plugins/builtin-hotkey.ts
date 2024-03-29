@@ -88,7 +88,7 @@ function getSuitableInsertion(
   } else {
     // FIXME!!, parent maybe null
     target = refNode.parent!;
-    index = refNode.index + 1;
+    index = refNode.index! + 1;
   }
 
   if (target && insertNode && !target.componentMeta?.checkNestingDown(target, insertNode)) {
@@ -116,14 +116,14 @@ function getNextForSelect(next: IPublicModelNode | null, head?: any, parent?: IP
       }
     }
 
-    ret = getNextForSelect(next.nextSibling);
+    ret = getNextForSelect(next.nextSibling!);
     if (ret) {
       return ret;
     }
   }
 
   if (parent) {
-    return getNextForSelect(parent.nextSibling, false, parent?.parent);
+    return getNextForSelect(parent.nextSibling!, false, parent?.parent);
   }
 
   return null;
@@ -147,7 +147,7 @@ function getPrevForSelect(prev: IPublicModelNode | null, head?: any, parent?: IP
       return prev;
     }
 
-    ret = getPrevForSelect(prev.prevSibling);
+    ret = getPrevForSelect(prev.prevSibling!);
     if (ret) {
       return ret;
     }

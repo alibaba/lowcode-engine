@@ -2,15 +2,25 @@
   "name": "@alilc/lowcode-engine",
   "version": "2.0.0-beta.0",
   "description": "An enterprise-class low-code technology stack with scale-out design / 一套面向扩展设计的企业级低代码技术体系",
-  "main": "dist/engine-core.js",
-  "module": "dist/engine-core.js",
+  "type": "module",
+  "main": "dist/engine.js",
+  "module": "dist/engine.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/engine.js",
+      "require": "./dist/engine.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "files": [
     "dist",
-    "es",
-    "lib"
+    "src",
+    "package.json"
   ],
   "scripts": {
-    "version:update": "node ./scripts/version.js",
+    "build:target": "vite build",
+    "build:dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.mjs",
     "test": "vitest"
   },
   "license": "MIT",
@@ -23,9 +33,9 @@
     "@alilc/lowcode-plugin-command": "workspace:*",
     "@alilc/lowcode-plugin-designer": "workspace:*",
     "@alilc/lowcode-plugin-outline-pane": "workspace:*",
-    "@alilc/lowcode-shell": "workspace:*",
     "@alilc/lowcode-utils": "workspace:*",
-    "@alilc/lowcode-workspace": "workspace:*",
+    "@alilc/lowcode-types": "workspace:*",
+    "classnames": "^2.5.1",
     "prop-types": "^15.7.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

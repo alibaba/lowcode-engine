@@ -1,10 +1,9 @@
-import { computed, makeObservable, obx } from '@alilc/lowcode-editor-core';
+import { computed, makeObservable, obx, flow } from '@alilc/lowcode-editor-core';
 import {
   IPublicEditorViewConfig,
   IPublicEnumPluginRegisterLevel,
   IPublicTypeEditorView,
 } from '@alilc/lowcode-types';
-import { flow } from 'mobx';
 import { IWorkspace } from '../workspace';
 import { BasicContext, IBasicContext } from './base-context';
 import { IEditorWindow } from '../window';
@@ -29,7 +28,7 @@ export class Context extends BasicContext implements IViewContext {
 
   @obx isInit: boolean = false;
 
-  init = flow(function* (this: Context) {
+  init: any = flow(function* (this: Context) {
     if (this.viewType === 'webview') {
       const url = yield this.instance?.url?.();
       yield this.plugins.register(getWebviewPlugin(url, this.viewName));

@@ -10,13 +10,20 @@ export default defineConfig({
     lib: {
       // Could also be a dictionary or array of multiple entry points
       entry: resolve(import.meta.dirname, 'src/index.ts'),
-      name: 'LowCodeDesigner',
-      formats: ['es', 'cjs'],
+      name: 'AliLowCodeEngine',
+      formats: ['es', 'cjs', 'iife'],
       // the proper extensions will be added
-      fileName: 'designer',
+      fileName: 'engine',
     },
     rollupOptions: {
       external: externals,
+      output: {
+        // for UMD
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM',
+        },
+      },
     },
   },
   plugins: [react()],
