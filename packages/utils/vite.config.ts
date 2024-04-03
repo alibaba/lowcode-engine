@@ -1,17 +1,18 @@
-import { defineConfig } from 'vite';
+import { defineConfig, LibraryFormats } from 'vite';
 import { resolve } from 'node:path';
-import dts from 'vite-plugin-dts';
+import { env } from 'node:process';
 import react from '@vitejs/plugin-react';
 import { devDependencies, peerDependencies } from './package.json';
 
 const externals = [...Object.keys(peerDependencies), ...Object.keys(devDependencies)];
+const formats = (env['FORMATS']?.split(',') ?? ['es']) as LibraryFormats[];
 
 export default defineConfig({
   build: {
     lib: {
       entry: resolve(import.meta.dirname, 'src/index.ts'),
       name: 'LowCodeUtils',
-      formats: ['es'],
+      formats,
       fileName: 'lowCodeUtils',
     },
     rollupOptions: {
@@ -20,13 +21,5 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    dts({
-      rollupTypes: true,
-      tsconfigPath: resolve(import.meta.dirname, 'tsconfig.declaration.json'),
-      compilerOptions: {
-        stripInternal: true,
-        paths: {},
-      },
-    }),
   ],
 });

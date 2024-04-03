@@ -1,5 +1,8 @@
-import { defineConfig } from 'vite';
+import { defineConfig, LibraryFormats } from 'vite';
+import { env } from 'node:process';
 import { resolve } from 'node:path';
+
+const formats = (env['FORMATS']?.split(',') ?? ['es']) as LibraryFormats[];
 
 export default defineConfig({
   build: {
@@ -7,7 +10,7 @@ export default defineConfig({
       // Could also be a dictionary or array of multiple entry points
       entry: resolve(import.meta.dirname, 'src/index.ts'),
       name: 'LowCodeRendererCore',
-      formats: ['es'],
+      formats,
       // the proper extensions will be added
       fileName: 'rendererCore',
     },

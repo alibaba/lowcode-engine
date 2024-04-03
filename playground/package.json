@@ -2,7 +2,11 @@
   "name": "playground",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite"
+  },
+  "dependencies": {
+    "@alilc/lowcode-engine": "workspace:*"
   }
 }

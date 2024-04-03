@@ -234,37 +234,6 @@ export class Panel implements IWidget {
       return isPanelDock(item) && item.panelName === this.name;
     }) as any;
   }
-
-  /**
-   * @deprecated
-   */
-  getSupportedPositions() {
-    return ['default'];
-  }
-
-  /**
-   * @deprecated
-   */
-  getCurrentPosition() {
-    return 'default';
-  }
-
-  /**
-   * @deprecated
-   */
-  setPosition(/* position: string */) {
-    // noop
-  }
-
-  /**
-   * @deprecated
-   */
-  onActiveChange(fn: (flag: boolean) => void): () => void {
-    this.emitter.on('activechange', fn);
-    return () => {
-      this.emitter.removeListener('activechange', fn);
-    };
-  }
 }
 
 export function isPanel(obj: any): obj is Panel {

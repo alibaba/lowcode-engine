@@ -29,7 +29,6 @@
     "@alilc/lowcode-designer": "workspace:*",
     "@alilc/lowcode-editor-core": "workspace:*",
     "@alilc/lowcode-editor-skeleton": "workspace:*",
-    "@alilc/lowcode-engine-ext": "^1.0.0",
     "@alilc/lowcode-plugin-command": "workspace:*",
     "@alilc/lowcode-plugin-designer": "workspace:*",
     "@alilc/lowcode-plugin-outline-pane": "workspace:*",

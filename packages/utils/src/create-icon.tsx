@@ -20,7 +20,7 @@ export function createIcon(
     if (URL_RE.test(icon)) {
       return createElement('img', {
         src: icon,
-        class: props?.className,
+        className: props?.className,
         ...props,
       });
     }
@@ -31,7 +31,7 @@ export function createIcon(
   }
   if (isReactComponent(icon)) {
     return createElement(icon, {
-      class: props?.className,
+      className: props?.className,
       ...props,
     });
   }

@@ -138,8 +138,7 @@ export class SettingsPrimaryPane extends Component<
     return (
       <div className="lc-settings-navigator">
         {createIcon(this.main.componentMeta?.icon, {
-          className: 'lc-settings-navigator-icon',
-          class: 'lc-settings-navigator-icon',
+          className: 'lc-settings-navigator-icon'
         })}
         <Breadcrumb className="lc-settings-node-breadcrumb">{items}</Breadcrumb>
       </div>

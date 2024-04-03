@@ -1,7 +1,5 @@
-/* eslint-disable max-len */
-/* eslint-disable no-param-reassign */
 import { createElement } from 'react';
-import { render, unmountComponentAtNode } from 'react-dom';
+import { createRoot, type Root } from 'react-dom/client';
 import {
   globalContext,
   Editor,
@@ -210,12 +208,13 @@ engineConfig.set('isOpenSource', isOpenSource);
 
 // container which will host LowCodeEngine DOM
 let engineContainer: HTMLElement;
-// @ts-ignore webpack Define variable
 
 export { version }
 engineConfig.set('ENGINE_VERSION', version);
 
 const pluginPromise = registryInnerPlugin(designer, editor, plugins);
+
+let root: Root | undefined;
 
 export async function init(
   container?: HTMLElement,
@@ -244,15 +243,19 @@ export async function init(
   if (options && options.enableWorkspaceMode) {
     const disposeFun = await pluginPromise;
     disposeFun && disposeFun();
-    render(
-      createElement(WorkSpaceWorkbench, {
+
+    if (!root) {
+      root = createRoot(
+        engineContainer,
+      );
+      root.render(createElement(WorkSpaceWorkbench, {
         workspace: innerWorkspace,
         // skeleton: workspace.skeleton,
         className: 'engine-main',
         topAreaItemClassName: 'engine-actionitem',
-      }),
-      engineContainer,
-    );
+      }))
+    }
+
     innerWorkspace.enableAutoOpenFirstWindow = engineConfig.get('enableAutoOpenFirstWindow', true);
     innerWorkspace.setActive(true);
     innerWorkspace.initWindow();
@@ -263,14 +266,14 @@ export async function init(
 
   await plugins.init(pluginPreference as any);
 
-  render(
-    createElement(Workbench, {
+  if (!root) {
+    root = createRoot(engineContainer)
+    root.render(createElement(Workbench, {
       skeleton: innerSkeleton,
       className: 'engine-main',
       topAreaItemClassName: 'engine-actionitem',
-    }),
-    engineContainer,
-  );
+    }))
+  }
 }
 
 export async function destroy() {
@@ -284,5 +287,5 @@ export async function destroy() {
 
   // unmount DOM container, this will trigger React componentWillUnmount lifeCycle,
   // so necessary cleanups will be done.
-  engineContainer && unmountComponentAtNode(engineContainer);
+  root && root.unmount();
 }
