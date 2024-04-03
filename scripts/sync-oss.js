@@ -1,7 +1,11 @@
 #!/usr/bin/env node
-const http = require('http');
-const package = require('../packages/engine/package.json');
-const { version, name } = package;
+import { request } from 'node:http';
+import packageJson from '../packages/engine/package.json';
+import * as console from 'node:console';
+import { Buffer } from 'node:buffer'
+
+const { version, name } = packageJson;
+
 const options = {
   method: 'PUT',
   hostname: 'uipaas-node.alibaba-inc.com',
@@ -29,7 +33,7 @@ const onResponse = function (res) {
   });
 };
 
-const req = http.request(options, onResponse);
+const req = request(options, onResponse);
 
 const postData = JSON.stringify({
   packages: [
