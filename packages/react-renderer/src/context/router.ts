@@ -1,5 +1,5 @@
-import { type Router, type RouteLocationNormalized } from '@alilc/runtime-router';
-import { type PageConfig } from '@alilc/renderer-core';
+import { type Router, type RouteLocationNormalized } from '@alilc/lowcode-renderer-router';
+import { type PageConfig } from '@alilc/lowcode-renderer-core';
 import { createContext, useContext } from 'react';
 
 export const RouterContext = createContext<Router>({} as any);

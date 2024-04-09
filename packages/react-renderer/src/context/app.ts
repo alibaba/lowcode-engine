@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { type AppContext as AppContextType } from '@alilc/renderer-core';
+import { type AppContext as AppContextType } from '@alilc/lowcode-renderer-core';
 import { type ReactRenderer } from '../renderer';
 
 export interface AppContextObject extends AppContextType {

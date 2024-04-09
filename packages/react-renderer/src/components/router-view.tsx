@@ -1,4 +1,4 @@
-import { type Router } from '@alilc/runtime-router';
+import { type Router } from '@alilc/lowcode-renderer-router';
 import { useState, useLayoutEffect, useMemo, type ReactNode } from 'react';
 import { RouterContext, RouteLocationContext, PageConfigContext } from '../context/router';
 import { useAppContext } from '../context/app';

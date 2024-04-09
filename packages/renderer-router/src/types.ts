@@ -3,7 +3,7 @@ import type {
   RouteLocation,
   PlainObject,
   RawRouteLocation,
-} from '@alilc/renderer-core';
+} from '@alilc/lowcode-renderer-core';
 import type { PathParserOptions } from './utils/path-parser';
 
 export interface RouteRecord extends RouterRecordSpec, PathParserOptions {

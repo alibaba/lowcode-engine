@@ -3,13 +3,13 @@
   "version": "2.0.0-beta.0",
   "description": "alibaba lowcode editor skeleton",
   "type": "module",
-  "main": "dist/editorSkeleton.cjs",
-  "module": "dist/editorSkeleton.js",
+  "main": "dist/low-code-editor-skeleton.cjs",
+  "module": "dist/low-code-editor-skeleton.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/editorSkeleton.js",
-      "require": "./dist/editorSkeleton.cjs",
+      "import": "./dist/low-code-editor-skeleton.js",
+      "require": "./dist/low-code-editor-skeleton.cjs",
       "types": "./dist/index.d.ts"
     }
   },

@@ -3,13 +3,13 @@
   "version": "2.0.0-beta.0",
   "description": "An enterprise-class low-code technology stack with scale-out design / 一套面向扩展设计的企业级低代码技术体系",
   "type": "module",
-  "main": "dist/engine.js",
-  "module": "dist/engine.js",
+  "main": "dist/ali-low-code-engine.js",
+  "module": "dist/ali-low-code-engine.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/engine.js",
-      "require": "./dist/engine.cjs",
+      "import": "./dist/ali-low-code-engine.js",
+      "require": "./dist/ali-low-code-engine.cjs",
       "types": "./dist/index.d.ts"
     }
   },

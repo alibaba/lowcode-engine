@@ -1,4 +1,4 @@
-import type { PageConfig, ComponentTree } from '@alilc/renderer-core';
+import type { PageConfig, ComponentTree } from '@alilc/lowcode-renderer-core';
 import { useAppContext } from '../context/app';
 import { createComponent } from '../component';
 

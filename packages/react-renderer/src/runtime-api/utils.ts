@@ -4,7 +4,7 @@ import {
   type AnyFunction,
   type Util,
   type UtilsApi,
-} from '@alilc/renderer-core';
+} from '@alilc/lowcode-renderer-core';
 
 export interface RuntimeUtils extends UtilsApi {
   addUtil(utilItem: Util): void;

@@ -3,10 +3,10 @@ import {
   type AppBase,
   createAppFunction,
   type AppOptionsBase,
-} from '@alilc/renderer-core';
+} from '@alilc/lowcode-renderer-core';
 import { type ComponentType } from 'react';
 import { type Root, createRoot } from 'react-dom/client';
-import { createRouter } from '@alilc/runtime-router';
+import { createRouter } from '@alilc/lowcode-renderer-router';
 import { createRenderer } from '../renderer';
 import AppComponent from '../components/app';
 import { createIntl } from '../runtime-api/intl';

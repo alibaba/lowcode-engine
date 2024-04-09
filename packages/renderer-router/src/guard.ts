@@ -1,4 +1,4 @@
-import { RawRouteLocation } from '@alilc/renderer-core';
+import { RawRouteLocation } from '@alilc/lowcode-renderer-core';
 import { type RouteLocationNormalized } from './types';
 import { isRouteLocation } from './utils/helper';
 

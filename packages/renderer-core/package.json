@@ -6,12 +6,12 @@
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",
   "homepage": "https://github.com/alibaba/lowcode-engine/#readme",
   "license": "MIT",
-  "main": "dist/rendererCore.js",
-  "module": "dist/rendererCore.js",
+  "main": "dist/low-code-renderer-core.js",
+  "module": "dist/low-code-renderer-core.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/rendererCore.js",
+      "import": "./dist/low-code-renderer-core.js",
       "types": "./dist/index.d.ts"
     }
   },

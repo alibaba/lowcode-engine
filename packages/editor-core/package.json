@@ -4,12 +4,12 @@
   "description": "Core Api for Ali lowCode engine",
   "license": "MIT",
   "type": "module",
-  "main": "dist/editorCore.js",
-  "module": "dist/editorCore.js",
+  "main": "dist/low-code-editor-core.js",
+  "module": "dist/low-code-editor-core.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/editorCore.js",
+      "import": "./dist/low-code-editor-core.js",
       "types": "./dist/index.d.ts"
     }
   },

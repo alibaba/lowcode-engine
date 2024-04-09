@@ -3,12 +3,12 @@
   "version": "2.0.0-beta.0",
   "description": "Utils for Ali lowCode engine",
   "type": "module",
-  "main": "lib/index.js",
-  "module": "dist/index.js",
+  "main": "lib/low-code-utils.js",
+  "module": "dist/low-code-utils.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/lowCodeUtils.js",
+      "import": "./dist/low-code-utils.js",
       "types": "./dist/index.d.ts"
     },
     "./package.json": "./package.json"

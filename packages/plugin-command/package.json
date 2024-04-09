@@ -6,13 +6,13 @@
   "homepage": "https://github.com/alibaba/lowcode-engine#readme",
   "license": "ISC",
   "type": "module",
-  "main": "dist/command.cjs",
-  "module": "dist/command.js",
+  "main": "dist/low-code-plugin-command.cjs",
+  "module": "dist/low-code-plugin-command.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/command.js",
-      "require": "./dist/command.cjs",
+      "import": "./dist/low-code-plugin-command.js",
+      "require": "./dist/low-code-plugin-command.cjs",
       "types": "./dist/index.d.ts"
     }
   },
@@ -34,7 +34,13 @@
   },
   "dependencies": {
     "@alilc/lowcode-types": "workspace:*",
-    "@alilc/lowcode-utils": "workspace:*"
+    "@alilc/lowcode-utils": "workspace:*",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "publishConfig": {
     "access": "public"

@@ -4,7 +4,7 @@ import {
   type PlainObject,
   type JSExpression,
   isJSExpression,
-} from '@alilc/renderer-core';
+} from '@alilc/lowcode-renderer-core';
 import { type ComponentType, memo, forwardRef, type PropsWithChildren, createElement } from 'react';
 import { produce } from 'immer';
 import hoistNonReactStatics from 'hoist-non-react-statics';

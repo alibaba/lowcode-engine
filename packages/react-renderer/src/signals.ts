@@ -1,4 +1,4 @@
-import { type PlainObject } from '@alilc/renderer-core';
+import { type PlainObject } from '@alilc/lowcode-renderer-core';
 import {
   ref,
   computed,

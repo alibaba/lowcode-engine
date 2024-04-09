@@ -3,13 +3,13 @@
   "version": "2.0.0-beta.0",
   "description": "alibaba lowcode editor designer plugin",
   "type": "module",
-  "main": "dist/designer.cjs",
-  "module": "dist/designer.js",
+  "main": "dist/low-code-plugin-designer.cjs",
+  "module": "dist/low-code-plugin-designer.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/designer.js",
-      "require": "./dist/designer.cjs",
+      "import": "./dist/low-code-plugin-designer.js",
+      "require": "./dist/low-code-plugin-designer.cjs",
       "types": "./dist/index.d.ts"
     }
   },

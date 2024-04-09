@@ -1,4 +1,4 @@
-import { type PlainObject, type RawLocation } from '@alilc/renderer-core';
+import { type PlainObject, type RawLocation } from '@alilc/lowcode-renderer-core';
 import { pick } from 'lodash-es';
 import { createRouteRecordMatcher, type RouteRecordMatcher } from './utils/record-matcher';
 import { type PathParserOptions } from './utils/path-parser';

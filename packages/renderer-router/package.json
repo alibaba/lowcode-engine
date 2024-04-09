@@ -6,11 +6,11 @@
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",
   "homepage": "https://github.com/alibaba/lowcode-engine/#readme",
   "license": "MIT",
-  "module": "dist/runtimeRouter.js",
+  "module": "dist/low-code-runtime-router.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/runtimeRouter.js",
+      "import": "./dist/low-code-runtime-router.js",
       "types": "./dist/index.d.ts"
     }
   },

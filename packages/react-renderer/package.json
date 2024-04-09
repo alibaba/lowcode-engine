@@ -6,13 +6,13 @@
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",
   "homepage": "https://github.com/alibaba/lowcode-engine/#readme",
   "license": "MIT",
-  "main": "dist/reactRenderer.cjs",
-  "module": "dist/reactRenderer.js",
+  "main": "dist/low-code-react-renderer.cjs",
+  "module": "dist/low-code-react-renderer.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/reactRenderer.js",
-      "require": "./dist/reactRenderer.cjs",
+      "import": "./dist/low-code-react-renderer.js",
+      "require": "./dist/low-code-react-renderer.cjs",
       "types": "./dist/index.d.ts"
     }
   },

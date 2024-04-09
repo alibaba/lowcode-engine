@@ -9,7 +9,7 @@ import {
   isJSFunction,
   isJSSlot,
   someValue,
-} from '@alilc/renderer-core';
+} from '@alilc/lowcode-renderer-core';
 import { isPlainObject } from 'lodash-es';
 import { forwardRef, useRef, useEffect, createElement, useMemo } from 'react';
 import { createSignal, watch } from './signals';
@@ -26,7 +26,7 @@ import type {
   JSSlot,
   JSFunction,
   I18nNode,
-} from '@alilc/renderer-core';
+} from '@alilc/lowcode-renderer-core';
 import type {
   ComponentType,
   ReactInstance,

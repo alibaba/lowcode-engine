@@ -5,7 +5,7 @@ import {
   useEvent,
   type RawRouteLocation,
   type RawLocationOptions,
-} from '@alilc/renderer-core';
+} from '@alilc/lowcode-renderer-core';
 import {
   createBrowserHistory,
   createHashHistory,

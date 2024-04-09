@@ -2,7 +2,7 @@ import {
   definePlugin as definePluginFn,
   type Plugin,
   type PluginSetupContext,
-} from '@alilc/renderer-core';
+} from '@alilc/lowcode-renderer-core';
 import { type ComponentType, type PropsWithChildren } from 'react';
 import { type OutletProps } from './components/outlet';
 

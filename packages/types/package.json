@@ -3,13 +3,13 @@
   "version": "2.0.0-beta.0",
   "description": "Types for Ali lowCode engine",
   "type": "module",
-  "main": "dist/lowcodeTypes.js",
-  "module": "dist/lowcodeTypes.js",
+  "main": "dist/low-code-types.js",
+  "module": "dist/low-code-types.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/lowcodeTypes.js",
-      "module": "./dist/lowcodeTypes.js",
+      "import": "./dist/low-code-types.js",
+      "module": "./dist/low-code-types.js",
       "types": "./dist/index.d.ts"
     },
     "./package.json": "./package.json"

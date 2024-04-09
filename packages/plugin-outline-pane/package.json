@@ -3,13 +3,13 @@
   "version": "1.3.2",
   "description": "Outline pane for Ali lowCode engine",
   "type": "module",
-  "main": "dist/plugin-outline-pane.cjs",
-  "module": "dist/plugin-outline-pane.js",
+  "main": "dist/low-code-plugin-outline-pane.cjs",
+  "module": "dist/low-code-plugin-outline-pane.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/plugin-outline-pane.js",
-      "require": "./dist/plugin-outline-pane.cjs",
+      "import": "./dist/low-code-plugin-outline-pane.js",
+      "require": "./dist/low-code-plugin-outline-pane.cjs",
       "types": "./dist/index.d.ts"
     }
   },
