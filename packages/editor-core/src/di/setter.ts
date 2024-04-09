@@ -39,7 +39,7 @@ export function registerSetter(
 function getInitialFromSetter(setter: any) {
   return setter && (
     setter.initial || setter.Initial
-      || (setter.type && (setter.type.initial || setter.type.Initial))
+    || (setter.type && (setter.type.initial || setter.type.Initial))
     ) || null; // eslint-disable-line
 }
 

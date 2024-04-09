@@ -1,7 +1,7 @@
 import { join } from 'node:path';
 import { existsSync, readdirSync } from 'node:fs';
 import { env, exit } from 'node:process'
-import * as console from 'node:console'
+import console from 'node:console'
 import { Extractor, ExtractorConfig } from '@microsoft/api-extractor';
 import { rimraf } from 'rimraf';
 

@@ -211,7 +211,7 @@ class SkeletonCabin implements IPublicApiCommonSkeletonCabin {
   /**
    * @deprecated
    */
-   get PopupPipe(): any {
+  get PopupPipe(): any {
     return InnerPopupPipe;
   }
 }
@@ -233,9 +233,9 @@ class Utils implements IPublicApiCommonUtils {
   }
 
   getNodeSchemaById(
-      schema: IPublicTypeNodeSchema,
-      nodeId: string,
-    ): IPublicTypeNodeSchema | undefined {
+    schema: IPublicTypeNodeSchema,
+    nodeId: string,
+  ): IPublicTypeNodeSchema | undefined {
     return innerGetNodeSchemaById(schema, nodeId);
   }
 
@@ -248,18 +248,18 @@ class Utils implements IPublicApiCommonUtils {
   }
 
   executeTransaction(
-      fn: () => void,
-      type: IPublicEnumTransitionType = IPublicEnumTransitionType.REPAINT,
-    ): void {
+    fn: () => void,
+    type: IPublicEnumTransitionType = IPublicEnumTransitionType.REPAINT,
+  ): void {
     transactionManager.executeTransaction(fn, type);
   }
 
   createIntl(instance: string | object): {
-      intlNode(id: string, params?: object): ReactNode;
-      intl(id: string, params?: object): string;
-      getLocale(): string;
-      setLocale(locale: string): void;
-    } {
+    intlNode(id: string, params?: object): ReactNode;
+    intl(id: string, params?: object): string;
+    getLocale(): string;
+    setLocale(locale: string): void;
+  } {
     return innerCreateIntl(instance);
   }
 

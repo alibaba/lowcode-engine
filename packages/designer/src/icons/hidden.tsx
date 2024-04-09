@@ -7,4 +7,5 @@ export function IconHidden(props: IconProps) {
     </SVGIcon>
   );
 }
+
 IconHidden.displayName = 'Hidden';

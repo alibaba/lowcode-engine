@@ -1,25 +1,25 @@
 import { resolve } from 'node:path';
 import { existsSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
-import { argv } from 'node:process';
-import { URL } from 'node:url'
+import { argv, cwd } from 'node:process';
 import minimist from 'minimist';
 import { execa } from 'execa';
+import { findWorkspacePackages } from '@pnpm/workspace.find-packages'
 
 const args = minimist(argv.slice(2));
-const targets = args['_'][0].split(',');
-const formatArgs = args['format'];
+const targets = args['_'][0];
+const formatArgs = args['formats'];
 const prod = args['prod'] || args['p'];
 
-const packagesUrl = new URL('../packages', import.meta.url);
-
 async function run() {
-  const packageDirs = await readdir(packagesUrl.pathname);
-  const targetPackages = packageDirs
-    .filter((dir) => targets.includes(dir))
+  const packages = await findWorkspacePackages(cwd());
+  const targetPackageName = `@alilc/lowcode-${targets[0]}`
+
+  const finalName = packages
+    .filter((item) => item.manifest.name.includes(targetPackageName))
     .filter((dir) => existsSync(resolve(packagesUrl.pathname, dir)));
 
-  await execa('pnpm', ['--filter', `@alilc/lowcode-${targetPackages[0]}`, 'build:target'], {
+  await execa('pnpm', ['--filter', finalName, 'build:target'], {
     stdio: 'inherit',
     env: {
       FORMATS: !prod ? formatArgs : undefined,

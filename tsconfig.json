@@ -33,6 +33,7 @@
     "removeComments": false,
     "baseUrl": ".",
     "rootDir": ".",
+    // provide type friendly tips
     "paths": {
       "@alilc/lowcode-*": ["packages/*/src"]
     }

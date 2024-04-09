@@ -9,7 +9,6 @@ import {
 } from './plugin-types';
 import { filterValidOptions, isLowCodeRegisterOptions } from './plugin-utils';
 import { LowCodePluginRuntime } from './plugin';
-// eslint-disable-next-line import/no-named-as-default
 import LowCodePluginContext from './plugin-context';
 import { invariant } from '../utils';
 import sequencify from './sequencify';

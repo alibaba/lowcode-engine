@@ -1,0 +1,10 @@
+{
+  "name": "scripts",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@pnpm/workspace.find-packages": "^1.1.12",
+    "execa": "^8.0.1",
+    "minimist": "^1.2.8"
+  }
+}
