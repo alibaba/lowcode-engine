@@ -30,8 +30,8 @@ export interface IPublicApiPlugins {
    * use this to get preference config for this plugin when engine.init() called
    */
   getPluginPreference(
-      pluginName: string,
-    ): Record<string, IPublicTypePreferenceValueType> | null | undefined;
+    pluginName: string,
+  ): Record<string, IPublicTypePreferenceValueType> | null | undefined;
 
   /**
    * 获取指定插件

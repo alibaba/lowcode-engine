@@ -2,7 +2,7 @@ import type { AnyFunction } from '../types';
 
 export type EventName = string | number | symbol;
 
-export function useEvent<T = AnyFunction>() {
+export function createEvent<T = AnyFunction>() {
   let events: T[] = [];
 
   function add(fn: T) {
@@ -31,7 +31,7 @@ export function useEvent<T = AnyFunction>() {
   };
 }
 
-export type Event<F = AnyFunction> = ReturnType<typeof useEvent<F>>;
+export type Event<F = AnyFunction> = ReturnType<typeof createEvent<F>>;
 
 export type HookCallback = (...args: any) => Promise<any> | any;
 
@@ -93,7 +93,7 @@ export function createHookStore<
 
     let hooks = hooksMap.get(name);
     if (!hooks) {
-      hooks = useEvent();
+      hooks = createEvent();
       hooksMap.set(name, hooks);
     }
 

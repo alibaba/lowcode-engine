@@ -518,9 +518,9 @@ export class Node implements IPublicModelNode {
    * @returns
    */
   exportSchema(
-      stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Render,
-      options?: any,
-    ): IPublicTypeNodeSchema {
+    stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Render,
+    options?: any,
+  ): IPublicTypeNodeSchema {
     return this[nodeSymbol].export(stage, options);
   }
 
@@ -531,15 +531,15 @@ export class Node implements IPublicModelNode {
    * @param useMutator
    */
   insertBefore(
-      node: IPublicModelNode,
-      ref?: IPublicModelNode | undefined,
-      useMutator?: boolean,
-    ): void {
+    node: IPublicModelNode,
+    ref?: IPublicModelNode | undefined,
+    useMutator?: boolean,
+  ): void {
     this[nodeSymbol].insertBefore(
-        (node as any)[nodeSymbol] || node,
-        (ref as any)?.[nodeSymbol],
-        useMutator,
-      );
+      (node as any)[nodeSymbol] || node,
+      (ref as any)?.[nodeSymbol],
+      useMutator,
+    );
   }
 
   /**
@@ -549,15 +549,15 @@ export class Node implements IPublicModelNode {
    * @param useMutator
    */
   insertAfter(
-      node: IPublicModelNode,
-      ref?: IPublicModelNode | undefined,
-      useMutator?: boolean,
-    ): void {
+    node: IPublicModelNode,
+    ref?: IPublicModelNode | undefined,
+    useMutator?: boolean,
+  ): void {
     this[nodeSymbol].insertAfter(
-        (node as any)[nodeSymbol] || node,
-        (ref as any)?.[nodeSymbol],
-        useMutator,
-      );
+      (node as any)[nodeSymbol] || node,
+      (ref as any)?.[nodeSymbol],
+      useMutator,
+    );
   }
 
   /**

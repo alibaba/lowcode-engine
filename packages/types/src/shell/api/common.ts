@@ -30,9 +30,9 @@ export interface IPublicApiCommonUtils {
    * @returns {(IPublicTypeNodeSchema | undefined)}
    */
   getNodeSchemaById(
-      schema: IPublicTypeNodeSchema,
-      nodeId: string,
-    ): IPublicTypeNodeSchema | undefined;
+    schema: IPublicTypeNodeSchema,
+    nodeId: string,
+  ): IPublicTypeNodeSchema | undefined;
 
   // TODO: add comments
   getConvertedExtraKey(key: string): string;

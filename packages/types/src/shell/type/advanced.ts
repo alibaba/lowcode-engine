@@ -37,7 +37,7 @@ export interface IPublicTypeAdvanced {
     propTarget?: string;
     appearOn?: 'mouse-enter' | 'mouse-hover' | 'selected' | 'always';
   }> |
-    ReactElement[]);
+  ReactElement[]);
 
   /**
    * @deprecated 用于动态初始化拖拽到设计器里的组件的 prop 的值

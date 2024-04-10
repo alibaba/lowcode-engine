@@ -112,9 +112,9 @@ export interface IPublicApiMaterial {
    * @param handle
    */
   modifyBuiltinComponentAction(
-      actionName: string,
-      handle: (action: IPublicTypeComponentAction) => void,
-    ): void;
+    actionName: string,
+    handle: (action: IPublicTypeComponentAction) => void,
+  ): void;
 
   /**
    * 监听 assets 变化的事件

@@ -1225,9 +1225,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       const childrenCanMove =
         onChildMoveHook && parentContainerNode && typeof onChildMoveHook === 'function'
           ? onChildMoveHook(
-              node!.internalToShellNode(),
-              (parentContainerNode as any).internalToShellNode(),
-            )
+            node!.internalToShellNode(),
+            (parentContainerNode as any).internalToShellNode(),
+          )
           : true;
 
       return canMove && childrenCanMove;
@@ -1313,9 +1313,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       const inst = instances
         ? instances.length > 1
           ? instances.find(
-              (_inst) =>
-                this.getClosestNodeInstance(_inst, container.id)?.instance === containerInstance,
-            )
+            (_inst) =>
+              this.getClosestNodeInstance(_inst, container.id)?.instance === containerInstance,
+          )
           : instances[0]
         : null;
       const rect = inst

@@ -45,7 +45,7 @@ export class GlobalContextMenuActions {
     event.preventDefault();
 
     const actions: IPublicTypeContextMenuAction[] = [];
-    let contextMenu: ContextMenuActions = this.contextMenuActionsMap.values().next().value;
+    const contextMenu: ContextMenuActions = this.contextMenuActionsMap.values().next().value;
     this.contextMenuActionsMap.forEach((contextMenu) => {
       actions.push(...contextMenu.actions);
     });

@@ -163,13 +163,13 @@ function cssToRuntime(css: string) {
         res[2]
           .split(';')
           .reduce<string[]>((prev, next) => {
-            if (next.indexOf('base64') > -1) {
-              prev[prev.length - 1] += `;${next}`;
-            } else {
-              prev.push(next);
-            }
-            return prev;
-          }, [])
+          if (next.indexOf('base64') > -1) {
+            prev[prev.length - 1] += `;${next}`;
+          } else {
+            prev.push(next);
+          }
+          return prev;
+        }, [])
           .forEach((item) => {
             if (item) {
               if (PROPS_REG.test(item)) {

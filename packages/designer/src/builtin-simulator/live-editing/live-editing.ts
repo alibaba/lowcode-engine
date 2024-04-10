@@ -197,8 +197,8 @@ export class LiveEditing {
 
 export type SpecificRule = (target: EditingTarget) =>
   | (IPublicTypeLiveTextEditingConfig & {
-      propElement?: HTMLElement;
-    })
+    propElement?: HTMLElement;
+  })
   | null;
 
 export interface SaveHandler {

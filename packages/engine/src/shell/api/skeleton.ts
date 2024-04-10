@@ -33,10 +33,10 @@ export class Skeleton implements IPublicApiSkeleton {
   }
 
   constructor(
-      skeleton: ISkeleton,
-      pluginName: string,
-      readonly workspaceMode: boolean = false,
-    ) {
+    skeleton: ISkeleton,
+    pluginName: string,
+    readonly workspaceMode: boolean = false,
+  ) {
     this[innerSkeletonSymbol] = skeleton;
     this.pluginName = pluginName;
   }

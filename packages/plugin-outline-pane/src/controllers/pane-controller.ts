@@ -195,7 +195,7 @@ export class PaneController implements IPublicModelSensor, ITreeBoard, IPublicTy
     if (
       originLoc &&
       ((pos && pos === 'unchanged') ||
-        (irect && globalY >= irect.top && globalY <= irect.bottom)) &&
+      (irect && globalY >= irect.top && globalY <= irect.bottom)) &&
       dragObject
     ) {
       const loc = originLoc.clone(e);

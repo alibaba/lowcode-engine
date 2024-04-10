@@ -226,10 +226,10 @@ export class ComponentMeta implements IComponentMeta {
       this._title =
         typeof title === 'string'
           ? {
-              type: 'i18n',
-              'en-US': this.componentName,
-              'zh-CN': title,
-            }
+            type: 'i18n',
+            'en-US': this.componentName,
+            'zh-CN': title,
+          }
           : title;
     }
 

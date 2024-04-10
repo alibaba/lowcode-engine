@@ -14,7 +14,7 @@ function propertyNameRequiresQuotes(propertyName: string) {
 }
 
 function quoteString(str: string, { doubleQuote }: any) {
-  return doubleQuote ? `"${str.replace(/"/gu, '\\"')}"` : `'${str.replace(/'/gu, "\\'")}'`;
+  return doubleQuote ? `"${str.replace(/"/gu, '\\"')}"` : `'${str.replace(/'/gu, '\\\'')}'`;
 }
 
 export function valueToSource(
@@ -96,12 +96,12 @@ export function valueToSource(
 
         const itemsStayOnTheSameLine = value.every(
           item => typeof item === 'object' &&
-            item &&
-            !(item instanceof Date) &&
-            !(item instanceof Map) &&
-            !(item instanceof RegExp) &&
-            !(item instanceof Set) &&
-            (Object.keys(item).length || value.length === 1),
+          item &&
+          !(item instanceof Date) &&
+          !(item instanceof Map) &&
+          !(item instanceof RegExp) &&
+          !(item instanceof Set) &&
+          (Object.keys(item).length || value.length === 1),
         );
 
         let previousIndex: number | null = null;

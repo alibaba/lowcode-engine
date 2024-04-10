@@ -202,9 +202,9 @@ export class Editor extends EventEmitter implements IEditor {
                   Array.isArray(d)
                     ? setArrayAssets(d, exportName, subName)
                     : setAssetsComponent(d, {
-                        exportName,
-                        subName,
-                      });
+                      exportName,
+                      subName,
+                    });
                 });
               }
               if ((window as any)[exportName]) {

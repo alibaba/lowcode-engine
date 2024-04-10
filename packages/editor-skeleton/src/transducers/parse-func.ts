@@ -20,7 +20,7 @@ function transformStringToFunction(str: string) {
   if (leadingFnNameRe.test(str) && !leadingFnRe.test(str)) {
     str = `function ${str}`;
   }
-  let fnBody = `
+  const fnBody = `
     return function() {
       const self = this;
       try {

@@ -66,7 +66,7 @@ export class TreeMaster {
       'en-US': enUS,
       'zh-CN': zhCN,
     });
-    let _pluginContext: IOutlinePanelPluginContext = Object.assign(pluginContext, {
+    const _pluginContext: IOutlinePanelPluginContext = Object.assign(pluginContext, {
       intl,
       intlNode,
       getLocale,

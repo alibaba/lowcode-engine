@@ -55,9 +55,9 @@ export interface DesignerProps {
   onDragstart?: (e: IPublicModelLocateEvent) => void;
   onDrag?: (e: IPublicModelLocateEvent) => void;
   onDragend?: (
-      e: { dragObject: IPublicModelDragObject; copy: boolean },
-      loc?: DropLocation,
-    ) => void;
+    e: { dragObject: IPublicModelDragObject; copy: boolean },
+    loc?: DropLocation,
+  ) => void;
 }
 
 export class Designer {
@@ -406,8 +406,8 @@ export class Designer {
 
     if (components) {
       // 合并 assets
-      let assets = this.editor.get('assets') || {};
-      let newAssets = mergeAssets(assets, incrementalAssets);
+      const assets = this.editor.get('assets') || {};
+      const newAssets = mergeAssets(assets, incrementalAssets);
       // 对于 assets 存在需要二次网络下载的过程，必须 await 等待结束之后，再进行事件触发
       await this.editor.set('assets', newAssets);
     }

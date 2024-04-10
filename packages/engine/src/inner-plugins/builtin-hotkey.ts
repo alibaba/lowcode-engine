@@ -328,7 +328,7 @@ export const builtinHotkey = (ctx: IPublicModelPluginContext) => {
             if (!target) {
               return;
             }
-            let canAddComponentsTree = componentsTree.filter((node: IPublicModelNode) => {
+            const canAddComponentsTree = componentsTree.filter((node: IPublicModelNode) => {
               const dragNodeObject: IPublicTypeDragNodeObject = {
                 type: IPublicEnumDragObjectType.Node,
                 nodes: [node],

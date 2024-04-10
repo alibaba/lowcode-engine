@@ -7,6 +7,7 @@ const args = minimist(argv.slice(2));
 const targets = args['_'];
 const formatArgs = args['formats'];
 const prod = args['prod'] || args['p'];
+const buildTypes = args['types'] || args['t']
 
 async function run() {
   const packages = await findWorkspacePackages(cwd());
@@ -18,9 +19,15 @@ async function run() {
   await execa('pnpm', ['--filter', finalName[0], 'build:target'], {
     stdio: 'inherit',
     env: {
-      FORMATS: !prod ? formatArgs : undefined,
+      FORMATS: formatArgs ? formatArgs : !prod ? 'es' : undefined,
     },
   });
+
+  if (buildTypes) {
+    await execa('pnpm', ['--filter', finalName[0], 'build:dts'], {
+      stdio: 'inherit',
+    });
+  }
 }
 
 run();

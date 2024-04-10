@@ -18,10 +18,10 @@ export interface IPublicApiHotkey {
    * @param action
    */
   bind(
-      combos: string[] | string,
-      callback: IPublicTypeHotkeyCallback,
-      action?: string,
-    ): IPublicTypeDisposable;
+    combos: string[] | string,
+    callback: IPublicTypeHotkeyCallback,
+    action?: string,
+  ): IPublicTypeDisposable;
 
   /**
    * 给指定窗口绑定快捷键

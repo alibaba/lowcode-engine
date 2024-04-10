@@ -75,7 +75,7 @@ const KEYCODE_MAP: KeyMap = {
   219: '[',
   220: '\\',
   221: ']',
-  222: "'",
+  222: '\'',
 };
 
 const SHIFT_MAP: CtrlKeyMap = {
@@ -93,7 +93,7 @@ const SHIFT_MAP: CtrlKeyMap = {
   _: '-',
   '+': '=',
   ':': ';',
-  '"': "'",
+  '"': '\'',
   '<': ',',
   '>': '.',
   '?': '/',

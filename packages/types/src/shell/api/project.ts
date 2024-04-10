@@ -93,9 +93,9 @@ export interface IBaseApiProject<
    * @param stage
    */
   addPropsTransducer(
-      transducer: IPublicTypePropsTransducer,
-      stage: IPublicEnumTransformStage,
-    ): void;
+    transducer: IPublicTypePropsTransducer,
+    stage: IPublicEnumTransformStage,
+  ): void;
 
   /**
    * 绑定删除文档事件

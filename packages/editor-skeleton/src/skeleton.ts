@@ -47,23 +47,23 @@ export enum SkeletonEvents {
 export interface ISkeleton extends Skeleton {}
 
 export class Skeleton implements Omit<IPublicApiSkeleton,
-'showPanel' |
-'hidePanel' |
-'showWidget' |
-'enableWidget' |
-'hideWidget' |
-'disableWidget' |
-'showArea' |
-'onShowPanel' |
-'onHidePanel' |
-'onShowWidget' |
-'onHideWidget' |
-'remove' |
-'hideArea' |
-'add' |
-'getAreaItems' |
-'onDisableWidget' |
-'onEnableWidget'
+  'showPanel' |
+  'hidePanel' |
+  'showWidget' |
+  'enableWidget' |
+  'hideWidget' |
+  'disableWidget' |
+  'showArea' |
+  'onShowPanel' |
+  'onHidePanel' |
+  'onShowWidget' |
+  'onHideWidget' |
+  'remove' |
+  'hideArea' |
+  'add' |
+  'getAreaItems' |
+  'onDisableWidget' |
+  'onEnableWidget'
 > {
   private panels = new Map<string, Panel>();
 
@@ -425,7 +425,10 @@ export class Skeleton implements Omit<IPublicApiSkeleton,
     return this.configTransducers;
   }
 
-  add(config: IPublicTypeSkeletonConfig, extraConfig?: Record<string, any>): IWidget | Widget | Panel | Stage | Dock | PanelDock | undefined {
+  add(
+    config: IPublicTypeSkeletonConfig,
+    extraConfig?: Record<string, any>
+  ): IWidget | Widget | Panel | Stage | Dock | PanelDock | undefined {
     const registeredTransducers = this.getRegisteredConfigTransducers();
 
     const parsedConfig = registeredTransducers.reduce((prevConfig, current) => {

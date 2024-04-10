@@ -98,7 +98,7 @@ async function appendExternalCss(
   }
 
   return new Promise((resolve, reject) => {
-    let el: HTMLLinkElement = document.createElement('link');
+    const el: HTMLLinkElement = document.createElement('link');
     el.rel = 'stylesheet';
     el.href = url;
 
@@ -122,7 +122,7 @@ export async function appendExternalStyle(
   root: HTMLElement = document.head,
 ): Promise<HTMLElement> {
   return new Promise((resolve, reject) => {
-    let el: HTMLStyleElement = document.createElement('style');
+    const el: HTMLStyleElement = document.createElement('style');
     el.innerText = cssText;
 
     el.addEventListener(

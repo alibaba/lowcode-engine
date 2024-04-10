@@ -15,9 +15,9 @@ export class Workbench extends Component<{
   className?: string;
   topAreaItemClassName?: string;
 }, {
-  workspaceEmptyComponent: any;
-  theme?: string;
-}> {
+    workspaceEmptyComponent: any;
+    theme?: string;
+  }> {
   constructor(props: any) {
     super(props);
     const { config, components, workspace } = this.props;

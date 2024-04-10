@@ -1,4 +1,4 @@
-import { useEvent } from '@alilc/lowcode-renderer-core';
+import { createEvent } from '@alilc/lowcode-renderer-core';
 
 export type HistoryState = History['state'];
 export type HistoryLocation = string;
@@ -166,8 +166,8 @@ export function createBrowserHistory(base?: string): RouterHistory {
     currentLocation = to;
   }
 
-  let listeners = useEvent<NavigationCallback>();
-  let teardowns = useEvent<() => void>();
+  const listeners = createEvent<NavigationCallback>();
+  const teardowns = createEvent<() => void>();
 
   let pauseState: HistoryLocation | null = null;
 
@@ -285,7 +285,7 @@ function createCurrentLocation(base: string, location: Location) {
   // hash bases like #, /#, #/, #!, #!/, /#!/, or even /folder#end
   const hashPos = base.indexOf('#');
   if (hashPos > -1) {
-    let slicePos = hash.includes(base.slice(hashPos)) ? base.slice(hashPos).length : 1;
+    const slicePos = hash.includes(base.slice(hashPos)) ? base.slice(hashPos).length : 1;
     let pathFromHash = hash.slice(slicePos);
     // prepend the starting slash to hash so the url starts with /#
     if (pathFromHash[0] !== '/') pathFromHash = '/' + pathFromHash;
@@ -348,7 +348,7 @@ export function createMemoryHistory(base = ''): RouterHistory {
     historyStack.push({ location, state });
   }
 
-  const listeners = useEvent<NavigationCallback>();
+  const listeners = createEvent<NavigationCallback>();
 
   function triggerListeners(
     to: HistoryLocation,

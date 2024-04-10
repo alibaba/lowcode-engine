@@ -5,9 +5,9 @@ function getHotterFromSetter(setter: any) {
 function getTransducerFromSetter(setter: any) {
   return (
     (setter &&
-      (setter.transducer ||
-        setter.Transducer ||
-        (setter.type && (setter.type.transducer || setter.type.Transducer)))) ||
+    (setter.transducer ||
+    setter.Transducer ||
+    (setter.type && (setter.type.transducer || setter.type.Transducer)))) ||
     null
   ); // eslint-disable-line
 }

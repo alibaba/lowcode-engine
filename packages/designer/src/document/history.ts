@@ -41,10 +41,10 @@ export class History<T = IPublicTypeNodeSchema> implements IHistory {
   private timeGap: number = 1000;
 
   constructor(
-      dataFn: () => T | null,
-      private redoer: (data: T) => void,
-      private document?: IDocumentModel,
-    ) {
+    dataFn: () => T | null,
+    private redoer: (data: T) => void,
+    private document?: IDocumentModel,
+  ) {
     this.session = new Session(0, null, this.timeGap);
     this.records = [this.session];
 

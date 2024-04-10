@@ -1,8 +1,5 @@
-import { defineConfig } from 'vitest/config'
+import { defineProject } from 'vitest/config'
 
-export default defineConfig({
-  test: {
-    include: ['tests/*.spec.ts'],
-    environment: 'jsdom'
-  }
+export default defineProject({
+  test: {}
 })

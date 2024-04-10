@@ -3,3 +3,5 @@ import { createComponent as internalCreate, ComponentOptions } from '../componen
 export function createComponent(options: ComponentOptions) {
   return internalCreate(options);
 }
+
+export type { ComponentOptions };

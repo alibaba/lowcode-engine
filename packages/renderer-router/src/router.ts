@@ -2,7 +2,7 @@ import {
   type RouterApi,
   type RouterConfig,
   type RouteLocation,
-  useEvent,
+  createEvent,
   type RawRouteLocation,
   type RawLocationOptions,
 } from '@alilc/lowcode-renderer-core';
@@ -14,10 +14,10 @@ import {
   type HistoryState,
 } from './history';
 import { createRouterMatcher } from './matcher';
-import { type PathParserOptions } from './utils/path-parser';
+import { type PathParserOptions, type PathParams } from './utils/path-parser';
 import { parseURL, stringifyURL } from './utils/url';
 import { isSameRouteLocation } from './utils/helper';
-import type { RouteParams, RouteRecord, RouteLocationNormalized } from './types';
+import type { RouteRecord, RouteLocationNormalized } from './types';
 import { type NavigationHookAfter, type NavigationGuard, guardToPromiseFn } from './guard';
 
 export interface RouterOptions extends RouterConfig, PathParserOptions {
@@ -72,8 +72,8 @@ export function createRouter(options: RouterOptions = defaultRouterOptions): Rou
         ? createMemoryHistory(baseName)
         : createBrowserHistory(baseName);
 
-  const beforeGuards = useEvent<NavigationGuard>();
-  const afterGuards = useEvent<NavigationHookAfter>();
+  const beforeGuards = createEvent<NavigationGuard>();
+  const afterGuards = createEvent<NavigationHookAfter>();
 
   let currentLocation: RouteLocationNormalized = START_LOCATION;
   let pendingLocation = currentLocation;
@@ -114,9 +114,9 @@ export function createRouter(options: RouterOptions = defaultRouterOptions): Rou
 
       matcherLocation = {
         ...rawLocation,
-        params: rawLocation.params as RouteParams,
+        params: rawLocation.params as PathParams,
       };
-      currentLocation.params = currentLocation.params;
+      currentLocation.params = matcherLocation.params;
     }
 
     const matchedRoute = matcher.resolve(matcherLocation, currentLocation);
@@ -256,7 +256,7 @@ export function createRouter(options: RouterOptions = defaultRouterOptions): Rou
     to: RouteLocationNormalized,
     from: RouteLocationNormalized,
   ): Promise<any> {
-    let guards: ((...args: any[]) => Promise<any>)[] = [];
+    const guards: ((...args: any[]) => Promise<any>)[] = [];
 
     const canceledNavigationCheck = async (): Promise<any> => {
       if (pendingLocation !== to) {
@@ -265,19 +265,14 @@ export function createRouter(options: RouterOptions = defaultRouterOptions): Rou
       return Promise.resolve();
     };
 
-    try {
-      guards = [];
-      const beforeGuardsList = beforeGuards.list();
+    const beforeGuardsList = beforeGuards.list();
 
-      for (const guard of beforeGuardsList) {
-        guards.push(guardToPromiseFn(guard, to, from));
-      }
-      if (beforeGuardsList.length > 0) guards.push(canceledNavigationCheck);
-
-      return guards.reduce((promise, guard) => promise.then(() => guard()), Promise.resolve());
-    } catch (err) {
-      throw err;
+    for (const guard of beforeGuardsList) {
+      guards.push(guardToPromiseFn(guard, to, from));
     }
+    if (beforeGuardsList.length > 0) guards.push(canceledNavigationCheck);
+
+    return guards.reduce((promise, guard) => promise.then(() => guard()), Promise.resolve());
   }
 
   function finalizeNavigation(

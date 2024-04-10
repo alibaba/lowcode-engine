@@ -16,24 +16,24 @@ import { ISimulatorHost } from '../simulator';
 export interface IProject extends Omit<IBaseApiProject<
   IDocumentModel
 >,
-  'simulatorHost' |
-  'importSchema' |
-  'exportSchema' |
-  'openDocument' |
-  'getDocumentById' |
-  'getCurrentDocument' |
-  'addPropsTransducer' |
-  'onRemoveDocument' |
-  'onChangeDocument' |
-  'onSimulatorHostReady' |
-  'onSimulatorRendererReady' |
-  'setI18n' |
-  'setConfig' |
-  'currentDocument' |
-  'selection' |
-  'documents' |
-  'createDocument' |
-  'getDocumentByFileName'
+'simulatorHost' |
+'importSchema' |
+'exportSchema' |
+'openDocument' |
+'getDocumentById' |
+'getCurrentDocument' |
+'addPropsTransducer' |
+'onRemoveDocument' |
+'onChangeDocument' |
+'onSimulatorHostReady' |
+'onSimulatorRendererReady' |
+'setI18n' |
+'setConfig' |
+'currentDocument' |
+'selection' |
+'documents' |
+'createDocument' |
+'getDocumentByFileName'
 > {
 
   get designer(): IDesigner;

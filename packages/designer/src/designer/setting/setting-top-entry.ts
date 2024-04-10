@@ -21,7 +21,7 @@ function generateSessionId(nodes: INode[]) {
 
 export interface ISettingTopEntry
   extends ISettingEntry,
-    IPublicModelSettingTopEntry<INode, ISettingField> {
+  IPublicModelSettingTopEntry<INode, ISettingField> {
   readonly top: ISettingTopEntry;
 
   readonly parent: ISettingTopEntry;

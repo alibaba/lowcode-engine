@@ -103,9 +103,9 @@ export interface IPublicModelComponentMeta<
    * @param parent 父节点
    */
   checkNestingDown(
-      my: Node | IPublicTypeNodeData,
-      target: IPublicTypeNodeSchema | Node | IPublicTypeNodeSchema[],
-    ): boolean;
+    my: Node | IPublicTypeNodeData,
+    target: IPublicTypeNodeSchema | Node | IPublicTypeNodeSchema[],
+  ): boolean;
 
   /**
    * 刷新元数据，会触发元数据的重新解析和刷新

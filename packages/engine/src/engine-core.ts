@@ -1,5 +1,6 @@
 import { createElement } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
+import { isPlainObject } from '@alilc/lowcode-utils';
 import {
   globalContext,
   Editor,
@@ -28,16 +29,13 @@ import {
   PluginPreference,
   IDesigner,
 } from '@alilc/lowcode-designer';
-import {
-  Skeleton as InnerSkeleton,
-  registerDefaults,
-} from '@alilc/lowcode-editor-skeleton';
+import { Skeleton as InnerSkeleton, registerDefaults } from '@alilc/lowcode-editor-skeleton';
+
 import {
   Workspace as InnerWorkspace,
   Workbench as WorkSpaceWorkbench,
   IWorkspace,
 } from './workspace';
-
 import {
   Hotkey,
   Project,
@@ -54,10 +52,10 @@ import {
   CommonUI,
   Command,
 } from './shell';
-import { isPlainObject } from '@alilc/lowcode-utils';
 import './modules/live-editing';
 import * as classes from './modules/classes';
 import symbols from './modules/symbols';
+
 import { componentMetaParser } from './inner-plugins/component-meta-parser';
 import { setterRegistry } from './inner-plugins/setter-registry';
 import { defaultPanelRegistry } from './inner-plugins/default-panel-registry';
@@ -66,13 +64,19 @@ import { builtinHotkey } from './inner-plugins/builtin-hotkey';
 import { defaultContextMenu } from './inner-plugins/default-context-menu';
 import { CommandPlugin } from '@alilc/lowcode-plugin-command';
 import { OutlinePlugin } from '@alilc/lowcode-plugin-outline-pane';
-import { version } from '../package.json'
+import { version } from '../package.json';
+
+import '@alilc/lowcode-editor-skeleton/dist/style.css';
 
 export * from './modules/skeleton-types';
 export * from './modules/designer-types';
 export * from './modules/lowcode-types';
 
-async function registryInnerPlugin(designer: IDesigner, editor: IEditor, plugins: IPublicApiPlugins): Promise<IPublicTypeDisposable> {
+async function registryInnerPlugin(
+  designer: IDesigner,
+  editor: IEditor,
+  plugins: IPublicApiPlugins
+): Promise<IPublicTypeDisposable> {
   // 注册一批内置插件
   const componentMetaParserPlugin = componentMetaParser(designer);
   const defaultPanelRegistryPlugin = defaultPanelRegistry(editor);
@@ -97,9 +101,13 @@ async function registryInnerPlugin(designer: IDesigner, editor: IEditor, plugins
   };
 }
 
-const innerWorkspace: IWorkspace = new InnerWorkspace(registryInnerPlugin, shellModelFactory);
+const innerWorkspace: IWorkspace = new InnerWorkspace(
+  registryInnerPlugin,
+  shellModelFactory
+);
 const workspace: IPublicApiWorkspace = new Workspace(innerWorkspace);
 const editor = new Editor();
+
 globalContext.register(editor, Editor);
 globalContext.register(editor, 'editor');
 globalContext.register(innerWorkspace, 'workspace');
@@ -121,24 +129,30 @@ const skeleton = new Skeleton(innerSkeleton, 'any', false);
 const innerSetters = new InnerSetters();
 const setters = new Setters(innerSetters);
 const innerCommand = new InnerCommand();
-const command = new Command(innerCommand, engineContext as IPublicModelPluginContext);
-
+const command = new Command(
+  innerCommand,
+  engineContext as IPublicModelPluginContext
+);
 const material = new Material(editor);
 const commonUI = new CommonUI(editor);
+
 editor.set('project', project);
 editor.set('setters' as any, setters);
 editor.set('material', material);
 editor.set('innerHotkey', innerHotkey);
+
 const config = new Config(engineConfig);
 const event = new Event(commonEvent, { prefix: 'common' });
 const logger = new Logger({ level: 'warn', bizName: 'common' });
 const common = new Common(editor, innerSkeleton);
 const canvas = new Canvas(editor);
-let plugins: Plugins;
 
 const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  assembleApis: (context: ILowCodePluginContextPrivate, pluginName: string, meta: IPublicTypePluginMeta) => {
+  assembleApis: (
+    context: ILowCodePluginContextPrivate,
+    pluginName: string,
+    meta: IPublicTypePluginMeta
+  ) => {
     context.hotkey = hotkey;
     context.project = project;
     context.skeleton = new Skeleton(innerSkeleton, pluginName, false);
@@ -154,9 +168,10 @@ const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
     context.logger = new Logger({ level: 'warn', bizName: `plugin:${pluginName}` });
     context.workspace = workspace;
     context.commonUI = commonUI;
-    context.command = new Command(innerCommand, context as IPublicModelPluginContext, {
-      commandScope,
-    });
+    context.command = new Command(
+      innerCommand, context as IPublicModelPluginContext, {
+        commandScope,
+      });
     context.registerLevel = IPublicEnumPluginRegisterLevel.Default;
     context.isPluginRegisteredInWorkspace = false;
     editor.set('pluginContext', context);
@@ -164,7 +179,7 @@ const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
 };
 
 const innerPlugins = new LowCodePluginManager(pluginContextApiAssembler);
-plugins = new Plugins(innerPlugins).toProxy();
+const plugins = new Plugins(innerPlugins).toProxy();
 editor.set('innerPlugins' as any, innerPlugins);
 editor.set('plugins' as any, plugins);
 
@@ -198,19 +213,25 @@ export {
   commonUI,
   command,
 };
+
+
 // declare this is open-source version
+/**
+ * @deprecated
+ */
 export const isOpenSource = true;
+engineConfig.set('isOpenSource', isOpenSource);
+
+engineConfig.set('ENGINE_VERSION', version);
+export { version };
+
+/**
+ * @deprecated
+ */
 export const __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = {
   symbols,
   classes,
 };
-engineConfig.set('isOpenSource', isOpenSource);
-
-// container which will host LowCodeEngine DOM
-let engineContainer: HTMLElement;
-
-export { version }
-engineConfig.set('ENGINE_VERSION', version);
 
 const pluginPromise = registryInnerPlugin(designer, editor, plugins);
 
@@ -219,10 +240,14 @@ let root: Root | undefined;
 export async function init(
   container?: HTMLElement,
   options?: IPublicTypeEngineOptions,
-  pluginPreference?: PluginPreference,
-  ) {
+  pluginPreference?: PluginPreference
+) {
   await destroy();
+
+  // container which will host LowCodeEngine DOM
+  let engineContainer: HTMLElement;
   let engineOptions = null;
+
   if (isPlainObject(container)) {
     engineOptions = container;
     engineContainer = document.createElement('div');
@@ -237,6 +262,7 @@ export async function init(
       document.body.appendChild(engineContainer);
     }
   }
+  
   engineConfig.setEngineOptions(engineOptions as any);
 
   const { Workbench } = common.skeletonCabin;
@@ -245,15 +271,15 @@ export async function init(
     disposeFun && disposeFun();
 
     if (!root) {
-      root = createRoot(
-        engineContainer,
+      root = createRoot(engineContainer);
+      root.render(
+        createElement(WorkSpaceWorkbench, {
+          workspace: innerWorkspace,
+          // skeleton: workspace.skeleton,
+          className: 'engine-main',
+          topAreaItemClassName: 'engine-actionitem',
+        })
       );
-      root.render(createElement(WorkSpaceWorkbench, {
-        workspace: innerWorkspace,
-        // skeleton: workspace.skeleton,
-        className: 'engine-main',
-        topAreaItemClassName: 'engine-actionitem',
-      }))
     }
 
     innerWorkspace.enableAutoOpenFirstWindow = engineConfig.get('enableAutoOpenFirstWindow', true);
@@ -267,12 +293,14 @@ export async function init(
   await plugins.init(pluginPreference as any);
 
   if (!root) {
-    root = createRoot(engineContainer)
-    root.render(createElement(Workbench, {
-      skeleton: innerSkeleton,
-      className: 'engine-main',
-      topAreaItemClassName: 'engine-actionitem',
-    }))
+    root = createRoot(engineContainer);
+    root.render(
+      createElement(Workbench, {
+        skeleton: innerSkeleton,
+        className: 'engine-main',
+        topAreaItemClassName: 'engine-actionitem',
+      })
+    );
   }
 }
 
@@ -280,7 +308,9 @@ export async function destroy() {
   // remove all documents
   const { documents } = project;
   if (Array.isArray(documents) && documents.length > 0) {
-    documents.forEach(((doc: IPublicModelDocumentModel) => project.removeDocument(doc)));
+    documents.forEach(
+      (doc: IPublicModelDocumentModel) => project.removeDocument(doc)
+    );
   }
 
   // TODO: delete plugins except for core plugins

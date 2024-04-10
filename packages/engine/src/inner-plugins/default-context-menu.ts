@@ -129,7 +129,7 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
               return;
             }
             if (parent) {
-              let canAddNodes = nodeSchema.filter((nodeSchema: IPublicTypeNodeSchema) => {
+              const canAddNodes = nodeSchema.filter((nodeSchema: IPublicTypeNodeSchema) => {
                 const dragNodeObject: IPublicTypeDragNodeDataObject = {
                   type: IPublicEnumDragObjectType.NodeData,
                   data: nodeSchema,
@@ -177,7 +177,7 @@ export const defaultContextMenu = (ctx: IPublicModelPluginContext) => {
             if (nodeSchema.length === 0) {
               return;
             }
-            let canAddNodes = nodeSchema.filter((nodeSchema: IPublicTypeNodeSchema) => {
+            const canAddNodes = nodeSchema.filter((nodeSchema: IPublicTypeNodeSchema) => {
               const dragNodeObject: IPublicTypeDragNodeDataObject = {
                 type: IPublicEnumDragObjectType.NodeData,
                 data: nodeSchema,

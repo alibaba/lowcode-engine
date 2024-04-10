@@ -103,7 +103,7 @@ export function getNodeSchemaById(
 
 function getNodeSchemaFromPropsById(props: any, nodeId: string): IPublicTypeNodeSchema | undefined {
   let found: IPublicTypeNodeSchema | undefined;
-  for (const [_key, value] of Object.entries(props)) {
+  for (const [, value] of Object.entries(props)) {
     if (isJSSlot(value)) {
       // value 是数组类型 { type: 'JSSlot', value: IPublicTypeNodeSchema[] }
       if (Array.isArray(value.value)) {
@@ -130,7 +130,7 @@ export function applyActivities(
   pivotSchema: IPublicTypeRootSchema,
   activities: any,
 ): IPublicTypeRootSchema {
-  let schema = { ...pivotSchema };
+  const schema = { ...pivotSchema };
   if (!Array.isArray(activities)) {
     activities = [activities];
   }

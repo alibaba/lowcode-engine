@@ -11,10 +11,10 @@ export interface IOnChangeOptions {
 }
 
 export class NodeChildren implements Omit<IPublicModelNodeChildren<INode>,
-'importSchema' |
-'exportSchema' |
-'isEmpty' |
-'notEmpty'
+  'importSchema' |
+  'exportSchema' |
+  'isEmpty' |
+  'notEmpty'
 > {
   @obx.shallow children: INode[];
 
@@ -46,9 +46,9 @@ export class NodeChildren implements Omit<IPublicModelNodeChildren<INode>,
   }
 
   constructor(
-      readonly owner: INode,
-      data: IPublicTypeNodeData | IPublicTypeNodeData[],
-    ) {
+    readonly owner: INode,
+    data: IPublicTypeNodeData | IPublicTypeNodeData[],
+  ) {
     makeObservable(this);
     this.children = (Array.isArray(data) ? data : [data]).filter(child => !!child).map((child) => {
       return this.owner.document?.createNode(child);

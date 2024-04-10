@@ -14,9 +14,9 @@ export class Clipboard implements IPublicModelClipboard {
   }
 
   waitPasteData(
-      keyboardEvent: KeyboardEvent,
-      cb: (data: any, clipboardEvent: ClipboardEvent) => void,
-    ): void {
+    keyboardEvent: KeyboardEvent,
+    cb: (data: any, clipboardEvent: ClipboardEvent) => void,
+  ): void {
     this[clipboardSymbol].waitPasteData(keyboardEvent, cb);
   }
 }

@@ -76,11 +76,11 @@ const outputFunction: Record<string, any> = {
 const bizNameColorConfig: Record<string, string> = {};
 
 const shouldOutput = (
-    logLevel: string,
-    targetLevel: string = 'warn',
-    bizName: string,
-    targetBizName: string,
-  ): boolean => {
+  logLevel: string,
+  targetLevel: string = 'warn',
+  bizName: string,
+  targetBizName: string,
+): boolean => {
   const isLevelFit = (levels as any)[targetLevel] <= (levels as any)[logLevel];
   const isBizNameFit = targetBizName === '*' || bizName.indexOf(targetBizName) > -1;
   return isLevelFit && isBizNameFit;

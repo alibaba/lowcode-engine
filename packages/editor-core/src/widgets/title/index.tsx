@@ -59,7 +59,7 @@ export class Title extends Component<IPublicTypeTitleProps> {
   }
 
   renderLabel = (label: string | IPublicTypeI18nData | ReactNode) => {
-    let { match, keywords } = this.props;
+    const { match, keywords } = this.props;
 
     if (!label) {
       return null;

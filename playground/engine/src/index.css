@@ -6,7 +6,7 @@ body * {
   box-sizing: border-box;
 }
 
-body, #lce-container {
+body, #app {
   position: fixed;
   left: 0;
   right: 0;

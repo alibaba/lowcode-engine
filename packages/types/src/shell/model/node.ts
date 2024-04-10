@@ -369,10 +369,10 @@ export interface IBaseModelNode<
    * @param useMutator
    */
   insertBefore(
-      node: Node,
-      ref?: Node | undefined,
-      useMutator?: boolean,
-    ): void;
+    node: Node,
+    ref?: Node | undefined,
+    useMutator?: boolean,
+  ): void;
 
   /**
    * 在指定位置之后插入一个节点
@@ -382,10 +382,10 @@ export interface IBaseModelNode<
    * @param useMutator
    */
   insertAfter(
-      node: Node,
-      ref?: Node | undefined,
-      useMutator?: boolean,
-    ): void;
+    node: Node,
+    ref?: Node | undefined,
+    useMutator?: boolean,
+  ): void;
 
   /**
    * 替换指定节点

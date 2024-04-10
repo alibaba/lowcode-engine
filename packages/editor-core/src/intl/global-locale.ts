@@ -61,7 +61,7 @@ class GlobalLocale {
     }
     if (!result) {
       // store 2: config from window
-      let localeFromConfig: string = getConfig('locale');
+      const localeFromConfig: string = getConfig('locale');
       if (localeFromConfig) {
         result = languageMap[localeFromConfig] || localeFromConfig.replace('_', '-');
         logger.debug(`getting locale from config: ${result}`);
@@ -147,6 +147,6 @@ function hasLocalStorage(obj: any): obj is WindowLocalStorage {
   return obj.localStorage;
 }
 
-let globalLocale = new GlobalLocale();
+const globalLocale = new GlobalLocale();
 
 export { globalLocale };

@@ -103,21 +103,21 @@ export default class TreeNodeView extends PureComponent<{
     matchChild: boolean;
     matchSelf: boolean;
   } = {
-    expanded: false,
-    selected: false,
-    hidden: false,
-    locked: false,
-    detecting: false,
-    isRoot: false,
-    highlight: false,
-    dropping: false,
-    conditionFlow: false,
-    expandable: false,
-    treeChildren: [],
-    filterWorking: false,
-    matchChild: false,
-    matchSelf: false,
-  };
+      expanded: false,
+      selected: false,
+      hidden: false,
+      locked: false,
+      detecting: false,
+      isRoot: false,
+      highlight: false,
+      dropping: false,
+      conditionFlow: false,
+      expandable: false,
+      treeChildren: [],
+      filterWorking: false,
+      matchChild: false,
+      matchSelf: false,
+    };
 
   eventOffCallbacks: Array<IPublicTypeDisposable | undefined> = [];
   constructor(props: any) {
@@ -232,7 +232,7 @@ export default class TreeNodeView extends PureComponent<{
       'condition-flow': this.state.conditionFlow,
       highlight: this.state.highlight,
     });
-    let shouldShowModalTreeNode: boolean = this.shouldShowModalTreeNode();
+    const shouldShowModalTreeNode: boolean = this.shouldShowModalTreeNode();
 
     // filter 处理
     const { filterWorking, matchChild, matchSelf } = this.state;

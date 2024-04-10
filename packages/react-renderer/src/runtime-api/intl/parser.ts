@@ -81,7 +81,7 @@ export function compile(tokens: Token[], values: Record<string, any> | any[] = {
         break;
       case 'unknown':
         if (process.env.NODE_ENV !== 'production') {
-          console.warn(`Detect 'unknown' type of token!`);
+          console.warn('Detect \'unknown\' type of token!');
         }
         break;
     }

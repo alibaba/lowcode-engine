@@ -81,19 +81,19 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
 
   onMouseOver =
     (node: INode) =>
-    (_: any, flag = true) => {
-      if (node && typeof node.hover === 'function') {
-        node.hover(flag);
-      }
-    };
+      (_: any, flag = true) => {
+        if (node && typeof node.hover === 'function') {
+          node.hover(flag);
+        }
+      };
 
   onMouseOut =
     (node: INode) =>
-    (_: any, flag = false) => {
-      if (node && typeof node.hover === 'function') {
-        node.hover(flag);
-      }
-    };
+      (_: any, flag = false) => {
+        if (node && typeof node.hover === 'function') {
+          node.hover(flag);
+        }
+      };
 
   renderNodes = () => {
     const nodes = this.state.parentNodes;

@@ -18,5 +18,3 @@ export interface RouteRecord extends RouterRecordSpec, PathParserOptions {
 export interface RouteLocationNormalized extends RouteLocation {
   matched: RouteRecord[];
 }
-
-export type RouteParams = Record<string, string | string[]>;

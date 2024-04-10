@@ -11,6 +11,10 @@
       "import": "./dist/low-code-editor-skeleton.js",
       "require": "./dist/low-code-editor-skeleton.cjs",
       "types": "./dist/index.d.ts"
+    },
+    "./dist/": {
+      "import": "./dist/",
+      "require": "./dist/"
     }
   },
   "sideEffects": [

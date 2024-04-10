@@ -34,7 +34,7 @@ export function normalizeTriggers(triggers: string[]) {
 /**
  * make a handler that listen all sensors:document, avoid frame lost
  */
- export function makeEventsHandler(
+export function makeEventsHandler(
   boostEvent: MouseEvent | DragEvent,
   sensors: ISimulatorHost[],
 ): (fn: (sdoc: Document) => void) => void {

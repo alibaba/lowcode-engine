@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-react-renderer",
-  "version": "2.0.0-beta.0",
+  "version": "2.0.0-alpha.0",
   "description": "react renderer for ali lowcode engine",
   "type": "module",
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",
@@ -18,7 +18,7 @@
   },
   "scripts": {
     "build:target": "vite build",
-    "build:dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.mjs",
+    "build:dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.js",
     "test": "vitest"
   },
   "dependencies": {

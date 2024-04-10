@@ -8,7 +8,7 @@ export class RuntimeError extends Error {
     message: string,
   ) {
     super(message);
-    appBoosts.hookStore.call(`app:error`, this);
+    appBoosts.hookStore.call('app:error', this);
   }
 }
 

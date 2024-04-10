@@ -1,9 +1,11 @@
+// refer from https://github.com/vuejs/router/blob/main/packages/router/src/matcher/index.ts
+
 import { type PlainObject, type RawLocation } from '@alilc/lowcode-renderer-core';
 import { pick } from 'lodash-es';
 import { createRouteRecordMatcher, type RouteRecordMatcher } from './utils/record-matcher';
-import { type PathParserOptions } from './utils/path-parser';
+import { type PathParserOptions, type PathParams, comparePathParserScore } from './utils/path-parser';
 
-import type { RouteRecord, RouteParams, RouteLocationNormalized } from './types';
+import type { RouteRecord, RouteLocationNormalized } from './types';
 
 export interface RouteRecordNormalized {
   /**
@@ -58,7 +60,9 @@ export interface RouterMatcher {
    * @param location - MatcherLocationRaw to resolve to a url
    * @param currentLocation - MatcherLocation of the current location
    */
-  resolve: (location: RawLocation, currentLocation: MatcherLocation) => MatcherLocation;
+  resolve: (
+    location: RawLocation, currentLocation: MatcherLocation
+  ) => MatcherLocation;
 }
 
 export function createRouterMatcher(
@@ -83,7 +87,7 @@ export function createRouterMatcher(
       const parentPath = parent.record.path;
       const connectingSlash = parentPath[parentPath.length - 1] === '/' ? '' : '/';
 
-      normalizedRecord.path = parent.record.path + (path && connectingSlash + path);
+      normalizedRecord.path = parent.record.path + (path ? connectingSlash + path : '');
     }
 
     const matcher = createRouteRecordMatcher(normalizedRecord, parent, options);
@@ -96,7 +100,16 @@ export function createRouterMatcher(
     }
 
     if (matcher.record.path) {
-      matchers.push(matcher);
+      let i = 0;
+      while (
+        i < matchers.length &&
+        comparePathParserScore(matcher, matchers[i]) >= 0 &&
+        (matcher.record.path !== matchers[i].record.path ||
+        !isRecordChildOf(matcher, matchers[i]))
+      ) {
+        i++;
+      }
+      matchers.splice(i, 0, matcher);
 
       if (matcher.record.name) {
         matcherMap.set(matcher.record.name, matcher);
@@ -126,9 +139,12 @@ export function createRouterMatcher(
     return matcherMap.get(name);
   }
 
-  function resolve(location: RawLocation, currentLocation: MatcherLocation): MatcherLocation {
+  function resolve(
+    location: RawLocation,
+    currentLocation: MatcherLocation
+  ): MatcherLocation {
     let matcher: RouteRecordMatcher | undefined;
-    let params: RouteParams = {};
+    let params: PathParams = {};
     let path: MatcherLocation['path'];
     let name: MatcherLocation['name'];
 
@@ -136,7 +152,9 @@ export function createRouterMatcher(
       matcher = matcherMap.get(location.name);
 
       if (!matcher) {
-        throw new Error(`Router error: no match for ${JSON.stringify(location)}`);
+        throw new Error(`
+          Router error: no match for ${JSON.stringify(location)}
+        `);
       }
 
       name = matcher.record.name;
@@ -145,19 +163,20 @@ export function createRouterMatcher(
         paramsFromLocation(
           currentLocation.params ?? {},
           matcher.keys
-            .filter((k) => {
-              return !(k.modifier === '?' || k.modifier === '*');
-            })
+            .filter(k => !k.optional)
+            .concat(
+              matcher.parent ? matcher.parent.keys.filter(k => k.optional) : []
+            )
             .map((k) => k.name),
         ),
         location.params
           ? paramsFromLocation(
-              location.params,
-              matcher.keys.map((k) => k.name),
-            )
+            location.params,
+            matcher.keys.map((k) => k.name),
+          )
           : {},
       );
-      // throws if cannot be stringified
+
       path = matcher.stringify(params);
     } else if ('path' in location) {
       path = location.path;
@@ -214,8 +233,8 @@ export function createRouterMatcher(
   };
 }
 
-function paramsFromLocation(params: RouteParams, keys: (string | number)[]): RouteParams {
-  const newParams = {} as RouteParams;
+function paramsFromLocation(params: PathParams, keys: (string | number)[]): PathParams {
+  const newParams = {} as PathParams;
   for (const key of keys) {
     if (key in params) newParams[key] = params[key];
   }
@@ -232,4 +251,13 @@ export function normalizeRouteRecord(record: RouteRecord): RouteRecordNormalized
     meta: record['meta'] || {},
     children: record.children || [],
   };
+}
+
+function isRecordChildOf(
+  record: RouteRecordMatcher,
+  parent: RouteRecordMatcher
+): boolean {
+  return parent.children.some(
+    child => child === record || isRecordChildOf(record, child)
+  );
 }

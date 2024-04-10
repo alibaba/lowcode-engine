@@ -46,14 +46,14 @@ import { EDITOR_EVENT } from '../types';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
-      schema: infer R;
-    }
+    schema: infer R;
+  }
     ? R
     : any
   : T;
 
 export class DocumentModel
-  implements
+implements
     Omit<
       IPublicModelDocumentModel<
         ISelection,

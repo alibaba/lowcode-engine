@@ -221,23 +221,23 @@ export default function (
           setValue(field: IPublicModelSettingField, eventData) {
             const { eventDataList, eventList } = eventData;
             Array.isArray(eventList) &&
-              eventList.map((item) => {
-                field.parent.clearPropValue(item.name);
-                return item;
-              });
+            eventList.map((item) => {
+              field.parent.clearPropValue(item.name);
+              return item;
+            });
             Array.isArray(eventDataList) &&
-              eventDataList.map((item) => {
-                field.parent.setPropValue(item.name, {
-                  type: 'JSFunction',
-                  // 需要传下入参
-                  value: `function(){return this.${
-                    item.relatedEventName
-                  }.apply(this,Array.prototype.slice.call(arguments).concat([${
-                    item.paramStr ? item.paramStr : ''
-                  }])) }`,
-                });
-                return item;
+            eventDataList.map((item) => {
+              field.parent.setPropValue(item.name, {
+                type: 'JSFunction',
+                // 需要传下入参
+                value: `function(){return this.${
+                  item.relatedEventName
+                }.apply(this,Array.prototype.slice.call(arguments).concat([${
+                  item.paramStr ? item.paramStr : ''
+                }])) }`,
               });
+              return item;
+            });
           },
         },
       ],

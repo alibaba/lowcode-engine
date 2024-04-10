@@ -52,7 +52,7 @@ class Contents extends Component<{ area: Area; itemClassName?: string }> {
           right.push(content);
         }
       });
-    let children = [];
+    const children = [];
     if (left && left.length) {
       children.push(
         <div className="lc-workspace-sub-top-area-left lc-sub-top-area-left">{left}</div>,

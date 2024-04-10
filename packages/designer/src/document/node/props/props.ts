@@ -138,13 +138,13 @@ export class Props implements Omit<IBaseModelProps<IProp>, | 'getExtraProp' | 'g
     if (this.items.length < 1) {
       return {};
     }
-    let allProps = {} as any;
+    const allProps = {} as any;
     let props: any = {};
     const extras: any = {};
     if (this.type === 'list') {
       props = [];
       this.items.forEach((item) => {
-        let value = item.export(stage);
+        const value = item.export(stage);
         let name = item.key as string;
         if (name && typeof name === 'string' && name.startsWith(EXTRA_KEY_PREFIX)) {
           name = getOriginalExtraKey(name);
@@ -159,9 +159,9 @@ export class Props implements Omit<IBaseModelProps<IProp>, | 'getExtraProp' | 'g
       });
     } else {
       this.items.forEach((item) => {
-        let name = item.key as string;
+        const name = item.key as string;
         if (name == null || item.isUnset() || item.isVirtual()) return;
-        let value = item.export(stage);
+        const value = item.export(stage);
         if (value != null) {
           allProps[name] = value;
         }

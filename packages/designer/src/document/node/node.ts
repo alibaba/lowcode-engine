@@ -97,7 +97,7 @@ export interface IBaseNode extends Node {}
  *  hidden
  */
 export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema>
-  implements
+implements
     Omit<
       IBaseModelNode<
         IDocumentModel,
@@ -191,7 +191,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema>
   }
 
   @computed get title(): string | IPublicTypeI18nData | ReactElement {
-    let t = this.getExtraProp('title');
+    const t = this.getExtraProp('title');
     // TODO: 暂时走不到这个分支
     // if (!t && this.componentMeta.descriptor) {
     //   t = this.getProp(this.componentMeta.descriptor, false);
@@ -325,17 +325,17 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema>
   @action
   private initBuiltinProps() {
     this.props.has(getConvertedExtraKey('hidden')) ||
-      this.props.add(false, getConvertedExtraKey('hidden'));
+    this.props.add(false, getConvertedExtraKey('hidden'));
     this.props.has(getConvertedExtraKey('title')) ||
-      this.props.add('', getConvertedExtraKey('title'));
+    this.props.add('', getConvertedExtraKey('title'));
     this.props.has(getConvertedExtraKey('isLocked')) ||
-      this.props.add(false, getConvertedExtraKey('isLocked'));
+    this.props.add(false, getConvertedExtraKey('isLocked'));
     this.props.has(getConvertedExtraKey('condition')) ||
-      this.props.add(true, getConvertedExtraKey('condition'));
+    this.props.add(true, getConvertedExtraKey('condition'));
     this.props.has(getConvertedExtraKey('conditionGroup')) ||
-      this.props.add('', getConvertedExtraKey('conditionGroup'));
+    this.props.add('', getConvertedExtraKey('conditionGroup'));
     this.props.has(getConvertedExtraKey('loop')) ||
-      this.props.add(undefined, getConvertedExtraKey('loop'));
+    this.props.add(undefined, getConvertedExtraKey('loop'));
   }
 
   @action
@@ -1164,7 +1164,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema>
     const isRGLContainerNode = this.isRGLContainer;
     const isRGLNode = this.getParent()?.isRGLContainer as boolean;
     const isRGL = isRGLContainerNode || (isRGLNode && (!isContainerNode || !isEmptyNode));
-    let rglNode = isRGLContainerNode ? this : isRGL ? this?.getParent() : null;
+    const rglNode = isRGLContainerNode ? this : isRGL ? this?.getParent() : null;
     return { isContainerNode, isEmptyNode, isRGLContainerNode, isRGLNode, isRGL, rglNode };
   }
 

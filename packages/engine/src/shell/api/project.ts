@@ -164,9 +164,9 @@ export class Project implements IPublicApiProject {
    * @param stage
    */
   addPropsTransducer(
-      transducer: IPublicTypePropsTransducer,
-      stage: IPublicEnumTransformStage,
-    ): void {
+    transducer: IPublicTypePropsTransducer,
+    stage: IPublicEnumTransformStage,
+  ): void {
     this[projectSymbol].designer.addPropsReducer(transducer, stage);
   }
 
@@ -177,9 +177,9 @@ export class Project implements IPublicApiProject {
    */
   onRemoveDocument(fn: (data: { id: string}) => void): IPublicTypeDisposable {
     return this[editorSymbol].eventBus.on(
-        'designer.document.remove',
-        (data: { id: string }) => fn(data),
-      );
+      'designer.document.remove',
+      (data: { id: string }) => fn(data),
+    );
   }
 
   /**

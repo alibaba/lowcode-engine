@@ -6,11 +6,13 @@ export const setterRegistry = (ctx: IPublicModelPluginContext) => {
     init() {
       const { config } = ctx;
       if (config.get('disableDefaultSetters')) return;
-      // todo: 互相依赖
+
       // const builtinSetters = require('@alilc/lowcode-engine-ext')?.setters;
-      // if (builtinSetters) {
-      //   ctx.setters.registerSetter(builtinSetters);
-      // }
+      // @ts-expect-error: todo remove
+      const builtinSetters = window.AliLowCodeEngineExt?.setters;
+      if (builtinSetters) {
+        ctx.setters.registerSetter(builtinSetters);
+      }
     },
   };
 };

@@ -44,8 +44,8 @@ export class Plugins implements IPublicApiPlugins {
   }
 
   getPluginPreference(
-      pluginName: string,
-    ): Record<string, IPublicTypePreferenceValueType> | null | undefined {
+    pluginName: string,
+  ): Record<string, IPublicTypePreferenceValueType> | null | undefined {
     return this[pluginsSymbol].getPluginPreference(pluginName);
   }
 

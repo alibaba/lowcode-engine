@@ -130,14 +130,14 @@ export class ComponentMeta implements IPublicModelComponentMeta {
    * @returns
    */
   checkNestingDown(
-      my: IPublicModelNode | IPublicTypeNodeData,
-      target: IPublicTypeNodeSchema | IPublicModelNode | IPublicTypeNodeSchema[],
-    ) {
+    my: IPublicModelNode | IPublicTypeNodeData,
+    target: IPublicTypeNodeSchema | IPublicModelNode | IPublicTypeNodeSchema[],
+  ) {
     const curNode = (my as any)?.isNode ? (my as any)[nodeSymbol] : my;
     return this[componentMetaSymbol].checkNestingDown(
-        curNode as any,
-        (target as any)[nodeSymbol] || target,
-      );
+      curNode as any,
+      (target as any)[nodeSymbol] || target,
+    );
   }
 
   refreshMetadata(): void {

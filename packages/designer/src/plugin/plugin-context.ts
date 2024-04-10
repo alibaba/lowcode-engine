@@ -52,9 +52,9 @@ export default class PluginContext implements
   command: IPublicApiCommand;
 
   constructor(
-      options: IPluginContextOptions,
-      contextApiAssembler: ILowCodePluginContextApiAssembler,
-    ) {
+    options: IPluginContextOptions,
+    contextApiAssembler: ILowCodePluginContextApiAssembler,
+  ) {
     const { pluginName = 'anonymous', meta = {} } = options;
     contextApiAssembler.assembleApis(this, pluginName, meta);
     this.pluginEvent = createModuleEventBus(pluginName, 200);
@@ -71,7 +71,7 @@ export default class PluginContext implements
     const getPreferenceValue = (
       key: string,
       defaultValue?: IPublicTypePreferenceValueType,
-      ): IPublicTypePreferenceValueType | undefined => {
+    ): IPublicTypePreferenceValueType | undefined => {
       if (!isValidPreferenceKey(key, preferenceDeclaration)) {
         return undefined;
       }

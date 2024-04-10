@@ -36,7 +36,8 @@
     // provide type friendly tips
     "paths": {
       "@alilc/lowcode-*": ["packages/*/src"]
-    }
+    },
+    "types": ["vitest/globals", "node"]
   },
   "exclude": ["**/dist", "node_modules"]
 }

@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { useEvent, createHookStore, type HookStore } from '../../src/utils/hook';
+import { createEvent, createHookStore, type HookStore } from '../../src/utils/hook';
 
 describe('event', () => {
-  it("event's listener ops", () => {
-    const event = useEvent();
+  it('event\'s listener ops', () => {
+    const event = createEvent();
     const fn = () => {};
     event.add(fn);
 

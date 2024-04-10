@@ -50,8 +50,8 @@ function getTitle(title: string | IPublicTypeI18nData | ReactElement) {
 export class BorderContainer extends Component<{
   host: BuiltinSimulatorHost;
 }, {
-  target?: INode;
-}> {
+    target?: INode;
+  }> {
   state = {} as any;
 
   @computed get scale() {
@@ -70,7 +70,7 @@ export class BorderContainer extends Component<{
     const { host } = this.props;
 
     host.designer.editor.eventBus.on('designer.dropLocation.change', (loc: DropLocation) => {
-      let { target } = this.state;
+      const { target } = this.state;
       if (target === loc?.target) return;
       this.setState({
         target: loc?.target,

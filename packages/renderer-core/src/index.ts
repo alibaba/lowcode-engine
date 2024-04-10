@@ -5,7 +5,7 @@ export { createCodeRuntime, createScope } from './code-runtime';
 export { definePlugin } from './plugin';
 export { createWidget } from './widget';
 export { createContainer } from './container';
-export { createHookStore, useEvent } from './utils/hook';
+export { createHookStore, createEvent } from './utils/hook';
 export * from './utils/type-guard';
 export * from './utils/value';
 export * from './widget';

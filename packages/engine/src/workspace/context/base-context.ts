@@ -56,7 +56,7 @@ import { IEditorWindow } from '../window';
 export interface IBasicContext extends BasicContext {}
 
 export class BasicContext
-  implements
+implements
     Omit<
       IPublicModelPluginContext,
       'workspace' | 'commonUI' | 'command' | 'isPluginRegisteredInWorkspace' | 'editorWindow'

@@ -52,12 +52,12 @@ export default class TreeTitle extends PureComponent<{
     keywords: string;
     matchSelf: boolean;
   } = {
-    editing: false,
-    title: '',
-    filterWorking: false,
-    keywords: '',
-    matchSelf: false,
-  };
+      editing: false,
+      title: '',
+      filterWorking: false,
+      keywords: '',
+      matchSelf: false,
+    };
 
   private lastInput?: HTMLInputElement;
 

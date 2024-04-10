@@ -47,8 +47,8 @@ export interface IPublicTypeContextMenuAction {
   items?:
     | Omit<IPublicTypeContextMenuAction, 'items'>[]
     | ((
-        nodes?: IPublicModelNode[],
-      ) => Omit<IPublicTypeContextMenuAction, 'items'>[]);
+      nodes?: IPublicModelNode[],
+    ) => Omit<IPublicTypeContextMenuAction, 'items'>[]);
 
   /**
    * 显示条件函数

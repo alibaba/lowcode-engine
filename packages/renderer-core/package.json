@@ -1,17 +1,18 @@
 {
   "name": "@alilc/lowcode-renderer-core",
-  "version": "2.0.0-beta.0",
-  "description": "",
+  "version": "2.0.0-alpha.0",
+  "description": "core package for lowCode renderer",
   "type": "module",
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",
   "homepage": "https://github.com/alibaba/lowcode-engine/#readme",
   "license": "MIT",
-  "main": "dist/low-code-renderer-core.js",
+  "main": "dist/low-code-renderer-core.cjs",
   "module": "dist/low-code-renderer-core.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/low-code-renderer-core.js",
+      "require": "./dist/low-code-renderer-core.cjs",
       "types": "./dist/index.d.ts"
     }
   },
@@ -22,7 +23,7 @@
   ],
   "scripts": {
     "build:target": "vite build",
-    "build:dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.mjs",
+    "build:dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.js",
     "test": "vitest --run",
     "test:watch": "vitest"
   },

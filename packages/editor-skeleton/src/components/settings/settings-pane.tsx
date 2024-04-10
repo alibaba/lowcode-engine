@@ -139,8 +139,8 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
     const { setter } = this.field;
     let setterProps:
       | ({
-          setters?: (ReactNode | string)[];
-        } & Record<string, unknown>)
+        setters?: (ReactNode | string)[];
+      } & Record<string, unknown>)
       | IPublicTypeDynamicProps = {};
     let setterType: any;
     let initialValue: any = null;
@@ -251,8 +251,8 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
 
     const value = this.value;
 
-    let onChangeAPI = extraProps?.onChange;
-    let stageName = this.stageName;
+    const onChangeAPI = extraProps?.onChange;
+    const stageName = this.stageName;
 
     return createField(
       {
@@ -269,47 +269,47 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
         ...extraProps,
       },
       !stageName &&
-        this.setters?.createSetterContent(setterType, {
-          ...shallowIntl(setterProps),
-          forceInline: extraProps.forceInline,
-          key: field.id,
-          // === injection
-          prop: field.internalToShellField(), // for compatible vision
-          selected: field.top?.getNode()?.internalToShellNode(),
-          field: field.internalToShellField(),
-          // === IO
-          value, // reaction point
-          initialValue,
-          onChange: (value: any) => {
-            this.setState({
-              fromOnChange: true,
-              // eslint-disable-next-line react/no-unused-state
-              value,
-            });
-            field.setValue(value, true);
-            if (onChangeAPI) onChangeAPI(value, field.internalToShellField());
-          },
-          onInitial: () => {
-            if (initialValue == null) {
-              return;
-            }
-            const value =
+      this.setters?.createSetterContent(setterType, {
+        ...shallowIntl(setterProps),
+        forceInline: extraProps.forceInline,
+        key: field.id,
+        // === injection
+        prop: field.internalToShellField(), // for compatible vision
+        selected: field.top?.getNode()?.internalToShellNode(),
+        field: field.internalToShellField(),
+        // === IO
+        value, // reaction point
+        initialValue,
+        onChange: (value: any) => {
+          this.setState({
+            fromOnChange: true,
+            // eslint-disable-next-line react/no-unused-state
+            value,
+          });
+          field.setValue(value, true);
+          if (onChangeAPI) onChangeAPI(value, field.internalToShellField());
+        },
+        onInitial: () => {
+          if (initialValue == null) {
+            return;
+          }
+          const value =
               typeof initialValue === 'function'
                 ? initialValue(field.internalToShellField())
                 : initialValue;
-            this.setState({
-              // eslint-disable-next-line react/no-unused-state
-              value,
-            });
-            field.setValue(value, true);
-          },
+          this.setState({
+            // eslint-disable-next-line react/no-unused-state
+            value,
+          });
+          field.setValue(value, true);
+        },
 
-          removeProp: () => {
-            if (field.name) {
-              field.parent.clearPropValue(field.name);
-            }
-          },
-        }),
+        removeProp: () => {
+          if (field.name) {
+            field.parent.clearPropValue(field.name);
+          }
+        },
+      }),
       extraProps.forceInline ? 'plain' : extraProps.display,
     );
   }

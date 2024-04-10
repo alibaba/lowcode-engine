@@ -1,22 +1,24 @@
 {
   "name": "@alilc/lowcode-renderer-router",
-  "version": "1.0.0-beta.0",
-  "description": "",
+  "version": "1.0.0-alpha.0",
+  "description": "router for lowCode renderer",
   "type": "module",
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",
   "homepage": "https://github.com/alibaba/lowcode-engine/#readme",
   "license": "MIT",
+  "main": "dist/low-code-runtime-router.cjs",
   "module": "dist/low-code-runtime-router.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/low-code-runtime-router.js",
+      "require": "./dist/low-code-runtime-router.cjs",
       "types": "./dist/index.d.ts"
     }
   },
   "scripts": {
     "build:target": "vite build",
-    "build:dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.mjs",
+    "build:dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.js",
     "test": "vitest"
   },
   "dependencies": {

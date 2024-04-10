@@ -19,7 +19,7 @@ export interface IPublicModelClipboard {
    * @since v1.1.0
    */
   waitPasteData(
-      keyboardEvent: KeyboardEvent,
-      cb: (data: any, clipboardEvent: ClipboardEvent) => void,
-    ): void;
+    keyboardEvent: KeyboardEvent,
+    cb: (data: any, clipboardEvent: ClipboardEvent) => void,
+  ): void;
 }

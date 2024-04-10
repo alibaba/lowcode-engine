@@ -41,9 +41,9 @@ export class Dragon implements IPublicModelDragon {
   }
 
   static create(
-      dragon: IDragon | null,
-      workspaceMode: boolean,
-    ): IPublicModelDragon | null {
+    dragon: IDragon | null,
+    workspaceMode: boolean,
+  ): IPublicModelDragon | null {
     if (!dragon) {
       return null;
     }

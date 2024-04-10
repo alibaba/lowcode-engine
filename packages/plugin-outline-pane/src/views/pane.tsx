@@ -13,8 +13,8 @@ export class Pane extends PureComponent<{
   controller: PaneController;
   hideFilter?: boolean;
 }, {
-  tree: Tree | null;
-}> {
+    tree: Tree | null;
+  }> {
   private controller;
 
   private simulatorRendererReadyDispose: IPublicTypeDisposable;

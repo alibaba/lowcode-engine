@@ -30,8 +30,8 @@ export default class TreeView extends PureComponent<{
   state: {
     root: TreeNode | null;
   } = {
-    root: null,
-  };
+      root: null,
+    };
 
   private hover(e: ReactMouseEvent) {
     const { project } = this.props.tree.pluginContext;

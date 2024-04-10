@@ -5,7 +5,7 @@ import { MouseEvent } from 'react';
 export const getClosestNode = <Node extends IPublicModelNode = IPublicModelNode>(
   node: Node,
   until: (n: Node) => boolean,
-  ): Node | undefined => {
+): Node | undefined => {
   if (!node) {
     return undefined;
   }

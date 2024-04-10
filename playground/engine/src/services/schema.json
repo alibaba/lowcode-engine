@@ -1,0 +1,445 @@
+{
+  "componentName": "Page",
+  "id": "node_dockcviv8fo1",
+  "docId": "doclaqkk3b9",
+  "props": {
+      "ref": "outerView",
+      "style": {
+          "height": "100%"
+      }
+  },
+  "fileName": "/",
+  "dataSource": {
+      "list": [
+          {
+              "type": "fetch",
+              "isInit": true,
+              "options": {
+                  "params": {},
+                  "method": "GET",
+                  "isCors": true,
+                  "timeout": 5000,
+                  "headers": {},
+                  "uri": "mock/info.json"
+              },
+              "id": "info",
+              "shouldFetch": {
+                  "type": "JSFunction",
+                  "value": "function() { \n  console.log('should fetch.....');\n  return true; \n}"
+              }
+          }
+      ]
+  },
+  "state": {
+      "text": {
+          "type": "JSExpression",
+          "value": "\"outer\""
+      },
+      "isShowDialog": {
+          "type": "JSExpression",
+          "value": "false"
+      }
+  },
+  "css": "body {\n  font-size: 12px;\n}\n\n.button {\n  width: 100px;\n  color: #ff00ff\n}",
+  "lifeCycles": {
+      "componentDidMount": {
+          "type": "JSFunction",
+          "value": "function componentDidMount() {\n  console.log('did mount');\n}"
+      },
+      "componentWillUnmount": {
+          "type": "JSFunction",
+          "value": "function componentWillUnmount() {\n  console.log('will unmount');\n}"
+      }
+  },
+  "methods": {
+      "testFunc": {
+          "type": "JSFunction",
+          "value": "function testFunc() {\n  console.log('test func');\n}"
+      },
+      "onClick": {
+          "type": "JSFunction",
+          "value": "function onClick() {\n  this.setState({\n    isShowDialog: true\n  });\n}"
+      },
+      "closeDialog": {
+          "type": "JSFunction",
+          "value": "function closeDialog() {\n  this.setState({\n    isShowDialog: false\n  });\n}"
+      },
+      "onClickTestConstants": {
+          "type": "JSFunction",
+          "value": "function onClickTestConstants() {\n  console.log('this.constants.ConstantA', this.constants.ConstantA);\n  console.log('this.constants.ConstantB', this.constants.ConstantB);\n}"
+      },
+      "onClickTestUtils": {
+          "type": "JSFunction",
+          "value": "function onClickTestUtils() {\n  this.utils.demoUtil('a', 'b');\n}"
+      }
+  },
+  "originCode": "class LowcodeComponent extends Component {\n  state = {\n    \"text\": \"outer\",\n    \"isShowDialog\": false\n  }\n  componentDidMount() {\n    console.log('did mount');\n  }\n  componentWillUnmount() {\n    console.log('will unmount');\n  }\n  testFunc() {\n    console.log('test func');\n  }\n  onClick() {\n    this.setState({\n      isShowDialog: true\n    })\n  }\n  closeDialog() {\n    this.setState({\n      isShowDialog: false\n    })\n  }\n\tonClickTestConstants(){\n    console.log('this.constants.ConstantA', this.constants.ConstantA);\n    console.log('this.constants.ConstantB', this.constants.ConstantB);\n  }\n  onClickTestUtils() {\n    this.utils.demoUtil('a', 'b');\n  }\n}",
+  "hidden": false,
+  "title": "",
+  "isLocked": false,
+  "condition": true,
+  "conditionGroup": "",
+  "children": [
+      {
+          "componentName": "NextPage",
+          "id": "node_ockzs2vw431",
+          "docId": "doclaqkk3b9",
+          "props": {
+              "headerDivider": true,
+              "minHeight": "100vh",
+              "presetNav": true,
+              "presetAside": true,
+              "footer": false,
+              "nav": false,
+              "aside": false,
+              "placeholderStyle": {
+                  "gridRowEnd": "span 1",
+                  "gridColumnEnd": "span 12"
+              },
+              "headerProps": {
+                  "background": "surface"
+              },
+              "header": {
+                  "type": "JSSlot",
+                  "value": {
+                    "componentName": "NextPageHeader",
+                    "id": "node_ockzs2vw433",
+                    "docId": "doclaqkk3b9",
+                    "props": {},
+                    "title": "页面头部",
+                    "hidden": false,
+                    "isLocked": false,
+                    "condition": true,
+                    "conditionGroup": "",
+                    "children": [
+                        {
+                            "componentName": "NextRowColContainer",
+                            "id": "node_ockzs2vw434",
+                            "docId": "doclaqkk3b9",
+                            "props": {
+                                "rowGap": 20,
+                                "colGap": 20
+                            },
+                            "title": "行列容器",
+                            "hidden": false,
+                            "isLocked": false,
+                            "condition": true,
+                            "conditionGroup": "",
+                            "children": [
+                                {
+                                    "componentName": "NextRow",
+                                    "id": "node_ockzs2vw435",
+                                    "docId": "doclaqkk3b9",
+                                    "props": {},
+                                    "title": "行",
+                                    "hidden": false,
+                                    "isLocked": false,
+                                    "condition": true,
+                                    "conditionGroup": "",
+                                    "children": [
+                                        {
+                                            "componentName": "NextCol",
+                                            "id": "node_ockzs2vw436",
+                                            "docId": "doclaqkk3b9",
+                                            "props": {
+                                                "colSpan": 1
+                                            },
+                                            "title": "列",
+                                            "hidden": false,
+                                            "isLocked": false,
+                                            "condition": true,
+                                            "conditionGroup": "",
+                                            "children": [
+                                                {
+                                                    "componentName": "NextP",
+                                                    "id": "node_ockzvfoetv17",
+                                                    "docId": "dockzvfoetv",
+                                                    "props": {
+                                                        "wrap": false,
+                                                        "type": "body2",
+                                                        "verAlign": "middle",
+                                                        "textSpacing": true,
+                                                        "align": "left"
+                                                    },
+                                                    "title": "段落",
+                                                    "hidden": false,
+                                                    "isLocked": false,
+                                                    "condition": true,
+                                                    "conditionGroup": "",
+                                                    "children": [
+                                                        {
+                                                            "componentName": "NextText",
+                                                            "id": "node_ockzvfoetv18",
+                                                            "docId": "dockzvfoetv",
+                                                            "props": {
+                                                                "type": "h5",
+                                                                "children": {
+                                                                    "type": "JSExpression",
+                                                                    "value": "this.state.info?.info",
+                                                                    "mock": "标题标题"
+                                                                },
+                                                                "mark": false,
+                                                                "code": false,
+                                                                "delete": false,
+                                                                "underline": false,
+                                                                "strong": false,
+                                                                "prefix": "",
+                                                                "classname": "",
+                                                                "ref": "nexttext-3a39ea8b"
+                                                            },
+                                                            "hidden": false,
+                                                            "title": "",
+                                                            "isLocked": false,
+                                                            "condition": true,
+                                                            "conditionGroup": ""
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                  }
+              },
+              "isTab": false,
+              "contentAlignCenter": false,
+              "contentProps": {
+                  "style": {
+                      "background": "rgba(255,255,255,0)"
+                  }
+              },
+              "navProps": {
+                  "width": 200
+              },
+              "asideProps": {
+                  "width": 200
+              },
+              "background": "lining",
+              "ref": "nextpage-3cc814e7"
+          },
+          "title": "页面",
+          "hidden": false,
+          "isLocked": false,
+          "condition": true,
+          "conditionGroup": "",
+          "children": [
+              {
+                  "componentName": "NextBlock",
+                  "id": "node_oclat5fpb6ga",
+                  "docId": "doclat87b8r",
+                  "props": {
+                      "placeholderStyle": {
+                          "height": "100%"
+                      },
+                      "noPadding": false,
+                      "noBorder": false,
+                      "title": "区域标题",
+                      "rowGap": 20,
+                      "colGap": 20,
+                      "background": "surface",
+                      "layoutmode": "O",
+                      "strict": true,
+                      "colSpan": 12,
+                      "rowSpan": 1,
+                      "mode": "transparent",
+                      "childTotalColumns": 12
+                  },
+                  "title": "区域",
+                  "hidden": false,
+                  "isLocked": false,
+                  "condition": true,
+                  "conditionGroup": "",
+                  "children": [
+                      {
+                          "componentName": "NextBlockCell",
+                          "id": "node_oclat5fpb6gb",
+                          "docId": "doclat87b8r",
+                          "props": {
+                              "colSpan": 12,
+                              "rowSpan": 1,
+                              "mode": "procard",
+                              "isAutoContainer": true,
+                              "title": "区块标题",
+                              "hasDivider": true,
+                              "loading": false,
+                              "hasCollapse": false,
+                              "text": true,
+                              "isFillContainer": true,
+                              "operations": []
+                          },
+                          "hidden": false,
+                          "title": "",
+                          "isLocked": false,
+                          "condition": true,
+                          "conditionGroup": "",
+                          "children": [
+                              {
+                                  "componentName": "NextRowColContainer",
+                                  "id": "node_oclat5fpb6gc",
+                                  "docId": "doclat87b8r",
+                                  "props": {
+                                      "rowGap": 20,
+                                      "colGap": 20
+                                  },
+                                  "title": "行列容器",
+                                  "hidden": false,
+                                  "isLocked": false,
+                                  "condition": true,
+                                  "conditionGroup": "",
+                                  "children": [
+                                      {
+                                          "componentName": "NextRow",
+                                          "id": "node_oclat5fpb6gd",
+                                          "docId": "doclat87b8r",
+                                          "props": {},
+                                          "title": "行",
+                                          "hidden": false,
+                                          "isLocked": false,
+                                          "condition": true,
+                                          "conditionGroup": "",
+                                          "children": [
+                                              {
+                                                  "componentName": "NextCol",
+                                                  "id": "node_oclat5fpb6ge",
+                                                  "docId": "doclat87b8r",
+                                                  "props": {
+                                                      "colSpan": 1
+                                                  },
+                                                  "title": "列",
+                                                  "hidden": false,
+                                                  "isLocked": false,
+                                                  "condition": true,
+                                                  "conditionGroup": "",
+                                                  "children": [
+                                                      {
+                                                          "componentName": "NextP",
+                                                          "id": "node_oclat5fpb6gf",
+                                                          "docId": "doclat87b8r",
+                                                          "props": {
+                                                              "wrap": false,
+                                                              "type": "body2",
+                                                              "verAlign": "middle",
+                                                              "textSpacing": true,
+                                                              "align": "left"
+                                                          },
+                                                          "title": "段落",
+                                                          "hidden": false,
+                                                          "isLocked": false,
+                                                          "condition": true,
+                                                          "conditionGroup": "",
+                                                          "children": [
+                                                              {
+                                                                  "componentName": "Button",
+                                                                  "id": "node_oclat5fpb6gg",
+                                                                  "docId": "doclat5fpb6",
+                                                                  "props": {
+                                                                      "prefix": "next-",
+                                                                      "type": "primary",
+                                                                      "size": "medium",
+                                                                      "htmlType": "button",
+                                                                      "component": "button",
+                                                                      "children": "测试constants",
+                                                                      "iconSize": "xxs",
+                                                                      "loading": false,
+                                                                      "text": false,
+                                                                      "warning": false,
+                                                                      "disabled": false,
+                                                                      "__events": {
+                                                                          "eventDataList": [
+                                                                              {
+                                                                                  "type": "componentEvent",
+                                                                                  "name": "onClick",
+                                                                                  "relatedEventName": "onClickTestConstants"
+                                                                              }
+                                                                          ],
+                                                                          "eventList": [
+                                                                              {
+                                                                                  "name": "onClick",
+                                                                                  "description": "点击按钮的回调\n@param {Object} e Event Object",
+                                                                                  "disabled": true
+                                                                              },
+                                                                              {
+                                                                                  "name": "onMouseUp",
+                                                                                  "disabled": false
+                                                                              }
+                                                                          ]
+                                                                      },
+                                                                      "onClick": {
+                                                                          "type": "JSFunction",
+                                                                          "value": "function(){this.onClickTestConstants.apply(this,Array.prototype.slice.call(arguments).concat([])) }"
+                                                                      },
+                                                                      "ghost": false
+                                                                  },
+                                                                  "hidden": false,
+                                                                  "title": "",
+                                                                  "isLocked": false,
+                                                                  "condition": true,
+                                                                  "conditionGroup": ""
+                                                              },
+                                                              {
+                                                                  "componentName": "Button",
+                                                                  "id": "node_oclat5fpb6gh",
+                                                                  "docId": "doclat5fpb6",
+                                                                  "props": {
+                                                                      "prefix": "next-",
+                                                                      "type": "primary",
+                                                                      "size": "medium",
+                                                                      "htmlType": "button",
+                                                                      "component": "button",
+                                                                      "children": "测试utils",
+                                                                      "iconSize": "xxs",
+                                                                      "loading": false,
+                                                                      "text": false,
+                                                                      "warning": false,
+                                                                      "disabled": false,
+                                                                      "ref": "button-0d20c188",
+                                                                      "__events": {
+                                                                          "eventDataList": [
+                                                                              {
+                                                                                  "type": "componentEvent",
+                                                                                  "name": "onClick",
+                                                                                  "relatedEventName": "onClickTestUtils"
+                                                                              }
+                                                                          ],
+                                                                          "eventList": [
+                                                                              {
+                                                                                  "name": "onClick",
+                                                                                  "description": "点击按钮的回调\n@param {Object} e Event Object",
+                                                                                  "disabled": true
+                                                                              },
+                                                                              {
+                                                                                  "name": "onMouseUp",
+                                                                                  "disabled": false
+                                                                              }
+                                                                          ]
+                                                                      },
+                                                                      "onClick": {
+                                                                          "type": "JSFunction",
+                                                                          "value": "function(){this.onClickTestUtils.apply(this,Array.prototype.slice.call(arguments).concat([])) }"
+                                                                      }
+                                                                  },
+                                                                  "hidden": false,
+                                                                  "title": "",
+                                                                  "isLocked": false,
+                                                                  "condition": true,
+                                                                  "conditionGroup": ""
+                                                              }
+                                                          ]
+                                                      }
+                                                  ]
+                                              }
+                                          ]
+                                      }
+                                  ]
+                              }
+                          ]
+                      }
+                  ]
+              }
+          ]
+      }
+  ]
+}

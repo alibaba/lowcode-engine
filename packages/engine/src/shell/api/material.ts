@@ -141,7 +141,7 @@ export class Material implements IPublicApiMaterial {
   getComponentMetasMap(): Map<string, IPublicModelComponentMeta> {
     const map = new Map<string, IPublicModelComponentMeta>();
     const originalMap = this[designerSymbol].getComponentMetasMap();
-    for (let componentName of originalMap.keys()) {
+    for (const componentName of originalMap.keys()) {
       map.set(componentName, this.getComponentMeta(componentName)!);
     }
     return map;

@@ -646,7 +646,7 @@ export class Prop implements IProp, IPropParent {
       }
     }
     const prop = isProp(value) ? value : new Prop(this, value, key);
-    let items = this._items! || [];
+    const items = this._items! || [];
     if (this.type === 'list') {
       if (!isValidArrayIndex(key)) {
         return null;

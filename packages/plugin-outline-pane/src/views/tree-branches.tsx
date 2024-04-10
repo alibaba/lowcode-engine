@@ -69,10 +69,10 @@ interface ITreeNodeChildrenState {
   dropDetail: IPublicTypeLocationChildrenDetail | undefined | null;
 }
 class TreeNodeChildren extends PureComponent<{
-    treeNode: TreeNode;
-    isModal?: boolean;
-    treeChildren: TreeNode[] | null;
-  }, ITreeNodeChildrenState> {
+  treeNode: TreeNode;
+  isModal?: boolean;
+  treeChildren: TreeNode[] | null;
+}, ITreeNodeChildrenState> {
   state: ITreeNodeChildrenState = {
     filterWorking: false,
     matchSelf: false,
@@ -96,7 +96,7 @@ class TreeNodeChildren extends PureComponent<{
         filterWorking: newFilterWorking,
         matchSelf: newMatchChild,
         keywords: newKeywords,
-       } = treeNode.filterReult;
+      } = treeNode.filterReult;
       this.setState({
         filterWorking: newFilterWorking,
         matchSelf: newMatchChild,
@@ -104,10 +104,10 @@ class TreeNodeChildren extends PureComponent<{
       });
     });
     this.offLocationChanged = project.currentDocument?.onDropLocationChanged(
-        () => {
-          this.setState({ dropDetail: treeNode.dropDetail });
-        },
-      );
+      () => {
+        this.setState({ dropDetail: treeNode.dropDetail });
+      },
+    );
   }
   componentWillUnmount(): void {
     this.offLocationChanged && this.offLocationChanged();
@@ -188,8 +188,8 @@ class TreeNodeChildren extends PureComponent<{
 }
 
 class TreeNodeSlots extends PureComponent<{
-    treeNode: TreeNode;
-  }> {
+  treeNode: TreeNode;
+}> {
   render() {
     const { treeNode } = this.props;
     if (!treeNode.hasSlots()) {

@@ -86,4 +86,4 @@ export interface IBaseModelProps<
 
 }
 
-export interface IPublicModelProps extends IBaseModelProps<IPublicModelProp> {};
+export interface IPublicModelProps extends IBaseModelProps<IPublicModelProp> {}

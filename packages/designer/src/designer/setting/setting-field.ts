@@ -37,10 +37,10 @@ function getSettingFieldCollectorKey(
 // @ts-ignore
 export interface ISettingField
   extends ISettingPropEntry,
-    Omit<
-      IBaseModelSettingField<ISettingTopEntry, ISettingField, IComponentMeta, INode>,
+  Omit<
+    IBaseModelSettingField<ISettingTopEntry, ISettingField, IComponentMeta, INode>,
       'setValue' | 'key' | 'node'
-    > {
+  > {
   readonly isSettingField: true;
 
   readonly isRequired: boolean;

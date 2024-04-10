@@ -111,8 +111,8 @@ export class DocumentModel implements IPublicModelDocumentModel {
     this._focusNode = node;
     this[editorSymbol].eventBus.emit(
       'shell.document.focusNodeChanged',
-        { document: this, focusNode: node },
-      );
+      { document: this, focusNode: node },
+    );
   }
 
   /**
@@ -121,7 +121,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
    */
   get nodesMap(): Map<string, IPublicModelNode> {
     const map = new Map<string, IPublicModelNode>();
-    for (let id of this[documentSymbol].nodesMap.keys()) {
+    for (const id of this[documentSymbol].nodesMap.keys()) {
       map.set(id, this.getNodeById(id)!);
     }
     return map;
@@ -227,14 +227,14 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * @returns boolean 是否可以放置
    */
   checkNesting(
-      dropTarget: IPublicModelNode,
-      dragObject: IPublicTypeDragNodeObject | IPublicTypeDragNodeDataObject,
-    ): boolean {
-    let innerDragObject = dragObject;
+    dropTarget: IPublicModelNode,
+    dragObject: IPublicTypeDragNodeObject | IPublicTypeDragNodeDataObject,
+  ): boolean {
+    const innerDragObject = dragObject;
     if (isDragNodeObject(dragObject)) {
       innerDragObject.nodes = innerDragObject.nodes?.map(
-          (node: IPublicModelNode) => ((node as any)[nodeSymbol] || node),
-        );
+        (node: IPublicModelNode) => ((node as any)[nodeSymbol] || node),
+      );
     }
     return this[documentSymbol].checkNesting(
       ((dropTarget as any)[nodeSymbol] || dropTarget) as any,

@@ -11,6 +11,10 @@
     ".": {
       "import": "./dist/low-code-editor-core.js",
       "types": "./dist/index.d.ts"
+    },
+    "./dist/": {
+      "import": "./dist/",
+      "require": "./dist/"
     }
   },
   "sideEffects": [

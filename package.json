@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "playground": "pnpm --filter playground dev",
-    "test": "pnpm -r test",
     "build": "node ./scripts/build.js",
+    "test": "vitest",
     "clean": "rimraf ./packages/*/dist",
     "clean:lib": "rimraf ./node_modules ./packages/*/node_modules",
     "lint": "eslint . --cache",
@@ -35,7 +35,6 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.6",
     "globals": "^15.0.0",
     "husky": "^9.0.11",
     "less": "^4.2.0",

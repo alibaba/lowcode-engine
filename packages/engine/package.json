@@ -11,6 +11,10 @@
       "import": "./dist/ali-low-code-engine.js",
       "require": "./dist/ali-low-code-engine.cjs",
       "types": "./dist/index.d.ts"
+    },
+    "./dist/": {
+      "import": "./dist/",
+      "require": "./dist/"
     }
   },
   "files": [

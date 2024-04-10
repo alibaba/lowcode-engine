@@ -104,29 +104,29 @@ export class SettingsPrimaryPane extends Component<
         l === 2
           ? {}
           : {
-              onMouseOver: hoverNode.bind(null, _node, true),
-              onMouseOut: hoverNode.bind(null, _node, false),
-              onClick: () => {
-                if (!_node) {
-                  return;
-                }
-                selectNode.call(null, _node);
-                const getName = (node: any) => {
-                  const npm = node?.componentMeta?.npm;
-                  return (
-                    [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
-                    node?.componentMeta?.componentName ||
-                    ''
-                  );
-                };
-                const selected = getName(current);
-                const target = getName(_node);
-                editor?.eventBus.emit('skeleton.settingsPane.Breadcrumb', {
-                  selected,
-                  target,
-                });
-              },
-            };
+            onMouseOver: hoverNode.bind(null, _node, true),
+            onMouseOut: hoverNode.bind(null, _node, false),
+            onClick: () => {
+              if (!_node) {
+                return;
+              }
+              selectNode.call(null, _node);
+              const getName = (node: any) => {
+                const npm = node?.componentMeta?.npm;
+                return (
+                  [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+                  node?.componentMeta?.componentName ||
+                  ''
+                );
+              };
+              const selected = getName(current);
+              const target = getName(_node);
+              editor?.eventBus.emit('skeleton.settingsPane.Breadcrumb', {
+                selected,
+                target,
+              });
+            },
+          };
       items.unshift(
         <Breadcrumb.Item {...props} key={node.id}>
           <Title title={node.title} />
