@@ -66,7 +66,9 @@ import { CommandPlugin } from '@alilc/lowcode-plugin-command';
 import { OutlinePlugin } from '@alilc/lowcode-plugin-outline-pane';
 import { version } from '../package.json';
 
+import '@alilc/lowcode-plugin-outline-pane/dist/style.css';
 import '@alilc/lowcode-editor-skeleton/dist/style.css';
+import '@alilc/lowcode-designer/dist/style.css';
 
 export * from './modules/skeleton-types';
 export * from './modules/designer-types';
@@ -115,10 +117,10 @@ globalContext.register(innerWorkspace, 'workspace');
 const engineContext: Partial<ILowCodePluginContextPrivate> = {};
 
 const innerSkeleton = new InnerSkeleton(editor);
-editor.set('skeleton' as any, innerSkeleton);
+editor.set('skeleton', innerSkeleton);
 
 const designer = new Designer({ editor, shellModelFactory });
-editor.set('designer' as any, designer);
+editor.set('designer', designer);
 
 const { project: innerProject } = designer;
 
@@ -137,7 +139,7 @@ const material = new Material(editor);
 const commonUI = new CommonUI(editor);
 
 editor.set('project', project);
-editor.set('setters' as any, setters);
+editor.set('setters', setters);
 editor.set('material', material);
 editor.set('innerHotkey', innerHotkey);
 
@@ -290,6 +292,7 @@ export async function init(
     return;
   }
 
+  await pluginPromise;
   await plugins.init(pluginPreference as any);
 
   if (!root) {

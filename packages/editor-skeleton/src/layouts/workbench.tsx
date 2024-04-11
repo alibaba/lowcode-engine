@@ -10,9 +10,10 @@ import Toolbar from './toolbar';
 import MainArea from './main-area';
 import BottomArea from './bottom-area';
 import RightArea from './right-area';
-import './workbench.less';
 import { SkeletonContext } from '../context';
 import { EditorConfig, PluginClassSet } from '@alilc/lowcode-types';
+
+import './workbench.less';
 
 @observer
 export class Workbench extends Component<{

@@ -164,13 +164,19 @@ export interface ISimulatorHost<P = object> extends IPublicModelSensor<INode> {
    */
   getComponentContext(node: INode): object | null;
 
-  getClosestNodeInstance(from: IPublicTypeComponentInstance, specId?: string): IPublicTypeNodeInstance | null;
+  getClosestNodeInstance(
+    from: IPublicTypeComponentInstance, specId?: string
+  ): IPublicTypeNodeInstance | null;
 
   computeRect(node: INode): DOMRect | null;
 
-  computeComponentInstanceRect(instance: IPublicTypeComponentInstance, selector?: string): DOMRect | null;
+  computeComponentInstanceRect(
+    instance: IPublicTypeComponentInstance, selector?: string
+  ): DOMRect | null;
 
-  findDOMNodes(instance: IPublicTypeComponentInstance, selector?: string): Array<Element | Text> | null;
+  findDOMNodes(
+    instance: IPublicTypeComponentInstance, selector?: string
+  ): Array<Element | Text> | null;
 
   getDropContainer(e: ILocateEvent): DropContainer | null;
 

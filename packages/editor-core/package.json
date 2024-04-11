@@ -57,6 +57,8 @@
   },
   "peerDependencies": {
     "@alifd/next": "^1.27.8",
+    "@alilc/lowcode-types": "workspace:*",
+    "@alilc/lowcode-utils": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

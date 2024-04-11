@@ -12,9 +12,9 @@
       "require": "./dist/low-code-designer.cjs",
       "types": "./dist/index.d.ts"
     },
-    "./dist/": {
-      "import": "./dist/",
-      "require": "./dist/"
+    "./dist/style.css": {
+      "import": "./dist/style.css",
+      "require": "./dist/style.css"
     }
   },
   "files": [
@@ -54,6 +54,9 @@
   },
   "peerDependencies": {
     "@alifd/next": "^1.27.8",
+    "@alilc/lowcode-editor-core": "workspace:*",
+    "@alilc/lowcode-types": "workspace:*",
+    "@alilc/lowcode-utils": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

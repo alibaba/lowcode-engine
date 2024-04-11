@@ -67,14 +67,15 @@ export class Workbench extends Component<{
                   }
 
                   {
-                    !workspace.windows.length && WorkspaceEmptyComponent ? <WorkspaceEmptyComponent /> : null
+                    workspace.windows.length === 0 && WorkspaceEmptyComponent
+                      ? <WorkspaceEmptyComponent />
+                      : null
                   }
                 </div>
               </div>
               <MainArea area={skeleton.mainArea} />
               <BottomArea area={skeleton.bottomArea} />
             </div>
-            {/* <RightArea area={skeleton.rightArea} /> */}
           </div>
           <TipContainer />
         </SkeletonContext.Provider>

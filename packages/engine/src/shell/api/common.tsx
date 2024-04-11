@@ -417,9 +417,9 @@ class EditorCabin implements IPublicApiCommonEditorCabin {
 }
 
 export class Common implements IPublicApiCommon {
-  private readonly __designerCabin: any;
-  private readonly __skeletonCabin: any;
-  private readonly __editorCabin: any;
+  private readonly __designerCabin: DesignerCabin;
+  private readonly __skeletonCabin: SkeletonCabin;
+  private readonly __editorCabin: EditorCabin;
   private readonly __utils: Utils;
 
   constructor(editor: Editor, skeleton: InnerSkeleton) {
@@ -438,7 +438,7 @@ export class Common implements IPublicApiCommon {
    * this load of crap will be removed in some future versions, don`t use it.
    * @deprecated
    */
-  get editorCabin(): any {
+  get editorCabin(): EditorCabin {
     return this.__editorCabin;
   }
 
@@ -447,11 +447,11 @@ export class Common implements IPublicApiCommon {
    * this load of crap will be removed in some future versions, don`t use it.
    * @deprecated use canvas api instead
    */
-  get designerCabin(): any {
+  get designerCabin(): DesignerCabin {
     return this.__designerCabin;
   }
 
-  get skeletonCabin(): any {
+  get skeletonCabin(): SkeletonCabin {
     return this.__skeletonCabin;
   }
 
@@ -460,7 +460,7 @@ export class Common implements IPublicApiCommon {
    * this load of crap will be removed in some future versions, don`t use it.
    * @deprecated use { TransformStage } from '@alilc/lowcode-types' instead
    */
-  get objects(): any {
+  get objects() {
     return {
       TransformStage: InnerTransitionStage,
     };

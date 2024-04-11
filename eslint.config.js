@@ -6,7 +6,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 
 export default tseslint.config({
-  files: ['packages/*/{src,__tests__}/**/*.{ts?(x),js?(x)}'],
+  files: ['packages/*/{src,__tests__}/**/*.{ts?(x),js?(x)}', 'scripts/*.js'],
   ignores: ['**/*.test.ts'],
   extends: [js.configs.recommended, ...tseslint.configs.recommended],
   plugins: {
@@ -32,13 +32,15 @@ export default tseslint.config({
     '@stylistic/max-len': ['error', { code: 100, tabWidth: 2, ignoreStrings: true, ignoreComments: true }],
     '@stylistic/no-tabs': 'error',
     '@stylistic/quotes': ['error', 'single'],
+    '@stylistic/quote-props': ['error', 'as-needed'],
     '@stylistic/jsx-pascal-case': [2],
     '@stylistic/jsx-indent': [2, 2, { checkAttributes: true, indentLogicalExpressions: true }],
     '@stylistic/semi': ['error', 'always'],
     '@stylistic/eol-last': ['error', 'always'],
     '@stylistic/jsx-quotes': ['error', 'prefer-double'],
 
-    "@typescript-eslint/ban-ts-comment": ["error", { 'ts-expect-error': 'allow-with-description' }],
+    '@typescript-eslint/ban-ts-comment': ["error", { 'ts-expect-error': 'allow-with-description' }],
+    '@typescript-eslint/no-explicit-any': 'warn',
 
     'react/jsx-no-undef': 'error',
     'react/jsx-uses-vars': 'error',

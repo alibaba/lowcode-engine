@@ -118,7 +118,6 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     );
     const config = newPluginModel(ctx, newOptions);
     // compat the legacy way to declare pluginName
-    // @ts-ignore
     pluginName = pluginName || config.name;
     invariant(pluginName, 'pluginConfigCreator.pluginName required', config);
 

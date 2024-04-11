@@ -2,6 +2,7 @@
   "name": "@alilc/lowcode-plugin-designer",
   "version": "2.0.0-beta.0",
   "description": "alibaba lowcode editor designer plugin",
+  "private": true,
   "type": "module",
   "main": "dist/low-code-plugin-designer.cjs",
   "module": "dist/low-code-plugin-designer.js",
@@ -11,6 +12,10 @@
       "import": "./dist/low-code-plugin-designer.js",
       "require": "./dist/low-code-plugin-designer.cjs",
       "types": "./dist/index.d.ts"
+    },
+    "./dist/": {
+      "import": "./dist/",
+      "require": "./dist/"
     }
   },
   "files": [
@@ -41,7 +46,10 @@
   },
   "peerDependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "@alilc/lowcode-designer": "workspace:*",
+    "@alilc/lowcode-editor-core": "workspace:*",
+    "@alilc/lowcode-utils": "workspace:*"
   },
   "publishConfig": {
     "access": "public",

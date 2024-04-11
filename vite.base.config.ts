@@ -12,6 +12,7 @@ interface Options {
 }
 
 const resolvePath = (path: string) => resolve(cwd(), path)
+const isProduction = !!env['PROD']
 
 export default async ({ name, entry = 'src/index.ts', defaultFormats = ['es'], externalDeps = true }: Options) => {
   const formats = (env['FORMATS']?.split(',') ?? defaultFormats) as LibraryFormats[];
@@ -31,7 +32,8 @@ export default async ({ name, entry = 'src/index.ts', defaultFormats = ['es'], e
         fileName: camelCaseToKebabCase(name),
         formats,
       },
-      minify: false,
+      minify: isProduction,
+      sourcemap: isProduction ? false : 'inline',
       rollupOptions: {
         external: externals
       }

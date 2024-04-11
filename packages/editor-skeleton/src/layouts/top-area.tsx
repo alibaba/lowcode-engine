@@ -4,7 +4,9 @@ import { observer } from '@alilc/lowcode-editor-core';
 import { Area } from '../area';
 
 @observer
-export default class TopArea extends Component<{ area: Area; itemClassName?: string; className?: string }> {
+export default class TopArea extends Component<
+  { area: Area; itemClassName?: string; className?: string }
+> {
   render() {
     const { area, itemClassName, className } = this.props;
     if (area.isEmpty()) {
@@ -13,8 +15,7 @@ export default class TopArea extends Component<{ area: Area; itemClassName?: str
     return (
       <div className={classNames(className, 'lc-top-area engine-actionpane', {
         'lc-area-visible': area.visible,
-      })}
-      >
+      })}>
         <Contents area={area} itemClassName={itemClassName} />
       </div>
     );

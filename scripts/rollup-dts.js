@@ -1,7 +1,7 @@
 import { join } from 'node:path';
 import { existsSync, readdirSync } from 'node:fs';
-import { env, exit } from 'node:process'
-import console from 'node:console'
+import { env, exit } from 'node:process';
+import console from 'node:console';
 import { Extractor, ExtractorConfig } from '@microsoft/api-extractor';
 import { rimraf } from 'rimraf';
 
@@ -30,13 +30,13 @@ async function run() {
   });
 
   if (extractorResult.succeeded) {
-    console.log(`🚀类型声明文件生成成功！！！`);
+    console.log('🚀类型声明文件生成成功！！！');
 
     await rimraf(join(libPath, 'temp'));
   } else {
     console.error(
       '🚨类型声明文件生成失败：' +
-        +`\n\t${extractorResult.errorCount} errors``\n\tand ${extractorResult.warningCount} warnings`,
+      +`\n\t${extractorResult.errorCount} errors``\n\tand ${extractorResult.warningCount} warnings`,
     );
     exit(1);
   }

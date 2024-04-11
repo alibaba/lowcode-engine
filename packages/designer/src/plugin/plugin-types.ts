@@ -84,7 +84,9 @@ export interface ILowCodePluginManagerCore {
     pluginOptions?: any,
     options?: IPublicTypePluginRegisterOptions,
   ): Promise<void>;
-  init(pluginPreference?: Map<string, Record<string, IPublicTypePreferenceValueType>>): Promise<void>;
+  init(
+    pluginPreference?: Map<string, Record<string, IPublicTypePreferenceValueType>>
+  ): Promise<void>;
   get(pluginName: string): ILowCodePluginRuntime | undefined;
   getAll(): ILowCodePluginRuntime[];
   has(pluginName: string): boolean;

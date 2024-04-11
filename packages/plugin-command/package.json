@@ -6,6 +6,7 @@
   "homepage": "https://github.com/alibaba/lowcode-engine#readme",
   "license": "ISC",
   "type": "module",
+  "private": true,
   "main": "dist/low-code-plugin-command.cjs",
   "module": "dist/low-code-plugin-command.js",
   "types": "dist/index.d.ts",
@@ -39,6 +40,7 @@
     "react-dom": "^18.2.0"
   },
   "peerDependencies": {
+    "@alilc/lowcode-utils": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

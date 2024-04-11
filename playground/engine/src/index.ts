@@ -1,10 +1,15 @@
-import { init, plugins } from '@alilc/lowcode-engine';
+import * as engine from '@alilc/lowcode-engine';
 import EditorInitPlugin from './plugins/plugin-editor-init';
+import LogoSamplePlugin from './plugins/plugin-logo-sample';
 
 import '@alilc/lowcode-engine/dist/style.css';
 import './index.css';
 
+(window as any).AliLowCodeEngine = engine;
+
 async function run() {
+  const { plugins, init, project, skeleton, config } = engine;
+
   await plugins.register(EditorInitPlugin, {
     scenarioName: 'general',
     displayName: '综合场景',
@@ -25,6 +30,7 @@ async function run() {
       ],
     },
   });
+  await plugins.register(LogoSamplePlugin);
 
   await init(document.getElementById('app')!, {
     locale: 'zh-CN',
@@ -38,7 +44,10 @@ async function run() {
       'https://alifd.alicdn.com/npm/@alilc/lowcode-react-simulator-renderer@1.1.1/dist/js/react-simulator-renderer.js'
     ],
     enableContextMenu: true,
+    enableWorkspaceMode: false
   });
+
+  console.log(project, skeleton, plugins, config)
 }
 
 run()

@@ -319,7 +319,9 @@ export class Project implements IProject {
       return doc.open();
     }
     if (typeof doc === 'string' || typeof doc === 'number') {
-      const got = this.documents.find((item) => item.fileName === String(doc) || String(item.id) === String(doc));
+      const got = this.documents.find(
+        (item) => item.fileName === String(doc) || String(item.id) === String(doc)
+      );
       if (got) {
         return got.open();
       }
