@@ -1,7 +1,7 @@
 import { Node, Designer, Selection, SettingTopEntry } from '@alilc/lowcode-designer';
 import {
   Editor,
-  obx,
+  observable,
   computed,
   makeObservable,
   action,
@@ -21,7 +21,7 @@ export class SettingsMain {
 
   private _sessionId = '';
 
-  @obx.ref private _settings?: SettingTopEntry;
+  @observable.ref private _settings?: SettingTopEntry;
 
   @computed get length(): number | undefined {
     return this._settings?.nodes.length;

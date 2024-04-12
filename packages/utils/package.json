@@ -11,6 +11,10 @@
       "import": "./dist/low-code-utils.js",
       "types": "./dist/index.d.ts"
     },
+    "./dist/style.css": {
+      "import": "./dist/style.css",
+      "require": "./dist/style.css"
+    },
     "./package.json": "./package.json"
   },
   "sideEffects": [

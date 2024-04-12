@@ -44,19 +44,12 @@ export class DocumentModel implements IPublicModelDocumentModel {
   detecting: IPublicModelDetecting;
   history: IPublicModelHistory;
 
-  /**
-   * @deprecated use canvas API instead
-   */
-  canvas: IPublicApiCanvas;
-
   constructor(document: InnerDocumentModel) {
     this[documentSymbol] = document;
     this[editorSymbol] = document.designer?.editor as IPublicModelEditor;
     this.selection = new ShellSelection(document);
     this.detecting = new ShellDetecting(document);
     this.history = new ShellHistory(document);
-    this.canvas = new ShellCanvas(this[editorSymbol]);
-
     this._focusNode = ShellNode.create(this[documentSymbol].focusNode);
   }
 

@@ -1,4 +1,4 @@
-import { makeObservable, obx, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
+import { makeObservable, observable, IEventBus, createModuleEventBus, action } from '@alilc/lowcode-editor-core';
 import { IPublicModelDetecting } from '@alilc/lowcode-types';
 import type { IDocumentModel } from '../document/document-model';
 import type { INode } from '../document/node/node';
@@ -19,7 +19,7 @@ export interface IDetecting extends Omit<IPublicModelDetecting<INode>,
 }
 
 export class Detecting implements IDetecting {
-  @obx.ref private _enable = true;
+  @observable.ref private _enable = true;
 
   /**
    * 控制大纲树 hover 时是否出现悬停效果
@@ -36,9 +36,9 @@ export class Detecting implements IDetecting {
     }
   }
 
-  @obx.ref xRayMode = false;
+  @observable.ref xRayMode = false;
 
-  @obx.ref private _current: INode | null = null;
+  @observable.ref private _current: INode | null = null;
 
   private emitter: IEventBus = createModuleEventBus('Detecting');
 
@@ -50,6 +50,7 @@ export class Detecting implements IDetecting {
     return this._current;
   }
 
+  @action
   capture(node: INode | null) {
     if (this._current !== node) {
       this._current = node;
@@ -57,6 +58,7 @@ export class Detecting implements IDetecting {
     }
   }
 
+  @action
   release(node: INode | null) {
     if (this._current === node) {
       this._current = null;
@@ -64,6 +66,7 @@ export class Detecting implements IDetecting {
     }
   }
 
+  @action
   leave(document: IDocumentModel | undefined) {
     if (this.current && this.current.document === document) {
       this._current = null;

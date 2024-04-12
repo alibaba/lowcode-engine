@@ -281,13 +281,6 @@ export class SettingTopEntry implements ISettingTopEntry {
     return this.first.document;
   }
 
-  /**
-   * @deprecated
-   */
-  get node() {
-    return this.getNode();
-  }
-
   getNode() {
     return this.nodes[0];
   }

@@ -1,5 +1,5 @@
 import { uniqueId } from '@alilc/lowcode-utils';
-import { createModuleEventBus, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
+import { createModuleEventBus, IEventBus, makeObservable, observable } from '@alilc/lowcode-editor-core';
 import { Context } from './context/view-context';
 import { IWorkspace } from './workspace';
 import { IResource } from './resource';
@@ -38,11 +38,11 @@ export class EditorWindow implements Omit<IPublicModelWindow<IResource>, 'change
 
   url: string | undefined;
 
-  @obx.ref _editorView: Context;
+  @observable.ref _editorView: Context;
 
-  @obx editorViews: Map<string, Context> = new Map<string, Context>();
+  @observable editorViews: Map<string, Context> = new Map<string, Context>();
 
-  @obx initReady = false;
+  @observable initReady = false;
 
   sleep: boolean | undefined;
 

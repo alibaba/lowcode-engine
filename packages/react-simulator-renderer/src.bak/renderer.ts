@@ -2,7 +2,7 @@ import React, { createElement, ReactInstance } from 'react';
 import { render as reactRender } from 'react-dom';
 import { host } from './host';
 import SimulatorRendererView from './renderer-view';
-import { computed, observable as obx, untracked, makeObservable, configure } from 'mobx';
+import { computed, observable as observable, untracked, makeObservable, configure } from 'mobx';
 import { getClientRects } from './utils/get-client-rects';
 import { reactFindDOMNodes, getReactInternalFiber } from './utils/react-find-dom-nodes';
 import {
@@ -39,7 +39,7 @@ export class DocumentInstance {
 
   private disposeFunctions: Array<() => void> = [];
 
-  @obx.ref private _components: any = {};
+  @observable.ref private _components: any = {};
 
   @computed get components(): object {
     // 根据 device 选择不同组件，进行响应式
@@ -48,31 +48,31 @@ export class DocumentInstance {
   }
 
   // context from: utils、constants、history、location、match
-  @obx.ref private _appContext = {};
+  @observable.ref private _appContext = {};
 
   @computed get context(): any {
     return this._appContext;
   }
 
-  @obx.ref private _designMode = 'design';
+  @observable.ref private _designMode = 'design';
 
   @computed get designMode(): any {
     return this._designMode;
   }
 
-  @obx.ref private _requestHandlersMap = null;
+  @observable.ref private _requestHandlersMap = null;
 
   @computed get requestHandlersMap(): any {
     return this._requestHandlersMap;
   }
 
-  @obx.ref private _device = 'default';
+  @observable.ref private _device = 'default';
 
   @computed get device() {
     return this._device;
   }
 
-  @obx.ref private _componentsMap = {};
+  @observable.ref private _componentsMap = {};
 
   @computed get componentsMap(): any {
     return this._componentsMap;
@@ -188,13 +188,13 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   private disposeFunctions: Array<() => void> = [];
   readonly history: MemoryHistory;
 
-  @obx.ref private _documentInstances: DocumentInstance[] = [];
+  @observable.ref private _documentInstances: DocumentInstance[] = [];
   private _requestHandlersMap: any;
   get documentInstances() {
     return this._documentInstances;
   }
 
-  @obx private _layout: any = null;
+  @observable private _layout: any = null;
 
   @computed get layout(): any {
     // TODO: parse layout Component
@@ -215,23 +215,23 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     return this._components || {};
   }
   // context from: utils、constants、history、location、match
-  @obx.ref private _appContext: any = {};
+  @observable.ref private _appContext: any = {};
   @computed get context(): any {
     return this._appContext;
   }
-  @obx.ref private _designMode: string = 'design';
+  @observable.ref private _designMode: string = 'design';
   @computed get designMode(): any {
     return this._designMode;
   }
-  @obx.ref private _device: string = 'default';
+  @observable.ref private _device: string = 'default';
   @computed get device() {
     return this._device;
   }
-  @obx.ref private _locale: string | undefined = undefined;
+  @observable.ref private _locale: string | undefined = undefined;
   @computed get locale() {
     return this._locale;
   }
-  @obx.ref private _componentsMap = {};
+  @observable.ref private _componentsMap = {};
   @computed get componentsMap(): any {
     return this._componentsMap;
   }

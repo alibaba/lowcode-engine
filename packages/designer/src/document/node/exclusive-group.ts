@@ -1,4 +1,4 @@
-import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
+import { observable, computed, makeObservable } from '@alilc/lowcode-editor-core';
 import { uniqueId } from '@alilc/lowcode-utils';
 import { IPublicTypeTitleContent, IPublicModelExclusiveGroup } from '@alilc/lowcode-types';
 import type { INode } from './node';
@@ -30,9 +30,9 @@ export class ExclusiveGroup implements IExclusiveGroup {
 
   readonly title: IPublicTypeTitleContent;
 
-  @obx.shallow readonly children: INode[] = [];
+  @observable.shallow readonly children: INode[] = [];
 
-  @obx private visibleIndex = 0;
+  @observable private visibleIndex = 0;
 
   @computed get document() {
     return this.visibleNode.document;

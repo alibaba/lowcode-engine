@@ -1,16 +1,12 @@
-import { obx, makeObservable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
+import { observable, makeObservable, IEventBus, createModuleEventBus, action, autorun } from '@alilc/lowcode-editor-core';
 import {
-  IPublicTypeDragNodeObject,
-  IPublicTypeDragAnyObject,
-  IPublicEnumDragObjectType,
-  IPublicTypeDragNodeDataObject,
   IPublicModelDragObject,
   IPublicModelNode,
   IPublicModelDragon,
   IPublicModelLocateEvent,
   IPublicModelSensor,
 } from '@alilc/lowcode-types';
-import { setNativeSelection, cursor } from '@alilc/lowcode-utils';
+import { setNativeSelection, cursor, isDragNodeObject } from '@alilc/lowcode-utils';
 import { INode, Node } from '../document';
 import { ISimulatorHost, isSimulatorHost } from '../simulator';
 import { IDesigner } from './designer';
@@ -23,31 +19,6 @@ export interface ILocateEvent extends IPublicModelLocateEvent {
    * 激活的感应器
    */
   sensor?: IPublicModelSensor;
-}
-
-/**
- * @deprecated use same function in @alilc/lowcode-utils
- */
-export function isDragNodeObject(obj: any): obj is IPublicTypeDragNodeObject {
-  return obj && obj.type === IPublicEnumDragObjectType.Node;
-}
-
-/**
- * @deprecated use same function in @alilc/lowcode-utils
- */
-export function isDragNodeDataObject(obj: any): obj is IPublicTypeDragNodeDataObject {
-  return obj && obj.type === IPublicEnumDragObjectType.NodeData;
-}
-
-/**
- * @deprecated use same function in @alilc/lowcode-utils
- */
-export function isDragAnyObject(obj: any): obj is IPublicTypeDragAnyObject {
-  return (
-    obj &&
-    obj.type !== IPublicEnumDragObjectType.NodeData &&
-    obj.type !== IPublicEnumDragObjectType.Node
-  );
 }
 
 export function isLocateEvent(e: any): e is ILocateEvent {
@@ -112,15 +83,15 @@ export class Dragon implements IPublicModelDragon<INode, ILocateEvent> {
   /**
    * current active sensor, 可用于感应区高亮
    */
-  @obx.ref private _activeSensor: IPublicModelSensor | undefined;
+  @observable.ref private _activeSensor: IPublicModelSensor | undefined;
 
   get activeSensor(): IPublicModelSensor | undefined {
     return this._activeSensor;
   }
 
-  @obx.ref private _dragging = false;
+  @observable.ref private _dragging = false;
 
-  @obx.ref private _canDrop = false;
+  @observable.ref private _canDrop = false;
 
   get dragging(): boolean {
     return this._dragging;
@@ -140,7 +111,6 @@ export class Dragon implements IPublicModelDragon<INode, ILocateEvent> {
    * @param shell container element
    * @param boost boost got a drag object
    */
-  // @ts-ignore
   from(shell: Element, boost: (e: MouseEvent) => IPublicModelDragObject | null) {
     const mousedown = (e: MouseEvent) => {
       // ESC or RightClick
@@ -168,6 +138,7 @@ export class Dragon implements IPublicModelDragon<INode, ILocateEvent> {
    * @param dragObject 拖拽对象
    * @param boostEvent 拖拽初始时事件
    */
+  @action
   boost(
     dragObject: IPublicModelDragObject,
     boostEvent: MouseEvent | DragEvent,
@@ -196,7 +167,7 @@ export class Dragon implements IPublicModelDragon<INode, ILocateEvent> {
     };
 
     const checkesc = (e: KeyboardEvent) => {
-      if (e.keyCode === 27) {
+      if (e.code === 'Escape') {
         designer.clearLocation();
         over();
       }
@@ -204,7 +175,6 @@ export class Dragon implements IPublicModelDragon<INode, ILocateEvent> {
 
     let copy = false;
     const checkcopy = (e: MouseEvent | DragEvent | KeyboardEvent) => {
-      /* istanbul ignore next */
       if (isDragEvent(e) && e.dataTransfer) {
         if (newBie || forceCopyState) {
           e.dataTransfer.dropEffect = 'copy';
@@ -251,7 +221,6 @@ export class Dragon implements IPublicModelDragon<INode, ILocateEvent> {
       const locateEvent = createLocateEvent(e);
       const sensor = chooseSensor(locateEvent);
 
-      /* istanbul ignore next */
       if (isRGL) {
         // 禁止被拖拽元素的阻断
         const nodeInst = dragObject?.nodes?.[0]?.getDOMNode();
@@ -294,7 +263,7 @@ export class Dragon implements IPublicModelDragon<INode, ILocateEvent> {
       this.emitter.emit('drag', locateEvent);
     };
 
-    const dragstart = () => {
+    const dragstart = autorun(() => {
       this._dragging = true;
       setShaken(boostEvent);
       const locateEvent = createLocateEvent(boostEvent);
@@ -312,7 +281,7 @@ export class Dragon implements IPublicModelDragon<INode, ILocateEvent> {
       }
 
       this.emitter.emit('dragstart', locateEvent);
-    };
+    });
 
     // route: drag-move
     const move = (e: MouseEvent | DragEvent) => {
@@ -335,7 +304,6 @@ export class Dragon implements IPublicModelDragon<INode, ILocateEvent> {
     };
 
     let didDrop = true;
-    /* istanbul ignore next */
     const drop = (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
@@ -374,14 +342,12 @@ export class Dragon implements IPublicModelDragon<INode, ILocateEvent> {
       // 移除磁帖占位消息
       this.emitter.emit('rgl.remove.placeholder');
 
-      /* istanbul ignore next */
       if (e && isDragEvent(e)) {
         e.preventDefault();
       }
       if (lastSensor) {
         lastSensor.deactiveSensor();
       }
-      /* istanbul ignore next */
       if (isBoostFromDragAPI) {
         if (!didDrop) {
           designer.clearLocation();

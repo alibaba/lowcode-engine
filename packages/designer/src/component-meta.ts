@@ -174,12 +174,6 @@ export class ComponentMeta implements IComponentMeta {
     return this.getMetadata().configure.advanced || {};
   }
 
-  /**
-   * @legacy compatiable for vision
-   * @deprecated
-   */
-  prototype?: any;
-
   constructor(
     readonly designer: Designer,
     metadata: IPublicTypeComponentMetadata,

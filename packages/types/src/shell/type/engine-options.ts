@@ -123,17 +123,6 @@ export interface IPublicTypeEngineOptions {
   simulatorUrl?: string[];
 
   /**
-   * Vision-polyfill settings
-   * @deprecated this exists for some legacy reasons
-   */
-  visionSettings?: {
-    // 是否禁用降级 reducer，默认值：false
-    disableCompatibleReducer?: boolean;
-    // 是否开启在 render 阶段开启 filter reducer，默认值：false
-    enableFilterReducerInRenderStage?: boolean;
-  };
-
-  /**
    * 与 react-renderer 的 appHelper 一致，https://lowcode-engine.cn/site/docs/guide/expand/runtime/renderer#apphelper
    */
   appHelper?: {
@@ -189,11 +178,4 @@ export interface IPublicTypeEngineOptions {
    * 隐藏设计器辅助层
    */
   hideComponentAction?: boolean;
-}
-
-/**
- * @deprecated use IPublicTypeEngineOptions instead
- */
-export interface EngineOptions {
-
 }

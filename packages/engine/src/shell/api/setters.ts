@@ -65,11 +65,4 @@ export class Setters implements IPublicApiSetters {
   ) => {
     return this[settersSymbol].registerSetter(typeOrMaps, setter);
   };
-
-  /**
-   * @deprecated
-   */
-  createSetterContent = (setter: any, props: Record<string, any>): ReactNode => {
-    return this[settersSymbol].createSetterContent(setter, props);
-  };
 }

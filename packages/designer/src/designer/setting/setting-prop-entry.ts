@@ -1,5 +1,5 @@
 import {
-  obx,
+  observable,
   computed,
   makeObservable,
   runInAction,
@@ -14,13 +14,13 @@ import {
   IPublicTypeFieldExtraProps,
   IPublicTypeSetValueOptions,
 } from '@alilc/lowcode-types';
-import { uniqueId, isJSExpression } from '@alilc/lowcode-utils';
+import { uniqueId, isJSExpression, isSettingField } from '@alilc/lowcode-utils';
 import { ISettingEntry } from './setting-entry-type';
 import { INode } from '../../document';
 import type { IComponentMeta } from '../../component-meta';
 import { IDesigner } from '../designer';
 import { ISettingTopEntry } from './setting-top-entry';
-import { ISettingField, isSettingField } from './setting-field';
+import { ISettingField } from './setting-field';
 
 export interface ISettingPropEntry extends ISettingEntry {
   readonly isGroup: boolean;
@@ -86,7 +86,7 @@ export class SettingPropEntry implements ISettingPropEntry {
   readonly emitter: IEventBus = createModuleEventBus('SettingPropEntry');
 
   // ==== dynamic properties ====
-  @obx.ref private _name: string | number | undefined;
+  @observable.ref private _name: string | number | undefined;
 
   get name() {
     return this._name;
@@ -343,17 +343,6 @@ export class SettingPropEntry implements ISettingPropEntry {
     return () => {
       this.emitter.removeListener('valuechange', func);
     };
-  }
-
-  /**
-   * @deprecated
-   */
-  valueChange(options: IPublicTypeSetValueOptions = {}) {
-    this.emitter.emit('valuechange', options);
-
-    if (this.parent && isSettingField(this.parent)) {
-      this.parent.valueChange(options);
-    }
   }
 
   notifyValueChange(oldValue: any, newValue: any) {

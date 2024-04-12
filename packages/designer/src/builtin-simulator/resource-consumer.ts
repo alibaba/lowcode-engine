@@ -1,4 +1,4 @@
-import { autorun, makeObservable, obx, createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
+import { autorun, makeObservable, observable, createModuleEventBus, IEventBus } from '@alilc/lowcode-editor-core';
 import { BuiltinSimulatorHost } from './host';
 import { BuiltinSimulatorRenderer, isSimulatorRenderer } from './renderer';
 
@@ -21,7 +21,7 @@ export type RendererConsumer<T> = (renderer: BuiltinSimulatorRenderer, data: T) 
 export default class ResourceConsumer<T = any> {
   private emitter: IEventBus = createModuleEventBus('ResourceConsumer');
 
-  @obx.ref private _data: T | typeof UNSET = UNSET;
+  @observable.ref private _data: T | typeof UNSET = UNSET;
 
   private _providing?: () => void;
 

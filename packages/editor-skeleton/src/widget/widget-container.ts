@@ -1,4 +1,4 @@
-import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
+import { observable, computed, makeObservable } from '@alilc/lowcode-editor-core';
 import { hasOwnProperty } from '@alilc/lowcode-utils';
 import { isPanel } from './panel';
 
@@ -15,11 +15,11 @@ function isActiveable(obj: any): obj is Activeable {
 }
 
 export class WidgetContainer<T extends WidgetItem = any, G extends WidgetItem = any> {
-  @obx.shallow items: T[] = [];
+  @observable.shallow items: T[] = [];
 
   private maps: { [name: string]: T } = {};
 
-  @obx.ref private _current: T & Activeable | null = null;
+  @observable.ref private _current: T & Activeable | null = null;
 
   get current() {
     return this._current;

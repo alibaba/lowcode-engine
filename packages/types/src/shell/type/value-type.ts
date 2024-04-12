@@ -105,16 +105,6 @@ export interface IPublicTypeJSSlot {
 }
 
 /**
- * @deprecated
- *
- * @todo 待文档描述
- */
-export interface IPublicTypeJSBlock {
-  type: 'JSBlock';
-  value: IPublicTypeNodeSchema;
-}
-
-/**
  * JSON 基本类型
  */
 export type IPublicTypeJSONValue =

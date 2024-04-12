@@ -4,7 +4,6 @@ import { configure } from 'mobx';
 configure({ enforceActions: 'never' });
 
 export {
-  observable as obx,
   observable,
   observe,
   autorun,

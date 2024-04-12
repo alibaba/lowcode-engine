@@ -56,7 +56,6 @@ export default {
   },
   plugins: {
     common: {
-
       /**
        * 处理 ES Module
        * @deprecated please use esModule

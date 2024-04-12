@@ -13,7 +13,7 @@ import {
 import type { IPublicTypeSetValueOptions } from '@alilc/lowcode-types';
 import { Transducer } from './utils';
 import { ISettingPropEntry, SettingPropEntry } from './setting-prop-entry';
-import { computed, obx, makeObservable, action, untracked, intl } from '@alilc/lowcode-editor-core';
+import { computed, observable, makeObservable, action, untracked, intl } from '@alilc/lowcode-editor-core';
 import { cloneDeep, isCustomView, isDynamicSetter, isJSExpression } from '@alilc/lowcode-utils';
 import { ISettingTopEntry } from './setting-top-entry';
 import { IComponentMeta } from '../../component-meta';
@@ -34,7 +34,6 @@ function getSettingFieldCollectorKey(
   return path.join('.');
 }
 
-// @ts-ignore
 export interface ISettingField
   extends ISettingPropEntry,
   Omit<
@@ -107,7 +106,7 @@ export class SettingField extends SettingPropEntry implements ISettingField {
 
   private _setter?: IPublicTypeSetterType | IPublicTypeDynamicSetter;
 
-  @obx.ref private _expanded = true;
+  @observable.ref private _expanded = true;
 
   private _items: Array<ISettingField | IPublicTypeCustomView> = [];
 
@@ -316,11 +315,4 @@ export class SettingField extends SettingPropEntry implements ISettingField {
   internalToShellField() {
     return this.designer!.shellModelFactory.createSettingField(this);
   }
-}
-
-/**
- * @deprecated use same function from '@alilc/lowcode-utils' instead
- */
-export function isSettingField(obj: any): obj is ISettingField {
-  return obj && obj.isSettingField;
 }

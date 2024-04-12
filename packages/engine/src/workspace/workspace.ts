@@ -1,5 +1,5 @@
 import { IDesigner, LowCodePluginManager } from '@alilc/lowcode-designer';
-import { createModuleEventBus, IEditor, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
+import { createModuleEventBus, IEditor, IEventBus, makeObservable, observable } from '@alilc/lowcode-editor-core';
 import { IPublicApiPlugins, IPublicApiWorkspace, IPublicEnumPluginRegisterLevel, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType } from '@alilc/lowcode-types';
 import { BasicContext } from './context/base-context';
 import { EditorWindow, WINDOW_STATE } from './window';
@@ -57,11 +57,11 @@ export class Workspace implements Omit<IPublicApiWorkspace<
     return null;
   }
 
-  @obx.ref windows: IEditorWindow[] = [];
+  @observable.ref windows: IEditorWindow[] = [];
 
   editorWindowMap: Map<string, IEditorWindow> = new Map<string, IEditorWindow>();
 
-  @obx.ref window: IEditorWindow;
+  @observable.ref window: IEditorWindow;
 
   windowQueue: ({
     name: string;

@@ -1,4 +1,4 @@
-import { obx, makeObservable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
+import { observable, makeObservable, IEventBus, createModuleEventBus, action } from '@alilc/lowcode-editor-core';
 import { INode, comparePosition, PositionNO } from './node/node';
 import { DocumentModel } from './document-model';
 import { IPublicModelSelection } from '@alilc/lowcode-types';
@@ -10,7 +10,7 @@ export interface ISelection extends Omit<IPublicModelSelection<INode>, 'node'> {
 export class Selection implements ISelection {
   private emitter: IEventBus = createModuleEventBus('Selection');
 
-  @obx.shallow private _selected: string[] = [];
+  @observable.shallow private _selected: string[] = [];
 
   constructor(readonly doc: DocumentModel) {
     makeObservable(this);
@@ -26,6 +26,7 @@ export class Selection implements ISelection {
   /**
    * 选中
    */
+  @action
   select(id: string) {
     if (this._selected.length === 1 && this._selected.indexOf(id) > -1) {
       // avoid cause reaction
@@ -45,6 +46,7 @@ export class Selection implements ISelection {
   /**
    * 批量选中
    */
+  @action
   selectAll(ids: string[]) {
     const selectIds: string[] = [];
 
@@ -64,6 +66,7 @@ export class Selection implements ISelection {
   /**
    * 清除选中
    */
+  @action
   clear() {
     if (this._selected.length < 1) {
       return;

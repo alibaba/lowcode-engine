@@ -1,9 +1,9 @@
-import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
+import { observable, computed, makeObservable, action } from '@alilc/lowcode-editor-core';
 import { Point, ScrollTarget } from '../designer';
 import { AutoFit, IViewport } from '../simulator';
 
 export default class Viewport implements IViewport {
-  @obx.ref private rect?: DOMRect;
+  @observable.ref private rect?: DOMRect;
 
   private _bounds?: DOMRect;
 
@@ -73,7 +73,7 @@ export default class Viewport implements IViewport {
     }
   }
 
-  @obx.ref private _scale = 1;
+  @observable.ref private _scale = 1;
 
   /**
    * 缩放比例
@@ -92,9 +92,9 @@ export default class Viewport implements IViewport {
     this._contentHeight = this.height / this.scale;
   }
 
-  @obx.ref private _contentWidth: number | AutoFit = AutoFit;
+  @observable.ref private _contentWidth: number | AutoFit = AutoFit;
 
-  @obx.ref private _contentHeight: number | AutoFit = AutoFit;
+  @observable.ref private _contentHeight: number | AutoFit = AutoFit;
 
   @computed get contentHeight(): number | AutoFit {
     return this._contentHeight;
@@ -112,9 +112,9 @@ export default class Viewport implements IViewport {
     this._contentWidth = val;
   }
 
-  @obx.ref private _scrollX = 0;
+  @observable.ref private _scrollX = 0;
 
-  @obx.ref private _scrollY = 0;
+  @observable.ref private _scrollY = 0;
 
   get scrollX() {
     return this._scrollX;
@@ -133,12 +133,13 @@ export default class Viewport implements IViewport {
     return this._scrollTarget;
   }
 
-  @obx private _scrolling = false;
+  @observable private _scrolling = false;
 
   get scrolling(): boolean {
     return this._scrolling;
   }
 
+  @action
   setScrollTarget(target: Window) {
     const scrollTarget = new ScrollTarget(target);
     this._scrollX = scrollTarget.left;

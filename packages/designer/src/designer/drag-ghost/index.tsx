@@ -1,7 +1,6 @@
 import { Component, ReactElement } from 'react';
-import { observer, obx, Title, makeObservable } from '@alilc/lowcode-editor-core';
+import { observer, observable, Title, makeObservable } from '@alilc/lowcode-editor-core';
 import { Designer } from '../designer';
-import { isDragNodeObject } from '../dragon';
 import { isSimulatorHost } from '../../simulator';
 import './ghost.less';
 import {
@@ -9,6 +8,7 @@ import {
   IPublicTypeNodeSchema,
   IPublicModelDragObject,
 } from '@alilc/lowcode-types';
+import { isDragNodeObject } from '@alilc/lowcode-utils';
 
 type offBinding = () => any;
 
@@ -16,13 +16,13 @@ type offBinding = () => any;
 export default class DragGhost extends Component<{ designer: Designer }> {
   private dispose: offBinding[] = [];
 
-  @obx.ref private titles: (string | IPublicTypeI18nData | ReactElement)[] | null = null;
+  @observable.ref private titles: (string | IPublicTypeI18nData | ReactElement)[] | null = null;
 
-  @obx.ref private x = 0;
+  @observable.ref private x = 0;
 
-  @obx.ref private y = 0;
+  @observable.ref private y = 0;
 
-  @obx private isAbsoluteLayoutContainer = false;
+  @observable private isAbsoluteLayoutContainer = false;
 
   private dragon = this.props.designer.dragon;
 

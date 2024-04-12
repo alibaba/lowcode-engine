@@ -78,13 +78,6 @@ export class Project implements IPublicApiProject {
   }
 
   /**
-   * @deprecated use .simulatorHost instead.
-   */
-  get simulator() {
-    return this.simulatorHost;
-  }
-
-  /**
    * 打开一个 document
    * @param doc
    * @returns

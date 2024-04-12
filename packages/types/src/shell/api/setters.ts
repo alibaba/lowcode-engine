@@ -31,9 +31,4 @@ export interface IPublicApiSetters {
     typeOrMaps: string | { [key: string]: IPublicTypeCustomView | IPublicTypeRegisteredSetter },
     setter?: IPublicTypeCustomView | IPublicTypeRegisteredSetter | undefined
   ): void;
-
-  /**
-   * @deprecated
-   */
-  createSetterContent (setter: any, props: Record<string, any>): ReactNode;
 }

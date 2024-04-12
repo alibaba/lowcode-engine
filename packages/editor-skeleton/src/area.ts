@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
+import { observable, computed, makeObservable } from '@alilc/lowcode-editor-core';
 import { Logger } from '@alilc/lowcode-utils';
 import { IPublicTypeWidgetBaseConfig } from '@alilc/lowcode-types';
 import { WidgetContainer } from './widget/widget-container';
@@ -17,7 +17,7 @@ export interface IArea<C, T> {
 }
 
 export class Area<C extends IPublicTypeWidgetBaseConfig = any, T extends IWidget = IWidget> implements IArea<C, T> {
-  @obx private _visible = true;
+  @observable private _visible = true;
 
   @computed get visible() {
     if (this.exclusive) {
@@ -79,13 +79,5 @@ export class Area<C extends IPublicTypeWidgetBaseConfig = any, T extends IWidget
 
   show() {
     this.setVisible(true);
-  }
-
-  // ========== compatible for vision ========
-  /**
-   * @deprecated
-   */
-  removeAction(config: string): number {
-    return this.remove(config);
   }
 }

@@ -1,5 +1,5 @@
 import { IEventBus, createModuleEventBus } from '../event-bus';
-import { obx, computed } from '../utils/obx';
+import { observable, computed } from '../utils/obx';
 import { Logger } from '@alilc/lowcode-utils';
 
 const logger = new Logger({ level: 'warn', bizName: 'globalLocale' });
@@ -35,7 +35,7 @@ const LowcodeConfigKey = 'ali-lowcode-config';
 class GlobalLocale {
   private emitter: IEventBus = createModuleEventBus('GlobalLocale');
 
-  @obx.ref private _locale?: string;
+  @observable.ref private _locale?: string;
 
   @computed get locale() {
     if (this._locale != null) {

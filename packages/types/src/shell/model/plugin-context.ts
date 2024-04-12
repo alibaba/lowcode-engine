@@ -122,10 +122,3 @@ export interface IPublicModelPluginContext {
 
   get editorWindow(): IPublicModelWindow;
 }
-
-/**
- * @deprecated please use IPublicModelPluginContext instead
- */
-export interface ILowCodePluginContext extends IPublicModelPluginContext {
-
-}

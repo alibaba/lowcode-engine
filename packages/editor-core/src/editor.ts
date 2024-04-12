@@ -12,7 +12,7 @@ import {
 } from '@alilc/lowcode-types';
 import { engineConfig } from './config';
 import { globalLocale } from './intl';
-import { obx } from './utils';
+import { observable } from './utils';
 import { IPublicTypeAssetsJson, AssetLoader } from '@alilc/lowcode-utils';
 import { assetsTransform } from './utils/assets-transform';
 
@@ -49,7 +49,7 @@ export class Editor extends EventEmitter implements IEditor {
   /**
    * Ioc Container
    */
-  @obx.shallow private context = new Map<IPublicTypeEditorValueKey, any>();
+  @observable.shallow private context = new Map<IPublicTypeEditorValueKey, any>();
 
   get locale() {
     return globalLocale.getLocale();

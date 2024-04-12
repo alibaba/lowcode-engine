@@ -63,26 +63,10 @@ export class Node implements IPublicModelNode {
   }
 
   /**
-   * @deprecated
-   * 是否为「容器型」节点
-   */
-  get isContainer(): boolean {
-    return this[nodeSymbol].isContainerNode;
-  }
-
-  /**
    * 是否为「容器型」节点
    */
   get isContainerNode(): boolean {
     return this[nodeSymbol].isContainerNode;
-  }
-
-  /**
-   * @deprecated
-   * 是否为根节点
-   */
-  get isRoot(): boolean {
-    return this[nodeSymbol].isRootNode;
   }
 
   /**
@@ -93,26 +77,10 @@ export class Node implements IPublicModelNode {
   }
 
   /**
-   * @deprecated
-   * 是否为空节点（无 children 或者 children 为空）
-   */
-  get isEmpty(): boolean {
-    return this[nodeSymbol].isEmptyNode;
-  }
-
-  /**
    * 是否为空节点（无 children 或者 children 为空）
    */
   get isEmptyNode(): boolean {
     return this[nodeSymbol].isEmptyNode;
-  }
-
-  /**
-   * @deprecated
-   * 是否为 Page 节点
-   */
-  get isPage(): boolean {
-    return this[nodeSymbol].isPageNode;
   }
 
   /**
@@ -123,26 +91,10 @@ export class Node implements IPublicModelNode {
   }
 
   /**
-   * @deprecated
-   * 是否为 Component 节点
-   */
-  get isComponent(): boolean {
-    return this[nodeSymbol].isComponentNode;
-  }
-
-  /**
    * 是否为 Component 节点
    */
   get isComponentNode(): boolean {
     return this[nodeSymbol].isComponentNode;
-  }
-
-  /**
-   * @deprecated
-   * 是否为「模态框」节点
-   */
-  get isModal(): boolean {
-    return this[nodeSymbol].isModalNode;
   }
 
   /**
@@ -153,14 +105,6 @@ export class Node implements IPublicModelNode {
   }
 
   /**
-   * @deprecated
-   * 是否为插槽节点
-   */
-  get isSlot(): boolean {
-    return this[nodeSymbol].isSlotNode;
-  }
-
-  /**
    * 是否为插槽节点
    */
   get isSlotNode(): boolean {
@@ -168,26 +112,10 @@ export class Node implements IPublicModelNode {
   }
 
   /**
-   * @deprecated
-   * 是否为父类/分支节点
-   */
-  get isParental(): boolean {
-    return this[nodeSymbol].isParentalNode;
-  }
-
-  /**
    * 是否为父类/分支节点
    */
   get isParentalNode(): boolean {
     return this[nodeSymbol].isParentalNode;
-  }
-
-  /**
-   * @deprecated
-   * 是否为叶子节点
-   */
-  get isLeaf(): boolean {
-    return this[nodeSymbol].isLeafNode;
   }
 
   /**
@@ -334,22 +262,14 @@ export class Node implements IPublicModelNode {
     if (!node) {
       return null;
     }
-    // @ts-ignore 直接返回已挂载的 shell node 实例
+    // 直接返回已挂载的 shell node 实例
     if (isShellNode(node)) {
       return (node as any)[shellNodeSymbol];
     }
     const shellNode = new Node(node);
-    // @ts-ignore 挂载 shell node 实例
-    // eslint-disable-next-line no-param-reassign
+    // @ts-expect-error: 挂载 shell node 实例
     node[shellNodeSymbol] = shellNode;
     return shellNode;
-  }
-
-  /**
-   * @deprecated use .children instead
-   */
-  getChildren() {
-    return this.children;
   }
 
   /**
@@ -431,13 +351,6 @@ export class Node implements IPublicModelNode {
    */
   lock(flag?: boolean): void {
     this[nodeSymbol].lock(flag);
-  }
-
-  /**
-   * @deprecated use .props instead
-   */
-  getProps() {
-    return this.props;
   }
 
   contains(node: IPublicModelNode): boolean {
@@ -598,23 +511,6 @@ export class Node implements IPublicModelNode {
    */
   remove(): void {
     this[nodeSymbol].remove();
-  }
-
-  /**
-   * @deprecated
-   * 设置为磁贴布局节点
-   */
-  set isRGLContainer(flag: boolean) {
-    this[nodeSymbol].isRGLContainerNode = flag;
-  }
-
-  /**
-   * @deprecated
-   * 获取磁贴布局节点设置状态
-   * @returns Boolean
-   */
-  get isRGLContainer() {
-    return this[nodeSymbol].isRGLContainerNode;
   }
 
   /**

@@ -1,6 +1,6 @@
 import { ComponentType, ReactElement } from 'react';
-import { IPublicTypeNodeData, IPublicTypeSnippet, IPublicTypeInitialItem, IPublicTypeFilterItem, IPublicTypeAutorunItem, IPublicTypeCallbacks, IPublicTypeLiveTextEditingConfig } from './';
-import { IPublicModelNode, IPublicModelSettingField } from '../model';
+import { IPublicTypeNodeData, IPublicTypeSnippet, IPublicTypeInitialItem, IPublicTypeCallbacks, IPublicTypeLiveTextEditingConfig } from './';
+import { IPublicModelNode } from '../model';
 
 /**
  * 高级特性配置
@@ -40,16 +40,6 @@ export interface IPublicTypeAdvanced {
   ReactElement[]);
 
   /**
-   * @deprecated 用于动态初始化拖拽到设计器里的组件的 prop 的值
-   */
-  initials?: IPublicTypeInitialItem[];
-
-  /**
-   * @deprecated 使用组件 metadata 上的 snippets 字段即可
-   */
-  snippets?: IPublicTypeSnippet[];
-
-  /**
    * 是否绝对布局容器，还未进入协议
    * @experimental not in spec yet
    */
@@ -72,34 +62,4 @@ export interface IPublicTypeAdvanced {
    * @experimental not in spec yet
    */
   view?: ComponentType<any>;
-
-  /**
-   * @legacy capability for vision
-   * @deprecated
-   */
-  isTopFixed?: boolean;
-
-  /**
-   * TODO: 补充文档 或 删除
-   * @deprecated not used anywhere, dont know what is it for
-   */
-  context?: { [contextInfoName: string]: any };
-
-  /**
-   * @legacy capability for vision
-   * @deprecated
-   */
-  filters?: IPublicTypeFilterItem[];
-
-  /**
-   * @legacy capability for vision
-   * @deprecated
-   */
-  autoruns?: IPublicTypeAutorunItem[];
-
-  /**
-   * @legacy capability for vision
-   * @deprecated
-   */
-  transducers?: any;
 }

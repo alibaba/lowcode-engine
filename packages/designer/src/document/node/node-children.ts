@@ -1,4 +1,4 @@
-import { obx, computed, makeObservable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
+import { observable, computed, makeObservable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { Node, INode } from './node';
 import { IPublicTypeNodeData, IPublicModelNodeChildren, IPublicEnumTransformStage, IPublicTypeDisposable } from '@alilc/lowcode-types';
 import { shallowEqual, compatStage, isNodeSchema } from '@alilc/lowcode-utils';
@@ -16,7 +16,7 @@ export class NodeChildren implements Omit<IPublicModelNodeChildren<INode>,
   'isEmpty' |
   'notEmpty'
 > {
-  @obx.shallow children: INode[];
+  @observable.shallow children: INode[];
 
   private emitter: IEventBus = createModuleEventBus('NodeChildren');
 
@@ -103,14 +103,6 @@ export class NodeChildren implements Omit<IPublicModelNodeChildren<INode>,
     if (!shallowEqual(children, originChildren)) {
       this.emitter.emit('change');
     }
-  }
-
-  /**
-   * @deprecated
-   * @param nodes
-   */
-  concat(nodes: INode[]) {
-    return this.children.concat(nodes);
   }
 
   /**

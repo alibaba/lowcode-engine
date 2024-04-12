@@ -27,21 +27,11 @@ export interface IBaseModelNode<
   get title(): string | IPublicTypeI18nData | ReactElement;
 
   /**
-   * @deprecated please use isContainerNode
-   */
-  get isContainer(): boolean;
-
-  /**
    * 是否为「容器型」节点
    * check if node is a container type node
    * @since v1.1.0
    */
   get isContainerNode(): boolean;
-
-  /**
-   * @deprecated please use isRootNode
-   */
-  get isRoot(): boolean;
 
   /**
    * 是否为根节点
@@ -51,22 +41,11 @@ export interface IBaseModelNode<
   get isRootNode(): boolean;
 
   /**
-   * @deprecated please use isEmptyNode
-   */
-  get isEmpty(): boolean;
-
-  /**
    * 是否为空节点（无 children 或者 children 为空）
    * check if current node is empty, which means no children or children is empty
    * @since v1.1.0
    */
   get isEmptyNode(): boolean;
-
-  /**
-   * @deprecated please use isPageNode
-   * 是否为 Page 节点
-   */
-  get isPage(): boolean;
 
   /**
    * 是否为 Page 节点
@@ -76,21 +55,11 @@ export interface IBaseModelNode<
   get isPageNode(): boolean;
 
   /**
-   * @deprecated please use isComponentNode
-   */
-  get isComponent(): boolean;
-
-  /**
    * 是否为 Component 节点
    * check if node is Component
    * @since v1.1.0
    */
   get isComponentNode(): boolean;
-
-  /**
-   * @deprecated please use isModalNode
-   */
-  get isModal(): boolean;
 
   /**
    * 是否为「模态框」节点
@@ -100,11 +69,6 @@ export interface IBaseModelNode<
   get isModalNode(): boolean;
 
   /**
-   * @deprecated please use isSlotNode
-   */
-  get isSlot(): boolean;
-
-  /**
    * 是否为插槽节点
    * check if node is a Slot
    * @since v1.1.0
@@ -112,21 +76,11 @@ export interface IBaseModelNode<
   get isSlotNode(): boolean;
 
   /**
-   * @deprecated please use isParentalNode
-   */
-  get isParental(): boolean;
-
-  /**
    * 是否为父类/分支节点
    * check if node a parental node
    * @since v1.1.0
    */
   get isParentalNode(): boolean;
-
-  /**
-   * @deprecated please use isLeafNode
-   */
-  get isLeaf(): boolean;
 
   /**
    * 是否为叶子节点
@@ -141,17 +95,6 @@ export interface IBaseModelNode<
    * @since v1.0.16
    */
   get isLocked(): boolean;
-
-  /**
-   * @deprecated please use isRGLContainerNode
-   */
-  set isRGLContainer(flag: boolean);
-
-  /**
-   * @deprecated please use isRGLContainerNode
-   * @returns Boolean
-   */
-  get isRGLContainer();
 
   /**
    * 设置为磁贴布局节点

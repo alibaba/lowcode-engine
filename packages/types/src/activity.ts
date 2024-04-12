@@ -1,10 +1,10 @@
 import { IPublicTypeNodeSchema } from './shell';
 
 export enum ActivityType {
-  'ADDED' = 'added',
-  'DELETED' = 'deleted',
-  'MODIFIED' = 'modified',
-  'COMPOSITE' = 'composite',
+  ADDED = 'added',
+  DELETED = 'deleted',
+  MODIFIED = 'modified',
+  COMPOSITE = 'composite',
 }
 
 interface IActivityPayload {
@@ -19,12 +19,3 @@ interface IActivityPayload {
   oldValue: any;
   newValue: any;
 }
-
-/**
- * TODO: not sure if this is used anywhere
- * @deprecated
- */
-export type ActivityData = {
-  type: ActivityType;
-  payload: IActivityPayload;
-};

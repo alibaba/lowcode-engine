@@ -1,4 +1,4 @@
-import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
+import { observable, computed, makeObservable } from '@alilc/lowcode-editor-core';
 import { uniqueId } from '@alilc/lowcode-utils';
 import { createElement, ReactNode, ReactInstance } from 'react';
 import { ISkeleton } from '../skeleton';
@@ -51,7 +51,7 @@ export class PanelDock implements IWidget {
     });
   }
 
-  @obx.ref private _visible = true;
+  @observable.ref private _visible = true;
 
   get visible() {
     return this._visible;
@@ -65,7 +65,7 @@ export class PanelDock implements IWidget {
 
   private _panel?: Panel;
 
-  @obx.ref private _disabled = false;
+  @observable.ref private _disabled = false;
 
   @computed get panel() {
     return this._panel || this.skeleton.getPanel(this.panelName);

@@ -1152,12 +1152,6 @@ export interface Snippet {
    */
   screenshot?: string;
   /**
-   * snippet 打标
-   *
-   * @deprecated 暂未使用
-   */
-  label?: string;
-  /**
    * 待插入的 schema
    */
   schema?: NodeSchema;

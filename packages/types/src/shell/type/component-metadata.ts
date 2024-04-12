@@ -1,4 +1,4 @@
-import { IPublicTypeIconType, IPublicTypeNpmInfo, IPublicTypeFieldConfig, IPublicTypeI18nData, IPublicTypeComponentSchema, IPublicTypeTitleContent, IPublicTypePropConfig, IPublicTypeConfigure, IPublicTypeAdvanced, IPublicTypeSnippet } from './';
+import { IPublicTypeIconType, IPublicTypeNpmInfo, IPublicTypeFieldConfig, IPublicTypeI18nData, IPublicTypeComponentSchema, IPublicTypeTitleContent, IPublicTypePropConfig, IPublicTypeConfigure, IPublicTypeSnippet } from './';
 
 /**
  * 组件 meta 配置
@@ -68,11 +68,6 @@ export interface IPublicTypeComponentMetadata {
    * 编辑体验增强
    */
   configure?: IPublicTypeFieldConfig[] | IPublicTypeConfigure;
-
-  /**
-   * @deprecated, use advanced instead
-   */
-  experimental?: IPublicTypeAdvanced;
 
   /**
    * @todo 待补充文档

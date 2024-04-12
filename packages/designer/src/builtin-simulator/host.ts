@@ -1,5 +1,5 @@
 import {
-  obx,
+  observable,
   autorun,
   reaction,
   computed,
@@ -12,6 +12,7 @@ import {
   makeObservable,
   createModuleEventBus,
   IEventBus,
+  action,
 } from '@alilc/lowcode-editor-core';
 
 import { ISimulatorHost, Component, DropContainer } from '../simulator';
@@ -228,17 +229,17 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return this.get('deviceStyle');
   }
 
-  @obx.ref _props: BuiltinSimulatorProps = {};
+  @observable.ref _props: BuiltinSimulatorProps = {};
 
-  @obx.ref private _contentWindow?: Window;
+  @observable.ref private _contentWindow?: Window;
 
   get contentWindow() {
     return this._contentWindow;
   }
 
-  @obx.ref private _contentDocument?: Document;
+  @observable.ref private _contentDocument?: Document;
 
-  @obx.ref private _appHelper?: any;
+  @observable.ref private _appHelper?: any;
 
   get contentDocument() {
     return this._contentDocument;
@@ -262,7 +263,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   readonly liveEditing = new LiveEditing();
 
-  @obx private instancesMap: {
+  @observable private instancesMap: {
     [docId: string]: Map<string, IPublicTypeComponentInstance[]>;
   } = {};
 
@@ -322,10 +323,12 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * @see ISimulator
    */
+  @action
   setProps(props: BuiltinSimulatorProps) {
     this._props = props;
   }
 
+  @action
   set(key: string, value: any) {
     this._props = {
       ...this._props,

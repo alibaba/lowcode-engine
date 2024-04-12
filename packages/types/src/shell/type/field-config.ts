@@ -38,14 +38,4 @@ export interface IPublicTypeFieldConfig extends IPublicTypeFieldExtraProps {
    * 其他配置属性（不做流通要求）
    */
   extraProps?: IPublicTypeFieldExtraProps;
-
-  /**
-   * @deprecated
-   */
-  description?: IPublicTypeTitleContent;
-
-  /**
-   * @deprecated
-   */
-  isExtends?: boolean;
 }

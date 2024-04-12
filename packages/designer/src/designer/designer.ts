@@ -1,5 +1,5 @@
 import { ComponentType } from 'react';
-import { obx, computed, autorun, makeObservable, IReactionPublic, IReactionOptions, IReactionDisposer } from '@alilc/lowcode-editor-core';
+import { observable, computed, autorun, makeObservable, IReactionPublic, IReactionOptions, IReactionDisposer } from '@alilc/lowcode-editor-core';
 import {
   IPublicTypeProjectSchema,
   IPublicTypeComponentMetadata,
@@ -93,13 +93,13 @@ export class Designer {
 
   private selectionDispose: undefined | (() => void);
 
-  @obx.ref private _componentMetasMap = new Map<string, IComponentMeta>();
+  @observable.ref private _componentMetasMap = new Map<string, IComponentMeta>();
 
-  @obx.ref private _simulatorComponent?: ComponentType<any>;
+  @observable.ref private _simulatorComponent?: ComponentType<any>;
 
-  @obx.ref private _simulatorProps?: Record<string, any> | ((project: IProject) => object);
+  @observable.ref private _simulatorProps?: Record<string, any> | ((project: IProject) => object);
 
-  @obx.ref private _suspensed = false;
+  @observable.ref private _suspensed = false;
 
   get currentDocument() {
     return this.project.currentDocument;
@@ -307,48 +307,6 @@ export class Designer {
 
   createSettingEntry(nodes: INode[]): ISettingTopEntry {
     return new SettingTopEntry(this.editor, nodes);
-  }
-
-  /**
-   * 获得合适的插入位置
-   * @deprecated
-   */
-  getSuitableInsertion(
-    insertNode?: INode | IPublicTypeNodeSchema | IPublicTypeNodeSchema[],
-  ): { target: INode; index?: number } | null {
-    const activeDoc = this.project.currentDocument;
-    if (!activeDoc) {
-      return null;
-    }
-    if (
-      Array.isArray(insertNode) &&
-      isNodeSchema(insertNode[0]) &&
-      this.getComponentMeta(insertNode[0].componentName).isModal
-    ) {
-      return {
-        target: activeDoc.rootNode as INode,
-      };
-    }
-    const focusNode = activeDoc.focusNode!;
-    const nodes = activeDoc.selection.getNodes();
-    const refNode = nodes.find((item) => focusNode.contains(item));
-    let target;
-    let index: number | undefined;
-    if (!refNode || refNode === focusNode) {
-      target = focusNode;
-    } else if (refNode.componentMeta.isContainer) {
-      target = refNode;
-    } else {
-      // FIXME!!, parent maybe null
-      target = refNode.parent!;
-      index = (refNode.index || 0) + 1;
-    }
-
-    if (target && insertNode && !target.componentMeta.checkNestingDown(target, insertNode)) {
-      return null;
-    }
-
-    return { target, index };
   }
 
   setProps(nextProps: DesignerProps) {

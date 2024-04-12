@@ -23,20 +23,6 @@ export type Rects = DOMRect[] & {
   elements: Array<Element | Text>;
 };
 
-/**
- * @deprecated use same function in @alilc/lowcode-utils
- */
-export function isLocationData(obj: any): boolean {
-  return obj && obj.target && obj.detail;
-}
-
-/**
- * @deprecated use same function in @alilc/lowcode-utils
- */
-export function isLocationChildrenDetail(obj: any): boolean {
-  return obj && obj.type === IPublicTypeLocationDetailType.Children;
-}
-
 export function isRowContainer(container: Element | Text, win?: Window) {
   if (isText(container)) {
     return true;
@@ -138,30 +124,5 @@ export class DropLocation implements IDropLocation {
       source: this.source,
       event,
     });
-  }
-
-  /**
-   * @deprecated
-   * 兼容 vision
-   */
-  getContainer() {
-    return this.target;
-  }
-
-  /**
-   * @deprecated
-   * 兼容 vision
-   */
-  getInsertion() {
-    if (!this.detail) {
-      return null;
-    }
-    if (this.detail.type === 'Children') {
-      if (this.detail.index <= 0) {
-        return null;
-      }
-      return this.target.children?.get(this.detail.index - 1);
-    }
-    return (this.detail as any)?.near?.node;
   }
 }

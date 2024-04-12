@@ -1,6 +1,6 @@
 import { createElement, ReactNode } from 'react';
 import {
-  obx,
+  observable,
   computed,
   makeObservable,
   IEventBus,
@@ -27,9 +27,9 @@ export class Panel implements IWidget {
 
   readonly id: string;
 
-  @obx.ref inited = false;
+  @observable.ref inited = false;
 
-  @obx.ref private _actived = false;
+  @observable.ref private _actived = false;
 
   private emitter: IEventBus = createModuleEventBus('Panel');
 
@@ -88,7 +88,7 @@ export class Panel implements IWidget {
 
   private container?: WidgetContainer<Panel, IPublicTypePanelConfig>;
 
-  @obx.ref public parent?: WidgetContainer;
+  @observable.ref public parent?: WidgetContainer;
 
   constructor(
     readonly skeleton: ISkeleton,

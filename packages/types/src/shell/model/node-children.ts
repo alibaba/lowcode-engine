@@ -19,24 +19,11 @@ export interface IPublicModelNodeChildren<
   get size(): number;
 
   /**
-   * @deprecated please use isEmptyNode
-   * 是否为空
-   * @returns
-   */
-  get isEmpty(): boolean;
-
-  /**
    * 是否为空
    *
    * @returns
    */
   get isEmptyNode(): boolean;
-
-  /**
-   * @deprecated please use notEmptyNode
-   * judge if it is not empty
-   */
-  get notEmpty(): boolean;
 
   /**
    * judge if it is not empty

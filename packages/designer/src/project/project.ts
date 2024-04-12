@@ -1,4 +1,4 @@
-import { obx, computed, makeObservable, action, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
+import { observable, computed, makeObservable, action, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { IDesigner } from '../designer';
 import { DocumentModel, isDocumentModel } from '../document';
 import type { IDocumentModel } from '../document';
@@ -93,7 +93,7 @@ export interface IProject extends Omit<IBaseApiProject<
 export class Project implements IProject {
   private emitter: IEventBus = createModuleEventBus('Project');
 
-  @obx.shallow readonly documents: IDocumentModel[] = [];
+  @observable.shallow readonly documents: IDocumentModel[] = [];
 
   private data: IPublicTypeProjectSchema = {
     version: '1.0.0',
@@ -117,7 +117,7 @@ export class Project implements IProject {
     return this.documents.find((doc) => doc.active);
   }
 
-  @obx private _config: any = {};
+  @observable private _config: any = {};
   @computed get config(): any {
     // TODO: parse layout Component
     return this._config;
@@ -126,7 +126,7 @@ export class Project implements IProject {
     this._config = value;
   }
 
-  @obx.ref private _i18n: any = {};
+  @observable.ref private _i18n: any = {};
   @computed get i18n(): any {
     return this._i18n;
   }

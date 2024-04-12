@@ -9,12 +9,6 @@ export interface IPublicResourceTypeConfig {
   /** 资源 icon 标识 */
   icon?: React.ReactElement | React.FunctionComponent | React.ComponentClass;
 
-  /**
-   * 默认视图类型
-   * @deprecated
-   */
-  defaultViewType?: string;
-
   /** 默认视图类型 */
   defaultViewName: string;
 

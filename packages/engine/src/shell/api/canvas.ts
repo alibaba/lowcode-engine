@@ -72,11 +72,4 @@ export class Canvas implements IPublicApiCanvas {
       target: (locationData.target as any)[nodeSymbol],
     }));
   }
-
-  /**
-   * @deprecated
-   */
-  get dropLocation() {
-    return ShellDropLocation.create((this[designerSymbol] as any).dropLocation || null);
-  }
 }

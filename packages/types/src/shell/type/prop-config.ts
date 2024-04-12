@@ -20,8 +20,4 @@ export interface IPublicTypePropConfig {
    * 属性默认值
    */
   defaultValue?: any;
-  /**
-   * @deprecated 已被弃用
-   */
-  setter?: any;
 }

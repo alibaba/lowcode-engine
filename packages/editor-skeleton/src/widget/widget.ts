@@ -1,5 +1,5 @@
 import { ReactNode, createElement } from 'react';
-import { makeObservable, obx } from '@alilc/lowcode-editor-core';
+import { makeObservable, observable } from '@alilc/lowcode-editor-core';
 import { createContent, uniqueId } from '@alilc/lowcode-utils';
 import { getEvent } from '../event';
 import { WidgetConfig } from '../types';
@@ -36,15 +36,15 @@ export class Widget implements IWidget {
 
   readonly align?: string;
 
-  @obx.ref private _visible = true;
+  @observable.ref private _visible = true;
 
   get visible(): boolean {
     return this._visible;
   }
 
-  @obx.ref inited = false;
+  @observable.ref inited = false;
 
-  @obx.ref private _disabled = false;
+  @observable.ref private _disabled = false;
 
   private _body: ReactNode;
 

@@ -32,13 +32,6 @@ export class SettingTopEntry implements IPublicModelSettingTopEntry {
   }
 
   /**
-   * @deprecated use .node instead
-   */
-  getNode() {
-    return this.node;
-  }
-
-  /**
    * 获取指定 propName 的值
    * @param propName
    * @returns

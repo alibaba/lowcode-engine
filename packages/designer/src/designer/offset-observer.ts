@@ -1,5 +1,5 @@
 import requestIdleCallback, { cancelIdleCallback } from 'ric-shim';
-import { obx, computed, makeObservable } from '@alilc/lowcode-editor-core';
+import { observable, computed, action, makeObservable } from '@alilc/lowcode-editor-core';
 import { uniqueId } from '@alilc/lowcode-utils';
 import { INodeSelector, IViewport } from '../simulator';
 import { INode } from '../document';
@@ -15,17 +15,17 @@ export class OffsetObserver {
 
   private lastOffsetWidth?: number;
 
-  @obx private _height = 0;
+  @observable private _height = 0;
 
-  @obx private _width = 0;
+  @observable private _width = 0;
 
-  @obx private _left = 0;
+  @observable private _left = 0;
 
-  @obx private _top = 0;
+  @observable private _top = 0;
 
-  @obx private _right = 0;
+  @observable private _right = 0;
 
-  @obx private _bottom = 0;
+  @observable private _bottom = 0;
 
   @computed get height() {
     return this.isRoot ? this.viewport?.height : this._height * this.scale;
@@ -51,7 +51,7 @@ export class OffsetObserver {
     return this.isRoot ? this.viewport?.width : this._right * this.scale;
   }
 
-  @obx hasOffset = false;
+  @observable hasOffset = false;
 
   @computed get offsetLeft() {
     if (this.isRoot) {
@@ -102,14 +102,17 @@ export class OffsetObserver {
   readonly compute: () => void;
 
   constructor(readonly nodeInstance: INodeSelector) {
+    makeObservable(this);
+
     const { node, instance } = nodeInstance;
     this.node = node;
+
     const doc = node.document;
     const host = doc?.simulator;
     const focusNode = doc?.focusNode;
     this.isRoot = node.contains(focusNode!);
     this.viewport = host?.viewport;
-    makeObservable(this);
+
     if (this.isRoot) {
       this.hasOffset = true;
       return;
@@ -119,7 +122,7 @@ export class OffsetObserver {
     }
 
     let pid: number | undefined;
-    const compute = () => {
+    const compute = action(() => {
       if (pid !== this.pid) {
         return;
       }
@@ -139,7 +142,7 @@ export class OffsetObserver {
       }
       this.pid = requestIdleCallback(compute);
       pid = this.pid;
-    };
+    });
 
     this.compute = compute;
 

@@ -9,6 +9,7 @@
   "dependencies": {
     "@alilc/lowcode-types": "workspace:*",
     "@alilc/lowcode-engine": "workspace:*",
+    "@alilc/lowcode-react-simulator-renderer": "workspace:*",
     "@alilc/lowcode-react-renderer": "workspace:*",
     "@alifd/next": "^1.27.10",
     "react": "^18.2.0",

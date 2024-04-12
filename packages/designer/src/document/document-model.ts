@@ -1,6 +1,6 @@
 import {
   makeObservable,
-  obx,
+  observable,
   engineConfig,
   action,
   runWithGlobalEventOff,
@@ -111,18 +111,13 @@ implements
 
   readonly designer: IDesigner;
 
-  @obx.shallow private nodes = new Set<INode>();
+  @observable.shallow private nodes = new Set<INode>();
 
   private seqId = 0;
 
   private emitter: IEventBus;
 
   private rootNodeVisitorMap: { [visitorName: string]: any } = {};
-
-  /**
-   * @deprecated
-   */
-  private _addons: Array<{ name: string; exportData: any }> = [];
 
   /**
    * 模拟器
@@ -154,7 +149,7 @@ implements
     return this.rootNode;
   }
 
-  @obx.ref private _drillDownNode: INode | null = null;
+  @observable.ref private _drillDownNode: INode | null = null;
 
   private _modalNode?: INode;
 
@@ -162,7 +157,7 @@ implements
 
   private inited = false;
 
-  @obx.shallow private willPurgeSpace: INode[] = [];
+  @observable.shallow private willPurgeSpace: INode[] = [];
 
   get modalNode() {
     return this._modalNode;
@@ -172,9 +167,9 @@ implements
     return this.modalNode || this.focusNode;
   }
 
-  @obx.shallow private activeNodes?: INode[];
+  @observable.shallow private activeNodes?: INode[];
 
-  @obx.ref private _dropLocation: IDropLocation | null = null;
+  @observable.ref private _dropLocation: IDropLocation | null = null;
 
   set dropLocation(loc: IDropLocation | null) {
     this._dropLocation = loc;
@@ -199,9 +194,9 @@ implements
     return this.rootNode?.schema as any;
   }
 
-  @obx.ref private _opened = false;
+  @observable.ref private _opened = false;
 
-  @obx.ref private _suspensed = false;
+  @observable.ref private _suspensed = false;
 
   /**
    * 是否为非激活状态
@@ -215,13 +210,6 @@ implements
    */
   get active(): boolean {
     return !this._suspensed;
-  }
-
-  /**
-   * @deprecated 兼容
-   */
-  get actived(): boolean {
-    return this.active;
   }
 
   /**
@@ -639,26 +627,6 @@ implements
   }
 
   /**
-   * @deprecated since version 1.0.16.
-   * Will be deleted in version 2.0.0.
-   * Use checkNesting method instead.
-   */
-  checkDropTarget(
-    dropTarget: INode,
-    dragObject: IPublicTypeDragNodeObject | IPublicTypeDragNodeDataObject,
-  ): boolean {
-    let items: Array<INode | IPublicTypeNodeSchema>;
-    if (isDragNodeDataObject(dragObject)) {
-      items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
-    } else if (isDragNodeObject<INode>(dragObject)) {
-      items = dragObject.nodes;
-    } else {
-      return false;
-    }
-    return items.every((item) => this.checkNestingUp(dropTarget, item));
-  }
-
-  /**
    * 检查对象对父级的要求，涉及配置 parentWhitelist
    */
   checkNestingUp(parent: INode, obj: IPublicTypeNodeSchema | INode): boolean {
@@ -698,54 +666,6 @@ implements
 
   getHistory(): IHistory {
     return this.history;
-  }
-
-  /**
-   * @deprecated
-   */
-  /* istanbul ignore next */
-  getAddonData(name: string) {
-    const addon = this._addons.find((item) => item.name === name);
-    if (addon) {
-      return addon.exportData();
-    }
-  }
-
-  /**
-   * @deprecated
-   */
-  /* istanbul ignore next */
-  exportAddonData() {
-    const addons: {
-      [key: string]: any;
-    } = {};
-    this._addons.forEach((addon) => {
-      const data = addon.exportData();
-      if (data === null) {
-        delete addons[addon.name];
-      } else {
-        addons[addon.name] = data;
-      }
-    });
-    return addons;
-  }
-
-  /**
-   * @deprecated
-   */
-  /* istanbul ignore next */
-  registerAddon(name: string, exportData: any) {
-    if (['id', 'params', 'layout'].indexOf(name) > -1) {
-      throw new Error('addon name cannot be id, params, layout');
-    }
-    const i = this._addons.findIndex((item) => item.name === name);
-    if (i > -1) {
-      this._addons.splice(i, 1);
-    }
-    this._addons.push({
-      exportData,
-      name,
-    });
   }
 
   /* istanbul ignore next */
@@ -843,20 +763,6 @@ implements
     return () => {
       this.emitter.removeListener('nodedestroy', wrappedFunc);
     };
-  }
-
-  /**
-   * @deprecated
-   */
-  refresh() {
-    console.warn('refresh method is deprecated');
-  }
-
-  /**
-   * @deprecated
-   */
-  onRefresh(/* func: () => void */) {
-    console.warn('onRefresh method is deprecated');
   }
 
   onReady(fn: (...args: any[]) => void) {

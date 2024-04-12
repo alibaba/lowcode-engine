@@ -1,5 +1,5 @@
 import { INode } from '../document/node/node';
-import { obx, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
+import { observable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { IPublicTypeActiveTarget, IPublicModelActiveTracker } from '@alilc/lowcode-types';
 import { isNode } from '@alilc/lowcode-utils';
 
@@ -17,7 +17,7 @@ export interface ActiveTarget extends Omit<IPublicTypeActiveTarget, 'node'> {
 
 // @ts-ignore
 export class ActiveTracker implements IActiveTracker {
-  @obx.ref private _target?: ActiveTarget | INode;
+  @observable.ref private _target?: ActiveTarget | INode;
 
   private emitter: IEventBus = createModuleEventBus('ActiveTracker');
 
@@ -36,14 +36,6 @@ export class ActiveTracker implements IActiveTracker {
 
   get detail() {
     return (this._target as ActiveTarget)?.detail;
-  }
-
-  /**
-   * @deprecated
-   */
-  /* istanbul ignore next */
-  get intance() {
-    return this.instance;
   }
 
   get instance() {

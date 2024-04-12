@@ -1,4 +1,4 @@
-import { action, makeObservable, obx, engineConfig, IEditor, FocusTracker } from '@alilc/lowcode-editor-core';
+import { action, makeObservable, observable, engineConfig, IEditor, FocusTracker } from '@alilc/lowcode-editor-core';
 import {
   DockConfig,
   WidgetConfig,
@@ -85,7 +85,7 @@ export class Skeleton implements Omit<IPublicApiSkeleton,
 
   readonly rightArea: Area<IPublicTypePanelConfig, Panel>;
 
-  @obx readonly mainArea: Area<WidgetConfig | IPublicTypePanelConfig, Widget | Panel>;
+  @observable readonly mainArea: Area<WidgetConfig | IPublicTypePanelConfig, Widget | Panel>;
 
   readonly bottomArea: Area<IPublicTypePanelConfig, Panel>;
 

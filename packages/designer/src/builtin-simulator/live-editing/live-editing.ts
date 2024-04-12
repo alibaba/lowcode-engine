@@ -1,4 +1,4 @@
-import { obx } from '@alilc/lowcode-editor-core';
+import { observable } from '@alilc/lowcode-editor-core';
 import { IPublicTypePluginConfig, IPublicTypeLiveTextEditingConfig } from '@alilc/lowcode-types';
 import { INode, Prop } from '../../document';
 
@@ -45,7 +45,7 @@ export class LiveEditing {
   static addLiveEditingSaveHandler = addLiveEditingSaveHandler;
   static clearLiveEditingSaveHandler = clearLiveEditingSaveHandler;
 
-  @obx.ref private _editing: Prop | null = null;
+  @observable.ref private _editing: Prop | null = null;
 
   private _dispose?: () => void;
 

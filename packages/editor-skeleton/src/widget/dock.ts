@@ -1,5 +1,5 @@
 import { ReactNode, createElement } from 'react';
-import { makeObservable, obx } from '@alilc/lowcode-editor-core';
+import { makeObservable, observable } from '@alilc/lowcode-editor-core';
 import { uniqueId, createContent } from '@alilc/lowcode-utils';
 import { getEvent } from '../event';
 import { DockConfig } from '../types';
@@ -19,13 +19,13 @@ export class Dock implements IWidget {
 
   readonly align?: string;
 
-  @obx.ref private _visible = true;
+  @observable.ref private _visible = true;
 
   get visible(): boolean {
     return this._visible;
   }
 
-  @obx.ref private _disabled = false;
+  @observable.ref private _disabled = false;
 
   get content(): ReactNode {
     return createElement(WidgetView, {

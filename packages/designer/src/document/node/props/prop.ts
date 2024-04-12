@@ -1,4 +1,4 @@
-import { untracked, computed, obx, engineConfig, action, makeObservable, mobx, runInAction } from '@alilc/lowcode-editor-core';
+import { untracked, computed, observable, engineConfig, action, makeObservable, mobx, runInAction } from '@alilc/lowcode-editor-core';
 import { GlobalEvent, IPublicEnumTransformStage } from '@alilc/lowcode-types';
 import type { IPublicTypeCompositeValue, IPublicTypeJSSlot, IPublicTypeSlotSchema, IPublicModelProp, IPublicTypeNodeData } from '@alilc/lowcode-types';
 import { uniqueId, isPlainObject, hasOwnProperty, compatStage, isJSExpression, isJSSlot, isNodeSchema } from '@alilc/lowcode-utils';
@@ -63,12 +63,12 @@ export class Prop implements IProp, IPropParent {
   /**
    * 键值
    */
-  @obx key: string | number | undefined;
+  @observable key: string | number | undefined;
 
   /**
    * 扩展值
    */
-  @obx spread: boolean;
+  @observable spread: boolean;
 
   readonly props: IProps;
 
@@ -76,7 +76,7 @@ export class Prop implements IProp, IPropParent {
 
   readonly id = uniqueId('prop$');
 
-  @obx.ref private _type: ValueTypes = 'unset';
+  @observable.ref private _type: ValueTypes = 'unset';
 
   /**
    * 属性类型
@@ -85,7 +85,7 @@ export class Prop implements IProp, IPropParent {
     return this._type;
   }
 
-  @obx private _value: any = UNSET;
+  @observable private _value: any = UNSET;
 
   /**
    * 属性值
@@ -146,7 +146,7 @@ export class Prop implements IProp, IPropParent {
     return this._slotNode || null;
   }
 
-  @obx.shallow private _items: IProp[] | null = null;
+  @observable.shallow private _items: IProp[] | null = null;
 
   /**
    * 作为一层缓存机制，主要是复用部分已存在的 Prop，保持响应式关系，比如：
@@ -154,7 +154,7 @@ export class Prop implements IProp, IPropParent {
    * 导致假如外部有 mobx reaction（常见于 observer），此时响应式链路会被打断，
    * 因为 reaction 监听的是原 Prop(a) 的 _value，而不是新 Prop(a) 的 _value。
    */
-  @obx.shallow private _maps: Map<string | number, IProp> | null = null;
+  @observable.shallow private _maps: Map<string | number, IProp> | null = null;
 
   /**
    * 构造 items 属性，同时构造 maps 属性

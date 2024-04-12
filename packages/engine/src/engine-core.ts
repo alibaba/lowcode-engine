@@ -68,6 +68,7 @@ import { version } from '../package.json';
 import '@alilc/lowcode-plugin-outline-pane/dist/style.css';
 import '@alilc/lowcode-editor-skeleton/dist/style.css';
 import '@alilc/lowcode-designer/dist/style.css';
+import '@alilc/lowcode-utils/dist/style.css';
 
 export * from './modules/skeleton-types';
 export * from './modules/designer-types';
@@ -219,8 +220,8 @@ export {
   command,
 };
 
-// declare this is open-source version
 /**
+ * declare this is open-source version
  * @deprecated
  */
 export const isOpenSource = true;

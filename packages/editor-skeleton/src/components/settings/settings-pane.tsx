@@ -1,5 +1,5 @@
 import { Component, MouseEvent, Fragment, ReactNode } from 'react';
-import { shallowIntl, observer, obx, engineConfig, runInAction } from '@alilc/lowcode-editor-core';
+import { shallowIntl, observer, observable, engineConfig, runInAction } from '@alilc/lowcode-editor-core';
 import {
   createContent,
   isJSSlot,
@@ -410,7 +410,7 @@ export type SettingsPaneProps = {
 export class SettingsPane extends Component<SettingsPaneProps> {
   static contextType = SkeletonContext;
 
-  @obx private currentStage?: Stage;
+  @observable private currentStage?: Stage;
 
   private popupPipe = new PopupPipe();
 

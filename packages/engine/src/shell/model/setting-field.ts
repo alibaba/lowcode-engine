@@ -156,20 +156,6 @@ export class SettingField implements IPublicModelSettingField {
   }
 
   /**
-   * @deprecated use .node instead
-   */
-  getNode() {
-    return this.node;
-  }
-
-  /**
-   * @deprecated use .parent instead
-   */
-  getParent() {
-    return this.parent;
-  }
-
-  /**
    * 设置值
    * @param val 值
    */

@@ -20,11 +20,6 @@ export interface IPublicTypeSetterConfig {
   props?: Record<string, unknown> | IPublicTypeDynamicProps;
 
   /**
-   * @deprecated
-   */
-  children?: any;
-
-  /**
    * 是否必填？
    *
    * ArraySetter 里有个快捷预览，可以在不打开面板的情况下直接编辑

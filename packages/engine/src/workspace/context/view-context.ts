@@ -1,4 +1,4 @@
-import { computed, makeObservable, obx, flow } from '@alilc/lowcode-editor-core';
+import { computed, makeObservable, observable, flow } from '@alilc/lowcode-editor-core';
 import {
   IPublicEditorViewConfig,
   IPublicEnumPluginRegisterLevel,
@@ -24,9 +24,9 @@ export class Context extends BasicContext implements IViewContext {
 
   viewType: 'editor' | 'webview';
 
-  @obx _activate = false;
+  @observable _activate = false;
 
-  @obx isInit: boolean = false;
+  @observable isInit: boolean = false;
 
   init: any = flow(function* (this: Context) {
     if (this.viewType === 'webview') {

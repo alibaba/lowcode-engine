@@ -4,19 +4,19 @@ import {
   Title,
   observer,
   Editor,
-  obx,
+  observable,
   globalContext,
   engineConfig,
   makeObservable,
 } from '@alilc/lowcode-editor-core';
-import { Node, SettingField, isSettingField, INode } from '@alilc/lowcode-designer';
+import { Node, SettingField, INode } from '@alilc/lowcode-designer';
 import classNames from 'classnames';
 import { SettingsMain } from './main';
 import { SettingsPane } from './settings-pane';
 import { StageBox } from '../stage-box';
 import { SkeletonContext } from '../../context';
 import { intl } from '../../locale';
-import { createIcon } from '@alilc/lowcode-utils';
+import { createIcon, isSettingField } from '@alilc/lowcode-utils';
 
 interface ISettingsPrimaryPaneProps {
   engineEditor: Editor;
@@ -33,7 +33,7 @@ export class SettingsPrimaryPane extends Component<
   };
   private main = new SettingsMain(this.props.engineEditor);
 
-  @obx.ref private _activeKey?: any;
+  @observable.ref private _activeKey?: any;
 
   constructor(props: ISettingsPrimaryPaneProps) {
     super(props);
@@ -235,7 +235,6 @@ export class SettingsPrimaryPane extends Component<
             {(skeleton) => {
               if (skeleton) {
                 return (
-                  // @ts-ignore
                   <StageBox skeleton={skeleton} target={field} key={field.id}>
                     <SettingsPane target={field} key={field.id} usePopup={false} />
                   </StageBox>

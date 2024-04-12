@@ -1,4 +1,4 @@
-import { computed, makeObservable, obx, action } from '@alilc/lowcode-editor-core';
+import { computed, makeObservable, observable, action } from '@alilc/lowcode-editor-core';
 import { IPublicTypePropsList, IPublicTypeCompositeValue, IPublicEnumTransformStage, IBaseModelProps } from '@alilc/lowcode-types';
 import type { IPublicTypePropsMap } from '@alilc/lowcode-types';
 import { uniqueId, compatStage } from '@alilc/lowcode-utils';
@@ -42,7 +42,7 @@ export interface IProps extends Props {}
 export class Props implements Omit<IBaseModelProps<IProp>, | 'getExtraProp' | 'getExtraPropValue' | 'setExtraPropValue' | 'node'>, IPropParent {
   readonly id = uniqueId('props');
 
-  @obx.shallow private items: IProp[] = [];
+  @observable.shallow private items: IProp[] = [];
 
   @computed private get maps(): Map<string, Prop> {
     const maps = new Map();
@@ -71,7 +71,7 @@ export class Props implements Omit<IBaseModelProps<IProp>, | 'getExtraProp' | 'g
     return this.items.length;
   }
 
-  @obx type: 'map' | 'list' = 'map';
+  @observable type: 'map' | 'list' = 'map';
 
   private purged = false;
 
@@ -180,27 +180,6 @@ export class Props implements Omit<IBaseModelProps<IProp>, | 'getExtraProp' | 'g
     }
 
     return { props, extras };
-  }
-
-  /**
-   * @deprecated
-   */
-  /* istanbul ignore next */
-  private transformToStatic(props: any) {
-    let transducers = this.owner.componentMeta?.prototype?.options?.transducers;
-    if (!transducers) {
-      return props;
-    }
-    if (!Array.isArray(transducers)) {
-      transducers = [transducers];
-    }
-    props = transducers.reduce((xprops: any, transducer: any) => {
-      if (transducer && typeof transducer.toStatic === 'function') {
-        return transducer.toStatic(xprops);
-      }
-      return xprops;
-    }, props);
-    return props;
   }
 
   /**
@@ -383,14 +362,5 @@ export class Props implements Omit<IBaseModelProps<IProp>, | 'getExtraProp' | 'g
    */
   getNode() {
     return this.owner;
-  }
-
-  /**
-   * @deprecated
-   * 获取 props 对应的 node
-   */
-  @action
-  toData() {
-    return this.export()?.props;
   }
 }

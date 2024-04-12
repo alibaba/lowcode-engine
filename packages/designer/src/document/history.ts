@@ -221,16 +221,6 @@ export class History<T = IPublicTypeNodeSchema> implements IHistory {
     this.emitter.removeAllListeners();
     this.records = [];
   }
-
-  /**
-   *
-   * @deprecated
-   * @returns
-   * @memberof History
-   */
-  isModified() {
-    return this.isSavePoint();
-  }
 }
 
 export class Session {

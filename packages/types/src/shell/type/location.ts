@@ -1,15 +1,6 @@
 import { IPublicModelNode, IPublicModelLocateEvent } from '../model';
 
-// eslint-disable-next-line no-shadow
 export enum IPublicTypeLocationDetailType {
-  Children = 'Children',
-  Prop = 'Prop',
-}
-
-/**
- * @deprecated please use IPublicTypeLocationDetailType
- */
-export enum LocationDetailType {
   Children = 'Children',
   Prop = 'Prop',
 }

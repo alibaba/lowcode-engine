@@ -32,28 +32,11 @@ export class NodeChildren implements IPublicModelNodeChildren {
   }
 
   /**
-   * @deprecated
-   * 是否为空
-   * @returns
-   */
-  get isEmpty(): boolean {
-    return this[nodeChildrenSymbol].isEmptyNode;
-  }
-
-  /**
    * 是否为空
    * @returns
    */
   get isEmptyNode(): boolean {
     return this[nodeChildrenSymbol].isEmptyNode;
-  }
-
-  /**
-   * @deprecated
-   * judge if it is not empty
-   */
-  get notEmpty(): boolean {
-    return this[nodeChildrenSymbol].notEmptyNode;
   }
 
   /**

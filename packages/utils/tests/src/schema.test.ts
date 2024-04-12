@@ -1,9 +1,7 @@
 import {
   compatibleLegaoSchema,
   getNodeSchemaById,
-  applyActivities,
 } from '../../src/schema';
-import { ActivityType } from '@alilc/lowcode-types';
 
 describe('compatibleLegaoSchema', () => {
   it('should handle null input', () => {
@@ -65,67 +63,6 @@ describe('getNodeSchemaById', () => {
 
   // Add more test cases for other scenarios
 });
-
-describe('applyActivities', () => {
-  it('should apply ADD activity', () => {
-    // Create your test schema and activities
-    const testSchema = {
-      id: 'root',
-      children: [
-        {
-          id: 'child1',
-          children: [
-            {
-              id: 'child1.1',
-            },
-          ],
-        },
-      ],
-    };
-    const activities = [
-      {
-        type: ActivityType.ADDED,
-        payload: {
-          location: {
-            parent: {
-              nodeId: 'child1',
-              index: 0,
-            },
-          },
-          schema: {
-            id: 'newChild',
-          },
-        },
-      },
-    ];
-
-    const result = applyActivities(testSchema, activities);
-
-    // Define the expected output
-    const expectedOutput = {
-      id: 'root',
-      children: [
-        {
-          id: 'child1',
-          children: [
-            {
-              id: 'newChild',
-            },
-            {
-              id: 'child1.1',
-            },
-          ],
-        },
-      ],
-    };
-
-    // Assert that the result matches the expected output
-    expect(result).toEqual(expectedOutput);
-  });
-
-  // Add more test cases for other activity types and scenarios
-});
-
 
 describe('Schema Ut', () => {
   it('props', () => {

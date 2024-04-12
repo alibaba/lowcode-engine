@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import {
-  obx,
+  observable,
   computed,
   autorun,
   makeObservable,
@@ -159,12 +159,7 @@ implements
 
   protected _children?: INodeChildren;
 
-  /**
-   * @deprecated
-   */
-  private _addons: { [key: string]: { exportData: () => any; isProp: boolean } } = {};
-
-  @obx.ref private _parent: INode | null = null;
+  @observable.ref private _parent: INode | null = null;
 
   /**
    * 父级节点
@@ -245,14 +240,14 @@ implements
 
   private _slotFor?: IProp | null | undefined = null;
 
-  @obx.shallow _slots: INode[] = [];
+  @observable.shallow _slots: INode[] = [];
 
   get slots(): INode[] {
     return this._slots;
   }
 
   /* istanbul ignore next */
-  @obx.ref private _conditionGroup: IExclusiveGroup | null = null;
+  @observable.ref private _conditionGroup: IExclusiveGroup | null = null;
 
   /* istanbul ignore next */
   get conditionGroup(): IExclusiveGroup | null {
@@ -277,7 +272,7 @@ implements
     return this.purging;
   }
 
-  @obx.shallow status: NodeStatus = {
+  @observable.shallow status: NodeStatus = {
     inPlaceEditing: false,
     locking: false,
     pseudo: false,
@@ -1106,49 +1101,6 @@ implements
   }
 
   /**
-   * @deprecated
-   */
-  getStatus(field?: keyof NodeStatus) {
-    if (field && this.status[field] != null) {
-      return this.status[field];
-    }
-
-    return this.status;
-  }
-
-  /**
-   * @deprecated
-   */
-  setStatus(field: keyof NodeStatus, flag: boolean) {
-    if (!this.status.hasOwnProperty(field)) {
-      return;
-    }
-
-    if (flag !== this.status[field]) {
-      this.status[field] = flag;
-    }
-  }
-
-  /**
-   * @deprecated
-   */
-  getDOMNode(): any {
-    const instance = this.document.simulator?.getComponentInstances(this)?.[0];
-    if (!instance) {
-      return;
-    }
-    return this.document.simulator?.findDOMNodes(instance)?.[0];
-  }
-
-  /**
-   * @deprecated
-   */
-  getPage() {
-    console.warn('getPage is deprecated, use document instead');
-    return this.document;
-  }
-
-  /**
    * 获取磁贴相关信息
    */
   getRGL(): {
@@ -1168,116 +1120,11 @@ implements
     return { isContainerNode, isEmptyNode, isRGLContainerNode, isRGLNode, isRGL, rglNode };
   }
 
-  /**
-   * @deprecated no one is using this, will be removed in a future release
-   */
-  getSuitablePlace(node: INode, ref: any): any {
-    const focusNode = this.document?.focusNode;
-    // 如果节点是模态框，插入到根节点下
-    if (node?.componentMeta?.isModal) {
-      return { container: focusNode, ref };
-    }
-
-    if (!ref && focusNode && this.contains(focusNode)) {
-      const rootCanDropIn = focusNode.componentMeta?.prototype?.options?.canDropIn;
-      if (
-        rootCanDropIn === undefined ||
-        rootCanDropIn === true ||
-        (typeof rootCanDropIn === 'function' && rootCanDropIn(node))
-      ) {
-        return { container: focusNode };
-      }
-
-      return null;
-    }
-
-    if (this.isRoot() && this.children) {
-      const dropElement = this.children.filter((c) => {
-        if (!c.isContainerNode) {
-          return false;
-        }
-        const canDropIn = c.componentMeta?.prototype?.options?.canDropIn;
-        if (
-          canDropIn === undefined ||
-          canDropIn === true ||
-          (typeof canDropIn === 'function' && canDropIn(node))
-        ) {
-          return true;
-        }
-        return false;
-      })[0];
-
-      if (dropElement) {
-        return { container: dropElement, ref };
-      }
-
-      const rootCanDropIn = this.componentMeta?.prototype?.options?.canDropIn;
-      if (
-        rootCanDropIn === undefined ||
-        rootCanDropIn === true ||
-        (typeof rootCanDropIn === 'function' && rootCanDropIn(node))
-      ) {
-        return { container: this, ref };
-      }
-
-      return null;
-    }
-
-    const canDropIn = this.componentMeta?.prototype?.options?.canDropIn;
-    if (this.isContainer()) {
-      if (
-        canDropIn === undefined ||
-        (typeof canDropIn === 'boolean' && canDropIn) ||
-        (typeof canDropIn === 'function' && canDropIn(node))
-      ) {
-        return { container: this, ref };
-      }
-    }
-
-    if (this.parent) {
-      return this.parent.getSuitablePlace(node, { index: this.index });
-    }
-
-    return null;
-  }
-
-  /**
-   * @deprecated
-   */
-  getAddonData(key: string) {
-    const addon = this._addons[key];
-    if (addon) {
-      return addon.exportData();
-    }
-    return this.getExtraProp(key)?.getValue();
-  }
-
-  /**
-   * @deprecated
-   */
-  registerAddon(key: string, exportData: () => any, isProp = false) {
-    this._addons[key] = { exportData, isProp };
-  }
-
   getRect(): DOMRect | null {
     if (this.isRoot()) {
       return this.document.simulator?.viewport.contentBounds || null;
     }
     return this.document.simulator?.computeRect(this) || null;
-  }
-
-  /**
-   * @deprecated
-   */
-  getPrototype() {
-    return this.componentMeta.prototype;
-  }
-
-  /**
-   * @deprecated
-   */
-  setPrototype(proto: any) {
-    this.componentMeta.prototype = proto;
   }
 
   getIcon() {

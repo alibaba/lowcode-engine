@@ -81,13 +81,6 @@ export class ComponentMeta implements IPublicModelComponentMeta {
     return this[componentMetaSymbol].npm;
   }
 
-  /**
-   * @deprecated
-   */
-  get prototype() {
-    return (this[componentMetaSymbol] as any).prototype;
-  }
-
   get availableActions(): any {
     return this[componentMetaSymbol].availableActions;
   }

@@ -94,12 +94,6 @@ setResourceList(resourceList: IPublicResourceList) {}
 打开视图窗口
 
 ```typescript
-/**
- * 打开视图窗口
- * @deprecated
- */
-openEditorWindow(resourceName: string, id: string, extra: Object, viewName?: string, sleep?: boolean): Promise<void>;
-
 /** 打开视图窗口 */
 openEditorWindow(resource: Resource, sleep?: boolean): Promise<void>;
 ```
@@ -117,12 +111,6 @@ openEditorWindowById(id: string): void;
 移除视图窗口
 
 ```typescript
-/**
- * 移除视图窗口
- * @deprecated
- */
-removeEditorWindow(resourceName: string, id: string): void;
-
 /**
  * 移除视图窗口
  */
