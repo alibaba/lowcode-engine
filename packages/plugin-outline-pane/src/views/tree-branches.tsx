@@ -126,7 +126,6 @@ class TreeNodeChildren extends PureComponent<{
         children.push(
           <div key={currentGrp.id} className="condition-group-container" data-id={currentGrp.firstNode?.id}>
             <div className="condition-group-title">
-              {/* @ts-ignore */}
               <Title
                 title={currentGrp.title}
                 match={filterWorking && matchSelf}
@@ -204,7 +203,6 @@ class TreeNodeSlots extends PureComponent<{
         data-id={treeNode.nodeId}
       >
         <div className="tree-node-slots-title">
-          {/* @ts-ignore */}
           <Title title={{ type: 'i18n', intl: this.props.treeNode.pluginContext.intlNode('Slots') }} />
         </div>
         {treeNode.slots.map(tnode => (

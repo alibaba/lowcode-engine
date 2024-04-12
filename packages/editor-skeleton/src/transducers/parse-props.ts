@@ -70,9 +70,9 @@ function propTypeToSetter(propType: IPublicTypePropType): IPublicTypeSetterType 
           value,
         };
       });
-      const componentName = dataSource.length >= 4 ? 'SelectSetter' : 'RadioGroupSetter';
+
       return {
-        componentName,
+        componentName: dataSource.length >= 4 ? 'SelectSetter' : 'RadioGroupSetter',
         props: { dataSource, options: dataSource },
         isRequired,
         initialValue: dataSource[0] ? dataSource[0].value : null,

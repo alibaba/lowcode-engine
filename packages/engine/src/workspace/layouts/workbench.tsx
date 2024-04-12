@@ -40,7 +40,7 @@ export class Workbench extends Component<{
   }
 
   render() {
-    const { workspace, className, topAreaItemClassName } = this.props;
+    const { workspace, className = 'engine-main', topAreaItemClassName = 'engine-actionitem' } = this.props;
     const { skeleton } = workspace;
     const { workspaceEmptyComponent: WorkspaceEmptyComponent, theme } = this.state;
 

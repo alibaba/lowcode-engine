@@ -43,8 +43,8 @@ interface ILowCodePluginRuntimeExportsAccessor {
   [propName: string]: any;
 }
 
-// eslint-disable-next-line max-len
-export type ILowCodePluginRuntime = ILowCodePluginRuntimeCore & ILowCodePluginRuntimeExportsAccessor;
+export type ILowCodePluginRuntime = 
+  ILowCodePluginRuntimeCore & ILowCodePluginRuntimeExportsAccessor;
 
 export interface ILowCodePluginContextPrivate {
   set hotkey(hotkey: IPublicApiHotkey);

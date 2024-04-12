@@ -56,28 +56,7 @@ export default function (
   const { props, supports = {} } = configure as any;
   const isRoot: boolean = componentName === 'Page' || componentName === 'Component';
   const eventsDefinition: any[] = [];
-  const supportedLifecycles =
-    supports.lifecycles ||
-    (isRoot
-      ? /* [
-          {
-            description: '初始化时',
-            name: 'constructor',
-          },
-          {
-            description: '装载后',
-            name: 'componentDidMount',
-          },
-          {
-            description: '更新时',
-            name: 'componentDidUpdate',
-          },
-          {
-            description: '卸载时',
-            name: 'componentWillUnmount',
-          },
-        ] */ null
-      : null);
+  const supportedLifecycles = supports.lifecycles;
   if (supportedLifecycles) {
     eventsDefinition.push({
       type: 'lifeCycleEvent',
@@ -117,43 +96,13 @@ export default function (
       },
     ];
   }
-  // propsGroup.push({
-  //   name: '#generals',
-  //   title: { type: 'i18n', 'zh-CN': '通用', 'en-US': 'General' },
-  //   items: [
-  //     {
-  //       name: 'id',
-  //       title: 'ID',
-  //       setter: 'StringSetter',
-  //     },
-  //     {
-  //       name: 'key',
-  //       title: 'Key',
-  //       // todo: use Mixin
-  //       setter: 'StringSetter',
-  //     },
-  //     {
-  //       name: 'ref',
-  //       title: 'Ref',
-  //       setter: 'StringSetter',
-  //     },
-  //     {
-  //       name: '!more',
-  //       title: '更多',
-  //       setter: 'PropertiesSetter',
-  //     },
-  //   ],
-  // });
+
   const stylesGroup: IPublicTypeFieldConfig[] = [];
   const advancedGroup: IPublicTypeFieldConfig[] = [];
   if (propsGroup) {
     let l = propsGroup.length;
     while (l-- > 0) {
       const item = propsGroup[l];
-      // if (item.type === 'group' && (item.title === '高级' || item.title?.label === '高级')) {
-      //   advancedGroup = item.items || [];
-      //   propsGroup.splice(l, 1);
-      // }
       if (
         item.name === '__style__' ||
         item.name === 'style' ||

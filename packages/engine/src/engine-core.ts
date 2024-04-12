@@ -1,6 +1,5 @@
 import { createElement } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import { isPlainObject } from '@alilc/lowcode-utils';
 import {
   globalContext,
   Editor,
@@ -29,7 +28,7 @@ import {
   PluginPreference,
   IDesigner,
 } from '@alilc/lowcode-designer';
-import { Skeleton as InnerSkeleton, registerDefaults } from '@alilc/lowcode-editor-skeleton';
+import { Skeleton as InnerSkeleton, registerDefaults, Workbench } from '@alilc/lowcode-editor-skeleton';
 
 import {
   Workspace as InnerWorkspace,
@@ -146,7 +145,7 @@ editor.set('innerHotkey', innerHotkey);
 const config = new Config(engineConfig);
 const event = new Event(commonEvent, { prefix: 'common' });
 const logger = new Logger({ level: 'warn', bizName: 'common' });
-const common = new Common(editor, innerSkeleton);
+const common = new Common();
 const canvas = new Canvas(editor);
 
 const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
@@ -160,9 +159,10 @@ const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
     context.skeleton = new Skeleton(innerSkeleton, pluginName, false);
     context.setters = setters;
     context.material = material;
+    
     const eventPrefix = meta?.eventPrefix || 'common';
-    const commandScope = meta?.commandScope;
     context.event = new Event(commonEvent, { prefix: eventPrefix });
+
     context.config = config;
     context.common = common;
     context.canvas = canvas;
@@ -170,10 +170,13 @@ const pluginContextApiAssembler: ILowCodePluginContextApiAssembler = {
     context.logger = new Logger({ level: 'warn', bizName: `plugin:${pluginName}` });
     context.workspace = workspace;
     context.commonUI = commonUI;
+
+    const commandScope = meta?.commandScope;
     context.command = new Command(
       innerCommand, context as IPublicModelPluginContext, {
         commandScope,
       });
+
     context.registerLevel = IPublicEnumPluginRegisterLevel.Default;
     context.isPluginRegisteredInWorkspace = false;
     editor.set('pluginContext', context);
@@ -216,7 +219,6 @@ export {
   command,
 };
 
-
 // declare this is open-source version
 /**
  * @deprecated
@@ -235,75 +237,45 @@ export const __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = {
   classes,
 };
 
-const pluginPromise = registryInnerPlugin(designer, editor, plugins);
-
+// react root
 let root: Root | undefined;
 
 export async function init(
-  container?: HTMLElement,
-  options?: IPublicTypeEngineOptions,
+  container: HTMLElement,
+  options: IPublicTypeEngineOptions = {},
   pluginPreference?: PluginPreference
 ) {
   await destroy();
 
-  // container which will host LowCodeEngine DOM
-  let engineContainer: HTMLElement;
-  let engineOptions = null;
+  engineConfig.setEngineOptions(options);
 
-  if (isPlainObject(container)) {
-    engineOptions = container;
-    engineContainer = document.createElement('div');
-    engineContainer.id = 'engine';
-    document.body.appendChild(engineContainer);
-  } else {
-    engineOptions = options;
-    engineContainer = container!;
-    if (!container) {
-      engineContainer = document.createElement('div');
-      engineContainer.id = 'engine';
-      document.body.appendChild(engineContainer);
-    }
-  }
-  
-  engineConfig.setEngineOptions(engineOptions as any);
-
-  const { Workbench } = common.skeletonCabin;
-  if (options && options.enableWorkspaceMode) {
-    const disposeFun = await pluginPromise;
-    disposeFun && disposeFun();
-
-    if (!root) {
-      root = createRoot(engineContainer);
-      root.render(
-        createElement(WorkSpaceWorkbench, {
-          workspace: innerWorkspace,
-          // skeleton: workspace.skeleton,
-          className: 'engine-main',
-          topAreaItemClassName: 'engine-actionitem',
-        })
-      );
-    }
-
+  if (engineConfig.get('enableWorkspaceMode')) {
     innerWorkspace.enableAutoOpenFirstWindow = engineConfig.get('enableAutoOpenFirstWindow', true);
     innerWorkspace.setActive(true);
     innerWorkspace.initWindow();
     innerHotkey.activate(false);
     await innerWorkspace.plugins.init(pluginPreference);
-    return;
-  }
 
-  await pluginPromise;
-  await plugins.init(pluginPreference as any);
+    if (!root) {
+      root = createRoot(container);
+      root.render(
+        createElement(WorkSpaceWorkbench, {
+          workspace: innerWorkspace,
+        })
+      );
+    }
+  } else {
+    await registryInnerPlugin(designer, editor, plugins);
+    await plugins.init(pluginPreference);
 
-  if (!root) {
-    root = createRoot(engineContainer);
-    root.render(
-      createElement(Workbench, {
-        skeleton: innerSkeleton,
-        className: 'engine-main',
-        topAreaItemClassName: 'engine-actionitem',
-      })
-    );
+    if (!root) {
+      root = createRoot(container);
+      root.render(
+        createElement(Workbench, {
+          skeleton: innerSkeleton,
+        })
+      );
+    }
   }
 }
 
@@ -320,5 +292,5 @@ export async function destroy() {
 
   // unmount DOM container, this will trigger React componentWillUnmount lifeCycle,
   // so necessary cleanups will be done.
-  root && root.unmount();
+  root?.unmount();
 }

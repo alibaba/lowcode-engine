@@ -14,11 +14,12 @@ export function assetsTransform(assets: IPublicTypeAssetsJson) {
       acc[key] = cur;
       return acc;
     },
-    {} as any,
+    {},
   );
   components.forEach(
     (componentDesc: IPublicTypeComponentDescription | IPublicTypeRemoteComponentDescription) => {
-      let { devMode, schema, reference } = componentDesc;
+      let { devMode } = componentDesc;
+      const { schema, reference } = componentDesc;
       if ((devMode as string) === 'lowcode') {
         devMode = 'lowCode';
       } else if (devMode === 'proCode') {

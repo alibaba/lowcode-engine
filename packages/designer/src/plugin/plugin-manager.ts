@@ -92,7 +92,8 @@ export class LowCodePluginManager implements ILowCodePluginManager {
       registerOptions = options;
       options = {};
     }
-    let { pluginName, meta = {} } = pluginModel;
+    let { pluginName } = pluginModel;
+    const { meta = {} } = pluginModel;
     const { preferenceDeclaration, engines } = meta;
     // filter invalid eventPrefix
     const { eventPrefix } = meta;

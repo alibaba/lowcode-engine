@@ -3,7 +3,6 @@ import { ReactNode } from 'react';
 import { IPublicTypeRegisteredSetter, IPublicTypeCustomView } from '../type';
 
 export interface IPublicApiSetters {
-
   /**
    * 获取指定 setter
    * get setter by type

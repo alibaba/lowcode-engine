@@ -2,7 +2,7 @@
 import { request } from 'node:http';
 import packageJson from '../packages/engine/package.json';
 import console from 'node:console';
-import { Buffer } from 'node:buffer'
+import { Buffer } from 'node:buffer';
 
 const { version, name } = packageJson;
 

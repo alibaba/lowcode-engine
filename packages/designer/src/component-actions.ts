@@ -75,7 +75,10 @@ export class ComponentActions {
                 });
                 rglNode?.setPropValue('layout', layout);
                 // 如果是磁贴块复制，则需要滚动到影响位置
-                setTimeout(() => newNode?.document?.project?.simulatorHost?.scrollToNode(newNode), 10);
+                setTimeout(
+                  () => newNode?.document?.project?.simulatorHost?.scrollToNode(newNode),
+                  10
+                );
               }
             }
           }
@@ -88,12 +91,10 @@ export class ComponentActions {
       content: {
         icon: IconLock, // 锁定 icon
         title: intlNode('lock'),
-        /* istanbul ignore next */
         action(node: IPublicModelNode) {
           node.lock();
         },
       },
-      /* istanbul ignore next */
       condition: (node: IPublicModelNode) => {
         return engineConfig.get('enableCanvasLock', false) && node.isContainerNode && !node.isLocked;
       },

@@ -1,11 +1,10 @@
 import { get as lodashGet } from 'lodash-es';
-import { isPlainObject } from '@alilc/lowcode-utils';
+import { isPlainObject, getLogger } from '@alilc/lowcode-utils';
 import {
   IPublicTypeEngineOptions,
   IPublicModelEngineConfig,
   IPublicModelPreference,
 } from '@alilc/lowcode-types';
-import { getLogger } from './utils/logger';
 import Preference from './utils/preference';
 
 const logger = getLogger({ level: 'log', bizName: 'config' });

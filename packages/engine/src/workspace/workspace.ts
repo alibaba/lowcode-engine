@@ -71,7 +71,11 @@ export class Workspace implements Omit<IPublicApiWorkspace<
   } | IResource)[] = [];
 
   constructor(
-    readonly registryInnerPlugin: (designer: IDesigner, editor: IEditor, plugins: IPublicApiPlugins) => Promise<IPublicTypeDisposable>,
+    readonly registryInnerPlugin: (
+      designer: IDesigner,
+      editor: IEditor,
+      plugins: IPublicApiPlugins
+    ) => Promise<IPublicTypeDisposable>,
     readonly shellModelFactory: any,
   ) {
     this.context = new BasicContext(this, '', IPublicEnumPluginRegisterLevel.Workspace);

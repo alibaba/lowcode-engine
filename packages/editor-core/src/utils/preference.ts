@@ -1,5 +1,5 @@
 import store from 'store';
-import { getLogger } from './logger';
+import { getLogger } from '@alilc/lowcode-utils';
 import { IPublicModelPreference } from '@alilc/lowcode-types';
 
 const logger = getLogger({ level: 'warn', bizName: 'Preference' });

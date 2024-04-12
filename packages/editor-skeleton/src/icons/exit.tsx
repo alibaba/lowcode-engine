@@ -1,5 +1,5 @@
 
-import { SVGIcon, IconProps } from '@alilc/lowcode-utils';
+import { SVGIcon, type IconProps } from '@alilc/lowcode-utils';
 
 export function IconExit(props: IconProps) {
   return (

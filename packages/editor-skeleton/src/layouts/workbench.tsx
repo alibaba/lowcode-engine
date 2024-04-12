@@ -32,8 +32,8 @@ export class Workbench extends Component<{
   render() {
     const {
       skeleton,
-      className,
-      topAreaItemClassName,
+      className = 'engine-main',
+      topAreaItemClassName = 'engine-actionitem',
     } = this.props;
     return (
       <div className={classNames('lc-workbench', className)}>

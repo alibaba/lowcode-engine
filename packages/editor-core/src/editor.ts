@@ -1,4 +1,3 @@
-import { StrictEventEmitter } from 'strict-event-emitter-types';
 import { EventEmitter } from 'events';
 import { EventBus, IEventBus } from './event-bus';
 import {
@@ -10,7 +9,6 @@ import {
   HookConfig,
   IPublicTypeComponentDescription,
   IPublicTypeRemoteComponentDescription,
-  GlobalEvent,
 } from '@alilc/lowcode-types';
 import { engineConfig } from './config';
 import { globalLocale } from './intl';
@@ -37,24 +35,6 @@ const AssetsCache: {
   [key: string]: IPublicTypeRemoteComponentDescription;
 } = {};
 
-// @ts-ignore
-export declare interface Editor extends StrictEventEmitter<EventEmitter, GlobalEvent.EventConfig> {
-  addListener(event: string | symbol, listener: (...args: any[]) => void): this;
-  once(event: string | symbol, listener: (...args: any[]) => void): this;
-  removeListener(event: string | symbol, listener: (...args: any[]) => void): this;
-  off(event: string | symbol, listener: (...args: any[]) => void): this;
-  removeAllListeners(event?: string | symbol): this;
-  setMaxListeners(n: number): this;
-  getMaxListeners(): number;
-  listeners(event: string | symbol): Function[];
-  rawListeners(event: string | symbol): Function[];
-  listenerCount(type: string | symbol): number;
-  // Added in Node 6...
-  prependListener(event: string | symbol, listener: (...args: any[]) => void): this;
-  prependOnceListener(event: string | symbol, listener: (...args: any[]) => void): this;
-  eventNames(): Array<string | symbol>;
-}
-
 export interface IEditor extends IPublicModelEditor {
   config?: EditorConfig;
 
@@ -65,7 +45,6 @@ export interface IEditor extends IPublicModelEditor {
   init(config?: EditorConfig, components?: PluginClassSet): Promise<any>;
 }
 
-// eslint-disable-next-line no-redeclare
 export class Editor extends EventEmitter implements IEditor {
   /**
    * Ioc Container

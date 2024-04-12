@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-const SizePresets: any = {
+const SizePresets = {
   xsmall: 8,
   small: 12,
   medium: 16,
@@ -26,8 +26,7 @@ export function SVGIcon({
 }: IconProps & {
   viewBox: string;
 }) {
-  // eslint-disable-next-line no-prototype-builtins
-  if (SizePresets.hasOwnProperty(size)) {
+  if (typeof size === 'string' && size in SizePresets) {
     size = SizePresets[size];
   }
 

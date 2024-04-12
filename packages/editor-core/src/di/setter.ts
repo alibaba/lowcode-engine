@@ -5,6 +5,7 @@ import { createContent, isCustomView } from '@alilc/lowcode-utils';
 const settersMap = new Map<string, IPublicTypeRegisteredSetter & {
   type: string;
 }>();
+
 export function registerSetter(
   typeOrMaps: string | { [key: string]: IPublicTypeCustomView | IPublicTypeRegisteredSetter },
   setter?: IPublicTypeCustomView | IPublicTypeRegisteredSetter,
@@ -43,9 +44,7 @@ function getInitialFromSetter(setter: any) {
     ) || null; // eslint-disable-line
 }
 
-export interface ISetters extends IPublicApiSetters {
-
-}
+export interface ISetters extends IPublicApiSetters {}
 
 export class Setters implements ISetters {
   settersMap = new Map<string, IPublicTypeRegisteredSetter & {
