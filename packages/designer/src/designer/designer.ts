@@ -7,7 +7,6 @@ import {
   IPublicTypeNpmInfo,
   IPublicModelEditor,
   IPublicTypePropsList,
-  IPublicTypeNodeSchema,
   IPublicTypePropsTransducer,
   IShellModelFactory,
   IPublicModelDragObject,

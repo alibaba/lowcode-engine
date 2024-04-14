@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 import { IPublicTypeRegisteredSetter, IPublicTypeCustomView } from '../type';
 
 export interface IPublicApiSetters {

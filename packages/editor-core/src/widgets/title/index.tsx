@@ -65,7 +65,7 @@ export class Title extends Component<IPublicTypeTitleProps> {
       return null;
     }
 
-    const intlLabel = intl(String(label));
+    const intlLabel = intl(label as IPublicTypeI18nData);
 
     if (typeof intlLabel !== 'string') {
       return <span className="lc-title-txt">{intlLabel}</span>;

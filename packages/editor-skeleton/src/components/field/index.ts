@@ -14,7 +14,11 @@ export interface FieldProps {
   [extra: string]: any;
 }
 
-export function createField(props: FieldProps, children: ReactNode, type?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry'): ReactNode {
+export function createField(
+  props: FieldProps,
+  children:ReactNode,
+  type?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry'
+): ReactNode {
   if (type === 'popup') {
     return createElement(PopupField, props, children);
   }

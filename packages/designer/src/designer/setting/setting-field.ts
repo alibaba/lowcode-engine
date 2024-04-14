@@ -71,8 +71,6 @@ export interface ISettingField
 
   clearValue(): void;
 
-  valueChange(options: IPublicTypeSetValueOptions): void;
-
   createField(config: IPublicTypeFieldConfig): ISettingField;
 
   onEffect(action: () => void): IPublicTypeDisposable;
@@ -258,8 +256,6 @@ export class SettingField extends SettingPropEntry implements ISettingField {
     if (Array.isArray(data) && data[0] && data[0].__sid__) {
       return;
     }
-
-    this.valueChange();
   }
 
   @action
@@ -304,8 +300,6 @@ export class SettingField extends SettingPropEntry implements ISettingField {
     if (Array.isArray(data) && data[0] && data[0].__sid__) {
       return;
     }
-
-    this.valueChange(options);
   }
 
   onEffect(action: () => void): IPublicTypeDisposable {

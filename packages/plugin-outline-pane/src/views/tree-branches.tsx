@@ -1,5 +1,6 @@
 import { PureComponent } from 'react';
 import classNames from 'classnames';
+import { Title } from '@alilc/lowcode-editor-core';
 import TreeNode from '../controllers/tree-node';
 import TreeNodeView from './tree-node';
 import { IPublicModelExclusiveGroup, IPublicTypeDisposable, IPublicTypeLocationChildrenDetail } from '@alilc/lowcode-types';
@@ -119,7 +120,6 @@ class TreeNodeChildren extends PureComponent<{
     let groupContents: any[] = [];
     let currentGrp: IPublicModelExclusiveGroup;
     const { filterWorking, matchSelf, keywords } = this.state;
-    const Title = this.props.treeNode.pluginContext.common.editorCabin.Title;
 
     const endGroup = () => {
       if (groupContents.length > 0) {
@@ -194,7 +194,6 @@ class TreeNodeSlots extends PureComponent<{
     if (!treeNode.hasSlots()) {
       return null;
     }
-    const Title = this.props.treeNode.pluginContext.common.editorCabin.Title;
     return (
       <div
         className={classNames('tree-node-slots', {

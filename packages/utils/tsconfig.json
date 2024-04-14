@@ -2,9 +2,6 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
-    "paths": {
-      "@alilc/lowcode-*": ["packages/*"]
-    }
   },
   "include": ["src"]
 }

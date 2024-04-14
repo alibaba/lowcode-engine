@@ -1,10 +1,11 @@
 import { Component, MouseEvent, Fragment, ReactNode } from 'react';
-import { shallowIntl, observer, observable, engineConfig, runInAction } from '@alilc/lowcode-editor-core';
+import { observer, observable, engineConfig, runInAction, shallowIntl } from '@alilc/lowcode-editor-core';
 import {
   createContent,
   isJSSlot,
   isSetterConfig,
   shouldUseVariableSetter,
+  isSettingField
 } from '@alilc/lowcode-utils';
 import { Skeleton } from '../../skeleton';
 import { Stage } from '../../widget/stage';
@@ -17,7 +18,6 @@ import {
   ISettingEntry,
   IComponentMeta,
   ISettingField,
-  isSettingField,
   ISettingTopEntry,
 } from '@alilc/lowcode-designer';
 import { createField } from '../field';
@@ -41,7 +41,7 @@ function isStandardComponent(componentMeta: IComponentMeta | null) {
 function isInitialValueNotEmpty(initialValue: any) {
   if (isJSSlot(initialValue)) {
     return (
-      // @ts-ignore visible 为 false 代表默认不展示
+      // @ts-expect-error visible 为 false 代表默认不展示
       initialValue.visible !== false &&
       Array.isArray(initialValue.value) &&
       initialValue.value.length > 0
@@ -247,12 +247,37 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
       return null;
     }
 
-    const { setterProps = {}, setterType, initialValue = null } = this.setterInfo;
-
-    const value = this.value;
-
-    const onChangeAPI = extraProps?.onChange;
     const stageName = this.stageName;
+
+    const {
+      setterProps = {},
+      setterType,
+      initialValue = null,
+    } = this.setterInfo;
+    const onChangeAPI = extraProps?.onChange;
+
+    const createSetterContent = (setter: any, props: Record<string, any>): ReactNode => {
+      if (typeof setter === 'string') {
+        setter = this.setters?.getSetter(setter);
+        if (!setter) {
+          return null;
+        }
+        if (setter.defaultProps) {
+          props = {
+            ...setter.defaultProps,
+            ...props,
+          };
+        }
+        setter = setter.component;
+      }
+  
+      // Fusion 的表单组件都是通过 'value' in props 来判断是否使用 defaultValue
+      if ('value' in props && typeof props.value === 'undefined') {
+        delete props.value;
+      }
+  
+      return createContent(setter, props);
+    };
 
     return createField(
       {
@@ -268,8 +293,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
         stageName,
         ...extraProps,
       },
-      !stageName &&
-      this.setters?.createSetterContent(setterType, {
+      !stageName && createSetterContent(setterType, {
         ...shallowIntl(setterProps),
         forceInline: extraProps.forceInline,
         key: field.id,
@@ -278,12 +302,11 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
         selected: field.top?.getNode()?.internalToShellNode(),
         field: field.internalToShellField(),
         // === IO
-        value, // reaction point
+        value: this.value, // reaction point
         initialValue,
         onChange: (value: any) => {
           this.setState({
             fromOnChange: true,
-            // eslint-disable-next-line react/no-unused-state
             value,
           });
           field.setValue(value, true);
@@ -298,7 +321,6 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
                 ? initialValue(field.internalToShellField())
                 : initialValue;
           this.setState({
-            // eslint-disable-next-line react/no-unused-state
             value,
           });
           field.setValue(value, true);

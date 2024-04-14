@@ -14,7 +14,7 @@ import {
   IPublicTypeFieldExtraProps,
   IPublicTypeSetValueOptions,
 } from '@alilc/lowcode-types';
-import { uniqueId, isJSExpression, isSettingField } from '@alilc/lowcode-utils';
+import { uniqueId, isJSExpression } from '@alilc/lowcode-utils';
 import { ISettingEntry } from './setting-entry-type';
 import { INode } from '../../document';
 import type { IComponentMeta } from '../../component-meta';
@@ -28,8 +28,6 @@ export interface ISettingPropEntry extends ISettingEntry {
   get props(): ISettingTopEntry;
 
   get name(): string | number | undefined;
-
-  valueChange(options: IPublicTypeSetValueOptions): void;
 
   getKey(): string | number | undefined;
 
@@ -49,8 +47,6 @@ export interface ISettingPropEntry extends ISettingEntry {
 
   setValue(
     val: any,
-    isHotValue?: boolean,
-    force?: boolean,
     extraOptions?: IPublicTypeSetValueOptions,
   ): void;
 
@@ -231,8 +227,6 @@ export class SettingPropEntry implements ISettingPropEntry {
    */
   setValue(
     val: any,
-    isHotValue?: boolean,
-    force?: boolean,
     extraOptions?: IPublicTypeSetValueOptions,
   ) {
     const oldValue = this.getValue();
@@ -250,10 +244,6 @@ export class SettingPropEntry implements ISettingPropEntry {
       }
     }
     this.notifyValueChange(oldValue, val);
-    // 如果 fromSetHotValue，那么在 setHotValue 中已经调用过 valueChange 了
-    if (!extraOptions?.fromSetHotValue) {
-      this.valueChange(extraOptions);
-    }
   }
 
   /**

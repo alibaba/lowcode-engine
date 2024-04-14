@@ -1,5 +1,5 @@
 import { Component, ReactElement } from 'react';
-import { observer, observable, Title, makeObservable } from '@alilc/lowcode-editor-core';
+import { observer, observable, Title, makeObservable, action } from '@alilc/lowcode-editor-core';
 import { Designer } from '../designer';
 import { isSimulatorHost } from '../../simulator';
 import './ghost.less';
@@ -30,15 +30,15 @@ export default class DragGhost extends Component<{ designer: Designer }> {
     super(props);
     makeObservable(this);
     this.dispose = [
-      this.dragon.onDragstart((e) => {
+      this.dragon.onDragstart(action((e) => {
         if (e.originalEvent.type.slice(0, 4) === 'drag') {
           return;
         }
         this.titles = this.getTitles(e.dragObject!) as any;
         this.x = e.globalX;
         this.y = e.globalY;
-      }),
-      this.dragon.onDrag((e) => {
+      })),
+      this.dragon.onDrag(action((e) => {
         this.x = e.globalX;
         this.y = e.globalY;
         if (isSimulatorHost(e.sensor)) {
@@ -49,12 +49,12 @@ export default class DragGhost extends Component<{ designer: Designer }> {
           }
         }
         this.isAbsoluteLayoutContainer = false;
-      }),
-      this.dragon.onDragend(() => {
+      })),
+      this.dragon.onDragend(action(() => {
         this.titles = null;
         this.x = 0;
         this.y = 0;
-      }),
+      })),
     ];
   }
 

@@ -18,6 +18,8 @@ import { SkeletonContext } from '../../context';
 import { intl } from '../../locale';
 import { createIcon, isSettingField } from '@alilc/lowcode-utils';
 
+import './style.less';
+
 interface ISettingsPrimaryPaneProps {
   engineEditor: Editor;
   config?: any;
@@ -200,7 +202,6 @@ export class SettingsPrimaryPane extends Component<
               {(skeleton) => {
                 if (skeleton) {
                   return (
-                    // @ts-ignore
                     <StageBox skeleton={skeleton} target={settings} key={settings.id}>
                       <SettingsPane target={settings} usePopup={false} />
                     </StageBox>

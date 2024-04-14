@@ -1,6 +1,5 @@
-import { ReactNode } from 'react';
 import { IPublicApiSetters, IPublicModelSettingField, IPublicTypeCustomView, IPublicTypeRegisteredSetter } from '@alilc/lowcode-types';
-import { createContent, isCustomView } from '@alilc/lowcode-utils';
+import { isCustomView } from '@alilc/lowcode-utils';
 
 const settersMap = new Map<string, IPublicTypeRegisteredSetter & {
   type: string;
@@ -44,9 +43,7 @@ function getInitialFromSetter(setter: any) {
     ) || null; // eslint-disable-line
 }
 
-export interface ISetters extends IPublicApiSetters {}
-
-export class Setters implements ISetters {
+export class Setters implements IPublicApiSetters {
   settersMap = new Map<string, IPublicTypeRegisteredSetter & {
     type: string;
   }>();
@@ -90,28 +87,5 @@ export class Setters implements ISetters {
 
   getSettersMap = () => {
     return this.settersMap;
-  };
-
-  createSetterContent = (setter: any, props: Record<string, any>): ReactNode => {
-    if (typeof setter === 'string') {
-      setter = this.getSetter(setter);
-      if (!setter) {
-        return null;
-      }
-      if (setter.defaultProps) {
-        props = {
-          ...setter.defaultProps,
-          ...props,
-        };
-      }
-      setter = setter.component;
-    }
-
-    // Fusion 的表单组件都是通过 'value' in props 来判断是否使用 defaultValue
-    if ('value' in props && typeof props.value === 'undefined') {
-      delete props.value;
-    }
-
-    return createContent(setter, props);
   };
 }

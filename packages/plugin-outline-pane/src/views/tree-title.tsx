@@ -1,5 +1,6 @@
 import { KeyboardEvent, FocusEvent, Fragment, PureComponent } from 'react';
 import classNames from 'classnames';
+import { Title, Tip } from '@alilc/lowcode-editor-core';
 import { createIcon } from '@alilc/lowcode-utils';
 import { IPublicApiEvent } from '@alilc/lowcode-types';
 import TreeNode from '../controllers/tree-node';
@@ -165,8 +166,7 @@ export default class TreeTitle extends PureComponent<{
       };
     }
     const Extra = pluginContext.extraTitle as any;
-    const { intlNode, common, config } = pluginContext;
-    const { Tip, Title } = common.editorCabin;
+    const { intlNode, config } = pluginContext;
     const couldHide = availableActions.includes('hide');
     const couldLock = availableActions.includes('lock');
     const couldUnlock = availableActions.includes('unlock');
@@ -235,7 +235,6 @@ export default class TreeTitle extends PureComponent<{
             />
           ) : (
             <Fragment>
-              {/* @ts-ignore */}
               <Title
                 title={this.state.title}
                 match={filterWorking && matchSelf}
@@ -245,7 +244,6 @@ export default class TreeTitle extends PureComponent<{
               {node.slotFor && (
                 <a className="tree-node-tag slot">
                   {/* todo: click redirect to prop */}
-                  {/* @ts-ignore */}
                   <Tip>{intlNode('Slot for {prop}', { prop: node.slotFor.key })}</Tip>
                 </a>
               )}
@@ -253,7 +251,6 @@ export default class TreeTitle extends PureComponent<{
                 <a className="tree-node-tag loop">
                   {/* todo: click todo something */}
                   <IconLoop />
-                  {/* @ts-ignore */}
                   <Tip>{intlNode('Loop')}</Tip>
                 </a>
               )}
@@ -261,7 +258,6 @@ export default class TreeTitle extends PureComponent<{
                 <a className="tree-node-tag cond">
                   {/* todo: click todo something */}
                   <IconCond />
-                  {/* @ts-ignore */}
                   <Tip>{intlNode('Conditional')}</Tip>
                 </a>
               )}
@@ -282,12 +278,10 @@ class DeleteBtn extends PureComponent<{
   onClick: () => void;
 }> {
   render() {
-    const { intl, common } = this.props.treeNode.pluginContext;
-    const { Tip } = common.editorCabin;
+    const { intl } = this.props.treeNode.pluginContext;
     return (
       <div className="tree-node-delete-btn" onClick={this.props.onClick}>
         <IconDelete />
-        {/* @ts-ignore */}
         <Tip>{intl('Delete')}</Tip>
       </div>
     );
@@ -299,12 +293,10 @@ class RenameBtn extends PureComponent<{
   onClick: (e: any) => void;
 }> {
   render() {
-    const { intl, common } = this.props.treeNode.pluginContext;
-    const { Tip } = common.editorCabin;
+    const { intl } = this.props.treeNode.pluginContext;
     return (
       <div className="tree-node-rename-btn" onClick={this.props.onClick}>
         <IconSetting />
-        {/* @ts-ignore */}
         <Tip>{intl('Rename')}</Tip>
       </div>
     );
@@ -317,8 +309,7 @@ class LockBtn extends PureComponent<{
 }> {
   render() {
     const { treeNode, locked } = this.props;
-    const { intl, common } = this.props.treeNode.pluginContext;
-    const { Tip } = common.editorCabin;
+    const { intl } = this.props.treeNode.pluginContext;
     return (
       <div
         className="tree-node-lock-btn"
@@ -346,8 +337,7 @@ class HideBtn extends PureComponent<
 > {
   render() {
     const { treeNode, hidden } = this.props;
-    const { intl, common } = treeNode.pluginContext;
-    const { Tip } = common.editorCabin;
+    const { intl } = treeNode.pluginContext;
     return (
       <div
         className="tree-node-hide-btn"

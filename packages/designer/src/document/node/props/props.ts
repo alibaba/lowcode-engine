@@ -75,7 +75,11 @@ export class Props implements Omit<IBaseModelProps<IProp>, | 'getExtraProp' | 'g
 
   private purged = false;
 
-  constructor(owner: INode, value?: IPublicTypePropsMap | IPublicTypePropsList | null, extras?: ExtrasObject) {
+  constructor(
+    owner: INode,
+    value?: IPublicTypePropsMap | IPublicTypePropsList | null,
+    extras?: ExtrasObject
+  ) {
     makeObservable(this);
     this.owner = owner;
     if (Array.isArray(value)) {
@@ -166,10 +170,9 @@ export class Props implements Omit<IBaseModelProps<IProp>, | 'getExtraProp' | 'g
           allProps[name] = value;
         }
       });
-      // compatible vision
-      const transformedProps = this.transformToStatic(allProps);
-      Object.keys(transformedProps).forEach((name) => {
-        const value = transformedProps[name];
+
+      Object.keys(allProps).forEach((name) => {
+        const value = allProps[name];
         if (typeof name === 'string' && name.startsWith(EXTRA_KEY_PREFIX)) {
           name = getOriginalExtraKey(name);
           extras[name] = value;

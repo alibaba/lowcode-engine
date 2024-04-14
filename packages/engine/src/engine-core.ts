@@ -123,26 +123,27 @@ const designer = new Designer({ editor, shellModelFactory });
 editor.set('designer', designer);
 
 const { project: innerProject } = designer;
+const project = new Project(innerProject);
+editor.set('project', project);
 
 const innerHotkey = new InnerHotkey();
 const hotkey = new Hotkey(innerHotkey);
-const project = new Project(innerProject);
+editor.set('innerHotkey', innerHotkey);
+
 const skeleton = new Skeleton(innerSkeleton, 'any', false);
 const innerSetters = new InnerSetters();
 const setters = new Setters(innerSetters);
+editor.set('setters', setters);
+
+const material = new Material(editor);
+editor.set('material', material);
+
 const innerCommand = new InnerCommand();
 const command = new Command(
   innerCommand,
   engineContext as IPublicModelPluginContext
 );
-const material = new Material(editor);
 const commonUI = new CommonUI(editor);
-
-editor.set('project', project);
-editor.set('setters', setters);
-editor.set('material', material);
-editor.set('innerHotkey', innerHotkey);
-
 const config = new Config(engineConfig);
 const event = new Event(commonEvent, { prefix: 'common' });
 const logger = new Logger({ level: 'warn', bizName: 'common' });

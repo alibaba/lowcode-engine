@@ -2,7 +2,6 @@ import { ReactElement } from 'react';
 import {
   observable,
   computed,
-  autorun,
   makeObservable,
   runInAction,
   wrapWithEventSwitch,
@@ -295,7 +294,6 @@ implements
       this._children = new NodeChildren(this as INode, this.initialChildren(children));
       this._children.internalInitParent();
       this.props.merge(this.upgradeProps(this.initProps(props || {})), this.upgradeProps(extras));
-      this.setupAutoruns();
     }
 
     this.initBuiltinProps();
@@ -341,18 +339,6 @@ implements
   @action
   private upgradeProps(props: any): any {
     return this.document.designer.transformProps(props, this, IPublicEnumTransformStage.Upgrade);
-  }
-
-  private setupAutoruns() {
-    const { autoruns } = this.componentMeta.advanced;
-    if (!autoruns || autoruns.length < 1) {
-      return;
-    }
-    this.autoruns = autoruns.map((item) => {
-      return autorun(() => {
-        item.autorun(this.props.getNode().settingEntry.get(item.name)?.internalToShellField());
-      });
-    });
   }
 
   private initialChildren(
@@ -840,7 +826,7 @@ implements
   }
 
   import(data: Schema, checkId = false) {
-    const { componentName, id, children, props, ...extras } = data;
+    const { children, props, ...extras } = data;
     if (this.isSlot()) {
       foreachReverse(
         this.children!,
@@ -894,17 +880,6 @@ implements
     const _extras_: { [key: string]: any } = {
       ...extras,
     };
-    /* istanbul ignore next */
-    Object.keys(this._addons).forEach((key) => {
-      const addon = this._addons[key];
-      if (addon) {
-        if (addon.isProp) {
-          (props as any)[getConvertedExtraKey(key)] = addon.exportData();
-        } else {
-          _extras_[key] = addon.exportData();
-        }
-      }
-    });
 
     const schema: any = {
       ...baseSchema,
@@ -1145,6 +1120,13 @@ implements
     return () => {
       this.emitter.removeListener('propChange', wrappedFunc);
     };
+  }
+
+  /**
+   * todo: fixed types
+   */
+  getDOMNode(): HTMLElement {
+    return document.body;
   }
 }
 

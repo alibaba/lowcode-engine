@@ -5,6 +5,6 @@ export default defineConfig(async () => {
   return baseConfigFn({
     name: 'LowCodePluginOutlinePane',
     defaultFormats: ['es', 'cjs'],
-    entry: 'src/index.tsx'
+    entry: 'src/index.tsx',
   })
 });

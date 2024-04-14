@@ -447,4 +447,5 @@ export interface IBaseModelNode<
   };
 }
 
-export interface IPublicModelNode extends IBaseModelNode<IPublicModelDocumentModel, IPublicModelNode> {}
+export interface IPublicModelNode extends
+  IBaseModelNode<IPublicModelDocumentModel, IPublicModelNode> {}

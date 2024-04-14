@@ -37,7 +37,7 @@
     "paths": {
       "@alilc/lowcode-*": ["packages/*/src"]
     },
-    "types": ["vitest/globals", "node"]
+    "types": ["vite/client", "vitest/globals", "node"]
   },
   "exclude": ["**/dist", "node_modules"]
 }
