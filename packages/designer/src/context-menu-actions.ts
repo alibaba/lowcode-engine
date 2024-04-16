@@ -4,6 +4,7 @@ import {
   IPublicTypeContextMenuItem,
   IPublicApiMaterial,
   IPublicModelPluginContext,
+  IPublicTypeDisposable
 } from '@alilc/lowcode-types';
 import { IDesigner, INode } from './designer';
 import {
@@ -12,16 +13,18 @@ import {
   parseContextMenuProperties,
   uniqueId,
 } from '@alilc/lowcode-utils';
+import { type AnyFunction } from '@alilc/lowcode-shared';
 import { Menu } from '@alifd/next';
 import { engineConfig } from '@alilc/lowcode-editor-core';
-import './context-menu-actions.scss';
 
-let adjustMenuLayoutFn: Function = (actions: IPublicTypeContextMenuAction[]) => actions;
+import './context-menu-actions.less';
+
+let adjustMenuLayoutFn: AnyFunction = (actions: IPublicTypeContextMenuAction[]) => actions;
 
 export class GlobalContextMenuActions {
   enableContextMenu: boolean;
 
-  dispose: Function[];
+  dispose: IPublicTypeDisposable[];
 
   contextMenuActionsMap: Map<string, ContextMenuActions> = new Map();
 
@@ -50,7 +53,7 @@ export class GlobalContextMenuActions {
       actions.push(...contextMenu.actions);
     });
 
-    let destroyFn: Function | undefined;
+    let destroyFn: AnyFunction | undefined = undefined;
 
     const destroy = () => {
       destroyFn?.();
@@ -79,8 +82,7 @@ export class GlobalContextMenuActions {
     });
 
     const target = event.target;
-
-    const { top, left } = (target as any)?.getBoundingClientRect();
+    const { top, left } = (target as any).getBoundingClientRect();
 
     const menuInstance = Menu.create({
       target: event.target,
@@ -120,7 +122,7 @@ export class ContextMenuActions {
 
   designer: IDesigner;
 
-  dispose: Function[];
+  dispose: AnyFunction[];
 
   enableContextMenu: boolean;
 
@@ -154,7 +156,7 @@ export class ContextMenuActions {
     const { bounds } = designer.project.simulator?.viewport || { bounds: { left: 0, top: 0 } };
     const { left: simulatorLeft, top: simulatorTop } = bounds;
 
-    let destroyFn: Function | undefined;
+    let destroyFn: AnyFunction | undefined = undefined;
 
     const destroy = () => {
       destroyFn?.();

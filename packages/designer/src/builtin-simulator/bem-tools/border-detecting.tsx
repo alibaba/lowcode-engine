@@ -1,10 +1,11 @@
 import { Component, Fragment, PureComponent } from 'react';
 import classNames from 'classnames';
-import { computed, observer, Title } from '@alilc/lowcode-editor-core';
+import { computed, observer } from '@alilc/lowcode-editor-core';
 import { IPublicTypeTitleContent } from '@alilc/lowcode-types';
 import { getClosestNode } from '@alilc/lowcode-utils';
 import { intl } from '../../locale';
 import { BuiltinSimulatorHost } from '../host';
+import { Title } from '../../widgets';
 
 export class BorderDetectingInstance extends PureComponent<{
   title: IPublicTypeTitleContent;

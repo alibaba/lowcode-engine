@@ -18,9 +18,9 @@ import {
 import { DocumentModel as ShellDocumentModel } from '../model';
 import { SimulatorHost } from './simulator-host';
 import { editorSymbol, projectSymbol, simulatorHostSymbol, documentSymbol } from '../symbols';
-import { getLogger } from '@alilc/lowcode-utils';
+import { createLogger } from '@alilc/lowcode-utils';
 
-const logger = getLogger({ level: 'warn', bizName: 'shell-project' });
+const logger = createLogger({ level: 'warn', bizName: 'shell-project' });
 
 const innerProjectSymbol = Symbol('innerProject');
 export class Project implements IPublicApiProject {
@@ -192,7 +192,7 @@ export class Project implements IPublicApiProject {
    * 当前 project 的模拟器 ready 事件
    */
   onSimulatorHostReady(fn: (host: IPublicApiSimulatorHost) => void): IPublicTypeDisposable {
-    // @ts-ignore
+    // @ts-expect-error: a
     const offFn = this[projectSymbol].onSimulatorReady((simulator: BuiltinSimulatorHost) => {
       fn(SimulatorHost.create(simulator)!);
     });

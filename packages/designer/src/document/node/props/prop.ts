@@ -6,7 +6,6 @@ import { valueToSource } from './value-to-source';
 import { IPropParent } from './props';
 import type { IProps } from './props';
 import { ISlotNode, INode } from '../node';
-// import { TransformStage } from '../transform-stage';
 
 const { set: mobxSet, isObservableArray } = mobx;
 export const UNSET = Symbol.for('unset');

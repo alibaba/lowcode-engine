@@ -1,7 +1,6 @@
 import { IPublicTypeDisposable } from '../type';
 
 export interface IPublicApiEvent {
-
   /**
    * 监听事件
    * add monitor to a event

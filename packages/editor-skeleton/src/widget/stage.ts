@@ -1,4 +1,3 @@
-// import { uniqueId } from '@alilc/lowcode-utils';
 import { Widget } from './widget';
 import { ISkeleton } from '../skeleton';
 import { WidgetConfig } from '../types';

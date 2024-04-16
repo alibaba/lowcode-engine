@@ -1,3 +1,5 @@
+import { AnyFunction } from '@alilc/lowcode-shared';
+
 let globalEventOn = true;
 
 export function setGlobalEventFlag(flag: boolean) {
@@ -16,7 +18,7 @@ export function isGlobalEventOn() {
   return globalEventOn;
 }
 
-export function runWithGlobalEventOff(fn: Function) {
+export function runWithGlobalEventOff(fn: AnyFunction) {
   switchGlobalEventOff();
   fn();
   switchGlobalEventOn();

@@ -1,8 +1,52 @@
+import { isPlainObject } from 'lodash-es';
+import type { PluginDeclaration } from './plugin';
+import type { PluginRegisterOptions } from './manager';
+
+export function isValidPreferenceKey(
+  key: string,
+  preferenceDeclaration: PluginDeclaration,
+): boolean {
+  if (!preferenceDeclaration || !Array.isArray(preferenceDeclaration.properties)) {
+    return false;
+  }
+  return preferenceDeclaration.properties.some((prop) => {
+    return prop.key === key;
+  });
+}
+
+export function isLowCodeRegisterOptions(opts: any): opts is PluginRegisterOptions {
+  return opts && ('autoInit' in opts || 'override' in opts);
+}
+
+export function filterValidOptions(opts: any, preferenceDeclaration: PluginDeclaration) {
+  if (!opts || !isPlainObject(opts)) return opts;
+  const filteredOpts = {} as any;
+  Object.keys(opts).forEach((key) => {
+    if (isValidPreferenceKey(key, preferenceDeclaration)) {
+      const v = opts[key];
+      if (v !== undefined && v !== null) {
+        filteredOpts[key] = v;
+      }
+    }
+  });
+  return filteredOpts;
+}
+
 interface ITaks {
   [key: string]: {
     name: string;
     dep: string[];
   };
+}
+
+interface Options {
+  tasks: ITaks;
+  names: string[];
+  results: string[];
+  missing: string[];
+  recursive: string[][];
+  nest: string[];
+  parentName: string;
 }
 
 export function sequence({
@@ -13,15 +57,7 @@ export function sequence({
   recursive,
   nest,
   parentName,
-}: {
-  tasks: ITaks;
-  names: string[];
-  results: string[];
-  missing: string[];
-  recursive: string[][];
-  nest: string[];
-  parentName: string;
-}) {
+}: Options) {
   names.forEach((name) => {
     if (results.indexOf(name) !== -1) {
       return; // de-dup results
@@ -52,7 +88,7 @@ export function sequence({
 
 // tasks: object with keys as task names
 // names: array of task names
-export default function (tasks: ITaks, names: string[]) {
+export function sequencify(tasks: ITaks, names: string[]) {
   let results: string[] = []; // the final sequence
   const missing: string[] = []; // missing tasks
   const recursive: string[][] = []; // recursive task dependencies
@@ -76,3 +112,4 @@ export default function (tasks: ITaks, names: string[]) {
     recursiveDependencies: recursive,
   };
 }
+

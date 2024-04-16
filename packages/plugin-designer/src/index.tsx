@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import { Editor, engineConfig } from '@alilc/lowcode-editor-core';
 import { DesignerView, Designer } from '@alilc/lowcode-designer';
-import { Asset, getLogger } from '@alilc/lowcode-utils';
+import { Asset, createLogger } from '@alilc/lowcode-utils';
 import './index.scss';
 
-const logger = getLogger({ level: 'warn', bizName: 'plugin:plugin-designer' });
+const logger = createLogger({ level: 'warn', bizName: 'plugin:plugin-designer' });
 
 export interface PluginProps {
   engineEditor: Editor;

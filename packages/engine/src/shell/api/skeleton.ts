@@ -5,12 +5,12 @@ import {
 } from '@alilc/lowcode-editor-skeleton';
 import { skeletonSymbol } from '../symbols';
 import { IPublicApiSkeleton, IPublicModelSkeletonItem, IPublicTypeConfigTransducer, IPublicTypeDisposable, IPublicTypeSkeletonConfig, IPublicTypeWidgetConfigArea } from '@alilc/lowcode-types';
-import { getLogger } from '@alilc/lowcode-utils';
+import { createLogger } from '@alilc/lowcode-utils';
 import { SkeletonItem } from '../model/skeleton-item';
 
 const innerSkeletonSymbol = Symbol('skeleton');
 
-const logger = getLogger({ level: 'warn', bizName: 'shell-skeleton' });
+const logger = createLogger({ level: 'warn', bizName: 'shell-skeleton' });
 
 export class Skeleton implements IPublicApiSkeleton {
   private readonly [innerSkeletonSymbol]: ISkeleton;

@@ -16,7 +16,8 @@ export interface IArea<C, T> {
   show(): void;
 }
 
-export class Area<C extends IPublicTypeWidgetBaseConfig = any, T extends IWidget = IWidget> implements IArea<C, T> {
+export class Area<C extends IPublicTypeWidgetBaseConfig = any, T extends IWidget = IWidget>
+implements IArea<C, T> {
   @observable private _visible = true;
 
   @computed get visible() {

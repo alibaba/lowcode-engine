@@ -6,20 +6,20 @@ import {
   IPublicTypeContextMenuAction,
   IPublicTypeContextMenuItem,
 } from '@alilc/lowcode-types';
-import { Logger } from './logger';
+import { createLogger, type AnyFunction } from '@alilc/lowcode-shared';
 import classNames from 'classnames';
 import React from 'react';
 
-import './context-menu.scss';
+import './context-menu.less';
 
-const logger = new Logger({ level: 'warn', bizName: 'utils' });
+const logger = createLogger({ level: 'warn', bizName: 'utils' });
 const { Item, Divider, PopupItem } = Menu;
 
 const MAX_LEVEL = 2;
 
 interface IOptions {
   nodes?: IPublicModelNode[] | null;
-  destroy?: Function;
+  destroy?: AnyFunction;
   pluginContext: IPublicModelPluginContext;
 }
 
@@ -64,7 +64,7 @@ const Tree = (props: {
   );
 };
 
-let destroyFn: Function | undefined;
+let destroyFn: AnyFunction | undefined;
 
 export function parseContextMenuAsReactNode(
   menus: IPublicTypeContextMenuItem[],

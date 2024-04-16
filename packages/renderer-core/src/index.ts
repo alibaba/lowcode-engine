@@ -11,7 +11,6 @@ export * from './utils/value';
 export * from './widget';
 
 /* --------------- types ---------------- */
-export * from './types';
 export type { CodeRuntime, CodeScope } from './code-runtime';
 export type { Plugin, PluginSetupContext } from './plugin';
 export type { PackageManager, PackageLoader } from './package';

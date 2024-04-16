@@ -1,6 +1,6 @@
 /**
  * https://lowcode-engine.cn/site/docs/specs/assets-spec
- * 低代码引擎资产包协议规范 for runtime
+ * 低代码引擎资产包协议规范
  */
 import { Project } from './lowcode-spec';
 

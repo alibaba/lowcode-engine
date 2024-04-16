@@ -2,6 +2,8 @@ import { IPublicApiEvent } from '@alilc/lowcode-types';
 import { Logger } from '@alilc/lowcode-utils';
 import EventEmitter from 'events';
 
+EventEmitter.defaultMaxListeners = 100;
+
 const logger = new Logger({ level: 'warn', bizName: 'event-bus' });
 const moduleLogger = new Logger({ level: 'warn', bizName: 'module-event-bus' });
 

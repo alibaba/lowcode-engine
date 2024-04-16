@@ -1,4 +1,4 @@
-import type { Project, Package, PlainObject } from '../types';
+import type { Project, Package, PlainObject } from '@alilc/lowcode-shared';
 import { type PackageManager, createPackageManager } from '../package';
 import { createPluginManager, type Plugin } from '../plugin';
 import { createScope, type CodeScope } from '../code-runtime';

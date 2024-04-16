@@ -1,2 +1,2 @@
 
-export type IPublicTypePreferenceValueType = string | number | boolean;
+export type IPublicTypePluginPreferenceValueType = string | number | boolean;

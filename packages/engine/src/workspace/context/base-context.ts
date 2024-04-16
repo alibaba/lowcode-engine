@@ -49,7 +49,7 @@ import {
   IPublicModelPluginContext,
   IPublicTypePluginMeta,
 } from '@alilc/lowcode-types';
-import { getLogger, Logger as InnerLogger } from '@alilc/lowcode-utils';
+import { createLogger, Logger as InnerLogger } from '@alilc/lowcode-utils';
 import { IWorkspace } from '../workspace';
 import { IEditorWindow } from '../window';
 
@@ -113,7 +113,7 @@ implements
     const project = new Project(innerProject, true);
     const config = engineConfig;
     const event = new Event(commonEvent, { prefix: 'common' });
-    const logger = getLogger({ level: 'warn', bizName: 'common' });
+    const logger = createLogger({ level: 'warn', bizName: 'common' });
     const skeleton = new Skeleton(innerSkeleton, 'any', true);
     const canvas = new Canvas(editor, true);
     const commonUI = new CommonUI(editor);

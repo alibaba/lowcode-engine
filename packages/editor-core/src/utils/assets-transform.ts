@@ -6,6 +6,7 @@ import {
 } from '@alilc/lowcode-types';
 
 // TODO: 该转换逻辑未来需要消化掉
+// 低代码 schema 转换逻辑
 export function assetsTransform(assets: IPublicTypeAssetsJson) {
   const { components, packages } = assets;
   const packageMaps = (packages || []).reduce(

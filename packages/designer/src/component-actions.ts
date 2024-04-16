@@ -150,7 +150,9 @@ export class ComponentActions {
   ) {
     transducer.level = level;
     transducer.id = id;
-    const i = this.metadataTransducers.findIndex((item) => item.level != null && item.level > level);
+    const i = this.metadataTransducers.findIndex(
+      (item) => item.level != null && item.level > level
+    );
     if (i < 0) {
       this.metadataTransducers.push(transducer);
     } else {

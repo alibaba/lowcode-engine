@@ -1,8 +1,8 @@
 import { IEventBus, createModuleEventBus } from '../event-bus';
-import { observable, computed } from '../utils/obx';
-import { Logger } from '@alilc/lowcode-utils';
+import { observable, computed } from '../obx';
+import { createLogger } from '@alilc/lowcode-shared';
 
-const logger = new Logger({ level: 'warn', bizName: 'globalLocale' });
+const logger = createLogger({ level: 'warn', bizName: 'globalLocale' });
 
 const languageMap: { [key: string]: string } = {
   en: 'en-US',

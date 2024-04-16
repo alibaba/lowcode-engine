@@ -223,7 +223,7 @@ delete(pluginName: string): void;
  */
 getPluginPreference(
     pluginName: string,
-  ): Record<string, IPublicTypePreferenceValueType> | null | undefined;
+  ): Record<string, IPublicTypePluginPreferenceValueType> | null | undefined;
 ```
 
 ## 相关类型定义

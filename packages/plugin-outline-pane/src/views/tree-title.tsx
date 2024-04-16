@@ -1,6 +1,6 @@
 import { KeyboardEvent, FocusEvent, Fragment, PureComponent } from 'react';
 import classNames from 'classnames';
-import { Title, Tip } from '@alilc/lowcode-editor-core';
+import { Title, Tip } from '@alilc/lowcode-designer';
 import { createIcon } from '@alilc/lowcode-utils';
 import { IPublicApiEvent } from '@alilc/lowcode-types';
 import TreeNode from '../controllers/tree-node';

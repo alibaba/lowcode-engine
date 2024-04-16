@@ -3,6 +3,10 @@ export class FocusTracker {
 
   private modals: Array<{ checkDown: (e: MouseEvent) => boolean; checkOpen: () => boolean }> = [];
 
+  get first() {
+    return this.actives[0];
+  }
+
   mount(win: Window) {
     const checkDown = (e: MouseEvent) => {
       if (this.checkModalDown(e)) {
@@ -18,10 +22,6 @@ export class FocusTracker {
     return () => {
       win.document.removeEventListener('click', checkDown, true);
     };
-  }
-
-  get first() {
-    return this.actives[0];
   }
 
   addModal(checkDown: (e: MouseEvent) => boolean, checkOpen: () => boolean) {
@@ -129,9 +129,7 @@ export class Focusable {
   }
 
   internalTriggerBlur() {
-    if (this.config.onBlur) {
-      this.config.onBlur();
-    }
+    this.config.onBlur?.();
   }
 
   internalTriggerSave() {
@@ -143,14 +141,10 @@ export class Focusable {
   }
 
   internalTriggerEsc() {
-    if (this.config.onEsc) {
-      this.config.onEsc();
-    }
+    this.config.onEsc?.();
   }
 
   internalTriggerActive() {
-    if (this.config.onActive) {
-      this.config.onActive();
-    }
+    this.config.onActive?.();
   }
 }

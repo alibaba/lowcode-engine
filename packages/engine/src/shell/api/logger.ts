@@ -1,5 +1,5 @@
 
-import { getLogger } from '@alilc/lowcode-utils';
+import { createLogger } from '@alilc/lowcode-utils';
 import { IPublicApiLogger, ILoggerOptions } from '@alilc/lowcode-types';
 
 const innerLoggerSymbol = Symbol('logger');
@@ -8,7 +8,7 @@ export class Logger implements IPublicApiLogger {
   private readonly [innerLoggerSymbol]: any;
 
   constructor(options: ILoggerOptions) {
-    this[innerLoggerSymbol] = getLogger(options as any);
+    this[innerLoggerSymbol] = createLogger(options as any);
   }
 
   /**

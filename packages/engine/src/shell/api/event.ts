@@ -1,8 +1,8 @@
 import { IEditor, IEventBus } from '@alilc/lowcode-editor-core';
-import { getLogger, isPluginEventName } from '@alilc/lowcode-utils';
+import { createLogger, isPluginEventName } from '@alilc/lowcode-utils';
 import { IPublicApiEvent, IPublicTypeDisposable } from '@alilc/lowcode-types';
 
-const logger = getLogger({ level: 'warn', bizName: 'shell-event' });
+const logger = createLogger({ level: 'warn', bizName: 'shell-event' });
 
 type EventOptions = {
   prefix: string;

@@ -1,20 +1,22 @@
 import store from 'store';
-import { getLogger } from '@alilc/lowcode-utils';
-import { IPublicModelPreference } from '@alilc/lowcode-types';
+import { createLogger } from '@alilc/lowcode-utils';
 
-const logger = getLogger({ level: 'warn', bizName: 'Preference' });
+const logger = createLogger({ level: 'warn', bizName: 'Preference' });
 const STORAGE_KEY_PREFIX = 'ale';
 
 /**
  * used to store user preferences, such as pinned status of a pannel.
  * save to local storage.
  */
-export default class Preference implements IPublicModelPreference {
-  getStorageKey(key: string, module?: string): string {
+export default class Preference {
+  private getStorageKey(key: string, module?: string): string {
     const moduleKey = module || '__inner__';
     return `${STORAGE_KEY_PREFIX}_${moduleKey}.${key}`;
   }
 
+  /**
+   * set value from local storage by module and key
+   */
   set(key: string, value: any, module?: string): void {
     if (!key || typeof key !== 'string' || key.length === 0) {
       logger.error('Invalid key when setting preference', key);
@@ -25,6 +27,9 @@ export default class Preference implements IPublicModelPreference {
     store.set(storageKey, value);
   }
 
+  /**
+   * get value from local storage by module and key
+   */
   get(key: string, module: string): any {
     if (!key || typeof key !== 'string' || key.length === 0) {
       logger.error('Invalid key when getting from preference', key);

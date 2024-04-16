@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Tab, Breadcrumb } from '@alifd/next';
 import {
-  Title,
   observer,
   Editor,
   observable,
@@ -9,7 +8,7 @@ import {
   engineConfig,
   makeObservable,
 } from '@alilc/lowcode-editor-core';
-import { Node, SettingField, INode } from '@alilc/lowcode-designer';
+import { Node, SettingField, INode, Title } from '@alilc/lowcode-designer';
 import classNames from 'classnames';
 import { SettingsMain } from './main';
 import { SettingsPane } from './settings-pane';

@@ -8,6 +8,7 @@ import {
 } from '@alilc/lowcode-types';
 import { intl } from '../../intl';
 import { Tip } from '../tip';
+
 import './title.less';
 
 /**
@@ -41,12 +42,7 @@ function splitLabelByKeywords(label: string, keywords: string): string[] {
 }
 
 export class Title extends Component<IPublicTypeTitleProps> {
-  constructor(props: any) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick(e: React.MouseEvent) {
+  handleClick = (e: React.MouseEvent) => {
     const { title, onClick } = this.props as any;
     const url = title && (title.docUrl || title.url);
     if (url) {
@@ -56,7 +52,7 @@ export class Title extends Component<IPublicTypeTitleProps> {
     }
     // TODO: 操作交互冲突，目前 mixedSetter 仅有 2 个 setter 注册时用到了 onClick
     onClick && onClick(e);
-  }
+  };
 
   renderLabel = (label: string | IPublicTypeI18nData | ReactNode) => {
     const { match, keywords } = this.props;

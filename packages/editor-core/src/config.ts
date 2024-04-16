@@ -1,13 +1,13 @@
 import { get as lodashGet } from 'lodash-es';
-import { isPlainObject, getLogger } from '@alilc/lowcode-utils';
+import { isPlainObject, createLogger } from '@alilc/lowcode-utils';
 import {
   IPublicTypeEngineOptions,
   IPublicModelEngineConfig,
   IPublicModelPreference,
 } from '@alilc/lowcode-types';
-import Preference from './utils/preference';
+import Preference from './preference';
 
-const logger = getLogger({ level: 'log', bizName: 'config' });
+const logger = createLogger({ level: 'log', bizName: 'config' });
 
 // this default behavior will be different later
 const STRICT_PLUGIN_MODE_DEFAULT = true;

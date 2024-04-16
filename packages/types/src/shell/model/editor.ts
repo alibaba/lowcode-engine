@@ -1,11 +1,11 @@
-/* eslint-disable max-len */
 import { EventEmitter } from 'events';
 import StrictEventEmitter from 'strict-event-emitter-types';
 import * as GlobalEvent from '../../event';
 import { IPublicApiEvent } from '../api';
 import { IPublicTypeEditorValueKey, IPublicTypeEditorGetOptions, IPublicTypeEditorGetResult, IPublicTypeEditorRegisterOptions, IPublicTypeAssetsJson } from '../type';
 
-export interface IPublicModelEditor extends StrictEventEmitter<EventEmitter, GlobalEvent.EventConfig> {
+export interface IPublicModelEditor
+  extends StrictEventEmitter<EventEmitter, GlobalEvent.EventConfig> {
   get: <T = undefined, KeyOrType = any>(
     keyOrType: KeyOrType,
     opt?: IPublicTypeEditorGetOptions
@@ -18,7 +18,9 @@ export interface IPublicModelEditor extends StrictEventEmitter<EventEmitter, Glo
   /**
    * 获取 keyOrType 一次
    */
-  onceGot: <T = undefined, KeyOrType extends IPublicTypeEditorValueKey = any>(keyOrType: KeyOrType) => Promise<IPublicTypeEditorGetResult<T, KeyOrType>>;
+  onceGot: <T = undefined, KeyOrType extends IPublicTypeEditorValueKey = any>(
+    keyOrType: KeyOrType
+  ) => Promise<IPublicTypeEditorGetResult<T, KeyOrType>>;
 
   /**
    * 获取 keyOrType 多次
@@ -36,7 +38,11 @@ export interface IPublicModelEditor extends StrictEventEmitter<EventEmitter, Glo
     fn: (data: IPublicTypeEditorGetResult<T, KeyOrType>) => void
   ) => () => void;
 
-  register: (data: any, key?: IPublicTypeEditorValueKey, options?: IPublicTypeEditorRegisterOptions) => void;
+  register: (
+    data: any,
+    key?: IPublicTypeEditorValueKey,
+    options?: IPublicTypeEditorRegisterOptions
+  ) => void;
 
   get eventBus(): IPublicApiEvent;
 

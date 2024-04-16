@@ -1,43 +1,43 @@
-import { getLogger, Logger } from '@alilc/lowcode-utils';
-import {
-  ILowCodePluginRuntime,
-  ILowCodePluginManager,
-} from './plugin-types';
-import {
-  IPublicTypePluginConfig,
-  IPublicTypePluginMeta,
-} from '@alilc/lowcode-types';
-import { invariant } from '../utils';
+import { type LowCodePluginManager } from './manager';
+import { type PluginInstance, type PluginMeta } from './plugin';
+import { invariant, createLogger, type Logger } from '@alilc/lowcode-shared';
 
-export class LowCodePluginRuntime implements ILowCodePluginRuntime {
-  config: IPublicTypePluginConfig;
-
+export interface IPluginRuntimeCore {
+  name: string;
+  dep: string[];
+  disabled: boolean;
+  instance: PluginInstance;
   logger: Logger;
+  meta: PluginMeta;
 
-  private manager: ILowCodePluginManager;
+  init(forceInit?: boolean): void;
+  isInited(): boolean;
+  destroy(): void;
+  toProxy(): any;
+  setDisabled(flag: boolean): void;
+}
 
+export interface IPluginRuntimeExportsAccessor {
+  [propName: string]: any;
+}
+
+export class LowCodePluginRuntime<ContextExtra extends Record<string, any>>
+implements IPluginRuntimeCore,IPluginRuntimeExportsAccessor {
   private _inited: boolean;
-
-  private pluginName: string;
-
-  meta: IPublicTypePluginMeta;
-
   /**
    * 标识插件状态，是否被 disabled
    */
   private _disabled: boolean;
 
+  logger: Logger;
+
   constructor(
-    pluginName: string,
-    manager: ILowCodePluginManager,
-    config: IPublicTypePluginConfig,
-    meta: IPublicTypePluginMeta,
+    private pluginName: string,
+    private manager: LowCodePluginManager<ContextExtra>,
+    public instance: PluginInstance,
+    public meta: PluginMeta,
   ) {
-    this.manager = manager;
-    this.config = config;
-    this.pluginName = pluginName;
-    this.meta = meta;
-    this.logger = getLogger({ level: 'warn', bizName: `plugin:${pluginName}` });
+    this.logger = createLogger({ level: 'warn', bizName: `plugin:${pluginName}` });
   }
 
   get name() {
@@ -49,7 +49,7 @@ export class LowCodePluginRuntime implements ILowCodePluginRuntime {
       return [this.meta.dependencies];
     }
     // compat legacy way to declare dependencies
-    const legacyDepValue = (this.config as any).dep;
+    const legacyDepValue = (this.instance as any).dep;
     if (typeof legacyDepValue === 'string') {
       return [legacyDepValue];
     }
@@ -67,14 +67,14 @@ export class LowCodePluginRuntime implements ILowCodePluginRuntime {
   async init(forceInit?: boolean) {
     if (this._inited && !forceInit) return;
     this.logger.log('method init called');
-    await this.config.init?.call(undefined);
+    await this.instance.init?.call(undefined);
     this._inited = true;
   }
 
   async destroy() {
     if (!this._inited) return;
     this.logger.log('method destroy called');
-    await this.config?.destroy?.call(undefined);
+    await this.instance?.destroy?.call(undefined);
     this._inited = false;
   }
 
@@ -84,7 +84,8 @@ export class LowCodePluginRuntime implements ILowCodePluginRuntime {
 
   toProxy() {
     invariant(this._inited, 'Could not call toProxy before init');
-    const exports = this.config.exports?.();
+
+    const exports = this.instance.exports?.();
     return new Proxy(this, {
       get(target, prop, receiver) {
         if ({}.hasOwnProperty.call(exports, prop)) {

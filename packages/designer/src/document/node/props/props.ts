@@ -5,7 +5,6 @@ import { uniqueId, compatStage } from '@alilc/lowcode-utils';
 import { Prop, UNSET } from './prop';
 import type { IProp } from './prop';
 import { INode } from '../node';
-// import { TransformStage } from '../transform-stage';
 
 interface ExtrasObject {
   [key: string]: any;

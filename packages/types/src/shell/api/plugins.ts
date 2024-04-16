@@ -1,13 +1,13 @@
 import { IPublicModelPluginInstance, IPublicTypePlugin } from '../model';
-import { IPublicTypePreferenceValueType } from '../type';
+import { IPublicTypePluginPreferenceValueType } from '../type';
 import { IPublicTypePluginRegisterOptions } from '../type/plugin-register-options';
 
 export interface IPluginPreferenceMananger {
   // eslint-disable-next-line max-len
   getPreferenceValue: (
     key: string,
-    defaultValue?: IPublicTypePreferenceValueType,
-  ) => IPublicTypePreferenceValueType | undefined;
+    defaultValue?: IPublicTypePluginPreferenceValueType,
+  ) => IPublicTypePluginPreferenceValueType | undefined;
 }
 
 export type PluginOptionsType = string | number | boolean | object;
@@ -31,7 +31,7 @@ export interface IPublicApiPlugins {
    */
   getPluginPreference(
     pluginName: string,
-  ): Record<string, IPublicTypePreferenceValueType> | null | undefined;
+  ): Record<string, IPublicTypePluginPreferenceValueType> | null | undefined;
 
   /**
    * 获取指定插件

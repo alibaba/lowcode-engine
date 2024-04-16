@@ -6,8 +6,7 @@ import { INode } from './document';
 import { IProject } from './project';
 
 export type AutoFit = '100%';
-// eslint-disable-next-line no-redeclare
-export const AutoFit = '100%';
+export const AUTO_FIT: AutoFit = '100%';
 
 export interface IScrollable extends IPublicTypeScrollable {
 }

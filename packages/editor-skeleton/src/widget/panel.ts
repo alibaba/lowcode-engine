@@ -13,7 +13,7 @@ import {
   IPublicTypeTitleContent,
 } from '@alilc/lowcode-types';
 import { WidgetContainer } from './widget-container';
-import { getEvent } from '../event';
+import { getEvent } from '../../../engine/src/shell/api/event';
 import { TitledPanelView, TabsPanelView, PanelView } from '../components/widget-views';
 import { ISkeleton } from '../skeleton';
 import { composeTitle } from './utils';

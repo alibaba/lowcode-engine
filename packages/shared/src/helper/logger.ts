@@ -1,9 +1,8 @@
-/* eslint-disable no-console */
-/* eslint-disable no-param-reassign */
-import { isObject } from './is-object';
+import { isObject } from '../../../utils/src/is-object';
 
 export type Level = 'debug' | 'log' | 'info' | 'warn' | 'error';
-interface Options {
+
+export interface LoggerOptions {
   level: Level;
   bizName: string;
 }
@@ -117,7 +116,8 @@ const getLogArgs = (args: any, bizName: string, logLevel: string) => {
   processedArgs = processedArgs.concat(argsArray);
   return processedArgs;
 };
-const parseLogConf = (logConf: string, options: Options): { level: string; bizName: string} => {
+
+const parseLogConf = (logConf: string, options: LoggerOptions) => {
   if (!logConf) {
     return {
       level: options.level,
@@ -137,16 +137,16 @@ const parseLogConf = (logConf: string, options: Options): { level: string; bizNa
   };
 };
 
-const defaultOptions: Options = {
+const defaultOptions: LoggerOptions = {
   level: 'warn',
   bizName: '*',
 };
 
-class Logger {
+export class Logger {
   bizName: string;
   targetBizName: string;
   targetLevel: string;
-  constructor(options: Options) {
+  constructor(options: LoggerOptions) {
     options = { ...defaultOptions, ...options };
     const _location = location || {} as any;
     // __logConf__ 格式为 logLevel[:bizName], bizName is used as: targetBizName like '%bizName%'
@@ -191,8 +191,6 @@ class Logger {
   }
 }
 
-export { Logger };
-
-export function getLogger(config: { level: Level; bizName: string }): Logger {
+export function createLogger(config: { level: Level; bizName: string }): Logger {
   return new Logger(config);
 }

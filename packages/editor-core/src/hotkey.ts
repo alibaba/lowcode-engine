@@ -1,3 +1,7 @@
+/**
+ * key event helper：https://www.toptal.com/developers/keycode
+ */
+
 import { isEqual } from 'lodash-es';
 import { globalContext } from './di';
 import {
@@ -226,7 +230,7 @@ function getReverseMap(): CtrlKeyMap {
         continue;
       }
 
-      if (MAP.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(MAP, key)) {
         REVERSE_MAP[MAP[key]] = key;
       }
     }

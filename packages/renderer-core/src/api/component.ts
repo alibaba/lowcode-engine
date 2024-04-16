@@ -1,5 +1,5 @@
+import type { PlainObject, InstanceStateApi } from '@alilc/lowcode-shared';
 import { type CreateContainerOptions, createContainer, type Container } from '../container';
-import type { PlainObject, InstanceStateApi } from '../types';
 
 export type CreateComponentBaseOptions<T extends string> = Omit<
   CreateContainerOptions<T>,

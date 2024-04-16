@@ -1,0 +1,8 @@
+{
+  "name": "@alilc/lowcode-shared",
+  "version": "2.0.0-beta.0",
+  "type": "module",
+  "main": "dist/low-code-shared.cjs",
+  "module": "dist/low-code-shared.js",
+  "types": "dist/index.d.ts"
+}

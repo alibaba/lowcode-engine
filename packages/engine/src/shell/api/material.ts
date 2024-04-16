@@ -1,6 +1,6 @@
 import { globalContext } from '@alilc/lowcode-editor-core';
 import { IDesigner, isComponentMeta } from '@alilc/lowcode-designer';
-import { IPublicTypeAssetsJson, getLogger } from '@alilc/lowcode-utils';
+import { IPublicTypeAssetsJson, createLogger } from '@alilc/lowcode-utils';
 import {
   IPublicTypeComponentAction,
   IPublicTypeComponentMetadata,
@@ -18,7 +18,7 @@ import { editorSymbol, designerSymbol } from '../symbols';
 import { ComponentMeta as ShellComponentMeta } from '../model';
 import { ComponentType } from 'react';
 
-const logger = getLogger({ level: 'warn', bizName: 'shell-material' });
+const logger = createLogger({ level: 'warn', bizName: 'shell-material' });
 
 const innerEditorSymbol = Symbol('editor');
 export class Material implements IPublicApiMaterial {

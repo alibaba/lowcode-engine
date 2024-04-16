@@ -1,5 +1,5 @@
 import { createDefer } from './create-defer';
-import { Logger } from './logger';
+import { Logger } from '../../shared/src/helper/logger';
 
 const logger = new Logger({ level: 'warn', bizName: 'utils' });
 

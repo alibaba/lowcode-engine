@@ -28,8 +28,9 @@ import {
   Config,
   CommonUI,
   Command,
+  getEvent,
+  Event
 } from './api';
-import { getEvent, Event } from '@alilc/lowcode-editor-skeleton';
 
 export * from './symbols';
 

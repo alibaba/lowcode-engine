@@ -19,5 +19,4 @@ export const registerDefaults = (ctx: IPublicModelPluginContext) => {
   };
 };
 
-
 registerDefaults.pluginName = '___register_defaults___';

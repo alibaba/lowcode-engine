@@ -1,4 +1,4 @@
-import { IPublicTypePreferenceValueType } from './';
+import { IPublicTypePluginPreferenceValueType } from './';
 
 export interface IPublicTypePluginDeclarationProperty {
   // shape like 'name' or 'group.name' or 'group.subGroup.name'
@@ -9,7 +9,7 @@ export interface IPublicTypePluginDeclarationProperty {
   type: string;
   // default value
   // NOTE! this is only used in configuration UI, won`t affect runtime
-  default?: IPublicTypePreferenceValueType;
+  default?: IPublicTypePluginPreferenceValueType;
   // only works when type === 'string', default value false
   useMultipleLineTextInput?: boolean;
   // enum values, only works when type === 'string'

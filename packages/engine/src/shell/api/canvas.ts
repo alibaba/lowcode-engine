@@ -17,7 +17,6 @@ import {
 import { editorSymbol, designerSymbol, nodeSymbol } from '../symbols';
 import {
   Dragon as ShellDragon,
-  DropLocation as ShellDropLocation,
   ActiveTracker as ShellActiveTracker,
   Clipboard as ShellClipboard,
   DropLocation,

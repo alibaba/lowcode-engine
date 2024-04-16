@@ -26,7 +26,7 @@ export * from './misc';
 export * from './schema';
 export * from './node-helper';
 export * from './clone-enumerable-property';
-export * from './logger';
+export * from '../../shared/src/helper/logger';
 export * from './is-shaken';
 export * from './is-plugin-event-name';
 export { css };

@@ -1,7 +1,7 @@
 import { ReactNode, createElement } from 'react';
 import { makeObservable, observable } from '@alilc/lowcode-editor-core';
 import { uniqueId, createContent } from '@alilc/lowcode-utils';
-import { getEvent } from '../event';
+import { getEvent } from '../../../engine/src/shell/api/event';
 import { DockConfig } from '../types';
 import { ISkeleton } from '../skeleton';
 import { DockView, WidgetView } from '../components/widget-views';

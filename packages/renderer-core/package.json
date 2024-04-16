@@ -28,6 +28,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@alilc/lowcode-shared": "workspace:*",
     "lodash-es": "^4.17.21"
   },
   "devDependencies": {

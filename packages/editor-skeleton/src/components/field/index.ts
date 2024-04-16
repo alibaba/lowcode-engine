@@ -1,7 +1,8 @@
 import { ReactNode, createElement } from 'react';
 import { IPublicTypeTitleContent } from '@alilc/lowcode-types';
-import './index.less';
 import { Field, PopupField, EntryField, PlainField } from './fields';
+
+import './index.less';
 
 export interface FieldProps {
   className?: string;

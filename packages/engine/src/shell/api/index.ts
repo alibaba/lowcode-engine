@@ -12,3 +12,4 @@ export * from './workspace';
 export * from './config';
 export * from './commonUI';
 export * from './command';
+export * from './event';

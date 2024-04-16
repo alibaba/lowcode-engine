@@ -1,6 +1,6 @@
 import { observable, computed, makeObservable, action } from '@alilc/lowcode-editor-core';
 import { Point, ScrollTarget } from '../designer';
-import { AutoFit, IViewport } from '../simulator';
+import { AutoFit, AUTO_FIT, IViewport } from '../simulator';
 
 export default class Viewport implements IViewport {
   @observable.ref private rect?: DOMRect;
@@ -92,9 +92,9 @@ export default class Viewport implements IViewport {
     this._contentHeight = this.height / this.scale;
   }
 
-  @observable.ref private _contentWidth: number | AutoFit = AutoFit;
+  @observable.ref private _contentWidth: number | AutoFit = AUTO_FIT;
 
-  @observable.ref private _contentHeight: number | AutoFit = AutoFit;
+  @observable.ref private _contentHeight: number | AutoFit = AUTO_FIT;
 
   @computed get contentHeight(): number | AutoFit {
     return this._contentHeight;

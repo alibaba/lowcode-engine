@@ -9,6 +9,7 @@ import {
   Hotkey as InnerHotkey,
   IEditor,
   Command as InnerCommand,
+  LowCodePluginManager
 } from '@alilc/lowcode-editor-core';
 import {
   IPublicTypeEngineOptions,
@@ -22,10 +23,6 @@ import {
 } from '@alilc/lowcode-types';
 import {
   Designer,
-  LowCodePluginManager,
-  ILowCodePluginContextPrivate,
-  ILowCodePluginContextApiAssembler,
-  PluginPreference,
   IDesigner,
 } from '@alilc/lowcode-designer';
 import { Skeleton as InnerSkeleton, registerDefaults, Workbench } from '@alilc/lowcode-editor-skeleton';

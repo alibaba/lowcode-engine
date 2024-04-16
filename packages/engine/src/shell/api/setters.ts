@@ -1,12 +1,11 @@
 import { IPublicTypeCustomView, IPublicApiSetters, IPublicTypeRegisteredSetter } from '@alilc/lowcode-types';
 import { ISetters, globalContext, untracked } from '@alilc/lowcode-editor-core';
-import { ReactNode } from 'react';
-import { getLogger } from '@alilc/lowcode-utils';
+import { createLogger } from '@alilc/lowcode-utils';
 
 const innerSettersSymbol = Symbol('setters');
 const settersSymbol = Symbol('setters');
 
-const logger = getLogger({ level: 'warn', bizName: 'shell-setters' });
+const logger = createLogger({ level: 'warn', bizName: 'shell-setters' });
 
 export class Setters implements IPublicApiSetters {
   readonly [innerSettersSymbol]: ISetters;

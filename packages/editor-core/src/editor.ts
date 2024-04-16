@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events';
+import EventEmitter from 'events';
 import { EventBus, IEventBus } from './event-bus';
 import {
   IPublicModelEditor,
@@ -12,11 +12,9 @@ import {
 } from '@alilc/lowcode-types';
 import { engineConfig } from './config';
 import { globalLocale } from './intl';
-import { observable } from './utils';
+import { observable } from './obx';
 import { IPublicTypeAssetsJson, AssetLoader } from '@alilc/lowcode-utils';
 import { assetsTransform } from './utils/assets-transform';
-
-EventEmitter.defaultMaxListeners = 100;
 
 // inner instance keys which should not be stored in config
 const keyBlacklist = [
@@ -31,23 +29,19 @@ const keyBlacklist = [
   'innerPlugins',
 ];
 
-const AssetsCache: {
-  [key: string]: IPublicTypeRemoteComponentDescription;
-} = {};
+const AssetsCache: Record<string, IPublicTypeRemoteComponentDescription> = {};
 
 export interface IEditor extends IPublicModelEditor {
   config?: EditorConfig;
-
   components?: PluginClassSet;
-
   eventBus: IEventBus;
-
   init(config?: EditorConfig, components?: PluginClassSet): Promise<any>;
 }
 
 export class Editor extends EventEmitter implements IEditor {
   /**
    * Ioc Container
+   * ???
    */
   @observable.shallow private context = new Map<IPublicTypeEditorValueKey, any>();
 
@@ -60,8 +54,6 @@ export class Editor extends EventEmitter implements IEditor {
   eventBus: EventBus;
 
   components?: PluginClassSet;
-
-  // readonly utils = utils;
 
   private hooks: HookConfig[] = [];
 
@@ -122,7 +114,6 @@ export class Editor extends EventEmitter implements IEditor {
         }
       });
       assets.components = componentDescriptions;
-      assets.componentList = assets.componentList || [];
 
       // 如果有远程组件描述协议，则自动加载并补充到资产包中，同时出发 designer.incrementalAssetsReady 通知组件面板更新数据
       if (remoteComponentDescriptions && remoteComponentDescriptions.length) {
@@ -143,7 +134,6 @@ export class Editor extends EventEmitter implements IEditor {
               AssetsCache[exportName] = component;
               function setAssetsComponent(component: any, extraNpmInfo: any = {}) {
                 const components = component.components;
-                assets.componentList = assets.componentList?.concat(component.componentList || []);
                 if (Array.isArray(components)) {
                   components.forEach((d) => {
                     assets.components = assets.components.concat(

@@ -7,7 +7,7 @@ import {
   IPublicModelPluginInstance,
   IPublicTypePlugin,
   IPublicTypePluginRegisterOptions,
-  IPublicTypePreferenceValueType,
+  IPublicTypePluginPreferenceValueType,
 } from '@alilc/lowcode-types';
 import { PluginInstance as ShellPluginInstance } from '../model';
 import { pluginsSymbol } from '../symbols';
@@ -45,7 +45,7 @@ export class Plugins implements IPublicApiPlugins {
 
   getPluginPreference(
     pluginName: string,
-  ): Record<string, IPublicTypePreferenceValueType> | null | undefined {
+  ): Record<string, IPublicTypePluginPreferenceValueType> | null | undefined {
     return this[pluginsSymbol].getPluginPreference(pluginName);
   }
 

@@ -5,7 +5,7 @@ import { default as ReactPropTypesSecret } from 'prop-types/lib/ReactPropTypesSe
 import { default as factoryWithTypeCheckers } from 'prop-types/factoryWithTypeCheckers';
 import { IPublicTypePropType } from '@alilc/lowcode-types';
 import { isRequiredPropType } from './check-types/is-required-prop-type';
-import { Logger } from './logger';
+import { Logger } from '../../shared/src/helper/logger';
 
 const PropTypes2 = factoryWithTypeCheckers(ReactIs.isElement, true);
 const logger = new Logger({ level: 'warn', bizName: 'utils' });

@@ -1,25 +1,17 @@
-import { engineConfig } from '@alilc/lowcode-editor-core';
-import { getLogger } from '@alilc/lowcode-utils';
+import { createLogger, invariant } from '@alilc/lowcode-shared';
+import { filterValidOptions, isLowCodeRegisterOptions, sequencify } from './utils';
+import { LowCodePluginRuntime } from './runtime';
+import { satisfies as semverSatisfies } from 'semver';
+import type { PluginCreater, PluginPreferenceValue, PluginPreference } from './plugin';
+import { engineConfig } from '../config';
 import {
-  ILowCodePluginRuntime,
-  ILowCodePluginManager,
-  IPluginContextOptions,
-  PluginPreference,
-  ILowCodePluginContextApiAssembler,
-} from './plugin-types';
-import { filterValidOptions, isLowCodeRegisterOptions } from './plugin-utils';
-import { LowCodePluginRuntime } from './plugin';
-import LowCodePluginContext from './plugin-context';
-import { invariant } from '../utils';
-import sequencify from './sequencify';
-import semverSatisfies from 'semver/functions/satisfies';
-import {
-  IPublicTypePluginRegisterOptions,
-  IPublicTypePreferenceValueType,
-  IPublicTypePlugin,
-} from '@alilc/lowcode-types';
+  type LowCodePluginContext,
+  type LowCodePluginContextApiAssembler,
+  createPluginContext,
+  PluginContextOptions
+} from './context';
 
-const logger = getLogger({ level: 'warn', bizName: 'designer:pluginManager' });
+const logger = createLogger({ level: 'warn', bizName: 'designer:pluginManager' });
 
 // 保留的事件前缀
 const RESERVED_EVENT_PREFIX = [
@@ -42,28 +34,43 @@ const RESERVED_EVENT_PREFIX = [
   'context',
 ];
 
-export class LowCodePluginManager implements ILowCodePluginManager {
-  private plugins: ILowCodePluginRuntime[] = [];
+export interface PluginRegisterOptions {
+  /**
+   * Will enable plugin registered with auto-initialization immediately
+   * other than plugin-manager init all plugins at certain time.
+   * It is helpful when plugin register is later than plugin-manager initialization.
+   */
+  autoInit?: boolean;
+  /**
+   * allow overriding existing plugin with same name when override === true
+   */
+  override?: boolean;
+}
 
-  pluginsMap: Map<string, ILowCodePluginRuntime> = new Map();
-  pluginContextMap: Map<string, LowCodePluginContext> = new Map();
+/**
+ * plugin manager
+ */
+export class LowCodePluginManager<ContextExtra extends Record<string, any>> {
+  private plugins: LowCodePluginRuntime<ContextExtra>[] = [];
+
+  private pluginsMap: Map<string, LowCodePluginRuntime<ContextExtra>> = new Map();
+
+  private pluginContextMap: Map<string, LowCodePluginContext<ContextExtra>> = new Map();
 
   private pluginPreference?: PluginPreference = new Map();
 
-  contextApiAssembler: ILowCodePluginContextApiAssembler;
-
   constructor(
-    contextApiAssembler: ILowCodePluginContextApiAssembler,
+    private contextApiAssembler: LowCodePluginContextApiAssembler<
+      LowCodePluginContext<ContextExtra>
+    >,
     readonly viewName = 'global',
-  ) {
-    this.contextApiAssembler = contextApiAssembler;
-  }
+  ) {}
 
-  _getLowCodePluginContext = (options: IPluginContextOptions) => {
+  private _getLowCodePluginContext = (options: PluginContextOptions) => {
     const { pluginName } = options;
     let context = this.pluginContextMap.get(pluginName);
     if (!context) {
-      context = new LowCodePluginContext(options, this.contextApiAssembler);
+      context = createPluginContext(options, this, this.contextApiAssembler);
       this.pluginContextMap.set(pluginName, context);
     }
     return context;
@@ -83,9 +90,9 @@ export class LowCodePluginManager implements ILowCodePluginManager {
    * @param registerOptions - the plugin register options
    */
   async register(
-    pluginModel: IPublicTypePlugin,
+    pluginModel: PluginCreater<LowCodePluginContext<ContextExtra>>,
     options?: any,
-    registerOptions?: IPublicTypePluginRegisterOptions,
+    registerOptions?: PluginRegisterOptions,
   ): Promise<void> {
     // registerOptions maybe in the second place
     if (isLowCodeRegisterOptions(options)) {
@@ -104,6 +111,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
         `plugin ${pluginName} is trying to use ${eventPrefix} as event prefix, which is a reserved event prefix, please use another one`,
       );
     }
+
     const ctx = this._getLowCodePluginContext({ pluginName, meta });
     const customFilterValidOptions = engineConfig.get(
       'customPluginFilterOptions',
@@ -136,7 +144,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
           'plugin override, originalPlugin with name ',
           pluginName,
           ' will be destroyed, config:',
-          originalPlugin?.config,
+          originalPlugin?.instance,
         );
         originalPlugin?.destroy();
         this.pluginsMap.delete(pluginName);
@@ -161,11 +169,11 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     logger.log(`plugin registered with pluginName: ${pluginName}, config: `, config, 'meta:', meta);
   }
 
-  get(pluginName: string): ILowCodePluginRuntime | undefined {
+  get(pluginName: string): LowCodePluginRuntime<ContextExtra> | undefined {
     return this.pluginsMap.get(pluginName);
   }
 
-  getAll(): ILowCodePluginRuntime[] {
+  getAll(): LowCodePluginRuntime<ContextExtra>[] {
     return this.plugins;
   }
 
@@ -184,7 +192,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
 
   async init(pluginPreference?: PluginPreference) {
     const pluginNames: string[] = [];
-    const pluginObj: { [name: string]: ILowCodePluginRuntime } = {};
+    const pluginObj: { [name: string]: LowCodePluginRuntime<ContextExtra> } = {};
     this.pluginPreference = pluginPreference;
     this.plugins.forEach((plugin) => {
       pluginNames.push(plugin.name);
@@ -218,7 +226,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
 
   getPluginPreference(
     pluginName: string,
-  ): Record<string, IPublicTypePreferenceValueType> | null | undefined {
+  ): Record<string, PluginPreferenceValue> | null | undefined {
     if (!this.pluginPreference) {
       return null;
     }
@@ -240,7 +248,6 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     });
   }
 
-  /* istanbul ignore next */
   setDisabled(pluginName: string, flag = true) {
     logger.warn(`plugin:${pluginName} has been set disable:${flag}`);
     this.pluginsMap.get(pluginName)?.setDisabled(flag);
