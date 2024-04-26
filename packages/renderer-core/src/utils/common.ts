@@ -221,22 +221,19 @@ function parseExpression(a: any, b?: any, c = false) {
     thisRequired = c;
   }
   try {
-    const contextArr = ['"use strict";', 'var __self = arguments[0];'];
-    contextArr.push('return ');
     let tarStr: string;
 
     tarStr = (str.value || '').trim();
 
-    // NOTE: use __self replace 'this' in the original function str
-    // may be wrong in extreme case which contains '__self' already
-    tarStr = tarStr.replace(/this(\W|$)/g, (_a: any, b: any) => `__self${b}`);
-    tarStr = contextArr.join('\n') + tarStr;
+    let code = `"use strict"; function __wrapper(){ return ${tarStr}} return __wrapper.call(arguments[0])`;
 
     // 默认调用顶层窗口的parseObj, 保障new Function的window对象是顶层的window对象
     if (inSameDomain() && (window.parent as any).__newFunc) {
-      return (window.parent as any).__newFunc(tarStr)(self);
+      return (window.parent as any).__newFunc(code)(self);
     }
-    const code = `with(${thisRequired ? '{}' : '$scope || {}'}) { ${tarStr} }`;
+    if (!thisRequired) {
+      code = `with($scope){${code}}`;
+    }
     return new Function('$scope', code)(self);
   } catch (err) {
     logger.error(`${logScope || ''} parseExpression.error`, err, str, self?.__self ?? self);
