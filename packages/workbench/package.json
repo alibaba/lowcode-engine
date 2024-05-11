@@ -1,0 +1,76 @@
+{
+  "name": "@alilc/lowcode-workbench",
+  "version": "2.0.0-beta.0",
+  "description": "alibaba lowcode editor skeleton",
+  "type": "module",
+  "main": "dist/low-code-editor-skeleton.cjs",
+  "module": "dist/low-code-editor-skeleton.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/low-code-editor-skeleton.js",
+      "require": "./dist/low-code-editor-skeleton.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./dist/": {
+      "import": "./dist/",
+      "require": "./dist/"
+    }
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "dist",
+    "src",
+    "package.json"
+  ],
+  "scripts": {
+    "build": "pnpm run --stream \"/^build:.*/\"",
+    "build:target": "vite build",
+    "build:dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.mjs",
+    "test": "vitest"
+  },
+  "keywords": [
+    "lowcode",
+    "editor"
+  ],
+  "dependencies": {
+    "@alifd/next": "^1.27.8",
+    "@alilc/lowcode-designer": "workspace:*",
+    "@alilc/lowcode-core": "workspace:*",
+    "@alilc/lowcode-shared": "workspace:*",
+    "@alilc/lowcode-types": "workspace:*",
+    "@alilc/lowcode-utils": "workspace:*",
+    "classnames": "^2.2.6",
+    "lodash-es": "^4.17.21",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0"
+  },
+  "peerDependencies": {
+    "@alifd/next": "^1.27.8",
+    "@alilc/lowcode-designer": "workspace:*",
+    "@alilc/lowcode-core": "workspace:*",
+    "@alilc/lowcode-shared": "workspace:*",
+    "@alilc/lowcode-types": "workspace:*",
+    "@alilc/lowcode-utils": "workspace:*",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "http",
+    "url": "https://github.com/alibaba/lowcode-engine/tree/main/packages/editor-skeleton"
+  },
+  "gitHead": "2669f179e6f899d395ce1942d0fe04f9c5ed48a6",
+  "bugs": "https://github.com/alibaba/lowcode-engine/issues",
+  "homepage": "https://github.com/alibaba/lowcode-engine/#readme"
+}

@@ -1,12 +1,12 @@
 import { parse, compile } from './parser';
-import { createSignal, computed } from '../../signals';
+import { signal, computed } from '../../signals';
 
 export function createIntl(
   messages: Record<string, Record<string, string>>,
   defaultLocale: string,
 ) {
-  const allMessages = createSignal(messages);
-  const currentLocale = createSignal(defaultLocale);
+  const allMessages = signal(messages);
+  const currentLocale = signal(defaultLocale);
   const currentMessages = computed(() => allMessages.value[currentLocale.value]);
 
   return {

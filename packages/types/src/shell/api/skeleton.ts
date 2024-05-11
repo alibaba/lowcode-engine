@@ -1,8 +1,12 @@
 import { IPublicModelSkeletonItem } from '../model';
-import { IPublicTypeConfigTransducer, IPublicTypeDisposable, IPublicTypeSkeletonConfig, IPublicTypeWidgetConfigArea } from '../type';
+import {
+  IPublicTypeConfigTransducer,
+  IPublicTypeDisposable,
+  IPublicTypeSkeletonConfig,
+  IPublicTypeWidgetConfigArea,
+} from '../type';
 
 export interface IPublicApiSkeleton {
-
   /**
    * 增加一个面板实例
    * add a new panel
@@ -10,7 +14,10 @@ export interface IPublicApiSkeleton {
    * @param extraConfig
    * @returns
    */
-  add(config: IPublicTypeSkeletonConfig, extraConfig?: Record<string, any>): IPublicModelSkeletonItem | undefined;
+  add(
+    config: IPublicTypeSkeletonConfig,
+    extraConfig?: Record<string, any>,
+  ): IPublicModelSkeletonItem | undefined;
 
   /**
    * 移除一个面板实例
@@ -24,7 +31,9 @@ export interface IPublicApiSkeleton {
    * 获取某个区域下的所有面板实例
    * @param areaName IPublicTypeWidgetConfigArea
    */
-  getAreaItems(areaName: IPublicTypeWidgetConfigArea): IPublicModelSkeletonItem[] | undefined;
+  getAreaItems(
+    areaName: IPublicTypeWidgetConfigArea,
+  ): IPublicModelSkeletonItem[] | undefined;
 
   /**
    * 获取面板实例
@@ -95,7 +104,9 @@ export interface IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onShowPanel(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
+  onShowPanel(
+    listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void,
+  ): IPublicTypeDisposable;
 
   /**
    * 监听 Panel 实例隐藏事件
@@ -103,19 +114,25 @@ export interface IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onHidePanel(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
+  onHidePanel(
+    listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void,
+  ): IPublicTypeDisposable;
 
   /**
    * 监听 Widget 实例 Disable 事件
    * @param listener
    */
-  onDisableWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
+  onDisableWidget(
+    listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void,
+  ): IPublicTypeDisposable;
 
   /**
    * 监听 Widget 实例 Enable 事件
    * @param listener
    */
-  onEnableWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
+  onEnableWidget(
+    listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void,
+  ): IPublicTypeDisposable;
 
   /**
    * 监听 Widget 显示事件
@@ -123,7 +140,9 @@ export interface IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onShowWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
+  onShowWidget(
+    listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void,
+  ): IPublicTypeDisposable;
 
   /**
    * 监听 Widget 隐藏事件
@@ -131,7 +150,9 @@ export interface IPublicApiSkeleton {
    * @param listener
    * @returns
    */
-  onHideWidget(listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void): IPublicTypeDisposable;
+  onHideWidget(
+    listener: (paneName?: string, panel?: IPublicModelSkeletonItem) => void,
+  ): IPublicTypeDisposable;
 
   /**
    * 注册一个面板的配置转换器（transducer）。
@@ -148,5 +169,9 @@ export interface IPublicApiSkeleton {
    *   - （可选）转换器的唯一标识符。用于在需要时引用或操作特定的转换器。
    *   - (Optional) A unique identifier for the transducer. Used for referencing or manipulating a specific transducer when needed.
    */
-  registerConfigTransducer(transducer: IPublicTypeConfigTransducer, level: number, id?: string): void;
+  registerConfigTransducer(
+    transducer: IPublicTypeConfigTransducer,
+    level: number,
+    id?: string,
+  ): void;
 }

@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@alifd/next": "^1.27.8",
-    "@alilc/lowcode-editor-core": "workspace:*",
+    "@alilc/lowcode-core": "workspace:*",
     "@alilc/lowcode-types": "workspace:*",
     "@alilc/lowcode-utils": "workspace:*",
     "classnames": "^2.5.1",
@@ -45,7 +45,7 @@
   },
   "peerDependencies": {
     "@alifd/next": "^1.27.8",
-    "@alilc/lowcode-editor-core": "workspace:*",
+    "@alilc/lowcode-core": "workspace:*",
     "@alilc/lowcode-types": "workspace:*",
     "@alilc/lowcode-utils": "workspace:*",
     "react": "^18.2.0",

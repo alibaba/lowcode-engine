@@ -1,9 +1,17 @@
-import { version } from './engine-core';
+import { bootstrapModules, createInstance } from '@alilc/lowcode-core';
+import { EngineMain } from './main';
 
-export * from './engine-core';
+export async function init(
+  container?: HTMLElement,
+  options?: IPublicTypeEngineOptions,
+  pluginPreference?: PluginPreference,
+) {
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'engine';
+    document.body.appendChild(container);
+  }
 
-console.log(
-  `%c AliLowCodeEngine %c v${version} `,
-  'padding: 2px 1px; border-radius: 3px 0 0 3px; color: #fff; background: #606060; font-weight: bold;',
-  'padding: 2px 1px; border-radius: 0 3px 3px 0; color: #fff; background: #42c02e; font-weight: bold;',
-);
+  bootstrapModules();
+  createInstance(EngineMain).startup(container);
+}

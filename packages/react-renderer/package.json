@@ -22,6 +22,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@alilc/lowcode-shared": "workspace:*",
     "@alilc/lowcode-renderer-core": "workspace:*",
     "@alilc/lowcode-renderer-router": "workspace:*",
     "@vue/reactivity": "^3.4.21",

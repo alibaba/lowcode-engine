@@ -1,12 +1,15 @@
 import { ComponentType, ReactElement } from 'react';
-import { IPublicTypeNodeData, IPublicTypeSnippet, IPublicTypeInitialItem, IPublicTypeCallbacks, IPublicTypeLiveTextEditingConfig } from './';
+import {
+  IPublicTypeNodeData,
+  IPublicTypeCallbacks,
+  IPublicTypeLiveTextEditingConfig,
+} from './';
 import { IPublicModelNode } from '../model';
 
 /**
  * 高级特性配置
  */
 export interface IPublicTypeAdvanced {
-
   /**
    * 配置 callbacks 可捕获引擎抛出的一些事件，例如 onNodeAdd、onResize 等
    * callbacks/hooks which can be used to do
@@ -17,7 +20,9 @@ export interface IPublicTypeAdvanced {
   /**
    * 拖入容器时，自动带入 children 列表
    */
-  initialChildren?: IPublicTypeNodeData[] | ((target: IPublicModelNode) => IPublicTypeNodeData[]);
+  initialChildren?:
+    | IPublicTypeNodeData[]
+    | ((target: IPublicModelNode) => IPublicTypeNodeData[]);
 
   /**
    * 样式 及 位置，handle 上必须有明确的标识以便事件路由判断，或者主动设置事件独占模式
@@ -29,15 +34,14 @@ export interface IPublicTypeAdvanced {
    * - dragstart 请求通用 resizing 控制 请求 hud 显示
    * - drag 时 计算并设置效果，更新控制柄位置
    */
-  getResizingHandlers?: (
-    currentNode: any
-  ) => (Array<{
-    type: 'N' | 'W' | 'S' | 'E' | 'NW' | 'NE' | 'SE' | 'SW';
-    content?: ReactElement;
-    propTarget?: string;
-    appearOn?: 'mouse-enter' | 'mouse-hover' | 'selected' | 'always';
-  }> |
-  ReactElement[]);
+  getResizingHandlers?: (currentNode: any) =>
+    | Array<{
+        type: 'N' | 'W' | 'S' | 'E' | 'NW' | 'NE' | 'SE' | 'SW';
+        content?: ReactElement;
+        propTarget?: string;
+        appearOn?: 'mouse-enter' | 'mouse-hover' | 'selected' | 'always';
+      }>
+    | ReactElement[];
 
   /**
    * 是否绝对布局容器，还未进入协议

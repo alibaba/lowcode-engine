@@ -1,6 +1,5 @@
-
-import { Component, ReactElement, ReactNode } from 'react';
-import { IPublicTypeI18nData, IPublicTypeNodeSchema, IPublicTypeTitleContent } from '../type';
+import { Component, ReactNode } from 'react';
+import { IPublicTypeNodeSchema, IPublicTypeTitleContent } from '../type';
 import { IPublicEnumTransitionType } from '../enum';
 
 export interface IPublicApiCommonUtils {
@@ -68,14 +67,9 @@ export interface IPublicApiCommonUtils {
     getLocale(): string;
     setLocale(locale: string): void;
   };
-
-  /**
-   * i18n 转换方法
-   */
-  intl(data: IPublicTypeI18nData | string | undefined | ReactElement, params?: object): string;
 }
-export interface IPublicApiCommonSkeletonCabin {
 
+export interface IPublicApiCommonSkeletonCabin {
   /**
    * 编辑器框架 View
    * get Workbench Component
@@ -84,7 +78,6 @@ export interface IPublicApiCommonSkeletonCabin {
 }
 
 export interface IPublicApiCommonEditorCabin {
-
   /**
    * Title 组件
    * @experimental unstable API, pay extra caution when trying to use this

@@ -1,7 +1,7 @@
 import { defineConfig, LibraryFormats } from 'vite';
 import { env, cwd } from 'node:process';
 import { resolve } from 'node:path';
-import { readFile } from 'node:fs/promises'
+import { readFile } from 'node:fs/promises';
 import react from '@vitejs/plugin-react';
 
 interface Options {
@@ -11,16 +11,23 @@ interface Options {
   externalDeps?: boolean;
 }
 
-const resolvePath = (path: string) => resolve(cwd(), path)
-const isProduction = !!env['PROD']
+const resolvePath = (path: string) => resolve(cwd(), path);
+const isProduction = !!env['PROD'];
 
-export default async ({ name, entry = 'src/index.ts', defaultFormats = ['es'], externalDeps = true }: Options) => {
+export default async ({
+  name,
+  entry = 'src/index.ts',
+  defaultFormats = ['es'],
+  externalDeps = true,
+}: Options) => {
   const formats = (env['FORMATS']?.split(',') ?? defaultFormats) as LibraryFormats[];
 
   let externals: string[] = [];
 
   if (externalDeps) {
-    const { peerDependencies = {}, devDependencies = {} } = await getPackageJson(resolvePath('package.json'));
+    const { peerDependencies = {}, devDependencies = {} } = await getPackageJson(
+      resolvePath('package.json'),
+    );
     externals = [...Object.keys(peerDependencies), ...Object.keys(devDependencies)];
   }
 
@@ -35,8 +42,8 @@ export default async ({ name, entry = 'src/index.ts', defaultFormats = ['es'], e
       minify: isProduction,
       sourcemap: isProduction ? false : 'inline',
       rollupOptions: {
-        external: externals
-      }
+        external: externals,
+      },
     },
     plugins: [react()],
   });

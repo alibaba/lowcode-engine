@@ -27,14 +27,19 @@ export default tseslint.config({
     },
   },
   rules: {
-    '@stylistic/indent': ['error', 2],
-    '@stylistic/indent-binary-ops': ['error', 2],
     '@stylistic/max-len': [
       'error',
-      { code: 100, tabWidth: 2, ignoreStrings: true, ignoreComments: true, ignoreTemplateLiterals: true }
+      {
+        code: 100,
+        tabWidth: 2,
+        ignoreStrings: true,
+        ignoreComments: true,
+        ignoreTemplateLiterals: true,
+        ignoreRegExpLiterals: true,
+      },
     ],
     '@stylistic/no-tabs': 'error',
-    '@stylistic/quotes': ['error', 'single'],
+    '@stylistic/quotes': ['error', 'single', { allowTemplateLiterals: true }],
     '@stylistic/quote-props': ['error', 'as-needed'],
     '@stylistic/jsx-pascal-case': [2],
     '@stylistic/jsx-indent': [2, 2, { checkAttributes: true, indentLogicalExpressions: true }],
@@ -42,7 +47,7 @@ export default tseslint.config({
     '@stylistic/eol-last': ['error', 'always'],
     '@stylistic/jsx-quotes': ['error', 'prefer-double'],
 
-    '@typescript-eslint/ban-ts-comment': ["error", { 'ts-expect-error': 'allow-with-description' }],
+    '@typescript-eslint/ban-ts-comment': ['error', { 'ts-expect-error': 'allow-with-description' }],
     '@typescript-eslint/no-explicit-any': 'off',
 
     'react/jsx-no-undef': 'error',
@@ -53,6 +58,8 @@ export default tseslint.config({
     'react/no-children-prop': 'warn',
 
     'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
-    'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
+    'react-hooks/exhaustive-deps': 'off', // Checks effect dependencies
+
+    'no-inner-declarations': 'off',
   },
 });

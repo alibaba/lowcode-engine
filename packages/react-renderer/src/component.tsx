@@ -9,30 +9,29 @@ import {
   isJSFunction,
   isJSSlot,
   someValue,
+  type CreateComponentBaseOptions,
+  type CodeRuntime,
 } from '@alilc/lowcode-renderer-core';
 import { isPlainObject } from 'lodash-es';
 import { forwardRef, useRef, useEffect, createElement, useMemo } from 'react';
-import { createSignal, watch } from './signals';
+import { signal, watch } from './signals';
 import { appendExternalStyle } from './utils/element';
 import { reactive } from './utils/reactive';
 
 import type {
-  CreateComponentBaseOptions,
   PlainObject,
   InstanceStateApi,
   LowCodeComponent as LowCodeComponentSchema,
-  CodeRuntime,
   IntlApi,
   JSSlot,
   JSFunction,
   I18nNode,
-} from '@alilc/lowcode-renderer-core';
+} from '@alilc/lowcode-shared';
 import type {
   ComponentType,
   ReactInstance,
   CSSProperties,
   ForwardedRef,
-  ReactNode,
   ReactElement,
 } from 'react';
 
@@ -167,14 +166,16 @@ export const createComponent = createComponentFunction<
                 (node) => isJSFunction(node) || isJSSlot(node),
                 (node: JSSlot | JSFunction) => {
                   if (isJSSlot(node)) {
-                    if (node.value) {
+                    const slot = node as JSSlot;
+
+                    if (slot.value) {
                       const widgets = (Array.isArray(node.value) ? node.value : [node.value]).map(
                         (v) => new ComponentWidget<ComponentType<any>>(v),
                       );
 
-                      if (node.params?.length) {
+                      if (slot.params?.length) {
                         return (...args: any[]) => {
-                          const params = node.params!.reduce((prev, cur, idx) => {
+                          const params = slot.params!.reduce((prev, cur, idx) => {
                             return (prev[cur] = args[idx]);
                           }, {} as PlainObject);
                           const subCodeScope = codeRuntime.getScope().createSubScope(params);
@@ -323,7 +324,13 @@ export const createComponent = createComponentFunction<
     ref: ForwardedRef<any>,
   ) {
     const { id, className, style } = props;
+    const isConstructed = useRef(false);
     const isMounted = useRef(false);
+
+    if (!isConstructed.current) {
+      container.triggerLifeCycle('constructor');
+      isConstructed.current = true;
+    }
 
     useEffect(() => {
       const scopeValue = container.codeRuntime.getScope().value;
@@ -398,7 +405,7 @@ export const createComponent = createComponentFunction<
 });
 
 function reactiveStateCreator(initState: PlainObject): InstanceStateApi {
-  const proxyState = createSignal(initState);
+  const proxyState = signal(initState);
 
   return {
     get state() {

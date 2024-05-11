@@ -4,7 +4,7 @@ import type {
   ComponentTree,
   InstanceDataSourceApi,
   InstanceStateApi,
-} from './types';
+} from '@alilc/lowcode-shared';
 import { type CodeScope, type CodeRuntime, createCodeRuntime, createScope } from './code-runtime';
 import { isJSFunction } from './utils/type-guard';
 import { type TextWidget, type ComponentWidget, createWidget } from './widget';

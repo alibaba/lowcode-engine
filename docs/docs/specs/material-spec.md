@@ -621,7 +621,7 @@ component
 | docUrl            | 组件文档链接                                                                                                                                | String                    | 否     |
 | screenshot        | 组件快照                                                                                                                                    | String                    | 否     |
 | icon              | 组件的小图标                                                                                                                                | String (URL)              | 是     |
-| tags              | 组件标签                                                                                                                                    | String                    | 是     |
+| tags              | 组件标签                                                                                                                                    | String[]                  | 是     |
 | keywords          | 组件关键词，用于搜索联想                                                                                                                    | String                    | 是     |
 | devMode           | 组件研发模式                                                                                                                                | String  (proCode,lowCode) | 是     |
 | npm               | npm 源引入完整描述对象                                                                                                                      | Object                    | 否     |
@@ -634,7 +634,7 @@ component
 | snippets          | 内容为组件不同状态下的低代码 schema (可以有多个)，用户从组件面板拖入组件到设计器时会向页面 schema 中插入 snippets 中定义的组件低代码 schema | Object[]                  | 否     |
 | group             | 用于描述当前组件位于组件面板的哪个 tab                                                                                                      | String                    | 否     |
 | category          | 用于描述组件位于组件面板同一 tab 的哪个区域                                                                                                 | String                    | 否     |
-| priority          | 用于描述组件在同一 category 中的排序                                                                                                        | String                    | 否     |
+| priority          | 用于描述组件在同一 category 中的排序                                                                                                        | number                    | 否     |
 
 ##### 2.2.2.3 组件属性信息 props (A)
 
@@ -1177,132 +1177,6 @@ export interface ComponentDescription { // 组件描述协议，通过 npm 中�
 }
 ```
 
-#### 2.2.3 资产包协议
-
-##### 2.2.3.1 协议结构
-
-协议最顶层结构如下，包含 5 方面的描述内容：
-
-- version { String } 当前协议版本号
-- packages{ Array } 低代码编辑器中加载的资源列表
-- components { Array } 所有组件的描述协议列表
-- sort { Object } 用于描述组件面板中的 tab 和 category
-
-##### 2.2.3.2 version (A)
-
-定义当前协议 schema 的版本号；
-
-| 根属性名称 | 类型   | 说明       | 变量支持 | 默认值 |
-| ---------- | ------ | ---------- | -------- | ------ |
-| version    | String | 协议版本号 | -        | 1.0.0  |
-
-##### 2.2.3.3 packages (A)
-
-定义低代码编辑器中加载的资源列表，包含公共库和组件 (库) cdn 资源等；
-
-| 字段                    | 字段描述                                            | 字段类型        | 备注                             |
-| ----------------------- | --------------------------------------------------- | --------------- | -------------------------------- |
-| packages[].title? (A)   | 资源标题                                            | String          | 资源标题                         |
-| packages[].package (A)  | npm 包名                                            | String          | 组件资源唯一标识                 |
-| packages[].version(A)   | npm 包版本号                                        | String          | 组件资源版本号                   |
-| packages[].library(A)   | 作为全局变量引用时的名称，用来定义全局变量名        | String          | 低代码引擎通过该字段获取组件实例 |
-| packages[].editUrls (A) | 组件编辑态视图打包后的 CDN url 列表，包含 js 和 css | Array\<String\> | 低代码引擎编辑器会加载这些 url   |
-| packages[].urls (AA)    | 组件渲染态视图打包后的 CDN url 列表，包含 js 和 css | Array\<String\> | 低代码引擎渲染模块会加载这些 url |
-
-描述举例：
-
-```json
-{
-  "packages": [
-    {
-      "package": "moment",
-      "version": "2.24.0",
-      "urls": ["https://g.alicdn.com/mylib/moment/2.24.0/min/moment.min.js"],
-      "library": "moment"
-    },
-    {
-      "package": "lodash",
-      "library": "_",
-      "urls": ["https://g.alicdn.com/platform/c/lodash/4.6.1/lodash.min.js"]
-    },
-    {
-      "title": "fusion 组件库",
-      "package": "@alifd/next",
-      "version": "1.24.18",
-      "urls": [
-        "https://g.alicdn.com/code/lib/alifd__next/1.24.18/next.min.css",
-        "https://g.alicdn.com/code/lib/alifd__next/1.24.18/next-with-locales.min.js"
-      ],
-      "library": "Next"
-    },
-    {
-      "package": "@alilc/lowcode-materials",
-      "version": "1.0.0",
-      "library": "AlilcLowcodeMaterials",
-      "urls": [
-        "https://alifd.alicdn.com/npm/@alilc/lowcode-materials@1.0.0/dist/AlilcLowcodeMaterials.js",
-        "https://alifd.alicdn.com/npm/@alilc/lowcode-materials@1.0.0/dist/AlilcLowcodeMaterials.css"
-      ],
-      "editUrls": [
-        "https://alifd.alicdn.com/npm/@alilc/lowcode-materials@1.0.0/build/lowcode/view.js",
-        "https://alifd.alicdn.com/npm/@alilc/lowcode-materials@1.0.0/build/lowcode/view.css"
-      ]
-    },
-    {
-      "package": "@alifd/fusion-ui",
-      "version": "1.0.0",
-      "library": "AlifdFusionUi",
-      "urls": [
-        "https://alifd.alicdn.com/npm/@alifd/fusion-ui@1.0.0/build/lowcode/view.js",
-        "https://alifd.alicdn.com/npm/@alifd/fusion-ui@1.0.0/build/lowcode/view.css"
-      ],
-      "editUrls": [
-        "https://alifd.alicdn.com/npm/@alifd/fusion-ui@1.0.0/build/lowcode/view.js",
-        "https://alifd.alicdn.com/npm/@alifd/fusion-ui@1.0.0/build/lowcode/view.css"
-      ]
-    }
-  ]
-}
-```
-
-##### 2.2.3.4 components (A)
-
-定义所有组件的描述协议列表，组件描述协议遵循本规范章节 2.2.2 的定义；
-
-##### 2.2.3.5 sort (A)
-
-定义组件列表分组
-
-| 根属性名称        | 类型     | 说明                                                                                         | 变量支持 | 默认值                                   |
-| ----------------- | -------- | -------------------------------------------------------------------------------------------- | -------- | ---------------------------------------- |
-| sort.groupList    | String[] | 组件分组，用于组件面板 tab 展示                                                              | -        | ['精选组件', '原子组件']                 |
-| sort.categoryList | String[] | 组件面板中同一个 tab 下的不同区间用 category 区分，category 的排序依照 categoryList 顺序排列 | -        | ['通用', '数据展示', '表格类', '表单类'] |
-
-##### 2.2.3.6 TypeScript 定义
-
-```TypeScript
-export interface ComponentSort {
-  groupList?: String[]; // 用于描述组件面板的 tab 项及其排序，例如：["精选组件", "原子组件"]
-  categoryList?: String[]; // 组件面板中同一个 tab 下的不同区间用 category 区分，category 的排序依照 categoryList 顺序排列；
-}
-
-export interface Assets {
-  version: string; // 资产包协议版本号
-  packages?: Array<Package>; // 大包列表，external与package的概念相似，融合在一起
-  components: Array<ComponentDescription> | Array<RemoteComponentDescription>; // 所有组件的描述协议列表
-  componentList?: ComponentCategory[]; // 【待废弃】组件分类列表，用来描述物料面板
-  sort: ComponentSort; // 新增字段，用于描述组件面板中的 tab 和 category
-}
-
-export interface RemoteComponentDescription {
-  exportName: string; // 组件描述导出名字，可以通过 window[exportName] 获取到组件描述的 Object 内容；
-  url: string; // 组件描述的资源链接；
-  package: { // 组件(库)的 npm 信息；
-    npm: string;
-  }
-}
-```
-
 ## 3 物料规范 - 区块规范
 
 ### 3.1 源码规范
@@ -1313,10 +1187,11 @@ export interface RemoteComponentDescription {
 
 ```html
 block/ ├── build │   ├── index.css // 【编译生成】 │ ├── index.html //
-【编译生成】【必选】可直接预览文件 │   ├── index.js // 【编译生成】 │   └── views // 【3A
-编译生成】html2sketch │   ├── block_view1.html // 【3A 编译生成】给 sketch 用的 html │   └──
-block_view1.png // 【3A 编译生成】截图 ├── src // 【必选】区块源码 │ ├── index.jsx // 【必选】入口 │
-└── index.module.scss // 【可选】如有样式请使用 CSS Modules 避免冲突 ├── README.md //
+【编译生成】【必选】可直接预览文件 │   ├── index.js // 【编译生成】 │   └──
+views // 【3A 编译生成】html2sketch │   ├── block_view1.html // 【3A
+编译生成】给 sketch 用的 html │   └── block_view1.png // 【3A 编译生成】截图 ├──
+src // 【必选】区块源码 │ ├── index.jsx // 【必选】入口 │ └── index.module.scss
+// 【可选】如有样式请使用 CSS Modules 避免冲突 ├── README.md //
 【可选】无格式要求 └── package.json // 【必选】
 ```
 
@@ -1471,23 +1346,28 @@ block_view1.png // 【3A 编译生成】截图 ├── src // 【必选】区�
 与标准源码 build-scripts 对齐
 
 ```html
-├── META/ # 低代码元数据信息，用于多分支冲突解决、数据回滚等功能 ├── build │   ├── index.css #
-【编译生成】 │ ├── index.html # 【编译生成】【必选】可直接预览文件 │   ├── index.js # 【编译生成】
-│   └── views # 【3A 编译生成】html2sketch │   ├── page1.html # 【3A 编译生成】给 sketch 用的 html
-│   └── page1.png # 【3A 编译生成】截图 ├── public/ # 静态文件，构建时会 copy 到 build/ 目录 │ ├──
-index.html # 应用入口 HTML │ └── favicon.png # Favicon ├── src/ │ ├── components/ #
-应用内的低代码业务组件 │ │ └── GuideComponent/ │ │ ├── index.js # 组件入口 │ │ ├── components.js #
-组件依赖的其他组件 │ │ ├── schema.js # schema 描述 │ │ └── index.scss # css 样式 │ ├── pages/ # 页面
-│ │ └── HomePage/ # Home 页面 │ │ ├── index.js # 页面入口 │ │ └── index.scss # css 样式 │ ├──
-layouts/ │ │ └── BasicLayout/ # layout 组件名称 │ │ ├── index.js # layout 入口 │ │ ├── components.js
-# layout 组件依赖的其他组件 │ │ ├── schema.js # layout schema 描述 │ │ └── index.scss # layout css
-样式 │ ├── config/ # 配置信息 │ │ ├── components.js # 应用上下文所有组件 │ │ ├── routes.js #
-页面路由列表 │ │ └── constants.js # 全局常量定义 │ │ └── app.js # 应用配置文件 │ ├── utils/ # 工具库
-│ │ └── index.js # 应用第三方扩展函数 │ ├── stores/ # [可选] 全局状态管理 │ │ └── user.js │ ├──
-locales/ # [可选] 国际化资源 │ │ ├── en-US │ │ └── zh-CN │ ├── global.scss # 全局样式 │ └──
-index.jsx # 应用入口脚本，依赖 config/routes.js 的路由配置动态生成路由； ├── webpack.config.js #
-项目工程配置，包含插件配置及自定义 `webpack` 配置等 ├── README.md ├── package.json ├── .editorconfig
-├── .eslintignore ├── .eslintrc.js ├── .gitignore ├── .stylelintignore └── .stylelintrc.js
+├── META/ # 低代码元数据信息，用于多分支冲突解决、数据回滚等功能 ├── build │  
+├── index.css # 【编译生成】 │ ├── index.html #
+【编译生成】【必选】可直接预览文件 │   ├── index.js # 【编译生成】 │   └── views
+# 【3A 编译生成】html2sketch │   ├── page1.html # 【3A 编译生成】给 sketch 用的
+html │   └── page1.png # 【3A 编译生成】截图 ├── public/ # 静态文件，构建时会
+copy 到 build/ 目录 │ ├── index.html # 应用入口 HTML │ └── favicon.png # Favicon
+├── src/ │ ├── components/ # 应用内的低代码业务组件 │ │ └── GuideComponent/ │ │
+├── index.js # 组件入口 │ │ ├── components.js # 组件依赖的其他组件 │ │ ├──
+schema.js # schema 描述 │ │ └── index.scss # css 样式 │ ├── pages/ # 页面 │ │
+└── HomePage/ # Home 页面 │ │ ├── index.js # 页面入口 │ │ └── index.scss # css
+样式 │ ├── layouts/ │ │ └── BasicLayout/ # layout 组件名称 │ │ ├── index.js #
+layout 入口 │ │ ├── components.js # layout 组件依赖的其他组件 │ │ ├── schema.js
+# layout schema 描述 │ │ └── index.scss # layout css 样式 │ ├── config/ #
+配置信息 │ │ ├── components.js # 应用上下文所有组件 │ │ ├── routes.js #
+页面路由列表 │ │ └── constants.js # 全局常量定义 │ │ └── app.js # 应用配置文件 │
+├── utils/ # 工具库 │ │ └── index.js # 应用第三方扩展函数 │ ├── stores/ # [可选]
+全局状态管理 │ │ └── user.js │ ├── locales/ # [可选] 国际化资源 │ │ ├── en-US │
+│ └── zh-CN │ ├── global.scss # 全局样式 │ └── index.jsx # 应用入口脚本，依赖
+config/routes.js 的路由配置动态生成路由； ├── webpack.config.js #
+项目工程配置，包含插件配置及自定义 `webpack` 配置等 ├── README.md ├──
+package.json ├── .editorconfig ├── .eslintignore ├── .eslintrc.js ├── .gitignore
+├── .stylelintignore └── .stylelintrc.js
 ```
 
 ##### 入口文件

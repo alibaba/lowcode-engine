@@ -49,7 +49,7 @@ export interface Project {
    * 当前应用的公共数据源
    * @deprecated
    */
-  dataSource?: unknown;
+  dataSource?: never;
   /**
    * 当前应用的路由配置信息
    */
@@ -104,14 +104,14 @@ export interface ComponentMap {
  * 协议中用于描述搭建出来的组件树结构的规范，整个组件树的描述由组件结构&容器结构两种结构嵌套构成。
  */
 export type ComponentTree<LifeCycleNameT extends string = string> =
-  ComponentTreeContainer<LifeCycleNameT>;
+  ComponentTreeRootNode<LifeCycleNameT>;
 
 /**
- * 容器结构描述 (A)
+ * 根容器节点结构描述 (A)
  * 容器是一类特殊的组件，在组件能力基础上增加了对生命周期对象、自定义方法、样式文件、数据源等信息的描述。
  */
-export interface ComponentTreeContainer<LifeCycleNameT extends string>
-  extends Omit<ComponentTreeNode, 'loop' | 'loopArgs' | 'condition'> {
+export interface ComponentTreeRootNode<LifeCycleNameT extends string = string>
+  extends ComponentTreeNode {
   componentName: 'Page' | 'Block' | 'Component';
   /**
    * 文件名称
@@ -142,6 +142,11 @@ export interface ComponentTreeContainer<LifeCycleNameT extends string>
    * type todo
    */
   dataSource?: any;
+
+  // for useless
+  loop: never;
+  loopArgs: never;
+  condition: never;
 }
 
 /**
@@ -182,13 +187,13 @@ export interface ComponentTreeNode {
  * Props 结构描述
  */
 export interface ComponentTreeNodeProps {
-  /** 组件 ID	 */
+  /** 组件 ID */
   id?: string | JSExpression;
-  /** 组件样式类名	 */
+  /** 组件样式类名 */
   className?: string;
-  /**  组件内联样式	 */
+  /**  组件内联样式 */
   style?: JSONObject | JSExpression;
-  /** 组件 ref 名称	 */
+  /** 组件 ref 名称 */
   ref?: string;
 
   [key: string]: any;

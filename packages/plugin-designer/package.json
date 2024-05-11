@@ -35,7 +35,7 @@
   "author": "xiayang.xy",
   "dependencies": {
     "@alilc/lowcode-designer": "workspace:*",
-    "@alilc/lowcode-editor-core": "workspace:*",
+    "@alilc/lowcode-core": "workspace:*",
     "@alilc/lowcode-utils": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
@@ -48,7 +48,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "@alilc/lowcode-designer": "workspace:*",
-    "@alilc/lowcode-editor-core": "workspace:*",
+    "@alilc/lowcode-core": "workspace:*",
     "@alilc/lowcode-utils": "workspace:*"
   },
   "publishConfig": {

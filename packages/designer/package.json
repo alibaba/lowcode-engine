@@ -30,7 +30,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@alilc/lowcode-editor-core": "workspace:*",
+    "@alilc/lowcode-core": "workspace:*",
     "@alilc/lowcode-shared": "workspace:*",
     "@alilc/lowcode-types": "workspace:*",
     "@alilc/lowcode-utils": "workspace:*",
@@ -55,7 +55,7 @@
   },
   "peerDependencies": {
     "@alifd/next": "^1.27.8",
-    "@alilc/lowcode-editor-core": "workspace:*",
+    "@alilc/lowcode-core": "workspace:*",
     "@alilc/lowcode-shared": "workspace:*",
     "@alilc/lowcode-types": "workspace:*",
     "@alilc/lowcode-utils": "workspace:*",

@@ -13,7 +13,7 @@ import {
 } from '@vue/reactivity';
 import { noop, isObject, isPlainObject, isSet, isMap } from 'lodash-es';
 
-export { ref as createSignal, computed, effect };
+export { ref as signal, computed, effect };
 export type { Ref as Signal, ComputedRef as ComputedSignal };
 
 const INITIAL_WATCHER_VALUE = {};

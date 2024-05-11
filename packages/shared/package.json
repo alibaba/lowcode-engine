@@ -1,8 +1,17 @@
 {
   "name": "@alilc/lowcode-shared",
   "version": "2.0.0-beta.0",
+  "private": true,
   "type": "module",
-  "main": "dist/low-code-shared.cjs",
-  "module": "dist/low-code-shared.js",
-  "types": "dist/index.d.ts"
+  "module": "src/index.ts",
+  "dependencies": {
+    "@vue/reactivity": "^3.4.23",
+    "hookable": "^5.5.3",
+    "lodash-es": "^4.17.21",
+    "store": "^2.0.12"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
+    "@types/store": "^2.0.2"
+  }
 }
