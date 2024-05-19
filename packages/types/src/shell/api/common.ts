@@ -1,5 +1,5 @@
 
-import { Component, ReactNode } from 'react';
+import { Component, ReactElement, ReactNode } from 'react';
 import { IPublicTypeI18nData, IPublicTypeNodeSchema, IPublicTypeTitleContent } from '../type';
 import { IPublicEnumTransitionType } from '../enum';
 
@@ -73,7 +73,7 @@ export interface IPublicApiCommonUtils {
   /**
    * i18n 转换方法
    */
-  intl(data: IPublicTypeI18nData | string, params?: object): string;
+  intl(data: IPublicTypeI18nData | string | undefined | ReactElement, params?: object): string;
 }
 export interface IPublicApiCommonSkeletonCabin {
 

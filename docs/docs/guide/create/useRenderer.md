@@ -20,7 +20,7 @@ sidebar_position: 1
 [在 Demo 中](https://lowcode-engine.cn/demo/demo-general/index.html)，右上角有渲染模块的示例使用方式：
 ![Mar-13-2022 16-52-49.gif](https://img.alicdn.com/imgextra/i2/O1CN01PRsEl61o7Zct5fJML_!!6000000005178-1-tps-1534-514.gif)
 
-基于官方提供的渲染模块 [@alifd/lowcode-react-renderer](https://github.com/alibaba/lowcode-engine/tree/main/packages/react-renderer)，你可以在 React 上下文渲染低代码编辑器产出的页面。
+基于官方提供的渲染模块 [@alilc/lowcode-react-renderer](https://github.com/alibaba/lowcode-engine/tree/main/packages/react-renderer)，你可以在 React 上下文渲染低代码编辑器产出的页面。
 
 ### 构造渲染模块所需数据
 

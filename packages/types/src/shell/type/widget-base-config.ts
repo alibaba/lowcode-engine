@@ -36,7 +36,7 @@ export interface IPublicTypeWidgetBaseConfig {
    */
   area?: IPublicTypeWidgetConfigArea;
   props?: Record<string, any>;
-  content?: string | ReactElement | ComponentType<any> | IPublicTypePanelConfig[];
+  content?: string | ReactElement | ComponentType<any> | IPublicTypePanelConfig[] | IPublicTypePanelConfig;
   contentProps?: Record<string, any>;
 
   /**

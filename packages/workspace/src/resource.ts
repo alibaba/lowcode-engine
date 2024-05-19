@@ -1,35 +1,14 @@
-import { ISkeleton } from '@alilc/lowcode-editor-skeleton';
 import { IPublicTypeEditorView, IPublicResourceData, IPublicResourceTypeConfig, IBaseModelResource, IPublicEnumPluginRegisterLevel } from '@alilc/lowcode-types';
 import { Logger } from '@alilc/lowcode-utils';
 import { BasicContext, IBasicContext } from './context/base-context';
-import { ResourceType, IResourceType } from './resource-type';
+import { IResourceType } from './resource-type';
 import { IWorkspace } from './workspace';
 
 const logger = new Logger({ level: 'warn', bizName: 'workspace:resource' });
 
-export interface IBaseResource<T> extends IBaseModelResource<T> {
-  readonly resourceType: ResourceType;
+export interface IResource extends Resource {}
 
-  skeleton: ISkeleton;
-
-  description?: string;
-
-  get editorViews(): IPublicTypeEditorView[];
-
-  get defaultViewName(): string | undefined;
-
-  getEditorView(name: string): IPublicTypeEditorView | undefined;
-
-  import(schema: any): Promise<any>;
-
-  save(value: any): Promise<any>;
-
-  url(): Promise<string | undefined>;
-}
-
-export type IResource = IBaseResource<IResource>;
-
-export class Resource implements IResource {
+export class Resource implements IBaseModelResource<IResource> {
   private context: IBasicContext;
 
   resourceTypeInstance: IPublicResourceTypeConfig;
