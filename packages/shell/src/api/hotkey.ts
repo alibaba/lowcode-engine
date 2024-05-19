@@ -50,4 +50,12 @@ export class Hotkey implements IPublicApiHotkey {
       this[hotkeySymbol].unbind(combos, callback, action);
     };
   }
+
+  /**
+   * 给指定窗口绑定快捷键
+   * @param window 窗口的 window 对象
+   */
+  mount(window: Window) {
+    return this[hotkeySymbol].mount(window);
+  }
 }

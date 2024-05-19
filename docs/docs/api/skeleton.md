@@ -11,8 +11,9 @@ sidebar_position: 10
 
 ![image.png](https://img.alicdn.com/imgextra/i4/O1CN01eVA0U41xYRP3e5zo0_!!6000000006455-2-tps-1780-996.png)
 
-页面上可以扩展的区域共 5 个，具体如下：
-![image.png](https://img.alicdn.com/imgextra/i3/O1CN014d2AcS1D5c9TshEiQ_!!6000000000165-2-tps-1892-974.png)
+页面上可以扩展的区域共 6 个，具体如下：
+![image](https://github.com/alibaba/lowcode-engine/assets/11935995/ba4641dd-d346-4ef7-8b71-8ca211e6eaf4)
+
 ### 基本概念
 #### 扩展区域位置 (area)
 ##### topArea
@@ -41,6 +42,11 @@ sidebar_position: 10
 ##### rightArea
 
 右侧区域，常用于组件的配置。常见的扩展有：统一处理组件的配置项，例如统一删除某一个配置项，统一添加某一个配置项的。
+
+##### bottomArea
+
+底部扩展区域。
+
 ##### toolbar
 
 跟 topArea 类似，按需放置面板插件~

@@ -68,7 +68,7 @@ export interface IProject extends Omit<IBaseApiProject<
 
   onCurrentDocumentChange(fn: (doc: IDocumentModel) => void): () => void;
 
-  onSimulatorReady(fn: (args: any) => void): () => void;
+  onSimulatorReady(fn: (simulator: ISimulatorHost) => void): () => void;
 
   onRendererReady(fn: () => void): () => void;
 

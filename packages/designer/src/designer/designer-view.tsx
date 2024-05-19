@@ -1,16 +1,16 @@
 import { Component } from 'react';
 import classNames from 'classnames';
 import BuiltinDragGhostComponent from './drag-ghost';
-import { Designer, DesignerProps } from './designer';
+import { Designer, DesignerProps, IDesigner } from './designer';
 import { ProjectView } from '../project';
 import './designer.less';
 
 type IProps = DesignerProps & {
-  designer?: Designer;
+  designer?: IDesigner;
 };
 
 export class DesignerView extends Component<IProps> {
-  readonly designer: Designer;
+  readonly designer: IDesigner;
   readonly viewName: string | undefined;
 
   constructor(props: IProps) {

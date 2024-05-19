@@ -43,5 +43,5 @@ sidebar_position: 3
 | @alilc/lowcode-materials | [https://github.com/alibaba/lowcode-materials](https://github.com/alibaba/lowcode-materials) | packages/fusion-lowcode-materials |
 | @alilc/antd-lowcode-materials | [https://github.com/alibaba/lowcode-materials](https://github.com/alibaba/lowcode-materials) | packages/antd-lowcode-materials |
 | @alifd/layout（原 @alifd/pro-layout 升级后的版本） | [https://github.com/alibaba-fusion/layout](https://github.com/alibaba-fusion/layout) |  |
-|  |  |  |
+| @alilc/lowcode-engine-docs | [https://github.com/alibaba/lowcode-engine](https://github.com/alibaba/lowcode-engine) | docs |
 |  |  |  |

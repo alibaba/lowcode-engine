@@ -1,18 +1,12 @@
 import { IPublicApiCommand, IPublicEnumTransitionType, IPublicModelPluginContext, IPublicTypeCommand, IPublicTypeCommandHandlerArgs, IPublicTypeListCommand } from '@alilc/lowcode-types';
 import { checkPropTypes } from '@alilc/lowcode-utils';
-export interface ICommand extends Omit<IPublicApiCommand, 'registerCommand' | 'batchExecuteCommand'> {
-  registerCommand(command: IPublicTypeCommand, options?: {
-    commandScope?: string;
-  }): void;
-
-  batchExecuteCommand(commands: { name: string; args: IPublicTypeCommandHandlerArgs }[], pluginContext?: IPublicModelPluginContext): void;
-}
+export interface ICommand extends Command {}
 
 export interface ICommandOptions {
   commandScope?: string;
 }
 
-export class Command implements ICommand {
+export class Command implements Omit<IPublicApiCommand, 'registerCommand' | 'batchExecuteCommand'> {
   private commands: Map<string, IPublicTypeCommand> = new Map();
   private commandErrors: Function[] = [];
 
