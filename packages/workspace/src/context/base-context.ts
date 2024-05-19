@@ -55,32 +55,10 @@ import { getLogger, Logger as InnerLogger } from '@alilc/lowcode-utils';
 import { IWorkspace } from '../workspace';
 import { IEditorWindow } from '../window';
 
-export interface IBasicContext extends Omit<IPublicModelPluginContext, 'workspace'> {
-  skeleton: IPublicApiSkeleton;
-  plugins: IPublicApiPlugins;
-  project: IPublicApiProject;
-  setters: IPublicApiSetters;
-  material: IPublicApiMaterial;
-  common: IPublicApiCommon;
-  config: IEngineConfig;
-  event: IPublicApiEvent;
-  logger: InnerLogger;
-  hotkey: IPublicApiHotkey;
-  innerProject: IProject;
-  editor: Editor;
-  designer: IDesigner;
-  registerInnerPlugins: () => Promise<void>;
-  innerSetters: InnerSetters;
-  innerSkeleton: ISkeleton;
-  innerHotkey: IHotKey;
-  innerPlugins: ILowCodePluginManager;
-  canvas: IPublicApiCanvas;
-  pluginEvent: IPublicApiEvent;
-  preference: IPluginPreferenceMananger;
-  workspace: IWorkspace;
+export interface IBasicContext extends BasicContext {
 }
 
-export class BasicContext implements IBasicContext {
+export class BasicContext implements Omit<IPublicModelPluginContext, 'workspace' | 'commonUI' | 'command' | 'isPluginRegisteredInWorkspace' | 'editorWindow'> {
   skeleton: IPublicApiSkeleton;
   plugins: IPublicApiPlugins;
   project: IPublicApiProject;

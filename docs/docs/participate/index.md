@@ -70,7 +70,7 @@ npm start
 在 lowcode-engine 目录下执行下面命令
 ```
 cd docs
-
+npm install
 npm start
 ```
 

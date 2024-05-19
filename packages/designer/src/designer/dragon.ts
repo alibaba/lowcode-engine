@@ -13,7 +13,7 @@ import {
 import { setNativeSelection, cursor } from '@alilc/lowcode-utils';
 import { INode, Node } from '../document';
 import { ISimulatorHost, isSimulatorHost } from '../simulator';
-import { IDesigner } from './designer';
+import type { IDesigner } from './designer';
 import { makeEventsHandler } from '../utils/misc';
 
 export interface ILocateEvent extends IPublicModelLocateEvent {
@@ -95,17 +95,13 @@ function isDragEvent(e: any): e is DragEvent {
   return e?.type?.startsWith('drag');
 }
 
-export interface IDragon extends IPublicModelDragon<
-  INode,
-  ILocateEvent
-> {
-  emitter: IEventBus;
-}
-
 /**
  * Drag-on 拖拽引擎
  */
-export class Dragon implements IDragon {
+export class Dragon implements IPublicModelDragon<
+  INode,
+  ILocateEvent
+> {
   private sensors: IPublicModelSensor[] = [];
 
   private nodeInstPointerEvents: boolean;
@@ -637,3 +633,5 @@ export class Dragon implements IDragon {
     };
   }
 }
+
+export interface IDragon extends Dragon { }
