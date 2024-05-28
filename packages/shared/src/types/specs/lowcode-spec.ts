@@ -27,7 +27,7 @@ export interface Project {
   /**
    * 国际化语料
    */
-  i18n?: I18nMap;
+  i18n?: LocaleTranslationsMap;
   /**
    * 应用范围内的全局常量
    */
@@ -40,16 +40,16 @@ export interface Project {
   /**
    * 当前应用配置信息
    */
-  config?: Record<string, JSONValue>;
+  config?: Record<string, JSONObject>;
   /**
    * 当前应用元数据信息
    */
-  meta?: Record<string, JSONValue>;
+  meta?: Record<string, JSONObject>;
   /**
    * 当前应用的公共数据源
    * @deprecated
    */
-  dataSource?: never;
+  // dataSource?: never;
   /**
    * 当前应用的路由配置信息
    */
@@ -103,15 +103,13 @@ export interface ComponentMap {
  * 组件树描述
  * 协议中用于描述搭建出来的组件树结构的规范，整个组件树的描述由组件结构&容器结构两种结构嵌套构成。
  */
-export type ComponentTree<LifeCycleNameT extends string = string> =
-  ComponentTreeRootNode<LifeCycleNameT>;
+export type ComponentTree = ComponentTreeRoot;
 
 /**
  * 根容器节点结构描述 (A)
  * 容器是一类特殊的组件，在组件能力基础上增加了对生命周期对象、自定义方法、样式文件、数据源等信息的描述。
  */
-export interface ComponentTreeRootNode<LifeCycleNameT extends string = string>
-  extends ComponentTreeNode {
+export interface ComponentTreeRoot extends ComponentNode {
   componentName: 'Page' | 'Block' | 'Component';
   /**
    * 文件名称
@@ -129,7 +127,7 @@ export interface ComponentTreeRootNode<LifeCycleNameT extends string = string>
    * 生命周期对象
    */
   lifeCycles?: {
-    [name in LifeCycleNameT]: JSFunction;
+    [name in ComponentLifeCycle]: JSFunction;
   };
   /**
    * 自定义方法对象
@@ -141,7 +139,7 @@ export interface ComponentTreeRootNode<LifeCycleNameT extends string = string>
    * 数据源对象
    * type todo
    */
-  dataSource?: any;
+  dataSource?: ComponentDataSource;
 
   // for useless
   loop: never;
@@ -149,10 +147,109 @@ export interface ComponentTreeRootNode<LifeCycleNameT extends string = string>
   condition: never;
 }
 
+export type ComponentLifeCycle =
+  | 'constructor'
+  | 'render'
+  | 'componentDidMount'
+  | 'componentDidUpdate'
+  | 'componentWillUnmount'
+  | 'componentDidCatch';
+
+/**
+ * 组件数据源描述
+ */
+export interface ComponentDataSource {
+  /**
+   * 数据源列表
+   */
+  list: ComponentDataSourceItem[];
+  /**
+   * 所有请求数据的处理函数
+   */
+  dataHandler: JSFunction;
+}
+
+/**
+ * 请求配置
+ */
+export interface ComponentDataSourceItem {
+  /**
+   * 数据请求 ID 标识
+   */
+  id: string;
+  /**
+   * 是否为初始数据
+   * 值为 true 时，将在组件初始化渲染时自动发送当前数据请求
+   */
+  isInit: boolean | JSExpression;
+  /**
+   * 是否需要串行执行
+   * 值为 true 时，当前请求将被串行执行
+   */
+  isSync: boolean | JSExpression;
+  /**
+   * 数据请求类型
+   */
+  type: string;
+  /**
+   * 自定义扩展的外部请求处理器
+   */
+  requestHandler?: JSFunction;
+  /**
+   * request 成功后的回调函数
+   * 参数为请求成功后 promise 的 value 值
+   */
+  dataHandler?: JSFunction;
+  /**
+   * request 失败后的回调函数
+   * 参数为请求出错 promise 的 error 内容
+   */
+  errorHandler?: JSFunction;
+  /**
+   * 请求配置参数
+   */
+  options?: ComponentDataSourceItemOptions;
+
+  [otherKey: string]: any;
+}
+
+/**
+ * 请求配置参数
+ */
+export interface ComponentDataSourceItemOptions {
+  /**
+   * 请求地址
+   */
+  uri: string | JSExpression;
+  /**
+   * 请求参数
+   */
+  params?: JSONObject | JSExpression;
+  /**
+   * 请求方法
+   */
+  method?: string | JSExpression;
+  /**
+   * 是否支持跨域
+   * 对应 credentials = 'include'
+   */
+  isCors?: boolean | JSExpression;
+  /**
+   * 超时时长
+   */
+  timeout?: number | JSExpression;
+  /**
+   * 请求头信息
+   */
+  headers?: JSONObject | JSExpression;
+
+  [option: string]: any;
+}
+
 /**
  * 组件结构描述（A）
  */
-export interface ComponentTreeNode {
+export interface ComponentNode {
   /**
    * 组件唯一标识
    */
@@ -164,7 +261,7 @@ export interface ComponentTreeNode {
   /**
    * 组件属性对象
    */
-  props?: ComponentTreeNodeProps;
+  props?: ComponentNodeProps;
   /**
    * 选填，根据表达式结果判断是否渲染物料；
    */
@@ -186,7 +283,7 @@ export interface ComponentTreeNode {
 /**
  * Props 结构描述
  */
-export interface ComponentTreeNodeProps {
+export interface ComponentNodeProps {
   /** 组件 ID */
   id?: string | JSExpression;
   /** 组件样式类名 */
@@ -221,8 +318,12 @@ export type Util = NPMUtil | FunctionUtil;
  * https://lowcode-engine.cn/site/docs/specs/lowcode-spec#25-%E5%9B%BD%E9%99%85%E5%8C%96%E5%A4%9A%E8%AF%AD%E8%A8%80%E6%94%AF%E6%8C%81aa
  * 国际化多语言支持
  */
-export interface I18nMap {
-  [locale: string]: Record<string, string>;
+export interface I18nTranslations {
+  [key: string]: string;
+}
+
+export interface LocaleTranslationsMap {
+  [locale: string]: I18nTranslations;
 }
 
 /**
@@ -316,11 +417,11 @@ export interface JSONObject {
 
 /**
  * 节点类型（A）
- * 通常用于描述组件的某一个属性为 ReactNode 或 Function-Return-ReactNode 的场景。
+ * 通常用于描述组件的某一个属性为 Node 或 Function-Return-Node 的场景。
  */
 export interface JSSlot {
   type: 'JSSlot';
-  value: ComponentTreeNode | ComponentTreeNode[];
+  value: ComponentNode | ComponentNode[];
   params?: string[];
 }
 
@@ -343,7 +444,7 @@ export interface JSExpression {
 /**
  * 国际化多语言类型（AA）
  */
-export interface I18nNode {
+export interface JSI18n {
   type: 'i18n';
   /**
    * i18n 结构中字段的 key 标识符
@@ -355,4 +456,4 @@ export interface I18nNode {
   params?: Record<string, string | number | JSExpression>;
 }
 
-export type NodeType = string | JSExpression | I18nNode | ComponentTreeNode;
+export type NodeType = string | JSExpression | JSI18n | ComponentNode;

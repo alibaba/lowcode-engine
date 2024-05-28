@@ -1,5 +1,4 @@
-import type { RawRouteLocation } from '@alilc/lowcode-renderer-core';
-import type { RouteLocationNormalized } from '../types';
+import type { RouteLocationNormalized, RawRouteLocation } from '../types';
 
 export function isRouteLocation(route: any): route is RawRouteLocation {
   return typeof route === 'string' || (route && typeof route === 'object');

@@ -1,77 +1,78 @@
-import {
-  type App,
-  type AppBase,
-  createAppFunction,
-  type AppOptionsBase,
-} from '@alilc/lowcode-renderer-core';
+import { createRenderer, type AppOptions, type IRender } from '@alilc/lowcode-renderer-core';
 import { type ComponentType } from 'react';
 import { type Root, createRoot } from 'react-dom/client';
-import { createRouter } from '@alilc/lowcode-renderer-router';
-import { createRenderer } from '../renderer';
+import { createRouter, type RouterOptions } from '@alilc/lowcode-renderer-router';
 import AppComponent from '../components/app';
-import { createIntl } from '../runtime-api/intl';
-import { createRuntimeUtils } from '../runtime-api/utils';
+import { RendererContext } from '../context/render';
+import { createRouterProvider } from '../components/routerView';
+import { rendererExtends } from '../plugin';
 
-export interface AppOptions extends AppOptionsBase {
-  dataSourceCreator: any;
+export interface ReactAppOptions extends AppOptions {
   faultComponent?: ComponentType<any>;
 }
 
-export interface ReactRender extends AppBase {}
+const defaultRouterOptions: RouterOptions = {
+  historyMode: 'browser',
+  baseName: '/',
+  routes: [],
+};
 
-export type ReactApp = App<ReactRender>;
+export const createApp = async (options: ReactAppOptions) => {
+  const creator = createRenderer<IRender>(async (context) => {
+    const { schema, boostsManager } = context;
+    const boosts = boostsManager.toExpose();
 
-export const createApp = createAppFunction<AppOptions, ReactRender>(async (context, options) => {
-  const { schema, packageManager, appScope, boosts } = context;
+    // router
+    let routerConfig = defaultRouterOptions;
 
-  // router
-  // todo: transform config
-  const router = createRouter(schema.getByKey('router') as any);
-
-  appScope.inject('router', router);
-
-  // i18n
-  const i18nMessages = schema.getByKey('i18n') ?? {};
-  const defaultLocale = schema.getByPath('config.defaultLocale') ?? 'zh-CN';
-  const intl = createIntl(i18nMessages, defaultLocale);
-
-  appScope.inject('intl', intl);
-
-  // utils
-  const runtimeUtils = createRuntimeUtils(schema.getByKey('utils') ?? [], packageManager);
-
-  appScope.inject('utils', runtimeUtils.utils);
-  boosts.add('runtimeUtils', runtimeUtils);
-
-  // set config
-  if (options.faultComponent) {
-    context.config.set('faultComponent', options.faultComponent);
-  }
-  context.config.set('dataSourceCreator', options.dataSourceCreator);
-
-  let root: Root | undefined;
-  const renderer = createRenderer();
-  const appContext = { ...context, renderer };
-
-  const reactRender: ReactRender = {
-    async mount(el) {
-      if (root) {
-        return;
+    try {
+      const routerSchema = schema.get('router');
+      if (routerSchema) {
+        routerConfig = boosts.codeRuntime.resolve(routerSchema);
       }
+    } catch (e) {
+      console.error(`schema's router config is resolve error: `, e);
+    }
 
-      root = createRoot(el);
-      root.render(<AppComponent context={appContext} />);
-    },
-    unmount() {
-      if (root) {
-        root.unmount();
-        root = undefined;
-      }
-    },
-  };
+    const router = createRouter(routerConfig);
 
-  return {
-    appBase: reactRender,
-    renderer,
-  };
-});
+    boosts.codeRuntime.getScope().inject('router', router);
+
+    // set config
+    // if (options.faultComponent) {
+    //   context.config.set('faultComponent', options.faultComponent);
+    // }
+
+    // extends boosts
+    boostsManager.extend(rendererExtends);
+
+    const RouterProvider = createRouterProvider(router);
+
+    let root: Root | undefined;
+
+    return {
+      async mount(el) {
+        if (root) {
+          return;
+        }
+
+        root = createRoot(el);
+        root.render(
+          <RendererContext.Provider value={context}>
+            <RouterProvider>
+              <AppComponent />
+            </RouterProvider>
+          </RendererContext.Provider>,
+        );
+      },
+      unmount() {
+        if (root) {
+          root.unmount();
+          root = undefined;
+        }
+      },
+    };
+  });
+
+  return creator(options);
+};

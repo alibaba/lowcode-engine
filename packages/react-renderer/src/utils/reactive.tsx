@@ -1,15 +1,15 @@
+import { processValue } from '@alilc/lowcode-renderer-core';
 import {
-  processValue,
   type AnyFunction,
   type PlainObject,
-  type JSExpression,
   isJSExpression,
-} from '@alilc/lowcode-renderer-core';
+  computed,
+  watch,
+} from '@alilc/lowcode-shared';
 import { type ComponentType, memo, forwardRef, type PropsWithChildren, createElement } from 'react';
 import { produce } from 'immer';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 import { useSyncExternalStore } from 'use-sync-external-store/shim';
-import { computed, watch } from '../signals';
 
 export interface ReactiveStore<Snapshot = PlainObject> {
   value: Snapshot;
@@ -20,7 +20,8 @@ export interface ReactiveStore<Snapshot = PlainObject> {
 
 function createReactiveStore<Snapshot = PlainObject>(
   target: Record<string, any>,
-  valueGetter: (expr: JSExpression) => any,
+  predicate: (obj: any) => boolean,
+  valueGetter: (expr: any) => any,
 ): ReactiveStore<Snapshot> {
   let isFlushing = false;
   let isFlushPending = false;
@@ -28,7 +29,7 @@ function createReactiveStore<Snapshot = PlainObject>(
   const cleanups: Array<() => void> = [];
   const waitPathToSetValueMap = new Map();
 
-  const initValue = processValue(target, isJSExpression, (node: JSExpression, paths) => {
+  const initValue = processValue(target, predicate, (node: any, paths) => {
     const computedValue = computed(() => valueGetter(node));
     const unwatch = watch(computedValue, (newValue) => {
       waitPathToSetValueMap.set(paths, newValue);
@@ -93,15 +94,21 @@ function createReactiveStore<Snapshot = PlainObject>(
 
 interface ReactiveOptions {
   target: PlainObject;
-  valueGetter: (expr: JSExpression) => any;
+  valueGetter: (expr: any) => any;
+  predicate?: (obj: any) => boolean;
   forwardRef?: boolean;
 }
 
 export function reactive<TProps extends PlainObject = PlainObject>(
   WrappedComponent: ComponentType<TProps>,
-  { target, valueGetter, forwardRef: forwardRefOption = true }: ReactiveOptions,
-): ComponentType<PlainObject> {
-  const store = createReactiveStore(target, valueGetter);
+  {
+    target,
+    valueGetter,
+    predicate = isJSExpression,
+    forwardRef: forwardRefOption = true,
+  }: ReactiveOptions,
+): ComponentType<PropsWithChildren<any>> {
+  const store = createReactiveStore<TProps>(target, predicate, valueGetter);
 
   function WrapperComponent(props: any, ref: any) {
     const actualProps = useSyncExternalStore(store.subscribe, store.getSnapshot);

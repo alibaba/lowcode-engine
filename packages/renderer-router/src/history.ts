@@ -1,6 +1,12 @@
-import { createEvent } from '@alilc/lowcode-renderer-core';
+import { createCallback } from './utils/callback';
 
+/**
+ * history state
+ */
 export type HistoryState = History['state'];
+/**
+ * history locaiton
+ */
 export type HistoryLocation = string;
 
 export enum NavigationType {
@@ -166,8 +172,8 @@ export function createBrowserHistory(base?: string): RouterHistory {
     currentLocation = to;
   }
 
-  const listeners = createEvent<NavigationCallback>();
-  const teardowns = createEvent<() => void>();
+  const listeners = createCallback<NavigationCallback>();
+  const teardowns = createCallback<() => void>();
 
   let pauseState: HistoryLocation | null = null;
 
@@ -266,7 +272,7 @@ export function createBrowserHistory(base?: string): RouterHistory {
 function normalizeBase(base?: string) {
   if (!base) {
     // strip full URL origin
-    base = document.baseURI.replace(/^\w+:\/\/[^\/]+/, '');
+    base = document.baseURI.replace(/^\w+:\/\/[^/]+/, '');
   }
 
   // 处理边界问题 确保是一个浏览器路径 如 /xxx #/xxx
@@ -348,7 +354,7 @@ export function createMemoryHistory(base = ''): RouterHistory {
     historyStack.push({ location, state });
   }
 
-  const listeners = createEvent<NavigationCallback>();
+  const listeners = createCallback<NavigationCallback>();
 
   function triggerListeners(
     to: HistoryLocation,

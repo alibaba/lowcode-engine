@@ -1,8 +1,8 @@
-import { signal, uniqueId, type ComponentTreeRootNode } from '@alilc/lowcode-shared';
+import { signal, uniqueId, type Spec } from '@alilc/lowcode-shared';
 import { type Project } from '../project';
 import { History } from './history';
 
-export interface DocumentSchema extends ComponentTreeRootNode {
+export interface DocumentSchema extends Spec.ComponentTreeRoot {
   id: string;
 }
 

@@ -1,11 +1,15 @@
 // refer from https://github.com/vuejs/router/blob/main/packages/router/src/matcher/index.ts
 
-import { type PlainObject, type RawLocation } from '@alilc/lowcode-renderer-core';
+import { type PlainObject } from '@alilc/lowcode-shared';
 import { pick } from 'lodash-es';
 import { createRouteRecordMatcher, type RouteRecordMatcher } from './utils/record-matcher';
-import { type PathParserOptions, type PathParams, comparePathParserScore } from './utils/path-parser';
+import {
+  type PathParserOptions,
+  type PathParams,
+  comparePathParserScore,
+} from './utils/path-parser';
 
-import type { RouteRecord, RouteLocationNormalized } from './types';
+import type { RouteRecord, RouteLocationNormalized, RawLocation } from './types';
 
 export interface RouteRecordNormalized {
   /**
@@ -60,9 +64,7 @@ export interface RouterMatcher {
    * @param location - MatcherLocationRaw to resolve to a url
    * @param currentLocation - MatcherLocation of the current location
    */
-  resolve: (
-    location: RawLocation, currentLocation: MatcherLocation
-  ) => MatcherLocation;
+  resolve: (location: RawLocation, currentLocation: MatcherLocation) => MatcherLocation;
 }
 
 export function createRouterMatcher(
@@ -104,8 +106,7 @@ export function createRouterMatcher(
       while (
         i < matchers.length &&
         comparePathParserScore(matcher, matchers[i]) >= 0 &&
-        (matcher.record.path !== matchers[i].record.path ||
-        !isRecordChildOf(matcher, matchers[i]))
+        (matcher.record.path !== matchers[i].record.path || !isRecordChildOf(matcher, matchers[i]))
       ) {
         i++;
       }
@@ -139,10 +140,7 @@ export function createRouterMatcher(
     return matcherMap.get(name);
   }
 
-  function resolve(
-    location: RawLocation,
-    currentLocation: MatcherLocation
-  ): MatcherLocation {
+  function resolve(location: RawLocation, currentLocation: MatcherLocation): MatcherLocation {
     let matcher: RouteRecordMatcher | undefined;
     let params: PathParams = {};
     let path: MatcherLocation['path'];
@@ -163,17 +161,15 @@ export function createRouterMatcher(
         paramsFromLocation(
           currentLocation.params ?? {},
           matcher.keys
-            .filter(k => !k.optional)
-            .concat(
-              matcher.parent ? matcher.parent.keys.filter(k => k.optional) : []
-            )
+            .filter((k) => !k.optional)
+            .concat(matcher.parent ? matcher.parent.keys.filter((k) => k.optional) : [])
             .map((k) => k.name),
         ),
         location.params
           ? paramsFromLocation(
-            location.params,
-            matcher.keys.map((k) => k.name),
-          )
+              location.params,
+              matcher.keys.map((k) => k.name),
+            )
           : {},
       );
 
@@ -253,11 +249,6 @@ export function normalizeRouteRecord(record: RouteRecord): RouteRecordNormalized
   };
 }
 
-function isRecordChildOf(
-  record: RouteRecordMatcher,
-  parent: RouteRecordMatcher
-): boolean {
-  return parent.children.some(
-    child => child === record || isRecordChildOf(record, child)
-  );
+function isRecordChildOf(record: RouteRecordMatcher, parent: RouteRecordMatcher): boolean {
+  return parent.children.some((child) => child === record || isRecordChildOf(record, child));
 }

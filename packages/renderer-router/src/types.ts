@@ -1,12 +1,12 @@
-import type {
-  RouteRecord as RouterRecordSpec,
-  RouteLocation,
-  PlainObject,
-  RawRouteLocation,
-} from '@alilc/lowcode-renderer-core';
+import type { Spec, PlainObject } from '@alilc/lowcode-shared';
 import type { PathParserOptions } from './utils/path-parser';
 
-export interface RouteRecord extends RouterRecordSpec, PathParserOptions {
+export type RawRouteLocation = Spec.RawRouteLocation;
+export type RouteLocation = Spec.RouteLocation;
+export type RawLocation = Spec.RawLocation;
+export type RawLocationOptions = Spec.RawLocationOptions;
+
+export interface RouteRecord extends Spec.RouteRecord, PathParserOptions {
   meta?: PlainObject;
   redirect?:
     | string

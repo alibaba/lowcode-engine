@@ -1,6 +1,11 @@
-export * from './base';
+import * as Spec from './specs';
+
+export { Spec };
+
 export * from './material';
-export * from './specs/asset-spec';
-export * from './specs/lowcode-spec';
-export * from './specs/runtime-api';
-export * from './specs/material-spec';
+
+export type VoidFunction = (...args: any[]) => void;
+
+export type AnyFunction = (...args: any[]) => any;
+
+export type PlainObject = Record<string, any>;

@@ -1,5 +1,4 @@
-import { RawRouteLocation } from '@alilc/lowcode-renderer-core';
-import { type RouteLocationNormalized } from './types';
+import { type RouteLocationNormalized, type RawRouteLocation } from './types';
 import { isRouteLocation } from './utils/helper';
 
 export type NavigationHookAfter = (

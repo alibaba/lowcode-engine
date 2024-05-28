@@ -1,5 +1,6 @@
 export * from './invariant';
 export * from './is-promise';
 export * from './unique-id';
-export * as Browser from './browser';
-export * as Platform from './platform';
+export * from './type-guards';
+export * from './platform';
+export * from './callback';

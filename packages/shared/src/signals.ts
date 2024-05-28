@@ -32,7 +32,7 @@ export type WatchCallback<V = any, OV = any> = (
   onCleanup: OnCleanup,
 ) => any;
 
-type OnCleanup = (cleanupFn: () => void) => void;
+export type OnCleanup = (cleanupFn: () => void) => void;
 
 export interface WatchOptions<Immediate = boolean> {
   immediate?: Immediate;
@@ -42,7 +42,7 @@ export interface WatchOptions<Immediate = boolean> {
 
 const INITIAL_WATCHER_VALUE = {};
 
-type MultiWatchSources = (WatchSource<unknown> | object)[];
+export type MultiWatchSources = (WatchSource<unknown> | object)[];
 
 export type WatchStopHandle = () => void;
 
@@ -51,7 +51,7 @@ export function watchEffect(effect: WatchEffect): WatchStopHandle {
   return doWatch(effect, null);
 }
 
-type MapSources<T, Immediate> = {
+export type MapSources<T, Immediate> = {
   [K in keyof T]: T[K] extends WatchSource<infer V>
     ? Immediate extends true
       ? V | undefined

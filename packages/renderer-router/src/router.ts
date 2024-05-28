@@ -1,11 +1,4 @@
-import {
-  type RouterApi,
-  type RouterConfig,
-  type RouteLocation,
-  createEvent,
-  type RawRouteLocation,
-  type RawLocationOptions,
-} from '@alilc/lowcode-renderer-core';
+import { type Spec } from '@alilc/lowcode-shared';
 import {
   createBrowserHistory,
   createHashHistory,
@@ -17,14 +10,21 @@ import { createRouterMatcher } from './matcher';
 import { type PathParserOptions, type PathParams } from './utils/path-parser';
 import { parseURL, stringifyURL } from './utils/url';
 import { isSameRouteLocation } from './utils/helper';
-import type { RouteRecord, RouteLocationNormalized } from './types';
+import type {
+  RouteRecord,
+  RouteLocationNormalized,
+  RawRouteLocation,
+  RouteLocation,
+  RawLocationOptions,
+} from './types';
 import { type NavigationHookAfter, type NavigationGuard, guardToPromiseFn } from './guard';
+import { createCallback } from './utils/callback';
 
-export interface RouterOptions extends RouterConfig, PathParserOptions {
+export interface RouterOptions extends Spec.RouterConfig, PathParserOptions {
   routes: RouteRecord[];
 }
 
-export interface Router extends RouterApi {
+export interface Router extends Spec.RouterApi {
   readonly options: RouterOptions;
   readonly history: RouterHistory;
 
@@ -56,13 +56,7 @@ const START_LOCATION: RouteLocationNormalized = {
   redirectedFrom: undefined,
 };
 
-const defaultRouterOptions: RouterOptions = {
-  historyMode: 'browser',
-  baseName: '/',
-  routes: [],
-};
-
-export function createRouter(options: RouterOptions = defaultRouterOptions): Router {
+export function createRouter(options: RouterOptions): Router {
   const { baseName = '/', historyMode = 'browser', routes = [], ...globalOptions } = options;
   const matcher = createRouterMatcher(routes, globalOptions);
   const routerHistory =
@@ -72,8 +66,8 @@ export function createRouter(options: RouterOptions = defaultRouterOptions): Rou
         ? createMemoryHistory(baseName)
         : createBrowserHistory(baseName);
 
-  const beforeGuards = createEvent<NavigationGuard>();
-  const afterGuards = createEvent<NavigationHookAfter>();
+  const beforeGuards = createCallback<NavigationGuard>();
+  const afterGuards = createCallback<NavigationHookAfter>();
 
   let currentLocation: RouteLocationNormalized = START_LOCATION;
   let pendingLocation = currentLocation;

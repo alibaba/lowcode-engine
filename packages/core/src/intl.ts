@@ -3,8 +3,8 @@ import {
   computed,
   effect,
   createLogger,
+  type Spec,
   type Signal,
-  type I18nMap,
   type ComputedSignal,
   type PlainObject,
 } from '@alilc/lowcode-shared';
@@ -21,8 +21,8 @@ const logger = createLogger({ level: 'warn', bizName: 'globalLocale' });
 const STORED_LOCALE_KEY = 'ali-lowcode-config';
 
 export type Locale = string;
-export type IntlMessage = I18nMap[Locale];
-export type IntlMessageRecord = I18nMap;
+export type IntlMessage = Spec.I18nMap[Locale];
+export type IntlMessageRecord = Spec.I18nMap;
 
 export class Intl {
   #locale: Signal<Locale>;
@@ -34,7 +34,7 @@ export class Intl {
     if (defaultLocale) {
       defaultLocale = nomarlizeLocale(defaultLocale);
     } else {
-      defaultLocale = initializeLocale();
+      defaultLocale = 'zh-CN';
     }
 
     const messageStore = mapKeys(messages, (_, key) => {
@@ -65,22 +65,6 @@ export class Intl {
 
   setLocale(locale: Locale) {
     const nomarlizedLocale = nomarlizeLocale(locale);
-
-    try {
-      // store storage
-      let config = JSON.parse(localStorage.getItem(STORED_LOCALE_KEY) || '');
-
-      if (config && typeof config === 'object') {
-        config.locale = locale;
-      } else {
-        config = { locale };
-      }
-
-      localStorage.setItem(STORED_LOCALE_KEY, JSON.stringify(config));
-    } catch {
-      // ignore;
-    }
-
     this.#locale.value = nomarlizedLocale;
   }
 

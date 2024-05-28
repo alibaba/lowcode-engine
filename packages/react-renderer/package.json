@@ -25,7 +25,6 @@
     "@alilc/lowcode-shared": "workspace:*",
     "@alilc/lowcode-renderer-core": "workspace:*",
     "@alilc/lowcode-renderer-router": "workspace:*",
-    "@vue/reactivity": "^3.4.21",
     "lodash-es": "^4.17.21",
     "immer": "^10.0.4",
     "hoist-non-react-statics": "^3.3.2",
@@ -39,8 +38,7 @@
     "@types/hoist-non-react-statics": "^3.3.5",
     "@types/use-sync-external-store": "^0.0.6",
     "@types/react": "^18.2.67",
-    "@types/react-dom": "^18.2.22",
-    "jsdom": "^24.0.0"
+    "@types/react-dom": "^18.2.22"
   },
   "peerDependencies": {
     "react": "^18.2.0",

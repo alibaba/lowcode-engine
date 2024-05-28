@@ -1,33 +1,25 @@
-import { AppContext, type AppContextObject } from '../context/app';
-import { createComponent } from '../component';
+import { isLowCodeComponentSchema } from '@alilc/lowcode-shared';
+import { useRenderContext } from '../context/render';
+import { createComponentBySchema, ReactComponent } from '../runtime';
 import Route from './route';
-import { createRouterProvider } from './router-view';
+import { rendererExtends } from '../plugin';
 
-export default function App({ context }: { context: AppContextObject }) {
-  const { schema, config, renderer, packageManager, appScope } = context;
-  const appWrappers = renderer.getAppWrappers();
-  const wrappers = renderer.getRouteWrappers();
+export default function App() {
+  const { schema, packageManager } = useRenderContext();
+  const appWrappers = rendererExtends.getAppWrappers();
+  const wrappers = rendererExtends.getRouteWrappers();
 
   function getLayoutComponent() {
-    const layoutName = schema.getByPath('config.layout.componentName');
+    const config = schema.get('config');
+    const componentName = config?.layout?.componentName as string;
 
-    if (layoutName) {
-      const Component: any = packageManager.getComponent(layoutName);
+    if (componentName) {
+      const Component = packageManager.getComponent<ReactComponent>(componentName);
 
-      if (Component?.devMode === 'lowCode') {
-        const componentsMap = schema.getComponentsMaps();
-        const componentsRecord = packageManager.getComponentsNameRecord<any>(componentsMap);
-
-        const Layout = createComponent({
-          componentsTree: Component.schema,
-          componentsRecord,
-
-          dataSourceCreator: config.get('dataSourceCreator'),
-          supCodeScope: appScope,
-          intl: appScope.value.intl,
+      if (isLowCodeComponentSchema(Component)) {
+        return createComponentBySchema(Component.schema, {
+          displayName: componentName,
         });
-
-        return Layout;
       }
 
       return Component;
@@ -45,7 +37,7 @@ export default function App({ context }: { context: AppContextObject }) {
   }
 
   if (Layout) {
-    const layoutProps = schema.getByPath('config.layout.props') ?? {};
+    const layoutProps: any = schema.get('config')?.layout?.props ?? {};
     element = <Layout {...layoutProps}>{element}</Layout>;
   }
 
@@ -55,11 +47,5 @@ export default function App({ context }: { context: AppContextObject }) {
     }, element);
   }
 
-  const RouterProvider = createRouterProvider(appScope.value.router);
-
-  return (
-    <AppContext.Provider value={context}>
-      <RouterProvider>{element}</RouterProvider>
-    </AppContext.Provider>
-  );
+  return element;
 }

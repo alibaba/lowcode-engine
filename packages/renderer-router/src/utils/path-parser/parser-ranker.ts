@@ -8,26 +8,26 @@ export type PathParams = Record<string, string | string[]>;
  * A param in a url like `/users/:id`
  */
 interface PathParserParamKey {
-  name: string
-  repeatable: boolean
-  optional: boolean
+  name: string;
+  repeatable: boolean;
+  optional: boolean;
 }
 
 export interface PathParser {
   /**
    * The regexp used to match a url
    */
-  re: RegExp
+  re: RegExp;
 
   /**
    * The score of the parser
    */
-  score: Array<number[]>
+  score: Array<number[]>;
 
   /**
    * Keys that appeared in the path
    */
-  keys: PathParserParamKey[]
+  keys: PathParserParamKey[];
   /**
    * Parses a url and returns the matched params or null if it doesn't match. An
    * optional param that isn't preset will be an empty string. A repeatable
@@ -37,7 +37,7 @@ export interface PathParser {
    * @returns a Params object, empty if there are no params. `null` if there is
    * no match
    */
-  parse(path: string): PathParams | null
+  parse(path: string): PathParams | null;
 
   /**
    * Creates a string version of the url
@@ -45,26 +45,23 @@ export interface PathParser {
    * @param params - object of params
    * @returns a url
    */
-  stringify(params: PathParams): string
+  stringify(params: PathParams): string;
 }
 
-/**
- * @internal
- */
 export interface _PathParserOptions {
   /**
    * Makes the RegExp case-sensitive.
    *
    * @defaultValue `false`
    */
-  sensitive?: boolean
+  sensitive?: boolean;
 
   /**
    * Whether to disallow a trailing slash or not.
    *
    * @defaultValue `false`
    */
-  strict?: boolean
+  strict?: boolean;
 
   /**
    * Should the RegExp match from the beginning by prepending a `^` to it.
@@ -72,20 +69,17 @@ export interface _PathParserOptions {
    *
    * @defaultValue `true`
    */
-  start?: boolean
+  start?: boolean;
 
   /**
    * Should the RegExp match until the end by appending a `$` to it.
    *
    * @defaultValue `true`
    */
-  end?: boolean
+  end?: boolean;
 }
 
-export type PathParserOptions = Pick<
-  _PathParserOptions,
-  'end' | 'sensitive' | 'strict'
->;
+export type PathParserOptions = Pick<_PathParserOptions, 'end' | 'sensitive' | 'strict'>;
 
 // default pattern for a param: non-greedy everything but /
 const BASE_PARAM_PATTERN = '[^/]+?';
@@ -126,7 +120,7 @@ const REGEX_CHARS_RE = /[.+*?^${}()[\]/\\]/g;
  */
 export function tokensToParser(
   segments: Array<Token[]>,
-  extraOptions?: _PathParserOptions
+  extraOptions?: _PathParserOptions,
 ): PathParser {
   const options = Object.assign({}, BASE_PATH_PARSER_OPTIONS, extraOptions);
 
@@ -147,8 +141,7 @@ export function tokensToParser(
       const token = segment[tokenIndex];
       // resets the score if we are inside a sub-segment /:a-other-:b
       let subSegmentScore: number =
-        PathScore.Segment +
-        (options.sensitive ? PathScore.BonusCaseSensitive : 0);
+        PathScore.Segment + (options.sensitive ? PathScore.BonusCaseSensitive : 0);
 
       if (token.type === TokenType.Static) {
         // prepend the slash if we are starting a new segment
@@ -171,8 +164,7 @@ export function tokensToParser(
             new RegExp(`(${re})`);
           } catch (err) {
             throw new Error(
-              `Invalid custom RegExp for param "${value}" (${re}): ` +
-              (err as Error).message
+              `Invalid custom RegExp for param "${value}" (${re}): ` + (err as Error).message,
             );
           }
         }
@@ -185,9 +177,7 @@ export function tokensToParser(
           subPattern =
             // avoid an optional / if there are more segments e.g. /:p?-static
             // or /:p?-:p2
-            optional && segment.length < 2
-              ? `(?:/${subPattern})`
-              : '/' + subPattern;
+            optional && segment.length < 2 ? `(?:/${subPattern})` : '/' + subPattern;
         if (optional) subPattern += '?';
 
         pattern += subPattern;
@@ -250,12 +240,11 @@ export function tokensToParser(
           path += token.value;
         } else if (token.type === TokenType.Param) {
           const { value, repeatable, optional } = token;
-          const param: string | readonly string[] =
-            value in params ? params[value] : '';
+          const param: string | readonly string[] = value in params ? params[value] : '';
 
           if (Array.isArray(param) && !repeatable) {
             throw new Error(
-              `Provided param "${value}" is an array but it is not repeatable (* or + modifiers)`
+              `Provided param "${value}" is an array but it is not repeatable (* or + modifiers)`,
             );
           }
 
@@ -313,13 +302,9 @@ function compareScoreArray(a: number[], b: number[]): number {
   // if the last subsegment was Static, the shorter segments should be sorted first
   // otherwise sort the longest segment first
   if (a.length < b.length) {
-    return a.length === 1 && a[0] === PathScore.Static + PathScore.Segment
-      ? -1
-      : 1;
+    return a.length === 1 && a[0] === PathScore.Static + PathScore.Segment ? -1 : 1;
   } else if (a.length > b.length) {
-    return b.length === 1 && b[0] === PathScore.Static + PathScore.Segment
-      ? 1
-      : -1;
+    return b.length === 1 && b[0] === PathScore.Static + PathScore.Segment ? 1 : -1;
   }
 
   return 0;

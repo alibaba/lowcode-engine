@@ -3,8 +3,8 @@
  * 对源码组件在低代码搭建平台中使用时所具备的配置能力和交互行为进行规范化描述，让不同平台对组件接入的实现保持一致，
  * 让组件针对不同的搭建平台接入时可以使用一份统一的描述内容，让组件在不同的业务中流通成为可能。
  */
-import { ComponentTree, ComponentTreeNode } from './lowcode-spec';
-import { PlainObject } from '../base';
+import { ComponentTree, ComponentNode } from './lowcode-spec';
+import { PlainObject } from '../index';
 
 export interface LowCodeComponentTree extends ComponentTree {
   componentName: 'Component';
@@ -230,5 +230,5 @@ export interface Snippet {
   /**
    * 待插入的 schema
    */
-  schema?: ComponentTreeNode;
+  schema?: ComponentNode;
 }
