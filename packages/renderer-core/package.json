@@ -34,6 +34,9 @@
   "devDependencies": {
     "@types/lodash-es": "^4.17.12"
   },
+  "peerDependencies": {
+    "@alilc/lowcode-shared": "workspace:*"
+  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"

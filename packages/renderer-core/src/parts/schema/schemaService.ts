@@ -39,7 +39,7 @@ export class SchemaService implements ISchemaService {
 
   initialize(schema: unknown): void {
     if (!isObject(schema)) {
-      throw Error('schema muse a object');
+      throw Error('schema must a object');
     }
 
     Object.keys(schema).forEach((key) => {

@@ -2,7 +2,7 @@
   "name": "@alilc/lowcode-shared",
   "version": "1.0.0-alpha.0",
   "type": "module",
-  "main": "dist/low-code-shared.js",
+  "main": "dist/low-code-shared.cjs",
   "module": "dist/low-code-shared.js",
   "types": "dist/index.d.ts",
   "files": [

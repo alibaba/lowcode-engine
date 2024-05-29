@@ -1,6 +1,9 @@
 import { defineConfig } from 'vite';
-import baseConfigFn from '../../vite.base.config'
+import baseConfigFn from '../../vite.base.config';
 
-export default defineConfig(async () => baseConfigFn({
-  name: 'LowCodeShared',
-}));
+export default defineConfig(async () =>
+  baseConfigFn({
+    name: 'LowCodeShared',
+    defaultFormats: ['es', 'cjs'],
+  }),
+);

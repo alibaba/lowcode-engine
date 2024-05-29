@@ -20,7 +20,7 @@ export function createRenderer<Render = IRender>(
   const rendererMain = instantiationService.createInstance(RendererMain);
 
   return async (options) => {
-    rendererMain.initialize(options);
+    await rendererMain.initialize(options);
 
     return rendererMain.startup<Render>(renderAdapter);
   };

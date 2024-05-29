@@ -77,8 +77,11 @@ export class RendererMain {
       this.runtimeUtilService.add(util);
     }
 
+    const constants = this.schemaService.get('constants') ?? {};
+
     const globalScope = this.codeRuntimeService.getScope();
     globalScope.setValue({
+      constants,
       utils: this.runtimeUtilService.toExpose(),
       ...this.runtimeIntlService.toExpose(),
     });

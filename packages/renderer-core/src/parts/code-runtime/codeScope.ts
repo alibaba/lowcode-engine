@@ -54,7 +54,7 @@ export class CodeScope implements ICodeScope {
     if (this.__node.current[name] && !force) {
       return;
     }
-    this.__node.current.value[name] = value;
+    this.__node.current[name] = value;
   }
 
   setValue(value: PlainObject, replace = false) {

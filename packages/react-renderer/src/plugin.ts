@@ -45,6 +45,6 @@ export const rendererExtends: RendererExtends = {
   },
 };
 
-export function definePlugin(plugin: Plugin<RendererExtends>) {
+export function defineRendererPlugin(plugin: Plugin<RendererExtends>) {
   return plugin;
 }

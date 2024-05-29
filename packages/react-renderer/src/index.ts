@@ -1,6 +1,6 @@
 export * from './api/app';
 export * from './api/component';
-export { definePlugin } from './plugin';
+export { defineRendererPlugin } from './plugin';
 export * from './context/render';
 export * from './context/router';
 

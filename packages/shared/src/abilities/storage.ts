@@ -53,11 +53,10 @@ export class KeyValueStore<O = PlainObject, K extends keyof O = keyof O> {
     if (this.setterValidation) {
       const valid = this.setterValidation(key, value);
 
-      invariant(
-        valid === false || typeof valid === 'string',
-        `failed to config ${key.toString()}, only predefined options can be set under strict mode, predefined options: ${valid ? valid : ''}`,
-        'KeyValueStore',
-      );
+      if (valid !== true) {
+        console.warn(`failed to config ${key.toString()}, validation error: ${valid ? valid : ''}`);
+        return;
+      }
     }
 
     this.store.set(key, value);
