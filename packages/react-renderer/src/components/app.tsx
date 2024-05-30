@@ -1,32 +1,13 @@
-import { isLowCodeComponentSchema } from '@alilc/lowcode-shared';
 import { useRenderContext } from '../context/render';
-import { createComponentBySchema, ReactComponent } from '../runtime';
+import { getComponentByName } from '../runtime';
 import Route from './route';
 import { rendererExtends } from '../plugin';
 
 export default function App() {
-  const { schema, packageManager } = useRenderContext();
+  const renderContext = useRenderContext();
+  const { schema } = renderContext;
   const appWrappers = rendererExtends.getAppWrappers();
   const wrappers = rendererExtends.getRouteWrappers();
-
-  function getLayoutComponent() {
-    const config = schema.get('config');
-    const componentName = config?.layout?.componentName as string;
-
-    if (componentName) {
-      const Component = packageManager.getComponent<ReactComponent>(componentName);
-
-      if (isLowCodeComponentSchema(Component)) {
-        return createComponentBySchema(Component.schema, {
-          displayName: componentName,
-        });
-      }
-
-      return Component;
-    }
-  }
-
-  const Layout = getLayoutComponent();
 
   let element = <Route />;
 
@@ -36,9 +17,16 @@ export default function App() {
     }, element);
   }
 
-  if (Layout) {
-    const layoutProps: any = schema.get('config')?.layout?.props ?? {};
-    element = <Layout {...layoutProps}>{element}</Layout>;
+  const layoutConfig = schema.get('config')?.layout;
+
+  if (layoutConfig) {
+    const componentName = layoutConfig.componentName as string;
+    const Layout = getComponentByName(componentName, renderContext);
+
+    if (Layout) {
+      const layoutProps: any = layoutConfig.props ?? {};
+      element = <Layout {...layoutProps}>{element}</Layout>;
+    }
   }
 
   if (appWrappers.length > 0) {

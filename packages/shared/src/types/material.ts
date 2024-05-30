@@ -1,14 +1,14 @@
 import { Package } from './specs/asset-spec';
-import { ComponentTree } from './specs/lowcode-spec';
+import { Project } from './specs/lowcode-spec';
 
 export interface ProCodeComponent extends Package {
   package: string;
   type: 'proCode';
 }
 
-export interface LowCodeComponent extends Omit<Package, 'schema'> {
+export interface LowCodeComponent extends Package {
   id: string;
   type: 'lowCode';
   componentName: string;
-  schema: ComponentTree;
+  schema: Project;
 }

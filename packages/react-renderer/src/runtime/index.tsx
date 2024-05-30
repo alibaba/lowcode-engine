@@ -53,7 +53,10 @@ export interface LowCodeComponentProps {
 
 const lowCodeComponentsCache = new Map<string, ReactComponent>();
 
-function getComponentByName(name: string, { packageManager }: RenderContext): ReactComponent {
+export function getComponentByName(
+  name: string,
+  { packageManager, boostsManager }: RenderContext,
+): ReactComponent {
   const componentsRecord = packageManager.getComponentsNameRecord<ReactComponent>();
   // read cache first
   const result = lowCodeComponentsCache.get(name) || componentsRecord[name];
@@ -61,7 +64,23 @@ function getComponentByName(name: string, { packageManager }: RenderContext): Re
   invariant(result, `${name} component not found in componentsRecord`);
 
   if (isLowCodeComponentSchema(result)) {
-    const lowCodeComponent = createComponentBySchema(result.schema, {
+    const { componentsMap, componentsTree, utils, i18n } = result.schema;
+
+    if (componentsMap.length > 0) {
+      packageManager.resolveComponentMaps(componentsMap);
+    }
+
+    const boosts = boostsManager.toExpose();
+
+    utils?.forEach((util) => boosts.util.add(util));
+
+    if (i18n) {
+      Object.keys(i18n).forEach((locale) => {
+        boosts.intl.addTranslations(locale, i18n[locale]);
+      });
+    }
+
+    const lowCodeComponent = createComponentBySchema(componentsTree[0], {
       displayName: name,
     });
 

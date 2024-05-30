@@ -28,7 +28,7 @@ export interface Package {
   /**
    * 组件多个渲染态视图打包后的 CDN url 列表，包含 js 和 css，优先级高于 urls
    */
-  advancedUrls?: ComplexUrls;
+  advancedUrls?: MultiModeUrls;
   /**
    * 组件编辑态视图打包后的 CDN url 列表，包含 js 和 css
    */
@@ -36,7 +36,7 @@ export interface Package {
   /**
    * 组件多个编辑态视图打包后的 CDN url 列表，包含 js 和 css，优先级高于 editUrls
    */
-  advancedEditUrls?: ComplexUrls;
+  advancedEditUrls?: MultiModeUrls;
   /**
    * 低代码组件的 schema 内容
    */
@@ -78,11 +78,6 @@ export interface Package {
    */
   exportSourceLibrary?: string;
 }
-
-/**
- * 复杂 urls 结构，同时兼容简单结构和多模态结构
- */
-export type ComplexUrls = string[] | MultiModeUrls;
 
 /**
  * 多模态资源
