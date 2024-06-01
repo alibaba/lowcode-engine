@@ -3,7 +3,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "playground": "pnpm --filter playground dev",
     "build": "node ./scripts/build.js",
     "test": "vitest",
     "clean": "rimraf ./packages/*/dist",
@@ -35,6 +34,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "globals": "^15.0.0",
     "husky": "^9.0.11",
+    "jsdom": "^24.1.0",
     "lint-staged": "^15.2.2",
     "prettier": "^3.2.5",
     "rimraf": "^5.0.2",

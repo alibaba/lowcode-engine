@@ -38,10 +38,22 @@ export class CodeScope implements ICodeScope {
           if (Reflect.has(valueTarget.current, p)) {
             return Reflect.get(valueTarget.current, p, receiver);
           }
-          valueTarget = this.__node.prev;
+          valueTarget = valueTarget.prev;
         }
 
         return Reflect.get(target, p, receiver);
+      },
+      has: (target, p) => {
+        let valueTarget: IScopeNode | undefined = this.__node;
+
+        while (valueTarget) {
+          if (Reflect.has(valueTarget.current, p)) {
+            return true;
+          }
+          valueTarget = valueTarget.prev;
+        }
+
+        return Reflect.has(target, p);
       },
     });
   }

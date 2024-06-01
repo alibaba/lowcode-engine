@@ -56,7 +56,7 @@ export interface Package {
   /**
    * 作为全局变量引用时的名称，和 webpack output.library 字段含义一样，用来定义全局变量名
    */
-  library: string;
+  library?: string | undefined;
   /**
    * 组件描述导出名字，可以通过 window[exportName] 获取到组件描述的 Object 内容；
    */

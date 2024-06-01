@@ -3,6 +3,7 @@ import { type Plugin } from './parts/extension';
 import { type ISchemaService } from './parts/schema';
 import { type IPackageManagementService } from './parts/package';
 import { type IExtensionHostService } from './parts/extension';
+import { type EvalCodeFunction } from './parts/code-runtime';
 
 export interface AppOptions {
   schema: Spec.Project;
@@ -18,6 +19,8 @@ export interface AppOptions {
    * 运行模式
    */
   mode?: 'development' | 'production';
+
+  evalCodeFunction?: EvalCodeFunction;
 }
 
 export type RendererApplication<Render = unknown> = {

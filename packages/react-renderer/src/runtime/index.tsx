@@ -1,15 +1,14 @@
 import { processValue, someValue } from '@alilc/lowcode-renderer-core';
 import {
-  watch,
   isJSExpression,
   isJSFunction,
   isJSSlot,
   invariant,
-  isLowCodeComponentSchema,
+  isLowCodeComponentPackage,
   isJSI18nNode,
 } from '@alilc/lowcode-shared';
 import { forwardRef, useRef, useEffect, createElement, memo } from 'react';
-import { appendExternalStyle } from '../utils/element';
+import { appendExternalStyle } from '../../../../playground/renderer/src/plugin/remote/element';
 import { reactive } from '../utils/reactive';
 import { useRenderContext } from '../context/render';
 import { reactiveStateCreator } from './reactiveState';
@@ -63,7 +62,7 @@ export function getComponentByName(
 
   invariant(result, `${name} component not found in componentsRecord`);
 
-  if (isLowCodeComponentSchema(result)) {
+  if (isLowCodeComponentPackage(result)) {
     const { componentsMap, componentsTree, utils, i18n } = result.schema;
 
     if (componentsMap.length > 0) {
@@ -120,6 +119,7 @@ export function createComponentBySchema(
     }
 
     const model = modelRef.current;
+    console.log('%c [ model ]-123', 'font-size:13px; background:pink; color:#bf2c9f;', model);
 
     const isConstructed = useRef(false);
     const isMounted = useRef(false);
@@ -133,7 +133,7 @@ export function createComponentBySchema(
       const scopeValue = model.codeScope.value;
 
       // init dataSource
-      scopeValue.reloadDataSource();
+      scopeValue.reloadDataSource?.();
 
       let styleEl: HTMLElement | undefined;
       const cssText = model.getCssText();
@@ -148,11 +148,11 @@ export function createComponentBySchema(
       model.triggerLifeCycle('componentDidMount');
 
       // 当 state 改变之后调用
-      const unwatch = watch(scopeValue.state, (_, oldVal) => {
-        if (isMounted.current) {
-          model.triggerLifeCycle('componentDidUpdate', props, oldVal);
-        }
-      });
+      // const unwatch = watch(scopeValue.state, (_, oldVal) => {
+      //   if (isMounted.current) {
+      //     model.triggerLifeCycle('componentDidUpdate', props, oldVal);
+      //   }
+      // });
 
       isMounted.current = true;
 
@@ -160,7 +160,7 @@ export function createComponentBySchema(
         // componentWillUnmount?.();
         model.triggerLifeCycle('componentWillUnmount');
         styleEl?.parentNode?.removeChild(styleEl);
-        unwatch();
+        // unwatch();
         isMounted.current = false;
       };
     }, []);
@@ -247,7 +247,7 @@ function createElementByWidget(
       };
 
       // 先将 jsslot, jsFunction 对象转换
-      const finalProps = processValue(
+      let finalProps = processValue(
         componentProps,
         (node) => isJSFunction(node) || isJSSlot(node),
         (node: Spec.JSSlot | Spec.JSFunction) => {
@@ -284,6 +284,17 @@ function createElementByWidget(
             return model.codeRuntime.resolve(node, codeScope);
           }
 
+          return null;
+        },
+      );
+
+      finalProps = processValue(
+        finalProps,
+        (value) => {
+          return value.type === 'JSSlot' && !value.value;
+        },
+        (node) => {
+          console.log('%c [ node ]-303', 'font-size:13px; background:pink; color:#bf2c9f;', node);
           return null;
         },
       );

@@ -13,12 +13,12 @@ export const createRouterProvider = (router: Router) => {
       return () => remove();
     }, []);
 
-    const pageSchema = useMemo(() => {
+    const pageConfig = useMemo(() => {
       const pages = schema.get('pages') ?? [];
       const matched = location.matched[location.matched.length - 1];
 
       if (matched) {
-        const page = pages.find((item) => matched.page === item.id);
+        const page = pages.find((item) => matched.page === item.mappingId);
         return page;
       }
 
@@ -28,7 +28,7 @@ export const createRouterProvider = (router: Router) => {
     return (
       <RouterContext.Provider value={router}>
         <RouteLocationContext.Provider value={location}>
-          <PageConfigContext.Provider value={pageSchema}>{children}</PageConfigContext.Provider>
+          <PageConfigContext.Provider value={pageConfig}>{children}</PageConfigContext.Provider>
         </RouteLocationContext.Provider>
       </RouterContext.Provider>
     );

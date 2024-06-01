@@ -33,7 +33,7 @@ export class RuntimeUtilService implements IRuntimeUtilService {
       }
     } else {
       const fn = this.parseUtil(name);
-      this.utilsMap.set(name.name, fn);
+      if (fn) this.utilsMap.set(name.name, fn);
     }
   }
 

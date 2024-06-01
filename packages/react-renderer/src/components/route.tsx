@@ -26,6 +26,11 @@ function RouteOutlet({ pageConfig }: OutletProps) {
   const context = useRenderContext();
   const { schema, packageManager } = context;
   const { type = 'lowCode', mappingId } = pageConfig;
+  console.log(
+    '%c [ pageConfig ]-29',
+    'font-size:13px; background:pink; color:#bf2c9f;',
+    pageConfig,
+  );
 
   if (type === 'lowCode') {
     // 在页面渲染时重新获取 componentsMap

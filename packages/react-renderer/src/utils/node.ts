@@ -10,5 +10,6 @@ export function normalizeComponentNode(node: Spec.ComponentNode): NormalizedComp
     ...node,
     loopArgs: node.loopArgs ?? ['item', 'index'],
     props: node.props ?? {},
+    condition: node.condition || node.condition === false ? node.condition : true,
   };
 }

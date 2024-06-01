@@ -100,9 +100,10 @@ function nomarlizeLocale(target: Locale) {
     return navigatorLanguageMapping[target];
   }
 
-  const replaced = target.replace('_', '-');
-  const splited = replaced.split('-').slice(0, 2);
-  splited[1] = splited[1].toUpperCase();
+  // const replaced = target.replace('_', '-');
+  // const splited = replaced.split('-').slice(0, 2);
+  // splited[1] = splited[1].toUpperCase();
 
-  return splited.join('-');
+  // return splited.join('-');
+  return target;
 }

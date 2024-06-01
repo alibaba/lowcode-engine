@@ -1,1 +1,5 @@
-export const dataSourceCreator = () => ({}) as any;
+export const dataSourceCreator = () =>
+  ({
+    dataSourceMap: {},
+    reloadDataSource: () => {},
+  }) as any;

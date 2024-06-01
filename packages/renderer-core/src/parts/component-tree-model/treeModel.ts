@@ -1,11 +1,4 @@
-import {
-  type Spec,
-  type PlainObject,
-  isJSFunction,
-  isComponentNode,
-  invariant,
-  type AnyFunction,
-} from '@alilc/lowcode-shared';
+import { type Spec, type PlainObject, isComponentNode, invariant } from '@alilc/lowcode-shared';
 import { type ICodeScope, type ICodeRuntimeService } from '../code-runtime';
 import { IWidget, Widget } from '../widget';
 
@@ -118,8 +111,8 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
     );
 
     for (const [key, fn] of Object.entries(methods)) {
-      const customMethod = this.codeRuntime.run(fn.value, this.codeScope);
-      if (customMethod) {
+      const customMethod = this.codeRuntime.resolve(fn, this.codeScope);
+      if (typeof customMethod === 'function') {
         this.codeScope.inject(key, customMethod);
       }
     }
@@ -140,11 +133,9 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
 
     const lifeCycleSchema = this.componentsTree.lifeCycles[lifeCycleName];
 
-    if (isJSFunction(lifeCycleSchema)) {
-      const lifeCycleFn = this.codeRuntime.run<AnyFunction>(lifeCycleSchema.value, this.codeScope);
-      if (lifeCycleFn) {
-        lifeCycleFn.apply(this.codeScope.value, args);
-      }
+    const lifeCycleFn = this.codeRuntime.resolve(lifeCycleSchema, this.codeScope);
+    if (typeof lifeCycleFn === 'function') {
+      lifeCycleFn.apply(this.codeScope.value, args);
     }
   }
 

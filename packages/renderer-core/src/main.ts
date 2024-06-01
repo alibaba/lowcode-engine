@@ -32,6 +32,8 @@ export class RendererMain {
     // valid schema
     this.schemaService.initialize(schema);
 
+    this.codeRuntimeService.initialize(options);
+
     // init intl
     const finalLocale = options.locale ?? navigator.language;
     const i18nTranslations = this.schemaService.get('i18n') ?? {};

@@ -4,6 +4,7 @@ import { Project } from './specs/lowcode-spec';
 export interface ProCodeComponent extends Package {
   package: string;
   type: 'proCode';
+  library: string;
 }
 
 export interface LowCodeComponent extends Package {

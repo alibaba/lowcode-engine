@@ -423,6 +423,8 @@ export interface JSSlot {
   type: 'JSSlot';
   value: ComponentNode | ComponentNode[];
   params?: string[];
+
+  [key: string]: any;
 }
 
 /**
@@ -431,6 +433,8 @@ export interface JSSlot {
 export interface JSFunction {
   type: 'JSFunction';
   value: string;
+
+  [key: string]: any;
 }
 
 /**
@@ -439,6 +443,8 @@ export interface JSFunction {
 export interface JSExpression {
   type: 'JSExpression';
   value: string;
+
+  [key: string]: any;
 }
 
 /**
@@ -455,5 +461,7 @@ export interface JSI18n {
    */
   params?: Record<string, string | number | JSExpression>;
 }
+
+export type JSNode = JSSlot | JSExpression | JSExpression | JSI18n;
 
 export type NodeType = string | JSExpression | JSI18n | ComponentNode;
