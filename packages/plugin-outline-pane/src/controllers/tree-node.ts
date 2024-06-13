@@ -37,6 +37,8 @@ enum EVENT_NAMES {
   expandableChanged = 'expandableChanged',
 
   conditionChanged = 'conditionChanged',
+
+  loopChanged = 'loopChanged',
 }
 
 export default class TreeNode {
@@ -160,6 +162,10 @@ export default class TreeNode {
     return this.node.hasCondition() && !this.node.conditionGroup;
   }
 
+  get loop(): boolean {
+    return this.node.hasLoop();
+  }
+
   get children(): TreeNode[] | null {
     return this.node.children?.map((node) => this.tree.getTreeNode(node)) || null;
   }
@@ -222,6 +228,14 @@ export default class TreeNode {
     };
   }
 
+  onLoopChanged(fn: (treeNode: TreeNode) => void): IPublicTypeDisposable {
+    this.event.on(EVENT_NAMES.loopChanged, fn);
+
+    return () => {
+      this.event.off(EVENT_NAMES.loopChanged, fn);
+    };
+  }
+
   onExpandableChanged(fn: (expandable: boolean) => void): IPublicTypeDisposable {
     this.event.on(EVENT_NAMES.expandableChanged, fn);
     return () => {
@@ -242,6 +256,10 @@ export default class TreeNode {
 
   notifyConditionChanged(): void {
     this.event.emit(EVENT_NAMES.conditionChanged, this.condition);
+  }
+
+  notifyLoopChanged(): void {
+    this.event.emit(EVENT_NAMES.loopChanged, this.loop);
   }
 
   setHidden(flag: boolean) {
