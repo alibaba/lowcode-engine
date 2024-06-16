@@ -14,7 +14,7 @@ export class Intl {
   private currentMessage: ComputedSignal<Translations>;
   private intlShape: IntlFormatter;
 
-  constructor(defaultLocale?: string, messages: LocaleTranslationsRecord = {}) {
+  constructor(defaultLocale: string = navigator.language, messages: LocaleTranslationsRecord = {}) {
     if (defaultLocale) {
       defaultLocale = nomarlizeLocale(defaultLocale);
     } else {

@@ -9,19 +9,31 @@ import {
   ref,
   computed,
   ReactiveEffect,
+  shallowRef,
+  type ShallowRef,
   type ComputedRef,
   type Ref,
   getCurrentScope,
   isRef,
   isReactive,
   isShallow,
-  EffectScheduler,
+  readonly,
+  type EffectScheduler,
 } from '@vue/reactivity';
 import { noop, isObject, isPlainObject, isSet, isMap, isFunction } from 'lodash-es';
 import { isPromise } from './utils';
 
-export { ref as signal, computed, watchEffect as effect, watch as reaction, isRef as isSignal };
-export type { Ref as Signal, ComputedRef as ComputedSignal };
+export {
+  ref as signal,
+  shallowRef as shallowSignal,
+  computed,
+  watchEffect as effect,
+  watch as reaction,
+  isRef as isSignal,
+  isShallow as isShallowSignal,
+  readonly,
+};
+export type { Ref as Signal, ComputedRef as ComputedSignal, ShallowRef as ShallowSignal };
 
 export type WatchSource<T = any> = Ref<T> | ComputedRef<T> | (() => T);
 export type WatchEffect = (onCleanup: OnCleanup) => void;

@@ -1,91 +1,111 @@
-import { Injectable } from '@alilc/lowcode-shared';
-import { ICodeRuntimeService } from './parts/code-runtime';
-import { IExtensionHostService, type RenderAdapter } from './parts/extension';
-import { IPackageManagementService } from './parts/package';
-import { IRuntimeUtilService } from './parts/runtimeUtil';
-import { IRuntimeIntlService } from './parts/runtimeIntl';
-import { ISchemaService } from './parts/schema';
-
+import { Injectable, invariant, InstantiationService } from '@alilc/lowcode-shared';
+import { ICodeRuntimeService } from './services/code-runtime';
+import {
+  IBoostsService,
+  IExtensionHostService,
+  type RenderAdapter,
+  type IRenderObject,
+} from './services/extension';
+import { IPackageManagementService } from './services/package';
+import { ISchemaService } from './services/schema';
+import { ILifeCycleService, LifecyclePhase } from './services/lifeCycleService';
+import { IComponentTreeModelService } from './services/model';
 import type { AppOptions, RendererApplication } from './types';
 
 @Injectable()
-export class RendererMain {
+export class RendererMain<RenderObject> {
   private mode: 'development' | 'production' = 'production';
 
   private initOptions: AppOptions;
 
+  private renderObject: RenderObject;
+
+  private adapter: RenderAdapter<RenderObject>;
+
   constructor(
     @ICodeRuntimeService private codeRuntimeService: ICodeRuntimeService,
     @IPackageManagementService private packageManagementService: IPackageManagementService,
-    @IRuntimeUtilService private runtimeUtilService: IRuntimeUtilService,
-    @IRuntimeIntlService private runtimeIntlService: IRuntimeIntlService,
     @ISchemaService private schemaService: ISchemaService,
     @IExtensionHostService private extensionHostService: IExtensionHostService,
-  ) {}
+    @IComponentTreeModelService private componentTreeModelService: IComponentTreeModelService,
+    @IBoostsService private boostsService: IBoostsService,
+    @ILifeCycleService private lifeCycleService: ILifeCycleService,
+  ) {
+    this.lifeCycleService.when(LifecyclePhase.OptionsResolved).finally(async () => {
+      const renderContext = {
+        schema: this.schemaService,
+        packageManager: this.packageManagementService,
+        boostsManager: this.boostsService,
+        componentTreeModel: this.componentTreeModelService,
+        lifeCycle: this.lifeCycleService,
+      };
 
-  async initialize(options: AppOptions) {
-    const { schema, mode } = options;
+      this.renderObject = await this.adapter(renderContext);
+
+      await this.packageManagementService.loadPackages(this.initOptions.packages ?? []);
+
+      this.lifeCycleService.phase = LifecyclePhase.Ready;
+    });
+  }
+
+  async main(options: AppOptions, adapter: RenderAdapter<RenderObject>) {
+    const { schema, mode, plugins = [] } = options;
 
     if (mode) this.mode = mode;
     this.initOptions = { ...options };
+    this.adapter = adapter;
 
     // valid schema
     this.schemaService.initialize(schema);
 
-    this.codeRuntimeService.initialize(options);
+    this.codeRuntimeService.initialize(options.codeRuntime ?? {});
 
-    // init intl
-    const finalLocale = options.locale ?? navigator.language;
-    const i18nTranslations = this.schemaService.get('i18n') ?? {};
+    this.extensionHostService.registerPlugin(plugins);
 
-    this.runtimeIntlService.initialize(finalLocale, i18nTranslations);
+    this.lifeCycleService.phase = LifecyclePhase.OptionsResolved;
   }
 
-  async startup<Render>(adapter: RenderAdapter<Render>): Promise<RendererApplication<Render>> {
-    const render = await this.extensionHostService.runRender<Render>(adapter);
+  async getApp(): Promise<RendererApplication<RenderObject>> {
+    await this.lifeCycleService.when(LifecyclePhase.Ready);
 
     // construct application
-    const app = Object.freeze<RendererApplication<Render>>({
+    return Object.freeze<RendererApplication<RenderObject>>({
+      // develop use
+      __options: this.initOptions,
+
       mode: this.mode,
       schema: this.schemaService,
       packageManager: this.packageManagementService,
-      ...render,
+      ...this.renderObject,
 
       use: (plugin) => {
-        return this.extensionHostService.registerPlugin(plugin);
+        this.extensionHostService.registerPlugin(plugin);
+        return this.extensionHostService.doSetupPlugin(plugin);
       },
     });
-
-    // setup plugins
-    this.extensionHostService.initialize(app);
-    await this.extensionHostService.registerPlugin(this.initOptions.plugins ?? []);
-
-    // load packages
-    await this.packageManagementService.loadPackages(this.initOptions.packages ?? []);
-
-    // resolve component maps
-    const componentsMaps = this.schemaService.get('componentsMap');
-    this.packageManagementService.resolveComponentMaps(componentsMaps);
-
-    this.initGlobalScope();
-
-    return app;
   }
+}
 
-  private initGlobalScope() {
-    // init runtime uitls
-    const utils = this.schemaService.get('utils') ?? [];
-    for (const util of utils) {
-      this.runtimeUtilService.add(util);
-    }
+/**
+ * 创建 createRenderer 的辅助函数
+ * @param schema
+ * @param options
+ * @returns
+ */
+export function createRenderer<RenderObject = IRenderObject>(
+  renderAdapter: RenderAdapter<RenderObject>,
+): (options: AppOptions) => Promise<RendererApplication<RenderObject>> {
+  invariant(typeof renderAdapter === 'function', 'The first parameter must be a function.');
 
-    const constants = this.schemaService.get('constants') ?? {};
+  const instantiationService = new InstantiationService({ defaultScope: 'Singleton' });
+  instantiationService.bootstrapModules();
 
-    const globalScope = this.codeRuntimeService.getScope();
-    globalScope.setValue({
-      constants,
-      utils: this.runtimeUtilService.toExpose(),
-      ...this.runtimeIntlService.toExpose(),
-    });
-  }
+  const rendererMain = instantiationService.createInstance(
+    RendererMain,
+  ) as RendererMain<RenderObject>;
+
+  return async (options) => {
+    await rendererMain.main(options, renderAdapter);
+    return rendererMain.getApp();
+  };
 }

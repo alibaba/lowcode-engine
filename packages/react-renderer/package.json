@@ -30,7 +30,8 @@
     "hoist-non-react-statics": "^3.3.2",
     "use-sync-external-store": "^1.2.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-is": "^18.3.1"
   },
   "devDependencies": {
     "@testing-library/react": "^14.2.0",
@@ -38,7 +39,8 @@
     "@types/hoist-non-react-statics": "^3.3.5",
     "@types/use-sync-external-store": "^0.0.6",
     "@types/react": "^18.2.67",
-    "@types/react-dom": "^18.2.22"
+    "@types/react-dom": "^18.2.22",
+    "@types/react-is": "^18.3.0"
   },
   "peerDependencies": {
     "react": "^18.2.0",

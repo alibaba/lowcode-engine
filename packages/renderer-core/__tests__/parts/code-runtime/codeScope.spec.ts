@@ -1,46 +1,55 @@
-import { describe, it, expect, beforeAll } from 'vitest';
-import { ICodeScope, CodeScope } from '../../../src/parts/code-runtime';
+import { describe, it, expect } from 'vitest';
+import { CodeScope } from '../../../src/parts/code-runtime';
 
-describe('codeScope', () => {
-  let scope: ICodeScope;
-
-  beforeAll(() => {
-    scope = new CodeScope({});
+describe('CodeScope', () => {
+  it('should return initial values', () => {
+    const initValue = { a: 1, b: 2 };
+    const scope = new CodeScope(initValue);
+    expect(scope.value.a).toBe(1);
+    expect(scope.value.b).toBe(2);
   });
 
-  it('should inject a new value', () => {
-    scope.inject('username', 'Alice');
-    expect(scope.value).toEqual({ username: 'Alice' });
+  it('inject should add new values', () => {
+    const scope = new CodeScope({});
+    scope.set('c', 3);
+    expect(scope.value.c).toBe(3);
   });
 
-  it('should not overwrite an existing value without force', () => {
-    scope.inject('username', 'Bob');
-    expect(scope.value).toEqual({ username: 'Alice' });
+  it('inject should not overwrite existing values without force', () => {
+    const initValue = { a: 1 };
+    const scope = new CodeScope(initValue);
+    scope.set('a', 2);
+    expect(scope.value.a).toBe(1);
+    scope.set('a', 3, true);
+    expect(scope.value.a).toBe(3);
   });
 
-  it('should overwrite an existing value with force', () => {
-    scope.inject('username', 'Bob', true);
-    expect(scope.value).toEqual({ username: 'Bob' });
+  it('setValue should merge values by default', () => {
+    const initValue = { a: 1 };
+    const scope = new CodeScope(initValue);
+    scope.setValue({ b: 2 });
+    expect(scope.value.a).toBe(1);
+    expect(scope.value.b).toBe(2);
   });
 
-  it('should set new value without replacing existing values', () => {
-    scope.setValue({ age: 25 });
-    expect(scope.value).toEqual({ username: 'Bob', age: 25 });
+  it('setValue should replace values when replace is true', () => {
+    const initValue = { a: 1 };
+    const scope = new CodeScope(initValue);
+    scope.setValue({ b: 2 }, true);
+    expect(scope.value.a).toBeUndefined();
+    expect(scope.value.b).toBe(2);
   });
 
-  it('should set new value and replace all existing values', () => {
-    scope.setValue({ loggedIn: true }, true);
-    expect(scope.value).toEqual({ loggedIn: true });
-  });
+  it('should create child scopes and respect scope hierarchy', () => {
+    const parentValue = { a: 1, b: 2 };
+    const childValue = { b: 3, c: 4 };
 
-  it('should create a child scope with initial values', () => {
-    const childScope = scope.createChild({ sessionId: 'abc123' });
-    expect(childScope.value).toEqual({ loggedIn: true, sessionId: 'abc123' });
-  });
+    const parentScope = new CodeScope(parentValue);
+    const childScope = parentScope.createChild(childValue);
 
-  it('should set new values in the child scope without affecting the parent scope', () => {
-    const childScope = scope.createChild({ theme: 'dark' });
-    expect(childScope.value).toEqual({ loggedIn: true, sessionId: 'abc123', theme: 'dark' });
-    expect(scope.value).toEqual({ loggedIn: true });
+    expect(childScope.value.a).toBe(1); // Inherits from parent scope
+    expect(childScope.value.b).toBe(3); // Overridden by child scope
+    expect(childScope.value.c).toBe(4); // Unique to child scope
+    expect(parentScope.value.c).toBeUndefined(); // Parent scope should not have child's properties
   });
 });

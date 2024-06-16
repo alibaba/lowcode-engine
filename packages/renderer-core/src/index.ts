@@ -1,20 +1,23 @@
 /* --------------- api -------------------- */
-export * from './apiCreate';
-export { definePackageLoader } from './parts/package';
-export { Widget } from './parts/widget';
+export { createRenderer } from './main';
+export { definePackageLoader } from './services/package';
+export { LifecyclePhase } from './services/lifeCycleService';
+export { Widget } from './services/widget';
+export * from './utils/node';
 export * from './utils/value';
 
 /* --------------- types ---------------- */
 export type * from './types';
 export type {
   Plugin,
-  IRender,
+  IRenderObject,
   PluginContext,
   RenderAdapter,
   RenderContext,
-} from './parts/extension';
-export type * from './parts/code-runtime';
-export type * from './parts/component-tree-model';
-export type * from './parts/package';
-export type * from './parts/schema';
-export type * from './parts/widget';
+} from './services/extension';
+export type * from './services/code-runtime';
+export type * from './services/model';
+export type * from './services/package';
+export type * from './services/schema';
+export type * from './services/widget';
+export type * from './services/extension';

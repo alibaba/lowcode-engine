@@ -40,7 +40,7 @@ export interface Project {
   /**
    * 当前应用配置信息
    */
-  config?: Record<string, JSONObject>;
+  config?: ProjectConfig;
   /**
    * 当前应用元数据信息
    */
@@ -58,6 +58,32 @@ export interface Project {
    * 当前应用的所有页面信息
    */
   pages?: PageConfig[];
+}
+
+/**
+ * 当前应用配置信息
+ */
+export interface ProjectConfig {
+  /**
+   * 默认语言配置，不填则为 navagator.language
+   */
+  defaultLocale?: string;
+  /**
+   * 布局组件配置
+   */
+  layout?: {
+    componentName: string;
+    props: Record<string, JSONObject>;
+  };
+  /**
+   * 默认挂载 dom 节点
+   */
+  targetRootID?: string;
+
+  // todo
+  theme?: any;
+
+  [key: string]: any;
 }
 
 /**
@@ -259,7 +285,11 @@ export interface ComponentNode {
    */
   componentName: string;
   /**
-   * 组件属性对象
+   * 默认 props
+   */
+  defaultProps?: JSONObject;
+  /**
+   * 组件 props 对象
    */
   props?: ComponentNodeProps;
   /**
@@ -415,11 +445,16 @@ export interface JSONObject {
   [key: string]: JSONValue | JSONObject | JSONObject[];
 }
 
+export interface JSNode {
+  type: string;
+  [key: string]: any;
+}
+
 /**
  * 节点类型（A）
  * 通常用于描述组件的某一个属性为 Node 或 Function-Return-Node 的场景。
  */
-export interface JSSlot {
+export interface JSSlot extends JSNode {
   type: 'JSSlot';
   value: ComponentNode | ComponentNode[];
   params?: string[];
@@ -430,7 +465,7 @@ export interface JSSlot {
 /**
  * 事件函数类型（A）
  */
-export interface JSFunction {
+export interface JSFunction extends JSNode {
   type: 'JSFunction';
   value: string;
 
@@ -440,7 +475,7 @@ export interface JSFunction {
 /**
  * 变量类型（A）
  */
-export interface JSExpression {
+export interface JSExpression extends JSNode {
   type: 'JSExpression';
   value: string;
 
@@ -450,7 +485,7 @@ export interface JSExpression {
 /**
  * 国际化多语言类型（AA）
  */
-export interface JSI18n {
+export interface JSI18n extends JSNode {
   type: 'i18n';
   /**
    * i18n 结构中字段的 key 标识符
@@ -461,7 +496,5 @@ export interface JSI18n {
    */
   params?: Record<string, string | number | JSExpression>;
 }
-
-export type JSNode = JSSlot | JSExpression | JSExpression | JSI18n;
 
 export type NodeType = string | JSExpression | JSI18n | ComponentNode;

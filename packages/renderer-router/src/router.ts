@@ -42,6 +42,8 @@ export interface Router extends Spec.RouterApi {
 
   beforeRouteLeave: (fn: NavigationGuard) => () => void;
   afterRouteChange: (fn: NavigationHookAfter) => () => void;
+
+  isReady(): Promise<void>;
 }
 
 const START_LOCATION: RouteLocationNormalized = {
@@ -68,6 +70,7 @@ export function createRouter(options: RouterOptions): Router {
 
   const beforeGuards = createCallback<NavigationGuard>();
   const afterGuards = createCallback<NavigationHookAfter>();
+  const readyHandlers = createCallback<any>();
 
   let currentLocation: RouteLocationNormalized = START_LOCATION;
   let pendingLocation = currentLocation;
@@ -203,7 +206,9 @@ export function createRouter(options: RouterOptions): Router {
     }
 
     return navigateTriggerBeforeGuards(toLocation, from)
-      .catch(() => {})
+      .catch((error) => {
+        return markAsReady(error);
+      })
       .then(() => {
         finalizeNavigation(toLocation, from, true, replace, data);
 
@@ -293,7 +298,7 @@ export function createRouter(options: RouterOptions): Router {
     }
 
     currentLocation = toLocation;
-    // markAsReady();
+    markAsReady();
   }
 
   let removeHistoryListener: undefined | null | (() => void);
@@ -337,6 +342,32 @@ export function createRouter(options: RouterOptions): Router {
     });
   }
 
+  let ready: boolean;
+
+  /**
+   * Mark the router as ready, resolving the promised returned by isReady(). Can
+   * only be called once, otherwise does nothing.
+   * @param err - optional error
+   */
+  function markAsReady<E = any>(err?: E): E | void {
+    if (!ready) {
+      // still not ready if an error happened
+      ready = !err;
+      setupListeners();
+      readyHandlers.list().forEach(([resolve, reject]) => (err ? reject(err) : resolve()));
+      readyHandlers.clear();
+    }
+
+    return err;
+  }
+
+  function isReady(): Promise<void> {
+    if (ready && currentLocation !== START_LOCATION) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      readyHandlers.add([resolve, reject]);
+    });
+  }
+
   // init
   setupListeners();
   if (currentLocation === START_LOCATION) {
@@ -370,5 +401,7 @@ export function createRouter(options: RouterOptions): Router {
 
     beforeRouteLeave: beforeGuards.add,
     afterRouteChange: afterGuards.add,
+
+    isReady,
   };
 }

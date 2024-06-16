@@ -1,9 +1,8 @@
 import { type Spec } from '@alilc/lowcode-shared';
-import { type Plugin } from './parts/extension';
-import { type ISchemaService } from './parts/schema';
-import { type IPackageManagementService } from './parts/package';
-import { type IExtensionHostService } from './parts/extension';
-import { type EvalCodeFunction } from './parts/code-runtime';
+import { type Plugin } from './services/extension';
+import { type ISchemaService } from './services/schema';
+import { type IPackageManagementService } from './services/package';
+import { type CodeRuntimeInitializeOptions } from './services/code-runtime';
 
 export interface AppOptions {
   schema: Spec.Project;
@@ -11,16 +10,14 @@ export interface AppOptions {
   plugins?: Plugin[];
 
   /**
-   * 应用语言，默认值为浏览器当前语言 navigator.language
-   */
-  locale?: string;
-
-  /**
    * 运行模式
    */
   mode?: 'development' | 'production';
 
-  evalCodeFunction?: EvalCodeFunction;
+  /**
+   * code runtime 设置选项
+   */
+  codeRuntime?: CodeRuntimeInitializeOptions;
 }
 
 export type RendererApplication<Render = unknown> = {
@@ -30,5 +27,5 @@ export type RendererApplication<Render = unknown> = {
 
   readonly packageManager: IPackageManagementService;
 
-  use: IExtensionHostService['registerPlugin'];
+  use(plugin: Plugin): Promise<void>;
 } & Render;
