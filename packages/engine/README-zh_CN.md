@@ -160,14 +160,19 @@ lowcode-engine 启动后，提供了几个 umd 文件，可以结合 [lowcode-de
 ## 🤝 参与共建
 
 请先阅读：
-1. [如何配置引擎调试环境？](https://lowcode-engine.cn/site/docs/participate/prepare)
+1. [如何配置引擎调试环境？](https://lowcode-engine.cn/site/docs/participate)
 2. [关于引擎的研发协作流程](https://lowcode-engine.cn/site/docs/participate/flow)
-3. [引擎的工程化配置](https://lowcode-engine.cn/site/docs/participate/config)
 
 > 强烈推荐阅读 [《提问的智慧》](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way)、[《如何向开源社区提问题》](https://github.com/seajs/seajs/issues/545) 和 [《如何有效地报告 Bug》](http://www.chiark.greenend.org.uk/%7Esgtatham/bugs-cn.html)、[《如何向开源项目提交无法解答的问题》](https://zhuanlan.zhihu.com/p/25795393)，更好的问题更容易获得帮助。（此段参考 [antd](https://github.com/ant-design/ant-design)）
 
 关于提交 PR：
 请将目标合并分支设置为 **develop**，不要指定 **main** 分支，在发布正式版本后，develop 分支将会合入 main 分支。
+
+## ⭐️ Star 历史
+
+<a href="https://star-history.com/#alibaba/lowcode-engine">
+  <img src="https://api.star-history.com/svg?repos=alibaba/lowcode-engine&type=Date" alt="Star History Chart" width="100%" />
+</a>
 
 ## ❤️ 致谢
 

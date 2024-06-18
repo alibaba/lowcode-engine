@@ -259,10 +259,11 @@ exports[`Base Render renderComp 1`] = `
                           "hidden": undefined,
                         }
                       }
+                      aria-expanded="false"
+                      aria-label="select"
                       autoComplete="off"
                       disabled={false}
                       height="100%"
-                      maxLength={null}
                       onBlur={[Function]}
                       onChange={[Function]}
                       onCompositionEnd={[Function]}
@@ -378,10 +379,11 @@ exports[`Base Render renderComp 1`] = `
                           "hidden": undefined,
                         }
                       }
+                      aria-expanded="false"
+                      aria-label="select"
                       autoComplete="off"
                       disabled={false}
                       height="100%"
-                      maxLength={null}
                       onBlur={[Function]}
                       onChange={[Function]}
                       onCompositionEnd={[Function]}
@@ -485,7 +487,6 @@ exports[`Base Render renderComp 1`] = `
                 autoComplete="off"
                 disabled={false}
                 height="100%"
-                maxLength={null}
                 onBlur={[Function]}
                 onChange={[Function]}
                 onCompositionEnd={[Function]}
@@ -988,7 +989,6 @@ exports[`Base Render renderComp 1`] = `
                 autoComplete="off"
                 disabled={false}
                 height="100%"
-                maxLength={null}
                 onBlur={[Function]}
                 onChange={[Function]}
                 onCompositionEnd={[Function]}
@@ -1048,10 +1048,11 @@ exports[`Base Render renderComp 1`] = `
                 "hidden": undefined,
               }
             }
+            aria-expanded="false"
+            aria-label="select"
             autoComplete="off"
             disabled={false}
             height="100%"
-            maxLength={null}
             name="error"
             onBlur={[Function]}
             onChange={[Function]}
