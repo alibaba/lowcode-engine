@@ -1,6 +1,6 @@
 import { IComponentTreeModel } from '@alilc/lowcode-renderer-core';
 import { createContext, useContext, type ReactInstance } from 'react';
-import { type ReactComponent } from './render';
+import { type ReactComponent } from './components';
 
 export const ModelContext = createContext<IComponentTreeModel<ReactComponent, ReactInstance>>(
   undefined!,

@@ -1,6 +1,6 @@
 import { createRenderer, type AppOptions } from '@alilc/lowcode-renderer-core';
 import { FunctionComponent } from 'react';
-import { type LowCodeComponentProps, createComponentBySchema } from '../runtime/component';
+import { type LowCodeComponentProps, createComponentBySchema } from '../runtime/schema';
 import { RendererContext } from '../app/context';
 
 interface Render {

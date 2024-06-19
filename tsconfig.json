@@ -39,5 +39,11 @@
     },
     "types": ["vite/client", "vitest/globals", "node"]
   },
-  "exclude": ["**/dist", "node_modules"]
+  "include": [
+    "packages/global.d.ts",
+    "packages/*/src",
+    "packages/*/__tests__",
+    "playground/*/src",
+    "scripts/*"
+  ]
 }

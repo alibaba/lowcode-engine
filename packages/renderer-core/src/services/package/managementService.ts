@@ -68,7 +68,7 @@ export class PackageManagementService implements IPackageManagementService {
     @ISchemaService private schemaService: ISchemaService,
     @ILifeCycleService private lifeCycleService: ILifeCycleService,
   ) {
-    this.lifeCycleService.when(LifecyclePhase.Ready).then(() => {
+    this.lifeCycleService.when(LifecyclePhase.AfterInitPackageLoad).then(() => {
       const componentsMaps = this.schemaService.get('componentsMap');
       this.resolveComponentMaps(componentsMaps);
     });
@@ -85,7 +85,6 @@ export class PackageManagementService implements IPackageManagementService {
       if (!isProCodeComponentPackage(item)) continue;
 
       const normalized = this.normalizePackage(item);
-
       await this.loadPackageByNormalized(normalized);
     }
   }

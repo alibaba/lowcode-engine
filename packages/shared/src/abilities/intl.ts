@@ -1,6 +1,7 @@
 import { createIntl, createIntlCache, type IntlShape as IntlFormatter } from '@formatjs/intl';
 import { mapKeys } from 'lodash-es';
 import { signal, computed, effect, type Signal, type ComputedSignal } from '../signals';
+import { platformLocale } from '../utils';
 
 export { IntlFormatter };
 
@@ -14,7 +15,7 @@ export class Intl {
   private currentMessage: ComputedSignal<Translations>;
   private intlShape: IntlFormatter;
 
-  constructor(defaultLocale: string = navigator.language, messages: LocaleTranslationsRecord = {}) {
+  constructor(defaultLocale: string = platformLocale, messages: LocaleTranslationsRecord = {}) {
     if (defaultLocale) {
       defaultLocale = nomarlizeLocale(defaultLocale);
     } else {

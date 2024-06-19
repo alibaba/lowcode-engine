@@ -7,11 +7,7 @@ export const enum LifecyclePhase {
 
   Ready = 3,
 
-  BeforeMount = 4,
-
-  Mounted = 5,
-
-  BeforeUnmount = 6,
+  AfterInitPackageLoad = 4,
 }
 
 export interface ILifeCycleService {
@@ -40,7 +36,7 @@ export class LifeCycleService implements ILifeCycleService {
   }
 
   set phase(value: LifecyclePhase) {
-    if (value < this.phase) {
+    if (value < this._phase) {
       throw new Error('Lifecycle cannot go backwards');
     }
 

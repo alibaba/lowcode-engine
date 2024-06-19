@@ -1,4 +1,4 @@
-import { defineRendererPlugin } from '../app/extension';
+import { defineRendererPlugin } from '../app/boosts';
 import { LifecyclePhase } from '@alilc/lowcode-renderer-core';
 import { createRouter, type RouterOptions } from '@alilc/lowcode-renderer-router';
 import { createRouterView } from './routerView';
@@ -29,13 +29,14 @@ export const routerPlugin = defineRendererPlugin({
     const router = createRouter(routerConfig);
 
     boosts.codeRuntime.getScope().set('router', router);
+    boosts.temporaryUse('router', router);
 
     const RouterView = createRouterView(router);
 
     boosts.addAppWrapper(RouterView);
     boosts.setOutlet(RouteOutlet);
 
-    whenLifeCylePhaseChange(LifecyclePhase.Ready).then(() => {
+    whenLifeCylePhaseChange(LifecyclePhase.AfterInitPackageLoad).then(() => {
       return router.isReady();
     });
   },

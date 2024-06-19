@@ -16,7 +16,7 @@ import { type ComponentType, type ReactInstance, useMemo, createElement } from '
 import { useRenderContext } from '../app/context';
 import { useReactiveStore } from './hooks/useReactiveStore';
 import { useModel } from './context';
-import { getComponentByName } from './component';
+import { getComponentByName } from './schema';
 
 export type ReactComponent = ComponentType<any>;
 export type ReactWidget = IWidget<ReactComponent, ReactInstance>;

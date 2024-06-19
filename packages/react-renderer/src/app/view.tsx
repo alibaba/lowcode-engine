@@ -1,12 +1,12 @@
 import { useRenderContext } from './context';
-import { getComponentByName } from '../runtime/component';
-import { extension } from './extension';
+import { getComponentByName } from '../runtime/schema';
+import { boosts } from './boosts';
 
 export function ApplicationView() {
   const renderContext = useRenderContext();
   const { schema } = renderContext;
-  const appWrappers = extension.getAppWrappers();
-  const Outlet = extension.getOutlet();
+  const appWrappers = boosts.getAppWrappers();
+  const Outlet = boosts.getOutlet();
 
   if (!Outlet) return null;
 

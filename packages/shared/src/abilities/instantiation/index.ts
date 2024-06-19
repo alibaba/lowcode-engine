@@ -15,7 +15,7 @@ export type Constructor<T = any> = new (...args: any[]) => T;
 export function createDecorator<T>(serviceId: string): ServiceIdentifier<T> {
   const id = <any>(
     function (target: Constructor, targetKey: string, indexOrPropertyDescriptor: any): any {
-      return set(serviceId)(target, targetKey, indexOrPropertyDescriptor);
+      return inject(serviceId)(target, targetKey, indexOrPropertyDescriptor);
     }
   );
   id.toString = () => serviceId;

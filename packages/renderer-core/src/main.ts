@@ -31,7 +31,7 @@ export class RendererMain<RenderObject> {
     @IBoostsService private boostsService: IBoostsService,
     @ILifeCycleService private lifeCycleService: ILifeCycleService,
   ) {
-    this.lifeCycleService.when(LifecyclePhase.OptionsResolved).finally(async () => {
+    this.lifeCycleService.when(LifecyclePhase.OptionsResolved).then(async () => {
       const renderContext = {
         schema: this.schemaService,
         packageManager: this.packageManagementService,
@@ -41,8 +41,6 @@ export class RendererMain<RenderObject> {
       };
 
       this.renderObject = await this.adapter(renderContext);
-
-      await this.packageManagementService.loadPackages(this.initOptions.packages ?? []);
 
       this.lifeCycleService.phase = LifecyclePhase.Ready;
     });
@@ -60,13 +58,19 @@ export class RendererMain<RenderObject> {
 
     this.codeRuntimeService.initialize(options.codeRuntime ?? {});
 
-    this.extensionHostService.registerPlugin(plugins);
-
     this.lifeCycleService.phase = LifecyclePhase.OptionsResolved;
+
+    await this.lifeCycleService.when(LifecyclePhase.Ready);
+
+    await this.extensionHostService.registerPlugin(plugins);
+
+    await this.packageManagementService.loadPackages(this.initOptions.packages ?? []);
+
+    this.lifeCycleService.phase = LifecyclePhase.AfterInitPackageLoad;
   }
 
   async getApp(): Promise<RendererApplication<RenderObject>> {
-    await this.lifeCycleService.when(LifecyclePhase.Ready);
+    await this.lifeCycleService.when(LifecyclePhase.AfterInitPackageLoad);
 
     // construct application
     return Object.freeze<RendererApplication<RenderObject>>({
@@ -79,8 +83,7 @@ export class RendererMain<RenderObject> {
       ...this.renderObject,
 
       use: (plugin) => {
-        this.extensionHostService.registerPlugin(plugin);
-        return this.extensionHostService.doSetupPlugin(plugin);
+        return this.extensionHostService.registerPlugin(plugin);
       },
     });
   }

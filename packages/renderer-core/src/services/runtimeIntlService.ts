@@ -5,6 +5,7 @@ import {
   type Spec,
   type Locale,
   type Translations,
+  platformLocale,
 } from '@alilc/lowcode-shared';
 import { ILifeCycleService, LifecyclePhase } from './lifeCycleService';
 import { ICodeRuntimeService } from './code-runtime';
@@ -34,7 +35,7 @@ export const IRuntimeIntlService = createDecorator<IRuntimeIntlService>('IRuntim
 export class RuntimeIntlService implements IRuntimeIntlService {
   private intl: Intl = new Intl();
 
-  public locale: string = navigator.language;
+  public locale: string = platformLocale;
 
   constructor(
     @ILifeCycleService private lifeCycleService: ILifeCycleService,

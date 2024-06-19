@@ -5,6 +5,13 @@
   "main": "dist/low-code-shared.cjs",
   "module": "dist/low-code-shared.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/low-code-shared.js",
+      "require": "./dist/low-code-shared.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "files": [
     "dist",
     "src",

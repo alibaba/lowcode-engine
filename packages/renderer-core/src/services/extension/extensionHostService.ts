@@ -3,8 +3,6 @@ import { type Plugin, type PluginContext } from './plugin';
 import { IBoostsService } from './boosts';
 import { IPackageManagementService } from '../package';
 import { ISchemaService } from '../schema';
-import { type RenderAdapter } from './render';
-import { IComponentTreeModelService } from '../model';
 import { ILifeCycleService, LifecyclePhase } from '../lifeCycleService';
 
 interface IPluginRuntime extends Plugin {
@@ -12,9 +10,7 @@ interface IPluginRuntime extends Plugin {
 }
 
 export interface IExtensionHostService {
-  registerPlugin(plugin: Plugin | Plugin[]): void;
-
-  doSetupPlugin(plugin: Plugin): Promise<void>;
+  registerPlugin(plugin: Plugin | Plugin[]): Promise<void>;
 
   getPlugin(name: string): Plugin | undefined;
 
@@ -50,15 +46,9 @@ export class ExtensionHostService implements IExtensionHostService {
         return this.lifeCycleService.when(phase);
       },
     };
-
-    this.lifeCycleService.when(LifecyclePhase.OptionsResolved).then(async () => {
-      for (const plugin of this.pluginRuntimes) {
-        await this.doSetupPlugin(plugin);
-      }
-    });
   }
 
-  registerPlugin(plugins: Plugin | Plugin[]) {
+  async registerPlugin(plugins: Plugin | Plugin[]) {
     plugins = Array.isArray(plugins) ? plugins : [plugins];
 
     for (const plugin of plugins) {
@@ -67,19 +57,17 @@ export class ExtensionHostService implements IExtensionHostService {
         continue;
       }
 
-      this.pluginRuntimes.push({
-        ...plugin,
-        status: 'ready',
-      });
+      await this.doSetupPlugin(plugin);
     }
   }
 
-  async doSetupPlugin(plugin: Plugin) {
+  private async doSetupPlugin(plugin: Plugin) {
     const pluginRuntime = plugin as IPluginRuntime;
 
-    if (!this.pluginRuntimes.some((item) => item.name !== pluginRuntime.name)) {
-      return;
-    }
+    this.pluginRuntimes.push({
+      ...pluginRuntime,
+      status: 'ready',
+    });
 
     const isSetup = (name: string) => {
       const setupPlugins = this.pluginRuntimes.filter((item) => item.status === 'setup');

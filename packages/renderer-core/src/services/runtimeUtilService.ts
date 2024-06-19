@@ -23,12 +23,11 @@ export class RuntimeUtilService implements IRuntimeUtilService {
     @ILifeCycleService private lifeCycleService: ILifeCycleService,
     @ISchemaService private schemaService: ISchemaService,
   ) {
-    this.lifeCycleService.when(LifecyclePhase.Ready).then(() => {
+    this.lifeCycleService.when(LifecyclePhase.AfterInitPackageLoad).then(() => {
       const utils = this.schemaService.get('utils') ?? [];
       for (const util of utils) {
         this.add(util);
       }
-
       this.toExpose();
     });
   }

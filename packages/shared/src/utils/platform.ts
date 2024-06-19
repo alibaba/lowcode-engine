@@ -1,15 +1,15 @@
-const userAgent: string = navigator.userAgent;
+const userAgent: string = window.navigator.userAgent;
 
 export const isWindows = userAgent.indexOf('Windows') >= 0;
 export const isMacintosh = userAgent.indexOf('Macintosh') >= 0;
 export const isLinux = userAgent.indexOf('Linux') >= 0;
 export const isIOS =
   (isMacintosh || userAgent.indexOf('iPad') >= 0 || userAgent.indexOf('iPhone') >= 0) &&
-  !!navigator.maxTouchPoints &&
-  navigator.maxTouchPoints > 0;
+  !!window.navigator.maxTouchPoints &&
+  window.navigator.maxTouchPoints > 0;
 export const isMobile = userAgent?.indexOf('Mobi') >= 0;
-export const locale: string | undefined = undefined;
-export const platformLocale = navigator.language;
+
+export const platformLocale = window.navigator.language;
 
 export const enum Platform {
   Web,

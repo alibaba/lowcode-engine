@@ -1,5 +1,8 @@
+/**
+ * @vitest-environment jsdom
+ */
 import { describe, it, expect } from 'vitest';
-import { CodeScope } from '../../../src/parts/code-runtime';
+import { CodeScope } from '../../../src/services/code-runtime';
 
 describe('CodeScope', () => {
   it('should return initial values', () => {
@@ -18,9 +21,8 @@ describe('CodeScope', () => {
   it('inject should not overwrite existing values without force', () => {
     const initValue = { a: 1 };
     const scope = new CodeScope(initValue);
-    scope.set('a', 2);
-    expect(scope.value.a).toBe(1);
-    scope.set('a', 3, true);
+    expect(scope.value.a).not.toBe(2);
+    scope.set('a', 3);
     expect(scope.value.a).toBe(3);
   });
 

@@ -4,7 +4,7 @@ import { ICodeRuntimeService } from '../code-runtime';
 import { IRuntimeUtilService } from '../runtimeUtilService';
 import { IRuntimeIntlService } from '../runtimeIntlService';
 
-export type IBoosts<Extends> = IBoostsApi & Extends;
+export type IBoosts<Extends> = IBoostsApi & Extends & { [key: string]: any };
 
 export interface IBoostsApi {
   readonly codeRuntime: ICodeRuntimeService;
@@ -12,6 +12,10 @@ export interface IBoostsApi {
   readonly intl: Pick<IRuntimeIntlService, 't' | 'setLocale' | 'getLocale' | 'addTranslations'>;
 
   readonly util: Pick<IRuntimeUtilService, 'add' | 'remove'>;
+  /**
+   * 允许插件挂载额外的对象在 boosts 上，方便其他插件使用
+   */
+  temporaryUse(name: string, value: any): void;
 }
 
 /**
@@ -43,6 +47,9 @@ export class BoostsService implements IBoostsService {
       codeRuntime: this.codeRuntimeService,
       intl: this.runtimeIntlService,
       util: this.runtimeUtilService,
+      temporaryUse: (name, value) => {
+        this.extend(name, value);
+      },
     };
   }
 
@@ -55,6 +62,8 @@ export class BoostsService implements IBoostsService {
       } else {
         if (!this.extendsValue[name]) {
           this.extendsValue[name] = value;
+        } else {
+          console.warn(`${name} is exist`);
         }
       }
     } else if (isObject(name)) {

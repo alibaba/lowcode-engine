@@ -4,7 +4,7 @@ import { isValidElementType } from 'react-is';
 import { useRenderContext } from '../app/context';
 import { reactiveStateFactory } from './reactiveState';
 import { dataSourceCreator } from './dataSource';
-import { type ReactComponent, type ReactWidget, createElementByWidget } from './render';
+import { type ReactComponent, type ReactWidget, createElementByWidget } from './components';
 import { ModelContextProvider } from './context';
 import { appendExternalStyle } from '../utils/element';
 

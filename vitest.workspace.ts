@@ -5,9 +5,12 @@ export default defineWorkspace([
   {
     test: {
       include: ['**/__tests__/**/*.spec.{ts?(x),js?(x)}'],
+      alias: {
+        '@alilc/lowcode-shared': 'packages/shared',
+      },
       name: 'unit test',
-      environment: 'jsdom',
-      globals: true
-    }
+      environmentMatchGlobs: [['packages/**', 'jsdom']],
+      globals: true,
+    },
   },
-])
+]);

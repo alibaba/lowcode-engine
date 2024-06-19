@@ -1,4 +1,4 @@
-import { type Plugin, type IBoostsService } from '@alilc/lowcode-renderer-core';
+import { type Plugin } from '@alilc/lowcode-renderer-core';
 import { type ComponentType, type PropsWithChildren } from 'react';
 
 export type WrapperComponent = ComponentType<PropsWithChildren<any>>;
@@ -9,13 +9,13 @@ export interface OutletProps {
 
 export type Outlet = ComponentType<OutletProps>;
 
-export interface ReactRendererExtensionApi {
+export interface ReactRendererBoostsApi {
   addAppWrapper(appWrapper: WrapperComponent): void;
 
   setOutlet(outlet: Outlet): void;
 }
 
-class ReactRendererExtension {
+class ReactRendererBoosts {
   private wrappers: WrapperComponent[] = [];
 
   private outlet: Outlet | null = null;
@@ -28,7 +28,7 @@ class ReactRendererExtension {
     return this.outlet;
   }
 
-  toExpose(): ReactRendererExtensionApi {
+  toExpose(): ReactRendererBoostsApi {
     return {
       addAppWrapper: (appWrapper) => {
         if (appWrapper) this.wrappers.push(appWrapper);
@@ -38,14 +38,10 @@ class ReactRendererExtension {
       },
     };
   }
-
-  install(boostsService: IBoostsService) {
-    boostsService.extend(this.toExpose());
-  }
 }
 
-export const extension = new ReactRendererExtension();
+export const boosts = new ReactRendererBoosts();
 
-export function defineRendererPlugin(plugin: Plugin<ReactRendererExtensionApi>) {
+export function defineRendererPlugin(plugin: Plugin<ReactRendererBoostsApi>) {
   return plugin;
 }

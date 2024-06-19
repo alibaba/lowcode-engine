@@ -1,7 +1,7 @@
 import { createRenderer, type AppOptions } from '@alilc/lowcode-renderer-core';
 import { type ComponentType } from 'react';
 import { type Root, createRoot } from 'react-dom/client';
-import { ApplicationView, RendererContext, extension } from '../app';
+import { ApplicationView, RendererContext, boosts } from '../app';
 
 export interface ReactAppOptions extends AppOptions {
   faultComponent?: ComponentType<any>;
@@ -17,7 +17,7 @@ export const createApp = async (options: ReactAppOptions) => {
     // }
 
     // extends boosts
-    extension.install(boostsManager);
+    boostsManager.extend(boosts.toExpose());
 
     let root: Root | undefined;
 

@@ -1,3 +1,3 @@
 export * from './context';
-export * from './extension';
+export * from './boosts';
 export * from './view';

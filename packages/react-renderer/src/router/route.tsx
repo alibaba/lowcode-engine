@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useRenderContext } from '../app/context';
-import { OutletProps } from '../app/extension';
+import { OutletProps } from '../app/boosts';
 import { useRouteLocation } from './context';
-import { createComponentBySchema } from '../runtime/component';
+import { createComponentBySchema } from '../runtime/schema';
 
 export function RouteOutlet(props: OutletProps) {
   const context = useRenderContext();
