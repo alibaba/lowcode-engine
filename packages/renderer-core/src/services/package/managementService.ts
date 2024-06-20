@@ -33,12 +33,16 @@ export interface IPackageManagementService {
 
   setLibraryByPackageName(packageName: string, library: any): void;
 
+  getLibraryByComponentMap(componentMap: Spec.ComponentMap): any;
+
   /** 解析组件映射 */
   resolveComponentMaps(componentMaps: Spec.ComponentMap[]): void;
+
   /** 获取组件映射对象，key = componentName value = component */
   getComponentsNameRecord<C = unknown>(
     componentMaps?: Spec.ComponentMap[],
   ): Record<string, C | LowCodeComponent>;
+
   /** 通过组件名获取对应的组件  */
   getComponent<C = unknown>(componentName: string): C | LowCodeComponent | undefined;
   /** 注册组件 */
@@ -105,6 +109,33 @@ export class PackageManagementService implements IPackageManagementService {
     this.packageStore.set(packageName, library);
   }
 
+  getLibraryByComponentMap(componentMap: Spec.ComponentMap) {
+    if (this.packageStore.has(componentMap.package!)) {
+      const library = this.packageStore.get(componentMap.package!);
+      // export { exportName } from xxx exportName === global.libraryName.exportName
+      // export exportName from xxx exportName === global.libraryName.default || global.libraryName
+      // export { exportName as componentName } from package
+      // if exportName == null exportName === componentName;
+      // const componentName = exportName.subName, if exportName empty subName donot use
+      const paths =
+        componentMap.exportName && componentMap.subName ? componentMap.subName.split('.') : [];
+      const exportName = componentMap.exportName ?? componentMap.componentName;
+
+      if (componentMap.destructuring) {
+        paths.unshift(exportName);
+      }
+
+      let result = library;
+      for (const path of paths) {
+        result = result[path] || result;
+      }
+
+      return result;
+    }
+
+    return undefined;
+  }
+
   resolveComponentMaps(componentMaps: Spec.ComponentMap[]) {
     for (const map of componentMaps) {
       if (map.devMode === 'lowCode') {
@@ -114,28 +145,8 @@ export class PackageManagementService implements IPackageManagementService {
           this.componentsRecord[map.componentName] = packageInfo;
         }
       } else {
-        if (this.packageStore.has(map.package!)) {
-          const library = this.packageStore.get(map.package!);
-          // export { exportName } from xxx exportName === global.libraryName.exportName
-          // export exportName from xxx exportName === global.libraryName.default || global.libraryName
-          // export { exportName as componentName } from package
-          // if exportName == null exportName === componentName;
-          // const componentName = exportName.subName, if exportName empty subName donot use
-          const paths = map.exportName && map.subName ? map.subName.split('.') : [];
-          const exportName = map.exportName ?? map.componentName;
-
-          if (map.destructuring) {
-            paths.unshift(exportName);
-          }
-
-          let result = library;
-          for (const path of paths) {
-            result = result[path] || result;
-          }
-
-          const recordName = map.componentName ?? map.exportName;
-          if (recordName && result) this.componentsRecord[recordName] = result;
-        }
+        const result = this.getLibraryByComponentMap(map);
+        if (map.componentName && result) this.componentsRecord[map.componentName] = result;
       }
     }
   }

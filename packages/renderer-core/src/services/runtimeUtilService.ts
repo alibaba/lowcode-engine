@@ -1,4 +1,11 @@
-import { type AnyFunction, type Spec, createDecorator, Provide } from '@alilc/lowcode-shared';
+import {
+  type AnyFunction,
+  type Spec,
+  createDecorator,
+  Provide,
+  type PlainObject,
+} from '@alilc/lowcode-shared';
+import { isPlainObject } from 'lodash-es';
 import { IPackageManagementService } from './package';
 import { ICodeRuntimeService } from './code-runtime';
 import { ILifeCycleService, LifecyclePhase } from './lifeCycleService';
@@ -6,7 +13,7 @@ import { ISchemaService } from './schema';
 
 export interface IRuntimeUtilService {
   add(utilItem: Spec.Util): void;
-  add(name: string, fn: AnyFunction): void;
+  add(name: string, target: AnyFunction | PlainObject): void;
 
   remove(name: string): void;
 }
@@ -15,7 +22,7 @@ export const IRuntimeUtilService = createDecorator<IRuntimeUtilService>('rendere
 
 @Provide(IRuntimeUtilService)
 export class RuntimeUtilService implements IRuntimeUtilService {
-  private utilsMap: Map<string, AnyFunction> = new Map();
+  private utilsMap: Map<string, any> = new Map();
 
   constructor(
     @ICodeRuntimeService private codeRuntimeService: ICodeRuntimeService,
@@ -33,20 +40,39 @@ export class RuntimeUtilService implements IRuntimeUtilService {
   }
 
   add(utilItem: Spec.Util): void;
-  add(name: string, fn: AnyFunction): void;
-  add(name: Spec.Util | string, fn?: AnyFunction): void {
+  add(name: string, fn: AnyFunction | PlainObject): void;
+  add(name: Spec.Util | string, fn?: AnyFunction | PlainObject): void {
     if (typeof name === 'string') {
-      if (typeof fn === 'function') {
-        this.utilsMap.set(name, fn as AnyFunction);
+      if (fn) {
+        if (isPlainObject(fn)) {
+          if ((fn as PlainObject).destructuring) {
+            for (const key of Object.keys(fn)) {
+              this.add(key, (fn as PlainObject)[key]);
+            }
+          } else {
+            this.utilsMap.set(name, fn);
+          }
+        } else if (typeof fn === 'function') {
+          this.utilsMap.set(name, fn);
+        }
       }
     } else {
-      const fn = this.parseUtil(name);
-      if (fn) this.utilsMap.set(name.name, fn);
+      const util = this.parseUtil(name);
+      if (util) this.add(name.name, util);
     }
   }
 
   remove(name: string): void {
     this.utilsMap.delete(name);
+  }
+
+  private parseUtil(utilItem: Spec.Util) {
+    if (utilItem.type === 'function') {
+      const { content } = utilItem;
+      return this.codeRuntimeService.run(content.value);
+    } else {
+      return this.packageManagementService.getLibraryByComponentMap(utilItem.content);
+    }
   }
 
   private toExpose(): void {
@@ -63,27 +89,5 @@ export class RuntimeUtilService implements IRuntimeUtilService {
     });
 
     this.codeRuntimeService.getScope().set('utils', exposed);
-  }
-
-  private parseUtil(utilItem: Spec.Util) {
-    if (utilItem.type === 'function') {
-      const { content } = utilItem;
-
-      return this.codeRuntimeService.run(content.value);
-    } else {
-      const {
-        content: { package: packageName, destructuring, exportName, subName },
-      } = utilItem;
-      let library: any = this.packageManagementService.getLibraryByPackageName(packageName!);
-
-      if (library) {
-        if (destructuring) {
-          const target = library[exportName!];
-          library = subName ? target[subName] : target;
-        }
-
-        return library;
-      }
-    }
   }
 }

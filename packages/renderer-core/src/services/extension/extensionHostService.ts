@@ -57,17 +57,17 @@ export class ExtensionHostService implements IExtensionHostService {
         continue;
       }
 
-      await this.doSetupPlugin(plugin);
+      const pluginRuntime = plugin as IPluginRuntime;
+
+      pluginRuntime.status = 'ready';
+      this.pluginRuntimes.push(pluginRuntime);
+
+      await this.doSetupPlugin(pluginRuntime);
     }
   }
 
-  private async doSetupPlugin(plugin: Plugin) {
-    const pluginRuntime = plugin as IPluginRuntime;
-
-    this.pluginRuntimes.push({
-      ...pluginRuntime,
-      status: 'ready',
-    });
+  private async doSetupPlugin(pluginRuntime: IPluginRuntime) {
+    if (pluginRuntime.status === 'setup') return;
 
     const isSetup = (name: string) => {
       const setupPlugins = this.pluginRuntimes.filter((item) => item.status === 'setup');

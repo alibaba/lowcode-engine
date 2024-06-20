@@ -329,7 +329,7 @@ export interface ComponentNodeProps {
 export interface NPMUtil {
   name: string;
   type: 'npm';
-  content: Omit<ComponentMap, 'componentName'>;
+  content: ComponentMap;
 }
 
 export interface FunctionUtil {
