@@ -15,9 +15,8 @@ export interface NormalizedComponentNode extends Spec.ComponentNode {
 
 export interface InitializeModelOptions {
   defaultProps?: PlainObject | undefined;
-
   stateCreator: ModelScopeStateCreator;
-  dataSourceCreator: ModelScopeDataSourceCreator;
+  dataSourceCreator?: ModelScopeDataSourceCreator;
 }
 
 /**
@@ -60,14 +59,6 @@ export interface IComponentTreeModel<Component, ComponentInstance = unknown> {
 export type ModelScopeStateCreator = (initalState: PlainObject) => Spec.InstanceStateApi;
 export type ModelScopeDataSourceCreator = (...args: any[]) => Spec.InstanceDataSourceApi;
 
-const defaultDataSourceSchema: Spec.ComponentDataSource = {
-  list: [],
-  dataHandler: {
-    type: 'JSFunction',
-    value: '() => {}',
-  },
-};
-
 export interface ComponentTreeModelOptions {
   id?: string;
   metadata?: PlainObject;
@@ -108,7 +99,7 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
       state = {},
       defaultProps: defaultSchemaProps,
       props = {},
-      dataSource = defaultDataSourceSchema,
+      dataSource,
       methods = {},
     } = this.componentsTree;
 
@@ -120,16 +111,22 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
       },
     });
 
-    const initalState = this.codeRuntime.resolve(state, { scope: this.codeScope });
     const initalProps = this.codeRuntime.resolve(props, { scope: this.codeScope });
+    this.codeScope.setValue({ props: { ...defaultProps, ...initalProps } });
 
+    const initalState = this.codeRuntime.resolve(state, { scope: this.codeScope });
     const stateApi = stateCreator(initalState);
-    const dataSourceApi = dataSourceCreator(dataSource, stateApi);
+    this.codeScope.setValue(stateApi);
+
+    let dataSourceApi: Spec.InstanceDataSourceApi | undefined;
+    if (dataSource && dataSourceCreator) {
+      const dataSourceProps = this.codeRuntime.resolve(dataSource, { scope: this.codeScope });
+      dataSourceApi = dataSourceCreator(dataSourceProps, stateApi);
+    }
 
     this.codeScope.setValue(
       Object.assign(
         {
-          props: { ...defaultProps, ...initalProps },
           $: (ref: string) => {
             const insArr = this.instanceMap.get(ref);
             if (!insArr) return undefined;
@@ -139,7 +136,6 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
             return this.instanceMap.get(ref) ?? [];
           },
         },
-        stateApi,
         dataSourceApi,
       ),
     );

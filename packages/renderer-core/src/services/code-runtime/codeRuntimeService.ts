@@ -58,11 +58,7 @@ export class CodeRuntimeService implements ICodeRuntimeService {
     if (!code) return undefined;
 
     try {
-      let result = this.evalCodeFunction(code, scope.value);
-
-      if (typeof result === 'function') {
-        result = result.bind(scope.value);
-      }
+      const result = this.evalCodeFunction(code, scope.value);
 
       return result as R;
     } catch (err) {
@@ -105,7 +101,8 @@ export class CodeRuntimeService implements ICodeRuntimeService {
     node: Spec.JSExpression | Spec.JSFunction,
     options: ResolveOptions,
   ) {
-    const v = this.run(node.value, options.scope || this.codeScope);
+    const scope = options.scope || this.codeScope;
+    const v = this.run(node.value, scope) as any;
 
     if (typeof v === 'undefined' && node.mock) {
       return this.resolve(node.mock, options);

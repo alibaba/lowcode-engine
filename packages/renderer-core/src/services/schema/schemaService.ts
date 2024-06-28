@@ -4,6 +4,8 @@ import {
   Provide,
   type IStore,
   KeyValueStore,
+  EventEmitter,
+  type EventDisposable,
 } from '@alilc/lowcode-shared';
 import { isObject } from 'lodash-es';
 import { schemaValidation } from './validation';
@@ -19,7 +21,12 @@ export interface ISchemaService {
 
   get<K extends NormalizedSchemaKey>(key: K): NormalizedSchema[K];
 
-  set<K extends NormalizedSchemaKey>(key: K, value: NormalizedSchema[K]): void;
+  set<K extends NormalizedSchemaKey>(key: K, value: NormalizedSchema[K]): Promise<void>;
+
+  onChange<K extends NormalizedSchemaKey>(
+    key: K,
+    listener: (v: NormalizedSchema[K]) => void,
+  ): EventDisposable;
 }
 
 export const ISchemaService = createDecorator<ISchemaService>('schemaService');
@@ -33,13 +40,18 @@ export class SchemaService implements ISchemaService {
     setterValidation: schemaValidation,
   });
 
+  private notifyEmiiter = new EventEmitter();
+
   constructor(
     @ILifeCycleService private lifeCycleService: ILifeCycleService,
     @ICodeRuntimeService private codeRuntimeService: ICodeRuntimeService,
   ) {
-    this.lifeCycleService.when(LifecyclePhase.Ready).then(() => {
-      const constants = this.get('constants') ?? {};
-      this.codeRuntimeService.getScope().set('constants', constants);
+    this.onChange('constants', (value = {}) => {
+      this.codeRuntimeService.getScope().set('constants', value);
+    });
+
+    this.lifeCycleService.when(LifecyclePhase.Destroying, () => {
+      this.notifyEmiiter.removeAll();
     });
   }
 
@@ -54,11 +66,21 @@ export class SchemaService implements ISchemaService {
     });
   }
 
-  set<K extends NormalizedSchemaKey>(key: K, value: NormalizedSchema[K]): void {
-    this.store.set(key, value);
+  async set<K extends NormalizedSchemaKey>(key: K, value: NormalizedSchema[K]): Promise<void> {
+    if (value !== this.get(key)) {
+      this.store.set(key, value);
+      await this.notifyEmiiter.emit(key, value);
+    }
   }
 
   get<K extends NormalizedSchemaKey>(key: K): NormalizedSchema[K] {
     return this.store.get(key) as NormalizedSchema[K];
+  }
+
+  onChange<K extends keyof NormalizedSchema>(
+    key: K,
+    listener: (v: NormalizedSchema[K]) => void | Promise<void>,
+  ): EventDisposable {
+    return this.notifyEmiiter.on(key, listener);
   }
 }

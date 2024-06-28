@@ -45,3 +45,14 @@ export function stringifyURL(location: {
   const searchStr = location.searchParams ? location.searchParams.toString() : '';
   return location.path + (searchStr && '?') + searchStr + (location.hash || '');
 }
+
+export function mergeSearchParams(
+  a: URLSearchParams | undefined,
+  b: URLSearchParams | undefined,
+): URLSearchParams {
+  if (!a && !b) return new URLSearchParams();
+  if (!a) return b!;
+  if (!b) return a;
+
+  return new URLSearchParams([...Array.from(a.entries()), ...Array.from(b.entries())]);
+}

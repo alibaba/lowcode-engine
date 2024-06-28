@@ -63,7 +63,7 @@ export class CodeScope implements ICodeScope {
   private createProxy(): PlainObject {
     return new Proxy(Object.create(null) as PlainObject, {
       set: (target, p, newValue) => {
-        this.set(p as string, newValue, true);
+        this.set(p as string, newValue);
         return true;
       },
       get: (_, p) => this.findValue(p) ?? undefined,

@@ -1,10 +1,10 @@
-import { useRenderContext } from './context';
+import { useRendererContext } from '../api/context';
 import { getComponentByName } from '../runtime/schema';
 import { boosts } from './boosts';
 
 export function ApplicationView() {
-  const renderContext = useRenderContext();
-  const { schema } = renderContext;
+  const rendererContext = useRendererContext();
+  const { schema } = rendererContext;
   const appWrappers = boosts.getAppWrappers();
   const Outlet = boosts.getOutlet();
 
@@ -16,7 +16,7 @@ export function ApplicationView() {
 
   if (layoutConfig) {
     const componentName = layoutConfig.componentName;
-    const Layout = getComponentByName(componentName, renderContext);
+    const Layout = getComponentByName(componentName, rendererContext);
 
     if (Layout) {
       const layoutProps: any = layoutConfig.props ?? {};

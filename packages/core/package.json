@@ -34,13 +34,7 @@
   },
   "dependencies": {
     "@alilc/lowcode-shared": "workspace:*",
-    "@alilc/lowcode-types": "workspace:*",
-    "@alilc/lowcode-utils": "workspace:*",
-    "@formatjs/intl": "^2.10.1",
-    "lodash-es": "^4.17.21",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "events": "^3.3.0"
+    "lodash-es": "^4.17.21"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.12",
@@ -49,8 +43,6 @@
   },
   "peerDependencies": {
     "@alilc/lowcode-shared": "workspace:*",
-    "@alilc/lowcode-types": "workspace:*",
-    "@alilc/lowcode-utils": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

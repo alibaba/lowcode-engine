@@ -10,7 +10,7 @@ import {
 import { get as lodashGet } from 'lodash-es';
 import { PackageLoader } from './loader';
 import { ISchemaService } from '../schema';
-import { ILifeCycleService, LifecyclePhase } from '../lifeCycleService';
+import { ILifeCycleService } from '../lifeCycleService';
 
 export interface NormalizedPackage {
   id: string;
@@ -33,15 +33,12 @@ export interface IPackageManagementService {
 
   setLibraryByPackageName(packageName: string, library: any): void;
 
-  getLibraryByComponentMap(componentMap: Spec.ComponentMap): any;
+  getLibraryByComponentMap(
+    componentMap: Spec.ComponentMap,
+  ): { key: string; value: any } | undefined;
 
   /** 解析组件映射 */
   resolveComponentMaps(componentMaps: Spec.ComponentMap[]): void;
-
-  /** 获取组件映射对象，key = componentName value = component */
-  getComponentsNameRecord<C = unknown>(
-    componentMaps?: Spec.ComponentMap[],
-  ): Record<string, C | LowCodeComponent>;
 
   /** 通过组件名获取对应的组件  */
   getComponent<C = unknown>(componentName: string): C | LowCodeComponent | undefined;
@@ -72,8 +69,7 @@ export class PackageManagementService implements IPackageManagementService {
     @ISchemaService private schemaService: ISchemaService,
     @ILifeCycleService private lifeCycleService: ILifeCycleService,
   ) {
-    this.lifeCycleService.when(LifecyclePhase.AfterInitPackageLoad).then(() => {
-      const componentsMaps = this.schemaService.get('componentsMap');
+    this.schemaService.onChange('componentsMap', (componentsMaps) => {
       this.resolveComponentMaps(componentsMaps);
     });
   }
@@ -109,19 +105,23 @@ export class PackageManagementService implements IPackageManagementService {
     this.packageStore.set(packageName, library);
   }
 
-  getLibraryByComponentMap(componentMap: Spec.ComponentMap) {
-    if (this.packageStore.has(componentMap.package!)) {
+  getLibraryByComponentMap(
+    componentMap: Spec.ComponentMap,
+  ): { key: string; value: any } | undefined {
+    if (!componentMap.componentName && !componentMap.exportName) return;
+
+    if (this.packageStore.has(componentMap.package)) {
       const library = this.packageStore.get(componentMap.package!);
       // export { exportName } from xxx exportName === global.libraryName.exportName
       // export exportName from xxx exportName === global.libraryName.default || global.libraryName
-      // export { exportName as componentName } from package
-      // if exportName == null exportName === componentName;
       // const componentName = exportName.subName, if exportName empty subName donot use
       const paths =
         componentMap.exportName && componentMap.subName ? componentMap.subName.split('.') : [];
+
+      // if exportName === nil, exportName === componentName;
       const exportName = componentMap.exportName ?? componentMap.componentName;
 
-      if (componentMap.destructuring) {
+      if (exportName && componentMap.destructuring) {
         paths.unshift(exportName);
       }
 
@@ -130,10 +130,12 @@ export class PackageManagementService implements IPackageManagementService {
         result = result[path] || result;
       }
 
-      return result;
+      // export { exportName as componentName } from package
+      return {
+        key: componentMap.componentName ?? componentMap.exportName!,
+        value: result,
+      };
     }
-
-    return undefined;
   }
 
   resolveComponentMaps(componentMaps: Spec.ComponentMap[]) {
@@ -146,22 +148,15 @@ export class PackageManagementService implements IPackageManagementService {
         }
       } else {
         const result = this.getLibraryByComponentMap(map);
-        if (map.componentName && result) this.componentsRecord[map.componentName] = result;
+        if (result) {
+          this.componentsRecord[result.key] = result.value;
+        }
       }
     }
   }
 
-  getComponentsNameRecord(componentMaps?: Spec.ComponentMap[]) {
-    if (componentMaps) {
-      const newMaps = componentMaps.filter((item) => !this.componentsRecord[item.componentName]);
-      this.resolveComponentMaps(newMaps);
-    }
-
-    return { ...this.componentsRecord };
-  }
-
   getComponent(componentName: string) {
-    return this.componentsRecord[componentName];
+    return lodashGet(this.componentsRecord, componentName);
   }
 
   registerComponentByName(componentName: string, Component: unknown) {

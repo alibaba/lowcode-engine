@@ -1,22 +1,12 @@
-import { createRenderer, type AppOptions } from '@alilc/lowcode-renderer-core';
-import { type ComponentType } from 'react';
+import { createRenderer } from '@alilc/lowcode-renderer-core';
 import { type Root, createRoot } from 'react-dom/client';
-import { ApplicationView, RendererContext, boosts } from '../app';
-
-export interface ReactAppOptions extends AppOptions {
-  faultComponent?: ComponentType<any>;
-}
+import { type ReactAppOptions, RendererContext } from './context';
+import { ApplicationView, boosts } from '../app';
 
 export const createApp = async (options: ReactAppOptions) => {
   return createRenderer(async (context) => {
     const { schema, boostsManager } = context;
 
-    // set config
-    // if (options.faultComponent) {
-    //   context.config.set('faultComponent', options.faultComponent);
-    // }
-
-    // extends boosts
     boostsManager.extend(boosts.toExpose());
 
     let root: Root | undefined;
@@ -27,10 +17,11 @@ export const createApp = async (options: ReactAppOptions) => {
 
         const defaultId = schema.get('config')?.targetRootID ?? 'app';
         const rootElement = normalizeContainer(containerOrId, defaultId);
+        const contextValue = { ...context, options };
 
         root = createRoot(rootElement);
         root.render(
-          <RendererContext.Provider value={context}>
+          <RendererContext.Provider value={contextValue}>
             <ApplicationView />
           </RendererContext.Provider>,
         );

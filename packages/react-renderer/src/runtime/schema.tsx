@@ -1,9 +1,8 @@
 import { invariant, isLowCodeComponentPackage, type Spec } from '@alilc/lowcode-shared';
 import { forwardRef, useRef, useEffect } from 'react';
 import { isValidElementType } from 'react-is';
-import { useRenderContext } from '../app/context';
+import { useRendererContext } from '../api/context';
 import { reactiveStateFactory } from './reactiveState';
-import { dataSourceCreator } from './dataSource';
 import { type ReactComponent, type ReactWidget, createElementByWidget } from './components';
 import { ModelContextProvider } from './context';
 import { appendExternalStyle } from '../utils/element';
@@ -39,9 +38,7 @@ export function getComponentByName(
   name: string,
   { packageManager, boostsManager }: RenderContext,
 ): ReactComponent {
-  const componentsRecord = packageManager.getComponentsNameRecord<ReactComponent>();
-  // read cache first
-  const result = lowCodeComponentsCache.get(name) || componentsRecord[name];
+  const result = lowCodeComponentsCache.get(name) || packageManager.getComponent(name);
 
   if (isLowCodeComponentPackage(result)) {
     const { schema, ...metadata } = result;
@@ -87,8 +84,8 @@ export function createComponentBySchema(
     props: LowCodeComponentProps,
     ref: ForwardedRef<any>,
   ) {
-    const renderContext = useRenderContext();
-    const { componentTreeModel } = renderContext;
+    const renderContext = useRendererContext();
+    const { options, componentTreeModel } = renderContext;
 
     const modelRef = useRef<IComponentTreeModel<ReactComponent, ReactInstance>>();
 
@@ -110,7 +107,7 @@ export function createComponentBySchema(
       model.initialize({
         defaultProps: props,
         stateCreator: reactiveStateFactory,
-        dataSourceCreator,
+        dataSourceCreator: options.dataSourceCreator,
       });
 
       model.triggerLifeCycle('constructor');
@@ -123,11 +120,6 @@ export function createComponentBySchema(
     }
 
     useEffect(() => {
-      const scopeValue = model.codeScope.value;
-
-      // init dataSource
-      scopeValue.reloadDataSource?.();
-
       // trigger lifeCycles
       // componentDidMount?.();
       model.triggerLifeCycle('componentDidMount');

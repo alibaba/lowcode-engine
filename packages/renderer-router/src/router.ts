@@ -8,7 +8,7 @@ import {
 } from './history';
 import { createRouterMatcher } from './matcher';
 import { type PathParserOptions, type PathParams } from './utils/path-parser';
-import { parseURL, stringifyURL } from './utils/url';
+import { mergeSearchParams, parseURL, stringifyURL } from './utils/url';
 import { isSameRouteLocation } from './utils/helper';
 import type {
   RouteRecord,
@@ -77,11 +77,11 @@ export function createRouter(options: RouterOptions): Router {
 
   function resolve(
     rawLocation: RawRouteLocation,
-    currentLocation?: RouteLocationNormalized,
+    current?: RouteLocationNormalized,
   ): RouteLocationNormalized & {
     href: string;
   } {
-    currentLocation = Object.assign({}, currentLocation || currentLocation);
+    currentLocation = Object.assign({}, current || currentLocation);
 
     if (typeof rawLocation === 'string') {
       const locationNormalized = parseURL(rawLocation);
@@ -89,7 +89,10 @@ export function createRouter(options: RouterOptions): Router {
       const href = routerHistory.createHref(locationNormalized.fullPath);
 
       return Object.assign(locationNormalized, matchedRoute, {
-        searchParams: locationNormalized.searchParams,
+        searchParams: mergeSearchParams(
+          currentLocation.searchParams,
+          locationNormalized.searchParams,
+        ),
         hash: decodeURIComponent(locationNormalized.hash),
         redirectedFrom: undefined,
         href,

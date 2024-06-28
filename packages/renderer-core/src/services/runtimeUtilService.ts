@@ -8,12 +8,11 @@ import {
 import { isPlainObject } from 'lodash-es';
 import { IPackageManagementService } from './package';
 import { ICodeRuntimeService } from './code-runtime';
-import { ILifeCycleService, LifecyclePhase } from './lifeCycleService';
 import { ISchemaService } from './schema';
 
 export interface IRuntimeUtilService {
-  add(utilItem: Spec.Util): void;
-  add(name: string, target: AnyFunction | PlainObject): void;
+  add(utilItem: Spec.Util, force?: boolean): void;
+  add(name: string, target: AnyFunction | PlainObject, force?: boolean): void;
 
   remove(name: string): void;
 }
@@ -27,38 +26,61 @@ export class RuntimeUtilService implements IRuntimeUtilService {
   constructor(
     @ICodeRuntimeService private codeRuntimeService: ICodeRuntimeService,
     @IPackageManagementService private packageManagementService: IPackageManagementService,
-    @ILifeCycleService private lifeCycleService: ILifeCycleService,
     @ISchemaService private schemaService: ISchemaService,
   ) {
-    this.lifeCycleService.when(LifecyclePhase.AfterInitPackageLoad).then(() => {
-      const utils = this.schemaService.get('utils') ?? [];
+    this.injectScope();
+
+    this.schemaService.onChange('utils', (utils = []) => {
       for (const util of utils) {
         this.add(util);
       }
-      this.toExpose();
     });
   }
 
-  add(utilItem: Spec.Util): void;
-  add(name: string, fn: AnyFunction | PlainObject): void;
-  add(name: Spec.Util | string, fn?: AnyFunction | PlainObject): void {
-    if (typeof name === 'string') {
-      if (fn) {
-        if (isPlainObject(fn)) {
-          if ((fn as PlainObject).destructuring) {
-            for (const key of Object.keys(fn)) {
-              this.add(key, (fn as PlainObject)[key]);
-            }
-          } else {
-            this.utilsMap.set(name, fn);
-          }
-        } else if (typeof fn === 'function') {
-          this.utilsMap.set(name, fn);
-        }
-      }
+  add(utilItem: Spec.Util, force?: boolean): void;
+  add(name: string, fn: AnyFunction | PlainObject, force?: boolean): void;
+  add(util: Spec.Util | string, fn?: AnyFunction | PlainObject | boolean, force?: boolean): void {
+    let name: string;
+    let utilObj: AnyFunction | PlainObject | Spec.Util;
+
+    if (typeof util === 'string') {
+      if (!fn) return;
+
+      name = util;
+      utilObj = fn as AnyFunction | PlainObject;
     } else {
-      const util = this.parseUtil(name);
-      if (util) this.add(name.name, util);
+      if (!util) return;
+
+      name = util.name;
+      utilObj = util;
+      force = fn as boolean;
+    }
+
+    this.addUtilByName(name, utilObj, force);
+  }
+
+  private addUtilByName(
+    name: string,
+    fn: AnyFunction | PlainObject | Spec.Util,
+    force?: boolean,
+  ): void {
+    if (this.utilsMap.has(name) && !force) return;
+
+    if (isPlainObject(fn)) {
+      if ((fn as Spec.Util).type === 'function' || (fn as Spec.Util).type === 'npm') {
+        const utilFn = this.parseUtil(fn as Spec.Util);
+        if (utilFn) {
+          this.addUtilByName(utilFn.key, utilFn.value, force);
+        }
+      } else if ((fn as PlainObject).destructuring) {
+        for (const key of Object.keys(fn)) {
+          this.addUtilByName(key, (fn as PlainObject)[key], force);
+        }
+      } else {
+        this.utilsMap.set(name, fn);
+      }
+    } else if (typeof fn === 'function') {
+      this.utilsMap.set(name, fn);
     }
   }
 
@@ -69,13 +91,16 @@ export class RuntimeUtilService implements IRuntimeUtilService {
   private parseUtil(utilItem: Spec.Util) {
     if (utilItem.type === 'function') {
       const { content } = utilItem;
-      return this.codeRuntimeService.run(content.value);
+      return {
+        key: utilItem.name,
+        value: this.codeRuntimeService.run(content.value),
+      };
     } else {
       return this.packageManagementService.getLibraryByComponentMap(utilItem.content);
     }
   }
 
-  private toExpose(): void {
+  private injectScope(): void {
     const exposed = new Proxy(Object.create(null), {
       get: (_, p: string) => {
         return this.utilsMap.get(p);

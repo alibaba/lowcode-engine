@@ -3,21 +3,24 @@ import { type Plugin } from './services/extension';
 import { type ISchemaService } from './services/schema';
 import { type IPackageManagementService } from './services/package';
 import { type CodeRuntimeInitializeOptions } from './services/code-runtime';
+import { type ModelScopeDataSourceCreator } from './services/model';
 
 export interface AppOptions {
   schema: Spec.Project;
   packages?: Spec.Package[];
   plugins?: Plugin[];
-
   /**
    * 运行模式
    */
   mode?: 'development' | 'production';
-
   /**
    * code runtime 设置选项
    */
   codeRuntime?: CodeRuntimeInitializeOptions;
+  /**
+   * 数据源创建工厂函数
+   */
+  dataSourceCreator?: ModelScopeDataSourceCreator;
 }
 
 export type RendererApplication<Render = unknown> = {
@@ -28,4 +31,6 @@ export type RendererApplication<Render = unknown> = {
   readonly packageManager: IPackageManagementService;
 
   use(plugin: Plugin): Promise<void>;
+
+  destroy(): Promise<void>;
 } & Render;

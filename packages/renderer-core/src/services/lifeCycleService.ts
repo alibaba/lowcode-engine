@@ -1,4 +1,4 @@
-import { Provide, createDecorator, Barrier } from '@alilc/lowcode-shared';
+import { Provide, createDecorator, EventEmitter, EventDisposable } from '@alilc/lowcode-shared';
 
 export const enum LifecyclePhase {
   Starting = 1,
@@ -7,7 +7,7 @@ export const enum LifecyclePhase {
 
   Ready = 3,
 
-  AfterInitPackageLoad = 4,
+  Destroying = 4,
 }
 
 export interface ILifeCycleService {
@@ -16,18 +16,20 @@ export interface ILifeCycleService {
    */
   phase: LifecyclePhase;
 
+  setPhase(phase: LifecyclePhase): Promise<void>;
+
   /**
    * Returns a promise that resolves when a certain lifecycle phase
    * has started.
    */
-  when(phase: LifecyclePhase): Promise<void>;
+  when(phase: LifecyclePhase, listener: () => void | Promise<void>): EventDisposable;
 }
 
 export const ILifeCycleService = createDecorator<ILifeCycleService>('lifeCycleService');
 
 @Provide(ILifeCycleService)
 export class LifeCycleService implements ILifeCycleService {
-  private readonly phaseWhen = new Map<LifecyclePhase, Barrier>();
+  private readonly phaseWhen = new EventEmitter();
 
   private _phase = LifecyclePhase.Starting;
 
@@ -35,7 +37,7 @@ export class LifeCycleService implements ILifeCycleService {
     return this._phase;
   }
 
-  set phase(value: LifecyclePhase) {
+  async setPhase(value: LifecyclePhase) {
     if (value < this._phase) {
       throw new Error('Lifecycle cannot go backwards');
     }
@@ -44,28 +46,27 @@ export class LifeCycleService implements ILifeCycleService {
       return;
     }
 
-    // this.logService.trace(`lifecycle: phase changed (value: ${value})`);
-
     this._phase = value;
 
-    const barrier = this.phaseWhen.get(this._phase);
-    if (barrier) {
-      barrier.open();
-      this.phaseWhen.delete(this._phase);
-    }
+    await this.phaseWhen.emit(LifecyclePhaseToString(value));
   }
 
-  async when(phase: LifecyclePhase): Promise<void> {
-    if (phase <= this._phase) {
-      return;
-    }
+  when(phase: LifecyclePhase, listener: () => void | Promise<void>) {
+    return this.phaseWhen.on(LifecyclePhaseToString(phase), listener);
+  }
+}
 
-    let barrier = this.phaseWhen.get(phase);
-    if (!barrier) {
-      barrier = new Barrier();
-      this.phaseWhen.set(phase, barrier);
-    }
-
-    await barrier.wait();
+export function LifecyclePhaseToString(phase: LifecyclePhase): string {
+  switch (phase) {
+    case LifecyclePhase.Starting:
+      return 'Starting';
+    case LifecyclePhase.OptionsResolved:
+      return 'OptionsResolved';
+    case LifecyclePhase.Ready:
+      return 'Ready';
+    case LifecyclePhase.Inited:
+      return 'Inited';
+    case LifecyclePhase.Destroying:
+      return 'Destroying';
   }
 }

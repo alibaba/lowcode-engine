@@ -1,7 +1,3 @@
-export const addLeadingSlash = (path: string): string => {
-  return path.charAt(0) === '/' ? path : `/${path}`;
-};
-
 export interface ExternalElementOptions {
   id?: string;
   root?: HTMLElement;

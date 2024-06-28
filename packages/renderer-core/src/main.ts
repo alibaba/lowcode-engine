@@ -30,21 +30,7 @@ export class RendererMain<RenderObject> {
     @IComponentTreeModelService private componentTreeModelService: IComponentTreeModelService,
     @IBoostsService private boostsService: IBoostsService,
     @ILifeCycleService private lifeCycleService: ILifeCycleService,
-  ) {
-    this.lifeCycleService.when(LifecyclePhase.OptionsResolved).then(async () => {
-      const renderContext = {
-        schema: this.schemaService,
-        packageManager: this.packageManagementService,
-        boostsManager: this.boostsService,
-        componentTreeModel: this.componentTreeModelService,
-        lifeCycle: this.lifeCycleService,
-      };
-
-      this.renderObject = await this.adapter(renderContext);
-
-      this.lifeCycleService.phase = LifecyclePhase.Ready;
-    });
-  }
+  ) {}
 
   async main(options: AppOptions, adapter: RenderAdapter<RenderObject>) {
     const { schema, mode, plugins = [] } = options;
@@ -58,20 +44,26 @@ export class RendererMain<RenderObject> {
 
     this.codeRuntimeService.initialize(options.codeRuntime ?? {});
 
-    this.lifeCycleService.phase = LifecyclePhase.OptionsResolved;
+    await this.lifeCycleService.setPhase(LifecyclePhase.OptionsResolved);
 
-    await this.lifeCycleService.when(LifecyclePhase.Ready);
+    const renderContext = {
+      schema: this.schemaService,
+      packageManager: this.packageManagementService,
+      boostsManager: this.boostsService,
+      componentTreeModel: this.componentTreeModelService,
+      lifeCycle: this.lifeCycleService,
+    };
+
+    this.renderObject = await this.adapter(renderContext);
 
     await this.extensionHostService.registerPlugin(plugins);
-
+    // 先加载插件提供 package loader
     await this.packageManagementService.loadPackages(this.initOptions.packages ?? []);
 
-    this.lifeCycleService.phase = LifecyclePhase.AfterInitPackageLoad;
+    await this.lifeCycleService.setPhase(LifecyclePhase.Ready);
   }
 
-  async getApp(): Promise<RendererApplication<RenderObject>> {
-    await this.lifeCycleService.when(LifecyclePhase.AfterInitPackageLoad);
-
+  getApp(): RendererApplication<RenderObject> {
     // construct application
     return Object.freeze<RendererApplication<RenderObject>>({
       // develop use
@@ -84,6 +76,9 @@ export class RendererMain<RenderObject> {
 
       use: (plugin) => {
         return this.extensionHostService.registerPlugin(plugin);
+      },
+      destroy: async () => {
+        return this.lifeCycleService.setPhase(LifecyclePhase.Destroying);
       },
     });
   }

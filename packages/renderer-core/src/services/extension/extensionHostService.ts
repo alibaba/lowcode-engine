@@ -3,7 +3,7 @@ import { type Plugin, type PluginContext } from './plugin';
 import { IBoostsService } from './boosts';
 import { IPackageManagementService } from '../package';
 import { ISchemaService } from '../schema';
-import { ILifeCycleService, LifecyclePhase } from '../lifeCycleService';
+import { ILifeCycleService } from '../lifeCycleService';
 
 interface IPluginRuntime extends Plugin {
   status: 'setup' | 'ready';
@@ -42,8 +42,8 @@ export class ExtensionHostService implements IExtensionHostService {
       schema: this.schemaService,
       packageManager: this.packageManagementService,
 
-      whenLifeCylePhaseChange: (phase) => {
-        return this.lifeCycleService.when(phase);
+      whenLifeCylePhaseChange: (phase, listener) => {
+        return this.lifeCycleService.when(phase, listener);
       },
     };
   }

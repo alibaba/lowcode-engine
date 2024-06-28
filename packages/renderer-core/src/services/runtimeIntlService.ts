@@ -42,7 +42,9 @@ export class RuntimeIntlService implements IRuntimeIntlService {
     @ICodeRuntimeService private codeRuntimeService: ICodeRuntimeService,
     @ISchemaService private schemaService: ISchemaService,
   ) {
-    this.lifeCycleService.when(LifecyclePhase.OptionsResolved).then(() => {
+    this.injectScope();
+
+    this.lifeCycleService.when(LifecyclePhase.OptionsResolved, () => {
       const config = this.schemaService.get('config');
       const i18nTranslations = this.schemaService.get('i18n');
 
@@ -54,10 +56,6 @@ export class RuntimeIntlService implements IRuntimeIntlService {
           this.addTranslations(key, i18nTranslations[key]);
         });
       }
-    });
-
-    this.lifeCycleService.when(LifecyclePhase.Ready).then(() => {
-      this.toExpose();
     });
   }
 
@@ -85,7 +83,7 @@ export class RuntimeIntlService implements IRuntimeIntlService {
     this.intl.addTranslations(locale, translations);
   }
 
-  private toExpose(): void {
+  private injectScope(): void {
     const exposed: Spec.IntlApi = {
       i18n: (key, params) => {
         return this.t({ key, params });

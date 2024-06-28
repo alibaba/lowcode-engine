@@ -13,7 +13,7 @@ import {
   type Spec,
 } from '@alilc/lowcode-shared';
 import { type ComponentType, type ReactInstance, useMemo, createElement } from 'react';
-import { useRenderContext } from '../app/context';
+import { useRendererContext } from '../api/context';
 import { useReactiveStore } from './hooks/useReactiveStore';
 import { useModel } from './context';
 import { getComponentByName } from './schema';
@@ -65,10 +65,10 @@ export function WidgetComponent(props: WidgetRendererProps) {
   const componentNode = widget.node as NormalizedComponentNode;
   const { ref, ...componentProps } = componentNode.props;
 
-  const renderContext = useRenderContext();
+  const rendererContext = useRendererContext();
 
   const Component = useMemo(
-    () => getComponentByName(componentNode.componentName, renderContext),
+    () => getComponentByName(componentNode.componentName, rendererContext),
     [widget],
   );
 
@@ -94,11 +94,16 @@ export function WidgetComponent(props: WidgetRendererProps) {
     return null;
   }
 
+  const finalProps = {
+    ...otherProps,
+    ...state.props,
+  };
+
   return createElement(
     Component,
     {
-      ...otherProps,
-      ...state.props,
+      ...finalProps,
+      id: finalProps.id ? finalProps.id : undefined,
       key: widget.key,
       ref: attachRef,
     },

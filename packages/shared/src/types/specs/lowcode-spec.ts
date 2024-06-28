@@ -44,7 +44,7 @@ export interface Project {
   /**
    * 当前应用元数据信息
    */
-  meta?: Record<string, JSONObject>;
+  meta?: Record<string, JSONValue | JSONObject>;
   /**
    * 当前应用的公共数据源
    * @deprecated
@@ -92,13 +92,13 @@ export interface ProjectConfig {
  */
 export interface ComponentMap {
   /**
-   * 协议中的组件名，唯一性，对应包导出的组件名，是一个有效的 JS 标识符，而且是大写字母打头
+   * 协议中的组件名，对应包导出的组件名，是一个有效的 JS 标识符
    */
-  componentName: string;
+  componentName?: string;
   /**
-   * npm 公域的 package name
+   * npm 公域的 package name，唯一性
    */
-  package?: string;
+  package: string;
   /**
    * package version
    */

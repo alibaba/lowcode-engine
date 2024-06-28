@@ -1,6 +1,6 @@
 import { type EventEmitter, type IStore, type PlainObject } from '@alilc/lowcode-shared';
 import { type IBoosts } from './boosts';
-import { LifecyclePhase } from '../lifeCycleService';
+import { ILifeCycleService } from '../lifeCycleService';
 import { type ISchemaService } from '../schema';
 import { type IPackageManagementService } from '../package';
 
@@ -8,12 +8,12 @@ export interface PluginContext<BoostsExtends = object> {
   eventEmitter: EventEmitter;
   globalState: IStore<PlainObject, string>;
   boosts: IBoosts<BoostsExtends>;
-  schema: ISchemaService;
+  schema: Pick<ISchemaService, 'get' | 'set'>;
   packageManager: IPackageManagementService;
   /**
    * 生命周期变更事件
    */
-  whenLifeCylePhaseChange(phase: LifecyclePhase): Promise<void>;
+  whenLifeCylePhaseChange: ILifeCycleService['when'];
 }
 
 export interface Plugin<BoostsExtends = object> {

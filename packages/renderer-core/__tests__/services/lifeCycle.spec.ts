@@ -14,10 +14,10 @@ describe('LifeCycleService', () => {
     lifeCycle.when(LifecyclePhase.Ready).finally(() => {
       result += '2';
     });
-    lifeCycle.when(LifecyclePhase.AfterInitPackageLoad).then(() => {
+    lifeCycle.when(LifecyclePhase.Inited).then(() => {
       result += '3';
     });
-    lifeCycle.when(LifecyclePhase.AfterInitPackageLoad).finally(() => {
+    lifeCycle.when(LifecyclePhase.Inited).finally(() => {
       result += '4';
     });
 
@@ -27,7 +27,7 @@ describe('LifeCycleService', () => {
 
     expect(result).toEqual('12');
 
-    lifeCycle.phase = LifecyclePhase.AfterInitPackageLoad;
+    lifeCycle.phase = LifecyclePhase.Inited;
 
     await sleep();
 
