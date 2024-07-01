@@ -2,12 +2,12 @@ import { useMemo } from 'react';
 import { useRendererContext } from '../api/context';
 import { OutletProps } from '../app/boosts';
 import { useRouteLocation } from './context';
-import { createComponentBySchema } from '../runtime/schema';
+import { createComponent } from '../runtime/createComponent';
 
 export function RouteOutlet(props: OutletProps) {
   const context = useRendererContext();
   const location = useRouteLocation();
-  const { schema, packageManager } = context;
+  const { schema, packageManager, options } = context;
 
   const pageConfig = useMemo(() => {
     const pages = schema.get('pages') ?? [];
@@ -27,11 +27,12 @@ export function RouteOutlet(props: OutletProps) {
     const componentsMap = schema.get('componentsMap');
     packageManager.resolveComponentMaps(componentsMap);
 
-    const LowCodeComponent = createComponentBySchema(pageConfig.mappingId, {
+    const LowCodeComponent = createComponent(pageConfig.mappingId, {
       displayName: pageConfig.id,
       modelOptions: {
         metadata: pageConfig,
       },
+      ...options.component,
     });
 
     return <LowCodeComponent {...props} />;

@@ -9,6 +9,7 @@ import { isPlainObject } from 'lodash-es';
 import { IPackageManagementService } from './package';
 import { ICodeRuntimeService } from './code-runtime';
 import { ISchemaService } from './schema';
+import { ILifeCycleService, LifecyclePhase } from './lifeCycleService';
 
 export interface IRuntimeUtilService {
   add(utilItem: Spec.Util, force?: boolean): void;
@@ -27,8 +28,11 @@ export class RuntimeUtilService implements IRuntimeUtilService {
     @ICodeRuntimeService private codeRuntimeService: ICodeRuntimeService,
     @IPackageManagementService private packageManagementService: IPackageManagementService,
     @ISchemaService private schemaService: ISchemaService,
+    @ILifeCycleService private lifeCycleService: ILifeCycleService,
   ) {
-    this.injectScope();
+    this.lifeCycleService.when(LifecyclePhase.OptionsResolved, () => {
+      this.injectScope();
+    });
 
     this.schemaService.onChange('utils', (utils = []) => {
       for (const util of utils) {
@@ -93,7 +97,7 @@ export class RuntimeUtilService implements IRuntimeUtilService {
       const { content } = utilItem;
       return {
         key: utilItem.name,
-        value: this.codeRuntimeService.run(content.value),
+        value: this.codeRuntimeService.rootRuntime.run(content.value),
       };
     } else {
       return this.packageManagementService.getLibraryByComponentMap(utilItem.content);
@@ -113,6 +117,6 @@ export class RuntimeUtilService implements IRuntimeUtilService {
       },
     });
 
-    this.codeRuntimeService.getScope().set('utils', exposed);
+    this.codeRuntimeService.rootRuntime.getScope().set('utils', exposed);
   }
 }

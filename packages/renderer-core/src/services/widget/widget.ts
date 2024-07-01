@@ -1,11 +1,10 @@
 import { type Spec, uniqueId } from '@alilc/lowcode-shared';
-import { clone } from 'lodash-es';
 import { IComponentTreeModel } from '../model';
 
 export interface IWidget<Component, ComponentInstance = unknown> {
   readonly key: string;
 
-  readonly node: Spec.NodeType;
+  readonly rawNode: Spec.NodeType;
 
   model: IComponentTreeModel<Component, ComponentInstance>;
 
@@ -15,9 +14,7 @@ export interface IWidget<Component, ComponentInstance = unknown> {
 export class Widget<Component, ComponentInstance = unknown>
   implements IWidget<Component, ComponentInstance>
 {
-  public __raw: Spec.NodeType;
-
-  public node: Spec.NodeType;
+  public rawNode: Spec.NodeType;
 
   public key: string;
 
@@ -27,8 +24,7 @@ export class Widget<Component, ComponentInstance = unknown>
     node: Spec.NodeType,
     public model: IComponentTreeModel<Component, ComponentInstance>,
   ) {
-    this.node = clone(node);
-    this.__raw = node;
+    this.rawNode = node;
     this.key = (node as Spec.ComponentNode)?.id ?? uniqueId();
   }
 }

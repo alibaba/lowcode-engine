@@ -1,7 +1,8 @@
 import { createRenderer } from '@alilc/lowcode-renderer-core';
 import { type Root, createRoot } from 'react-dom/client';
-import { type ReactAppOptions, RendererContext } from './context';
+import { RendererContext } from './context';
 import { ApplicationView, boosts } from '../app';
+import { type ReactAppOptions } from './types';
 
 export const createApp = async (options: ReactAppOptions) => {
   return createRenderer(async (context) => {

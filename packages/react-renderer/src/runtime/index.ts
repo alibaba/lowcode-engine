@@ -1,2 +1,2 @@
-export * from './schema';
-export * from './components';
+export * from './createComponent';
+export * from './elements';

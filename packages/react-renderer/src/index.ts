@@ -6,5 +6,11 @@ export * from './router';
 export { LifecyclePhase } from '@alilc/lowcode-renderer-core';
 
 export type { Spec, ProCodeComponent, LowCodeComponent } from '@alilc/lowcode-shared';
-export type { PackageLoader, CodeScope, Plugin } from '@alilc/lowcode-renderer-core';
+export type {
+  PackageLoader,
+  CodeScope,
+  Plugin,
+  ModelDataSourceCreator,
+  ModelStateCreator,
+} from '@alilc/lowcode-renderer-core';
 export type { ReactRendererBoostsApi } from './app/boosts';

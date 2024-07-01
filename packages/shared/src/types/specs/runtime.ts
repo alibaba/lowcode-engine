@@ -1,5 +1,4 @@
 import { AnyFunction, PlainObject } from '../index';
-import { JSExpression } from './lowcode-spec';
 
 /**
  * 在上述事件类型描述和变量类型描述中，在函数或 JS 表达式内，均可以通过 this 对象获取当前组件所在容器的实例化对象
@@ -62,7 +61,7 @@ export interface DataSourceMapItem<T = any> {
    * 调用单个数据源
    * @param params 替换 ComponentDataSourceItemOptions 对象描述中的 params
    */
-  load(params: any): Promise<T>;
+  load(params?: any): Promise<T>;
   /**
    * 数据源请求的返回状态
    */

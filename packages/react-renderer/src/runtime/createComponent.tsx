@@ -3,23 +3,23 @@ import { forwardRef, useRef, useEffect } from 'react';
 import { isValidElementType } from 'react-is';
 import { useRendererContext } from '../api/context';
 import { reactiveStateFactory } from './reactiveState';
-import { type ReactComponent, type ReactWidget, createElementByWidget } from './components';
-import { ModelContextProvider } from './context';
+import { type ReactComponent, type ReactWidget, createElementByWidget } from './elements';
 import { appendExternalStyle } from '../utils/element';
 
 import type {
   RenderContext,
   IComponentTreeModel,
-  ComponentTreeModelOptions,
+  CreateComponentTreeModelOptions,
 } from '@alilc/lowcode-renderer-core';
-import type { ReactInstance, CSSProperties, ForwardedRef } from 'react';
+import type { ReactInstance, CSSProperties, ForwardedRef, ReactNode } from 'react';
 
 export interface ComponentOptions {
   displayName?: string;
-  modelOptions?: ComponentTreeModelOptions;
+  modelOptions?: Pick<CreateComponentTreeModelOptions, 'id' | 'metadata'>;
 
-  widgetCreated?(widget: ReactWidget): void;
-  componentRefAttached?(widget: ReactWidget, instance: ReactInstance): void;
+  beforeElementCreate?(widget: ReactWidget): ReactWidget;
+  elementCreated?(widget: ReactWidget, element: ReactNode): ReactNode;
+  componentRefAttached?(widget: ReactWidget, instance: ReactInstance | null): void;
 }
 
 export interface LowCodeComponentProps {
@@ -37,6 +37,7 @@ const lowCodeComponentsCache = new Map<string, ReactComponent>();
 export function getComponentByName(
   name: string,
   { packageManager, boostsManager }: RenderContext,
+  componentOptions: ComponentOptions = {},
 ): ReactComponent {
   const result = lowCodeComponentsCache.get(name) || packageManager.getComponent(name);
 
@@ -58,7 +59,8 @@ export function getComponentByName(
       });
     }
 
-    const lowCodeComponent = createComponentBySchema(componentsTree[0], {
+    const lowCodeComponent = createComponent(componentsTree[0], {
+      ...componentOptions,
       displayName: name,
       modelOptions: {
         id: metadata.id,
@@ -76,40 +78,49 @@ export function getComponentByName(
   return result;
 }
 
-export function createComponentBySchema(
+export function createComponent(
   schema: string | Spec.ComponentTreeRoot,
-  { displayName = '__LowCodeComponent__', modelOptions }: ComponentOptions = {},
+  componentOptions: ComponentOptions = {},
 ) {
+  const { displayName = '__LowCodeComponent__', modelOptions } = componentOptions;
+
   const LowCodeComponent = forwardRef(function (
     props: LowCodeComponentProps,
     ref: ForwardedRef<any>,
   ) {
-    const renderContext = useRendererContext();
-    const { options, componentTreeModel } = renderContext;
+    const context = useRendererContext();
+    const { options: globalOptions, componentTreeModel } = context;
 
     const modelRef = useRef<IComponentTreeModel<ReactComponent, ReactInstance>>();
 
     if (!modelRef.current) {
+      const finalOptions: CreateComponentTreeModelOptions = {
+        ...modelOptions,
+        codeScopeValue: {
+          props,
+        },
+        stateCreator: reactiveStateFactory,
+        dataSourceCreator: globalOptions.dataSourceCreator,
+      };
+
       if (typeof schema === 'string') {
-        modelRef.current = componentTreeModel.createById(schema, modelOptions);
+        modelRef.current = componentTreeModel.createById(schema, finalOptions);
       } else {
-        modelRef.current = componentTreeModel.create(schema, modelOptions);
+        modelRef.current = componentTreeModel.create(schema, finalOptions);
       }
+      console.log(
+        '%c [ model ]-103',
+        'font-size:13px; background:pink; color:#bf2c9f;',
+        modelRef.current,
+      );
     }
 
     const model = modelRef.current!;
-    console.log('%c [ model ]-103', 'font-size:13px; background:pink; color:#bf2c9f;', model);
 
     const isConstructed = useRef(false);
     const isMounted = useRef(false);
 
     if (!isConstructed.current) {
-      model.initialize({
-        defaultProps: props,
-        stateCreator: reactiveStateFactory,
-        dataSourceCreator: options.dataSourceCreator,
-      });
-
       model.triggerLifeCycle('constructor');
       isConstructed.current = true;
 
@@ -142,11 +153,9 @@ export function createComponentBySchema(
     }, []);
 
     return (
-      <ModelContextProvider value={model}>
-        <div id={props.id} className={props.className} style={props.style} ref={ref}>
-          {model.widgets.map((w) => createElementByWidget(w, model.codeScope))}
-        </div>
-      </ModelContextProvider>
+      <div id={props.id} className={props.className} style={props.style} ref={ref}>
+        {model.widgets.map((w) => createElementByWidget(w, w.model.codeRuntime, componentOptions))}
+      </div>
     );
   });
 

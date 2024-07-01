@@ -42,8 +42,6 @@ export class RuntimeIntlService implements IRuntimeIntlService {
     @ICodeRuntimeService private codeRuntimeService: ICodeRuntimeService,
     @ISchemaService private schemaService: ISchemaService,
   ) {
-    this.injectScope();
-
     this.lifeCycleService.when(LifecyclePhase.OptionsResolved, () => {
       const config = this.schemaService.get('config');
       const i18nTranslations = this.schemaService.get('i18n');
@@ -56,6 +54,8 @@ export class RuntimeIntlService implements IRuntimeIntlService {
           this.addTranslations(key, i18nTranslations[key]);
         });
       }
+
+      this.injectScope();
     });
   }
 
@@ -96,6 +96,6 @@ export class RuntimeIntlService implements IRuntimeIntlService {
       },
     };
 
-    this.codeRuntimeService.getScope().setValue(exposed);
+    this.codeRuntimeService.rootRuntime.getScope().setValue(exposed);
   }
 }

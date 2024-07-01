@@ -1,13 +1,13 @@
 import { createDecorator, Provide, type PlainObject } from '@alilc/lowcode-shared';
 import { isObject } from 'lodash-es';
-import { ICodeRuntimeService } from '../code-runtime';
+import { ICodeRuntime, ICodeRuntimeService } from '../code-runtime';
 import { IRuntimeUtilService } from '../runtimeUtilService';
 import { IRuntimeIntlService } from '../runtimeIntlService';
 
 export type IBoosts<Extends> = IBoostsApi & Extends & { [key: string]: any };
 
 export interface IBoostsApi {
-  readonly codeRuntime: ICodeRuntimeService;
+  readonly codeRuntime: ICodeRuntime;
 
   readonly intl: Pick<IRuntimeIntlService, 't' | 'setLocale' | 'getLocale' | 'addTranslations'>;
 
@@ -39,12 +39,14 @@ export class BoostsService implements IBoostsService {
   private _expose: any;
 
   constructor(
-    @ICodeRuntimeService private codeRuntimeService: ICodeRuntimeService,
+    @ICodeRuntimeService codeRuntimeService: ICodeRuntimeService,
     @IRuntimeIntlService private runtimeIntlService: IRuntimeIntlService,
     @IRuntimeUtilService private runtimeUtilService: IRuntimeUtilService,
   ) {
     this.builtInApis = {
-      codeRuntime: this.codeRuntimeService,
+      get codeRuntime() {
+        return codeRuntimeService.rootRuntime;
+      },
       intl: this.runtimeIntlService,
       util: this.runtimeUtilService,
       temporaryUse: (name, value) => {
@@ -75,7 +77,7 @@ export class BoostsService implements IBoostsService {
 
   toExpose<Extends>(): IBoosts<Extends> {
     if (!this._expose) {
-      this._expose = new Proxy(Object.create(null), {
+      this._expose = new Proxy(this.builtInApis, {
         get: (_, p, receiver) => {
           return (
             Reflect.get(this.builtInApis, p, receiver) ||

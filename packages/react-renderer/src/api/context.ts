@@ -1,9 +1,6 @@
-import { type ComponentType, createContext, useContext } from 'react';
-import { type AppOptions, type RenderContext } from '@alilc/lowcode-renderer-core';
-
-export interface ReactAppOptions extends AppOptions {
-  faultComponent?: ComponentType<any>;
-}
+import { createContext, useContext } from 'react';
+import { type RenderContext } from '@alilc/lowcode-renderer-core';
+import { type ReactAppOptions } from './types';
 
 export const RendererContext = createContext<RenderContext & { options: ReactAppOptions }>(
   undefined!,

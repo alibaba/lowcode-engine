@@ -9,27 +9,28 @@ const unscopables = trustedGlobals.reduce((acc, key) => ({ ...acc, [key]: true }
   __proto__: null,
 });
 
-export interface ICodeScope {
-  readonly value: PlainObject;
-  set(name: string, value: any): void;
-  setValue(value: PlainObject, replace?: boolean): void;
-  createChild(initValue: PlainObject): ICodeScope;
+export interface ICodeScope<T extends PlainObject = PlainObject> {
+  readonly value: T;
+
+  set(name: keyof T, value: any): void;
+  setValue(value: Partial<T>, replace?: boolean): void;
+  createChild<V extends PlainObject = PlainObject>(initValue: Partial<V>): ICodeScope<V>;
 }
 
 /**
  * 双链表实现父域值的获取
  */
-interface IScopeNode {
-  parent?: IScopeNode;
-  current: PlainObject;
+interface IScopeNode<T extends PlainObject> {
+  parent?: IScopeNode<PlainObject>;
+  current: Partial<T>;
 }
 
-export class CodeScope implements ICodeScope {
-  __node: IScopeNode;
+export class CodeScope<T extends PlainObject = PlainObject> implements ICodeScope<T> {
+  __node: IScopeNode<T>;
 
-  private proxyValue: PlainObject;
+  private proxyValue: T;
 
-  constructor(initValue: PlainObject) {
+  constructor(initValue: Partial<T>) {
     this.__node = {
       current: initValue,
     };
@@ -37,15 +38,15 @@ export class CodeScope implements ICodeScope {
     this.proxyValue = this.createProxy();
   }
 
-  get value() {
+  get value(): T {
     return this.proxyValue;
   }
 
-  set(name: string, value: any): void {
+  set(name: keyof T, value: any): void {
     this.__node.current[name] = value;
   }
 
-  setValue(value: PlainObject, replace = false) {
+  setValue(value: Partial<T>, replace = false) {
     if (replace) {
       this.__node.current = { ...value };
     } else {
@@ -53,15 +54,15 @@ export class CodeScope implements ICodeScope {
     }
   }
 
-  createChild(initValue: PlainObject): ICodeScope {
+  createChild<V extends PlainObject = PlainObject>(initValue: Partial<V>): ICodeScope<V> {
     const childScope = new CodeScope(initValue);
     childScope.__node.parent = this.__node;
 
     return childScope;
   }
 
-  private createProxy(): PlainObject {
-    return new Proxy(Object.create(null) as PlainObject, {
+  private createProxy(): T {
+    return new Proxy(Object.create(null) as T, {
       set: (target, p, newValue) => {
         this.set(p as string, newValue);
         return true;
@@ -74,7 +75,7 @@ export class CodeScope implements ICodeScope {
   private findValue(prop: PropertyKey) {
     if (prop === Symbol.unscopables) return unscopables;
 
-    let node: IScopeNode | undefined = this.__node;
+    let node: IScopeNode<PlainObject> | undefined = this.__node;
     while (node) {
       if (Object.hasOwnProperty.call(node.current, prop)) {
         return node.current[prop as string];
@@ -86,7 +87,7 @@ export class CodeScope implements ICodeScope {
   private hasProperty(prop: PropertyKey): boolean {
     if (prop in unscopables) return true;
 
-    let node: IScopeNode | undefined = this.__node;
+    let node: IScopeNode<PlainObject> | undefined = this.__node;
     while (node) {
       if (prop in node.current) {
         return true;

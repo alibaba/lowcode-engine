@@ -2,8 +2,8 @@ import { type Spec } from '@alilc/lowcode-shared';
 import { type Plugin } from './services/extension';
 import { type ISchemaService } from './services/schema';
 import { type IPackageManagementService } from './services/package';
-import { type CodeRuntimeInitializeOptions } from './services/code-runtime';
-import { type ModelScopeDataSourceCreator } from './services/model';
+import { type CodeRuntimeOptions } from './services/code-runtime';
+import { type ModelDataSourceCreator } from './services/model';
 
 export interface AppOptions {
   schema: Spec.Project;
@@ -16,11 +16,11 @@ export interface AppOptions {
   /**
    * code runtime 设置选项
    */
-  codeRuntime?: CodeRuntimeInitializeOptions;
+  codeRuntime?: CodeRuntimeOptions;
   /**
    * 数据源创建工厂函数
    */
-  dataSourceCreator?: ModelScopeDataSourceCreator;
+  dataSourceCreator?: ModelDataSourceCreator;
 }
 
 export type RendererApplication<Render = unknown> = {

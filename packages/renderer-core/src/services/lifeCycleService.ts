@@ -25,6 +25,19 @@ export interface ILifeCycleService {
   when(phase: LifecyclePhase, listener: () => void | Promise<void>): EventDisposable;
 }
 
+export function LifecyclePhaseToString(phase: LifecyclePhase): string {
+  switch (phase) {
+    case LifecyclePhase.Starting:
+      return 'Starting';
+    case LifecyclePhase.OptionsResolved:
+      return 'OptionsResolved';
+    case LifecyclePhase.Ready:
+      return 'Ready';
+    case LifecyclePhase.Destroying:
+      return 'Destroying';
+  }
+}
+
 export const ILifeCycleService = createDecorator<ILifeCycleService>('lifeCycleService');
 
 @Provide(ILifeCycleService)
@@ -53,20 +66,5 @@ export class LifeCycleService implements ILifeCycleService {
 
   when(phase: LifecyclePhase, listener: () => void | Promise<void>) {
     return this.phaseWhen.on(LifecyclePhaseToString(phase), listener);
-  }
-}
-
-export function LifecyclePhaseToString(phase: LifecyclePhase): string {
-  switch (phase) {
-    case LifecyclePhase.Starting:
-      return 'Starting';
-    case LifecyclePhase.OptionsResolved:
-      return 'OptionsResolved';
-    case LifecyclePhase.Ready:
-      return 'Ready';
-    case LifecyclePhase.Inited:
-      return 'Inited';
-    case LifecyclePhase.Destroying:
-      return 'Destroying';
   }
 }

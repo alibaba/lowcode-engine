@@ -5,18 +5,12 @@ import {
   invariant,
   uniqueId,
 } from '@alilc/lowcode-shared';
-import { type ICodeScope, type ICodeRuntimeService } from '../code-runtime';
+import { type ICodeRuntime } from '../code-runtime';
 import { IWidget, Widget } from '../widget';
 
 export interface NormalizedComponentNode extends Spec.ComponentNode {
   loopArgs: [string, string];
   props: Spec.ComponentNodeProps;
-}
-
-export interface InitializeModelOptions {
-  defaultProps?: PlainObject | undefined;
-  stateCreator: ModelScopeStateCreator;
-  dataSourceCreator?: ModelScopeDataSourceCreator;
 }
 
 /**
@@ -25,13 +19,9 @@ export interface InitializeModelOptions {
 export interface IComponentTreeModel<Component, ComponentInstance = unknown> {
   readonly id: string;
 
-  readonly codeScope: ICodeScope;
-
-  readonly codeRuntime: ICodeRuntimeService;
+  readonly codeRuntime: ICodeRuntime;
 
   readonly widgets: IWidget<Component, ComponentInstance>[];
-
-  initialize(options: InitializeModelOptions): void;
 
   /**
    * 获取协议中的 css 内容
@@ -56,12 +46,18 @@ export interface IComponentTreeModel<Component, ComponentInstance = unknown> {
   buildWidgets(nodes: Spec.NodeType[]): IWidget<Component, ComponentInstance>[];
 }
 
-export type ModelScopeStateCreator = (initalState: PlainObject) => Spec.InstanceStateApi;
-export type ModelScopeDataSourceCreator = (...args: any[]) => Spec.InstanceDataSourceApi;
+export type ModelStateCreator = (initalState: PlainObject) => Spec.InstanceStateApi;
+export type ModelDataSourceCreator = (
+  dataSourceSchema: Spec.ComponentDataSource,
+  codeRuntime: ICodeRuntime<Spec.InstanceApi>,
+) => Spec.InstanceDataSourceApi;
 
 export interface ComponentTreeModelOptions {
   id?: string;
   metadata?: PlainObject;
+
+  stateCreator: ModelStateCreator;
+  dataSourceCreator?: ModelDataSourceCreator;
 }
 
 export class ComponentTreeModel<Component, ComponentInstance = unknown>
@@ -71,16 +67,14 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
 
   public id: string;
 
-  public codeScope: ICodeScope;
-
   public widgets: IWidget<Component>[] = [];
 
   public metadata: PlainObject = {};
 
   constructor(
     public componentsTree: Spec.ComponentTree,
-    public codeRuntime: ICodeRuntimeService,
-    options?: ComponentTreeModelOptions,
+    public codeRuntime: ICodeRuntime<Spec.InstanceApi>,
+    options: ComponentTreeModelOptions,
   ) {
     invariant(componentsTree, 'componentsTree must to provide', 'ComponentTreeModel');
 
@@ -92,39 +86,28 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
     if (componentsTree.children) {
       this.widgets = this.buildWidgets(componentsTree.children);
     }
+
+    this.initialize(options);
   }
 
-  initialize({ defaultProps, stateCreator, dataSourceCreator }: InitializeModelOptions) {
-    const {
-      state = {},
-      defaultProps: defaultSchemaProps,
-      props = {},
-      dataSource,
-      methods = {},
-    } = this.componentsTree;
+  private initialize({ stateCreator, dataSourceCreator }: ComponentTreeModelOptions) {
+    const { state = {}, defaultProps, props = {}, dataSource, methods = {} } = this.componentsTree;
+    const codeScope = this.codeRuntime.getScope();
 
-    this.codeScope = this.codeRuntime.createChildScope({
-      props: {
-        ...props,
-        ...defaultSchemaProps,
-        ...defaultProps,
-      },
-    });
+    const initalProps = this.codeRuntime.resolve(props);
+    codeScope.setValue({ props: { ...defaultProps, ...codeScope.value.props, ...initalProps } });
 
-    const initalProps = this.codeRuntime.resolve(props, { scope: this.codeScope });
-    this.codeScope.setValue({ props: { ...defaultProps, ...initalProps } });
-
-    const initalState = this.codeRuntime.resolve(state, { scope: this.codeScope });
+    const initalState = this.codeRuntime.resolve(state);
     const stateApi = stateCreator(initalState);
-    this.codeScope.setValue(stateApi);
+    codeScope.setValue(stateApi);
 
     let dataSourceApi: Spec.InstanceDataSourceApi | undefined;
     if (dataSource && dataSourceCreator) {
-      const dataSourceProps = this.codeRuntime.resolve(dataSource, { scope: this.codeScope });
-      dataSourceApi = dataSourceCreator(dataSourceProps, stateApi);
+      const dataSourceProps = this.codeRuntime.resolve(dataSource);
+      dataSourceApi = dataSourceCreator(dataSourceProps, this.codeRuntime);
     }
 
-    this.codeScope.setValue(
+    codeScope.setValue(
       Object.assign(
         {
           $: (ref: string) => {
@@ -141,9 +124,9 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
     );
 
     for (const [key, fn] of Object.entries(methods)) {
-      const customMethod = this.codeRuntime.resolve(fn, { scope: this.codeScope });
+      const customMethod = this.codeRuntime.resolve(fn);
       if (typeof customMethod === 'function') {
-        this.codeScope.set(key, customMethod);
+        codeScope.set(key, customMethod);
       }
     }
   }
@@ -163,9 +146,9 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
 
     const lifeCycleSchema = this.componentsTree.lifeCycles[lifeCycleName];
 
-    const lifeCycleFn = this.codeRuntime.resolve(lifeCycleSchema, { scope: this.codeScope });
+    const lifeCycleFn = this.codeRuntime.resolve(lifeCycleSchema);
     if (typeof lifeCycleFn === 'function') {
-      lifeCycleFn.apply(this.codeScope.value, args);
+      lifeCycleFn.apply(this.codeRuntime.getScope().value, args);
     }
   }
 
