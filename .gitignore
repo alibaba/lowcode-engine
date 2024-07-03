@@ -1,12 +1,6 @@
 # project custom
 build
 dist
-packages/*/lib/
-packages/*/es/
-packages/*/dist/
-packages/*/output/
-packages/*/temp/
-packages/demo/
 package-lock.json
 yarn.lock
 pnpm-lock.yaml

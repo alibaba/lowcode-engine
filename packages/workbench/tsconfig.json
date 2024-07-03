@@ -3,7 +3,5 @@
   "compilerOptions": {
     "outDir": "lib"
   },
-  "include": [
-    "./src/"
-, "../engine/src/shell/api/event.ts"  ]
+  "include": ["./src/"]
 }

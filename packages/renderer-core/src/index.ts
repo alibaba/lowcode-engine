@@ -3,7 +3,7 @@ export { createRenderer } from './main';
 export { definePackageLoader } from './services/package';
 export { LifecyclePhase } from './services/lifeCycleService';
 export { Widget } from './services/widget';
-export * from './utils/node';
+export * from '../../shared/src/utils/node';
 export * from './utils/value';
 
 /* --------------- types ---------------- */

@@ -36,30 +36,15 @@ const lowCodeComponentsCache = new Map<string, ReactComponent>();
 
 export function getComponentByName(
   name: string,
-  { packageManager, boostsManager }: RenderContext,
+  { packageManager }: RenderContext,
   componentOptions: ComponentOptions = {},
 ): ReactComponent {
   const result = lowCodeComponentsCache.get(name) || packageManager.getComponent(name);
 
   if (isLowCodeComponentPackage(result)) {
     const { schema, ...metadata } = result;
-    const { componentsMap, componentsTree, utils, i18n } = schema;
 
-    if (componentsMap.length > 0) {
-      packageManager.resolveComponentMaps(componentsMap);
-    }
-
-    const boosts = boostsManager.toExpose();
-
-    utils?.forEach((util) => boosts.util.add(util));
-
-    if (i18n) {
-      Object.keys(i18n).forEach((locale) => {
-        boosts.intl.addTranslations(locale, i18n[locale]);
-      });
-    }
-
-    const lowCodeComponent = createComponent(componentsTree[0], {
+    const lowCodeComponent = createComponent(schema, {
       ...componentOptions,
       displayName: name,
       modelOptions: {

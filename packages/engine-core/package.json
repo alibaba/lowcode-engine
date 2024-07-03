@@ -1,15 +1,14 @@
 {
-  "name": "@alilc/lowcode-engine",
-  "version": "2.0.0-beta.0",
-  "description": "An enterprise-class low-code technology stack with scale-out design / 一套面向扩展设计的企业级低代码技术体系",
+  "name": "@ali/lowcode-engine-core",
+  "description": "",
   "type": "module",
-  "main": "dist/ali-low-code-engine.js",
-  "module": "dist/ali-low-code-engine.js",
+  "main": "dist/engine-core.js",
+  "module": "dist/engine-core.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/ali-low-code-engine.js",
-      "require": "./dist/ali-low-code-engine.cjs",
+      "import": "./dist/engine-core.js",
+      "require": "./dist/engine-core.cjs",
       "types": "./dist/index.d.ts"
     },
     "./dist/": {
@@ -30,18 +29,13 @@
   "license": "MIT",
   "dependencies": {
     "@alilc/lowcode-shared": "workspace:*",
-    "lodash-es": "^4.17.21",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "lodash-es": "^4.17.21"
   },
   "devDependencies": {
-    "@types/lodash-es": "^4.17.12",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0"
+    "@types/lodash-es": "^4.17.12"
   },
   "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@alilc/lowcode-shared": "workspace:*"
   },
   "publishConfig": {
     "access": "public",
@@ -49,7 +43,7 @@
   },
   "repository": {
     "type": "http",
-    "url": "https://github.com/alibaba/lowcode-engine/tree/main/packages/engine"
+    "url": "https://github.com/alibaba/lowcode-engine/tree/main/packages/engine-core"
   },
   "gitHead": "2669f179e6f899d395ce1942d0fe04f9c5ed48a6",
   "bugs": "https://github.com/alibaba/lowcode-engine/issues",

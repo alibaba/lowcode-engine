@@ -2,7 +2,7 @@
  * https://lowcode-engine.cn/site/docs/specs/assets-spec
  * 低代码引擎资产包协议规范
  */
-import { Project } from './lowcode-spec';
+import { ComponentTreeRoot } from './lowcode-spec';
 
 export interface Package {
   /**
@@ -40,7 +40,7 @@ export interface Package {
   /**
    * 低代码组件的 schema 内容
    */
-  schema?: Project;
+  schema?: ComponentTreeRoot;
   /**
    * 当前资源所依赖的其他资源包的 id 列表
    */

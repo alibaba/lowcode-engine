@@ -1,12 +1,24 @@
 import { Provide, createDecorator, EventEmitter, EventDisposable } from '@alilc/lowcode-shared';
 
+/**
+ * 生命周期阶段
+ */
 export const enum LifecyclePhase {
+  /**
+   * 开始
+   */
   Starting = 1,
-
+  /**
+   * 配置解析完成
+   */
   OptionsResolved = 2,
-
+  /**
+   * 已就绪
+   */
   Ready = 3,
-
+  /**
+   * 销毁中
+   */
   Destroying = 4,
 }
 

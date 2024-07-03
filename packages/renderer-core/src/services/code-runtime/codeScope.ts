@@ -1,5 +1,5 @@
 import { type PlainObject } from '@alilc/lowcode-shared';
-import { trustedGlobals } from '../../utils/globals-es2015';
+import { trustedGlobals } from './globals-es2015';
 
 /*
  * variables who are impossible to be overwritten need to be escaped from proxy scope for performance reasons

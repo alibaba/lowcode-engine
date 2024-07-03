@@ -6,7 +6,7 @@ import {
   isJSFunction,
 } from '@alilc/lowcode-shared';
 import { type ICodeScope, CodeScope } from './codeScope';
-import { isNode } from '../../utils/node';
+import { isNode } from '../../../../shared/src/utils/node';
 import { mapValue } from '../../utils/value';
 import { evaluate } from './evaluate';
 
