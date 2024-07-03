@@ -151,32 +151,46 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
       }
     }
 
+    // 根据是否支持reset做相应的更改
+    const supportReset = extraProps?.supportReset;
+    const supportResetGlobally = engineConfig.get('supportResetGlobally', false);
+    const isUseResetSetter = supportReset === false ? false :
+      supportReset || supportResetGlobally;
+
     // 根据是否支持变量配置做相应的更改
     const supportVariable = this.field.extraProps?.supportVariable;
     // supportVariableGlobally 只对标准组件生效，vc 需要单独配置
     const supportVariableGlobally = engineConfig.get('supportVariableGlobally', false) && isStandardComponent(componentMeta);
     const isUseVariableSetter = shouldUseVariableSetter(supportVariable, supportVariableGlobally);
-    if (isUseVariableSetter === false) {
+    const shouldAddVariableSetter = isUseVariableSetter && Array.isArray(setterProps.setters) && !setterProps.setters?.includes('VariableSetter');
+    const shouldAddResetSetter = isUseResetSetter && Array.isArray(setterProps.setters) && !setterProps.setters?.includes('ResetSetter');
+    if (!isUseResetSetter && !isUseVariableSetter) {
       return {
         setterProps,
         initialValue,
         setterType,
       };
     }
-
     if (setterType === 'MixedSetter') {
-      // VariableSetter 不单独使用
-      if (Array.isArray(setterProps.setters) && !setterProps.setters.includes('VariableSetter')) {
-        setterProps.setters.push('VariableSetter');
+      if (shouldAddVariableSetter) {
+        setterProps.setters?.push('VariableSetter');
+      }
+      if (shouldAddResetSetter) {
+        setterProps.setters?.push('ResetSetter');
       }
     } else {
       setterType = 'MixedSetter';
       setterProps = {
         setters: [
           setter,
-          'VariableSetter',
         ],
       };
+      if (isUseVariableSetter) {
+        setterProps.setters?.push('VariableSetter');
+      }
+      if (isUseResetSetter) {
+        setterProps.setters?.push('ResetSetter');
+      }
     }
     return {
       setterProps,
@@ -227,7 +241,6 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
 
     let onChangeAPI = extraProps?.onChange;
     let stageName = this.stageName;
-
     return createField(
       {
         meta: field?.componentMeta?.npm || field?.componentMeta?.componentName || '',

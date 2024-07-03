@@ -115,7 +115,9 @@ config.set('enableCondition', false)
 ```typescript
   focusNodeSelector?: (rootNode: IPublicModelNode) => Node;
 ```
-
+#### supportResetGlobally - 设置所有属性支持重置
+`@type {boolean}` `@default {false}`
+设置所有属性支持重置, 开启后会给组件属性增加一个resetSetter，点击后会将组件的该属性重置为默认状态（defaultValue/initialValue）。如果没有设置默认值则回到该项属性不存在于props中的状态。不能重置成snippets中定义的低代码组件属性的值
 #### supportVariableGlobally - 全局变量配置
 
 `@type {boolean}` `@default {false}`
