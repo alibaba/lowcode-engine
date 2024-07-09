@@ -1,11 +1,11 @@
 import {
-  type Spec,
+  type Package,
   type LowCodeComponent,
   type ProCodeComponent,
+  type ComponentMap,
   createDecorator,
   Provide,
-  isLowCodeComponentPackage,
-  isProCodeComponentPackage,
+  specTypes,
 } from '@alilc/lowcode-shared';
 import { get as lodashGet } from 'lodash-es';
 import { PackageLoader } from './loader';
@@ -25,20 +25,18 @@ export interface IPackageManagementService {
    * 新增资产包
    * @param packages
    */
-  loadPackages(packages: Spec.Package[]): Promise<void>;
+  loadPackages(packages: Package[]): Promise<void>;
   /** 通过包名获取资产包信息 */
-  getPackageInfo(packageName: string): Spec.Package | undefined;
+  getPackageInfo(packageName: string): Package | undefined;
 
   getLibraryByPackageName(packageName: string): any;
 
   setLibraryByPackageName(packageName: string, library: any): void;
 
-  getLibraryByComponentMap(
-    componentMap: Spec.ComponentMap,
-  ): { key: string; value: any } | undefined;
+  getLibraryByComponentMap(componentMap: ComponentMap): { key: string; value: any } | undefined;
 
   /** 解析组件映射 */
-  resolveComponentMaps(componentMaps: Spec.ComponentMap[]): void;
+  resolveComponentMaps(componentMaps: ComponentMap[]): void;
 
   /** 通过组件名获取对应的组件  */
   getComponent<C = unknown>(componentName: string): C | LowCodeComponent | undefined;
@@ -74,15 +72,15 @@ export class PackageManagementService implements IPackageManagementService {
     });
   }
 
-  async loadPackages(packages: Spec.Package[]) {
+  async loadPackages(packages: Package[]) {
     for (const item of packages) {
       // low code component not need load
-      if (isLowCodeComponentPackage(item)) {
+      if (specTypes.isLowCodeComponentPackage(item)) {
         this.lowCodeComponentPackages.set(item.id, item);
         continue;
       }
 
-      if (!isProCodeComponentPackage(item)) continue;
+      if (!specTypes.isProCodeComponentPackage(item)) continue;
 
       const normalized = this.normalizePackage(item);
       await this.loadPackageByNormalized(normalized);
@@ -105,12 +103,10 @@ export class PackageManagementService implements IPackageManagementService {
     this.packageStore.set(packageName, library);
   }
 
-  getLibraryByComponentMap(
-    componentMap: Spec.ComponentMap,
-  ): { key: string; value: any } | undefined {
+  getLibraryByComponentMap(componentMap: ComponentMap): { key: string; value: any } | undefined {
     if (!componentMap.componentName && !componentMap.exportName) return;
 
-    if (this.packageStore.has(componentMap.package)) {
+    if (componentMap.package && this.packageStore.has(componentMap.package)) {
       const library = this.packageStore.get(componentMap.package!);
       // export { exportName } from xxx exportName === global.libraryName.exportName
       // export exportName from xxx exportName === global.libraryName.default || global.libraryName
@@ -138,7 +134,7 @@ export class PackageManagementService implements IPackageManagementService {
     }
   }
 
-  resolveComponentMaps(componentMaps: Spec.ComponentMap[]) {
+  resolveComponentMaps(componentMaps: ComponentMap[]) {
     for (const map of componentMaps) {
       if (map.devMode === 'lowCode') {
         const packageInfo = this.lowCodeComponentPackages.get((map as LowCodeComponent).id);

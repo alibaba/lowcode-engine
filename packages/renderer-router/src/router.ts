@@ -1,4 +1,4 @@
-import { type Spec } from '@alilc/lowcode-shared';
+import { type RouterConfig, type RouterApi } from '@alilc/lowcode-shared';
 import {
   createBrowserHistory,
   createHashHistory,
@@ -20,11 +20,11 @@ import type {
 import { type NavigationHookAfter, type NavigationGuard, guardToPromiseFn } from './guard';
 import { createCallback } from './utils/callback';
 
-export interface RouterOptions extends Spec.RouterConfig, PathParserOptions {
+export interface RouterOptions extends RouterConfig, PathParserOptions {
   routes: RouteRecord[];
 }
 
-export interface Router extends Spec.RouterApi {
+export interface Router extends RouterApi {
   readonly options: RouterOptions;
   readonly history: RouterHistory;
 

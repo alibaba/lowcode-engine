@@ -1,7 +1,7 @@
-import { signal, type PlainObject, type Spec } from '@alilc/lowcode-shared';
+import { signal, type StringDictionary, type InstanceStateApi } from '@alilc/lowcode-shared';
 import { isPlainObject } from 'lodash-es';
 
-export function reactiveStateFactory(initState: PlainObject): Spec.InstanceStateApi {
+export function reactiveStateFactory(initState: StringDictionary): InstanceStateApi {
   const proxyState = signal(initState);
 
   return {
@@ -13,8 +13,8 @@ export function reactiveStateFactory(initState: PlainObject): Spec.InstanceState
         throw Error('newState mush be a object');
       }
 
-      Object.keys(newState as PlainObject).forEach((key) => {
-        proxyState.value[key] = (newState as PlainObject)[key];
+      Object.keys(newState as StringDictionary).forEach((key) => {
+        proxyState.value[key] = (newState as StringDictionary)[key];
       });
     },
   };

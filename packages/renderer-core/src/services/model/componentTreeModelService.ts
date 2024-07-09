@@ -2,8 +2,8 @@ import {
   createDecorator,
   Provide,
   invariant,
-  type Spec,
-  type PlainObject,
+  type ComponentTree,
+  type StringDictionary,
 } from '@alilc/lowcode-shared';
 import { ICodeRuntimeService } from '../code-runtime';
 import {
@@ -14,12 +14,12 @@ import {
 import { ISchemaService } from '../schema';
 
 export interface CreateComponentTreeModelOptions extends ComponentTreeModelOptions {
-  codeScopeValue?: PlainObject;
+  codeScopeValue?: StringDictionary;
 }
 
 export interface IComponentTreeModelService {
   create<Component>(
-    componentsTree: Spec.ComponentTree,
+    componentsTree: ComponentTree,
     options?: CreateComponentTreeModelOptions,
   ): IComponentTreeModel<Component>;
 
@@ -41,11 +41,12 @@ export class ComponentTreeModelService implements IComponentTreeModelService {
   ) {}
 
   create<Component>(
-    componentsTree: Spec.ComponentTree,
+    componentsTree: ComponentTree,
     options: CreateComponentTreeModelOptions,
   ): IComponentTreeModel<Component> {
     return new ComponentTreeModel(
       componentsTree,
+      // @ts-expect-error: preset scope value
       this.codeRuntimeService.createCodeRuntime({
         initScopeValue: options?.codeScopeValue,
       }),
@@ -64,6 +65,7 @@ export class ComponentTreeModelService implements IComponentTreeModelService {
 
     return new ComponentTreeModel(
       componentsTree,
+      // @ts-expect-error: preset scope value
       this.codeRuntimeService.createCodeRuntime({
         initScopeValue: options?.codeScopeValue,
       }),

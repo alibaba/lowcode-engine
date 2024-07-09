@@ -1,4 +1,4 @@
-import { createDecorator, invariant, Provide, type PlainObject } from '@alilc/lowcode-shared';
+import { createDecorator, invariant, Provide, type StringDictionary } from '@alilc/lowcode-shared';
 import { type ICodeRuntime, type CodeRuntimeOptions, CodeRuntime } from './codeRuntime';
 
 export interface ICodeRuntimeService {
@@ -6,8 +6,8 @@ export interface ICodeRuntimeService {
 
   initialize(options: CodeRuntimeOptions): void;
 
-  createCodeRuntime<T extends PlainObject = PlainObject>(
-    options: CodeRuntimeOptions<T>,
+  createCodeRuntime<T extends StringDictionary = StringDictionary>(
+    options?: CodeRuntimeOptions<T>,
   ): ICodeRuntime<T>;
 }
 
@@ -21,7 +21,7 @@ export class CodeRuntimeService implements ICodeRuntimeService {
     this.rootRuntime = new CodeRuntime(options);
   }
 
-  createCodeRuntime<T extends PlainObject = PlainObject>(
+  createCodeRuntime<T extends StringDictionary = StringDictionary>(
     options: CodeRuntimeOptions<T> = {},
   ): ICodeRuntime<T> {
     invariant(this.rootRuntime, `please initialize codeRuntimeService on renderer starting!`);

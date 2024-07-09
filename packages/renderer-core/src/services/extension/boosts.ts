@@ -1,4 +1,4 @@
-import { createDecorator, Provide, type PlainObject } from '@alilc/lowcode-shared';
+import { createDecorator, Provide, type StringDictionary } from '@alilc/lowcode-shared';
 import { isObject } from 'lodash-es';
 import { ICodeRuntime, ICodeRuntimeService } from '../code-runtime';
 import { IRuntimeUtilService } from '../runtimeUtilService';
@@ -23,7 +23,7 @@ export interface IBoostsApi {
  */
 export interface IBoostsService {
   extend(name: string, value: any, force?: boolean): void;
-  extend(value: PlainObject, force?: boolean): void;
+  extend(value: StringDictionary, force?: boolean): void;
 
   toExpose<Extends>(): IBoosts<Extends>;
 }
@@ -34,7 +34,7 @@ export const IBoostsService = createDecorator<IBoostsService>('boostsService');
 export class BoostsService implements IBoostsService {
   private builtInApis: IBoostsApi;
 
-  private extendsValue: PlainObject = {};
+  private extendsValue: StringDictionary = {};
 
   private _expose: any;
 
@@ -56,8 +56,8 @@ export class BoostsService implements IBoostsService {
   }
 
   extend(name: string, value: any, force?: boolean | undefined): void;
-  extend(value: PlainObject, force?: boolean | undefined): void;
-  extend(name: string | PlainObject, value?: any, force?: boolean | undefined): void {
+  extend(value: StringDictionary, force?: boolean | undefined): void;
+  extend(name: string | StringDictionary, value?: any, force?: boolean | undefined): void {
     if (typeof name === 'string') {
       if (force) {
         this.extendsValue[name] = value;

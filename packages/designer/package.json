@@ -30,10 +30,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@alilc/lowcode-core": "workspace:*",
+    "@alilc/lowcode-engine-core": "workspace:*",
     "@alilc/lowcode-shared": "workspace:*",
-    "@alilc/lowcode-types": "workspace:*",
-    "@alilc/lowcode-utils": "workspace:*",
     "@alifd/next": "^1.27.8",
     "classnames": "^2.5.1",
     "lodash-es": "^4.17.20",
@@ -55,10 +53,8 @@
   },
   "peerDependencies": {
     "@alifd/next": "^1.27.8",
-    "@alilc/lowcode-core": "workspace:*",
+    "@alilc/lowcode-engine-core": "workspace:*",
     "@alilc/lowcode-shared": "workspace:*",
-    "@alilc/lowcode-types": "workspace:*",
-    "@alilc/lowcode-utils": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

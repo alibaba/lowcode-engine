@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`History data function & records 1`] = `"{\\"data\\":1,\\"children\\":[{\\"data\\":2,\\"children\\":[]}]}"`;
-
-exports[`History data function & records 2`] = `"{\\"data\\":3,\\"children\\":[{\\"data\\":2,\\"children\\":[]}]}"`;
-
-exports[`History data function & records 3`] = `"{\\"data\\":5,\\"children\\":[{\\"data\\":2,\\"children\\":[]}]}"`;
-
-exports[`History data function & records 4`] = `"{\\"data\\":7,\\"children\\":[{\\"data\\":2,\\"children\\":[]}]}"`;

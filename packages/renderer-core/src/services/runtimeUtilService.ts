@@ -1,9 +1,9 @@
 import {
   type AnyFunction,
-  type Spec,
+  type UtilDescription,
   createDecorator,
   Provide,
-  type PlainObject,
+  type StringDictionary,
 } from '@alilc/lowcode-shared';
 import { isPlainObject } from 'lodash-es';
 import { IPackageManagementService } from './package';
@@ -12,8 +12,8 @@ import { ISchemaService } from './schema';
 import { ILifeCycleService, LifecyclePhase } from './lifeCycleService';
 
 export interface IRuntimeUtilService {
-  add(utilItem: Spec.Util, force?: boolean): void;
-  add(name: string, target: AnyFunction | PlainObject, force?: boolean): void;
+  add(utilItem: UtilDescription, force?: boolean): void;
+  add(name: string, target: AnyFunction | StringDictionary, force?: boolean): void;
 
   remove(name: string): void;
 }
@@ -41,17 +41,21 @@ export class RuntimeUtilService implements IRuntimeUtilService {
     });
   }
 
-  add(utilItem: Spec.Util, force?: boolean): void;
-  add(name: string, fn: AnyFunction | PlainObject, force?: boolean): void;
-  add(util: Spec.Util | string, fn?: AnyFunction | PlainObject | boolean, force?: boolean): void {
+  add(utilItem: UtilDescription, force?: boolean): void;
+  add(name: string, fn: AnyFunction | StringDictionary, force?: boolean): void;
+  add(
+    util: UtilDescription | string,
+    fn?: AnyFunction | StringDictionary | boolean,
+    force?: boolean,
+  ): void {
     let name: string;
-    let utilObj: AnyFunction | PlainObject | Spec.Util;
+    let utilObj: AnyFunction | StringDictionary | UtilDescription;
 
     if (typeof util === 'string') {
       if (!fn) return;
 
       name = util;
-      utilObj = fn as AnyFunction | PlainObject;
+      utilObj = fn as AnyFunction | StringDictionary;
     } else {
       if (!util) return;
 
@@ -65,20 +69,20 @@ export class RuntimeUtilService implements IRuntimeUtilService {
 
   private addUtilByName(
     name: string,
-    fn: AnyFunction | PlainObject | Spec.Util,
+    fn: AnyFunction | StringDictionary | UtilDescription,
     force?: boolean,
   ): void {
     if (this.utilsMap.has(name) && !force) return;
 
     if (isPlainObject(fn)) {
-      if ((fn as Spec.Util).type === 'function' || (fn as Spec.Util).type === 'npm') {
-        const utilFn = this.parseUtil(fn as Spec.Util);
+      if ((fn as UtilDescription).type === 'function' || (fn as UtilDescription).type === 'npm') {
+        const utilFn = this.parseUtil(fn as UtilDescription);
         if (utilFn) {
           this.addUtilByName(utilFn.key, utilFn.value, force);
         }
-      } else if ((fn as PlainObject).destructuring) {
+      } else if ((fn as StringDictionary).destructuring) {
         for (const key of Object.keys(fn)) {
-          this.addUtilByName(key, (fn as PlainObject)[key], force);
+          this.addUtilByName(key, (fn as StringDictionary)[key], force);
         }
       } else {
         this.utilsMap.set(name, fn);
@@ -92,7 +96,7 @@ export class RuntimeUtilService implements IRuntimeUtilService {
     this.utilsMap.delete(name);
   }
 
-  private parseUtil(utilItem: Spec.Util) {
+  private parseUtil(utilItem: UtilDescription) {
     if (utilItem.type === 'function') {
       const { content } = utilItem;
       return {

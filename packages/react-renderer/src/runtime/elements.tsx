@@ -5,12 +5,12 @@ import {
   mapValue,
 } from '@alilc/lowcode-renderer-core';
 import {
-  type PlainObject,
-  isJSExpression,
-  isJSI18nNode,
-  isJSFunction,
-  isJSSlot,
-  type Spec,
+  type StringDictionary,
+  specTypes,
+  type JSExpression,
+  type JSFunction,
+  type JSSlot,
+  type JSI18n,
 } from '@alilc/lowcode-shared';
 import { type ComponentType, type ReactInstance, useMemo, createElement } from 'react';
 import { useRendererContext } from '../api/context';
@@ -40,11 +40,11 @@ export function createElementByWidget(
       return rawNode;
     }
 
-    if (isJSExpression(rawNode)) {
+    if (specTypes.isJSExpression(rawNode)) {
       return <Text key={key} expr={rawNode} codeRuntime={codeRuntime} />;
     }
 
-    if (isJSI18nNode(rawNode)) {
+    if (specTypes.isJSI18nNode(rawNode)) {
       return <I18nText key={key} i18n={rawNode} codeRuntime={codeRuntime} />;
     }
 
@@ -55,7 +55,7 @@ export function createElementByWidget(
     // loop 为数组且为空的情况下 不渲染
     if (Array.isArray(loop) && loop.length === 0) return null;
 
-    if (isJSExpression(loop)) {
+    if (specTypes.isJSExpression(loop)) {
       return (
         <LoopWidgetRenderer
           key={key}
@@ -100,10 +100,10 @@ export function WidgetComponent(props: WidgetRendererProps) {
   // 先将 jsslot, jsFunction 对象转换
   const processedProps = mapValue(
     componentProps,
-    (node) => isJSFunction(node) || isJSSlot(node),
-    (node: Spec.JSSlot | Spec.JSFunction) => {
-      if (isJSSlot(node)) {
-        const slot = node as Spec.JSSlot;
+    (node) => specTypes.isJSFunction(node) || specTypes.isJSSlot(node),
+    (node: JSSlot | JSFunction) => {
+      if (specTypes.isJSSlot(node)) {
+        const slot = node as JSSlot;
 
         if (slot.value) {
           const widgets = widget.model.buildWidgets(
@@ -114,7 +114,7 @@ export function WidgetComponent(props: WidgetRendererProps) {
             return (...args: any[]) => {
               const params = slot.params!.reduce((prev, cur, idx) => {
                 return (prev[cur] = args[idx]);
-              }, {} as PlainObject);
+              }, {} as StringDictionary);
 
               return widgets.map((n) =>
                 createElementByWidget(
@@ -128,7 +128,7 @@ export function WidgetComponent(props: WidgetRendererProps) {
             return widgets.map((n) => createElementByWidget(n, codeRuntime, options));
           }
         }
-      } else if (isJSFunction(node)) {
+      } else if (specTypes.isJSFunction(node)) {
         return widget.model.codeRuntime.resolve(node);
       }
 
@@ -182,7 +182,7 @@ export function WidgetComponent(props: WidgetRendererProps) {
   );
 }
 
-function Text(props: { expr: Spec.JSExpression; codeRuntime: ICodeRuntime }) {
+function Text(props: { expr: JSExpression; codeRuntime: ICodeRuntime }) {
   const text: string = useReactiveStore({
     target: props.expr,
     getter: (obj) => {
@@ -195,7 +195,7 @@ function Text(props: { expr: Spec.JSExpression; codeRuntime: ICodeRuntime }) {
 
 Text.displayName = 'Text';
 
-function I18nText(props: { i18n: Spec.JSI18n; codeRuntime: ICodeRuntime }) {
+function I18nText(props: { i18n: JSI18n; codeRuntime: ICodeRuntime }) {
   const text: string = useReactiveStore({
     target: props.i18n,
     getter: (obj) => {
@@ -215,7 +215,7 @@ function LoopWidgetRenderer({
   options,
   ...otherProps
 }: {
-  loop: Spec.JSExpression;
+  loop: JSExpression;
   widget: ReactWidget;
   codeRuntime: ICodeRuntime;
   options: ComponentOptions;

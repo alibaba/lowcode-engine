@@ -1,4 +1,4 @@
-import { type Spec } from '@alilc/lowcode-shared';
+import { type Project, type Package } from '@alilc/lowcode-shared';
 import { type Plugin } from './services/extension';
 import { type ISchemaService } from './services/schema';
 import { type IPackageManagementService } from './services/package';
@@ -6,8 +6,8 @@ import { type CodeRuntimeOptions } from './services/code-runtime';
 import { type ModelDataSourceCreator } from './services/model';
 
 export interface AppOptions {
-  schema: Spec.Project;
-  packages?: Spec.Package[];
+  schema: Project;
+  packages?: Package[];
   plugins?: Plugin[];
   /**
    * 运行模式

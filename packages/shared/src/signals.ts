@@ -4,7 +4,7 @@
  * https://github.com/tc39/proposal-signals
  */
 
-import { AnyFunction, type PlainObject } from './types';
+import { AnyFunction, type StringDictionary } from './types';
 import {
   ref,
   computed,
@@ -299,7 +299,7 @@ function traverse(value: unknown, depth?: number, currentDepth = 0, seen?: Set<u
     });
   } else if (isPlainObject(value)) {
     for (const key in value) {
-      traverse((value as PlainObject)[key], depth, currentDepth, seen);
+      traverse((value as StringDictionary)[key], depth, currentDepth, seen);
     }
   }
 

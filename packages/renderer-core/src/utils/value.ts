@@ -1,9 +1,9 @@
-import { type PlainObject } from '@alilc/lowcode-shared';
+import { type StringDictionary } from '@alilc/lowcode-shared';
 import { isPlainObject, isEmpty } from 'lodash-es';
 
 export function someValue(
-  obj: PlainObject | PlainObject[],
-  filter: (data: PlainObject) => boolean,
+  obj: StringDictionary | StringDictionary[],
+  filter: (data: StringDictionary) => boolean,
 ): boolean {
   if (Array.isArray(obj)) {
     return obj.some((item) => someValue(item, filter));
@@ -16,8 +16,8 @@ export function someValue(
 }
 
 export function mapValue(
-  obj: PlainObject,
-  filter: (obj: PlainObject) => boolean,
+  obj: StringDictionary,
+  filter: (obj: StringDictionary) => boolean,
   callback: (node: any, paths: Array<string | number>) => any,
 ): any {
   if (!someValue(obj, filter)) return obj;
@@ -33,7 +33,7 @@ export function mapValue(
       return callback(target, paths);
     }
 
-    const result: PlainObject = {};
+    const result: StringDictionary = {};
 
     for (const [key, value] of Object.entries(target)) {
       result[key] = mapping(value, [...paths, key]);

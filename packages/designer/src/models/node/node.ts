@@ -1,8 +1,8 @@
-import { Spec } from '@alilc/lowcode-shared';
+import { ComponentNode } from '@alilc/lowcode-shared';
 import { type ComponentMeta } from '../component-meta';
 import { type Prop } from './prop';
 
-export interface Node<Schema extends Spec.ComponentNode = Spec.ComponentNode> {
+export interface Node<Schema extends ComponentNode = ComponentNode> {
   /**
    * 节点 id
    * node id
@@ -353,6 +353,6 @@ export interface Node<Schema extends Spec.ComponentNode = Spec.ComponentNode> {
   };
 }
 
-export function createNode<Schema extends Spec.ComponentNode>(nodeSchema: Schema): Node<Schema> {
+export function createNode<Schema extends ComponentNode>(nodeSchema: Schema): Node<Schema> {
   return {};
 }

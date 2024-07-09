@@ -34,13 +34,10 @@
     "url": "https://github.com/alibaba/lowcode-engine/issues"
   },
   "dependencies": {
-    "@alilc/lowcode-types": "workspace:*",
-    "@alilc/lowcode-utils": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "peerDependencies": {
-    "@alilc/lowcode-utils": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

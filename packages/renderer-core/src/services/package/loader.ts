@@ -1,10 +1,10 @@
-import { type Spec } from '@alilc/lowcode-shared';
+import { type Package } from '@alilc/lowcode-shared';
 import { type IPackageManagementService } from './managementService';
 
 export interface PackageLoader {
   name?: string;
-  load(this: IPackageManagementService, info: Spec.Package): Promise<any>;
-  active(info: Spec.Package): boolean;
+  load(this: IPackageManagementService, info: Package): Promise<any>;
+  active(info: Package): boolean;
 }
 
 export function definePackageLoader(loader: PackageLoader) {

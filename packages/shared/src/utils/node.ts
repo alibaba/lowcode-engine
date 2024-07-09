@@ -3,14 +3,12 @@
  * fork from: https://github.com/Rich-Harris/estree-walker
  */
 
-import { type PlainObject, type Spec } from '../types';
-
-type Node = Spec.JSNode;
+import { type StringDictionary, type JSNode } from '../types';
 
 interface WalkerContext {
   skip: () => void;
   remove: () => void;
-  replace: (node: Node) => void;
+  replace: (node: JSNode) => void;
 }
 
 class WalkerBase {
@@ -18,7 +16,7 @@ class WalkerBase {
 
   should_remove: boolean = false;
 
-  replacement: Node | null = null;
+  replacement: JSNode | null = null;
 
   context: WalkerContext;
 
@@ -31,10 +29,10 @@ class WalkerBase {
   }
 
   replace(
-    parent: Node | null,
-    prop: keyof Node | null | undefined,
+    parent: JSNode | null,
+    prop: keyof JSNode | null | undefined,
     index: number | null | undefined,
-    node: Node,
+    node: JSNode,
   ) {
     if (parent && prop) {
       if (index != null) {
@@ -46,8 +44,8 @@ class WalkerBase {
   }
 
   remove(
-    parent: Node | null | undefined,
-    prop: keyof Node | null | undefined,
+    parent: JSNode | null | undefined,
+    prop: keyof JSNode | null | undefined,
     index: number | null | undefined,
   ) {
     if (parent && prop) {
@@ -62,8 +60,8 @@ class WalkerBase {
 
 export type SyncWalkerHandler = (
   this: WalkerContext,
-  node: Node,
-  parent: Node | null,
+  node: JSNode,
+  parent: JSNode | null,
   key: PropertyKey | undefined,
   index: number | undefined,
 ) => void;
@@ -81,11 +79,11 @@ export class SyncWalker extends WalkerBase {
   }
 
   visit(
-    node: Node,
-    parent: Node | null,
-    prop?: keyof Node | undefined,
+    node: JSNode,
+    parent: JSNode | null,
+    prop?: keyof JSNode | undefined,
     index?: number | undefined,
-  ): Node | null {
+  ): JSNode | null {
     if (node) {
       if (this.enter) {
         const _should_skip = this.should_skip;
@@ -117,7 +115,7 @@ export class SyncWalker extends WalkerBase {
         if (removed) return null;
       }
 
-      let key: keyof Node;
+      let key: keyof JSNode;
 
       for (key in node) {
         const value = node[key] as unknown;
@@ -172,18 +170,15 @@ export class SyncWalker extends WalkerBase {
 
 /**
  * Ducktype a node.
- *
- * @param {unknown} value
- * @returns {value is Node}
  */
-export function isNode(value: unknown): value is Node {
+export function isNode(value: unknown): value is JSNode {
   return (
     value !== null && typeof value === 'object' && 'type' in value && typeof value.type === 'string'
   );
 }
 
 export function walk(
-  ast: PlainObject,
+  ast: StringDictionary,
   { enter, leave }: { enter?: SyncWalkerHandler; leave?: SyncWalkerHandler } = {},
 ) {
   const instance = new SyncWalker(enter, leave);

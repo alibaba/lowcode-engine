@@ -1,4 +1,4 @@
-import { PlainObject } from '../types';
+import { StringDictionary } from '../types';
 
 /**
  * MapLike interface
@@ -19,7 +19,9 @@ export interface IStore<O, K extends keyof O> {
 /**
  * 统一存储接口
  */
-export class KeyValueStore<O = PlainObject, K extends keyof O = keyof O> implements IStore<O, K> {
+export class KeyValueStore<O = StringDictionary, K extends keyof O = keyof O>
+  implements IStore<O, K>
+{
   private readonly store = new Map();
 
   private setterValidation: ((key: K, value: O[K]) => boolean | string) | undefined;

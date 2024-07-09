@@ -1,4 +1,4 @@
-import { type EventEmitter, type IStore, type PlainObject } from '@alilc/lowcode-shared';
+import { type EventEmitter, type IStore, type StringDictionary } from '@alilc/lowcode-shared';
 import { type IBoosts } from './boosts';
 import { ILifeCycleService } from '../lifeCycleService';
 import { type ISchemaService } from '../schema';
@@ -6,7 +6,7 @@ import { type IPackageManagementService } from '../package';
 
 export interface PluginContext<BoostsExtends = object> {
   eventEmitter: EventEmitter;
-  globalState: IStore<PlainObject, string>;
+  globalState: IStore<StringDictionary, string>;
   boosts: IBoosts<BoostsExtends>;
   schema: Pick<ISchemaService, 'get' | 'set'>;
   packageManager: IPackageManagementService;

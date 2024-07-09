@@ -1,8 +1,8 @@
 import { mapValue } from '@alilc/lowcode-renderer-core';
 import {
   type AnyFunction,
-  type PlainObject,
-  isJSExpression,
+  type StringDictionary,
+  specTypes,
   computed,
   watch,
   invariant,
@@ -12,23 +12,23 @@ import { produce } from 'immer';
 import { useSyncExternalStore } from 'use-sync-external-store/shim';
 
 interface ReactiveOptions {
-  target: PlainObject;
+  target: StringDictionary;
   getter?: (obj: any) => any;
   valueGetter?: (expr: any) => any;
   filter?: (obj: any) => boolean;
 }
 
-export interface ReactiveStore<Snapshot = PlainObject> {
+export interface ReactiveStore<Snapshot = StringDictionary> {
   value: Snapshot | null;
   onStateChange: AnyFunction | null;
   subscribe: (onStoreChange: () => void) => () => void;
   getSnapshot: () => Snapshot | null;
 }
 
-function createReactiveStore<Snapshot = PlainObject>(
+function createReactiveStore<Snapshot = StringDictionary>(
   options: ReactiveOptions,
 ): ReactiveStore<Snapshot> {
-  const { target, getter, filter = isJSExpression, valueGetter } = options;
+  const { target, getter, filter = specTypes.isJSExpression, valueGetter } = options;
 
   invariant(
     getter || valueGetter,

@@ -1,4 +1,4 @@
-import { type Spec } from '@alilc/lowcode-shared';
+import { type Project } from '@alilc/lowcode-shared';
 
 interface ValidationRule<T> {
   valid: (value: T) => boolean;
@@ -6,7 +6,7 @@ interface ValidationRule<T> {
 }
 
 type ValidOptionRecord = {
-  [K in keyof Spec.Project]: ValidationRule<Spec.Project[K]>;
+  [K in keyof Project]: ValidationRule<Project[K]>;
 };
 
 const SCHEMA_KEYS = [
@@ -38,7 +38,7 @@ const SCHEMA_VALIDATIONS_OPTIONS: Partial<ValidOptionRecord> = {
   },
 };
 
-export function schemaValidation<K extends keyof Spec.Project>(key: K, value: Spec.Project[K]) {
+export function schemaValidation<K extends keyof Project>(key: K, value: Project[K]) {
   if (!SCHEMA_KEYS.includes(key)) {
     return `schema 的字段名必须是${JSON.stringify(SCHEMA_KEYS)}中的一个`;
   }

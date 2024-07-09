@@ -1,5 +1,5 @@
 import {
-  type Spec,
+  type Project,
   createDecorator,
   Provide,
   type IStore,
@@ -12,12 +12,12 @@ import { schemaValidation } from './validation';
 import { ILifeCycleService, LifecyclePhase } from '../lifeCycleService';
 import { ICodeRuntimeService } from '../code-runtime';
 
-export interface NormalizedSchema extends Spec.Project {}
+export interface NormalizedSchema extends Project {}
 
 export type NormalizedSchemaKey = keyof NormalizedSchema;
 
 export interface ISchemaService {
-  initialize(schema: Spec.Project): void;
+  initialize(schema: Project): void;
 
   get<K extends NormalizedSchemaKey>(key: K): NormalizedSchema[K];
 
@@ -47,7 +47,7 @@ export class SchemaService implements ISchemaService {
     @ICodeRuntimeService private codeRuntimeService: ICodeRuntimeService,
   ) {
     this.onChange('constants', (value = {}) => {
-      this.codeRuntimeService.getScope().set('constants', value);
+      this.codeRuntimeService.rootRuntime.getScope().set('constants', value);
     });
 
     this.lifeCycleService.when(LifecyclePhase.Destroying, () => {

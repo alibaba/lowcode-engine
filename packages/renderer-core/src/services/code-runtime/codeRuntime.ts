@@ -1,43 +1,44 @@
 import {
-  type PlainObject,
-  type Spec,
+  type StringDictionary,
+  type JSNode,
   type EventDisposable,
-  isJSExpression,
-  isJSFunction,
+  type JSExpression,
+  type JSFunction,
+  specTypes,
 } from '@alilc/lowcode-shared';
 import { type ICodeScope, CodeScope } from './codeScope';
 import { isNode } from '../../../../shared/src/utils/node';
 import { mapValue } from '../../utils/value';
 import { evaluate } from './evaluate';
 
-export interface CodeRuntimeOptions<T extends PlainObject = PlainObject> {
+export interface CodeRuntimeOptions<T extends StringDictionary = StringDictionary> {
   initScopeValue?: Partial<T>;
   parentScope?: ICodeScope;
 
   evalCodeFunction?: EvalCodeFunction;
 }
 
-export interface ICodeRuntime<T extends PlainObject = PlainObject> {
+export interface ICodeRuntime<T extends StringDictionary = StringDictionary> {
   getScope(): ICodeScope<T>;
 
   run<R = unknown>(code: string, scope?: ICodeScope): R | undefined;
 
-  resolve(value: PlainObject): any;
+  resolve(value: StringDictionary): any;
 
   onResolve(handler: NodeResolverHandler): EventDisposable;
 
-  createChild<V extends PlainObject = PlainObject>(
+  createChild<V extends StringDictionary = StringDictionary>(
     options: Omit<CodeRuntimeOptions<V>, 'parentScope'>,
   ): ICodeRuntime<V>;
 }
 
-export type NodeResolverHandler = (node: Spec.JSNode) => Spec.JSNode | false | undefined;
+export type NodeResolverHandler = (node: JSNode) => JSNode | false | undefined;
 
 let onResolveHandlers: NodeResolverHandler[] = [];
 
 export type EvalCodeFunction = (code: string, scope: any) => any;
 
-export class CodeRuntime<T extends PlainObject = PlainObject> implements ICodeRuntime<T> {
+export class CodeRuntime<T extends StringDictionary = StringDictionary> implements ICodeRuntime<T> {
   private codeScope: ICodeScope<T>;
 
   private evalCodeFunction: EvalCodeFunction = evaluate;
@@ -70,13 +71,13 @@ export class CodeRuntime<T extends PlainObject = PlainObject> implements ICodeRu
     }
   }
 
-  resolve(data: PlainObject): any {
+  resolve(data: StringDictionary): any {
     if (onResolveHandlers.length > 0) {
-      data = mapValue(data, isNode, (node: Spec.JSNode) => {
-        let newNode: Spec.JSNode | false | undefined = node;
+      data = mapValue(data, isNode, (node: JSNode) => {
+        let newNode: JSNode | false | undefined = node;
 
         for (const handler of onResolveHandlers) {
-          newNode = handler(newNode as Spec.JSNode);
+          newNode = handler(newNode as JSNode);
           if (newNode === false || typeof newNode === 'undefined') {
             break;
           }
@@ -89,15 +90,15 @@ export class CodeRuntime<T extends PlainObject = PlainObject> implements ICodeRu
     return mapValue(
       data,
       (data) => {
-        return isJSExpression(data) || isJSFunction(data);
+        return specTypes.isJSExpression(data) || specTypes.isJSFunction(data);
       },
-      (node: Spec.JSExpression | Spec.JSFunction) => {
+      (node: JSExpression | JSFunction) => {
         return this.resolveExprOrFunction(node);
       },
     );
   }
 
-  private resolveExprOrFunction(node: Spec.JSExpression | Spec.JSFunction) {
+  private resolveExprOrFunction(node: JSExpression | JSFunction) {
     const v = this.run(node.value) as any;
 
     if (typeof v === 'undefined' && node.mock) {
@@ -116,7 +117,7 @@ export class CodeRuntime<T extends PlainObject = PlainObject> implements ICodeRu
     };
   }
 
-  createChild<V extends PlainObject = PlainObject>(
+  createChild<V extends StringDictionary = StringDictionary>(
     options?: Omit<CodeRuntimeOptions<V>, 'parentScope'>,
   ): ICodeRuntime<V> {
     return new CodeRuntime({

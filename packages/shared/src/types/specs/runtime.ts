@@ -1,4 +1,4 @@
-import { AnyFunction, PlainObject } from '../index';
+import { AnyFunction, StringDictionary } from '../index';
 
 /**
  * 在上述事件类型描述和变量类型描述中，在函数或 JS 表达式内，均可以通过 this 对象获取当前组件所在容器的实例化对象
@@ -9,7 +9,7 @@ export interface InstanceApi<InstanceT = unknown> extends InstanceStateApi, Inst
   /**
    * 容器的 props 对象
    */
-  props?: PlainObject;
+  props?: StringDictionary;
   /**
    * ref 对应组件上配置的 ref 属性，用于唯一标识一个组件；若有同名的，则会返回第一个匹配的。
    * @param ref 组件标识
@@ -24,7 +24,7 @@ export interface InstanceApi<InstanceT = unknown> extends InstanceStateApi, Inst
   [methodName: string]: any;
 }
 
-export interface InstanceStateApi<S = PlainObject> {
+export interface InstanceStateApi<S = StringDictionary> {
   /**
    * 实例的数据对象 state
    */
@@ -206,7 +206,7 @@ export interface RouteLocation {
   /**
    * 匹配到的路由记录元数据
    */
-  meta: PlainObject | undefined;
+  meta: StringDictionary | undefined;
   /**
    * 重定向之前的路由，在跳转到当前路径之前的路由记录
    */

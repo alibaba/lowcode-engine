@@ -2,6 +2,8 @@
  * https://lowcode-engine.cn/site/docs/specs/lowcode-spec
  * 低代码引擎搭建协议规范
  */
+import { JSONObject, JSONValue } from '../json';
+import { Reference } from './material-spec';
 
 /**
  * https://lowcode-engine.cn/site/docs/specs/lowcode-spec#2-%E5%8D%8F%E8%AE%AE%E7%BB%93%E6%9E%84
@@ -23,7 +25,7 @@ export interface Project {
   /**
    * 工具类扩展映射关系
    */
-  utils?: Util[];
+  utils?: UtilDescription[];
   /**
    * 国际化语料
    */
@@ -90,39 +92,13 @@ export interface ProjectConfig {
  * https://lowcode-engine.cn/site/docs/specs/lowcode-spec#22-%E7%BB%84%E4%BB%B6%E6%98%A0%E5%B0%84%E5%85%B3%E7%B3%BBa
  * 协议中用于描述 componentName 到公域组件映射关系的规范。
  */
-export interface ComponentMap {
+export interface ComponentMap extends Reference {
   /**
    * 协议中的组件名，对应包导出的组件名，是一个有效的 JS 标识符
    */
   componentName?: string;
-  /**
-   * npm 公域的 package name，唯一性
-   */
-  package: string;
-  /**
-   * package version
-   */
-  version?: string;
-  /**
-   * 使用解构方式对模块进行导出
-   */
-  destructuring?: boolean;
-  /**
-   * 包导出的组件名
-   */
-  exportName?: string;
-  /**
-   * 下标子组件名称
-   */
-  subName?: string;
-  /**
-   * 包导出组件入口文件路径
-   */
-  main?: string;
-  /**
-   * proCode or lowCode
-   */
-  devMode?: string;
+
+  devMode?: 'lowCode' | 'proCode';
 }
 
 /**
@@ -342,7 +318,7 @@ export interface FunctionUtil {
  * https://lowcode-engine.cn/site/docs/specs/lowcode-spec#24-%E5%B7%A5%E5%85%B7%E7%B1%BB%E6%89%A9%E5%B1%95%E6%8F%8F%E8%BF%B0aa
  * 用于描述物料开发过程中，自定义扩展或引入的第三方工具类（例如：lodash 及 moment），增强搭建基础协议的扩展性，提供通用的工具类方法的配置方案及调用 API。
  */
-export type Util = NPMUtil | FunctionUtil;
+export type UtilDescription = NPMUtil | FunctionUtil;
 
 /**
  * https://lowcode-engine.cn/site/docs/specs/lowcode-spec#25-%E5%9B%BD%E9%99%85%E5%8C%96%E5%A4%9A%E8%AF%AD%E8%A8%80%E6%94%AF%E6%8C%81aa
@@ -437,12 +413,6 @@ export interface PageConfig {
    * 页面配置
    */
   config?: JSONObject;
-}
-
-export type JSONValue = number | string | boolean | null;
-
-export interface JSONObject {
-  [key: string]: JSONValue | JSONObject | JSONObject[];
 }
 
 export interface JSNode {

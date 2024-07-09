@@ -1,4 +1,4 @@
-import { type PlainObject } from '@alilc/lowcode-shared';
+import { type StringDictionary } from '@alilc/lowcode-shared';
 import { trustedGlobals } from './globals-es2015';
 
 /*
@@ -9,23 +9,23 @@ const unscopables = trustedGlobals.reduce((acc, key) => ({ ...acc, [key]: true }
   __proto__: null,
 });
 
-export interface ICodeScope<T extends PlainObject = PlainObject> {
+export interface ICodeScope<T extends StringDictionary = StringDictionary> {
   readonly value: T;
 
   set(name: keyof T, value: any): void;
   setValue(value: Partial<T>, replace?: boolean): void;
-  createChild<V extends PlainObject = PlainObject>(initValue: Partial<V>): ICodeScope<V>;
+  createChild<V extends StringDictionary = StringDictionary>(initValue: Partial<V>): ICodeScope<V>;
 }
 
 /**
  * 双链表实现父域值的获取
  */
-interface IScopeNode<T extends PlainObject> {
-  parent?: IScopeNode<PlainObject>;
+interface IScopeNode<T extends StringDictionary> {
+  parent?: IScopeNode<StringDictionary>;
   current: Partial<T>;
 }
 
-export class CodeScope<T extends PlainObject = PlainObject> implements ICodeScope<T> {
+export class CodeScope<T extends StringDictionary = StringDictionary> implements ICodeScope<T> {
   __node: IScopeNode<T>;
 
   private proxyValue: T;
@@ -54,7 +54,7 @@ export class CodeScope<T extends PlainObject = PlainObject> implements ICodeScop
     }
   }
 
-  createChild<V extends PlainObject = PlainObject>(initValue: Partial<V>): ICodeScope<V> {
+  createChild<V extends StringDictionary = StringDictionary>(initValue: Partial<V>): ICodeScope<V> {
     const childScope = new CodeScope(initValue);
     childScope.__node.parent = this.__node;
 
@@ -75,7 +75,7 @@ export class CodeScope<T extends PlainObject = PlainObject> implements ICodeScop
   private findValue(prop: PropertyKey) {
     if (prop === Symbol.unscopables) return unscopables;
 
-    let node: IScopeNode<PlainObject> | undefined = this.__node;
+    let node: IScopeNode<StringDictionary> | undefined = this.__node;
     while (node) {
       if (Object.hasOwnProperty.call(node.current, prop)) {
         return node.current[prop as string];
@@ -87,7 +87,7 @@ export class CodeScope<T extends PlainObject = PlainObject> implements ICodeScop
   private hasProperty(prop: PropertyKey): boolean {
     if (prop in unscopables) return true;
 
-    let node: IScopeNode<PlainObject> | undefined = this.__node;
+    let node: IScopeNode<StringDictionary> | undefined = this.__node;
     while (node) {
       if (prop in node.current) {
         return true;

@@ -4,7 +4,8 @@
  * 让组件针对不同的搭建平台接入时可以使用一份统一的描述内容，让组件在不同的业务中流通成为可能。
  */
 import { ComponentTree, ComponentNode } from './lowcode-spec';
-import { PlainObject } from '../index';
+import { StringDictionary } from '../index';
+import { Package } from './asset-spec';
 
 export interface LowCodeComponentTree extends ComponentTree {
   componentName: 'Component';
@@ -13,15 +14,11 @@ export interface LowCodeComponentTree extends ComponentTree {
 /**
  * 组件基础信息
  */
-export interface ComponentMetaData<Configure extends PlainObject = PlainObject> {
+export interface ComponentMetaData<Configure extends StringDictionary = StringDictionary> {
   /**
    * 组件名
    */
   componentName: string;
-  /**
-   * unique id
-   */
-  uri?: string;
   /**
    * 组件名称
    */
@@ -67,22 +64,19 @@ export interface ComponentMetaData<Configure extends PlainObject = PlainObject> 
    * 组件研发模式
    */
   devMode?: 'proCode' | 'lowCode';
-
   /**
-   * npm 源引入完整描述对象
+   * 引用完整描述对象
    */
-  npm?: NpmInfo;
-
+  reference?: Reference;
   /**
    * 低代码组件 schema
-   * @todo 待补充文档
    */
   schema?: LowCodeComponentTree;
+
   /**
    * 可用片段
    */
   snippets?: Snippet[];
-
   /**
    * 组件属性信息
    */
@@ -97,21 +91,21 @@ export interface ComponentMetaData<Configure extends PlainObject = PlainObject> 
 }
 
 /**
- * npm 源引入完整描述对象
+ * 引用完整描述对象
  */
-export interface NpmInfo {
+export interface Reference {
   /**
-   * 源码组件名称
+   * 引用资源的 id 标识
    */
-  componentName?: string;
+  id?: string;
+  /**
+   * 资源版本号
+   */
+  version: string;
   /**
    * 源码组件库名
    */
-  package: string;
-  /**
-   * 源码组件版本号
-   */
-  version?: string;
+  package?: string;
   /**
    * 是否解构
    */
@@ -125,7 +119,7 @@ export interface NpmInfo {
    */
   subName?: string;
   /**
-   * 组件路径
+   * 引用的资源主入口
    */
   main?: string;
 }
@@ -231,4 +225,17 @@ export interface Snippet {
    * 待插入的 schema
    */
   schema?: ComponentNode;
+}
+
+export interface ProCodeComponent extends Package {
+  package: string;
+  type: 'proCode';
+  library: string;
+}
+
+export interface LowCodeComponent extends Package {
+  id: string;
+  type: 'lowCode';
+  componentName: string;
+  schema: LowCodeComponentTree;
 }

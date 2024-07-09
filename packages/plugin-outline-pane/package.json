@@ -30,9 +30,7 @@
   },
   "dependencies": {
     "@alifd/next": "^1.27.8",
-    "@alilc/lowcode-core": "workspace:*",
-    "@alilc/lowcode-types": "workspace:*",
-    "@alilc/lowcode-utils": "workspace:*",
+    "@alilc/lowcode-engine-core": "workspace:*",
     "classnames": "^2.5.1",
     "events": "^3.3.0",
     "react": "^18.2.0",
@@ -45,9 +43,7 @@
   },
   "peerDependencies": {
     "@alifd/next": "^1.27.8",
-    "@alilc/lowcode-core": "workspace:*",
-    "@alilc/lowcode-types": "workspace:*",
-    "@alilc/lowcode-utils": "workspace:*",
+    "@alilc/lowcode-engine-core": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

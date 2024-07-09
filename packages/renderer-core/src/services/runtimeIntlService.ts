@@ -2,7 +2,7 @@ import {
   createDecorator,
   Provide,
   Intl,
-  type Spec,
+  type IntlApi,
   type Locale,
   type Translations,
   platformLocale,
@@ -84,7 +84,7 @@ export class RuntimeIntlService implements IRuntimeIntlService {
   }
 
   private injectScope(): void {
-    const exposed: Spec.IntlApi = {
+    const exposed: IntlApi = {
       i18n: (key, params) => {
         return this.t({ key, params });
       },

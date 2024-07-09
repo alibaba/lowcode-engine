@@ -1,4 +1,8 @@
-import { invariant, isLowCodeComponentPackage, type Spec } from '@alilc/lowcode-shared';
+import {
+  invariant,
+  isLowCodeComponentPackage,
+  type ComponentTreeRoot,
+} from '@alilc/lowcode-shared';
 import { forwardRef, useRef, useEffect } from 'react';
 import { isValidElementType } from 'react-is';
 import { useRendererContext } from '../api/context';
@@ -64,7 +68,7 @@ export function getComponentByName(
 }
 
 export function createComponent(
-  schema: string | Spec.ComponentTreeRoot,
+  schema: string | ComponentTreeRoot,
   componentOptions: ComponentOptions = {},
 ) {
   const { displayName = '__LowCodeComponent__', modelOptions } = componentOptions;

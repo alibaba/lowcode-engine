@@ -2,7 +2,52 @@
  * https://lowcode-engine.cn/site/docs/specs/assets-spec
  * 低代码引擎资产包协议规范
  */
+import { StringDictionary } from '..';
 import { ComponentTreeRoot } from './lowcode-spec';
+import { ComponentMetaData, Reference } from './material-spec';
+
+/**
+ * 设计器资产包协议
+ */
+export interface Assets {
+  /**
+   * 当前协议版本号
+   */
+  version: string;
+  /**
+   * 低代码编辑器中加载的资源列表
+   */
+  packages?: Package[];
+  /**
+   * 所有组件的描述协议列表
+   */
+  components: ComponentMetaData[];
+  /**
+   * 用于组件面板中的 tab 和 category 的显示顺序
+   */
+  sort?: {
+    /**
+     * 组件分组
+     */
+    groupList: string[];
+    /**
+     * 组件面板中同一个 tab 下的不同区间用 category 区分
+     */
+    categoryList: string[];
+  };
+  /**
+   * 设计器中插件描述协议列表
+   */
+  plugins?: PluginDescription[];
+  /**
+   * 设计器中设置器描述协议列表
+   */
+  setters?: PluginDescription[];
+  /**
+   * 平台自定义扩展字段
+   */
+  extConfig?: StringDictionary;
+}
 
 export interface Package {
   /**
@@ -97,3 +142,45 @@ export interface MultiModeUrls {
  * 资源加载环境种类
  */
 export type LoadEnv = 'design' | 'runtime';
+
+/**
+ * 插件声明
+ */
+export interface PluginDescription {
+  /**
+   * 插件名称
+   */
+  name: string;
+  /**
+   * 插件标题
+   */
+  title?: string;
+  /**
+   * 插件类型
+   */
+  type?: string;
+  /**
+   * 插件描述
+   */
+  description?: string;
+  /**
+   * 插件文档地址
+   */
+  docUrl?: string;
+  /**
+   * 插件截图
+   */
+  screenshot?: string;
+  /**
+   * 插件相关的标签
+   */
+  tags?: string[];
+  /**
+   * 插件关键字
+   */
+  keywords?: string[];
+  /**
+   * 插件引用的资源信息
+   */
+  reference: Reference;
+}

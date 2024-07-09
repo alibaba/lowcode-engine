@@ -1,16 +1,24 @@
 import {
-  type Spec,
-  type PlainObject,
-  isComponentNode,
+  type ComponentNode,
+  type ComponentNodeProps,
+  type StringDictionary,
+  type ComponentLifeCycle,
+  type NodeType,
+  type InstanceApi,
+  type InstanceStateApi,
+  type ComponentDataSource,
+  type InstanceDataSourceApi,
+  type ComponentTree,
+  specTypes,
   invariant,
   uniqueId,
 } from '@alilc/lowcode-shared';
 import { type ICodeRuntime } from '../code-runtime';
 import { IWidget, Widget } from '../widget';
 
-export interface NormalizedComponentNode extends Spec.ComponentNode {
+export interface NormalizedComponentNode extends ComponentNode {
   loopArgs: [string, string];
-  props: Spec.ComponentNodeProps;
+  props: ComponentNodeProps;
 }
 
 /**
@@ -30,7 +38,7 @@ export interface IComponentTreeModel<Component, ComponentInstance = unknown> {
   /**
    * 调用生命周期方法
    */
-  triggerLifeCycle(lifeCycleName: Spec.ComponentLifeCycle, ...args: any[]): void;
+  triggerLifeCycle(lifeCycleName: ComponentLifeCycle, ...args: any[]): void;
   /**
    * 设置 ref 对应的组件实例, 提供给 scope.$() 方式使用
    */
@@ -43,18 +51,18 @@ export interface IComponentTreeModel<Component, ComponentInstance = unknown> {
   /**
    * 根据 compoonentsTree.children 构建 widget 渲染对象
    */
-  buildWidgets(nodes: Spec.NodeType[]): IWidget<Component, ComponentInstance>[];
+  buildWidgets(nodes: NodeType[]): IWidget<Component, ComponentInstance>[];
 }
 
-export type ModelStateCreator = (initalState: PlainObject) => Spec.InstanceStateApi;
+export type ModelStateCreator = (initalState: StringDictionary) => InstanceStateApi;
 export type ModelDataSourceCreator = (
-  dataSourceSchema: Spec.ComponentDataSource,
-  codeRuntime: ICodeRuntime<Spec.InstanceApi>,
-) => Spec.InstanceDataSourceApi;
+  dataSourceSchema: ComponentDataSource,
+  codeRuntime: ICodeRuntime<InstanceApi>,
+) => InstanceDataSourceApi;
 
 export interface ComponentTreeModelOptions {
   id?: string;
-  metadata?: PlainObject;
+  metadata?: StringDictionary;
 
   stateCreator: ModelStateCreator;
   dataSourceCreator?: ModelDataSourceCreator;
@@ -69,11 +77,11 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
 
   public widgets: IWidget<Component>[] = [];
 
-  public metadata: PlainObject = {};
+  public metadata: StringDictionary = {};
 
   constructor(
-    public componentsTree: Spec.ComponentTree,
-    public codeRuntime: ICodeRuntime<Spec.InstanceApi>,
+    public componentsTree: ComponentTree,
+    public codeRuntime: ICodeRuntime<InstanceApi>,
     options: ComponentTreeModelOptions,
   ) {
     invariant(componentsTree, 'componentsTree must to provide', 'ComponentTreeModel');
@@ -101,7 +109,7 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
     const stateApi = stateCreator(initalState);
     codeScope.setValue(stateApi);
 
-    let dataSourceApi: Spec.InstanceDataSourceApi | undefined;
+    let dataSourceApi: InstanceDataSourceApi | undefined;
     if (dataSource && dataSourceCreator) {
       const dataSourceProps = this.codeRuntime.resolve(dataSource);
       dataSourceApi = dataSourceCreator(dataSourceProps, this.codeRuntime);
@@ -135,7 +143,7 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
     return this.componentsTree.css;
   }
 
-  triggerLifeCycle(lifeCycleName: Spec.ComponentLifeCycle, ...args: any[]) {
+  triggerLifeCycle(lifeCycleName: ComponentLifeCycle, ...args: any[]) {
     // keys 用来判断 lifeCycleName 存在于 schema 对象上，不获取原型链上的对象
     if (
       !this.componentsTree.lifeCycles ||
@@ -173,9 +181,9 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
     }
   }
 
-  buildWidgets(nodes: Spec.NodeType[]): IWidget<Component>[] {
+  buildWidgets(nodes: NodeType[]): IWidget<Component>[] {
     return nodes.map((node) => {
-      if (isComponentNode(node)) {
+      if (specTypes.isComponentNode(node)) {
         const normalized = normalizeComponentNode(node);
         const widget = new Widget<Component, ComponentInstance>(normalized, this);
 
@@ -191,7 +199,7 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
   }
 }
 
-export function normalizeComponentNode(node: Spec.ComponentNode): NormalizedComponentNode {
+export function normalizeComponentNode(node: ComponentNode): NormalizedComponentNode {
   const [loopArgsOne, loopArgsTwo] = node.loopArgs ?? [];
   const { children, ...props } = node.props ?? {};
 

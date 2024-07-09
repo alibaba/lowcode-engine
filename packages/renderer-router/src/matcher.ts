@@ -1,6 +1,6 @@
 // refer from https://github.com/vuejs/router/blob/main/packages/router/src/matcher/index.ts
 
-import { type PlainObject } from '@alilc/lowcode-shared';
+import { type StringDictionary } from '@alilc/lowcode-shared';
 import { pick } from 'lodash-es';
 import { createRouteRecordMatcher, type RouteRecordMatcher } from './utils/record-matcher';
 import {
@@ -18,7 +18,7 @@ export interface RouteRecordNormalized {
   name: RouteRecord['name'];
   path: RouteRecord['path'];
   page: string;
-  meta: PlainObject;
+  meta: StringDictionary;
   /**
    * {@link RouteRecord.redirect}
    */

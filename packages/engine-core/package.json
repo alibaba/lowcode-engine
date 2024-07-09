@@ -1,5 +1,6 @@
 {
-  "name": "@ali/lowcode-engine-core",
+  "name": "@alilc/lowcode-engine-core",
+  "version": "2.0.0-beta.0",
   "description": "",
   "type": "module",
   "main": "dist/engine-core.js",
