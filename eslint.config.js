@@ -50,6 +50,8 @@ export default tseslint.config({
     '@typescript-eslint/ban-ts-comment': ['error', { 'ts-expect-error': 'allow-with-description' }],
     '@typescript-eslint/no-explicit-any': 'off',
 
+    '@typescript-eslint/no-this-alias': 'off',
+
     'react/jsx-no-undef': 'error',
     'react/jsx-uses-vars': 'error',
     'react/jsx-no-duplicate-props': ['error', { ignoreCase: true }],
