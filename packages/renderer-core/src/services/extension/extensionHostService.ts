@@ -1,9 +1,10 @@
-import { createDecorator, Provide, EventEmitter, KeyValueStore } from '@alilc/lowcode-shared';
+import { createDecorator, Provide, EventEmitter } from '@alilc/lowcode-shared';
 import { type Plugin, type PluginContext } from './plugin';
 import { IBoostsService } from './boosts';
 import { IPackageManagementService } from '../package';
 import { ISchemaService } from '../schema';
 import { ILifeCycleService } from '../lifeCycleService';
+import { KeyValueStore } from '../../utils/store';
 
 interface IPluginRuntime extends Plugin {
   status: 'setup' | 'ready';

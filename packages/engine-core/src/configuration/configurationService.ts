@@ -1,19 +1,29 @@
-import { createDecorator, Provide, type Event } from '@alilc/lowcode-shared';
-import { IConfigurationOverrides, IConfigurationUpdateOverrides } from './configuration';
-
-export interface IConfigurationChangeEvent {
-  readonly affectedKeys: ReadonlySet<string>;
-  readonly change: IConfigurationChange;
-
-  affectsConfiguration(configuration: string, overrides?: string[]): boolean;
-}
-
-export interface IConfigurationChange {
-  keys: string[];
-  overrides: [string, string[]][];
-}
+import {
+  createDecorator,
+  Emitter,
+  Provide,
+  type Event,
+  type EventListener,
+} from '@alilc/lowcode-shared';
+import {
+  Configuration,
+  DefaultConfiguration,
+  type IConfigurationData,
+  type IConfigurationOverrides,
+  type IConfigurationValue,
+  UserConfiguration,
+} from './configurations';
+import { ConfigurationModel } from './configurationModel';
+import { isEqual } from 'lodash-es';
+import {
+  ConfigurationChangeEvent,
+  type IConfigurationChangeEvent,
+  type IConfigurationChange,
+} from './configurationChangeEvent';
 
 export interface IConfigurationService {
+  initialize(): Promise<void>;
+
   /**
    * Fetches the value of the section for the given overrides.
    * Value can be of native type or an object keyed off the section name.
@@ -42,17 +52,17 @@ export interface IConfigurationService {
    * @param value The new value
    */
   updateValue(key: string, value: any): Promise<void>;
-  updateValue(
-    key: string,
-    value: any,
-    overrides: IConfigurationOverrides | IConfigurationUpdateOverrides,
-  ): Promise<void>;
+  updateValue(key: string, value: any, overrides: IConfigurationOverrides): Promise<void>;
 
-  inspect<T>(key: string, overrides?: IConfigurationOverrides): Readonly<T>;
+  inspect<T>(key: string, overrides?: IConfigurationOverrides): IConfigurationValue<Readonly<T>>;
 
   reloadConfiguration(): Promise<void>;
 
-  keys(): string[];
+  keys(): {
+    default: string[];
+    user: string[];
+    memory?: string[];
+  };
 
   onDidChangeConfiguration: Event<IConfigurationChangeEvent>;
 }
@@ -60,4 +70,134 @@ export interface IConfigurationService {
 export const IConfigurationService = createDecorator<IConfigurationService>('configurationService');
 
 @Provide(IConfigurationService)
-export class ConfigurationService implements IConfigurationService {}
+export class ConfigurationService implements IConfigurationService {
+  private configuration: Configuration;
+  private readonly defaultConfiguration: DefaultConfiguration;
+  private readonly userConfiguration: UserConfiguration;
+
+  private readonly didChangeEmitter = new Emitter<IConfigurationChangeEvent>();
+
+  constructor() {
+    this.defaultConfiguration = new DefaultConfiguration();
+    this.userConfiguration = new UserConfiguration({});
+    this.configuration = new Configuration(
+      this.defaultConfiguration.configurationModel,
+      ConfigurationModel.createEmptyModel(),
+      ConfigurationModel.createEmptyModel(),
+    );
+  }
+
+  async initialize(): Promise<void> {
+    const [defaultModel, userModel] = await Promise.all([
+      this.defaultConfiguration.initialize(),
+      this.userConfiguration.loadConfiguration(),
+    ]);
+
+    this.configuration = new Configuration(
+      defaultModel,
+      userModel,
+      ConfigurationModel.createEmptyModel(),
+    );
+  }
+
+  getConfigurationData(): IConfigurationData {
+    return this.configuration.toData();
+  }
+
+  getValue<T>(): T;
+  getValue<T>(section: string): T;
+  getValue<T>(overrides: IConfigurationOverrides): T;
+  getValue<T>(section: string, overrides: IConfigurationOverrides): T;
+  getValue(arg1?: unknown, arg2?: unknown): any {
+    const section = typeof arg1 === 'string' ? arg1 : undefined;
+    const overrides = isConfigurationOverrides(arg1)
+      ? arg1
+      : isConfigurationOverrides(arg2)
+        ? arg2
+        : {};
+
+    return this.configuration.getValue(section, overrides);
+  }
+
+  updateValue(key: string, value: any): Promise<void>;
+  updateValue(key: string, value: any, overrides: IConfigurationOverrides): Promise<void>;
+  async updateValue(key: string, value: any, arg3?: IConfigurationOverrides): Promise<void> {
+    const overrides: IConfigurationOverrides | undefined = isConfigurationOverrides(arg3)
+      ? arg3
+      : undefined;
+
+    const inspect = this.inspect(key, {
+      overrideIdentifier: overrides?.overrideIdentifier,
+    });
+
+    // Remove the setting, if the value is same as default value
+    if (isEqual(value, inspect.defaultValue)) {
+      value = undefined;
+    }
+
+    if (overrides?.overrideIdentifier) {
+      const overrideIdentifier = overrides.overrideIdentifier;
+      const existingOverride = this.configuration.userConfiguration.overrides.find((override) =>
+        override.identifiers.includes(overrideIdentifier),
+      );
+      if (!existingOverride) {
+        overrides.overrideIdentifier = undefined;
+      }
+    }
+
+    const path = overrides?.overrideIdentifier ? [overrides.overrideIdentifier, key] : [key];
+
+    // modify user config later todo...
+    await this.userConfiguration.syncRemoteConfiguration(path, value);
+  }
+
+  inspect<T>(key: string, overrides: IConfigurationOverrides = {}): IConfigurationValue<T> {
+    return this.configuration.inspect<T>(key, overrides);
+  }
+
+  keys(): {
+    default: string[];
+    user: string[];
+  } {
+    return this.configuration.keys();
+  }
+
+  async reloadConfiguration(): Promise<void> {
+    const configurationModel = await this.userConfiguration.loadConfiguration();
+    this.onDidChangeUserConfiguration(configurationModel);
+  }
+
+  private onDidChangeUserConfiguration(user: ConfigurationModel) {
+    const previous = this.configuration.toData();
+    const change = this.configuration.compareAndUpdateUserConfiguration(user);
+    this.trigger(change, previous);
+  }
+
+  private trigger(configurationChange: IConfigurationChange, previous: IConfigurationData): void {
+    const event = new ConfigurationChangeEvent(
+      configurationChange,
+      { data: previous },
+      this.configuration,
+    );
+    this.didChangeEmitter.emit(event);
+  }
+
+  onDidChangeConfiguration(listener: EventListener<IConfigurationChangeEvent>) {
+    return this.didChangeEmitter.on(listener);
+  }
+}
+
+export function isConfigurationOverrides(thing: any): thing is IConfigurationOverrides {
+  return (
+    thing &&
+    typeof thing === 'object' &&
+    (!thing.overrideIdentifier || typeof thing.overrideIdentifier === 'string')
+  );
+}
+
+export function keyFromOverrideIdentifiers(overrideIdentifiers: string[]): string {
+  return overrideIdentifiers.reduce(
+    (result, overrideIdentifier) => `${result}[${overrideIdentifier}]`,
+    '',
+  );
+}

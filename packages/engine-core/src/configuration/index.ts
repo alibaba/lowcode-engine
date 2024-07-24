@@ -1,3 +1,4 @@
 export * from './configurationModel';
 export * from './configurationRegistry';
-export * from './configuration';
+export * from './configurations';
+export * from './configurationService';

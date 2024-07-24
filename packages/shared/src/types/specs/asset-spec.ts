@@ -55,7 +55,7 @@ export interface Package {
    */
   id?: string;
   /**
-   * npm 包唯一标识，与 id 必须要有一个存在值
+   * npm 包唯一标识
    */
   package?: string;
   /**

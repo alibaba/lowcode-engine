@@ -103,25 +103,17 @@ export interface Reference {
    */
   version: string;
   /**
-   * 源码组件库名
+   * 包名
    */
   package?: string;
   /**
-   * 是否解构
-   */
-  destructuring?: boolean;
-  /**
-   * 源码组件名称
+   * 导出名称
    */
   exportName?: string;
   /**
    * 子组件名
    */
   subName?: string;
-  /**
-   * 引用的资源主入口
-   */
-  main?: string;
 }
 
 /**

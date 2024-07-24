@@ -1,4 +1,4 @@
-import { Injectable, invariant, InstantiationService } from '@alilc/lowcode-shared';
+import { invariant, InstantiationService } from '@alilc/lowcode-shared';
 import { ICodeRuntimeService } from './services/code-runtime';
 import {
   IBoostsService,
@@ -12,7 +12,6 @@ import { ILifeCycleService, LifecyclePhase } from './services/lifeCycleService';
 import { IComponentTreeModelService } from './services/model';
 import type { AppOptions, RendererApplication } from './types';
 
-@Injectable()
 export class RendererMain<RenderObject> {
   private mode: 'development' | 'production' = 'production';
 
@@ -96,8 +95,6 @@ export function createRenderer<RenderObject = IRenderObject>(
   invariant(typeof renderAdapter === 'function', 'The first parameter must be a function.');
 
   const instantiationService = new InstantiationService({ defaultScope: 'Singleton' });
-  instantiationService.bootstrapModules();
-
   const rendererMain = instantiationService.createInstance(
     RendererMain,
   ) as RendererMain<RenderObject>;

@@ -96,7 +96,7 @@ export interface ComponentMap extends Reference {
   /**
    * 协议中的组件名，对应包导出的组件名，是一个有效的 JS 标识符
    */
-  componentName?: string;
+  componentName: string;
 
   devMode?: 'lowCode' | 'proCode';
 }
@@ -305,7 +305,7 @@ export interface ComponentNodeProps {
 export interface NPMUtil {
   name: string;
   type: 'npm';
-  content: ComponentMap;
+  content: Reference;
 }
 
 export interface FunctionUtil {

@@ -78,7 +78,7 @@ export class RuntimeUtilService implements IRuntimeUtilService {
       if ((fn as UtilDescription).type === 'function' || (fn as UtilDescription).type === 'npm') {
         const utilFn = this.parseUtil(fn as UtilDescription);
         if (utilFn) {
-          this.addUtilByName(utilFn.key, utilFn.value, force);
+          this.addUtilByName(name, utilFn, force);
         }
       } else if ((fn as StringDictionary).destructuring) {
         for (const key of Object.keys(fn)) {
@@ -98,13 +98,9 @@ export class RuntimeUtilService implements IRuntimeUtilService {
 
   private parseUtil(utilItem: UtilDescription) {
     if (utilItem.type === 'function') {
-      const { content } = utilItem;
-      return {
-        key: utilItem.name,
-        value: this.codeRuntimeService.rootRuntime.run(content.value),
-      };
+      return this.codeRuntimeService.rootRuntime.run(utilItem.content.value);
     } else {
-      return this.packageManagementService.getLibraryByComponentMap(utilItem.content);
+      return this.packageManagementService.getModuleByReference(utilItem.content);
     }
   }
 

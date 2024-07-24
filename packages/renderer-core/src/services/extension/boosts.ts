@@ -9,7 +9,10 @@ export type IBoosts<Extends> = IBoostsApi & Extends & { [key: string]: any };
 export interface IBoostsApi {
   readonly codeRuntime: ICodeRuntime;
 
-  readonly intl: Pick<IRuntimeIntlService, 't' | 'setLocale' | 'getLocale' | 'addTranslations'>;
+  readonly intl: Pick<
+    IRuntimeIntlService,
+    'localize' | 'setLocale' | 'getLocale' | 'addTranslations'
+  >;
 
   readonly util: Pick<IRuntimeUtilService, 'add' | 'remove'>;
   /**

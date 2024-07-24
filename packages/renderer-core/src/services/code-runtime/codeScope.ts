@@ -1,4 +1,4 @@
-import { type StringDictionary } from '@alilc/lowcode-shared';
+import { type StringDictionary, LinkedListNode } from '@alilc/lowcode-shared';
 import { trustedGlobals } from './globals-es2015';
 
 /*
@@ -17,24 +17,13 @@ export interface ICodeScope<T extends StringDictionary = StringDictionary> {
   createChild<V extends StringDictionary = StringDictionary>(initValue: Partial<V>): ICodeScope<V>;
 }
 
-/**
- * 双链表实现父域值的获取
- */
-interface IScopeNode<T extends StringDictionary> {
-  parent?: IScopeNode<StringDictionary>;
-  current: Partial<T>;
-}
-
 export class CodeScope<T extends StringDictionary = StringDictionary> implements ICodeScope<T> {
-  __node: IScopeNode<T>;
+  node = LinkedListNode.Undefined;
 
   private proxyValue: T;
 
   constructor(initValue: Partial<T>) {
-    this.__node = {
-      current: initValue,
-    };
-
+    this.node.current = initValue;
     this.proxyValue = this.createProxy();
   }
 
@@ -43,20 +32,20 @@ export class CodeScope<T extends StringDictionary = StringDictionary> implements
   }
 
   set(name: keyof T, value: any): void {
-    this.__node.current[name] = value;
+    this.node.current[name] = value;
   }
 
   setValue(value: Partial<T>, replace = false) {
     if (replace) {
-      this.__node.current = { ...value };
+      this.node.current = { ...value };
     } else {
-      this.__node.current = Object.assign({}, this.__node.current, value);
+      this.node.current = Object.assign({}, this.node.current, value);
     }
   }
 
   createChild<V extends StringDictionary = StringDictionary>(initValue: Partial<V>): ICodeScope<V> {
     const childScope = new CodeScope(initValue);
-    childScope.__node.parent = this.__node;
+    childScope.node.prev = this.node;
 
     return childScope;
   }
@@ -75,24 +64,24 @@ export class CodeScope<T extends StringDictionary = StringDictionary> implements
   private findValue(prop: PropertyKey) {
     if (prop === Symbol.unscopables) return unscopables;
 
-    let node: IScopeNode<StringDictionary> | undefined = this.__node;
+    let node = this.node;
     while (node) {
       if (Object.hasOwnProperty.call(node.current, prop)) {
         return node.current[prop as string];
       }
-      node = node.parent;
+      node = node.prev;
     }
   }
 
   private hasProperty(prop: PropertyKey): boolean {
     if (prop in unscopables) return true;
 
-    let node: IScopeNode<StringDictionary> | undefined = this.__node;
+    let node = this.node;
     while (node) {
       if (prop in node.current) {
         return true;
       }
-      node = node.parent;
+      node = node.prev;
     }
 
     return false;

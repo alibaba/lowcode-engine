@@ -1,12 +1,4 @@
-import { createDecorator, Provide } from '@alilc/lowcode-shared';
-
-export interface IWorkspaceService {
-  mount(container: HTMLElement): void;
-}
-
-export const IWorkspaceService = createDecorator<IWorkspaceService>('workspaceService');
-
-@Provide(IWorkspaceService)
-export class WorkspaceService implements IWorkspaceService {
-  mount(container: HTMLElement): void {}
-}
+/**
+ * 工作空间：一个或多个项目的集合
+ */
+export interface Workspace {}

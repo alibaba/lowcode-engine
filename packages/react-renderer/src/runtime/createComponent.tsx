@@ -1,8 +1,4 @@
-import {
-  invariant,
-  isLowCodeComponentPackage,
-  type ComponentTreeRoot,
-} from '@alilc/lowcode-shared';
+import { invariant, specTypes, type ComponentTreeRoot } from '@alilc/lowcode-shared';
 import { forwardRef, useRef, useEffect } from 'react';
 import { isValidElementType } from 'react-is';
 import { useRendererContext } from '../api/context';
@@ -45,7 +41,7 @@ export function getComponentByName(
 ): ReactComponent {
   const result = lowCodeComponentsCache.get(name) || packageManager.getComponent(name);
 
-  if (isLowCodeComponentPackage(result)) {
+  if (specTypes.isLowCodeComponentPackage(result)) {
     const { schema, ...metadata } = result;
 
     const lowCodeComponent = createComponent(schema, {

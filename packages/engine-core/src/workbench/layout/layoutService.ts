@@ -1,6 +1,7 @@
+import { createDecorator } from '@alilc/lowcode-shared';
+
 export interface ILayoutService {
-  /**
-   * Main container of the application.
-   */
-  mainContainer: HTMLElement;
+  layout(): void;
 }
+
+export const ILayoutService = createDecorator<ILayoutService>('layoutService');

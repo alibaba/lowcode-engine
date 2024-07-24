@@ -2,8 +2,6 @@ import {
   type Project,
   createDecorator,
   Provide,
-  type IStore,
-  KeyValueStore,
   EventEmitter,
   type EventDisposable,
 } from '@alilc/lowcode-shared';
@@ -11,6 +9,7 @@ import { isObject } from 'lodash-es';
 import { schemaValidation } from './validation';
 import { ILifeCycleService, LifecyclePhase } from '../lifeCycleService';
 import { ICodeRuntimeService } from '../code-runtime';
+import { type IStore, KeyValueStore } from '../../utils/store';
 
 export interface NormalizedSchema extends Project {}
 

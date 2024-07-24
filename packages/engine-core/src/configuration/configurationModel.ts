@@ -1,13 +1,15 @@
 import { type StringDictionary } from '@alilc/lowcode-shared';
 import { get as lodasgGet, isEqual, uniq, cloneDeep, isObject } from 'lodash-es';
-import { OVERRIDE_PROPERTY_REGEX, overrideIdentifiersFromKey } from './configurationRegistry';
+import {
+  type IInspectValue,
+  addToValueTree,
+  removeFromValueTree,
+  toValuesTree,
+  OVERRIDE_PROPERTY_REGEX,
+  overrideIdentifiersFromKey,
+} from './configuration';
 
-export type InspectValue<V> = {
-  readonly value?: V;
-  readonly override?: V;
-  readonly overrides?: { readonly identifiers: string[]; readonly value: V }[];
-  merged?: V;
-};
+export type InspectValue<V> = IInspectValue<V> & { merged?: V };
 
 export interface IConfigurationModel {
   contents: any;
@@ -326,81 +328,4 @@ export class ConfigurationModel implements IConfigurationModel {
     }
     return uniq(result);
   }
-}
-
-function removeFromValueTree(valueTree: any, key: string): void {
-  const segments = key.split('.');
-  doRemoveFromValueTree(valueTree, segments);
-}
-
-function doRemoveFromValueTree(valueTree: any, segments: string[]): void {
-  const first = segments.shift()!;
-  if (segments.length === 0) {
-    // Reached last segment
-    delete valueTree[first];
-    return;
-  }
-
-  if (Object.keys(valueTree).includes(first)) {
-    const value = valueTree[first];
-    if (typeof value === 'object' && !Array.isArray(value)) {
-      doRemoveFromValueTree(value, segments);
-      if (Object.keys(value).length === 0) {
-        delete valueTree[first];
-      }
-    }
-  }
-}
-
-function addToValueTree(
-  settingsTreeRoot: any,
-  key: string,
-  value: any,
-  conflictReporter: (message: string) => void = console.error,
-): void {
-  const segments = key.split('.');
-  const last = segments.pop()!;
-
-  let curr = settingsTreeRoot;
-  for (let i = 0; i < segments.length; i++) {
-    const s = segments[i];
-    let obj = curr[s];
-    switch (typeof obj) {
-      case 'undefined':
-        obj = curr[s] = Object.create(null);
-        break;
-      case 'object':
-        if (obj === null) {
-          conflictReporter(`Ignoring ${key} as ${segments.slice(0, i + 1).join('.')} is null`);
-          return;
-        }
-        break;
-      default:
-        conflictReporter(
-          `Ignoring ${key} as ${segments.slice(0, i + 1).join('.')} is ${JSON.stringify(obj)}`,
-        );
-        return;
-    }
-    curr = obj;
-  }
-
-  if (typeof curr === 'object' && curr !== null) {
-    try {
-      curr[last] = value; // workaround https://github.com/microsoft/vscode/issues/13606
-    } catch (e) {
-      conflictReporter(`Ignoring ${key} as ${segments.join('.')} is ${JSON.stringify(curr)}`);
-    }
-  } else {
-    conflictReporter(`Ignoring ${key} as ${segments.join('.')} is ${JSON.stringify(curr)}`);
-  }
-}
-
-function toValuesTree(properties: StringDictionary): any {
-  const root = Object.create(null);
-
-  for (const key in properties) {
-    addToValueTree(root, key, properties[key]);
-  }
-
-  return root;
 }

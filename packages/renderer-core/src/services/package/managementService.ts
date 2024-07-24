@@ -6,6 +6,9 @@ import {
   createDecorator,
   Provide,
   specTypes,
+  exportByReference,
+  mapPackageToId,
+  type Reference,
 } from '@alilc/lowcode-shared';
 import { get as lodashGet } from 'lodash-es';
 import { PackageLoader } from './loader';
@@ -29,11 +32,7 @@ export interface IPackageManagementService {
   /** 通过包名获取资产包信息 */
   getPackageInfo(packageName: string): Package | undefined;
 
-  getLibraryByPackageName(packageName: string): any;
-
-  setLibraryByPackageName(packageName: string, library: any): void;
-
-  getLibraryByComponentMap(componentMap: ComponentMap): { key: string; value: any } | undefined;
+  getModuleByReference<T = any>(reference: Reference): T | undefined;
 
   /** 解析组件映射 */
   resolveComponentMaps(componentMaps: ComponentMap[]): void;
@@ -91,46 +90,13 @@ export class PackageManagementService implements IPackageManagementService {
     return this.packagesMap.get(packageName)?.raw;
   }
 
-  getLibraryByPackageName(packageName: string) {
-    const packageInfo = this.getPackageInfo(packageName);
+  getModuleByReference<T = any>(reference: Reference): T | undefined {
+    const id = mapPackageToId(reference);
+    if (this.packageStore.has(id)) {
+      const library = this.packageStore.get(id);
+      const result = exportByReference(library, reference);
 
-    if (packageInfo) {
-      return this.packageStore.get(packageInfo.package ?? packageInfo.id!);
-    }
-  }
-
-  setLibraryByPackageName(packageName: string, library: any) {
-    this.packageStore.set(packageName, library);
-  }
-
-  getLibraryByComponentMap(componentMap: ComponentMap): { key: string; value: any } | undefined {
-    if (!componentMap.componentName && !componentMap.exportName) return;
-
-    if (componentMap.package && this.packageStore.has(componentMap.package)) {
-      const library = this.packageStore.get(componentMap.package!);
-      // export { exportName } from xxx exportName === global.libraryName.exportName
-      // export exportName from xxx exportName === global.libraryName.default || global.libraryName
-      // const componentName = exportName.subName, if exportName empty subName donot use
-      const paths =
-        componentMap.exportName && componentMap.subName ? componentMap.subName.split('.') : [];
-
-      // if exportName === nil, exportName === componentName;
-      const exportName = componentMap.exportName ?? componentMap.componentName;
-
-      if (exportName && componentMap.destructuring) {
-        paths.unshift(exportName);
-      }
-
-      let result = library;
-      for (const path of paths) {
-        result = result[path] || result;
-      }
-
-      // export { exportName as componentName } from package
-      return {
-        key: componentMap.componentName ?? componentMap.exportName!,
-        value: result,
-      };
+      return result;
     }
   }
 
@@ -143,9 +109,9 @@ export class PackageManagementService implements IPackageManagementService {
           this.componentsRecord[map.componentName] = packageInfo;
         }
       } else {
-        const result = this.getLibraryByComponentMap(map);
+        const result = this.getModuleByReference(map);
         if (result) {
-          this.componentsRecord[result.key] = result.value;
+          this.componentsRecord[map.componentName] = result;
         }
       }
     }
@@ -172,12 +138,12 @@ export class PackageManagementService implements IPackageManagementService {
 
     const normalized: NormalizedPackage = {
       package: packageInfo.package,
-      id: packageInfo.id ?? packageInfo.package,
+      id: mapPackageToId(packageInfo),
       library: packageInfo.library,
       raw: packageInfo,
     };
 
-    this.packagesMap.set(normalized.package, normalized);
+    this.packagesMap.set(normalized.id, normalized);
 
     // add normalized to package exports dependency graph
     const packagesRef = [...this.packagesMap.values()];
@@ -201,14 +167,14 @@ export class PackageManagementService implements IPackageManagementService {
   }
 
   private async loadPackageByNormalized(normalized: NormalizedPackage) {
-    if (this.packageStore.has(normalized.package)) return;
+    if (this.packageStore.has(normalized.id)) return;
 
     // if it has export source package, wait export source package loaded
     if (normalized.exportSource) {
-      if (this.packageStore.has(normalized.package)) {
+      if (this.packageStore.has(normalized.id)) {
         const library = lodashGet(window, normalized.library);
         if (library) {
-          this.packageStore.set(normalized.package, library);
+          this.packageStore.set(normalized.id, library);
         }
       }
     } else {
@@ -217,14 +183,14 @@ export class PackageManagementService implements IPackageManagementService {
 
       const result = await loader.load.call(this, normalized.raw);
       if (result) {
-        this.packageStore.set(normalized.package, result);
+        this.packageStore.set(normalized.id, result);
       }
     }
 
     // if current package loaded, set the value of the dependency on this package
-    if (this.packageStore.has(normalized.package)) {
+    if (this.packageStore.has(normalized.id)) {
       const chilren = [...this.packagesMap.values()].filter((item) => {
-        return item.exportSource?.package === normalized.package;
+        return item.exportSource?.id === normalized.id;
       });
 
       for (const child of chilren) {

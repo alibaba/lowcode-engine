@@ -12,7 +12,13 @@ import {
   type JSSlot,
   type JSI18n,
 } from '@alilc/lowcode-shared';
-import { type ComponentType, type ReactInstance, useMemo, createElement } from 'react';
+import {
+  type ComponentType,
+  type ReactInstance,
+  useMemo,
+  createElement,
+  type ReactNode,
+} from 'react';
 import { useRendererContext } from '../api/context';
 import { useReactiveStore } from './hooks/useReactiveStore';
 import { getComponentByName, type ComponentOptions } from './createComponent';
@@ -32,7 +38,7 @@ export function createElementByWidget(
   widget: ReactWidget,
   codeRuntime: ICodeRuntime,
   options: ComponentOptions,
-) {
+): ReactNode {
   const getElement = (widget: ReactWidget) => {
     const { key, rawNode } = widget;
 

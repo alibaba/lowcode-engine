@@ -3,9 +3,14 @@ import {
   type EventDisposable,
   type EventListener,
   Emitter,
+  LinkedList,
+  TypeConstraint,
+  validateConstraints,
+  Iterable,
 } from '@alilc/lowcode-shared';
 import { ICommand, ICommandHandler } from './command';
-import { Registry } from '../extension';
+import { Extensions, Registry } from '../common/registry';
+import { ICommandService } from './commandService';
 
 export type ICommandsMap = Map<string, ICommand>;
 
@@ -24,10 +29,10 @@ export interface ICommandRegistry {
 class CommandsRegistry implements ICommandRegistry {
   private readonly _commands = new Map<string, LinkedList<ICommand>>();
 
-  private readonly _onDidRegisterCommand = new Emitter<string>();
+  private readonly _didRegisterCommandEmitter = new Emitter<string>();
 
   onDidRegisterCommand(fn: EventListener<string>) {
-    return this._onDidRegisterCommand.on(fn);
+    return this._didRegisterCommandEmitter.on(fn);
   }
 
   registerCommand(idOrCommand: string | ICommand, handler?: ICommandHandler): EventDisposable {
@@ -66,21 +71,21 @@ class CommandsRegistry implements ICommandRegistry {
 
     const removeFn = commands.unshift(idOrCommand);
 
-    const ret = toDisposable(() => {
+    const ret = () => {
       removeFn();
       const command = this._commands.get(id);
       if (command?.isEmpty()) {
         this._commands.delete(id);
       }
-    });
+    };
 
     // tell the world about this command
-    this._onDidRegisterCommand.emit(id);
+    this._didRegisterCommandEmitter.emit(id);
 
     return ret;
   }
 
-  registerCommandAlias(oldId: string, newId: string): IDisposable {
+  registerCommandAlias(oldId: string, newId: string): EventDisposable {
     return this.registerCommand(oldId, (accessor, ...args) =>
       accessor.get(ICommandService).executeCommand(newId, ...args),
     );
@@ -108,8 +113,4 @@ class CommandsRegistry implements ICommandRegistry {
 
 const commandsRegistry = new CommandsRegistry();
 
-export const Extension = {
-  command: 'base.contributions.command',
-};
-
-Registry.add(Extension.command, commandsRegistry);
+Registry.add(Extensions.Command, commandsRegistry);

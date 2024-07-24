@@ -5,7 +5,7 @@ import {
   type IntlApi,
   type Locale,
   type Translations,
-  platformLocale,
+  Platform,
 } from '@alilc/lowcode-shared';
 import { ILifeCycleService, LifecyclePhase } from './lifeCycleService';
 import { ICodeRuntimeService } from './code-runtime';
@@ -20,7 +20,7 @@ export interface MessageDescriptor {
 export interface IRuntimeIntlService {
   locale: string;
 
-  t(descriptor: MessageDescriptor): string;
+  localize(descriptor: MessageDescriptor): string;
 
   setLocale(locale: Locale): void;
 
@@ -35,7 +35,7 @@ export const IRuntimeIntlService = createDecorator<IRuntimeIntlService>('IRuntim
 export class RuntimeIntlService implements IRuntimeIntlService {
   private intl: Intl = new Intl();
 
-  public locale: string = platformLocale;
+  public locale: string = Platform.platformLocale;
 
   constructor(
     @ILifeCycleService private lifeCycleService: ILifeCycleService,
@@ -59,7 +59,7 @@ export class RuntimeIntlService implements IRuntimeIntlService {
     });
   }
 
-  t(descriptor: MessageDescriptor): string {
+  localize(descriptor: MessageDescriptor): string {
     const formatter = this.intl.getFormatter();
 
     return formatter.$t(
@@ -86,7 +86,7 @@ export class RuntimeIntlService implements IRuntimeIntlService {
   private injectScope(): void {
     const exposed: IntlApi = {
       i18n: (key, params) => {
-        return this.t({ key, params });
+        return this.localize({ key, params });
       },
       getLocale: () => {
         return this.getLocale();
