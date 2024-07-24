@@ -46,6 +46,7 @@ export default tseslint.config({
     '@stylistic/semi': ['error', 'always'],
     '@stylistic/eol-last': ['error', 'always'],
     '@stylistic/jsx-quotes': ['error', 'prefer-double'],
+    '@stylistic/max-len': 'off',
 
     '@typescript-eslint/ban-ts-comment': ['error', { 'ts-expect-error': 'allow-with-description' }],
     '@typescript-eslint/no-explicit-any': 'off',

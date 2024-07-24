@@ -22,13 +22,13 @@ export default async ({
 }: Options) => {
   const formats = (env['FORMATS']?.split(',') ?? defaultFormats) as LibraryFormats[];
 
-  let externals: string[] = [];
+  const { peerDependencies = {}, dependencies = {} } = await getPackageJson(
+    resolvePath('package.json'),
+  );
+  const externals: string[] = [...Object.keys(peerDependencies)];
 
   if (externalDeps) {
-    const { peerDependencies = {}, devDependencies = {} } = await getPackageJson(
-      resolvePath('package.json'),
-    );
-    externals = [...Object.keys(peerDependencies), ...Object.keys(devDependencies)];
+    externals.push(...Object.keys(dependencies));
   }
 
   return defineConfig({
