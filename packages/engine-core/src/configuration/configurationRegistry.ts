@@ -100,7 +100,9 @@ export interface IConfigurationPropertySchema extends IJSONSchema {
  * 扩展信息，用来查找对应属性的源扩展
  */
 export interface IExtensionInfo {
-  name: string;
+  id: string;
+  displayName?: string;
+  version?: string;
 }
 
 export type ConfigurationDefaultValueSource = IExtensionInfo | Map<string, IExtensionInfo>;
@@ -640,7 +642,7 @@ export class ConfigurationRegistry implements IConfigurationRegistry {
 
 function isSameExtension(a?: IExtensionInfo, b?: IExtensionInfo): boolean {
   if (!a || !b) return false;
-  return a.name === b.name;
+  return a.id === b.id && a.version === b.version;
 }
 
 Registry.add(Extensions.Configuration, new ConfigurationRegistry());

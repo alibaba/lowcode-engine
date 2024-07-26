@@ -1,7 +1,6 @@
 import { invariant, InstantiationService } from '@alilc/lowcode-shared';
 import { ICodeRuntimeService } from './services/code-runtime';
 import {
-  IBoostsService,
   IExtensionHostService,
   type RenderAdapter,
   type IRenderObject,
@@ -9,79 +8,7 @@ import {
 import { IPackageManagementService } from './services/package';
 import { ISchemaService } from './services/schema';
 import { ILifeCycleService, LifecyclePhase } from './services/lifeCycleService';
-import { IComponentTreeModelService } from './services/model';
 import type { AppOptions, RendererApplication } from './types';
-
-export class RendererMain<RenderObject> {
-  private mode: 'development' | 'production' = 'production';
-
-  private initOptions: AppOptions;
-
-  private renderObject: RenderObject;
-
-  private adapter: RenderAdapter<RenderObject>;
-
-  constructor(
-    @ICodeRuntimeService private codeRuntimeService: ICodeRuntimeService,
-    @IPackageManagementService private packageManagementService: IPackageManagementService,
-    @ISchemaService private schemaService: ISchemaService,
-    @IExtensionHostService private extensionHostService: IExtensionHostService,
-    @IComponentTreeModelService private componentTreeModelService: IComponentTreeModelService,
-    @IBoostsService private boostsService: IBoostsService,
-    @ILifeCycleService private lifeCycleService: ILifeCycleService,
-  ) {}
-
-  async main(options: AppOptions, adapter: RenderAdapter<RenderObject>) {
-    const { schema, mode, plugins = [] } = options;
-
-    if (mode) this.mode = mode;
-    this.initOptions = { ...options };
-    this.adapter = adapter;
-
-    // valid schema
-    this.schemaService.initialize(schema);
-
-    this.codeRuntimeService.initialize(options.codeRuntime ?? {});
-
-    await this.lifeCycleService.setPhase(LifecyclePhase.OptionsResolved);
-
-    const renderContext = {
-      schema: this.schemaService,
-      packageManager: this.packageManagementService,
-      boostsManager: this.boostsService,
-      componentTreeModel: this.componentTreeModelService,
-      lifeCycle: this.lifeCycleService,
-    };
-
-    this.renderObject = await this.adapter(renderContext);
-
-    await this.extensionHostService.registerPlugin(plugins);
-    // 先加载插件提供 package loader
-    await this.packageManagementService.loadPackages(this.initOptions.packages ?? []);
-
-    await this.lifeCycleService.setPhase(LifecyclePhase.Ready);
-  }
-
-  getApp(): RendererApplication<RenderObject> {
-    // construct application
-    return Object.freeze<RendererApplication<RenderObject>>({
-      // develop use
-      __options: this.initOptions,
-
-      mode: this.mode,
-      schema: this.schemaService,
-      packageManager: this.packageManagementService,
-      ...this.renderObject,
-
-      use: (plugin) => {
-        return this.extensionHostService.registerPlugin(plugin);
-      },
-      destroy: async () => {
-        return this.lifeCycleService.setPhase(LifecyclePhase.Destroying);
-      },
-    });
-  }
-}
 
 /**
  * 创建 createRenderer 的辅助函数
@@ -94,13 +21,51 @@ export function createRenderer<RenderObject = IRenderObject>(
 ): (options: AppOptions) => Promise<RendererApplication<RenderObject>> {
   invariant(typeof renderAdapter === 'function', 'The first parameter must be a function.');
 
-  const instantiationService = new InstantiationService({ defaultScope: 'Singleton' });
-  const rendererMain = instantiationService.createInstance(
-    RendererMain,
-  ) as RendererMain<RenderObject>;
+  const accessor = new InstantiationService({ defaultScope: 'Singleton' });
+  let mode: 'development' | 'production' = 'production';
+
+  const schemaService = accessor.get(ISchemaService);
+  const packageManagementService = accessor.get(IPackageManagementService);
+  const codeRuntimeService = accessor.get(ICodeRuntimeService);
+  const lifeCycleService = accessor.get(ILifeCycleService);
+  const extensionHostService = accessor.get(IExtensionHostService);
 
   return async (options) => {
-    await rendererMain.main(options, renderAdapter);
-    return rendererMain.getApp();
+    if (options.mode) mode = options.mode;
+
+    // valid schema
+    schemaService.initialize(options.schema);
+    codeRuntimeService.initialize(options.codeRuntime ?? {});
+    await lifeCycleService.setPhase(LifecyclePhase.OptionsResolved);
+
+    const renderObject = await renderAdapter(accessor);
+
+    await extensionHostService.registerPlugin(options.plugins ?? []);
+    // 先加载插件提供 package loader
+    await packageManagementService.loadPackages(options.packages ?? []);
+
+    await lifeCycleService.setPhase(LifecyclePhase.Ready);
+
+    const app: RendererApplication<RenderObject> = {
+      get mode() {
+        return mode;
+      },
+      schema: schemaService,
+      packageManager: packageManagementService,
+      ...renderObject,
+
+      use: (plugin) => {
+        return extensionHostService.registerPlugin(plugin);
+      },
+      destroy: async () => {
+        return lifeCycleService.setPhase(LifecyclePhase.Destroying);
+      },
+    };
+
+    if (mode === 'development') {
+      Object.defineProperty(app, '__options', { get: () => options });
+    }
+
+    return app;
   };
 }

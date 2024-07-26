@@ -1,13 +1,12 @@
 import { invariant, specTypes, type ComponentTreeRoot } from '@alilc/lowcode-shared';
 import { forwardRef, useRef, useEffect } from 'react';
 import { isValidElementType } from 'react-is';
-import { useRendererContext } from '../api/context';
+import { useRendererContext, IRendererContext } from '../api/context';
 import { reactiveStateFactory } from './reactiveState';
 import { type ReactComponent, type ReactWidget, createElementByWidget } from './elements';
 import { appendExternalStyle } from '../utils/element';
 
 import type {
-  RenderContext,
   IComponentTreeModel,
   CreateComponentTreeModelOptions,
 } from '@alilc/lowcode-renderer-core';
@@ -36,7 +35,7 @@ const lowCodeComponentsCache = new Map<string, ReactComponent>();
 
 export function getComponentByName(
   name: string,
-  { packageManager }: RenderContext,
+  { packageManager }: IRendererContext,
   componentOptions: ComponentOptions = {},
 ): ReactComponent {
   const result = lowCodeComponentsCache.get(name) || packageManager.getComponent(name);

@@ -2,7 +2,7 @@ import { InstantiationService } from '@alilc/lowcode-shared';
 import { IWorkbenchService } from './workbench';
 import { IConfigurationService } from './configuration';
 
-export class MainApplication {
+class MainApplication {
   constructor() {
     console.log('main application');
   }

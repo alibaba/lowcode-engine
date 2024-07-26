@@ -1,5 +1,7 @@
-export * as specTypes from './spec';
-export * as jsonTypes from './json';
-export * as types from './type';
+import * as specTypes from './spec';
+import * as jsonTypes from './json';
+import * as types from './type';
 
 export * from './constraint';
+
+export { specTypes, jsonTypes, types };

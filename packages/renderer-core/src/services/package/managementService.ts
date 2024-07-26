@@ -7,7 +7,7 @@ import {
   Provide,
   specTypes,
   exportByReference,
-  mapPackageToId,
+  mapPackageToUniqueId,
   type Reference,
 } from '@alilc/lowcode-shared';
 import { get as lodashGet } from 'lodash-es';
@@ -91,7 +91,7 @@ export class PackageManagementService implements IPackageManagementService {
   }
 
   getModuleByReference<T = any>(reference: Reference): T | undefined {
-    const id = mapPackageToId(reference);
+    const id = mapPackageToUniqueId(reference);
     if (this.packageStore.has(id)) {
       const library = this.packageStore.get(id);
       const result = exportByReference(library, reference);
@@ -138,7 +138,7 @@ export class PackageManagementService implements IPackageManagementService {
 
     const normalized: NormalizedPackage = {
       package: packageInfo.package,
-      id: mapPackageToId(packageInfo),
+      id: mapPackageToUniqueId(packageInfo),
       library: packageInfo.library,
       raw: packageInfo,
     };

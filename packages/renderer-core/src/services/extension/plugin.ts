@@ -1,8 +1,9 @@
-import { type EventEmitter, type IStore, type StringDictionary } from '@alilc/lowcode-shared';
+import { type EventEmitter, type StringDictionary } from '@alilc/lowcode-shared';
 import { type IBoosts } from './boosts';
 import { ILifeCycleService } from '../lifeCycleService';
 import { type ISchemaService } from '../schema';
 import { type IPackageManagementService } from '../package';
+import { type IStore } from '../../utils/store';
 
 export interface PluginContext<BoostsExtends = object> {
   eventEmitter: EventEmitter;

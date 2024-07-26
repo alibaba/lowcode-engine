@@ -5,7 +5,7 @@ export { defineRendererPlugin } from './app';
 export * from './router';
 export { LifecyclePhase } from '@alilc/lowcode-renderer-core';
 
-export type { Spec, ProCodeComponent, LowCodeComponent } from '@alilc/lowcode-shared';
+export type { Package, ProCodeComponent, LowCodeComponent } from '@alilc/lowcode-shared';
 export type {
   PackageLoader,
   CodeScope,

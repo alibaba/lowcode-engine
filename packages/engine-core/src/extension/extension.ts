@@ -7,9 +7,10 @@ export type ExtensionInitializer = <Context = any>(ctx: Context) => IExtensionIn
  * 函数声明插件
  */
 export interface IFunctionExtension extends ExtensionInitializer {
-  name: string;
+  id: string;
+  displayName?: string;
   version: string;
-  meta?: IExtensionMetadata;
+  metadata?: IExtensionMetadata;
 }
 
 export interface IExtensionMetadata {

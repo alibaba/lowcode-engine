@@ -1,4 +1,31 @@
+import { IWorkspaceFolder } from './folder';
+
 /**
- * 工作空间：一个或多个项目的集合
+ * workspace -> one or more folders -> virtual files
+ * file -> editWindow
+ * editorView -> component tree schema
+ *
+ * project = (one or muti folders -> files) + some configs
  */
-export interface Workspace {}
+export interface IWorkspace {
+  readonly id: string;
+
+  /**
+   * Folders in the workspace.
+   */
+  readonly folders: IWorkspaceFolder[];
+}
+
+export class Workspace implements IWorkspace {
+  private _folders: IWorkspaceFolder[] = [];
+
+  constructor(private _id: string) {}
+
+  get id() {
+    return this._id;
+  }
+
+  get folders() {
+    return this._folders;
+  }
+}

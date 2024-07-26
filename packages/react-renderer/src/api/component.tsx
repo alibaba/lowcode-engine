@@ -4,7 +4,7 @@ import {
   type LowCodeComponentProps,
   createComponent as createSchemaComponent,
 } from '../runtime/createComponent';
-import { RendererContext } from './context';
+import { RendererContext, getRenderInstancesByAccessor } from './context';
 import { type ReactAppOptions } from './types';
 
 interface Render {
@@ -12,16 +12,16 @@ interface Render {
 }
 
 export async function createComponent(options: ReactAppOptions) {
-  const creator = createRenderer<Render>((context) => {
-    const { schema } = context;
-    const componentsTree = schema.get('componentsTree')[0];
+  const creator = createRenderer<Render>((accessor) => {
+    const instances = getRenderInstancesByAccessor(accessor);
+    const componentsTree = instances.schema.get('componentsTree')[0];
 
     const LowCodeComponent = createSchemaComponent(componentsTree, {
       displayName: componentsTree.componentName,
       ...options.component,
     });
 
-    const contextValue = { ...context, options };
+    const contextValue = { ...instances, options };
 
     function Component(props: LowCodeComponentProps) {
       return (
