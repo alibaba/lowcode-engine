@@ -5,7 +5,7 @@ sidebar_position: 4
 | 预置 Setter | 返回类型 | 用途 | 截图 |
 | --- | --- | --- | --- |
 | [ArraySetter](./setterDetails/array) | T[] | 列表数组行数据设置器 | ![](https://img.alicdn.com/imgextra/i1/O1CN01UNmb7429mtHsbTHg3_!!6000000008111-2-tps-584-362.png) |
-| [BoolSetter](./setterDetails/behavior) | boolean | 布尔型数据设置器， | ![](https://img.alicdn.com/imgextra/i2/O1CN01gZlHyx24MiZfjU61A_!!6000000007377-2-tps-320-82.png) |
+| [BoolSetter](./setterDetails/behavior) | boolean | 布尔型数据设置器 | ![](https://img.alicdn.com/imgextra/i2/O1CN01gZlHyx24MiZfjU61A_!!6000000007377-2-tps-320-82.png) |
 | ClassNameSetter | string | 样式名设置器 | ![](https://img.alicdn.com/imgextra/i3/O1CN01ResoVi1PtKWxwuww8_!!6000000001898-2-tps-502-180.png) |
 | [ColorSetter](./setterDetails/color) | string | 颜色设置器 | ![](https://img.alicdn.com/imgextra/i4/O1CN018gsNdw1Qt9zsZWP9K_!!6000000002033-2-tps-590-728.png) |
 | DateMonthSetter | | 日期型 - 月数据设置器 | |
