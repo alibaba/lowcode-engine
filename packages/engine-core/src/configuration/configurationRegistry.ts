@@ -8,7 +8,7 @@ import {
   types,
 } from '@alilc/lowcode-shared';
 import { isUndefined, isObject } from 'lodash-es';
-import { Extensions, Registry } from '../common/registry';
+import { Extensions, Registry } from '../extension/registry';
 import { OVERRIDE_PROPERTY_REGEX, overrideIdentifiersFromKey } from './configuration';
 
 export interface IConfigurationRegistry {
@@ -133,9 +133,9 @@ export const allSettings: {
   patternProperties: StringDictionary<IConfigurationPropertySchema>;
 } = { properties: {}, patternProperties: {} };
 
-export class ConfigurationRegistry implements IConfigurationRegistry {
+export class ConfigurationRegistryImpl implements IConfigurationRegistry {
   private registeredConfigurationDefaults: IConfigurationDefaults[] = [];
-  private configurationDefaultsOverrides: Map<
+  private readonly configurationDefaultsOverrides: Map<
     string,
     {
       configurationDefaultOverrides: IConfigurationDefaultOverride[];
@@ -143,8 +143,8 @@ export class ConfigurationRegistry implements IConfigurationRegistry {
     }
   >;
 
-  private configurationProperties: StringDictionary<IRegisteredConfigurationPropertySchema>;
-  private excludedConfigurationProperties: StringDictionary<IRegisteredConfigurationPropertySchema>;
+  private readonly configurationProperties: StringDictionary<IRegisteredConfigurationPropertySchema>;
+  private readonly excludedConfigurationProperties: StringDictionary<IRegisteredConfigurationPropertySchema>;
   private overrideIdentifiers = new Set<string>();
 
   private propertiesChangeEmitter = new Emitter<{
@@ -645,4 +645,6 @@ function isSameExtension(a?: IExtensionInfo, b?: IExtensionInfo): boolean {
   return a.id === b.id && a.version === b.version;
 }
 
-Registry.add(Extensions.Configuration, new ConfigurationRegistry());
+export const ConfigurationRegistry = new ConfigurationRegistryImpl();
+
+Registry.add(Extensions.Configuration, ConfigurationRegistry);

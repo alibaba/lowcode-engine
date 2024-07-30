@@ -1,6 +1,5 @@
 import {
   createDecorator,
-  Provide,
   type Package,
   type Reference,
   mapPackageToUniqueId,
@@ -22,7 +21,6 @@ export interface IResourceService {
 
 export const IResourceService = createDecorator<IResourceService>('resourceService');
 
-@Provide(IResourceService)
 export class ResourceService implements IResourceService {
   private resourceModel = new ResourceModel();
 

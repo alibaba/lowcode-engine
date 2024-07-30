@@ -2,14 +2,11 @@ import {
   type AnyFunction,
   type UtilDescription,
   createDecorator,
-  Provide,
   type StringDictionary,
 } from '@alilc/lowcode-shared';
 import { isPlainObject } from 'lodash-es';
 import { IPackageManagementService } from './package';
 import { ICodeRuntimeService } from './code-runtime';
-import { ISchemaService } from './schema';
-import { ILifeCycleService, LifecyclePhase } from './lifeCycleService';
 
 export interface IRuntimeUtilService {
   add(utilItem: UtilDescription, force?: boolean): void;
@@ -20,25 +17,18 @@ export interface IRuntimeUtilService {
 
 export const IRuntimeUtilService = createDecorator<IRuntimeUtilService>('rendererUtilService');
 
-@Provide(IRuntimeUtilService)
 export class RuntimeUtilService implements IRuntimeUtilService {
   private utilsMap: Map<string, any> = new Map();
 
   constructor(
+    utils: UtilDescription[] = [],
     @ICodeRuntimeService private codeRuntimeService: ICodeRuntimeService,
     @IPackageManagementService private packageManagementService: IPackageManagementService,
-    @ISchemaService private schemaService: ISchemaService,
-    @ILifeCycleService private lifeCycleService: ILifeCycleService,
   ) {
-    this.lifeCycleService.when(LifecyclePhase.OptionsResolved, () => {
-      this.injectScope();
-    });
-
-    this.schemaService.onChange('utils', (utils = []) => {
-      for (const util of utils) {
-        this.add(util);
-      }
-    });
+    for (const util of utils) {
+      this.add(util);
+    }
+    this.injectScope();
   }
 
   add(utilItem: UtilDescription, force?: boolean): void;

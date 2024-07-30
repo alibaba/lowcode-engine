@@ -10,10 +10,6 @@ export interface AppOptions {
   packages?: Package[];
   plugins?: Plugin[];
   /**
-   * 运行模式
-   */
-  mode?: 'development' | 'production';
-  /**
    * code runtime 设置选项
    */
   codeRuntime?: CodeRuntimeOptions;
@@ -32,5 +28,5 @@ export type RendererApplication<Render = unknown> = {
 
   use(plugin: Plugin): Promise<void>;
 
-  destroy(): Promise<void>;
+  destroy(): void;
 } & Render;

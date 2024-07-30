@@ -1,5 +1,4 @@
-import { Extensions, Registry } from '../../extension/extension';
-import { IWidgetRegistry } from '../widget/widgetRegistry';
+import { WidgetRegistry } from '../widget/widgetRegistry';
 
 export const enum LayoutParts {
   TopBar = 1,
@@ -21,7 +20,7 @@ export interface ILayout {
 
 export class Layout<View> implements ILayout {
   constructor(public mainContainer: HTMLElement) {
-    Registry.as<IWidgetRegistry<View>>(Extensions.Widget).onDidRegister(() => {});
+    WidgetRegistry.onDidRegister(() => {});
   }
 
   registerPart(part: LayoutParts): void {}

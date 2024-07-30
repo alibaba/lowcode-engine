@@ -4,5 +4,9 @@ export * from './resource';
 export * from './command';
 
 // test
-export * from './common/registry';
+export * from './extension/registry';
 export * from './main';
+export * from './keybinding/keybindingRegistry';
+export * from './keybinding/keybindingParser';
+export * from './keybinding/keybindingResolver';
+export * from './keybinding/keybindings';

@@ -1,6 +1,6 @@
 import { type Event, type EventListener, Emitter } from '@alilc/lowcode-shared';
 import { IWidget } from './widget';
-import { Extensions, Registry } from '../../extension/extension';
+import { Extensions, Registry } from '../../extension/registry';
 
 export interface IWidgetRegistry<View> {
   onDidRegister: Event<IWidget<View>[]>;
@@ -12,7 +12,7 @@ export interface IWidgetRegistry<View> {
   getWidgets(): IWidget<View>[];
 }
 
-export class WidgetRegistry<View> implements IWidgetRegistry<View> {
+export class WidgetRegistryImpl<View> implements IWidgetRegistry<View> {
   private _widgets: Map<string, IWidget<View>> = new Map();
 
   private emitter = new Emitter<IWidget<View>[]>();
@@ -34,4 +34,6 @@ export class WidgetRegistry<View> implements IWidgetRegistry<View> {
   }
 }
 
-Registry.add(Extensions.Widget, new WidgetRegistry<any>());
+export const WidgetRegistry = new WidgetRegistryImpl<any>();
+
+Registry.add(Extensions.Widget, WidgetRegistry);

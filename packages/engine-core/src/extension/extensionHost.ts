@@ -1,5 +1,4 @@
-import { type IConfigurationRegistry, type IConfigurationNode } from '../configuration';
-import { Registry, Extensions } from '../common/registry';
+import { ConfigurationRegistry, type IConfigurationNode } from '../configuration';
 import { type ExtensionInitializer, type IExtensionInstance } from './extension';
 import { invariant } from '@alilc/lowcode-shared';
 
@@ -19,9 +18,8 @@ export class ExtensionHost {
     initializer: ExtensionInitializer,
     preferenceConfigurations: IConfigurationNode[],
   ) {
-    const configurationRegistry = Registry.as<IConfigurationRegistry>(Extensions.Configuration);
     this.configurationProperties =
-      configurationRegistry.registerConfigurations(preferenceConfigurations);
+      ConfigurationRegistry.registerConfigurations(preferenceConfigurations);
 
     this.instance = initializer({});
   }

@@ -1,34 +1,17 @@
-import { inject, injectable } from 'inversify';
-import { fluentProvide } from 'inversify-binding-decorators';
+import { type BeanIdentifier, type Constructor, mapDepsToBeanId } from './container';
 
-/**
- * Identifies a service of type `T`.
- */
-export interface ServiceIdentifier<T> {
-  (...args: any[]): void;
-  type: T;
-}
+const idsMap = new Map<string, BeanIdentifier<any>>();
 
-export type Constructor<T = any> = new (...args: any[]) => T;
-
-export function createDecorator<T>(serviceId: string): ServiceIdentifier<T> {
-  const id = <any>(
-    function (target: Constructor, targetKey: string, indexOrPropertyDescriptor: any): any {
-      return inject(serviceId)(target, targetKey, indexOrPropertyDescriptor);
-    }
-  );
-  id.toString = () => serviceId;
-
-  return id;
-}
-
-export const Injectable = injectable;
-
-export function Provide<T>(serviceId: ServiceIdentifier<T>, isSingleTon?: boolean) {
-  const ret = fluentProvide(serviceId.toString());
-
-  if (isSingleTon) {
-    return ret.inSingletonScope().done();
+export function createDecorator<T>(beanId: string): BeanIdentifier<T> {
+  if (idsMap.has(beanId)) {
+    return idsMap.get(beanId)!;
   }
-  return ret.done();
+
+  const id = <any>function (target: Constructor, _: string, indexOrPropertyDescriptor: any): any {
+    return mapDepsToBeanId(id, target, indexOrPropertyDescriptor);
+  };
+  id.toString = () => beanId;
+
+  idsMap.set(beanId, id);
+  return id;
 }

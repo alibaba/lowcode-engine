@@ -1,4 +1,4 @@
-import { type Event, type EventListener, createDecorator, Provide } from '@alilc/lowcode-shared';
+import { type Event, type EventListener, createDecorator } from '@alilc/lowcode-shared';
 
 export interface ITheme {
   type: string;
@@ -14,7 +14,6 @@ export interface IThemeService {
 
 export const IThemeService = createDecorator<IThemeService>('themeService');
 
-@Provide(IThemeService)
 export class ThemeService implements IThemeService {
   private activeTheme: ITheme;
 

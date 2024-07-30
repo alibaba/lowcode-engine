@@ -1,9 +1,10 @@
 import {
-  IBoostsService,
+  IBoostsManager,
   IComponentTreeModelService,
   ILifeCycleService,
   IPackageManagementService,
   ISchemaService,
+  IExtensionHostService,
 } from '@alilc/lowcode-renderer-core';
 import { InstanceAccessor } from '@alilc/lowcode-shared';
 import { createContext, useContext } from 'react';
@@ -16,7 +17,7 @@ export interface IRendererContext {
 
   readonly packageManager: IPackageManagementService;
 
-  readonly boostsManager: IBoostsService;
+  readonly boostsManager: IBoostsManager;
 
   readonly componentTreeModel: IComponentTreeModelService;
 
@@ -27,7 +28,7 @@ export const getRenderInstancesByAccessor = (accessor: InstanceAccessor) => {
   return {
     schema: accessor.get(ISchemaService),
     packageManager: accessor.get(IPackageManagementService),
-    boostsManager: accessor.get(IBoostsService),
+    boostsManager: accessor.get(IExtensionHostService).boostsManager,
     componentTreeModel: accessor.get(IComponentTreeModelService),
     lifeCycle: accessor.get(ILifeCycleService),
   };

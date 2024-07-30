@@ -1,4 +1,4 @@
-import { Provide, createDecorator, EventEmitter, EventDisposable } from '@alilc/lowcode-shared';
+import { createDecorator, Barrier } from '@alilc/lowcode-shared';
 
 /**
  * 生命周期阶段
@@ -28,13 +28,15 @@ export interface ILifeCycleService {
    */
   phase: LifecyclePhase;
 
-  setPhase(phase: LifecyclePhase): Promise<void>;
+  setPhase(phase: LifecyclePhase): void;
 
   /**
    * Returns a promise that resolves when a certain lifecycle phase
    * has started.
    */
-  when(phase: LifecyclePhase, listener: () => void | Promise<void>): EventDisposable;
+  when(phase: LifecyclePhase): Promise<void>;
+
+  onWillDestory(): void;
 }
 
 export function LifecyclePhaseToString(phase: LifecyclePhase): string {
@@ -52,9 +54,8 @@ export function LifecyclePhaseToString(phase: LifecyclePhase): string {
 
 export const ILifeCycleService = createDecorator<ILifeCycleService>('lifeCycleService');
 
-@Provide(ILifeCycleService)
 export class LifeCycleService implements ILifeCycleService {
-  private readonly phaseWhen = new EventEmitter();
+  private readonly phaseWhen = new Map<LifecyclePhase, Barrier>();
 
   private _phase = LifecyclePhase.Starting;
 
@@ -62,7 +63,7 @@ export class LifeCycleService implements ILifeCycleService {
     return this._phase;
   }
 
-  async setPhase(value: LifecyclePhase) {
+  setPhase(value: LifecyclePhase) {
     if (value < this._phase) {
       throw new Error('Lifecycle cannot go backwards');
     }
@@ -73,10 +74,26 @@ export class LifeCycleService implements ILifeCycleService {
 
     this._phase = value;
 
-    await this.phaseWhen.emit(LifecyclePhaseToString(value));
+    const barrier = this.phaseWhen.get(this._phase);
+    if (barrier) {
+      barrier.open();
+      this.phaseWhen.delete(this._phase);
+    }
   }
 
-  when(phase: LifecyclePhase, listener: () => void | Promise<void>) {
-    return this.phaseWhen.on(LifecyclePhaseToString(phase), listener);
+  async when(phase: LifecyclePhase): Promise<void> {
+    if (phase <= this._phase) {
+      return;
+    }
+
+    let barrier = this.phaseWhen.get(phase);
+    if (!barrier) {
+      barrier = new Barrier();
+      this.phaseWhen.set(phase, barrier);
+    }
+
+    await barrier.wait();
   }
+
+  onWillDestory(): void {}
 }

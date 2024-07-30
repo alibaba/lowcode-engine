@@ -9,7 +9,7 @@ import {
   Iterable,
 } from '@alilc/lowcode-shared';
 import { ICommand, ICommandHandler } from './command';
-import { Extensions, Registry } from '../common/registry';
+import { Extensions, Registry } from '../extension/registry';
 import { ICommandService } from './commandService';
 
 export type ICommandsMap = Map<string, ICommand>;
@@ -26,7 +26,7 @@ export interface ICommandRegistry {
   getCommands(): ICommandsMap;
 }
 
-class CommandsRegistry implements ICommandRegistry {
+class CommandsRegistryImpl implements ICommandRegistry {
   private readonly _commands = new Map<string, LinkedList<ICommand>>();
 
   private readonly _didRegisterCommandEmitter = new Emitter<string>();
@@ -111,6 +111,6 @@ class CommandsRegistry implements ICommandRegistry {
   }
 }
 
-const commandsRegistry = new CommandsRegistry();
+export const CommandsRegistry = new CommandsRegistryImpl();
 
-Registry.add(Extensions.Command, commandsRegistry);
+Registry.add(Extensions.Command, CommandsRegistry);

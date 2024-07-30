@@ -6,11 +6,11 @@ import {
   type IOverrides,
 } from './configurationModel';
 import {
+  ConfigurationRegistry,
   type IConfigurationPropertySchema,
   type IConfigurationRegistry,
   type IRegisteredConfigurationPropertySchema,
 } from './configurationRegistry';
-import { Registry, Extensions } from '../common/registry';
 import { isEqual, isNil, isPlainObject, get as lodasgGet } from 'lodash-es';
 import {
   IInspectValue,
@@ -37,8 +37,8 @@ export class DefaultConfiguration {
 
   initialize(): ConfigurationModel {
     this.resetConfigurationModel();
-    Registry.as<IConfigurationRegistry>(Extensions.Configuration).onDidUpdateConfiguration(
-      ({ properties }) => this.onDidUpdateConfiguration([...properties]),
+    ConfigurationRegistry.onDidUpdateConfiguration(({ properties }) =>
+      this.onDidUpdateConfiguration([...properties]),
     );
 
     return this.configurationModel;
@@ -56,19 +56,14 @@ export class DefaultConfiguration {
   }
 
   private onDidUpdateConfiguration(properties: string[]): void {
-    this.updateConfigurationModel(
-      properties,
-      Registry.as<IConfigurationRegistry>(Extensions.Configuration).getConfigurationProperties(),
-    );
+    this.updateConfigurationModel(properties, ConfigurationRegistry.getConfigurationProperties());
     this.emitter.emit({ defaults: this.configurationModel, properties });
   }
 
   private resetConfigurationModel(): void {
     this._configurationModel = ConfigurationModel.createEmptyModel();
 
-    const properties = Registry.as<IConfigurationRegistry>(
-      Extensions.Configuration,
-    ).getConfigurationProperties();
+    const properties = ConfigurationRegistry.getConfigurationProperties();
 
     this.updateConfigurationModel(Object.keys(properties), properties);
   }
@@ -156,9 +151,7 @@ class ConfigurationModelParser {
     raw: any,
     options?: ConfigurationParseOptions,
   ): IConfigurationModel & { hasExcludedProperties?: boolean } {
-    const configurationProperties = Registry.as<IConfigurationRegistry>(
-      Extensions.Configuration,
-    ).getConfigurationProperties();
+    const configurationProperties = ConfigurationRegistry.getConfigurationProperties();
     const filtered = this.filter(raw, configurationProperties, true, options);
 
     raw = filtered.raw;

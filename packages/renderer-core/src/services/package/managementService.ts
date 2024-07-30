@@ -4,16 +4,15 @@ import {
   type ProCodeComponent,
   type ComponentMap,
   createDecorator,
-  Provide,
   specTypes,
   exportByReference,
   mapPackageToUniqueId,
   type Reference,
+  Disposable,
 } from '@alilc/lowcode-shared';
-import { get as lodashGet } from 'lodash-es';
-import { PackageLoader } from './loader';
+import { get as lodashGet, differenceWith, isEqual } from 'lodash-es';
+import { PackageLoader } from './package';
 import { ISchemaService } from '../schema';
-import { ILifeCycleService } from '../lifeCycleService';
 
 export interface NormalizedPackage {
   id: string;
@@ -50,8 +49,7 @@ export const IPackageManagementService = createDecorator<IPackageManagementServi
   'packageManagementService',
 );
 
-@Provide(IPackageManagementService)
-export class PackageManagementService implements IPackageManagementService {
+export class PackageManagementService extends Disposable implements IPackageManagementService {
   private componentsRecord: Record<string, any> = {};
 
   private packageStore: Map<string, any> = ((window as any).__PACKAGE_STORE__ ??= new Map());
@@ -62,13 +60,18 @@ export class PackageManagementService implements IPackageManagementService {
 
   private packageLoaders: PackageLoader[] = [];
 
-  constructor(
-    @ISchemaService private schemaService: ISchemaService,
-    @ILifeCycleService private lifeCycleService: ILifeCycleService,
-  ) {
-    this.schemaService.onChange('componentsMap', (componentsMaps) => {
-      this.resolveComponentMaps(componentsMaps);
-    });
+  constructor(@ISchemaService private schemaService: ISchemaService) {
+    super();
+
+    this.addDispose(
+      this.schemaService.onSchemaUpdate(({ key, previous, data }) => {
+        if (key === 'componentsMap') {
+          // todo: add remove ...
+          const diff = differenceWith(data, previous, isEqual);
+          if (diff.length > 0) this.resolveComponentMaps(diff);
+        }
+      }),
+    );
   }
 
   async loadPackages(packages: Package[]) {

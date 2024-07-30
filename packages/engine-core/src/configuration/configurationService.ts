@@ -1,10 +1,4 @@
-import {
-  createDecorator,
-  Emitter,
-  Provide,
-  type Event,
-  type EventListener,
-} from '@alilc/lowcode-shared';
+import { createDecorator, Emitter, type Event, type EventListener } from '@alilc/lowcode-shared';
 import {
   Configuration,
   DefaultConfiguration,
@@ -69,7 +63,6 @@ export interface IConfigurationService {
 
 export const IConfigurationService = createDecorator<IConfigurationService>('configurationService');
 
-@Provide(IConfigurationService)
 export class ConfigurationService implements IConfigurationService {
   private configuration: Configuration;
   private readonly defaultConfiguration: DefaultConfiguration;

@@ -1,10 +1,14 @@
-import { createDecorator, invariant, Provide, type StringDictionary } from '@alilc/lowcode-shared';
+import {
+  createDecorator,
+  invariant,
+  Disposable,
+  type StringDictionary,
+} from '@alilc/lowcode-shared';
 import { type ICodeRuntime, type CodeRuntimeOptions, CodeRuntime } from './codeRuntime';
+import { ISchemaService } from '../schema';
 
 export interface ICodeRuntimeService {
   readonly rootRuntime: ICodeRuntime;
-
-  initialize(options: CodeRuntimeOptions): void;
 
   createCodeRuntime<T extends StringDictionary = StringDictionary>(
     options?: CodeRuntimeOptions<T>,
@@ -13,12 +17,23 @@ export interface ICodeRuntimeService {
 
 export const ICodeRuntimeService = createDecorator<ICodeRuntimeService>('codeRuntimeService');
 
-@Provide(ICodeRuntimeService)
-export class CodeRuntimeService implements ICodeRuntimeService {
+export class CodeRuntimeService extends Disposable implements ICodeRuntimeService {
   rootRuntime: ICodeRuntime;
 
-  initialize(options?: CodeRuntimeOptions) {
+  constructor(
+    options: CodeRuntimeOptions = {},
+    @ISchemaService private schemaService: ISchemaService,
+  ) {
+    super();
     this.rootRuntime = new CodeRuntime(options);
+
+    this.addDispose(
+      this.schemaService.onSchemaUpdate(({ key, data }) => {
+        if (key === 'constants') {
+          this.rootRuntime.getScope().set('constants', data);
+        }
+      }),
+    );
   }
 
   createCodeRuntime<T extends StringDictionary = StringDictionary>(

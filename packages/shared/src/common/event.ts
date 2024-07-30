@@ -1,132 +1,59 @@
-import { Hookable, type HookKeys } from 'hookable';
+import { Disposable, IDisposable, toDisposable } from './disposable';
 
-type ArrayT<T> = T extends any[] ? T : [T];
+export type Event<T> = (listener: (arg: T, thisArg?: any) => any) => IDisposable;
 
-export type Event<T = any> = (listener: EventListener<T>) => EventDisposable;
-export type EventListener<T = any> = (...arguments_: ArrayT<T>) => Promise<void> | void;
-export type EventDisposable = () => void;
+export class Observable<T> {
+  private _isDisposed = false;
 
-export interface IEmitter<T = any> {
-  on: Event<T>;
-  emit(...args: ArrayT<T>): void;
-  emitAsync(...args: ArrayT<T>): Promise<void>;
-  clear(): void;
-}
+  private _event?: Event<T>;
+  private _listeners?: Set<(arg: T) => void>;
 
-export class Emitter<T = any[]> implements IEmitter<T> {
-  private events: EventListener<T>[] = [];
+  dispose(): void {
+    if (this._isDisposed) return;
 
-  on(fn: EventListener<T>): EventDisposable {
-    this.events.push(fn);
-
-    return () => {
-      this.events = this.events.filter((e) => e !== fn);
-    };
+    this._listeners?.clear();
+    this._listeners = undefined;
+    this._event = undefined;
+    this._isDisposed = true;
   }
 
-  emit(...args: ArrayT<T>) {
-    for (const event of this.events) {
-      event.call(null, ...args);
+  notify(arg: T): void {
+    if (this._isDisposed) return;
+
+    this._listeners?.forEach((listener) => listener(arg));
+  }
+
+  /**
+   * For the public to allow to subscribe to events from this Observable
+   */
+  get subscribe(): Event<T> {
+    if (!this._event) {
+      this._event = (listener: (arg: T) => void, thisArg?: any) => {
+        if (this._isDisposed) {
+          return Disposable.Noop;
+        }
+
+        if (thisArg) {
+          listener = listener.bind(thisArg);
+        }
+
+        if (!this._listeners) this._listeners = new Set();
+        this._listeners.add(listener);
+
+        return toDisposable(() => {
+          this._removeListener(listener);
+        });
+      };
     }
+
+    return this._event;
   }
 
-  async emitAsync(...args: ArrayT<T>) {
-    for (const event of this.events) {
-      await event.call(null, ...args);
+  private _removeListener(listener: (arg: T) => void) {
+    if (this._isDisposed) return;
+
+    if (this._listeners?.has(listener)) {
+      this._listeners.delete(listener);
     }
-  }
-
-  clear() {
-    this.events.length = 0;
-  }
-}
-
-export interface IEventEmitter<
-  EventT extends Record<string, any> = Record<string, EventListener>,
-  EventNameT extends HookKeys<EventT> = HookKeys<EventT>,
-> {
-  /**
-   * 监听事件
-   * add monitor to a event
-   * @param event 事件名称
-   * @param listener 事件回调
-   */
-  on(event: EventNameT, listener: EventT[EventNameT]): EventDisposable;
-
-  /**
-   * 添加只运行一次的监听事件
-   * @param event 事件名称
-   * @param listener 事件回调
-   */
-  once(event: EventNameT, listener: EventT[EventNameT]): void;
-
-  /**
-   * 触发事件
-   * emit a message for a event
-   * @param event 事件名称
-   * @param args 事件参数
-   */
-  emit(event: EventNameT, ...args: any): Promise<any>;
-
-  /**
-   * 取消监听事件
-   * cancel a monitor from a event
-   * @param event 事件名称
-   * @param listener 事件回调
-   */
-  off(event: EventNameT, listener: EventT[EventNameT]): void;
-
-  /**
-   * 监听事件，会在其他回调函数之前执行
-   * @param event 事件名称
-   * @param listener 事件回调
-   */
-  prependListener(event: EventNameT, listener: EventT[EventNameT]): EventDisposable;
-
-  /**
-   * 清除所有事件监听
-   */
-  removeAll(): void;
-}
-
-export class EventEmitter<
-  EventT extends Record<string, any> = Record<string, EventListener<any[]>>,
-  EventNameT extends HookKeys<EventT> = HookKeys<EventT>,
-> implements IEventEmitter<EventT, EventNameT>
-{
-  private namespace: string | undefined;
-  private hooks = new Hookable<EventT, EventNameT>();
-
-  constructor(namespace?: string) {
-    this.namespace = namespace;
-  }
-
-  on(event: EventNameT, listener: EventT[EventNameT]): EventDisposable {
-    return this.hooks.hook(event, listener);
-  }
-
-  once(event: EventNameT, listener: EventT[EventNameT]): void {
-    this.hooks.hookOnce(event, listener);
-  }
-
-  async emit(event: EventNameT, ...args: any) {
-    return this.hooks.callHook(event, ...args);
-  }
-
-  off(event: EventNameT, listener: EventT[EventNameT]): void {
-    this.hooks.removeHook(event, listener);
-  }
-
-  /**
-   * 监听事件，会在其他回调函数之前执行
-   * @param event 事件名称
-   * @param listener 事件回调
-   */
-  prependListener(event: EventNameT, listener: EventT[EventNameT]): EventDisposable {
-    return this.hooks.hook(`${event}:before` as EventNameT, listener);
-  }
-
-  removeAll(): void {
-    this.hooks.removeAllHooks();
   }
 }

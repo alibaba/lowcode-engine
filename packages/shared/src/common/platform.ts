@@ -32,6 +32,13 @@ export function platformToString(platform: PlatformEnum): PlatformName {
   }
 }
 
+export const enum OperatingSystem {
+  Windows = 1,
+  Macintosh = 2,
+  Linux = 3
+}
+export const OS = (isMacintosh || isIOS ? OperatingSystem.Macintosh : (isWindows ? OperatingSystem.Windows : OperatingSystem.Linux));
+
 export let platform: PlatformEnum = PlatformEnum.Unknown;
 if (isMacintosh) {
   platform = PlatformEnum.Mac;

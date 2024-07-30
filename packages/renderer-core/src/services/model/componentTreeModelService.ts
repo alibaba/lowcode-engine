@@ -1,6 +1,5 @@
 import {
   createDecorator,
-  Provide,
   invariant,
   type ComponentTree,
   type StringDictionary,
@@ -33,7 +32,6 @@ export const IComponentTreeModelService = createDecorator<IComponentTreeModelSer
   'componentTreeModelService',
 );
 
-@Provide(IComponentTreeModelService)
 export class ComponentTreeModelService implements IComponentTreeModelService {
   constructor(
     @ISchemaService private schemaService: ISchemaService,

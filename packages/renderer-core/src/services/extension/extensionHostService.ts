@@ -1,102 +1,112 @@
-import { createDecorator, Provide, EventEmitter } from '@alilc/lowcode-shared';
+import { createDecorator, CyclicDependencyError, Disposable, Graph } from '@alilc/lowcode-shared';
 import { type Plugin, type PluginContext } from './plugin';
-import { IBoostsService } from './boosts';
+import { BoostsManager } from './boosts';
 import { IPackageManagementService } from '../package';
 import { ISchemaService } from '../schema';
 import { ILifeCycleService } from '../lifeCycleService';
-import { KeyValueStore } from '../../utils/store';
-
-interface IPluginRuntime extends Plugin {
-  status: 'setup' | 'ready';
-}
+import { ICodeRuntimeService } from '../code-runtime';
+import { IRuntimeIntlService } from '../runtimeIntlService';
+import { IRuntimeUtilService } from '../runtimeUtilService';
 
 export interface IExtensionHostService {
+  readonly boostsManager: BoostsManager;
+
   registerPlugin(plugin: Plugin | Plugin[]): Promise<void>;
 
   getPlugin(name: string): Plugin | undefined;
-
-  dispose(): Promise<void>;
 }
 
 export const IExtensionHostService =
   createDecorator<IExtensionHostService>('pluginManagementService');
 
-@Provide(IExtensionHostService)
-export class ExtensionHostService implements IExtensionHostService {
-  private pluginRuntimes: IPluginRuntime[] = [];
+export class ExtensionHostService extends Disposable implements IExtensionHostService {
+  boostsManager: BoostsManager;
 
-  private eventEmitter: EventEmitter;
-
-  private pluginSetupContext: PluginContext;
+  private _activePlugins = new Set<string>();
+  private _pluginStore = new Map<string, Plugin>();
+  private _pluginDependencyGraph = new Graph<string>((name) => name);
+  private _pluginSetupContext: PluginContext;
 
   constructor(
-    @IPackageManagementService private packageManagementService: IPackageManagementService,
-    @IBoostsService private boostsService: IBoostsService,
-    @ISchemaService private schemaService: ISchemaService,
-    @ILifeCycleService private lifeCycleService: ILifeCycleService,
+    lifeCycleService: ILifeCycleService,
+    packageManagementService: IPackageManagementService,
+    schemaService: ISchemaService,
+    codeRuntimeService: ICodeRuntimeService,
+    runtimeIntlService: IRuntimeIntlService,
+    runtimeUtilService: IRuntimeUtilService,
   ) {
-    this.eventEmitter = new EventEmitter('ExtensionHost');
-    this.pluginSetupContext = {
-      eventEmitter: this.eventEmitter,
-      globalState: new KeyValueStore(),
-      boosts: this.boostsService.toExpose(),
-      schema: this.schemaService,
-      packageManager: this.packageManagementService,
+    super();
 
-      whenLifeCylePhaseChange: (phase, listener) => {
-        return this.lifeCycleService.when(phase, listener);
+    this.boostsManager = new BoostsManager(
+      codeRuntimeService,
+      runtimeIntlService,
+      runtimeUtilService,
+    );
+
+    this._pluginSetupContext = {
+      globalState: new Map(),
+      boosts: this.boostsManager.toExpose(),
+      schema: schemaService,
+      packageManager: packageManagementService,
+
+      whenLifeCylePhaseChange: (phase) => {
+        return lifeCycleService.when(phase);
       },
     };
   }
 
   async registerPlugin(plugins: Plugin | Plugin[]) {
-    plugins = Array.isArray(plugins) ? plugins : [plugins];
+    const items = (Array.isArray(plugins) ? plugins : [plugins]).filter(
+      (plugin) => !this._pluginStore.has(plugin.name),
+    );
 
+    for (const item of items) {
+      this._pluginStore.set(item.name, item);
+    }
+
+    await this._doRegisterPlugins(items);
+  }
+
+  private async _doRegisterPlugins(plugins: Plugin[]) {
     for (const plugin of plugins) {
-      if (this.pluginRuntimes.find((item) => item.name === plugin.name)) {
-        console.warn(`${plugin.name} 插件已注册`);
-        continue;
+      this._pluginDependencyGraph.lookupOrInsertNode(plugin.name);
+
+      if (plugin.dependsOn) {
+        for (const dependency of plugin.dependsOn) {
+          this._pluginDependencyGraph.insertEdge(plugin.name, dependency);
+        }
+      }
+    }
+
+    while (true) {
+      const roots = this._pluginDependencyGraph.roots();
+
+      if (roots.length === 0 || roots.every((node) => !this._pluginStore.has(node.data))) {
+        if (this._pluginDependencyGraph.isEmpty()) {
+          throw new CyclicDependencyError(this._pluginDependencyGraph);
+        }
+        break;
       }
 
-      const pluginRuntime = plugin as IPluginRuntime;
-
-      pluginRuntime.status = 'ready';
-      this.pluginRuntimes.push(pluginRuntime);
-
-      await this.doSetupPlugin(pluginRuntime);
+      for (const { data } of roots) {
+        const plugin = this._pluginStore.get(data);
+        if (plugin) {
+          await this._doSetupPlugin(plugin);
+          this._pluginDependencyGraph.removeNode(plugin.name);
+        }
+      }
     }
   }
 
-  private async doSetupPlugin(pluginRuntime: IPluginRuntime) {
-    if (pluginRuntime.status === 'setup') return;
+  private async _doSetupPlugin(plugin: Plugin) {
+    if (this._activePlugins.has(plugin.name)) return;
 
-    const isSetup = (name: string) => {
-      const setupPlugins = this.pluginRuntimes.filter((item) => item.status === 'setup');
-      return setupPlugins.some((p) => p.name === name);
-    };
-
-    if (pluginRuntime.dependsOn?.some((dep) => !isSetup(dep))) {
-      return;
-    }
-
-    await pluginRuntime.setup(this.pluginSetupContext);
-    pluginRuntime.status = 'setup';
-
-    // 遍历未安装的插件 寻找 dependsOn 的插件已安装完的插件进行安装
-    const readyPlugins = this.pluginRuntimes.filter((item) => item.status === 'ready');
-    const readyPlugin = readyPlugins.find((item) => item.dependsOn?.every((dep) => isSetup(dep)));
-    if (readyPlugin) {
-      await this.doSetupPlugin(readyPlugin);
-    }
+    await plugin.setup(this._pluginSetupContext);
+    this._activePlugins.add(plugin.name);
+    this.addDispose(plugin);
   }
 
   getPlugin(name: string): Plugin | undefined {
-    return this.pluginRuntimes.find((item) => item.name === name);
-  }
-
-  async dispose(): Promise<void> {
-    for (const plugin of this.pluginRuntimes) {
-      await plugin.destory?.();
-    }
+    return this._pluginStore.get(name);
   }
 }

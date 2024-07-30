@@ -1,8 +1,8 @@
-import { signal, type StringDictionary, type InstanceStateApi } from '@alilc/lowcode-shared';
+import { Signals, type StringDictionary, type InstanceStateApi } from '@alilc/lowcode-shared';
 import { isPlainObject } from 'lodash-es';
 
 export function reactiveStateFactory(initState: StringDictionary): InstanceStateApi {
-  const proxyState = signal(initState);
+  const proxyState = Signals.signal(initState);
 
   return {
     get state() {

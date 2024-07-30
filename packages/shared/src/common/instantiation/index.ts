@@ -1,2 +1,4 @@
 export * from './instantiationService';
-export * from './decorators';
+export { createDecorator } from './decorators';
+export { CtorDescriptor, BeanContainer } from './container';
+export type { Constructor } from './container';

@@ -41,5 +41,6 @@ export const Registry: IRegistry = new RegistryImpl();
 export const Extensions = {
   Configuration: 'base.contributions.configuration',
   Command: 'base.contributions.command',
+  Keybinding: 'base.contributions.keybinding',
   Widget: 'base.contributions.widget',
 };

@@ -1,6 +1,6 @@
 /* --------------- api -------------------- */
 export { createRenderer } from './main';
-export { IBoostsService, IExtensionHostService } from './services/extension';
+export { IExtensionHostService } from './services/extension';
 export { definePackageLoader, IPackageManagementService } from './services/package';
 export { LifecyclePhase, ILifeCycleService } from './services/lifeCycleService';
 export { IComponentTreeModelService } from './services/model';

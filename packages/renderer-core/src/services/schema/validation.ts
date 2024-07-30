@@ -38,12 +38,12 @@ const SCHEMA_VALIDATIONS_OPTIONS: Partial<ValidOptionRecord> = {
   },
 };
 
-export function schemaValidation<K extends keyof Project>(key: K, value: Project[K]) {
+export function schemaValidation(key: string, value: unknown) {
   if (!SCHEMA_KEYS.includes(key)) {
     return `schema 的字段名必须是${JSON.stringify(SCHEMA_KEYS)}中的一个`;
   }
 
-  const validOption = SCHEMA_VALIDATIONS_OPTIONS[key];
+  const validOption = (SCHEMA_VALIDATIONS_OPTIONS as any)[key];
 
   if (validOption) {
     const result = validOption.valid(value);

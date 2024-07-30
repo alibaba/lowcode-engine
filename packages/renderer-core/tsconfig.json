@@ -3,5 +3,4 @@
   "compilerOptions": {
     "outDir": "dist"
   },
-  "include": ["src", "../shared/src/utils/node.ts"]
 }

@@ -1,15 +1,12 @@
 import {
   createDecorator,
-  Provide,
   Intl,
   type IntlApi,
   type Locale,
   type Translations,
-  Platform,
+  type LocaleTranslationsMap,
 } from '@alilc/lowcode-shared';
-import { ILifeCycleService, LifecyclePhase } from './lifeCycleService';
 import { ICodeRuntimeService } from './code-runtime';
-import { ISchemaService } from './schema';
 
 export interface MessageDescriptor {
   key: string;
@@ -18,8 +15,6 @@ export interface MessageDescriptor {
 }
 
 export interface IRuntimeIntlService {
-  locale: string;
-
   localize(descriptor: MessageDescriptor): string;
 
   setLocale(locale: Locale): void;
@@ -31,32 +26,21 @@ export interface IRuntimeIntlService {
 
 export const IRuntimeIntlService = createDecorator<IRuntimeIntlService>('IRuntimeIntlService');
 
-@Provide(IRuntimeIntlService)
 export class RuntimeIntlService implements IRuntimeIntlService {
   private intl: Intl = new Intl();
 
-  public locale: string = Platform.platformLocale;
-
   constructor(
-    @ILifeCycleService private lifeCycleService: ILifeCycleService,
+    defaultLocale: string | undefined,
+    i18nTranslations: LocaleTranslationsMap,
     @ICodeRuntimeService private codeRuntimeService: ICodeRuntimeService,
-    @ISchemaService private schemaService: ISchemaService,
   ) {
-    this.lifeCycleService.when(LifecyclePhase.OptionsResolved, () => {
-      const config = this.schemaService.get('config');
-      const i18nTranslations = this.schemaService.get('i18n');
+    if (defaultLocale) this.setLocale(defaultLocale);
 
-      if (config?.defaultLocale) {
-        this.setLocale(config.defaultLocale);
-      }
-      if (i18nTranslations) {
-        Object.keys(i18nTranslations).forEach((key) => {
-          this.addTranslations(key, i18nTranslations[key]);
-        });
-      }
+    for (const key of Object.keys(i18nTranslations)) {
+      this.addTranslations(key, i18nTranslations[key]);
+    }
 
-      this.injectScope();
-    });
+    this._injectScope();
   }
 
   localize(descriptor: MessageDescriptor): string {
@@ -83,7 +67,7 @@ export class RuntimeIntlService implements IRuntimeIntlService {
     this.intl.addTranslations(locale, translations);
   }
 
-  private injectScope(): void {
+  private _injectScope(): void {
     const exposed: IntlApi = {
       i18n: (key, params) => {
         return this.localize({ key, params });

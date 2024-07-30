@@ -1,4 +1,4 @@
-import { createDecorator, Provide } from '@alilc/lowcode-shared';
+import { createDecorator } from '@alilc/lowcode-shared';
 import { ExtensionManagement, type IExtensionRegisterOptions } from './extensionManagement';
 import { type IFunctionExtension } from './extension';
 import { ExtensionHost } from './extensionHost';
@@ -15,7 +15,6 @@ export interface IExtensionService {
 
 export const IExtensionService = createDecorator<IExtensionService>('extensionService');
 
-@Provide(IExtensionService)
 export class ExtensionService implements IExtensionService {
   private extensionManagement = new ExtensionManagement();
 

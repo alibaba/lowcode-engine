@@ -3,8 +3,7 @@ import {
   type AnyFunction,
   type StringDictionary,
   specTypes,
-  computed,
-  watch,
+  Signals,
   invariant,
 } from '@alilc/lowcode-shared';
 import { useRef } from 'react';
@@ -60,10 +59,10 @@ function createReactiveStore<Snapshot = StringDictionary>(
   };
 
   if (getter) {
-    const computedValue = computed<any>(() => getter(target));
+    const computedValue = Signals.computed<any>(() => getter(target));
 
     cleanups.push(
-      watch(
+      Signals.watch(
         computedValue,
         (newValue) => {
           Promise.resolve().then(() => {
@@ -76,8 +75,8 @@ function createReactiveStore<Snapshot = StringDictionary>(
     );
   } else if (valueGetter) {
     const initValue = mapValue(target, filter, (node: any, paths) => {
-      const computedValue = computed(() => valueGetter(node));
-      const unwatch = watch(computedValue, (newValue) => {
+      const computedValue = Signals.computed(() => valueGetter(node));
+      const unwatch = Signals.watch(computedValue, (newValue) => {
         waitPathToSetValueMap.set(paths, newValue);
 
         if (!isFlushPending && !isFlushing) {

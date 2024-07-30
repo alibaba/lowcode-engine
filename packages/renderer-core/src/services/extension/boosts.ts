@@ -1,4 +1,4 @@
-import { createDecorator, Provide, type StringDictionary } from '@alilc/lowcode-shared';
+import { type StringDictionary } from '@alilc/lowcode-shared';
 import { isObject } from 'lodash-es';
 import { ICodeRuntime, ICodeRuntimeService } from '../code-runtime';
 import { IRuntimeUtilService } from '../runtimeUtilService';
@@ -24,17 +24,14 @@ export interface IBoostsApi {
 /**
  * 提供了与运行时交互的接口
  */
-export interface IBoostsService {
+export interface IBoostsManager {
   extend(name: string, value: any, force?: boolean): void;
   extend(value: StringDictionary, force?: boolean): void;
 
   toExpose<Extends>(): IBoosts<Extends>;
 }
 
-export const IBoostsService = createDecorator<IBoostsService>('boostsService');
-
-@Provide(IBoostsService)
-export class BoostsService implements IBoostsService {
+export class BoostsManager implements IBoostsManager {
   private builtInApis: IBoostsApi;
 
   private extendsValue: StringDictionary = {};
@@ -42,16 +39,16 @@ export class BoostsService implements IBoostsService {
   private _expose: any;
 
   constructor(
-    @ICodeRuntimeService codeRuntimeService: ICodeRuntimeService,
-    @IRuntimeIntlService private runtimeIntlService: IRuntimeIntlService,
-    @IRuntimeUtilService private runtimeUtilService: IRuntimeUtilService,
+    codeRuntimeService: ICodeRuntimeService,
+    runtimeIntlService: IRuntimeIntlService,
+    runtimeUtilService: IRuntimeUtilService,
   ) {
     this.builtInApis = {
       get codeRuntime() {
         return codeRuntimeService.rootRuntime;
       },
-      intl: this.runtimeIntlService,
-      util: this.runtimeUtilService,
+      intl: runtimeIntlService,
+      util: runtimeUtilService,
       temporaryUse: (name, value) => {
         this.extend(name, value);
       },

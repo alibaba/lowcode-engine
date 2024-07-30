@@ -1,10 +1,16 @@
-import * as Platform from './platform';
+import * as Events from './event';
+import * as Signals from './signals';
 
-export { Platform };
+export { Events, Signals };
 
-export * from './event';
+export * from './platform';
 export * from './logger';
 export * from './intl';
 export * from './instantiation';
-export * from './signals';
+
+export * from './keyCodes';
+export * from './errors';
+export * from './disposable';
+
 export * from './linkedList';
+export * from './graph';

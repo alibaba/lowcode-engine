@@ -37,7 +37,7 @@ export class ExtensionManagement {
   ): Promise<void> {
     if (!this.validateExtension(extension, override)) return;
 
-    const metadata = extension.meta ?? {};
+    const metadata = extension.metadata ?? {};
     const host = new ExtensionHost(
       extension.name,
       extension,

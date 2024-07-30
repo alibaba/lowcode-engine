@@ -1,6 +1,5 @@
-import { createDecorator, Provide, IInstantiationService } from '@alilc/lowcode-shared';
-import { Registry, Extensions } from '../common/registry';
-import { ICommandRegistry } from './commandRegistry';
+import { createDecorator, IInstantiationService } from '@alilc/lowcode-shared';
+import { CommandsRegistry } from './commandRegistry';
 
 export interface ICommandService {
   executeCommand<T = any>(commandId: string, ...args: any[]): Promise<T | undefined>;
@@ -8,7 +7,6 @@ export interface ICommandService {
 
 export const ICommandService = createDecorator<ICommandService>('commandService');
 
-@Provide(ICommandService)
 export class CommandService implements ICommandService {
   constructor(@IInstantiationService private instantiationService: IInstantiationService) {}
 
@@ -17,7 +15,7 @@ export class CommandService implements ICommandService {
   }
 
   private tryExecuteCommand(id: string, args: any[]): Promise<any> {
-    const command = Registry.as<ICommandRegistry>(Extensions.Command).getCommand(id);
+    const command = CommandsRegistry.getCommand(id);
     if (!command) {
       return Promise.reject(new Error(`command '${id}' not found`));
     }

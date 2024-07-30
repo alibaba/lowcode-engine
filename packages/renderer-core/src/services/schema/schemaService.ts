@@ -1,85 +1,63 @@
-import {
-  type Project,
-  createDecorator,
-  Provide,
-  EventEmitter,
-  type EventDisposable,
-} from '@alilc/lowcode-shared';
-import { isObject } from 'lodash-es';
+import { Disposable, type Project, createDecorator, Events } from '@alilc/lowcode-shared';
+import { isObject, isEqual, get as lodashGet, set as lodashSet } from 'lodash-es';
 import { schemaValidation } from './validation';
-import { ILifeCycleService, LifecyclePhase } from '../lifeCycleService';
-import { ICodeRuntimeService } from '../code-runtime';
-import { type IStore, KeyValueStore } from '../../utils/store';
 
 export interface NormalizedSchema extends Project {}
 
 export type NormalizedSchemaKey = keyof NormalizedSchema;
 
+export type SchemaUpdateEvent = { key: string; previous: any; data: any };
+
 export interface ISchemaService {
-  initialize(schema: Project): void;
+  readonly onSchemaUpdate: Events.Event<SchemaUpdateEvent>;
 
-  get<K extends NormalizedSchemaKey>(key: K): NormalizedSchema[K];
+  get<T>(key: string): T | undefined;
+  get<T>(key: string, defaultValue?: T): T;
 
-  set<K extends NormalizedSchemaKey>(key: K, value: NormalizedSchema[K]): Promise<void>;
-
-  onChange<K extends NormalizedSchemaKey>(
-    key: K,
-    listener: (v: NormalizedSchema[K]) => void,
-  ): EventDisposable;
+  set(key: string, value: any): void;
 }
 
 export const ISchemaService = createDecorator<ISchemaService>('schemaService');
 
-@Provide(ISchemaService)
-export class SchemaService implements ISchemaService {
-  private store: IStore<NormalizedSchema, NormalizedSchemaKey> = new KeyValueStore<
-    NormalizedSchema,
-    NormalizedSchemaKey
-  >({
-    setterValidation: schemaValidation,
-  });
+export class SchemaService extends Disposable implements ISchemaService {
+  private store: NormalizedSchema;
 
-  private notifyEmiiter = new EventEmitter();
+  private _observer = this.addDispose(new Events.Observable<SchemaUpdateEvent>());
 
-  constructor(
-    @ILifeCycleService private lifeCycleService: ILifeCycleService,
-    @ICodeRuntimeService private codeRuntimeService: ICodeRuntimeService,
-  ) {
-    this.onChange('constants', (value = {}) => {
-      this.codeRuntimeService.rootRuntime.getScope().set('constants', value);
-    });
+  readonly onSchemaUpdate = this._observer.subscribe;
 
-    this.lifeCycleService.when(LifecyclePhase.Destroying, () => {
-      this.notifyEmiiter.removeAll();
-    });
-  }
+  constructor(schema: unknown) {
+    super();
 
-  initialize(schema: unknown): void {
     if (!isObject(schema)) {
       throw Error('schema must a object');
     }
 
-    Object.keys(schema).forEach((key) => {
-      // @ts-expect-error: ignore initialization
-      this.set(key, schema[key]);
-    });
-  }
+    this.store = {} as any;
+    for (const key of Object.keys(schema)) {
+      const value = (schema as any)[key];
 
-  async set<K extends NormalizedSchemaKey>(key: K, value: NormalizedSchema[K]): Promise<void> {
-    if (value !== this.get(key)) {
-      this.store.set(key, value);
-      await this.notifyEmiiter.emit(key, value);
+      // todo： schemas validate
+      const valid = schemaValidation(key as any, value);
+      if (valid !== true) {
+        throw new Error(
+          `failed to config ${key.toString()}, validation error: ${valid ? valid : ''}`,
+        );
+      }
+
+      this.set(key, value);
     }
   }
 
-  get<K extends NormalizedSchemaKey>(key: K): NormalizedSchema[K] {
-    return this.store.get(key) as NormalizedSchema[K];
+  set(key: string, value: any): void {
+    const previous = this.get(key);
+    if (!isEqual(previous, value)) {
+      lodashSet(this.store, key, value);
+      this._observer.notify({ key, previous, data: value });
+    }
   }
 
-  onChange<K extends keyof NormalizedSchema>(
-    key: K,
-    listener: (v: NormalizedSchema[K]) => void | Promise<void>,
-  ): EventDisposable {
-    return this.notifyEmiiter.on(key, listener);
+  get<T>(key: string, defaultValue?: T): T {
+    return (lodashGet(this.store, key) ?? defaultValue) as T;
   }
 }
