@@ -1,10 +1,11 @@
 import { createRenderer } from '@alilc/lowcode-renderer-core';
-import { FunctionComponent } from 'react';
+import { type ComponentTreeRoot } from '@alilc/lowcode-shared';
+import { type FunctionComponent } from 'react';
 import {
   type LowCodeComponentProps,
   createComponent as createSchemaComponent,
 } from '../runtime/createComponent';
-import { RendererContext, getRenderInstancesByAccessor } from './context';
+import { type IRendererContext, RendererContext, getRenderInstancesByAccessor } from './context';
 import { type ReactAppOptions } from './types';
 
 interface Render {
@@ -12,16 +13,24 @@ interface Render {
 }
 
 export async function createComponent(options: ReactAppOptions) {
-  const creator = createRenderer<Render>((accessor) => {
-    const instances = getRenderInstancesByAccessor(accessor);
-    const componentsTree = instances.schema.get('componentsTree')[0];
+  const creator = createRenderer<Render>((service) => {
+    const contextValue: IRendererContext = service.invokeFunction((accessor) => {
+      return {
+        options,
+        ...getRenderInstancesByAccessor(accessor),
+      };
+    });
+
+    const componentsTree = contextValue.schema.get<ComponentTreeRoot>('componentsTree.0');
+
+    if (!componentsTree) {
+      throw new Error('componentsTree is required');
+    }
 
     const LowCodeComponent = createSchemaComponent(componentsTree, {
       displayName: componentsTree.componentName,
       ...options.component,
     });
-
-    const contextValue = { ...instances, options };
 
     function Component(props: LowCodeComponentProps) {
       return (

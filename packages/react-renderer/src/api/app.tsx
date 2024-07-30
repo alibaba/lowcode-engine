@@ -1,14 +1,19 @@
 import { createRenderer } from '@alilc/lowcode-renderer-core';
 import { type Root, createRoot } from 'react-dom/client';
-import { RendererContext, getRenderInstancesByAccessor } from './context';
+import { type IRendererContext, RendererContext, getRenderInstancesByAccessor } from './context';
 import { ApplicationView, boosts } from '../app';
 import { type ReactAppOptions } from './types';
 
 export const createApp = async (options: ReactAppOptions) => {
-  return createRenderer(async (accessor) => {
-    const instances = getRenderInstancesByAccessor(accessor);
+  return createRenderer(async (service) => {
+    const contextValue: IRendererContext = service.invokeFunction((accessor) => {
+      return {
+        options,
+        ...getRenderInstancesByAccessor(accessor),
+      };
+    });
 
-    instances.boostsManager.extend(boosts.toExpose());
+    contextValue.boostsManager.extend(boosts.toExpose());
 
     let root: Root | undefined;
 
@@ -16,9 +21,8 @@ export const createApp = async (options: ReactAppOptions) => {
       async mount(containerOrId) {
         if (root) return;
 
-        const defaultId = instances.schema.get('config')?.targetRootID ?? 'app';
+        const defaultId = contextValue.schema.get<string>('config.targetRootID', 'app');
         const rootElement = normalizeContainer(containerOrId, defaultId);
-        const contextValue = { ...instances, options };
 
         root = createRoot(rootElement);
         root.render(

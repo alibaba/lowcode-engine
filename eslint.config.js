@@ -64,5 +64,6 @@ export default tseslint.config({
     'react-hooks/exhaustive-deps': 'off', // Checks effect dependencies
 
     'no-inner-declarations': 'off',
+    'no-constant-condition': 'off',
   },
 });

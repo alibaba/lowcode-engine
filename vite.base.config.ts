@@ -32,6 +32,10 @@ export default async ({
   }
 
   return defineConfig({
+    define: {
+      __DEV__: JSON.stringify(!isProduction),
+      __VERSION__: JSON.stringify(env['VERSION']),
+    },
     build: {
       lib: {
         entry: resolvePath(entry),

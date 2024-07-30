@@ -20,7 +20,6 @@
     "importHelpers": false,
     // Enables experimental support for ES7 decorators.
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     // Generates corresponding .map file.
     "sourceMap": true,
     // Disallow inconsistently-cased references to the same file.
@@ -37,7 +36,7 @@
     "paths": {
       "@alilc/lowcode-*": ["packages/*/src"]
     },
-    "types": ["vite/client", "vitest/globals", "node"]
+    "types": ["vitest/globals", "node"]
   },
   "include": [
     "packages/global.d.ts",

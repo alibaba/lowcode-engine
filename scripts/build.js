@@ -12,15 +12,14 @@ const buildTypes = args['types'] || args['t'];
 async function run() {
   const packages = await findWorkspacePackages(cwd());
   const targetPackageName = `@alilc/lowcode-${targets[0]}`;
-  const finalName = packages
-    .filter((item) => item.manifest.name === targetPackageName)
-    .map(item => item.manifest.name);
+  const manifest = packages.filter((item) => item.manifest.name === targetPackageName)[0].manifest;
 
-  await execa('pnpm', ['--filter', finalName[0], 'build:target'], {
+  await execa('pnpm', ['--filter', manifest.name, 'build:target'], {
     stdio: 'inherit',
     env: {
       PROD: prod,
       FORMATS: formatArgs ? formatArgs : !prod ? 'es' : undefined,
+      VERSION: manifest.version,
     },
   });
 
