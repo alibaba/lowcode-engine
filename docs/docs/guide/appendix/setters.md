@@ -23,7 +23,7 @@ sidebar_position: 4
 | [SelectSetter](./setterDetails/select) | string &#124; number &#124; boolean | 枚举型数据设置器，采用下拉的形式展现 | ![](https://img.alicdn.com/imgextra/i1/O1CN01sfUEgZ1I0BXCl60LM_!!6000000000830-2-tps-582-282.png) |
 | [SlotSetter](./setterDetails/slot) | Element &#124; Element[] | 节点型数据设置器 | ![](https://img.alicdn.com/imgextra/i3/O1CN01wulNGt1qNip0IlEsF_!!6000000005484-2-tps-644-164.png) |
 | [StringSetter](./setterDetails/string) | string | 短文本型数据设置器，不可换行 | ![](https://img.alicdn.com/imgextra/i4/O1CN01iYalzO1xVh1ikLvSr_!!6000000006449-2-tps-414-102.png) |
-| StyleSetter || 样式设置器 | ![](https://img.alicdn.com/imgextra/i4/O1CN01ZwX2pO26UAFKuYfuF_!!6000000007664-2-tps-788-1214.png) |
+| [StyleSetter](./setterDetails/style) || 样式设置器 | ![](https://img.alicdn.com/imgextra/i4/O1CN01ZwX2pO26UAFKuYfuF_!!6000000007664-2-tps-788-1214.png) |
 | [TextAreaSetter](./setterDetails/textArea) | string | 长文本型数据设置器，可换行 | ![](https://img.alicdn.com/imgextra/i4/O1CN01GMu8YJ1nqAZoYQ3xi_!!6000000005140-2-tps-1026-292.png) |
 | TimePicker | | 时间型数据设置器 ||
 | [VariableSetter](./setterDetails/variable) | any | 变量型数据设置器， | ![](https://img.alicdn.com/imgextra/i1/O1CN015V5AAY1v3B8XxQ75k_!!6000000006116-2-tps-578-92.png) |
