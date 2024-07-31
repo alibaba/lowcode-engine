@@ -1,14 +1,8 @@
 import { IPublicTypeResourceType } from '@alilc/lowcode-types';
 
-export interface IResourceType extends Omit<IPublicTypeResourceType, 'resourceName' | 'resourceType'> {
-  name: string;
+export interface IResourceType extends ResourceType {}
 
-  type: 'editor' | 'webview';
-
-  resourceTypeModel: IPublicTypeResourceType;
-}
-
-export class ResourceType implements IResourceType {
+export class ResourceType implements Omit<IPublicTypeResourceType, 'resourceName' | 'resourceType'> {
   constructor(readonly resourceTypeModel: IPublicTypeResourceType) {
   }
 

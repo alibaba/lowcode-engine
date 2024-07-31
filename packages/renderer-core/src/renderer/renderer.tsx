@@ -15,7 +15,7 @@ export default function rendererFactory(): IRenderComponent {
   const AppContext = contextFactory();
   const Div = divFactory();
 
-  const ConfigProvider = adapter.getConfigProvider() || Div;
+  const ConfigProvider = adapter.getConfigProvider();
 
   const debug = Debug('renderer:entry');
 
@@ -157,16 +157,7 @@ export default function rendererFactory(): IRenderComponent {
       }
 
       if (Comp) {
-        return createElement(AppContext.Provider, {
-          value: {
-            appHelper,
-            components: allComponents,
-            engine: this,
-          },
-        }, createElement(ConfigProvider, {
-          device: this.props.device,
-          locale: this.props.locale,
-        }, createElement(Comp, {
+        const comp = createElement(Comp, {
           key: schema.__ctx && `${schema.__ctx.lceKey}_${schema.__ctx.idx || '0'}`,
           ref: this.__getRef,
           __appHelper: appHelper,
@@ -174,7 +165,17 @@ export default function rendererFactory(): IRenderComponent {
           __schema: schema,
           __designMode: designMode,
           ...this.props,
-        })));
+        });
+        return createElement(AppContext.Provider, {
+          value: {
+            appHelper,
+            components: allComponents,
+            engine: this,
+          },
+        }, ConfigProvider ? createElement(ConfigProvider, {
+          device: this.props.device,
+          locale: this.props.locale,
+        }, comp) : comp);
       }
       return null;
     }

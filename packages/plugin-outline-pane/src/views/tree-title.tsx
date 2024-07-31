@@ -28,6 +28,7 @@ export default class TreeTitle extends PureComponent<{
     editing: boolean;
     title: string;
     condition?: boolean;
+    loop?: boolean;
     visible?: boolean;
     filterWorking: boolean;
     keywords: string;
@@ -85,11 +86,16 @@ export default class TreeTitle extends PureComponent<{
 
   componentDidMount() {
     const { treeNode } = this.props;
+    const { filterWorking, matchSelf, keywords } = treeNode.filterReult;
     this.setState({
       editing: false,
       title: treeNode.titleLabel,
       condition: treeNode.condition,
+      loop: treeNode.loop,
       visible: !treeNode.hidden,
+      filterWorking,
+      matchSelf,
+      keywords,
     });
     treeNode.onTitleLabelChanged(() => {
       this.setState({
@@ -99,6 +105,11 @@ export default class TreeTitle extends PureComponent<{
     treeNode.onConditionChanged(() => {
       this.setState({
         condition: treeNode.condition,
+      });
+    });
+    treeNode.onLoopChanged(() => {
+      this.setState({
+        loop: treeNode.loop,
       });
     });
     treeNode.onHiddenChanged((hidden: boolean) => {
@@ -207,7 +218,7 @@ export default class TreeTitle extends PureComponent<{
                   <Tip>{intlNode('Slot for {prop}', { prop: node.slotFor.key })}</Tip>
                 </a>
               )}
-              {node.hasLoop() && (
+              {this.state.loop && (
                 <a className="tree-node-tag loop">
                   {/* todo: click todo something */}
                   <IconLoop />

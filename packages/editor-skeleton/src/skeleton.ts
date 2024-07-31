@@ -44,72 +44,27 @@ export enum SkeletonEvents {
   WIDGET_ENABLE = 'skeleton.widget.enable',
 }
 
-export interface ISkeleton extends Omit<IPublicApiSkeleton,
-  'showPanel' |
-  'hidePanel' |
-  'showWidget' |
-  'enableWidget' |
-  'hideWidget' |
-  'disableWidget' |
-  'showArea' |
-  'onShowPanel' |
-  'onHidePanel' |
-  'onShowWidget' |
-  'onHideWidget' |
-  'remove' |
-  'hideArea' |
-  'add'
+export interface ISkeleton extends Skeleton {}
+
+export class Skeleton implements Omit<IPublicApiSkeleton,
+'showPanel' |
+'hidePanel' |
+'showWidget' |
+'enableWidget' |
+'hideWidget' |
+'disableWidget' |
+'showArea' |
+'onShowPanel' |
+'onHidePanel' |
+'onShowWidget' |
+'onHideWidget' |
+'remove' |
+'hideArea' |
+'add' |
+'getAreaItems' |
+'onDisableWidget' |
+'onEnableWidget'
 > {
-  editor: IEditor;
-
-  readonly leftArea: Area<DockConfig | PanelDockConfig | DialogDockConfig>;
-
-  readonly topArea: Area<DockConfig | DividerConfig | PanelDockConfig | DialogDockConfig>;
-
-  readonly subTopArea: Area<DockConfig | DividerConfig | PanelDockConfig | DialogDockConfig>;
-
-  readonly toolbar: Area<DockConfig | DividerConfig | PanelDockConfig | DialogDockConfig>;
-
-  readonly leftFixedArea: Area<IPublicTypePanelConfig, Panel>;
-
-  readonly leftFloatArea: Area<IPublicTypePanelConfig, Panel>;
-
-  readonly rightArea: Area<IPublicTypePanelConfig, Panel>;
-
-  readonly mainArea: Area<WidgetConfig | IPublicTypePanelConfig, Widget | Panel>;
-
-  readonly bottomArea: Area<IPublicTypePanelConfig, Panel>;
-
-  readonly stages: Area<StageConfig, Stage>;
-
-  readonly widgets: IWidget[];
-
-  readonly focusTracker: FocusTracker;
-
-  getPanel(name: string): Panel | undefined;
-
-  getWidget(name: string): IWidget | undefined;
-
-  buildFromConfig(config?: EditorConfig, components?: PluginClassSet): void;
-
-  createStage(config: any): string | undefined;
-
-  getStage(name: string): Stage | null;
-
-  createContainer(
-    name: string,
-    handle: (item: any) => any,
-    exclusive?: boolean,
-    checkVisible?: () => boolean,
-    defaultSetCurrent?: boolean,
-  ): WidgetContainer;
-
-  createPanel(config: IPublicTypePanelConfig): Panel;
-
-  add(config: IPublicTypeSkeletonConfig, extraConfig?: Record<string, any>): IWidget | Widget | Panel | Stage | Dock | PanelDock | undefined;
-}
-
-export class Skeleton implements ISkeleton {
   private panels = new Map<string, Panel>();
 
   private configTransducers: IPublicTypeConfigTransducer[] = [];
@@ -431,7 +386,7 @@ export class Skeleton implements ISkeleton {
     }
     const { content, ...restConfig } = config;
     if (content) {
-      if (isPlainObject(content) && !isValidElement(content)) {
+      if (isPlainObject<IPublicTypePanelConfig>(content) && !isValidElement(content)) {
         Object.keys(content).forEach((key) => {
           if (/props$/i.test(key) && restConfig[key]) {
             restConfig[key] = {

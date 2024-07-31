@@ -28,11 +28,11 @@ export class OffsetObserver {
   @obx private _bottom = 0;
 
   @computed get height() {
-    return this.isRoot ? this.viewport.height : this._height * this.scale;
+    return this.isRoot ? this.viewport?.height : this._height * this.scale;
   }
 
   @computed get width() {
-    return this.isRoot ? this.viewport.width : this._width * this.scale;
+    return this.isRoot ? this.viewport?.width : this._width * this.scale;
   }
 
   @computed get top() {
@@ -44,51 +44,51 @@ export class OffsetObserver {
   }
 
   @computed get bottom() {
-    return this.isRoot ? this.viewport.height : this._bottom * this.scale;
+    return this.isRoot ? this.viewport?.height : this._bottom * this.scale;
   }
 
   @computed get right() {
-    return this.isRoot ? this.viewport.width : this._right * this.scale;
+    return this.isRoot ? this.viewport?.width : this._right * this.scale;
   }
 
   @obx hasOffset = false;
 
   @computed get offsetLeft() {
     if (this.isRoot) {
-      return this.viewport.scrollX * this.scale;
+      return (this.viewport?.scrollX || 0) * this.scale;
     }
-    if (!this.viewport.scrolling || this.lastOffsetLeft == null) {
-      this.lastOffsetLeft = this.left + this.viewport.scrollX * this.scale;
+    if (!this.viewport?.scrolling || this.lastOffsetLeft == null) {
+      this.lastOffsetLeft = this.left + (this.viewport?.scrollX || 0) * this.scale;
     }
     return this.lastOffsetLeft;
   }
 
   @computed get offsetTop() {
     if (this.isRoot) {
-      return this.viewport.scrollY * this.scale;
+      return (this.viewport?.scrollY || 0) * this.scale;
     }
-    if (!this.viewport.scrolling || this.lastOffsetTop == null) {
-      this.lastOffsetTop = this.top + this.viewport.scrollY * this.scale;
+    if (!this.viewport?.scrolling || this.lastOffsetTop == null) {
+      this.lastOffsetTop = this.top + (this.viewport?.scrollY || 0) * this.scale;
     }
     return this.lastOffsetTop;
   }
 
   @computed get offsetHeight() {
-    if (!this.viewport.scrolling || this.lastOffsetHeight == null) {
-      this.lastOffsetHeight = this.isRoot ? this.viewport.height : this.height;
+    if (!this.viewport?.scrolling || this.lastOffsetHeight == null) {
+      this.lastOffsetHeight = this.isRoot ? (this.viewport?.height || 0) : this.height;
     }
     return this.lastOffsetHeight;
   }
 
   @computed get offsetWidth() {
-    if (!this.viewport.scrolling || this.lastOffsetWidth == null) {
-      this.lastOffsetWidth = this.isRoot ? this.viewport.width : this.width;
+    if (!(this.viewport?.scrolling || 0) || this.lastOffsetWidth == null) {
+      this.lastOffsetWidth = this.isRoot ? (this.viewport?.width || 0) : this.width;
     }
     return this.lastOffsetWidth;
   }
 
   @computed get scale() {
-    return this.viewport.scale;
+    return this.viewport?.scale || 0;
   }
 
   private pid: number | undefined;
@@ -124,11 +124,11 @@ export class OffsetObserver {
         return;
       }
 
-      const rect = host.computeComponentInstanceRect(instance!, node.componentMeta.rootSelector);
+      const rect = host?.computeComponentInstanceRect(instance!, node.componentMeta.rootSelector);
 
       if (!rect) {
         this.hasOffset = false;
-      } else if (!this.viewport.scrolling || !this.hasOffset) {
+      } else if (!this.viewport?.scrolling || !this.hasOffset) {
         this._height = rect.height;
         this._width = rect.width;
         this._left = rect.left;
