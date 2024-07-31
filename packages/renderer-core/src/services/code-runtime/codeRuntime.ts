@@ -1,31 +1,34 @@
 import {
   type StringDictionary,
   type JSNode,
-  type EventDisposable,
+  type IDisposable,
   type JSExpression,
   type JSFunction,
   specTypes,
+  isNode,
+  toDisposable,
+  Disposable,
 } from '@alilc/lowcode-shared';
 import { type ICodeScope, CodeScope } from './codeScope';
-import { isNode } from '../../../../shared/src/utils/node';
-import { mapValue } from '../../utils/value';
+import { mapValue } from './value';
 import { evaluate } from './evaluate';
 
 export interface CodeRuntimeOptions<T extends StringDictionary = StringDictionary> {
   initScopeValue?: Partial<T>;
+
   parentScope?: ICodeScope;
 
   evalCodeFunction?: EvalCodeFunction;
 }
 
-export interface ICodeRuntime<T extends StringDictionary = StringDictionary> {
+export interface ICodeRuntime<T extends StringDictionary = StringDictionary> extends IDisposable {
   getScope(): ICodeScope<T>;
 
   run<R = unknown>(code: string, scope?: ICodeScope): R | undefined;
 
   resolve(value: StringDictionary): any;
 
-  onResolve(handler: NodeResolverHandler): EventDisposable;
+  onResolve(handler: NodeResolverHandler): IDisposable;
 
   createChild<V extends StringDictionary = StringDictionary>(
     options: Omit<CodeRuntimeOptions<V>, 'parentScope'>,
@@ -34,49 +37,55 @@ export interface ICodeRuntime<T extends StringDictionary = StringDictionary> {
 
 export type NodeResolverHandler = (node: JSNode) => JSNode | false | undefined;
 
-let onResolveHandlers: NodeResolverHandler[] = [];
-
 export type EvalCodeFunction = (code: string, scope: any) => any;
 
-export class CodeRuntime<T extends StringDictionary = StringDictionary> implements ICodeRuntime<T> {
-  private codeScope: ICodeScope<T>;
+export class CodeRuntime<T extends StringDictionary = StringDictionary>
+  extends Disposable
+  implements ICodeRuntime<T>
+{
+  private _codeScope: ICodeScope<T>;
 
-  private evalCodeFunction: EvalCodeFunction = evaluate;
+  private _evalCodeFunction: EvalCodeFunction = evaluate;
+
+  private _resolveHandlers: NodeResolverHandler[] = [];
 
   constructor(options: CodeRuntimeOptions<T> = {}) {
-    if (options.evalCodeFunction) this.evalCodeFunction = options.evalCodeFunction;
+    super();
 
-    if (options.parentScope) {
-      this.codeScope = options.parentScope.createChild<T>(options.initScopeValue ?? {});
-    } else {
-      this.codeScope = new CodeScope(options.initScopeValue ?? {});
-    }
+    if (options.evalCodeFunction) this._evalCodeFunction = options.evalCodeFunction;
+    this._codeScope = this.addDispose(
+      options.parentScope
+        ? options.parentScope.createChild<T>(options.initScopeValue ?? {})
+        : new CodeScope(options.initScopeValue ?? {}),
+    );
   }
 
   getScope() {
-    return this.codeScope;
+    return this._codeScope;
   }
 
   run<R = unknown>(code: string): R | undefined {
+    this._throwIfDisposed(`this code runtime has been disposed`);
+
     if (!code) return undefined;
 
     try {
-      const result = this.evalCodeFunction(code, this.codeScope.value);
+      const result = this._evalCodeFunction(code, this._codeScope.value);
 
       return result as R;
     } catch (err) {
       // todo replace logger
-      console.error('eval error', code, this.codeScope.value, err);
+      console.error('eval error', code, this._codeScope.value, err);
       return undefined;
     }
   }
 
   resolve(data: StringDictionary): any {
-    if (onResolveHandlers.length > 0) {
+    if (this._resolveHandlers.length > 0) {
       data = mapValue(data, isNode, (node: JSNode) => {
         let newNode: JSNode | false | undefined = node;
 
-        for (const handler of onResolveHandlers) {
+        for (const handler of this._resolveHandlers) {
           newNode = handler(newNode as JSNode);
           if (newNode === false || typeof newNode === 'undefined') {
             break;
@@ -110,20 +119,25 @@ export class CodeRuntime<T extends StringDictionary = StringDictionary> implemen
   /**
    * 顺序执行 handler
    */
-  onResolve(handler: NodeResolverHandler): EventDisposable {
-    onResolveHandlers.push(handler);
-    return () => {
-      onResolveHandlers = onResolveHandlers.filter((h) => h !== handler);
-    };
+  onResolve(handler: NodeResolverHandler): IDisposable {
+    this._resolveHandlers.push(handler);
+
+    return this.addDispose(
+      toDisposable(() => {
+        this._resolveHandlers = this._resolveHandlers.filter((h) => h !== handler);
+      }),
+    );
   }
 
   createChild<V extends StringDictionary = StringDictionary>(
     options?: Omit<CodeRuntimeOptions<V>, 'parentScope'>,
   ): ICodeRuntime<V> {
-    return new CodeRuntime({
-      initScopeValue: options?.initScopeValue,
-      parentScope: this.codeScope,
-      evalCodeFunction: options?.evalCodeFunction ?? this.evalCodeFunction,
-    });
+    return this.addDispose(
+      new CodeRuntime({
+        initScopeValue: options?.initScopeValue,
+        parentScope: this._codeScope,
+        evalCodeFunction: options?.evalCodeFunction ?? this._evalCodeFunction,
+      }),
+    );
   }
 }

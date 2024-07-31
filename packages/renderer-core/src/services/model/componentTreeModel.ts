@@ -10,8 +10,9 @@ import {
   type InstanceDataSourceApi,
   type ComponentTree,
   specTypes,
-  invariant,
   uniqueId,
+  type IDisposable,
+  Disposable,
 } from '@alilc/lowcode-shared';
 import { type ICodeRuntime } from '../code-runtime';
 import { IWidget, Widget } from '../../widget';
@@ -60,7 +61,7 @@ export type ModelDataSourceCreator = (
   codeRuntime: ICodeRuntime<InstanceApi>,
 ) => InstanceDataSourceApi;
 
-export interface ComponentTreeModelOptions {
+export interface ComponentTreeModelOptions extends IDisposable {
   id?: string;
   metadata?: StringDictionary;
 
@@ -69,37 +70,53 @@ export interface ComponentTreeModelOptions {
 }
 
 export class ComponentTreeModel<Component, ComponentInstance = unknown>
+  extends Disposable
   implements IComponentTreeModel<Component, ComponentInstance>
 {
-  private instanceMap = new Map<string, ComponentInstance[]>();
+  private _instanceMap = new Map<string, ComponentInstance[]>();
 
-  public id: string;
+  private _id: string;
 
-  public widgets: IWidget<Component>[] = [];
+  private _widgets?: IWidget<Component>[];
 
-  public metadata: StringDictionary = {};
+  private _metadata: StringDictionary;
 
   constructor(
-    public componentsTree: ComponentTree,
-    public codeRuntime: ICodeRuntime<InstanceApi>,
+    private _componentsTree: ComponentTree,
+    private _codeRuntime: ICodeRuntime<InstanceApi>,
     options: ComponentTreeModelOptions,
   ) {
-    invariant(componentsTree, 'componentsTree must to provide', 'ComponentTreeModel');
+    super();
 
-    this.id = options?.id ?? `model_${uniqueId()}`;
-    if (options?.metadata) {
-      this.metadata = options.metadata;
-    }
-
-    if (componentsTree.children) {
-      this.widgets = this.buildWidgets(componentsTree.children);
-    }
-
+    this._id = options?.id ?? `model_${uniqueId()}`;
+    this._metadata = options?.metadata ?? {};
     this.initialize(options);
+    this.addDispose(_codeRuntime);
+  }
+
+  get id() {
+    return this._id;
+  }
+
+  get codeRuntime() {
+    return this._codeRuntime;
+  }
+
+  get metadata() {
+    return this._metadata;
+  }
+
+  get widgets() {
+    if (!this._componentsTree.children) return [];
+
+    if (!this._widgets) {
+      this._widgets = this.buildWidgets(this._componentsTree.children);
+    }
+    return this._widgets;
   }
 
   private initialize({ stateCreator, dataSourceCreator }: ComponentTreeModelOptions) {
-    const { state = {}, defaultProps, props = {}, dataSource, methods = {} } = this.componentsTree;
+    const { state = {}, defaultProps, props = {}, dataSource, methods = {} } = this._componentsTree;
     const codeScope = this.codeRuntime.getScope();
 
     const initalProps = this.codeRuntime.resolve(props);
@@ -119,12 +136,12 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
       Object.assign(
         {
           $: (ref: string) => {
-            const insArr = this.instanceMap.get(ref);
+            const insArr = this._instanceMap.get(ref);
             if (!insArr) return undefined;
             return insArr[0];
           },
           $$: (ref: string) => {
-            return this.instanceMap.get(ref) ?? [];
+            return this._instanceMap.get(ref) ?? [];
           },
         },
         dataSourceApi,
@@ -140,19 +157,19 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
   }
 
   getCssText(): string | undefined {
-    return this.componentsTree.css;
+    return this._componentsTree.css;
   }
 
   triggerLifeCycle(lifeCycleName: ComponentLifeCycle, ...args: any[]) {
     // keys 用来判断 lifeCycleName 存在于 schema 对象上，不获取原型链上的对象
     if (
-      !this.componentsTree.lifeCycles ||
-      !Object.keys(this.componentsTree.lifeCycles).includes(lifeCycleName)
+      !this._componentsTree.lifeCycles ||
+      !Object.keys(this._componentsTree.lifeCycles).includes(lifeCycleName)
     ) {
       return;
     }
 
-    const lifeCycleSchema = this.componentsTree.lifeCycles[lifeCycleName];
+    const lifeCycleSchema = this._componentsTree.lifeCycles[lifeCycleName];
 
     const lifeCycleFn = this.codeRuntime.resolve(lifeCycleSchema);
     if (typeof lifeCycleFn === 'function') {
@@ -161,22 +178,22 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
   }
 
   setComponentRef(ref: string, ins: ComponentInstance) {
-    let insArr = this.instanceMap.get(ref);
+    let insArr = this._instanceMap.get(ref);
     if (!insArr) {
       insArr = [];
-      this.instanceMap.set(ref, insArr);
+      this._instanceMap.set(ref, insArr);
     }
     insArr!.push(ins);
   }
 
   removeComponentRef(ref: string, ins?: ComponentInstance) {
-    const insArr = this.instanceMap.get(ref);
+    const insArr = this._instanceMap.get(ref);
     if (insArr) {
       if (ins) {
         const idx = insArr.indexOf(ins);
         if (idx > 0) insArr.splice(idx, 1);
       } else {
-        this.instanceMap.delete(ref);
+        this._instanceMap.delete(ref);
       }
     }
   }
@@ -196,6 +213,11 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
         return new Widget<Component, ComponentInstance>(node, this);
       }
     });
+  }
+
+  dispose(): void {
+    super.dispose();
+    this._instanceMap.clear();
   }
 }
 

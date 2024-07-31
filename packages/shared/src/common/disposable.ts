@@ -32,6 +32,14 @@ export abstract class Disposable implements IDisposable {
 
   private readonly _store = new DisposableStore();
 
+  protected _isDisposed = false;
+
+  protected _throwIfDisposed(msg: string = 'this disposable has been disposed'): void {
+    if (this._isDisposed) {
+      throw new Error(msg);
+    }
+  }
+
   dispose(): void {
     this._store.dispose();
   }
@@ -40,6 +48,7 @@ export abstract class Disposable implements IDisposable {
    * Adds `o` to the collection of disposables managed by this object.
    */
   protected addDispose<T extends IDisposable>(o: T): T {
+    this._throwIfDisposed();
     if ((o as unknown as Disposable) === this) {
       throw new Error('Cannot register a disposable on itself!');
     }

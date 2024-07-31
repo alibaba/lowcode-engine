@@ -1,5 +1,5 @@
 /* --------------- api -------------------- */
-export { createRenderer } from './main';
+export { createRenderer } from './createRenderer';
 export { IExtensionHostService } from './services/extension';
 export { definePackageLoader, IPackageManagementService } from './services/package';
 export { LifecyclePhase, ILifeCycleService } from './services/lifeCycleService';
@@ -9,7 +9,6 @@ export { IRuntimeIntlService } from './services/runtimeIntlService';
 export { IRuntimeUtilService } from './services/runtimeUtilService';
 export { ISchemaService } from './services/schema';
 export { Widget } from './widget';
-export * from './utils/value';
 
 /* --------------- types ---------------- */
 export type * from './types';

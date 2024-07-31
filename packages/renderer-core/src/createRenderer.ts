@@ -83,6 +83,7 @@ export function createRenderer<RenderObject = IRenderObject>(
       },
       destroy: () => {
         lifeCycleService.setPhase(LifecyclePhase.Destroying);
+        instantiationService.dispose();
       },
     };
 

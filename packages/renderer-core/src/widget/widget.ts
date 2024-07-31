@@ -6,7 +6,7 @@ export interface IWidget<Component, ComponentInstance = unknown> {
 
   readonly rawNode: NodeType;
 
-  model: IComponentTreeModel<Component, ComponentInstance>;
+  readonly model: IComponentTreeModel<Component, ComponentInstance>;
 
   children?: IWidget<Component, ComponentInstance>[];
 }
@@ -14,17 +14,26 @@ export interface IWidget<Component, ComponentInstance = unknown> {
 export class Widget<Component, ComponentInstance = unknown>
   implements IWidget<Component, ComponentInstance>
 {
-  public rawNode: NodeType;
+  private _key: string;
 
-  public key: string;
-
-  public children?: IWidget<Component, ComponentInstance>[] | undefined;
+  children?: IWidget<Component, ComponentInstance>[] | undefined;
 
   constructor(
-    node: NodeType,
-    public model: IComponentTreeModel<Component, ComponentInstance>,
+    private _node: NodeType,
+    private _model: IComponentTreeModel<Component, ComponentInstance>,
   ) {
-    this.rawNode = node;
-    this.key = (node as ComponentNode)?.id ?? uniqueId();
+    this._key = (_node as ComponentNode)?.id ?? uniqueId();
+  }
+
+  get rawNode(): NodeType {
+    return this._node;
+  }
+
+  get key(): string {
+    return this._key;
+  }
+
+  get model(): IComponentTreeModel<Component, ComponentInstance> {
+    return this._model;
   }
 }

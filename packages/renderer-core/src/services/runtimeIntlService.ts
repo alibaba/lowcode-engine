@@ -5,6 +5,7 @@ import {
   type Locale,
   type Translations,
   type LocaleTranslationsMap,
+  Disposable,
 } from '@alilc/lowcode-shared';
 import { ICodeRuntimeService } from './code-runtime';
 
@@ -26,27 +27,25 @@ export interface IRuntimeIntlService {
 
 export const IRuntimeIntlService = createDecorator<IRuntimeIntlService>('IRuntimeIntlService');
 
-export class RuntimeIntlService implements IRuntimeIntlService {
-  private intl: Intl = new Intl();
+export class RuntimeIntlService extends Disposable implements IRuntimeIntlService {
+  private _intl: Intl;
 
   constructor(
     defaultLocale: string | undefined,
     i18nTranslations: LocaleTranslationsMap,
     @ICodeRuntimeService private codeRuntimeService: ICodeRuntimeService,
   ) {
-    if (defaultLocale) this.setLocale(defaultLocale);
+    super();
 
+    this._intl = this.addDispose(new Intl(defaultLocale));
     for (const key of Object.keys(i18nTranslations)) {
-      this.addTranslations(key, i18nTranslations[key]);
+      this._intl.addTranslations(key, i18nTranslations[key]);
     }
-
     this._injectScope();
   }
 
   localize(descriptor: MessageDescriptor): string {
-    const formatter = this.intl.getFormatter();
-
-    return formatter.$t(
+    return this._intl.getFormatter().$t(
       {
         id: descriptor.key,
         defaultMessage: descriptor.fallback,
@@ -56,15 +55,15 @@ export class RuntimeIntlService implements IRuntimeIntlService {
   }
 
   setLocale(locale: string): void {
-    this.intl.setLocale(locale);
+    this._intl.setLocale(locale);
   }
 
   getLocale(): string {
-    return this.intl.getLocale();
+    return this._intl.getLocale();
   }
 
   addTranslations(locale: Locale, translations: Translations) {
-    this.intl.addTranslations(locale, translations);
+    this._intl.addTranslations(locale, translations);
   }
 
   private _injectScope(): void {

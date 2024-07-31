@@ -18,7 +18,7 @@ export interface IRuntimeUtilService {
 export const IRuntimeUtilService = createDecorator<IRuntimeUtilService>('rendererUtilService');
 
 export class RuntimeUtilService implements IRuntimeUtilService {
-  private utilsMap: Map<string, any> = new Map();
+  private _utilsMap: Map<string, any> = new Map();
 
   constructor(
     utils: UtilDescription[] = [],
@@ -28,7 +28,7 @@ export class RuntimeUtilService implements IRuntimeUtilService {
     for (const util of utils) {
       this.add(util);
     }
-    this.injectScope();
+    this._injectScope();
   }
 
   add(utilItem: UtilDescription, force?: boolean): void;
@@ -54,39 +54,39 @@ export class RuntimeUtilService implements IRuntimeUtilService {
       force = fn as boolean;
     }
 
-    this.addUtilByName(name, utilObj, force);
+    this._addUtilByName(name, utilObj, force);
   }
 
-  private addUtilByName(
+  private _addUtilByName(
     name: string,
     fn: AnyFunction | StringDictionary | UtilDescription,
     force?: boolean,
   ): void {
-    if (this.utilsMap.has(name) && !force) return;
+    if (this._utilsMap.has(name) && !force) return;
 
     if (isPlainObject(fn)) {
       if ((fn as UtilDescription).type === 'function' || (fn as UtilDescription).type === 'npm') {
-        const utilFn = this.parseUtil(fn as UtilDescription);
+        const utilFn = this._parseUtil(fn as UtilDescription);
         if (utilFn) {
-          this.addUtilByName(name, utilFn, force);
+          this._addUtilByName(name, utilFn, force);
         }
       } else if ((fn as StringDictionary).destructuring) {
         for (const key of Object.keys(fn)) {
-          this.addUtilByName(key, (fn as StringDictionary)[key], force);
+          this._addUtilByName(key, (fn as StringDictionary)[key], force);
         }
       } else {
-        this.utilsMap.set(name, fn);
+        this._utilsMap.set(name, fn);
       }
     } else if (typeof fn === 'function') {
-      this.utilsMap.set(name, fn);
+      this._utilsMap.set(name, fn);
     }
   }
 
   remove(name: string): void {
-    this.utilsMap.delete(name);
+    this._utilsMap.delete(name);
   }
 
-  private parseUtil(utilItem: UtilDescription) {
+  private _parseUtil(utilItem: UtilDescription) {
     if (utilItem.type === 'function') {
       return this.codeRuntimeService.rootRuntime.run(utilItem.content.value);
     } else {
@@ -94,16 +94,16 @@ export class RuntimeUtilService implements IRuntimeUtilService {
     }
   }
 
-  private injectScope(): void {
+  private _injectScope(): void {
     const exposed = new Proxy(Object.create(null), {
       get: (_, p: string) => {
-        return this.utilsMap.get(p);
+        return this._utilsMap.get(p);
       },
       set() {
         return false;
       },
       has: (_, p: string) => {
-        return this.utilsMap.has(p);
+        return this._utilsMap.has(p);
       },
     });
 

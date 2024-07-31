@@ -2,6 +2,7 @@ import { createIntl, createIntlCache, type IntlShape as IntlFormatter } from '@f
 import { mapKeys } from 'lodash-es';
 import { signal, computed, effect, type Signal, type ComputedSignal } from './signals';
 import { platformLocale } from './platform';
+import { Disposable, toDisposable } from './disposable';
 
 export { IntlFormatter };
 
@@ -9,59 +10,65 @@ export type Locale = string;
 export type Translations = Record<string, string>;
 export type LocaleTranslationsRecord = Record<Locale, Translations>;
 
-export class Intl {
-  private locale: Signal<Locale>;
-  private messageStore: Signal<LocaleTranslationsRecord>;
-  private currentMessage: ComputedSignal<Translations>;
-  private intlShape: IntlFormatter;
+export class Intl extends Disposable {
+  private _locale: Signal<Locale>;
+  private _messageStore: Signal<LocaleTranslationsRecord>;
+  private _currentMessage: ComputedSignal<Translations>;
+  private _intlShape: IntlFormatter;
 
   constructor(defaultLocale: string = platformLocale, messages: LocaleTranslationsRecord = {}) {
-    if (defaultLocale) {
-      defaultLocale = nomarlizeLocale(defaultLocale);
-    } else {
-      defaultLocale = 'zh-CN';
-    }
+    super();
 
-    const messageStore = mapKeys(messages, (_, key) => {
-      return nomarlizeLocale(key);
+    this._locale = signal(defaultLocale ? nomarlizeLocale(defaultLocale) : 'zh-CN');
+    this._messageStore = signal(
+      mapKeys(messages, (_, key) => {
+        return nomarlizeLocale(key);
+      }),
+    );
+    this._currentMessage = computed(() => {
+      return this._messageStore.value[this._locale.value] ?? {};
     });
 
-    this.locale = signal(defaultLocale);
-    this.messageStore = signal(messageStore);
-    this.currentMessage = computed(() => {
-      return this.messageStore.value[this.locale.value] ?? {};
-    });
-
-    effect(() => {
-      const cache = createIntlCache();
-      this.intlShape = createIntl(
-        {
-          locale: this.locale.value,
-          messages: this.currentMessage.value,
-        },
-        cache,
-      );
-    });
+    this.addDispose(
+      toDisposable(
+        effect(() => {
+          const cache = createIntlCache();
+          this._intlShape = createIntl(
+            {
+              locale: this._locale.value,
+              messages: this._currentMessage.value,
+            },
+            cache,
+          );
+        }),
+      ),
+    );
   }
 
   getLocale() {
-    return this.locale.value;
+    return this._locale.value;
   }
 
   setLocale(locale: Locale) {
+    this._throwIfDisposed(`this intl has been disposed`);
+
     const nomarlizedLocale = nomarlizeLocale(locale);
-    this.locale.value = nomarlizedLocale;
+    this._locale.value = nomarlizedLocale;
   }
 
   addTranslations(locale: Locale, messages: Translations) {
-    locale = nomarlizeLocale(locale);
-    const original = this.messageStore.value[locale];
+    this._throwIfDisposed(`this intl has been disposed`);
 
-    this.messageStore.value[locale] = Object.assign(original, messages);
+    locale = nomarlizeLocale(locale);
+    const original = this._messageStore.value[locale];
+
+    this._messageStore.value[locale] = Object.assign(original, messages);
   }
 
   getFormatter(): IntlFormatter {
-    return this.intlShape;
+    this._throwIfDisposed(`this intl has been disposed`);
+
+    return this._intlShape;
   }
 }
 

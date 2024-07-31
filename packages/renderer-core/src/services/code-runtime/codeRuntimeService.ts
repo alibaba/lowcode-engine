@@ -1,13 +1,13 @@
 import {
   createDecorator,
-  invariant,
   Disposable,
   type StringDictionary,
+  type IDisposable,
 } from '@alilc/lowcode-shared';
 import { type ICodeRuntime, type CodeRuntimeOptions, CodeRuntime } from './codeRuntime';
 import { ISchemaService } from '../schema';
 
-export interface ICodeRuntimeService {
+export interface ICodeRuntimeService extends IDisposable {
   readonly rootRuntime: ICodeRuntime;
 
   createCodeRuntime<T extends StringDictionary = StringDictionary>(
@@ -18,15 +18,18 @@ export interface ICodeRuntimeService {
 export const ICodeRuntimeService = createDecorator<ICodeRuntimeService>('codeRuntimeService');
 
 export class CodeRuntimeService extends Disposable implements ICodeRuntimeService {
-  rootRuntime: ICodeRuntime;
+  private _rootRuntime: ICodeRuntime;
+  get rootRuntime() {
+    return this._rootRuntime;
+  }
 
   constructor(
     options: CodeRuntimeOptions = {},
     @ISchemaService private schemaService: ISchemaService,
   ) {
     super();
-    this.rootRuntime = new CodeRuntime(options);
 
+    this._rootRuntime = this.addDispose(new CodeRuntime(options));
     this.addDispose(
       this.schemaService.onSchemaUpdate(({ key, data }) => {
         if (key === 'constants') {
@@ -39,10 +42,10 @@ export class CodeRuntimeService extends Disposable implements ICodeRuntimeServic
   createCodeRuntime<T extends StringDictionary = StringDictionary>(
     options: CodeRuntimeOptions<T> = {},
   ): ICodeRuntime<T> {
-    invariant(this.rootRuntime, `please initialize codeRuntimeService on renderer starting!`);
+    this._throwIfDisposed();
 
-    return options.parentScope
-      ? new CodeRuntime(options)
-      : this.rootRuntime.createChild<T>(options);
+    return this.addDispose(
+      options.parentScope ? new CodeRuntime(options) : this.rootRuntime.createChild<T>(options),
+    );
   }
 }

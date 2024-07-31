@@ -1,4 +1,9 @@
-import { type StringDictionary, LinkedListNode } from '@alilc/lowcode-shared';
+import {
+  type StringDictionary,
+  Disposable,
+  type IDisposable,
+  LinkedListNode,
+} from '@alilc/lowcode-shared';
 import { trustedGlobals } from './globals-es2015';
 
 /*
@@ -9,33 +14,50 @@ const unscopables = trustedGlobals.reduce((acc, key) => ({ ...acc, [key]: true }
   __proto__: null,
 });
 
-export interface ICodeScope<T extends StringDictionary = StringDictionary> {
+export interface ICodeScope<T extends StringDictionary = StringDictionary> extends IDisposable {
   readonly value: T;
 
   set(name: keyof T, value: any): void;
+
   setValue(value: Partial<T>, replace?: boolean): void;
+
   createChild<V extends StringDictionary = StringDictionary>(initValue: Partial<V>): ICodeScope<V>;
+
+  dispose(): void;
 }
 
-export class CodeScope<T extends StringDictionary = StringDictionary> implements ICodeScope<T> {
+export class CodeScope<T extends StringDictionary = StringDictionary>
+  extends Disposable
+  implements ICodeScope<T>
+{
   node = LinkedListNode.Undefined;
 
-  private proxyValue: T;
+  private _proxyValue?: T;
 
   constructor(initValue: Partial<T>) {
+    super();
+
     this.node.current = initValue;
-    this.proxyValue = this.createProxy();
   }
 
   get value(): T {
-    return this.proxyValue;
+    this._throwIfDisposed('code scope has been disposed');
+
+    if (!this._proxyValue) {
+      this._proxyValue = this._createProxy();
+    }
+    return this._proxyValue;
   }
 
   set(name: keyof T, value: any): void {
+    this._throwIfDisposed('code scope has been disposed');
+
     this.node.current[name] = value;
   }
 
   setValue(value: Partial<T>, replace = false) {
+    this._throwIfDisposed('code scope has been disposed');
+
     if (replace) {
       this.node.current = { ...value };
     } else {
@@ -44,24 +66,30 @@ export class CodeScope<T extends StringDictionary = StringDictionary> implements
   }
 
   createChild<V extends StringDictionary = StringDictionary>(initValue: Partial<V>): ICodeScope<V> {
-    const childScope = new CodeScope(initValue);
+    const childScope = this.addDispose(new CodeScope(initValue));
     childScope.node.prev = this.node;
 
     return childScope;
   }
 
-  private createProxy(): T {
+  dispose(): void {
+    super.dispose();
+    this.node = LinkedListNode.Undefined;
+    this._proxyValue = undefined;
+  }
+
+  private _createProxy(): T {
     return new Proxy(Object.create(null) as T, {
       set: (target, p, newValue) => {
         this.set(p as string, newValue);
         return true;
       },
-      get: (_, p) => this.findValue(p) ?? undefined,
-      has: (_, p) => this.hasProperty(p),
+      get: (_, p) => this._findValue(p) ?? undefined,
+      has: (_, p) => this._hasProperty(p),
     });
   }
 
-  private findValue(prop: PropertyKey) {
+  private _findValue(prop: PropertyKey) {
     if (prop === Symbol.unscopables) return unscopables;
 
     let node = this.node;
@@ -73,7 +101,7 @@ export class CodeScope<T extends StringDictionary = StringDictionary> implements
     }
   }
 
-  private hasProperty(prop: PropertyKey): boolean {
+  private _hasProperty(prop: PropertyKey): boolean {
     if (prop in unscopables) return true;
 
     let node = this.node;

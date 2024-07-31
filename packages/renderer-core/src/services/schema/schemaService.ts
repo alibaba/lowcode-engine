@@ -22,9 +22,9 @@ export const ISchemaService = createDecorator<ISchemaService>('schemaService');
 export class SchemaService extends Disposable implements ISchemaService {
   private store: NormalizedSchema;
 
-  private _observer = this.addDispose(new Events.Observable<SchemaUpdateEvent>());
+  private _observer = this.addDispose(new Events.Emitter<SchemaUpdateEvent>());
 
-  readonly onSchemaUpdate = this._observer.subscribe;
+  readonly onSchemaUpdate = this._observer.event;
 
   constructor(schema: unknown) {
     super();

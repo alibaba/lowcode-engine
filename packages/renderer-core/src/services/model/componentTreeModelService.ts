@@ -1,5 +1,7 @@
 import {
   createDecorator,
+  type IDisposable,
+  Disposable,
   invariant,
   type ComponentTree,
   type StringDictionary,
@@ -16,7 +18,7 @@ export interface CreateComponentTreeModelOptions extends ComponentTreeModelOptio
   codeScopeValue?: StringDictionary;
 }
 
-export interface IComponentTreeModelService {
+export interface IComponentTreeModelService extends IDisposable {
   create<Component>(
     componentsTree: ComponentTree,
     options?: CreateComponentTreeModelOptions,
@@ -32,23 +34,28 @@ export const IComponentTreeModelService = createDecorator<IComponentTreeModelSer
   'componentTreeModelService',
 );
 
-export class ComponentTreeModelService implements IComponentTreeModelService {
+export class ComponentTreeModelService extends Disposable implements IComponentTreeModelService {
   constructor(
     @ISchemaService private schemaService: ISchemaService,
     @ICodeRuntimeService private codeRuntimeService: ICodeRuntimeService,
-  ) {}
+  ) {
+    super();
+  }
 
   create<Component>(
     componentsTree: ComponentTree,
     options: CreateComponentTreeModelOptions,
   ): IComponentTreeModel<Component> {
-    return new ComponentTreeModel(
-      componentsTree,
-      // @ts-expect-error: preset scope value
-      this.codeRuntimeService.createCodeRuntime({
-        initScopeValue: options?.codeScopeValue,
-      }),
-      options,
+    this._throwIfDisposed(`ComponentTreeModelService has been disposed.`);
+
+    return this.addDispose(
+      new ComponentTreeModel(
+        componentsTree,
+        this.codeRuntimeService.createCodeRuntime({
+          initScopeValue: options?.codeScopeValue as any,
+        }),
+        options,
+      ),
     );
   }
 
@@ -56,18 +63,11 @@ export class ComponentTreeModelService implements IComponentTreeModelService {
     id: string,
     options: CreateComponentTreeModelOptions,
   ): IComponentTreeModel<Component> {
-    const componentsTrees = this.schemaService.get('componentsTree');
+    const componentsTrees = this.schemaService.get<ComponentTree[]>('componentsTree', []);
     const componentsTree = componentsTrees.find((item) => item.id === id);
 
     invariant(componentsTree, 'componentsTree not found');
 
-    return new ComponentTreeModel(
-      componentsTree,
-      // @ts-expect-error: preset scope value
-      this.codeRuntimeService.createCodeRuntime({
-        initScopeValue: options?.codeScopeValue,
-      }),
-      options,
-    );
+    return this.create(componentsTree, options);
   }
 }
