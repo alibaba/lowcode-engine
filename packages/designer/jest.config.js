@@ -22,6 +22,7 @@ const jestConfig = {
   // testMatch: ['**/selection.test.ts'],
   // testMatch: ['**/plugin/sequencify.test.ts'],
   // testMatch: ['**/builtin-simulator/utils/parse-metadata.test.ts'],
+  // testMatch: ['**/setting/setting-top-entry.test.ts'],
   transformIgnorePatterns: [
     `/node_modules/(?!${esModules})/`,
   ],

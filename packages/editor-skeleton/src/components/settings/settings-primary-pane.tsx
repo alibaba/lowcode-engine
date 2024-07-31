@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Tab, Breadcrumb } from '@alifd/next';
 import { Title, observer, Editor, obx, globalContext, engineConfig, makeObservable } from '@alilc/lowcode-editor-core';
-import { Node, SettingField, isSettingField, INode } from '@alilc/lowcode-designer';
+import type { ISettingField, INode } from '@alilc/lowcode-designer';
 import classNames from 'classnames';
 import { SettingsMain } from './main';
 import { SettingsPane } from './settings-pane';
 import { StageBox } from '../stage-box';
 import { SkeletonContext } from '../../context';
 import { intl } from '../../locale';
-import { createIcon } from '@alilc/lowcode-utils';
+import { createIcon, isSettingField } from '@alilc/lowcode-utils';
 
 interface ISettingsPrimaryPaneProps {
   engineEditor: Editor;
@@ -53,8 +53,7 @@ export class SettingsPrimaryPane extends Component<ISettingsPrimaryPaneProps, { 
   }
 
   renderBreadcrumb() {
-    const { settings, editor } = this.main;
-    // const shouldIgnoreRoot = config.props?.ignoreRoot;
+    const { settings, editor, designer } = this.main;
     const { shouldIgnoreRoot } = this.state;
     if (!settings) {
       return null;
@@ -73,10 +72,9 @@ export class SettingsPrimaryPane extends Component<ISettingsPrimaryPaneProps, { 
       );
     }
 
-    const designer = editor.get('designer');
     const current = designer?.currentSelection?.getNodes()?.[0];
     let node: INode | null = settings.first;
-    const focusNode = node.document?.focusNode;
+    const focusNode = node?.document?.focusNode;
 
     const items = [];
     let l = 3;
@@ -136,7 +134,7 @@ export class SettingsPrimaryPane extends Component<ISettingsPrimaryPaneProps, { 
   render() {
     const { settings } = this.main;
     const editor = this.props.engineEditor;
-    if (!settings) {
+    if (!settings || !settings.first) {
       // 未选中节点，提示选中 或者 显示根节点设置
       return (
         <div className="lc-settings-main">
@@ -202,7 +200,7 @@ export class SettingsPrimaryPane extends Component<ISettingsPrimaryPaneProps, { 
     }
 
     let matched = false;
-    const tabs = (items as SettingField[]).map((field) => {
+    const tabs = (items as ISettingField[]).map((field) => {
       if (this._activeKey === field.name) {
         matched = true;
       }
@@ -235,7 +233,7 @@ export class SettingsPrimaryPane extends Component<ISettingsPrimaryPaneProps, { 
         </Tab.Item>
       );
     });
-    const activeKey = matched ? this._activeKey : (items[0] as SettingField).name;
+    const activeKey = matched ? this._activeKey : (items[0] as ISettingField).name;
 
     const className = classNames('lc-settings-main', {
       'lc-settings-hide-tabs':
@@ -261,9 +259,10 @@ export class SettingsPrimaryPane extends Component<ISettingsPrimaryPaneProps, { 
   }
 }
 
-function hoverNode(node: Node, flag: boolean) {
+function hoverNode(node: INode, flag: boolean) {
   node.hover(flag);
 }
-function selectNode(node: Node) {
+
+function selectNode(node: INode) {
   node?.select();
 }

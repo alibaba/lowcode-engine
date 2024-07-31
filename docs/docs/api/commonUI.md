@@ -3,6 +3,8 @@ title: commonUI - UI 组件库
 sidebar_position: 10
 ---
 
+> **@since** v1.3.0
+
 ## 简介
 CommonUI API 是一个专为低代码引擎设计的组件 UI 库，使用它开发的插件，可以保证在不同项目和主题切换中能够保持一致性和兼容性。
 

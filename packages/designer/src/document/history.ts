@@ -1,7 +1,7 @@
 import { reaction, untracked, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { IPublicTypeNodeSchema, IPublicModelHistory, IPublicTypeDisposable } from '@alilc/lowcode-types';
 import { Logger } from '@alilc/lowcode-utils';
-import { IDocumentModel } from '../designer';
+import type { IDocumentModel } from '../designer';
 
 const logger = new Logger({ level: 'warn', bizName: 'history' });
 

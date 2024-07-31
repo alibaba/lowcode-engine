@@ -1,5 +1,5 @@
 import { IPublicEnumTransformStage } from '../enum';
-import { IPublicTypeCompositeValue } from '../type';
+import { IPublicTypeCompositeValue, IPublicTypeNodeData } from '../type';
 import { IPublicModelNode } from './';
 
 export interface IPublicModelProp<
@@ -48,7 +48,7 @@ export interface IPublicModelProp<
    * set value for this prop
    * @param val
    */
-  setValue(val: IPublicTypeCompositeValue): void;
+  setValue(val: IPublicTypeCompositeValue | IPublicTypeNodeData | IPublicTypeNodeData[]): void;
 
   /**
    * 获取值
