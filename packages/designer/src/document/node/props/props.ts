@@ -37,30 +37,9 @@ export interface IPropParent {
   delete(prop: IProp): void;
 }
 
-export interface IProps extends Omit<IBaseModelProps<IProp>, | 'getExtraProp' | 'getExtraPropValue' | 'setExtraPropValue' | 'node'>, IPropParent {
+export interface IProps extends Props {}
 
-  /**
-   * 获取 props 对应的 node
-   */
-  getNode(): INode;
-
-  get(path: string, createIfNone?: boolean): IProp | null;
-
-  export(stage?: IPublicEnumTransformStage): {
-    props?: IPublicTypePropsMap | IPublicTypePropsList;
-    extras?: ExtrasObject;
-  };
-
-  merge(value: IPublicTypePropsMap, extras?: IPublicTypePropsMap): void;
-
-  purge(): void;
-
-  query(path: string, createIfNone: boolean): IProp | null;
-
-  import(value?: IPublicTypePropsMap | IPublicTypePropsList | null, extras?: ExtrasObject): void;
-}
-
-export class Props implements IProps, IPropParent {
+export class Props implements Omit<IBaseModelProps<IProp>, | 'getExtraProp' | 'getExtraPropValue' | 'setExtraPropValue' | 'node'>, IPropParent {
   readonly id = uniqueId('props');
 
   @obx.shallow private items: IProp[] = [];

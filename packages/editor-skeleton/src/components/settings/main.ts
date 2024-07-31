@@ -1,7 +1,7 @@
-import { Node, Designer, Selection, SettingTopEntry } from '@alilc/lowcode-designer';
+import { INode, IDesigner, Selection, SettingTopEntry } from '@alilc/lowcode-designer';
 import { Editor, obx, computed, makeObservable, action, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 
-function generateSessionId(nodes: Node[]) {
+function generateSessionId(nodes: INode[]) {
   return nodes
     .map((node) => node.id)
     .sort()
@@ -29,7 +29,11 @@ export class SettingsMain {
 
   private disposeListener: () => void;
 
-  private designer?: Designer;
+  private _designer?: IDesigner;
+
+  get designer(): IDesigner | undefined {
+    return this._designer;
+  }
 
   constructor(readonly editor: Editor) {
     makeObservable(this);
@@ -49,12 +53,12 @@ export class SettingsMain {
       this.editor.removeListener('designer.selection.change', setupSelection);
     };
     const designer = await this.editor.onceGot('designer');
-    this.designer = designer;
+    this._designer = designer;
     setupSelection(designer.currentSelection);
   }
 
   @action
-  private setup(nodes: Node[]) {
+  private setup(nodes: INode[]) {
     // check nodes change
     const sessionId = generateSessionId(nodes);
     if (sessionId === this._sessionId) {
@@ -66,15 +70,15 @@ export class SettingsMain {
       return;
     }
 
-    if (!this.designer) {
-      this.designer = nodes[0].document.designer;
+    if (!this._designer) {
+      this._designer = nodes[0].document.designer;
     }
     // 当节点只有一个时，复用 node 上挂载的 settingEntry，不会产生平行的两个实例，这样在整个系统中对
     // 某个节点操作的 SettingTopEntry 只有一个实例，后续的 getProp() 也会拿到相同的 SettingField 实例
     if (nodes.length === 1) {
       this._settings = nodes[0].settingEntry;
     } else {
-      this._settings = this.designer.createSettingEntry(nodes);
+      this._settings = this._designer.createSettingEntry(nodes);
     }
   }
 

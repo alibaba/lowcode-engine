@@ -32,6 +32,19 @@ bind(
 - [IPublicTypeHotkeyCallback](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/hotkey-callback.ts)
 - [IPublicTypeDisposable](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/disposable.ts)
 
+### mount
+
+给指定窗口绑定快捷键
+
+```typescript
+/**
+ * 给指定窗口绑定快捷键
+ * @param window 窗口的 window 对象
+ */
+mount(window: Window): IPublicTypeDisposable;
+
+```
+
 
 ## 使用示例
 ### 基础示例

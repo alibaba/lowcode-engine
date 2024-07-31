@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import { globalContext } from './di';
-import { IPublicTypeHotkeyCallback, IPublicTypeHotkeyCallbackConfig, IPublicTypeHotkeyCallbacks, IPublicApiHotkey } from '@alilc/lowcode-types';
+import { IPublicTypeHotkeyCallback, IPublicTypeHotkeyCallbackConfig, IPublicTypeHotkeyCallbacks, IPublicApiHotkey, IPublicTypeDisposable } from '@alilc/lowcode-types';
 
 interface KeyMap {
   [key: number]: string;
@@ -339,11 +339,10 @@ function fireCallback(callback: IPublicTypeHotkeyCallback, e: KeyboardEvent, com
   }
 }
 
-export interface IHotKey extends Omit<IPublicApiHotkey, 'bind' | 'callbacks'> {
-  activate(activate: boolean): void;
+export interface IHotKey extends Hotkey {
 }
 
-export class Hotkey implements IHotKey {
+export class Hotkey implements Omit<IPublicApiHotkey, 'bind' | 'callbacks'> {
   callBacks: IPublicTypeHotkeyCallbacks = {};
 
   private directMap: HotkeyDirectMap = {};
@@ -368,7 +367,7 @@ export class Hotkey implements IHotKey {
     this.isActivate = activate;
   }
 
-  mount(window: Window) {
+  mount(window: Window): IPublicTypeDisposable {
     const { document } = window;
     const handleKeyEvent = this.handleKeyEvent.bind(this);
     document.addEventListener('keypress', handleKeyEvent, false);

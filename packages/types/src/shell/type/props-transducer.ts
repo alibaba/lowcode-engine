@@ -1,11 +1,11 @@
 import { IPublicEnumTransformStage } from '../enum';
 import { IPublicModelNode } from '../model';
-import { IPublicTypeCompositeObject } from './';
+import { IPublicTypePropsMap } from './';
 
 export type IPublicTypePropsTransducer = (
-  props: IPublicTypeCompositeObject,
+  props: IPublicTypePropsMap,
   node: IPublicModelNode,
   ctx?: {
     stage: IPublicEnumTransformStage;
   },
-) => IPublicTypeCompositeObject;
+) => IPublicTypePropsMap;

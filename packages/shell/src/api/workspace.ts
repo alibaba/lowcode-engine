@@ -1,4 +1,4 @@
-import { IPublicApiWorkspace, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType } from '@alilc/lowcode-types';
+import { IPublicApiWorkspace, IPublicModelResource, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType } from '@alilc/lowcode-types';
 import { IWorkspace } from '@alilc/lowcode-workspace';
 import { resourceSymbol, workspaceSymbol } from '../symbols';
 import { Resource as ShellResource, Window as ShellWindow } from '../model';
@@ -13,7 +13,7 @@ export class Workspace implements IPublicApiWorkspace {
   }
 
   get resourceList() {
-    return this[workspaceSymbol].getResourceList().map((d) => new ShellResource(d));
+    return this[workspaceSymbol].getResourceList().map((d) => new ShellResource(d) as IPublicModelResource);
   }
 
   setResourceList(resourceList: IPublicResourceList) {

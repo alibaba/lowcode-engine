@@ -102,7 +102,7 @@ export interface IPublicTypeFilterItem {
 }
 export interface IPublicTypeAutorunItem {
   name: string;
-  autorun: (target: IPublicModelSettingField | null) => any;
+  autorun: (target: IPublicModelSettingField | null | undefined) => any;
 }
 
 // thinkof Array

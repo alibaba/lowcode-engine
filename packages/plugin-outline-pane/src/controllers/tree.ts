@@ -36,12 +36,13 @@ export class Tree {
 
     doc?.onChangeNodeProp((info: IPublicTypePropChangeOptions) => {
       const { node, key } = info;
+      const treeNode = this.getTreeNodeById(node.id);
       if (key === '___title___') {
-        const treeNode = this.getTreeNodeById(node.id);
         treeNode?.notifyTitleLabelChanged();
       } else if (key === '___condition___') {
-        const treeNode = this.getTreeNodeById(node.id);
         treeNode?.notifyConditionChanged();
+      } else if (key === '___loop___') {
+        treeNode?.notifyLoopChanged();
       }
     });
 

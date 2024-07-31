@@ -19,7 +19,7 @@ export class CommonUI implements IPublicApiCommonUI {
   Card = Card;
   Checkbox = Checkbox;
   DatePicker = DatePicker;
-  Dialog = Dialog;
+  Dialog = Dialog as any;
   Dropdown = Dropdown;
   Form = Form;
   Icon = Icon;
@@ -31,15 +31,15 @@ export class CommonUI implements IPublicApiCommonUI {
   Radio = Radio;
   Search = Search;
   Select = Select;
-  SplitButton = SplitButton;
+  SplitButton = SplitButton as any;
   Step = Step;
-  Switch = Switch;
+  Switch = Switch as any;
   Tab = Tab;
   Table = Table;
   Tree = Tree;
   TreeSelect = TreeSelect;
   Upload = Upload;
-  Divider = Divider;
+  Divider = Divider as any;
 
   ContextMenu: ((props: {
     menus: IPublicTypeContextMenuAction[];

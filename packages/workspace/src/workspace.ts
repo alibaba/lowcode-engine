@@ -1,6 +1,6 @@
-import { IDesigner, ILowCodePluginManager, LowCodePluginManager } from '@alilc/lowcode-designer';
-import { createModuleEventBus, Editor, IEditor, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
-import { IPublicApiPlugins, IPublicApiWorkspace, IPublicEnumPluginRegisterLevel, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType, IShellModelFactory } from '@alilc/lowcode-types';
+import { IDesigner, LowCodePluginManager } from '@alilc/lowcode-designer';
+import { createModuleEventBus, IEditor, IEventBus, makeObservable, obx } from '@alilc/lowcode-editor-core';
+import { IPublicApiPlugins, IPublicApiWorkspace, IPublicEnumPluginRegisterLevel, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType } from '@alilc/lowcode-types';
 import { BasicContext } from './context/base-context';
 import { EditorWindow, WINDOW_STATE } from './window';
 import type { IEditorWindow } from './window';
@@ -20,56 +20,11 @@ enum EVENT {
 
 const CHANGE_EVENT = 'resource.list.change';
 
-export interface IWorkspace extends Omit<IPublicApiWorkspace<
+export class Workspace implements Omit<IPublicApiWorkspace<
   LowCodePluginManager,
+  ISkeleton,
   IEditorWindow
 >, 'resourceList' | 'plugins' | 'openEditorWindow' | 'removeEditorWindow'> {
-  readonly registryInnerPlugin: (designer: IDesigner, editor: Editor, plugins: IPublicApiPlugins) => Promise<IPublicTypeDisposable>;
-
-  readonly shellModelFactory: IShellModelFactory;
-
-  enableAutoOpenFirstWindow: boolean;
-
-  window: IEditorWindow;
-
-  plugins: ILowCodePluginManager;
-
-  skeleton: ISkeleton;
-
-  resourceTypeMap: Map<string, ResourceType>;
-
-  getResourceList(): IResource[];
-
-  getResourceType(resourceName: string): IResourceType;
-
-  checkWindowQueue(): void;
-
-  emitWindowRendererReady(): void;
-
-  initWindow(): void;
-
-  setActive(active: boolean): void;
-
-  onChangeActiveEditorView(fn: () => void): IPublicTypeDisposable;
-
-  emitChangeActiveEditorView(): void;
-
-  openEditorWindowByResource(resource: IResource, sleep: boolean): Promise<void>;
-
-  /**
-   * @deprecated
-   */
-  removeEditorWindow(resourceName: string, id: string): void;
-
-  removeEditorWindowByResource(resource: IResource): void;
-
-  /**
-   * @deprecated
-   */
-  openEditorWindow(name: string, title: string, options: Object, viewName?: string, sleep?: boolean): Promise<void>;
-}
-
-export class Workspace implements IWorkspace {
   context: BasicContext;
 
   enableAutoOpenFirstWindow: boolean;
@@ -377,3 +332,5 @@ export class Workspace implements IWorkspace {
     };
   }
 }
+
+export interface IWorkspace extends Workspace {}
