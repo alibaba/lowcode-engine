@@ -111,6 +111,16 @@ describe('NodeChildren 方法测试', () => {
     expect(children.length).toBe(2);
   });
 
+  it('split add node and update node parent', () => {
+    const firstBtn = doc.getNode('node_k1ow3cbn')!;
+    const { children } = firstBtn.parent!;
+    const node = doc.createNode({ componentName: 'Button' });
+
+    children.splice(0, 0, node);
+
+    expect(node.parent).toBe(firstBtn.parent);
+  })
+
   it('map', () => {
     const firstBtn = doc.getNode('node_k1ow3cbn')!;
     const { children } = firstBtn.parent!;

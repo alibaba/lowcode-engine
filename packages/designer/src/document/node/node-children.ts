@@ -1,5 +1,5 @@
 import { obx, computed, makeObservable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
-import { Node, INode } from './node';
+import type { INode } from './node';
 import { IPublicTypeNodeData, IPublicModelNodeChildren, IPublicEnumTransformStage, IPublicTypeDisposable } from '@alilc/lowcode-types';
 import { shallowEqual, compatStage, isNodeSchema } from '@alilc/lowcode-utils';
 import { foreachReverse } from '../../utils/tree';
@@ -7,66 +7,15 @@ import { NodeRemoveOptions } from '../../types';
 
 export interface IOnChangeOptions {
   type: string;
-  node: Node;
+  node: INode;
 }
 
-export interface INodeChildren extends Omit<IPublicModelNodeChildren<INode>,
-  'importSchema' |
-  'exportSchema' |
-  'isEmpty' |
-  'notEmpty'
+export class NodeChildren implements Omit<IPublicModelNodeChildren<INode>,
+'importSchema' |
+'exportSchema' |
+'isEmpty' |
+'notEmpty'
 > {
-  children: INode[];
-
-  get owner(): INode;
-
-  get length(): number;
-
-  unlinkChild(node: INode): void;
-
-  /**
-   * 删除一个节点
-   */
-  internalDelete(
-      node: INode,
-      purge: boolean,
-      useMutator: boolean,
-      options: NodeRemoveOptions
-    ): boolean;
-
-  /**
-   * 插入一个节点，返回新长度
-   */
-  internalInsert(node: INode, at?: number | null, useMutator?: boolean): void;
-
-  import(data?: IPublicTypeNodeData | IPublicTypeNodeData[], checkId?: boolean): void;
-
-  /**
-   * 导出 schema
-   */
-  export(stage: IPublicEnumTransformStage): IPublicTypeNodeData[];
-
-  /** following methods are overriding super interface, using different param types */
-  /** overriding methods start */
-
-  forEach(fn: (item: INode, index: number) => void): void;
-
-  /**
-   * 根据索引获得节点
-   */
-  get(index: number): INode | null;
-
-  isEmpty(): boolean;
-
-  notEmpty(): boolean;
-
-  internalInitParent(): void;
-
-  onChange(fn: (info?: IOnChangeOptions) => void): IPublicTypeDisposable;
-
-  /** overriding methods end */
-}
-export class NodeChildren implements INodeChildren {
   @obx.shallow children: INode[];
 
   private emitter: IEventBus = createModuleEventBus('NodeChildren');
@@ -99,11 +48,10 @@ export class NodeChildren implements INodeChildren {
   constructor(
       readonly owner: INode,
       data: IPublicTypeNodeData | IPublicTypeNodeData[],
-      options: any = {},
     ) {
     makeObservable(this);
     this.children = (Array.isArray(data) ? data : [data]).filter(child => !!child).map((child) => {
-      return this.owner.document?.createNode(child, options.checkId);
+      return this.owner.document?.createNode(child);
     });
   }
 
@@ -132,7 +80,7 @@ export class NodeChildren implements INodeChildren {
     const originChildren = this.children.slice();
     this.children.forEach((child) => child.internalSetParent(null));
 
-    const children = new Array<Node>(data.length);
+    const children = new Array<INode>(data.length);
     for (let i = 0, l = data.length; i < l; i++) {
       const child = originChildren[i];
       const item = data[i];
@@ -142,9 +90,17 @@ export class NodeChildren implements INodeChildren {
         node = child;
         node.import(item);
       } else {
-        node = this.owner.document?.createNode(item, checkId);
+        node = this.owner.document?.createNode(item);
+        child?.purge();
       }
-      children[i] = node;
+
+      if (node) {
+        children[i] = node;
+      }
+    }
+
+    for (let i = data.length; i < originChildren.length; i++) {
+      originChildren[i].purge();
     }
 
     this.children = children;
@@ -176,13 +132,13 @@ export class NodeChildren implements INodeChildren {
   /**
    * 回收销毁
    */
-  purge(useMutator = true) {
+  purge() {
     if (this.purged) {
       return;
     }
     this.purged = true;
     this.children.forEach((child) => {
-      child.purge(useMutator);
+      child.purge();
     });
   }
 
@@ -212,15 +168,15 @@ export class NodeChildren implements INodeChildren {
     node.internalPurgeStart();
     if (node.isParentalNode) {
       foreachReverse(
-        node.children,
-        (subNode: Node) => {
+        node.children!,
+        (subNode: INode) => {
           subNode.remove(useMutator, purge, options);
         },
         (iterable, idx) => (iterable as NodeChildren).get(idx),
       );
       foreachReverse(
         node.slots,
-        (slotNode: Node) => {
+        (slotNode: INode) => {
           slotNode.remove(useMutator, purge);
         },
         (iterable, idx) => (iterable as [])[idx],
@@ -351,10 +307,17 @@ export class NodeChildren implements INodeChildren {
    *
    */
   splice(start: number, deleteCount: number, node?: INode): INode[] {
+    let removedNode;
     if (node) {
-      return this.children.splice(start, deleteCount, node);
+      removedNode = this.children.splice(start, deleteCount, node);
+      node.internalSetParent(this.owner);
+    } else {
+      removedNode = this.children.splice(start, deleteCount);
     }
-    return this.children.splice(start, deleteCount);
+
+    removedNode.forEach(d => d?.purge());
+
+    return removedNode;
   }
 
   /**
@@ -459,11 +422,11 @@ export class NodeChildren implements INodeChildren {
       const items = adder(this.children);
       if (items && items.length > 0) {
         items.forEach((child: IPublicTypeNodeData) => {
-          const node: INode = this.owner.document?.createNode(child);
-          this.children.push(node);
-          node.internalSetParent(this.owner);
+          const node: INode | null = this.owner.document?.createNode(child);
+          node && this.children.push(node);
+          node?.internalSetParent(this.owner);
           /* istanbul ignore next */
-          const editor = node.document?.designer.editor;
+          const editor = node?.document?.designer.editor;
           editor?.eventBus.emit('node.add', { node });
         });
         changed = true;
@@ -504,7 +467,7 @@ export class NodeChildren implements INodeChildren {
       try {
         callbacks?.onSubtreeModified.call(
           node.internalToShellNode(),
-          owner.internalToShellNode(),
+          owner.internalToShellNode()!,
           options,
         );
       } catch (e) {
@@ -517,3 +480,5 @@ export class NodeChildren implements INodeChildren {
     }
   }
 }
+
+export interface INodeChildren extends NodeChildren {}

@@ -229,7 +229,7 @@ export async function init(
     document.body.appendChild(engineContainer);
   } else {
     engineOptions = options;
-    engineContainer = container;
+    engineContainer = container!;
     if (!container) {
       engineContainer = document.createElement('div');
       engineContainer.id = 'engine';

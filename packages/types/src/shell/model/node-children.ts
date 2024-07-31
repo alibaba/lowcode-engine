@@ -78,7 +78,7 @@ export interface IPublicModelNodeChildren<
    * @param deleteCount
    * @param node
    */
-  splice(start: number, deleteCount: number, node?: Node): any;
+  splice(start: number, deleteCount: number, node?: Node): Node[];
 
   /**
    * 返回指定下标的节点

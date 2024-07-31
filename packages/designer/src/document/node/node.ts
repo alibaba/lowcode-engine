@@ -13,17 +13,16 @@ import {
   GlobalEvent,
   IPublicTypeComponentAction,
   IPublicModelNode,
-  IPublicModelExclusiveGroup,
   IPublicEnumTransformStage,
   IPublicTypeDisposable,
   IBaseModelNode,
 } from '@alilc/lowcode-types';
 import { compatStage, isDOMText, isJSExpression, isNode, isNodeSchema } from '@alilc/lowcode-utils';
-import { ISettingTopEntry } from '@alilc/lowcode-designer';
+import type { ISettingTopEntry } from '@alilc/lowcode-designer';
 import { Props, getConvertedExtraKey, IProps } from './props/props';
 import type { IDocumentModel } from '../document-model';
 import { NodeChildren, INodeChildren } from './node-children';
-import { IProp, Prop } from './props/prop';
+import type { IProp } from './props/prop';
 import type { IComponentMeta } from '../../component-meta';
 import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
 import type { IExclusiveGroup } from './exclusive-group';
@@ -37,132 +36,7 @@ export interface NodeStatus {
   inPlaceEditing: boolean;
 }
 
-export interface IBaseNode<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> extends Omit<IBaseModelNode<
-  IDocumentModel,
-  IBaseNode,
-  INodeChildren,
-  IComponentMeta,
-  ISettingTopEntry,
-  IProps,
-  IProp,
-  IExclusiveGroup
->,
-  'isRoot' |
-  'isPage' |
-  'isComponent' |
-  'isModal' |
-  'isSlot' |
-  'isParental' |
-  'isLeaf' |
-  'settingEntry' |
-  // 在内部的 node 模型中不存在
-  'getExtraPropValue' |
-  'setExtraPropValue' |
-  'exportSchema' |
-  'visible' |
-  'importSchema' |
-  // 内外实现有差异
-  'isContainer' |
-  'isEmpty'
-> {
-  isNode: boolean;
-
-  get componentMeta(): IComponentMeta;
-
-  get settingEntry(): ISettingTopEntry;
-
-  get isPurged(): boolean;
-
-  get index(): number | undefined;
-
-  get isPurging(): boolean;
-
-  getId(): string;
-
-  getParent(): INode | null;
-
-  /**
-   * 内部方法，请勿使用
-   * @param useMutator 是否触发联动逻辑
-   */
-  internalSetParent(parent: INode | null, useMutator?: boolean): void;
-
-  setConditionGroup(grp: IPublicModelExclusiveGroup | string | null): void;
-
-  internalToShellNode(): IPublicModelNode | null;
-
-  internalPurgeStart(): void;
-
-  unlinkSlot(slotNode: INode): void;
-
-  /**
-   * 导出 schema
-   */
-  export<T = Schema>(stage: IPublicEnumTransformStage, options?: any): T;
-
-  emitPropChange(val: IPublicTypePropChangeOptions): void;
-
-  import(data: Schema, checkId?: boolean): void;
-
-  internalSetSlotFor(slotFor: Prop | null | undefined): void;
-
-  addSlot(slotNode: INode): void;
-
-  onVisibleChange(func: (flag: boolean) => any): () => void;
-
-  getSuitablePlace(node: INode, ref: any): any;
-
-  onChildrenChange(fn: (param?: { type: string; node: INode }) => void): IPublicTypeDisposable | undefined;
-
-  onPropChange(func: (info: IPublicTypePropChangeOptions) => void): IPublicTypeDisposable;
-
-  isModal(): boolean;
-
-  isRoot(): boolean;
-
-  isPage(): boolean;
-
-  isComponent(): boolean;
-
-  isSlot(): boolean;
-
-  isParental(): boolean;
-
-  isLeaf(): boolean;
-
-  isContainer(): boolean;
-
-  isEmpty(): boolean;
-
-  remove(
-    useMutator?: boolean,
-    purge?: boolean,
-    options?: NodeRemoveOptions,
-  ): void;
-
-  didDropIn(dragment: INode): void;
-
-  didDropOut(dragment: INode): void;
-
-  purge(): void;
-
-  removeSlot(slotNode: INode): boolean;
-
-  setVisible(flag: boolean): void;
-
-  getVisible(): boolean;
-
-  getChildren(): INodeChildren | null;
-
-  clearPropValue(path: string | number): void;
-
-  setProps(props?: IPublicTypePropsMap | IPublicTypePropsList | Props | null): void;
-
-  mergeProps(props: IPublicTypePropsMap): void;
-
-  /** 是否可以选中 */
-  canSelect(): boolean;
-}
+export interface IBaseNode extends Node {}
 
 /**
  * 基础节点
@@ -212,7 +86,34 @@ export interface IBaseNode<Schema extends IPublicTypeNodeSchema = IPublicTypeNod
  *  isLocked
  *  hidden
  */
-export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> implements IBaseNode {
+export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> implements Omit<IBaseModelNode<
+  IDocumentModel,
+  IBaseNode,
+  INodeChildren,
+  IComponentMeta,
+  ISettingTopEntry,
+  IProps,
+  IProp,
+  IExclusiveGroup
+>,
+'isRoot' |
+'isPage' |
+'isComponent' |
+'isModal' |
+'isSlot' |
+'isParental' |
+'isLeaf' |
+'settingEntry' |
+// 在内部的 node 模型中不存在
+'getExtraPropValue' |
+'setExtraPropValue' |
+'exportSchema' |
+'visible' |
+'importSchema' |
+// 内外实现有差异
+'isContainer' |
+'isEmpty'
+> {
   private emitter: IEventBus;
 
   /**
@@ -296,7 +197,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
 
   isInited = false;
 
-  _settingEntry: ISettingTopEntry;
+  _settingEntry?: ISettingTopEntry;
 
   get settingEntry(): ISettingTopEntry {
     if (this._settingEntry) return this._settingEntry;
@@ -594,7 +495,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     }
   }
 
-  internalSetSlotFor(slotFor: Prop | null | undefined) {
+  internalSetSlotFor(slotFor: IProp | null | undefined) {
     this._slotFor = slotFor;
   }
 
@@ -690,7 +591,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   }
 
   /* istanbul ignore next */
-  setConditionGroup(grp: IPublicModelExclusiveGroup | string | null) {
+  setConditionGroup(grp: IExclusiveGroup | string | null) {
     let _grp: IExclusiveGroup | null = null;
     if (!grp) {
       this.getExtraProp('conditionGroup', false)?.remove();
@@ -1086,7 +987,8 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
     this.autoruns?.forEach((dispose) => dispose());
     this.props.purge();
     this.settingEntry?.purge();
-    // this.document.destroyNode(this);
+    this.children?.purge();
+    this._settingEntry = undefined;
   }
 
   internalPurgeStart() {
@@ -1389,11 +1291,11 @@ export interface LeafNode extends Node {
 
 export type IPublicTypePropChangeOptions = Omit<GlobalEvent.Node.Prop.ChangeOptions, 'node'>;
 
-export type ISlotNode = IBaseNode<IPublicTypeSlotSchema>;
-export type IPageNode = IBaseNode<IPublicTypePageSchema>;
-export type IComponentNode = IBaseNode<IPublicTypeComponentSchema>;
-export type IRootNode = IPageNode | IComponentNode;
-export type INode = IPageNode | ISlotNode | IComponentNode | IRootNode;
+export interface ISlotNode extends Node<IPublicTypeSlotSchema> {}
+export interface IPageNode extends Node<IPublicTypePageSchema> {}
+export interface IComponentNode extends Node<IPublicTypeComponentSchema> {}
+export interface IRootNode extends Node<IPublicTypePageSchema | IPublicTypeComponentSchema> {}
+export interface INode extends Node<IPublicTypePageSchema | IPublicTypeSlotSchema | IPublicTypeComponentSchema | IPublicTypeNodeSchema> {}
 
 export function isRootNode(node: INode): node is IRootNode {
   return node && node.isRootNode;
@@ -1505,7 +1407,7 @@ export function insertChild(
 
 export function insertChildren(
   container: INode,
-  nodes: INode[] | IPublicTypeNodeData[],
+  nodes: INode[] | IPublicTypeNodeData[] | IPublicModelNode[],
   at?: number | null,
   copy?: boolean,
 ): INode[] {

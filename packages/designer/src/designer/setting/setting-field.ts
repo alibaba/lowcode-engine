@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import {
   IPublicTypeTitleContent,
   IPublicTypeSetterType,
@@ -7,18 +6,15 @@ import {
   IPublicTypeFieldConfig,
   IPublicTypeCustomView,
   IPublicTypeDisposable,
-  IPublicModelSettingField,
-  IBaseModelSettingField,
 } from '@alilc/lowcode-types';
 import type {
   IPublicTypeSetValueOptions,
 } from '@alilc/lowcode-types';
 import { Transducer } from './utils';
-import { ISettingPropEntry, SettingPropEntry } from './setting-prop-entry';
+import { SettingPropEntry } from './setting-prop-entry';
 import { computed, obx, makeObservable, action, untracked, intl } from '@alilc/lowcode-editor-core';
 import { cloneDeep, isCustomView, isDynamicSetter, isJSExpression } from '@alilc/lowcode-utils';
-import { ISettingTopEntry } from './setting-top-entry';
-import { IComponentMeta, INode } from '@alilc/lowcode-designer';
+import type { ISettingTopEntry } from './setting-top-entry';
 
 function getSettingFieldCollectorKey(parent: ISettingTopEntry | ISettingField, config: IPublicTypeFieldConfig) {
   let cur = parent;
@@ -32,53 +28,7 @@ function getSettingFieldCollectorKey(parent: ISettingTopEntry | ISettingField, c
   return path.join('.');
 }
 
-export interface ISettingField extends ISettingPropEntry, Omit<IBaseModelSettingField<
-  ISettingTopEntry,
-  ISettingField,
-  IComponentMeta,
-  INode
->, 'setValue' | 'key' | 'node'> {
-  readonly isSettingField: true;
-
-  readonly isRequired: boolean;
-
-  readonly isGroup: boolean;
-
-  extraProps: IPublicTypeFieldExtraProps;
-
-  get items(): Array<ISettingField | IPublicTypeCustomView>;
-
-  get title(): string | ReactNode | undefined;
-
-  get setter(): IPublicTypeSetterType | null;
-
-  get expanded(): boolean;
-
-  get valueState(): number;
-
-  setExpanded(value: boolean): void;
-
-  purge(): void;
-
-  setValue(
-    val: any,
-    isHotValue?: boolean,
-    force?: boolean,
-    extraOptions?: IPublicTypeSetValueOptions,
-  ): void;
-
-  clearValue(): void;
-
-  valueChange(options: IPublicTypeSetValueOptions): void;
-
-  createField(config: IPublicTypeFieldConfig): ISettingField;
-
-  onEffect(action: () => void): IPublicTypeDisposable;
-
-  internalToShellField(): IPublicModelSettingField;
-}
-
-export class SettingField extends SettingPropEntry implements ISettingField {
+export class SettingField extends SettingPropEntry {
   readonly isSettingField = true;
 
   readonly isRequired: boolean;
@@ -321,3 +271,5 @@ export class SettingField extends SettingPropEntry implements ISettingField {
 export function isSettingField(obj: any): obj is ISettingField {
   return obj && obj.isSettingField;
 }
+
+export type ISettingField = typeof SettingField;

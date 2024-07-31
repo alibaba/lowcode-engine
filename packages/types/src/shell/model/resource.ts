@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ComponentType, ReactElement } from 'react';
 
 export interface IBaseModelResource<
   Resource
@@ -7,7 +7,7 @@ export interface IBaseModelResource<
 
   get id(): string | undefined;
 
-  get icon(): ReactElement | undefined;
+  get icon(): ReactElement | undefined | ComponentType;
 
   get options(): Record<string, any>;
 
