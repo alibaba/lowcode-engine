@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     if: >-
       contains(github.ref, 'refs/heads/release/') &&
-      (github.actor == 'JackLian' || github.actor == 'liujuping')
+      (github.actor == '1ncounter' || github.actor == 'liujuping')
     steps:
       - uses: actions/checkout@v2
       - name: Setup Node.js

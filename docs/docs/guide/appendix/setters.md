@@ -18,7 +18,7 @@ sidebar_position: 4
 | JsonSetter | object | json 型数据设置器 | ![](https://img.alicdn.com/imgextra/i2/O1CN01mQTFjY1YiBQzWYj64_!!6000000003092-2-tps-1076-1068.png) |
 | [MixedSetter](./setterDetails/mixed) | any | 混合型数据设置器 | ![](https://img.alicdn.com/imgextra/i1/O1CN01ZxomFY1JW4j7wIGuQ_!!6000000001035-2-tps-1552-480.png) |
 | [NumberSetter](./setterDetails/number) | number | 数值型数据设置器 | ![](https://img.alicdn.com/imgextra/i3/O1CN01dSfSgg1WS2EpbqJIO_!!6000000002786-2-tps-1152-328.png) |
-| ObjectSetter | Record<string, any> | 对象数据设置器，一般内嵌在 ArraySetter 中 ||
+| [ObjectSetter](./setterDetails/array#objectsetter-配置) | Record<string, any> | 对象数据设置器，一般内嵌在 ArraySetter 中 ||
 | [RadioGroupSetter](./setterDetails/radioGroup)| string &#124; number &#124; boolean | 枚举型数据设置器，采用 tab 选择的形式展现 || ![](https://img.alicdn.com/imgextra/i4/O1CN01Z0Zgi51W10s5L2Hce_!!6000000002727-2-tps-564-98.png) |
 | [SelectSetter](./setterDetails/select) | string &#124; number &#124; boolean | 枚举型数据设置器，采用下拉的形式展现 | ![](https://img.alicdn.com/imgextra/i1/O1CN01sfUEgZ1I0BXCl60LM_!!6000000000830-2-tps-582-282.png) |
 | [SlotSetter](./setterDetails/slot) | Element &#124; Element[] | 节点型数据设置器 | ![](https://img.alicdn.com/imgextra/i3/O1CN01wulNGt1qNip0IlEsF_!!6000000005484-2-tps-644-164.png) |
