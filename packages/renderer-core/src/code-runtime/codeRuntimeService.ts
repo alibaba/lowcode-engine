@@ -29,8 +29,8 @@ export class CodeRuntimeService extends Disposable implements ICodeRuntimeServic
   ) {
     super();
 
-    this._rootRuntime = this.addDispose(new CodeRuntime(options));
-    this.addDispose(
+    this._rootRuntime = this._addDispose(new CodeRuntime(options));
+    this._addDispose(
       this.schemaService.onSchemaUpdate(({ key, data }) => {
         if (key === 'constants') {
           this.rootRuntime.getScope().set('constants', data);
@@ -44,7 +44,7 @@ export class CodeRuntimeService extends Disposable implements ICodeRuntimeServic
   ): ICodeRuntime<T> {
     this._throwIfDisposed();
 
-    return this.addDispose(
+    return this._addDispose(
       options.parentScope ? new CodeRuntime(options) : this.rootRuntime.createChild<T>(options),
     );
   }

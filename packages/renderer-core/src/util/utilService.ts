@@ -5,8 +5,8 @@ import {
   type StringDictionary,
 } from '@alilc/lowcode-shared';
 import { isPlainObject } from 'lodash-es';
-import { IPackageManagementService } from './package';
-import { ICodeRuntimeService } from './code-runtime';
+import { IPackageManagementService } from '../package';
+import { ICodeRuntimeService } from '../code-runtime';
 
 export interface IRuntimeUtilService {
   add(utilItem: UtilDescription, force?: boolean): void;

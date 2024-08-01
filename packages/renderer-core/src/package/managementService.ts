@@ -63,7 +63,7 @@ export class PackageManagementService extends Disposable implements IPackageMana
   constructor(@ISchemaService private schemaService: ISchemaService) {
     super();
 
-    this.addDispose(
+    this._addDispose(
       this.schemaService.onSchemaUpdate(({ key, previous, data }) => {
         if (key === 'componentsMap') {
           // todo: add remove ...

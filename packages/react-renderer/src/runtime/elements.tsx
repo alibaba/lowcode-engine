@@ -142,8 +142,7 @@ export function WidgetComponent(props: WidgetRendererProps) {
     },
   );
 
-  if (process.env.NODE_ENV === 'development') {
-    // development 模式下 把 widget 的内容作为 prop ，便于排查问题
+  if (__DEV__) {
     processedProps.widget = widget;
   }
 

@@ -15,7 +15,7 @@ import {
   Disposable,
 } from '@alilc/lowcode-shared';
 import { type ICodeRuntime } from '../code-runtime';
-import { IWidget, Widget } from '../../widget';
+import { IWidget, Widget } from '../widget';
 
 export interface NormalizedComponentNode extends ComponentNode {
   loopArgs: [string, string];
@@ -25,7 +25,7 @@ export interface NormalizedComponentNode extends ComponentNode {
 /**
  * 根据低代码搭建协议的容器组件描述生成的容器模型
  */
-export interface IComponentTreeModel<Component, ComponentInstance = unknown> {
+export interface IComponentTreeModel<Component, ComponentInstance = unknown> extends IDisposable {
   readonly id: string;
 
   readonly codeRuntime: ICodeRuntime;
@@ -61,7 +61,7 @@ export type ModelDataSourceCreator = (
   codeRuntime: ICodeRuntime<InstanceApi>,
 ) => InstanceDataSourceApi;
 
-export interface ComponentTreeModelOptions extends IDisposable {
+export interface ComponentTreeModelOptions {
   id?: string;
   metadata?: StringDictionary;
 
@@ -91,7 +91,7 @@ export class ComponentTreeModel<Component, ComponentInstance = unknown>
     this._id = options?.id ?? `model_${uniqueId()}`;
     this._metadata = options?.metadata ?? {};
     this.initialize(options);
-    this.addDispose(_codeRuntime);
+    this._addDispose(_codeRuntime);
   }
 
   get id() {

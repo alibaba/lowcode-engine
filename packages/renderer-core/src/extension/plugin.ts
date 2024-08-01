@@ -1,6 +1,6 @@
 import { type StringDictionary, type IDisposable } from '@alilc/lowcode-shared';
 import { type IBoosts } from './boosts';
-import { ILifeCycleService } from '../lifeCycleService';
+import { ILifeCycleService } from '../life-cycle/lifeCycleService';
 import { type ISchemaService } from '../schema';
 import { type IPackageManagementService } from '../package';
 import { type IStore } from '../../utils/store';

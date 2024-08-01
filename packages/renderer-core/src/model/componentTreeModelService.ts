@@ -48,7 +48,7 @@ export class ComponentTreeModelService extends Disposable implements IComponentT
   ): IComponentTreeModel<Component> {
     this._throwIfDisposed(`ComponentTreeModelService has been disposed.`);
 
-    return this.addDispose(
+    return this._addDispose(
       new ComponentTreeModel(
         componentsTree,
         this.codeRuntimeService.createCodeRuntime({

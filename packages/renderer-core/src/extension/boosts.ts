@@ -1,8 +1,8 @@
 import { type StringDictionary } from '@alilc/lowcode-shared';
 import { isObject } from 'lodash-es';
 import { ICodeRuntime, ICodeRuntimeService } from '../code-runtime';
-import { IRuntimeUtilService } from '../runtimeUtilService';
-import { IRuntimeIntlService } from '../runtimeIntlService';
+import { IRuntimeUtilService } from '../util/utilService';
+import { IRuntimeIntlService } from '../intlService';
 
 export type IBoosts<Extends> = IBoostsApi & Extends & { [key: string]: any };
 

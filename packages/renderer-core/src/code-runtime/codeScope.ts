@@ -66,7 +66,7 @@ export class CodeScope<T extends StringDictionary = StringDictionary>
   }
 
   createChild<V extends StringDictionary = StringDictionary>(initValue: Partial<V>): ICodeScope<V> {
-    const childScope = this.addDispose(new CodeScope(initValue));
+    const childScope = this._addDispose(new CodeScope(initValue));
     childScope.node.prev = this.node;
 
     return childScope;

@@ -3,10 +3,10 @@ import { type Plugin, type PluginContext } from './plugin';
 import { BoostsManager } from './boosts';
 import { IPackageManagementService } from '../package';
 import { ISchemaService } from '../schema';
-import { ILifeCycleService } from '../lifeCycleService';
+import { ILifeCycleService } from '../life-cycle/lifeCycleService';
 import { ICodeRuntimeService } from '../code-runtime';
-import { IRuntimeIntlService } from '../runtimeIntlService';
-import { IRuntimeUtilService } from '../runtimeUtilService';
+import { IRuntimeIntlService } from '../intl';
+import { IRuntimeUtilService } from '../util';
 
 export interface IExtensionHostService {
   readonly boostsManager: BoostsManager;
@@ -28,12 +28,12 @@ export class ExtensionHostService extends Disposable implements IExtensionHostSe
   private _pluginSetupContext: PluginContext;
 
   constructor(
-    lifeCycleService: ILifeCycleService,
-    packageManagementService: IPackageManagementService,
-    schemaService: ISchemaService,
-    codeRuntimeService: ICodeRuntimeService,
-    runtimeIntlService: IRuntimeIntlService,
-    runtimeUtilService: IRuntimeUtilService,
+    @ILifeCycleService lifeCycleService: ILifeCycleService,
+    @IPackageManagementService packageManagementService: IPackageManagementService,
+    @ISchemaService schemaService: ISchemaService,
+    @ICodeRuntimeService codeRuntimeService: ICodeRuntimeService,
+    @IRuntimeIntlService runtimeIntlService: IRuntimeIntlService,
+    @IRuntimeUtilService runtimeUtilService: IRuntimeUtilService,
   ) {
     super();
 
@@ -103,7 +103,7 @@ export class ExtensionHostService extends Disposable implements IExtensionHostSe
 
     await plugin.setup(this._pluginSetupContext);
     this._activePlugins.add(plugin.name);
-    this.addDispose(plugin);
+    this._addDispose(plugin);
   }
 
   getPlugin(name: string): Plugin | undefined {

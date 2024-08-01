@@ -53,7 +53,7 @@ export class CodeRuntime<T extends StringDictionary = StringDictionary>
     super();
 
     if (options.evalCodeFunction) this._evalCodeFunction = options.evalCodeFunction;
-    this._codeScope = this.addDispose(
+    this._codeScope = this._addDispose(
       options.parentScope
         ? options.parentScope.createChild<T>(options.initScopeValue ?? {})
         : new CodeScope(options.initScopeValue ?? {}),
@@ -122,7 +122,7 @@ export class CodeRuntime<T extends StringDictionary = StringDictionary>
   onResolve(handler: NodeResolverHandler): IDisposable {
     this._resolveHandlers.push(handler);
 
-    return this.addDispose(
+    return this._addDispose(
       toDisposable(() => {
         this._resolveHandlers = this._resolveHandlers.filter((h) => h !== handler);
       }),
@@ -132,7 +132,7 @@ export class CodeRuntime<T extends StringDictionary = StringDictionary>
   createChild<V extends StringDictionary = StringDictionary>(
     options?: Omit<CodeRuntimeOptions<V>, 'parentScope'>,
   ): ICodeRuntime<V> {
-    return this.addDispose(
+    return this._addDispose(
       new CodeRuntime({
         initScopeValue: options?.initScopeValue,
         parentScope: this._codeScope,

@@ -1,71 +1,98 @@
-import { invariant, InstantiationService } from '@alilc/lowcode-shared';
-import type { AppOptions, RendererApplication } from './types';
-import { CodeRuntimeService, ICodeRuntimeService } from './services/code-runtime';
+import {
+  invariant,
+  InstantiationService,
+  BeanContainer,
+  CtorDescriptor,
+  type Project,
+  type Package,
+} from '@alilc/lowcode-shared';
+import { CodeRuntimeService, ICodeRuntimeService, type CodeRuntimeOptions } from './code-runtime';
 import {
   IExtensionHostService,
   type RenderAdapter,
   type IRenderObject,
   ExtensionHostService,
-} from './services/extension';
-import { IPackageManagementService, PackageManagementService } from './services/package';
-import { ISchemaService, SchemaService } from './services/schema';
-import { ILifeCycleService, LifecyclePhase, LifeCycleService } from './services/lifeCycleService';
-import { IRuntimeIntlService, RuntimeIntlService } from './services/runtimeIntlService';
-import { IRuntimeUtilService, RuntimeUtilService } from './services/runtimeUtilService';
+  type Plugin,
+} from './extension';
+import { IPackageManagementService, PackageManagementService } from './package';
+import { ISchemaService, SchemaService } from './schema';
+import { ILifeCycleService, LifecyclePhase, LifeCycleService } from './life-cycle';
+import { IRuntimeIntlService, RuntimeIntlService } from './intl';
+import { IRuntimeUtilService, RuntimeUtilService } from './util';
+import { type ModelDataSourceCreator } from './model';
+
+export interface AppOptions {
+  schema: Project;
+  packages?: Package[];
+  plugins?: Plugin[];
+  /**
+   * code runtime 设置选项
+   */
+  codeRuntime?: CodeRuntimeOptions;
+  /**
+   * 数据源创建工厂函数
+   */
+  dataSourceCreator?: ModelDataSourceCreator;
+}
+
+export type RendererApplication<Render = unknown> = {
+  readonly mode: 'development' | 'production';
+
+  readonly schema: Omit<ISchemaService, 'initialize'>;
+
+  readonly packageManager: IPackageManagementService;
+
+  use(plugin: Plugin): Promise<void>;
+
+  destroy(): void;
+} & Render;
 
 export function createRenderer<RenderObject = IRenderObject>(
   renderAdapter: RenderAdapter<RenderObject>,
 ): (options: AppOptions) => Promise<RendererApplication<RenderObject>> {
   invariant(typeof renderAdapter === 'function', 'The first parameter must be a function.');
 
-  const instantiationService = new InstantiationService();
-
-  // create services
-  const lifeCycleService = new LifeCycleService();
-  instantiationService.container.set(ILifeCycleService, lifeCycleService);
-
   return async (options) => {
+    // create services
+    const container = new BeanContainer();
+    const lifeCycleService = new LifeCycleService();
+    container.set(ILifeCycleService, lifeCycleService);
+
     const schemaService = new SchemaService(options.schema);
-    instantiationService.container.set(ISchemaService, schemaService);
+    container.set(ISchemaService, schemaService);
 
-    const codeRuntimeService = instantiationService.createInstance(
-      CodeRuntimeService,
-      options.codeRuntime,
+    container.set(
+      ICodeRuntimeService,
+      new CtorDescriptor(CodeRuntimeService, [options.codeRuntime]),
     );
-    instantiationService.container.set(ICodeRuntimeService, codeRuntimeService);
-
-    const packageManagementService = instantiationService.createInstance(PackageManagementService);
-    instantiationService.container.set(IPackageManagementService, packageManagementService);
+    container.set(IPackageManagementService, new CtorDescriptor(PackageManagementService));
 
     const utils = schemaService.get('utils');
-    const runtimeUtilService = instantiationService.createInstance(RuntimeUtilService, utils);
-    instantiationService.container.set(IRuntimeUtilService, runtimeUtilService);
+    container.set(IRuntimeUtilService, new CtorDescriptor(RuntimeUtilService, [utils]));
 
     const defaultLocale = schemaService.get('config.defaultLocale');
     const i18ns = schemaService.get('i18n', {});
-    const runtimeIntlService = instantiationService.createInstance(
-      RuntimeIntlService,
-      defaultLocale,
-      i18ns,
+    container.set(
+      IRuntimeIntlService,
+      new CtorDescriptor(RuntimeIntlService, [defaultLocale, i18ns]),
     );
-    instantiationService.container.set(IRuntimeIntlService, runtimeIntlService);
 
-    const extensionHostService = new ExtensionHostService(
-      lifeCycleService,
-      packageManagementService,
-      schemaService,
-      codeRuntimeService,
-      runtimeIntlService,
-      runtimeUtilService,
-    );
-    instantiationService.container.set(IExtensionHostService, extensionHostService);
+    container.set(IExtensionHostService, new CtorDescriptor(ExtensionHostService));
+
+    const instantiationService = new InstantiationService(container);
 
     lifeCycleService.setPhase(LifecyclePhase.OptionsResolved);
+
+    const [extensionHostService, packageManagementService] = instantiationService.invokeFunction(
+      (accessor) => {
+        return [accessor.get(IExtensionHostService), accessor.get(IPackageManagementService)];
+      },
+    );
 
     const renderObject = await renderAdapter(instantiationService);
 
     await extensionHostService.registerPlugin(options.plugins ?? []);
-    // 先加载插件提供 package loader
+
     await packageManagementService.loadPackages(options.packages ?? []);
 
     lifeCycleService.setPhase(LifecyclePhase.Ready);

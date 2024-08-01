@@ -116,7 +116,6 @@ export function createComponent(
 
     useEffect(() => {
       // trigger lifeCycles
-      // componentDidMount?.();
       model.triggerLifeCycle('componentDidMount');
 
       // 当 state 改变之后调用

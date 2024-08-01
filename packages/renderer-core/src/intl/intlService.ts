@@ -7,7 +7,7 @@ import {
   type LocaleTranslationsMap,
   Disposable,
 } from '@alilc/lowcode-shared';
-import { ICodeRuntimeService } from './code-runtime';
+import { ICodeRuntimeService } from '../code-runtime';
 
 export interface MessageDescriptor {
   key: string;
@@ -37,7 +37,7 @@ export class RuntimeIntlService extends Disposable implements IRuntimeIntlServic
   ) {
     super();
 
-    this._intl = this.addDispose(new Intl(defaultLocale));
+    this._intl = this._addDispose(new Intl(defaultLocale));
     for (const key of Object.keys(i18nTranslations)) {
       this._intl.addTranslations(key, i18nTranslations[key]);
     }

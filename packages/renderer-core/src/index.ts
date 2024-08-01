@@ -1,21 +1,20 @@
 /* --------------- api -------------------- */
-export { createRenderer } from './createRenderer';
-export { IExtensionHostService } from './services/extension';
-export { definePackageLoader, IPackageManagementService } from './services/package';
-export { LifecyclePhase, ILifeCycleService } from './services/lifeCycleService';
-export { IComponentTreeModelService } from './services/model';
-export { ICodeRuntimeService } from './services/code-runtime';
-export { IRuntimeIntlService } from './services/runtimeIntlService';
-export { IRuntimeUtilService } from './services/runtimeUtilService';
-export { ISchemaService } from './services/schema';
+export * from './createRenderer';
+export { IExtensionHostService } from './extension';
+export { definePackageLoader, IPackageManagementService } from './package';
+export { LifecyclePhase, ILifeCycleService } from './life-cycle';
+export { IComponentTreeModelService } from './model';
+export { ICodeRuntimeService, mapValue, someValue } from './code-runtime';
+export { IRuntimeIntlService } from './intl';
+export { IRuntimeUtilService } from './util';
+export { ISchemaService } from './schema';
 export { Widget } from './widget';
 
 /* --------------- types ---------------- */
-export type * from './types';
-export type * from './services/extension';
-export type * from './services/code-runtime';
-export type * from './services/model';
-export type * from './services/package';
-export type * from './services/schema';
-export type * from './services/extension';
+export type * from './extension';
+export type * from './code-runtime';
+export type * from './model';
+export type * from './package';
+export type * from './schema';
+export type * from './extension';
 export type * from './widget';
