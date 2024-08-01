@@ -1,4 +1,5 @@
-import { type Plugin } from '@alilc/lowcode-renderer-core';
+import { IExtensionHostService } from '@alilc/lowcode-renderer-core';
+import { createDecorator } from '@alilc/lowcode-shared';
 import { type ComponentType, type PropsWithChildren } from 'react';
 
 export type WrapperComponent = ComponentType<PropsWithChildren<any>>;
@@ -9,39 +10,58 @@ export interface OutletProps {
 
 export type Outlet = ComponentType<OutletProps>;
 
-export interface ReactRendererBoostsApi {
+export interface IReactRendererBoostsService {
   addAppWrapper(appWrapper: WrapperComponent): void;
 
+  getAppWrappers(): WrapperComponent[];
+
   setOutlet(outlet: Outlet): void;
+
+  getOutlet(): Outlet | null;
 }
 
-class ReactRendererBoosts {
-  private wrappers: WrapperComponent[] = [];
+export const IReactRendererBoostsService = createDecorator<IReactRendererBoostsService>(
+  'reactRendererBoostsService',
+);
 
-  private outlet: Outlet | null = null;
+export type ReactRendererBoostsApi = Pick<
+  IReactRendererBoostsService,
+  'addAppWrapper' | 'setOutlet'
+>;
 
-  getAppWrappers() {
-    return this.wrappers;
+export class ReactRendererBoostsService implements IReactRendererBoostsService {
+  private _wrappers: WrapperComponent[] = [];
+
+  private _outlet: Outlet | null = null;
+
+  constructor(@IExtensionHostService private extensionHostService: IExtensionHostService) {
+    this.extensionHostService.boostsManager.extend(this._toExpose());
   }
 
-  getOutlet() {
-    return this.outlet;
+  getAppWrappers(): WrapperComponent[] {
+    return this._wrappers;
   }
 
-  toExpose(): ReactRendererBoostsApi {
+  addAppWrapper(appWrapper: WrapperComponent): void {
+    if (appWrapper) this._wrappers.push(appWrapper);
+  }
+
+  setOutlet(outletComponent: Outlet): void {
+    if (outletComponent) this._outlet = outletComponent;
+  }
+
+  getOutlet(): Outlet | null {
+    return this._outlet;
+  }
+
+  private _toExpose(): ReactRendererBoostsApi {
     return {
       addAppWrapper: (appWrapper) => {
-        if (appWrapper) this.wrappers.push(appWrapper);
+        this.addAppWrapper(appWrapper);
       },
       setOutlet: (outletComponent) => {
-        if (outletComponent) this.outlet = outletComponent;
+        this.setOutlet(outletComponent);
       },
     };
   }
-}
-
-export const boosts = new ReactRendererBoosts();
-
-export function defineRendererPlugin(plugin: Plugin<ReactRendererBoostsApi>) {
-  return plugin;
 }

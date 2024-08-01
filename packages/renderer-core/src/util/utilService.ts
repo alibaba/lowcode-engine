@@ -3,12 +3,17 @@ import {
   type UtilDescription,
   createDecorator,
   type StringDictionary,
+  Disposable,
+  type UtilsApi,
 } from '@alilc/lowcode-shared';
 import { isPlainObject } from 'lodash-es';
 import { IPackageManagementService } from '../package';
 import { ICodeRuntimeService } from '../code-runtime';
+import { ISchemaService } from '../schema';
 
 export interface IRuntimeUtilService {
+  initialize(): UtilsApi;
+
   add(utilItem: UtilDescription, force?: boolean): void;
   add(name: string, target: AnyFunction | StringDictionary, force?: boolean): void;
 
@@ -17,18 +22,41 @@ export interface IRuntimeUtilService {
 
 export const IRuntimeUtilService = createDecorator<IRuntimeUtilService>('rendererUtilService');
 
-export class RuntimeUtilService implements IRuntimeUtilService {
+export class RuntimeUtilService extends Disposable implements IRuntimeUtilService {
   private _utilsMap: Map<string, any> = new Map();
 
   constructor(
-    utils: UtilDescription[] = [],
     @ICodeRuntimeService private codeRuntimeService: ICodeRuntimeService,
     @IPackageManagementService private packageManagementService: IPackageManagementService,
+    @ISchemaService private schemaService: ISchemaService,
   ) {
-    for (const util of utils) {
-      this.add(util);
-    }
-    this._injectScope();
+    super();
+
+    this._addDispose(
+      this.schemaService.onSchemaUpdate(({ key, data }) => {
+        if (key === 'utils') {
+          for (const item of data) {
+            this.add(item);
+          }
+        }
+      }),
+    );
+  }
+
+  initialize(): UtilsApi {
+    const exposed: UtilsApi = new Proxy(Object.create(null), {
+      get: (_, p: string) => {
+        return this._utilsMap.get(p);
+      },
+      set() {
+        return false;
+      },
+      has: (_, p: string) => {
+        return this._utilsMap.has(p);
+      },
+    });
+
+    return exposed;
   }
 
   add(utilItem: UtilDescription, force?: boolean): void;
@@ -92,21 +120,5 @@ export class RuntimeUtilService implements IRuntimeUtilService {
     } else {
       return this.packageManagementService.getModuleByReference(utilItem.content);
     }
-  }
-
-  private _injectScope(): void {
-    const exposed = new Proxy(Object.create(null), {
-      get: (_, p: string) => {
-        return this._utilsMap.get(p);
-      },
-      set() {
-        return false;
-      },
-      has: (_, p: string) => {
-        return this._utilsMap.has(p);
-      },
-    });
-
-    this.codeRuntimeService.rootRuntime.getScope().set('utils', exposed);
   }
 }

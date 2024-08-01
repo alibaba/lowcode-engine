@@ -19,9 +19,9 @@ import {
   createElement,
   type ReactNode,
 } from 'react';
-import { useRendererContext } from '../api/context';
+import { ComponentsAccessor } from '../app';
 import { useReactiveStore } from './hooks/useReactiveStore';
-import { getComponentByName, type ComponentOptions } from './createComponent';
+import { getOrCreateComponent, type ComponentOptions } from './createComponent';
 
 export type ReactComponent = ComponentType<any>;
 export type ReactWidget = IWidget<ReactComponent, ReactInstance>;
@@ -29,16 +29,13 @@ export type ReactWidget = IWidget<ReactComponent, ReactInstance>;
 interface WidgetRendererProps {
   widget: ReactWidget;
   codeRuntime: ICodeRuntime;
+  components: ComponentsAccessor;
   options: ComponentOptions;
 
   [key: string]: any;
 }
 
-export function createElementByWidget(
-  widget: ReactWidget,
-  codeRuntime: ICodeRuntime,
-  options: ComponentOptions,
-): ReactNode {
+export function createElementByWidget(props: WidgetRendererProps): ReactNode {
   const getElement = (widget: ReactWidget) => {
     const { key, rawNode } = widget;
 
@@ -47,11 +44,11 @@ export function createElementByWidget(
     }
 
     if (specTypes.isJSExpression(rawNode)) {
-      return <Text key={key} expr={rawNode} codeRuntime={codeRuntime} />;
+      return <Text key={key} expr={rawNode} codeRuntime={props.codeRuntime} />;
     }
 
     if (specTypes.isJSI18nNode(rawNode)) {
-      return <I18nText key={key} i18n={rawNode} codeRuntime={codeRuntime} />;
+      return <I18nText key={key} i18n={rawNode} codeRuntime={props.codeRuntime} />;
     }
 
     const { condition, loop } = widget.rawNode as NormalizedComponentNode;
@@ -62,44 +59,32 @@ export function createElementByWidget(
     if (Array.isArray(loop) && loop.length === 0) return null;
 
     if (specTypes.isJSExpression(loop)) {
-      return (
-        <LoopWidgetRenderer
-          key={key}
-          loop={loop}
-          widget={widget}
-          codeRuntime={codeRuntime}
-          options={options}
-        />
-      );
+      return <LoopWidgetRenderer key={key} loop={loop} {...props} />;
     }
 
-    return (
-      <WidgetComponent key={key} widget={widget} codeRuntime={codeRuntime} options={options} />
-    );
+    return <WidgetComponent key={key} {...props} />;
   };
 
-  if (options.beforeElementCreate) {
-    widget = options.beforeElementCreate(widget);
+  if (props.options.beforeElementCreate) {
+    props.widget = props.options.beforeElementCreate(props.widget);
   }
 
-  const element = getElement(widget);
+  const element = getElement(props.widget);
 
-  if (options.elementCreated) {
-    return options.elementCreated(widget, element);
+  if (props.options.elementCreated) {
+    return props.options.elementCreated(props.widget, element);
   }
 
   return element;
 }
 
 export function WidgetComponent(props: WidgetRendererProps) {
-  const { widget, codeRuntime, options, ...otherProps } = props;
+  const { widget, codeRuntime, components, options, ...otherProps } = props;
   const componentNode = widget.rawNode as NormalizedComponentNode;
   const { ref, ...componentProps } = componentNode.props;
 
-  const context = useRendererContext();
-
   const Component = useMemo(
-    () => getComponentByName(componentNode.componentName, context, options),
+    () => getOrCreateComponent(componentNode.componentName, codeRuntime, components, options),
     [widget],
   );
 
@@ -123,15 +108,15 @@ export function WidgetComponent(props: WidgetRendererProps) {
               }, {} as StringDictionary);
 
               return widgets.map((n) =>
-                createElementByWidget(
-                  n,
-                  codeRuntime.createChild({ initScopeValue: params }),
-                  options,
-                ),
+                createElementByWidget({
+                  ...props,
+                  widget: n,
+                  codeRuntime: codeRuntime.createChild({ initScopeValue: params }),
+                }),
               );
             };
           } else {
-            return widgets.map((n) => createElementByWidget(n, codeRuntime, options));
+            return widgets.map((n) => createElementByWidget({ ...props, widget: n }));
           }
         }
       } else if (specTypes.isJSFunction(node)) {
@@ -183,7 +168,7 @@ export function WidgetComponent(props: WidgetRendererProps) {
       key: widget.key,
       ref: attachRef,
     },
-    widget.children?.map((item) => createElementByWidget(item, codeRuntime, options)) ?? [],
+    widget.children?.map((item) => createElementByWidget({ ...props, widget: item })) ?? [],
   );
 }
 
@@ -213,19 +198,12 @@ function I18nText(props: { i18n: JSI18n; codeRuntime: ICodeRuntime }) {
 
 I18nText.displayName = 'I18nText';
 
-function LoopWidgetRenderer({
-  loop,
-  widget,
-  codeRuntime,
-  options,
-  ...otherProps
-}: {
+interface LoopWidgetRendererProps extends WidgetRendererProps {
   loop: JSExpression;
-  widget: ReactWidget;
-  codeRuntime: ICodeRuntime;
-  options: ComponentOptions;
-  [key: string]: any;
-}) {
+}
+
+function LoopWidgetRenderer(props: LoopWidgetRendererProps) {
+  const { loop, widget, codeRuntime, ...otherProps } = props;
   const { condition, loopArgs } = widget.rawNode as NormalizedComponentNode;
   const state = useReactiveStore({
     target: {
@@ -252,7 +230,6 @@ function LoopWidgetRenderer({
           key={`loop-${widget.key}-${idx}`}
           widget={widget}
           codeRuntime={childRuntime}
-          options={options}
         />
       );
     });

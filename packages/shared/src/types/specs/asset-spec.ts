@@ -3,7 +3,7 @@
  * 低代码引擎资产包协议规范
  */
 import { StringDictionary } from '..';
-import { ComponentTreeRoot } from './lowcode-spec';
+import { ComponentTree } from './lowcode-spec';
 import { ComponentMetaData, Reference } from './material-spec';
 
 /**
@@ -85,7 +85,7 @@ export interface Package {
   /**
    * 低代码组件的 schema 内容
    */
-  schema?: ComponentTreeRoot;
+  schema?: ComponentTree;
   /**
    * 当前资源所依赖的其他资源包的 id 列表
    */

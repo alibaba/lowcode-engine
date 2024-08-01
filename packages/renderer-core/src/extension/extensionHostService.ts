@@ -3,7 +3,6 @@ import { type Plugin, type PluginContext } from './plugin';
 import { BoostsManager } from './boosts';
 import { IPackageManagementService } from '../package';
 import { ISchemaService } from '../schema';
-import { ILifeCycleService } from '../life-cycle/lifeCycleService';
 import { ICodeRuntimeService } from '../code-runtime';
 import { IRuntimeIntlService } from '../intl';
 import { IRuntimeUtilService } from '../util';
@@ -28,7 +27,6 @@ export class ExtensionHostService extends Disposable implements IExtensionHostSe
   private _pluginSetupContext: PluginContext;
 
   constructor(
-    @ILifeCycleService lifeCycleService: ILifeCycleService,
     @IPackageManagementService packageManagementService: IPackageManagementService,
     @ISchemaService schemaService: ISchemaService,
     @ICodeRuntimeService codeRuntimeService: ICodeRuntimeService,
@@ -48,10 +46,6 @@ export class ExtensionHostService extends Disposable implements IExtensionHostSe
       boosts: this.boostsManager.toExpose(),
       schema: schemaService,
       packageManager: packageManagementService,
-
-      whenLifeCylePhaseChange: (phase) => {
-        return lifeCycleService.when(phase);
-      },
     };
   }
 
@@ -101,9 +95,8 @@ export class ExtensionHostService extends Disposable implements IExtensionHostSe
   private async _doSetupPlugin(plugin: Plugin) {
     if (this._activePlugins.has(plugin.name)) return;
 
-    await plugin.setup(this._pluginSetupContext);
+    this._addDispose(await plugin.setup(this._pluginSetupContext));
     this._activePlugins.add(plugin.name);
-    this._addDispose(plugin);
   }
 
   getPlugin(name: string): Plugin | undefined {

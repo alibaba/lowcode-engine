@@ -1,4 +1,4 @@
-import { isDisposable } from '../disposable';
+import { dispose, isDisposable } from '../disposable';
 import { Graph, CyclicDependencyError } from '../graph';
 import {
   type BeanIdentifier,
@@ -14,14 +14,14 @@ export interface InstanceAccessor {
 }
 
 export interface IInstantiationService {
-  readonly container: BeanContainer;
-
   createInstance<T extends Constructor>(Ctor: T, ...args: any[]): InstanceType<T>;
 
   invokeFunction<R, Args extends any[] = []>(
     fn: (accessor: InstanceAccessor, ...args: Args) => R,
     ...args: Args
   ): R;
+
+  createChild(container: BeanContainer): IInstantiationService;
 
   dispose(): void;
 }
@@ -31,11 +31,47 @@ export const IInstantiationService = createDecorator<IInstantiationService>('ins
 export class InstantiationService implements IInstantiationService {
   private _activeInstantiations = new Set<BeanIdentifier<any>>();
 
+  private _children = new Set<InstantiationService>();
+
   private _isDisposed = false;
   private readonly _beansToMaybeDispose = new Set<any>();
 
-  constructor(public readonly container: BeanContainer = new BeanContainer()) {
-    this.container.set(IInstantiationService, this);
+  constructor(
+    private readonly _container: BeanContainer = new BeanContainer(),
+    private readonly _parent?: InstantiationService,
+  ) {
+    this._container.set(IInstantiationService, this);
+  }
+
+  createChild(container: BeanContainer): IInstantiationService {
+    this._throwIfDisposed();
+
+    const that = this;
+    const result = new (class extends InstantiationService {
+      override dispose(): void {
+        that._children.delete(result);
+        super.dispose();
+      }
+    })(container, this);
+    this._children.add(result);
+
+    return result;
+  }
+
+  dispose(): void {
+    if (this._isDisposed) return;
+    // dispose all child services
+    dispose(this._children);
+    this._children.clear();
+
+    // dispose all services created by this service
+    for (const candidate of this._beansToMaybeDispose) {
+      if (isDisposable(candidate)) {
+        candidate.dispose();
+      }
+    }
+    this._beansToMaybeDispose.clear();
+    this._isDisposed = true;
   }
 
   /**
@@ -92,7 +128,7 @@ export class InstantiationService implements IInstantiationService {
   }
 
   private _getOrCreateInstance<T>(id: BeanIdentifier<T>): T {
-    const thing = this.container.get(id);
+    const thing = this._container.get(id);
     if (thing instanceof CtorDescriptor) {
       return this._safeCreateAndCacheInstance<T>(id, thing);
     } else {
@@ -138,7 +174,7 @@ export class InstantiationService implements IInstantiationService {
 
       // check all dependencies for existence and if they need to be created first
       for (const dependency of getBeanDependecies(item.desc.ctor)) {
-        const instanceOrDesc = this.container.get(dependency.id);
+        const instanceOrDesc = this._container.get(dependency.id);
         if (!instanceOrDesc) {
           throw new Error(
             `[createInstance] ${id} depends on ${dependency.id} which is NOT registered.`,
@@ -171,35 +207,45 @@ export class InstantiationService implements IInstantiationService {
           // Repeat the check for this still being a service sync descriptor. That's because
           // instantiating a dependency might have side-effect and recursively trigger instantiation
           // so that some dependencies are now fullfilled already.
-          const instanceOrDesc = this.container.get(data.id);
+          const instanceOrDesc = this._container.get(data.id);
           if (instanceOrDesc instanceof CtorDescriptor) {
             // create instance and overwrite the service collections
-            const instance = this.createInstance(
-              instanceOrDesc.ctor,
-              instanceOrDesc.staticArguments,
+            const instance = this._createServiceInstanceWithOwner(
+              data.id,
+              data.desc.ctor,
+              data.desc.staticArguments,
             );
-            this._beansToMaybeDispose.add(instance);
-            this.container.set(data.id, instance);
+            this._setCreatedServiceInstance(data.id, instance);
           }
           graph.removeNode(data);
         }
       }
     }
 
-    return this.container.get(id) as T;
+    return this._container.get(id) as T;
   }
 
-  dispose(): void {
-    if (this._isDisposed) return;
+  private _createServiceInstanceWithOwner<T>(id: BeanIdentifier<T>, ctor: any, args: any[]): T {
+    if (this._container.get(id) instanceof CtorDescriptor) {
+      const instance = this.createInstance(ctor, args);
+      this._beansToMaybeDispose.add(instance);
 
-    // dispose all services created by this service
-    for (const candidate of this._beansToMaybeDispose) {
-      if (isDisposable(candidate)) {
-        candidate.dispose();
-      }
+      return instance;
+    } else if (this._parent) {
+      return this._parent._createServiceInstanceWithOwner(id, ctor, args);
+    } else {
+      throw new Error(`illegalState - creating UNKNOWN service instance ${ctor.name}`);
     }
-    this._beansToMaybeDispose.clear();
-    this._isDisposed = true;
+  }
+
+  private _setCreatedServiceInstance<T>(id: BeanIdentifier<T>, instance: T): void {
+    if (this._container.get(id) instanceof CtorDescriptor) {
+      this._container.set(id, instance);
+    } else if (this._parent) {
+      this._parent._setCreatedServiceInstance(id, instance);
+    } else {
+      throw new Error('illegalState - setting UNKNOWN service instance');
+    }
   }
 
   private _throwIfDisposed(): void {

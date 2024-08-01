@@ -18,18 +18,17 @@ export interface ICodeRuntimeService extends IDisposable {
 export const ICodeRuntimeService = createDecorator<ICodeRuntimeService>('codeRuntimeService');
 
 export class CodeRuntimeService extends Disposable implements ICodeRuntimeService {
-  private _rootRuntime: ICodeRuntime;
+  private _rootRuntime?: ICodeRuntime;
   get rootRuntime() {
+    if (!this._rootRuntime) {
+      this._rootRuntime = this._addDispose(new CodeRuntime());
+    }
     return this._rootRuntime;
   }
 
-  constructor(
-    options: CodeRuntimeOptions = {},
-    @ISchemaService private schemaService: ISchemaService,
-  ) {
+  constructor(@ISchemaService private schemaService: ISchemaService) {
     super();
 
-    this._rootRuntime = this._addDispose(new CodeRuntime(options));
     this._addDispose(
       this.schemaService.onSchemaUpdate(({ key, data }) => {
         if (key === 'constants') {
@@ -37,6 +36,10 @@ export class CodeRuntimeService extends Disposable implements ICodeRuntimeServic
         }
       }),
     );
+  }
+
+  initialize(options: CodeRuntimeOptions): void {
+    this._rootRuntime = this._addDispose(new CodeRuntime(options));
   }
 
   createCodeRuntime<T extends StringDictionary = StringDictionary>(

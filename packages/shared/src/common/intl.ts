@@ -29,7 +29,7 @@ export class Intl extends Disposable {
       return this._messageStore.value[this._locale.value] ?? {};
     });
 
-    this.addDispose(
+    this._addDispose(
       toDisposable(
         effect(() => {
           const cache = createIntlCache();

@@ -1,9 +1,6 @@
 export * from './api/app';
 export * from './api/component';
-export * from './api/context';
 export { defineRendererPlugin } from './app';
-export * from './router';
-export { LifecyclePhase } from '@alilc/lowcode-renderer-core';
 
 export type { Package, ProCodeComponent, LowCodeComponent } from '@alilc/lowcode-shared';
 export type {
@@ -13,4 +10,4 @@ export type {
   ModelDataSourceCreator,
   ModelStateCreator,
 } from '@alilc/lowcode-renderer-core';
-export type { ReactRendererBoostsApi } from './app/boosts';
+export type * from './app';

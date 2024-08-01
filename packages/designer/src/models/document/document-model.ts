@@ -1,8 +1,8 @@
-import { signal, uniqueId, ComponentTreeRoot } from '@alilc/lowcode-shared';
+import { Signals, uniqueId, ComponentTree } from '@alilc/lowcode-shared';
 import { type Project } from '../project';
 import { History } from './history';
 
-export interface DocumentSchema extends ComponentTreeRoot {
+export interface DocumentSchema extends ComponentTree {
   id: string;
 }
 
@@ -26,7 +26,7 @@ export interface DocumentModel {
 
 export function createDocumentModel(project: Project) {
   const uid = uniqueId('doc');
-  const currentDocumentSchema = signal<DocumentSchema>({});
+  const currentDocumentSchema = Signals.signal<DocumentSchema>({});
 
   const documentHistory = new History(currentDocumentSchema, () => {});
 

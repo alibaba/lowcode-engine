@@ -11,6 +11,8 @@ export type SchemaUpdateEvent = { key: string; previous: any; data: any };
 export interface ISchemaService {
   readonly onSchemaUpdate: Events.Event<SchemaUpdateEvent>;
 
+  initialize(schema: unknown): void;
+
   get<T>(key: string): T | undefined;
   get<T>(key: string, defaultValue?: T): T;
 
@@ -20,20 +22,22 @@ export interface ISchemaService {
 export const ISchemaService = createDecorator<ISchemaService>('schemaService');
 
 export class SchemaService extends Disposable implements ISchemaService {
-  private store: NormalizedSchema;
+  private _schema: NormalizedSchema;
 
-  private _observer = this._addDispose(new Events.Emitter<SchemaUpdateEvent>());
+  private _onSchemaUpdate = this._addDispose(new Events.Emitter<SchemaUpdateEvent>());
 
-  readonly onSchemaUpdate = this._observer.event;
+  readonly onSchemaUpdate = this._onSchemaUpdate.event;
 
-  constructor(schema: unknown) {
+  constructor() {
     super();
+  }
 
+  initialize(schema: unknown) {
     if (!isObject(schema)) {
       throw Error('schema must a object');
     }
 
-    this.store = {} as any;
+    this._schema = {} as any;
     for (const key of Object.keys(schema)) {
       const value = (schema as any)[key];
 
@@ -52,12 +56,12 @@ export class SchemaService extends Disposable implements ISchemaService {
   set(key: string, value: any): void {
     const previous = this.get(key);
     if (!isEqual(previous, value)) {
-      lodashSet(this.store, key, value);
-      this._observer.notify({ key, previous, data: value });
+      lodashSet(this._schema, key, value);
+      this._onSchemaUpdate.notify({ key, previous, data: value });
     }
   }
 
   get<T>(key: string, defaultValue?: T): T {
-    return (lodashGet(this.store, key) ?? defaultValue) as T;
+    return (lodashGet(this._schema, key) ?? defaultValue) as T;
   }
 }

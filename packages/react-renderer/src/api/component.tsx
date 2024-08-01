@@ -1,53 +1,38 @@
-import { createRenderer } from '@alilc/lowcode-renderer-core';
-import { type ComponentTreeRoot } from '@alilc/lowcode-shared';
-import { type FunctionComponent } from 'react';
+import { type StringDictionary, type ComponentTree } from '@alilc/lowcode-shared';
+import { CodeRuntime } from '@alilc/lowcode-renderer-core';
+import { FunctionComponent, ComponentType } from 'react';
 import {
   type LowCodeComponentProps,
   createComponent as createSchemaComponent,
-} from '../runtime/createComponent';
-import { type IRendererContext, RendererContext, getRenderInstancesByAccessor } from './context';
-import { type ReactAppOptions } from './types';
+  type ComponentOptions as SchemaComponentOptions,
+  reactiveStateFactory,
+} from '../runtime';
+import { type ComponentsAccessor } from '../app';
 
-interface Render {
-  toComponent(): FunctionComponent<LowCodeComponentProps>;
+export interface ComponentOptions extends SchemaComponentOptions {
+  schema: ComponentTree;
+  componentsRecord: Record<string, ComponentType>;
+  codeScope?: StringDictionary;
 }
 
-export async function createComponent(options: ReactAppOptions) {
-  const creator = createRenderer<Render>((service) => {
-    const contextValue: IRendererContext = service.invokeFunction((accessor) => {
-      return {
-        options,
-        ...getRenderInstancesByAccessor(accessor),
-      };
-    });
+export function createComponent(
+  options: ComponentOptions,
+): FunctionComponent<LowCodeComponentProps> {
+  const { schema, componentsRecord, modelOptions, codeScope, ...componentOptions } = options;
+  const codeRuntime = new CodeRuntime(codeScope);
+  const components: ComponentsAccessor = {
+    getComponent(componentName) {
+      return componentsRecord[componentName] as any;
+    },
+  };
 
-    const componentsTree = contextValue.schema.get<ComponentTreeRoot>('componentsTree.0');
-
-    if (!componentsTree) {
-      throw new Error('componentsTree is required');
-    }
-
-    const LowCodeComponent = createSchemaComponent(componentsTree, {
-      displayName: componentsTree.componentName,
-      ...options.component,
-    });
-
-    function Component(props: LowCodeComponentProps) {
-      return (
-        <RendererContext.Provider value={contextValue}>
-          <LowCodeComponent {...props} />
-        </RendererContext.Provider>
-      );
-    }
-
-    return {
-      toComponent() {
-        return Component;
-      },
-    };
+  const LowCodeComponent = createSchemaComponent(schema, codeRuntime, components, {
+    ...componentOptions,
+    modelOptions: {
+      ...modelOptions,
+      stateCreator: modelOptions.stateCreator ?? reactiveStateFactory,
+    },
   });
 
-  const render = await creator(options);
-
-  return render.toComponent();
+  return LowCodeComponent;
 }

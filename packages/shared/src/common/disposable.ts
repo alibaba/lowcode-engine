@@ -47,7 +47,7 @@ export abstract class Disposable implements IDisposable {
   /**
    * Adds `o` to the collection of disposables managed by this object.
    */
-  protected addDispose<T extends IDisposable>(o: T): T {
+  protected _addDispose<T extends IDisposable>(o: T): T {
     this._throwIfDisposed();
     if ((o as unknown as Disposable) === this) {
       throw new Error('Cannot register a disposable on itself!');

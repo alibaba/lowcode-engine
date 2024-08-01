@@ -1,5 +1,5 @@
 import { InstantiationService } from '@alilc/lowcode-shared';
-import { IConfigurationService, IWorkspaceService } from '@alilc/lowcode-engine-core';
+import { IConfigurationService } from '@alilc/lowcode-engine-core';
 
 export class MainEngineApplication {
   instantiationService = new InstantiationService();

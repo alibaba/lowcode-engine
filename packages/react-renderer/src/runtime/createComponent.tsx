@@ -1,20 +1,17 @@
-import { invariant, specTypes, type ComponentTreeRoot } from '@alilc/lowcode-shared';
+import { invariant, specTypes, type ComponentTree } from '@alilc/lowcode-shared';
+import { type ComponentTreeModelOptions, ComponentTreeModel } from '@alilc/lowcode-renderer-core';
 import { forwardRef, useRef, useEffect } from 'react';
 import { isValidElementType } from 'react-is';
-import { useRendererContext, IRendererContext } from '../api/context';
-import { reactiveStateFactory } from './reactiveState';
 import { type ReactComponent, type ReactWidget, createElementByWidget } from './elements';
 import { appendExternalStyle } from '../utils/element';
+import { type ComponentsAccessor } from '../app';
 
-import type {
-  IComponentTreeModel,
-  CreateComponentTreeModelOptions,
-} from '@alilc/lowcode-renderer-core';
+import type { ICodeRuntime, IComponentTreeModel } from '@alilc/lowcode-renderer-core';
 import type { ReactInstance, CSSProperties, ForwardedRef, ReactNode } from 'react';
 
 export interface ComponentOptions {
   displayName?: string;
-  modelOptions?: Pick<CreateComponentTreeModelOptions, 'id' | 'metadata'>;
+  modelOptions: ComponentTreeModelOptions;
 
   beforeElementCreate?(widget: ReactWidget): ReactWidget;
   elementCreated?(widget: ReactWidget, element: ReactNode): ReactNode;
@@ -33,20 +30,22 @@ export interface LowCodeComponentProps {
 
 const lowCodeComponentsCache = new Map<string, ReactComponent>();
 
-export function getComponentByName(
+export function getOrCreateComponent(
   name: string,
-  { packageManager }: IRendererContext,
-  componentOptions: ComponentOptions = {},
+  codeRuntime: ICodeRuntime,
+  components: ComponentsAccessor,
+  componentOptions: ComponentOptions,
 ): ReactComponent {
-  const result = lowCodeComponentsCache.get(name) || packageManager.getComponent(name);
+  const result = lowCodeComponentsCache.get(name) || components.getComponent(name);
 
   if (specTypes.isLowCodeComponentPackage(result)) {
     const { schema, ...metadata } = result;
 
-    const lowCodeComponent = createComponent(schema, {
+    const lowCodeComponent = createComponent(schema, codeRuntime, components, {
       ...componentOptions,
       displayName: name,
       modelOptions: {
+        ...componentOptions.modelOptions,
         id: metadata.id,
         metadata,
       },
@@ -63,8 +62,10 @@ export function getComponentByName(
 }
 
 export function createComponent(
-  schema: string | ComponentTreeRoot,
-  componentOptions: ComponentOptions = {},
+  schema: ComponentTree,
+  codeRuntime: ICodeRuntime,
+  components: ComponentsAccessor,
+  componentOptions: ComponentOptions,
 ) {
   const { displayName = '__LowCodeComponent__', modelOptions } = componentOptions;
 
@@ -72,26 +73,17 @@ export function createComponent(
     props: LowCodeComponentProps,
     ref: ForwardedRef<any>,
   ) {
-    const context = useRendererContext();
-    const { options: globalOptions, componentTreeModel } = context;
-
     const modelRef = useRef<IComponentTreeModel<ReactComponent, ReactInstance>>();
 
     if (!modelRef.current) {
-      const finalOptions: CreateComponentTreeModelOptions = {
-        ...modelOptions,
-        codeScopeValue: {
+      modelRef.current = new ComponentTreeModel(
+        schema,
+        codeRuntime.createChild({
           props,
-        },
-        stateCreator: reactiveStateFactory,
-        dataSourceCreator: globalOptions.dataSourceCreator,
-      };
+        } as any),
+        modelOptions,
+      );
 
-      if (typeof schema === 'string') {
-        modelRef.current = componentTreeModel.createById(schema, finalOptions);
-      } else {
-        modelRef.current = componentTreeModel.create(schema, finalOptions);
-      }
       console.log(
         '%c [ model ]-103',
         'font-size:13px; background:pink; color:#bf2c9f;',
@@ -137,7 +129,14 @@ export function createComponent(
 
     return (
       <div id={props.id} className={props.className} style={props.style} ref={ref}>
-        {model.widgets.map((w) => createElementByWidget(w, w.model.codeRuntime, componentOptions))}
+        {model.widgets.map((w) =>
+          createElementByWidget({
+            widget: w,
+            codeRuntime: w.model.codeRuntime,
+            components,
+            options: componentOptions,
+          }),
+        )}
       </div>
     );
   });

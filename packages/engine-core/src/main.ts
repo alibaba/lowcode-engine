@@ -1,24 +1,31 @@
 import { InstantiationService } from '@alilc/lowcode-shared';
 import { IWorkbenchService } from './workbench';
-import { IConfigurationService } from './configuration';
+import { ConfigurationService, IConfigurationService } from './configuration';
 
-class MainApplication {
+class TestMainApplication {
   constructor() {
     console.log('main application');
   }
 
   async main() {
-    const instantiationService = new InstantiationService();
-    const configurationService = instantiationService.get(IConfigurationService);
     const workbench = instantiationService.get(IWorkbenchService);
 
     await configurationService.initialize();
     workbench.initialize();
   }
+
+  createServices() {
+    const instantiationService = new InstantiationService();
+
+    const configurationService = new ConfigurationService();
+    instantiationService.container.set(IConfigurationService, configurationService);
+  }
+
+  initServices() {}
 }
 
-export async function createLowCodeEngineApp(): Promise<MainApplication> {
-  const app = new MainApplication();
+export async function createLowCodeEngineApp() {
+  const app = new TestMainApplication();
 
   await app.main();
 

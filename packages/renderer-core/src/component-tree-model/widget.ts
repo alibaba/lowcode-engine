@@ -1,5 +1,5 @@
 import { type NodeType, uniqueId, type ComponentNode } from '@alilc/lowcode-shared';
-import { IComponentTreeModel } from '../services/model';
+import { IComponentTreeModel } from './componentTreeModel';
 
 export interface IWidget<Component, ComponentInstance = unknown> {
   readonly key: string;
