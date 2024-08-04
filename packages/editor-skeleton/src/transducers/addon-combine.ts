@@ -82,14 +82,18 @@ export default function (
     eventsDefinition.push({
       type: 'lifeCycleEvent',
       title: '生命周期',
-      list: supportedLifecycles.map((event: any) => (typeof event === 'string' ? { name: event } : event)),
+      list: supportedLifecycles.map((event: any) =>
+        typeof event === 'string' ? { name: event } : event,
+      ),
     });
   }
   if (supports.events) {
     eventsDefinition.push({
       type: 'events',
       title: '事件',
-      list: (supports.events || []).map((event: any) => (typeof event === 'string' ? { name: event } : event)),
+      list: (supports.events || []).map((event: any) =>
+        typeof event === 'string' ? { name: event } : event,
+      ),
     });
   }
   //  通用设置
@@ -187,6 +191,16 @@ export default function (
       name: 'style',
       title: { type: 'i18n', 'zh-CN': '行内样式', 'en-US': 'Style' },
       setter: 'StyleSetter',
+      extraProps: {
+        display: 'block',
+      },
+    });
+  }
+  if (supports.dynamicStyle) {
+    stylesGroup.push({
+      name: 'dynamicStyle',
+      title: { type: 'i18n', 'zh-CN': '动态样式', 'en-US': 'dynamicStyle' },
+      setter: 'JsonSetter',
       extraProps: {
         display: 'block',
       },
@@ -334,8 +348,10 @@ export default function (
           },
           tip: {
             type: 'i18n',
-            'zh-CN': '搭配「条件渲染」或「循环渲染」时使用，和 react 组件中的 key 原理相同，点击查看帮助',
-            'en-US': 'Used with 「Conditional Rendering」or「Cycle Rendering」, the same principle as the key in the react component, click to view the help',
+            'zh-CN':
+              '搭配「条件渲染」或「循环渲染」时使用，和 react 组件中的 key 原理相同，点击查看帮助',
+            'en-US':
+              'Used with 「Conditional Rendering」or「Cycle Rendering」, the same principle as the key in the react component, click to view the help',
           },
           docUrl: 'https://www.yuque.com/lce/doc/qm75w3',
         },

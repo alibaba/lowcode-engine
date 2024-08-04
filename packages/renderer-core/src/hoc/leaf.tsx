@@ -1,5 +1,10 @@
 import { INode, IPublicTypePropChangeOptions } from '@alilc/lowcode-designer';
-import { GlobalEvent, IPublicEnumTransformStage, IPublicTypeNodeSchema, IPublicTypeEngineOptions } from '@alilc/lowcode-types';
+import {
+  GlobalEvent,
+  IPublicEnumTransformStage,
+  IPublicTypeNodeSchema,
+  IPublicTypeEngineOptions,
+} from '@alilc/lowcode-types';
 import { isReactComponent, cloneEnumerableProperty } from '@alilc/lowcode-utils';
 import { debounce } from '../utils/common';
 import adapter from '../adapter';
@@ -40,7 +45,10 @@ export interface IComponentHoc {
   hoc: IComponentConstruct;
 }
 
-export type IComponentConstruct = (Comp: types.IBaseRenderComponent, info: IComponentHocInfo) => types.IGeneralConstructor;
+export type IComponentConstruct = (
+  Comp: types.IBaseRenderComponent,
+  info: IComponentHocInfo,
+) => types.IGeneralConstructor;
 
 interface IProps {
   _leaf: INode | undefined;
@@ -66,7 +74,6 @@ enum RerenderType {
 
 // 缓存 Leaf 层组件，防止重新渲染问题
 class LeafCache {
-
   /** 组件缓存 */
   component = new Map();
 
@@ -82,24 +89,15 @@ class LeafCache {
 
   ref = new Map();
 
-  constructor(public documentId: string, public device: string) {
-  }
+  constructor(public documentId: string, public device: string) {}
 }
 
 let cache: LeafCache;
 
 /** 部分没有渲染的 node 节点进行兜底处理 or 渲染方式没有渲染 LeafWrapper */
-function initRerenderEvent({
-  schema,
-  __debug,
-  container,
-  getNode,
-}: any) {
+function initRerenderEvent({ schema, __debug, container, getNode }: any) {
   const leaf = getNode?.(schema.id);
-  if (!leaf
-    || cache.event.get(schema.id)?.clear
-    || leaf === cache.event.get(schema.id)
-  ) {
+  if (!leaf || cache.event.get(schema.id)?.clear || leaf === cache.event.get(schema.id)) {
     return;
   }
   cache.event.get(schema.id)?.dispose.forEach((disposeFn: any) => disposeFn && disposeFn());
@@ -114,21 +112,27 @@ function initRerenderEvent({
         if (!container.autoRepaintNode) {
           return;
         }
-        __debug(`${schema.componentName}[${schema.id}] leaf not render in SimulatorRendererView, leaf onPropsChange make rerender`);
+        __debug(
+          `${schema.componentName}[${schema.id}] leaf not render in SimulatorRendererView, leaf onPropsChange make rerender`,
+        );
         debounceRerender();
       }),
       leaf?.onChildrenChange?.(() => {
         if (!container.autoRepaintNode) {
           return;
         }
-        __debug(`${schema.componentName}[${schema.id}] leaf not render in SimulatorRendererView, leaf onChildrenChange make rerender`);
+        __debug(
+          `${schema.componentName}[${schema.id}] leaf not render in SimulatorRendererView, leaf onChildrenChange make rerender`,
+        );
         debounceRerender();
       }) as Function,
       leaf?.onVisibleChange?.(() => {
         if (!container.autoRepaintNode) {
           return;
         }
-        __debug(`${schema.componentName}[${schema.id}] leaf not render in SimulatorRendererView, leaf onVisibleChange make rerender`);
+        __debug(
+          `${schema.componentName}[${schema.id}] leaf not render in SimulatorRendererView, leaf onVisibleChange make rerender`,
+        );
         debounceRerender();
       }),
     ],
@@ -148,12 +152,10 @@ function clearRerenderEvent(id: string): void {
 }
 
 // 给每个组件包裹一个 HOC Leaf，支持组件内部属性变化，自响应渲染
-export function leafWrapper(Comp: types.IBaseRenderComponent, {
-  schema,
-  baseRenderer,
-  componentInfo,
-  scope,
-}: IComponentHocInfo) {
+export function leafWrapper(
+  Comp: types.IBaseRenderComponent,
+  { schema, baseRenderer, componentInfo, scope }: IComponentHocInfo,
+) {
   const {
     __debug,
     __getComponentProps: getProps,
@@ -171,13 +173,18 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
   const runtime = adapter.getRuntime();
   const { forwardRef, createElement } = runtime;
   const Component = runtime.Component as types.IGeneralConstructor<
-    IComponentHocProps, IComponentHocState
+    IComponentHocProps,
+    IComponentHocState
   >;
 
   const componentCacheId = schema.id;
 
-  if (!cache || (curDocumentId && curDocumentId !== cache.documentId) || (curDevice && curDevice !== cache.device)) {
-    cache?.event.forEach(event => {
+  if (
+    !cache ||
+    (curDocumentId && curDocumentId !== cache.documentId) ||
+    (curDevice && curDevice !== cache.device)
+  ) {
+    cache?.event.forEach((event) => {
       event.dispose?.forEach((disposeFn: any) => disposeFn && disposeFn());
     });
     cache = new LeafCache(curDocumentId, curDevice);
@@ -194,7 +201,11 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
     getNode,
   });
 
-  if (curDocumentId && cache.component.has(componentCacheId) && (cache.component.get(componentCacheId).Comp === Comp)) {
+  if (
+    curDocumentId &&
+    cache.component.has(componentCacheId) &&
+    cache.component.get(componentCacheId).Comp === Comp
+  ) {
     return cache.component.get(componentCacheId).LeafWrapper;
   }
 
@@ -209,7 +220,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
 
     static displayName = schema.componentName;
 
-    disposeFunctions: Array<((() => void) | Function)> = [];
+    disposeFunctions: Array<(() => void) | Function> = [];
 
     __component_tag = 'leafWrapper';
 
@@ -244,7 +255,9 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
     constructor(props: IProps, context: any) {
       super(props, context);
       // 监听以下事件，当变化时更新自己
-      __debug(`${schema.componentName}[${this.props.componentId}] leaf render in SimulatorRendererView`);
+      __debug(
+        `${schema.componentName}[${this.props.componentId}] leaf render in SimulatorRendererView`,
+      );
       clearRerenderEvent(componentCacheId);
       this.curEventLeaf = this.leaf;
 
@@ -266,7 +279,8 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
       }
       const endTime = Date.now();
       const nodeCount = host?.designer?.currentDocument?.getNodeCount?.();
-      const componentName = this.recordInfo.node?.componentName || this.leaf?.componentName || 'UnknownComponent';
+      const componentName =
+        this.recordInfo.node?.componentName || this.leaf?.componentName || 'UnknownComponent';
       editor?.eventBus.emit(GlobalEvent.Node.Rerender, {
         componentName,
         time: endTime - this.recordInfo.startTime,
@@ -297,10 +311,8 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
     }
 
     getDefaultState(nextProps: any) {
-      const {
-        hidden = false,
-        condition = true,
-      } = nextProps.__inner__ || this.leaf?.export?.(IPublicEnumTransformStage.Render) || {};
+      const { hidden = false, condition = true } =
+        nextProps.__inner__ || this.leaf?.export?.(IPublicEnumTransformStage.Render) || {};
       return {
         nodeChildren: null,
         childrenInState: false,
@@ -317,6 +329,12 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
         ...state,
         __tag: this.props.__tag,
       });
+      let style = state.nodeProps.style ?? {};
+      const { dynamicStyle } = state.nodeProps;
+      if (typeof dynamicStyle === 'object') {
+        style = { ...style, ...dynamicStyle };
+      }
+      if (style && Object.keys(style).length) state.nodeProps.style = style;
       super.setState(state);
     }
 
@@ -348,7 +366,9 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
         container?.rerender();
         return;
       }
-      __debug(`${this.leaf?.componentName}(${this.props.componentId}) need render, make its minimalRenderUnit ${renderUnitInfo.minimalUnitName}(${renderUnitInfo.minimalUnitId})`);
+      __debug(
+        `${this.leaf?.componentName}(${this.props.componentId}) need render, make its minimalRenderUnit ${renderUnitInfo.minimalUnitName}(${renderUnitInfo.minimalUnitId})`,
+      );
       ref.makeUnitRender();
     }
 
@@ -400,20 +420,14 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
         this.curEventLeaf = _leaf;
       }
 
-      const {
-        visible,
-        ...resetState
-      } = this.getDefaultState(nextProps);
+      const { visible, ...resetState } = this.getDefaultState(nextProps);
       this.setState(resetState);
     }
 
     /** 监听参数变化 */
     initOnPropsChangeEvent(leaf = this.leaf): void {
       const handlePropsChange = debounce((propChangeInfo: IPublicTypePropChangeOptions) => {
-        const {
-          key,
-          newValue = null,
-        } = propChangeInfo;
+        const { key, newValue = null } = propChangeInfo;
         const node = leaf;
 
         if (key === '___condition___') {
@@ -439,21 +453,36 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
         this.beforeRender(RerenderType.PropsChanged);
         const { state } = this;
         const { nodeCacheProps } = state;
-        const nodeProps = getProps(node?.export?.(IPublicEnumTransformStage.Render) as IPublicTypeNodeSchema, scope, Comp, componentInfo);
-        if (key && !(key in nodeProps) && (key in this.props)) {
+        const nodeProps = getProps(
+          node?.export?.(IPublicEnumTransformStage.Render) as IPublicTypeNodeSchema,
+          scope,
+          Comp,
+          componentInfo,
+        );
+        if (key && !(key in nodeProps) && key in this.props) {
           // 当 key 在 this.props 中时，且不存在在计算值中，需要用 newValue 覆盖掉 this.props 的取值
           nodeCacheProps[key] = newValue;
         }
-        __debug(`${leaf?.componentName}[${this.props.componentId}] component trigger onPropsChange!`, nodeProps, nodeCacheProps, key, newValue);
-        this.setState('children' in nodeProps ? {
-          nodeChildren: nodeProps.children,
-          nodeProps,
-          childrenInState: true,
-          nodeCacheProps,
-        } : {
+        __debug(
+          `${leaf?.componentName}[${this.props.componentId}] component trigger onPropsChange!`,
           nodeProps,
           nodeCacheProps,
-        });
+          key,
+          newValue,
+        );
+        this.setState(
+          'children' in nodeProps
+            ? {
+                nodeChildren: nodeProps.children,
+                nodeProps,
+                childrenInState: true,
+                nodeCacheProps,
+              }
+            : {
+                nodeProps,
+                nodeCacheProps,
+              },
+        );
 
         this.judgeMiniUnitRender();
       });
@@ -479,7 +508,9 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
           return;
         }
 
-        __debug(`${leaf?.componentName}[${this.props.componentId}] component trigger onVisibleChange(${flag}) event`);
+        __debug(
+          `${leaf?.componentName}[${this.props.componentId}] component trigger onVisibleChange(${flag}) event`,
+        );
         this.beforeRender(RerenderType.VisibleChanged);
         this.setState({
           visible: flag,
@@ -498,16 +529,20 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
         if (!this.autoRepaintNode) {
           return;
         }
-        const {
-          type,
-          node,
-        } = param || {};
+        const { type, node } = param || {};
         this.beforeRender(`${RerenderType.ChildChanged}-${type}`, node);
         // TODO: 缓存同级其他元素的 children。
         // 缓存二级 children Next 查询筛选组件有问题
         // 缓存一级 children Next Tab 组件有问题
-        const nextChild = getChildren(leaf?.export?.(IPublicEnumTransformStage.Render) as types.ISchema, scope, Comp);
-        __debug(`${schema.componentName}[${this.props.componentId}] component trigger onChildrenChange event`, nextChild);
+        const nextChild = getChildren(
+          leaf?.export?.(IPublicEnumTransformStage.Render) as types.ISchema,
+          scope,
+          Comp,
+        );
+        __debug(
+          `${schema.componentName}[${this.props.componentId}] component trigger onChildrenChange event`,
+          nextChild,
+        );
         this.setState({
           nodeChildren: nextChild,
           childrenInState: true,
@@ -518,7 +553,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
     }
 
     componentWillUnmount() {
-      this.disposeFunctions.forEach(fn => fn());
+      this.disposeFunctions.forEach((fn) => fn());
     }
 
     get hasChildren(): boolean {
@@ -556,10 +591,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
         return null;
       }
 
-      const {
-        forwardedRef,
-        ...rest
-      } = this.props;
+      const { forwardedRef, ...rest } = this.props;
 
       const compProps = {
         ...rest,
