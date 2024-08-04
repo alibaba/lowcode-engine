@@ -37,8 +37,30 @@ export default function pageRendererFactory(): IBaseRenderComponent {
       super.setState(state, callback);
     }
 
+    mergeStyle(schema: any) {
+      if (!schema || !Object.keys(schema).length) {
+        return;
+      }
+
+      let style = schema.props.style ?? {};
+      const { dynamicStyle } = schema.props;
+
+      if (typeof dynamicStyle === 'object') {
+        console.log('dynamic: ', this.__parseData(dynamicStyle));
+        style = { ...style, ...this.__parseData(dynamicStyle) };
+      }
+      if (style && Object.keys(style).length) schema.props.style = style;
+
+      if (!schema?.children) return;
+
+      for (const child of schema.children) {
+        this.mergeStyle(child);
+      }
+    }
+
     render() {
       const { __schema, __components } = this.props;
+      this.mergeStyle(__schema);
       if (this.__checkSchema(__schema)) {
         return '页面schema结构异常！';
       }
