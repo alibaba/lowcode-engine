@@ -1,3 +1,0 @@
-{
-  "plugins": ["@alilc/build-plugin-lce", "./build.plugin.js"]
-}

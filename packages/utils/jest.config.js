@@ -11,6 +11,7 @@ const jestConfig = {
     '!**/node_modules/**',
     '!**/vendor/**',
   ],
+  setupFilesAfterEnv: ['./jest.setup.js'],
 };
 
 // 只对本仓库内的 pkg 做 mapping

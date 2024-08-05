@@ -30,6 +30,10 @@ export class Tree {
       treeNode?.notifyExpandableChanged();
     });
 
+    doc?.history.onChangeCursor(() => {
+      this.root?.notifyExpandableChanged();
+    });
+
     doc?.onChangeNodeProp((info: IPublicTypePropChangeOptions) => {
       const { node, key } = info;
       if (key === '___title___') {
@@ -44,6 +48,10 @@ export class Tree {
     doc?.onChangeNodeVisible((node: IPublicModelNode, visible: boolean) => {
       const treeNode = this.getTreeNodeById(node.id);
       treeNode?.setHidden(!visible);
+    });
+
+    doc?.onImportSchema(() => {
+      this.treeNodesMap = new Map<string, TreeNode>();
     });
   }
 

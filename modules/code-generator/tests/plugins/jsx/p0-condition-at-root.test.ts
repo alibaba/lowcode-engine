@@ -83,4 +83,22 @@ describe('condition at root', () => {
     });
     expect(result).toMatchSnapshot();
   });
+
+  test('invalid attr name should not be generated', async () => {
+    const containerIr: IContainerInfo = {
+      containerType: 'Page',
+      moduleName: 'test',
+      componentName: 'Page',
+      fileName: 'test',
+      condition: null,
+      children: [{ componentName: 'Text', children: 'Hello world!', props: { 'a': 1, 'a.b': 2 } }],
+    };
+    const result = await jsx()({
+      ir: containerIr,
+      contextData: {},
+      chunks: [],
+      depNames: [],
+    });
+    expect(result).toMatchSnapshot();
+  })
 });

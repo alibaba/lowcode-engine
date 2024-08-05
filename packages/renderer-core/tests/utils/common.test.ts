@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   isSchema,
   isFileSchema,
@@ -278,7 +277,7 @@ describe('test capitalizeFirstLetter ', () => {
 describe('test forEach ', () => {
   it('should work', () => {
     const mockFn = jest.fn();
-    
+
     forEach(null, mockFn);
     expect(mockFn).toBeCalledTimes(0);
 
@@ -293,7 +292,7 @@ describe('test forEach ', () => {
 
     forEach({ a: 1, b: 2, c: 3 }, mockFn);
     expect(mockFn).toBeCalledTimes(3);
-    
+
     const mockFn2 = jest.fn();
     forEach({ a: 1 }, mockFn2, { b: 'bbb' });
     expect(mockFn2).toHaveBeenCalledWith(1, 'a');

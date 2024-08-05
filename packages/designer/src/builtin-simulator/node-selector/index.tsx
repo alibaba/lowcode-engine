@@ -1,6 +1,6 @@
 import { Overlay } from '@alifd/next';
 import React, { MouseEvent } from 'react';
-import { Title } from '@alilc/lowcode-editor-core';
+import { Title, observer } from '@alilc/lowcode-editor-core';
 import { canClickNode } from '@alilc/lowcode-utils';
 import './index.less';
 
@@ -18,6 +18,7 @@ export interface IState {
 
 type UnionNode = INode | null;
 
+@observer
 export default class InstanceNodeSelector extends React.Component<IProps, IState> {
   state: IState = {
     parentNodes: [],

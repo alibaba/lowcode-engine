@@ -13,6 +13,10 @@ export class SkeletonItem implements IPublicModelSkeletonItem {
     return this[skeletonItemSymbol].name;
   }
 
+  get visible() {
+    return this[skeletonItemSymbol].visible;
+  }
+
   disable() {
     this[skeletonItemSymbol].disable?.();
   }
@@ -27,5 +31,9 @@ export class SkeletonItem implements IPublicModelSkeletonItem {
 
   show() {
     this[skeletonItemSymbol].show();
+  }
+
+  toggle() {
+    this[skeletonItemSymbol].toggle();
   }
 }

@@ -490,6 +490,18 @@ export interface IBaseModelNode<
    * 获取节点实例对应的 dom 节点
    */
   getDOMNode(): HTMLElement;
+
+  /**
+   * 获取磁贴相关信息
+   */
+  getRGL(): {
+    isContainerNode: boolean;
+    isEmptyNode: boolean;
+    isRGLContainerNode: boolean;
+    isRGLNode: boolean;
+    isRGL: boolean;
+    rglNode: Node | null;
+  };
 }
 
 export interface IPublicModelNode extends IBaseModelNode<IPublicModelDocumentModel, IPublicModelNode> {}

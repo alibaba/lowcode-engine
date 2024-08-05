@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { createIcon } from '@alilc/lowcode-utils';
 import { IPublicApiEvent } from '@alilc/lowcode-types';
 import TreeNode from '../controllers/tree-node';
-import { IconLock, IconUnlock, IconArrowRight, IconEyeClose, IconEye, IconCond, IconLoop, IconRadioActive, IconRadio, IconSetting } from '../icons';
+import { IconLock, IconUnlock, IconArrowRight, IconEyeClose, IconEye, IconCond, IconLoop, IconRadioActive, IconRadio, IconSetting, IconDelete } from '../icons';
 
 function emitOutlineEvent(event: IPublicApiEvent, type: string, treeNode: TreeNode, rest?: Record<string, unknown>) {
   const node = treeNode?.node;
@@ -29,9 +29,15 @@ export default class TreeTitle extends PureComponent<{
     title: string;
     condition?: boolean;
     visible?: boolean;
+    filterWorking: boolean;
+    keywords: string;
+    matchSelf: boolean;
   } = {
     editing: false,
     title: '',
+    filterWorking: false,
+    keywords: '',
+    matchSelf: false,
   };
 
   private lastInput?: HTMLInputElement;
@@ -83,6 +89,7 @@ export default class TreeTitle extends PureComponent<{
       editing: false,
       title: treeNode.titleLabel,
       condition: treeNode.condition,
+      visible: !treeNode.hidden,
     });
     treeNode.onTitleLabelChanged(() => {
       this.setState({
@@ -99,12 +106,20 @@ export default class TreeTitle extends PureComponent<{
         visible: !hidden,
       });
     });
+    treeNode.onFilterResultChanged(() => {
+      const { filterWorking: newFilterWorking, keywords: newKeywords, matchSelf: newMatchSelf } = treeNode.filterReult;
+      this.setState({ filterWorking: newFilterWorking, keywords: newKeywords, matchSelf: newMatchSelf });
+    });
   }
-
+  deleteClick = () => {
+    const { treeNode } = this.props;
+    const { node } = treeNode;
+    treeNode.deleteNode(node);
+  };
   render() {
     const { treeNode, isModal } = this.props;
     const { pluginContext } = treeNode;
-    const { editing } = this.state;
+    const { editing, filterWorking, matchSelf, keywords } = this.state;
     const isCNode = !treeNode.isRoot();
     const { node } = treeNode;
     const { componentMeta } = node;
@@ -120,22 +135,21 @@ export default class TreeTitle extends PureComponent<{
         marginLeft: -indent,
       };
     }
-    const { filterWorking, matchSelf, keywords } = treeNode.filterReult;
     const Extra = pluginContext.extraTitle;
     const { intlNode, common, config } = pluginContext;
-    const Tip = common.editorCabin.Tip;
-    const Title = common.editorCabin.Title;
+    const { Tip, Title } = common.editorCabin;
     const couldHide = availableActions.includes('hide');
     const couldLock = availableActions.includes('lock');
     const couldUnlock = availableActions.includes('unlock');
     const shouldShowHideBtn = isCNode && isNodeParent && !isModal && couldHide;
     const shouldShowLockBtn = config.get('enableCanvasLock', false) && isContainer && isCNode && isNodeParent && ((couldLock && !node.isLocked) || (couldUnlock && node.isLocked));
     const shouldEditBtn = isCNode && isNodeParent;
+    const shouldDeleteBtn = isCNode && isNodeParent && node?.canPerformAction('remove');
     return (
       <div
         className={classNames('tree-node-title', { editing })}
         style={style}
-        data-id={treeNode.id}
+        data-id={treeNode.nodeId}
         onClick={() => {
           if (isModal) {
             if (this.state.visible) {
@@ -214,8 +228,28 @@ export default class TreeTitle extends PureComponent<{
         </div>
         {shouldShowHideBtn && <HideBtn hidden={this.props.hidden} treeNode={treeNode} />}
         {shouldShowLockBtn && <LockBtn locked={this.props.locked} treeNode={treeNode} />}
-        {shouldEditBtn && <RenameBtn treeNode={treeNode} onClick={this.enableEdit} /> }
+        {shouldEditBtn && <RenameBtn treeNode={treeNode} onClick={this.enableEdit} />}
+        {shouldDeleteBtn && <DeleteBtn treeNode={treeNode} onClick={this.deleteClick} />}
+      </div>
+    );
+  }
+}
 
+class DeleteBtn extends PureComponent<{
+  treeNode: TreeNode;
+  onClick: () => void;
+}> {
+  render() {
+    const { intl, common } = this.props.treeNode.pluginContext;
+    const { Tip } = common.editorCabin;
+    return (
+      <div
+        className="tree-node-delete-btn"
+        onClick={this.props.onClick}
+      >
+        <IconDelete />
+        {/* @ts-ignore */}
+        <Tip>{intl('Delete')}</Tip>
       </div>
     );
   }
@@ -227,7 +261,7 @@ class RenameBtn extends PureComponent<{
 }> {
   render() {
     const { intl, common } = this.props.treeNode.pluginContext;
-    const Tip = common.editorCabin.Tip;
+    const { Tip } = common.editorCabin;
     return (
       <div
         className="tree-node-rename-btn"
@@ -248,7 +282,7 @@ class LockBtn extends PureComponent<{
   render() {
     const { treeNode, locked } = this.props;
     const { intl, common } = this.props.treeNode.pluginContext;
-    const Tip = common.editorCabin.Tip;
+    const { Tip } = common.editorCabin;
     return (
       <div
         className="tree-node-lock-btn"
@@ -274,7 +308,7 @@ class HideBtn extends PureComponent<{
   render() {
     const { treeNode, hidden } = this.props;
     const { intl, common } = treeNode.pluginContext;
-    const Tip = common.editorCabin.Tip;
+    const { Tip } = common.editorCabin;
     return (
       <div
         className="tree-node-hide-btn"
@@ -297,7 +331,6 @@ class ExpandBtn extends PureComponent<{
   expanded: boolean;
   expandable: boolean;
 }> {
-
   render() {
     const { treeNode, expanded, expandable } = this.props;
     if (!expandable) {

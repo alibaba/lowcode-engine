@@ -32,3 +32,4 @@ export * from './clipboard';
 export * from './setting-field';
 export * from './editor-view';
 export * from './skeleton-item';
+export * from './simulator-render';

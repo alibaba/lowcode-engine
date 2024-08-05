@@ -14,8 +14,11 @@
 
   --color-icon-normal: @normal-alpha-4;
   --color-icon-hover: @normal-alpha-3;
+  --color-icon-light: @normal-alpha-5;
   --color-icon-active: @brand-color-1;
   --color-icon-reverse: @white-alpha-1;
+  --color-icon-disabled: @normal-alpha-6;
+  --color-icon-pane: @dark-alpha-3;
 
   --color-line-normal: @normal-alpha-7;
   --color-line-darken: darken(@normal-alpha-7, 10%);
@@ -25,7 +28,7 @@
   --color-text-dark: darken(@dark-alpha-3, 10%);
   --color-text-light: lighten(@dark-alpha-3, 10%);
   --color-text-reverse: @white-alpha-2;
-  --color-text-regular: @normal-alpha-2;
+  --color-text-disabled: @gray-light;
 
   --color-field-label: @dark-alpha-4;
   --color-field-text: @dark-alpha-3;
@@ -35,6 +38,44 @@
   --color-field-border-active: @normal-alpha-3;
   --color-field-background: @white-alpha-1;
 
+  --color-success: @brand-success;
+  --colo-success-dark: darken(@brand-success, 10%);
+  --color-success-light: lighten(@brand-success, 10%);
+  --color-warning: @brand-warning;
+  --color-warning-dark: darken(@brand-warning, 10%);
+  --color-warning-light: lighten(@brand-warning, 10%);
+  --color-information: @brand-link-hover;
+  --color-information-dark: darken(@brand-link-hover, 10%);
+  --color-information-light: lighten(@brand-link-hover, 10%);
+  --color-error: @brand-danger;
+  --color-error-dark: darken(@brand-danger, 10%);
+  --color-error-light: lighten(@brand-danger, 10%);
+  --color-purple: rgb(144, 94, 190);
+  --color-brown: #7b605b;
+
+  --color-pane-background: @white-alpha-1;
+  --color-block-background-normal: @white-alpha-1;
+  --color-block-background-light: @normal-alpha-9;
+  --color-block-background-dark: @normal-alpha-7;
+  --color-block-background-shallow: @normal-alpha-8;
+  --color-block-background-disabled: @normal-alpha-6;
+  --color-block-background-active: @brand-color-1;
+  --color-block-background-active-light: @brand-color-1-7;
+  --color-block-background-warning: @brand-warning-alpha-7;
+  --color-block-background-error: @brand-danger-alpha-7;
+  --color-block-background-success: @brand-success-alpha-7;
+  --color-block-background-deep-dark: @normal-5;
+  --color-layer-mask-background: @dark-alpha-7;
+  --color-layer-tooltip-background: rgba(44,47,51,0.8);
+  --color-background: #edeff3;
+
+  --color-canvas-detecting-background: rgba(0,121,242,.04);
+
+  --pane-title-bg-color: rgba(31,56,88,.04);
+}
+
+// @deprecated 变量
+:root {
   --color-function-success: @brand-success;
   --color-function-success-dark: darken(@brand-success, 10%);
   --color-function-success-light: lighten(@brand-success, 10%);
@@ -47,16 +88,7 @@
   --color-function-error: @brand-danger;
   --color-function-error-dark: darken(@brand-danger, 10%);
   --color-function-error-light: lighten(@brand-danger, 10%);
-
-  --color-pane-background: @white-alpha-1;
-  --color-block-background-normal: @white-alpha-1;
-  --color-block-background-light: @normal-alpha-9;
-  --color-block-background-shallow: @normal-alpha-8;
-  --color-block-background-dark: @normal-alpha-7;
-  --color-block-background-disabled: @normal-alpha-6;
-  --color-block-background-deep-dark: @normal-5;
-  --color-layer-mask-background: @dark-alpha-7;
-  --color-layer-tooltip-background: rgba(44,47,51,0.8);
-
-  --pane-title-bg-color: rgba(31,56,88,.04);
+  --color-function-purple: rgb(144, 94, 190);
+  --color-function-brown: #7b605b;
+  --color-text-regular: @normal-alpha-2;
 }

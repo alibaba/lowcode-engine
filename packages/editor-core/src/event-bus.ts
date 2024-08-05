@@ -55,6 +55,14 @@ export class EventBus implements IEventBus {
     };
   }
 
+  prependListener(event: string, listener: (...args: any[]) => void): () => void {
+    this.eventEmitter.prependListener(event, listener);
+    this.getLogger().debug(`${this.getMsgPrefix('prependListener')} ${event}`);
+    return () => {
+      this.off(event, listener);
+    };
+  }
+
   /**
    * 取消监听事件
    * @param event 事件名称

@@ -1,14 +1,17 @@
 import { IPublicTypePluginDeclaration } from './';
 
 export interface IPublicTypePluginMeta {
+
   /**
    * define dependencies which the plugin depends on
    */
   dependencies?: string[];
+
   /**
    * specify which engine version is compatible with the plugin
    */
   engines?: {
+
     /** e.g. '^1.0.0' */
     lowcodeEngine?: string;
   };
@@ -26,4 +29,9 @@ export interface IPublicTypePluginMeta {
    *        event.emit('someEventName') is actually sending event with name 'myEvent:someEventName'
    */
   eventPrefix?: string;
+
+  /**
+   * 如果要使用 command 注册命令，需要在插件 meta 中定义 commandScope
+   */
+  commandScope?: string;
 }

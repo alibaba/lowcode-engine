@@ -12,23 +12,22 @@ sidebar_position: 6
 
 ```typescript
 import { plugins } from '@alilc/lowcode-engine';
-import { IPublicModelPluginContext } from '@alilc/lowcode-types';
+import { IPublicModelPluginContext, IPublicModelNode } from '@alilc/lowcode-types';
 import { Icon, Message } from '@alifd/next';
 
 const addHelloAction = (ctx: IPublicModelPluginContext) => {
   return {
     async init() {
-      const { addBuiltinComponentAction } = ctx.material;
-      addBuiltinComponentAction({
+      ctx.material.addBuiltinComponentAction({
         name: 'hello',
         content: {
           icon: <Icon type="atm" />,
           title: 'hello',
-          action(node: Node) {
+          action(node: IPublicModelNode) {
             Message.show('Welcome to Low-Code engine');
           },
         },
-        condition: (node: Node) => {
+        condition: (node: IPublicModelNode) => {
           return node.componentMeta.componentName === 'NextTable';
         },
         important: true,
@@ -54,8 +53,7 @@ import { IPublicModelPluginContext } from '@alilc/lowcode-types';
 const removeCopyAction = (ctx: IPublicModelPluginContext) => {
   return {
     async init() {
-      const { removeBuiltinComponentAction } = ctx.material;
-      removeBuiltinComponentAction('copy');
+      ctx.material.removeBuiltinComponentAction('copy');
     }
   }
 };

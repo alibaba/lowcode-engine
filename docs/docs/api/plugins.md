@@ -1,6 +1,6 @@
 ---
 title: plugins - 插件 API
-sidebar_position: 4
+sidebar_position: 2
 ---
 > **@types** [IPublicApiPlugins](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/api/plugins.ts)<br/>
 > **@since** v1.0.0

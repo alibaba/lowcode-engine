@@ -1,4 +1,4 @@
-import { IPublicTypeCustomView, IPublicModelEditor, IPublicModelSettingTopEntry } from '@alilc/lowcode-types';
+import { IPublicTypeCustomView, IPublicModelEditor, IPublicModelSettingTopEntry, IPublicApiSetters } from '@alilc/lowcode-types';
 import { isCustomView } from '@alilc/lowcode-utils';
 import { computed, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { ISettingEntry } from './setting-entry-type';
@@ -6,7 +6,6 @@ import { ISettingField, SettingField } from './setting-field';
 import { INode } from '../../document';
 import type { IComponentMeta } from '../../component-meta';
 import { IDesigner } from '../designer';
-import { Setters } from '@alilc/lowcode-shell';
 
 function generateSessionId(nodes: INode[]) {
   return nodes
@@ -19,17 +18,17 @@ export interface ISettingTopEntry extends ISettingEntry, IPublicModelSettingTopE
   INode,
   ISettingField
 > {
-  purge(): void;
-
-  items: Array<ISettingField | IPublicTypeCustomView>;
-
   readonly top: ISettingTopEntry;
 
   readonly parent: ISettingTopEntry;
 
   readonly path: never[];
 
+  items: Array<ISettingField | IPublicTypeCustomView>;
+
   componentMeta: IComponentMeta | null;
+
+  purge(): void;
 
   getExtraPropValue(propName: string): void;
 
@@ -92,7 +91,7 @@ export class SettingTopEntry implements ISettingTopEntry {
 
   readonly designer: IDesigner | undefined;
 
-  readonly setters: Setters;
+  readonly setters: IPublicApiSetters;
 
   disposeFunctions: any[] = [];
 
@@ -103,7 +102,7 @@ export class SettingTopEntry implements ISettingTopEntry {
     this.id = generateSessionId(nodes);
     this.first = nodes[0];
     this.designer = this.first.document?.designer;
-    this.setters = editor.get('setters') as Setters;
+    this.setters = editor.get('setters') as IPublicApiSetters;
 
     // setups
     this.setupComponentMeta();

@@ -126,7 +126,7 @@ https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.18/dist
 ```
 
 #### Method 5: Use your own cdn
-Pass the files under packages/engine/dist and packages/(react|rax)-simulator-renderer/dist in the source code to your cdn provider
+Pass the files under packages/engine/dist and packages/react-simulator-renderer/dist in the source code to your cdn provider
 
 ## 🔗 Related Links
 

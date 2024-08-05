@@ -1,0 +1,30 @@
+name: Publish Engine Beta
+
+on:
+  push:
+    branches:
+      - 'release/[0-9]+.[0-9]+.[0-9]+-beta'
+    paths:
+      - 'packages/**'
+
+jobs:
+  publish-engine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm install && npm run setup
+      - run: |
+          npm run build
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+      - run: npm run pub:prerelease
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Get version
+        id: get_version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT

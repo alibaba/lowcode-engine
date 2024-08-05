@@ -35,6 +35,10 @@ const keyBlacklist = [
   'innerPlugins',
 ];
 
+const AssetsCache: {
+  [key: string]: IPublicTypeRemoteComponentDescription;
+} = {};
+
 export declare interface Editor extends StrictEventEmitter<EventEmitter, GlobalEvent.EventConfig> {
   addListener(event: string | symbol, listener: (...args: any[]) => void): this;
   once(event: string | symbol, listener: (...args: any[]) => void): this;
@@ -143,9 +147,15 @@ export class Editor extends EventEmitter implements IEditor {
       // 如果有远程组件描述协议，则自动加载并补充到资产包中，同时出发 designer.incrementalAssetsReady 通知组件面板更新数据
       if (remoteComponentDescriptions && remoteComponentDescriptions.length) {
         await Promise.all(
-          remoteComponentDescriptions.map(async (component: any) => {
+          remoteComponentDescriptions.map(async (component: IPublicTypeRemoteComponentDescription) => {
             const { exportName, url, npm } = component;
-            await (new AssetLoader()).load(url);
+            if (!url || !exportName) {
+              return;
+            }
+            if (!AssetsCache[exportName] || !npm?.version || AssetsCache[exportName].npm?.version !== npm?.version) {
+              await (new AssetLoader()).load(url);
+            }
+            AssetsCache[exportName] = component;
             function setAssetsComponent(component: any, extraNpmInfo: any = {}) {
               const components = component.components;
               assets.componentList = assets.componentList?.concat(component.componentList || []);
@@ -181,14 +191,14 @@ export class Editor extends EventEmitter implements IEditor {
                 });
               });
             }
-            if (window[exportName]) {
-              if (Array.isArray(window[exportName])) {
-                setArrayAssets(window[exportName] as any);
+            if ((window as any)[exportName]) {
+              if (Array.isArray((window as any)[exportName])) {
+                setArrayAssets((window as any)[exportName] as any);
               } else {
-                setAssetsComponent(window[exportName] as any);
+                setAssetsComponent((window as any)[exportName] as any);
               }
             }
-            return window[exportName];
+            return (window as any)[exportName];
           }),
         );
       }
@@ -216,6 +226,16 @@ export class Editor extends EventEmitter implements IEditor {
     if (x !== undefined) {
       fn(x);
     }
+    this.setWait(keyOrType, fn);
+    return () => {
+      this.delWait(keyOrType, fn);
+    };
+  }
+
+  onChange<T = undefined, KeyOrType extends IPublicTypeEditorValueKey = any>(
+    keyOrType: KeyOrType,
+    fn: (data: IPublicTypeEditorGetResult<T, KeyOrType>) => void,
+  ): () => void {
     this.setWait(keyOrType, fn);
     return () => {
       this.delWait(keyOrType, fn);

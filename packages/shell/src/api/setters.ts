@@ -19,7 +19,7 @@ export class Setters implements IPublicApiSetters {
     const workspace = globalContext.get('workspace');
     if (workspace.isActive) {
       return untracked(() => {
-        if (!workspace.window.innerSetters) {
+        if (!workspace.window?.innerSetters) {
           logger.error('setter api 调用时机出现问题，请检查');
           return this[innerSettersSymbol];
         }

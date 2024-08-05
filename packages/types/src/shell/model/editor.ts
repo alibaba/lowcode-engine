@@ -15,9 +15,23 @@ export interface IPublicModelEditor extends StrictEventEmitter<EventEmitter, Glo
 
   set: (key: IPublicTypeEditorValueKey, data: any) => void | Promise<void>;
 
+  /**
+   * 获取 keyOrType 一次
+   */
   onceGot: <T = undefined, KeyOrType extends IPublicTypeEditorValueKey = any>(keyOrType: KeyOrType) => Promise<IPublicTypeEditorGetResult<T, KeyOrType>>;
 
+  /**
+   * 获取 keyOrType 多次
+   */
   onGot: <T = undefined, KeyOrType extends IPublicTypeEditorValueKey = any>(
+    keyOrType: KeyOrType,
+    fn: (data: IPublicTypeEditorGetResult<T, KeyOrType>) => void
+  ) => () => void;
+
+  /**
+   * 监听 keyOrType 变化
+   */
+  onChange: <T = undefined, KeyOrType extends IPublicTypeEditorValueKey = any>(
     keyOrType: KeyOrType,
     fn: (data: IPublicTypeEditorGetResult<T, KeyOrType>) => void
   ) => () => void;

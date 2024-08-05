@@ -1,0 +1,53 @@
+name: Update and Publish Docs
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'docs/docs/**'
+  workflow_dispatch:
+
+jobs:
+  publish-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          ref: 'develop'
+          node-version: '16'
+          registry-url: 'https://registry.npmjs.org'
+      - run: cd docs && npm install
+      - run: |
+          cd docs
+          npm version patch
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add package.json
+          git commit -m "chore(docs): publish documentation"
+          git push
+      - run: cd docs && npm run build && npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Get version
+        id: get_version
+        run: echo "version=$(node -p "require('./docs/package.json').version")" >> $GITHUB_OUTPUT
+
+  comment-pr:
+    needs: publish-docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment on PR
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🚀 New version has been released: ' + '${{ needs.publish-docs.outputs.version }}'
+            })

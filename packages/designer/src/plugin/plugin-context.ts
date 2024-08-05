@@ -19,6 +19,7 @@ import {
   IPublicApiWorkspace,
   IPublicEnumPluginRegisterLevel,
   IPublicModelWindow,
+  IPublicApiCommonUI,
 } from '@alilc/lowcode-types';
 import {
   IPluginContextOptions,
@@ -45,6 +46,8 @@ export default class PluginContext implements
   workspace: IPublicApiWorkspace;
   registerLevel: IPublicEnumPluginRegisterLevel;
   editorWindow: IPublicModelWindow;
+  commonUI: IPublicApiCommonUI;
+  isPluginRegisteredInWorkspace: false;
 
   constructor(
       options: IPluginContextOptions,

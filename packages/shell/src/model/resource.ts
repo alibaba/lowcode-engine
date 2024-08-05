@@ -13,6 +13,10 @@ export class Resource implements IPublicModelResource {
     return this[resourceSymbol].title;
   }
 
+  get id() {
+    return this[resourceSymbol].id;
+  }
+
   get icon() {
     return this[resourceSymbol].icon;
   }
@@ -35,6 +39,10 @@ export class Resource implements IPublicModelResource {
 
   get category() {
     return this[resourceSymbol].category;
+  }
+
+  get description() {
+    return this[resourceSymbol].description;
   }
 
   get children() {

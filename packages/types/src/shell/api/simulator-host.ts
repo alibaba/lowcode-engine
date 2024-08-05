@@ -1,7 +1,7 @@
-import { IPublicModelNode } from '../model';
-
+import { IPublicModelNode, IPublicModelSimulatorRender } from '../model';
 
 export interface IPublicApiSimulatorHost {
+
   /**
    * 获取 contentWindow
    * @experimental unstable api, pay extra caution when trying to use it
@@ -17,7 +17,7 @@ export interface IPublicApiSimulatorHost {
   /**
    * @experimental unstable api, pay extra caution when trying to use it
    */
-  get renderer(): any;
+  get renderer(): IPublicModelSimulatorRender | undefined;
 
   /**
    * 设置若干用于画布渲染的变量，比如画布大小、locale 等。

@@ -1,10 +1,9 @@
 import { createElement, ReactNode } from 'react';
 import { obx, computed, makeObservable, IEventBus, createModuleEventBus } from '@alilc/lowcode-editor-core';
 import { uniqueId, createContent } from '@alilc/lowcode-utils';
-import { IPublicTypeTitleContent } from '@alilc/lowcode-types';
+import { IPublicTypeHelpTipConfig, IPublicTypePanelConfig, IPublicTypeTitleContent } from '@alilc/lowcode-types';
 import { WidgetContainer } from './widget-container';
 import { getEvent } from '@alilc/lowcode-shell';
-import { PanelConfig, HelpTipConfig } from '../types';
 import { TitledPanelView, TabsPanelView, PanelView } from '../components/widget-views';
 import { ISkeleton } from '../skeleton';
 import { composeTitle } from './utils';
@@ -45,6 +44,7 @@ export class Panel implements IWidget {
     if (this.container) {
       return createElement(TabsPanelView, {
         container: this.container,
+        shouldHideSingleTab: true,
       });
     }
 
@@ -72,15 +72,15 @@ export class Panel implements IWidget {
 
   readonly title: IPublicTypeTitleContent;
 
-  readonly help?: HelpTipConfig;
+  readonly help?: IPublicTypeHelpTipConfig;
 
   private plain = false;
 
-  private container?: WidgetContainer<Panel, PanelConfig>;
+  private container?: WidgetContainer<Panel, IPublicTypePanelConfig>;
 
   @obx.ref public parent?: WidgetContainer;
 
-  constructor(readonly skeleton: ISkeleton, readonly config: PanelConfig) {
+  constructor(readonly skeleton: ISkeleton, readonly config: IPublicTypePanelConfig) {
     makeObservable(this);
     const { name, content, props = {} } = config;
     const { hideTitleBar, title, icon, description, help } = props;
@@ -90,9 +90,6 @@ export class Panel implements IWidget {
     this.plain = hideTitleBar || !title;
     this.help = help;
     if (Array.isArray(content)) {
-      if (content.length === 1) {
-        // todo: not show tabs
-      }
       this.container = this.skeleton.createContainer(
         name,
         (item) => {
@@ -127,7 +124,7 @@ export class Panel implements IWidget {
     this.parent = parent;
   }
 
-  add(item: Panel | PanelConfig) {
+  add(item: Panel | IPublicTypePanelConfig) {
     return this.container?.add(item);
   }
 

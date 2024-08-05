@@ -56,12 +56,13 @@ export function createSimulator(
       }
       const id = asset.id ? ` data-id="${asset.id}"` : '';
       const lv = asset.level || level || AssetLevel.Environment;
+      const scriptType = asset.scriptType ? ` type="${asset.scriptType}"` : '';
       if (asset.type === AssetType.JSUrl) {
         scripts[lv].push(
-          `<script src="${asset.content}"${id}></script>`,
+          `<script src="${asset.content}"${id}${scriptType}></script>`,
         );
       } else if (asset.type === AssetType.JSText) {
-        scripts[lv].push(`<script${id}>${asset.content}</script>`);
+        scripts[lv].push(`<script${id}${scriptType}>${asset.content}</script>`);
       } else if (asset.type === AssetType.CSSUrl) {
         styles[lv].push(
           `<link rel="stylesheet" href="${asset.content}"${id} />`,

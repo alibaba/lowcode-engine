@@ -18,9 +18,9 @@ import {
   IPublicEnumTransformStage,
   IPublicModelLocateEvent,
 } from '@alilc/lowcode-types';
-import { megreAssets, IPublicTypeAssetsJson, isNodeSchema, isDragNodeObject, isDragNodeDataObject, isLocationChildrenDetail, Logger } from '@alilc/lowcode-utils';
+import { mergeAssets, IPublicTypeAssetsJson, isNodeSchema, isDragNodeObject, isDragNodeDataObject, isLocationChildrenDetail, Logger } from '@alilc/lowcode-utils';
 import { IProject, Project } from '../project';
-import { Node, DocumentModel, insertChildren, INode } from '../document';
+import { Node, DocumentModel, insertChildren, INode, ISelection } from '../document';
 import { ComponentMeta, IComponentMeta } from '../component-meta';
 import { INodeSelector, Component } from '../simulator';
 import { Scroller } from './scroller';
@@ -32,6 +32,7 @@ import { OffsetObserver, createOffsetObserver } from './offset-observer';
 import { ISettingTopEntry, SettingTopEntry } from './setting';
 import { BemToolsManager } from '../builtin-simulator/bem-tools/manager';
 import { ComponentActions } from '../component-actions';
+import { ContextMenuActions, IContextMenuActions } from '../context-menu-actions';
 
 const logger = new Logger({ level: 'warn', bizName: 'designer' });
 
@@ -72,11 +73,15 @@ export interface IDesigner {
 
   get componentActions(): ComponentActions;
 
+  get contextMenuActions(): ContextMenuActions;
+
   get editor(): IPublicModelEditor;
 
   get detecting(): Detecting;
 
   get simulatorComponent(): ComponentType<any> | undefined;
+
+  get currentSelection(): ISelection;
 
   createScroller(scrollable: IPublicTypeScrollable): IPublicModelScroller;
 
@@ -122,6 +127,8 @@ export class Designer implements IDesigner {
 
   readonly componentActions = new ComponentActions();
 
+  readonly contextMenuActions: IContextMenuActions;
+
   readonly activeTracker = new ActiveTracker();
 
   readonly detecting = new Detecting();
@@ -143,6 +150,8 @@ export class Designer implements IDesigner {
   private props?: DesignerProps;
 
   private oobxList: OffsetObserver[] = [];
+
+  private selectionDispose: undefined | (() => void);
 
   @obx.ref private _componentMetasMap = new Map<string, IComponentMeta>();
 
@@ -195,6 +204,8 @@ export class Designer implements IDesigner {
       }
       this.postEvent('dragstart', e);
     });
+
+    this.contextMenuActions = new ContextMenuActions(this);
 
     this.dragon.onDrag((e) => {
       if (this.props?.onDrag) {
@@ -265,10 +276,9 @@ export class Designer implements IDesigner {
   }
 
   setupSelection = () => {
-    let selectionDispose: undefined | (() => void);
-    if (selectionDispose) {
-      selectionDispose();
-      selectionDispose = undefined;
+    if (this.selectionDispose) {
+      this.selectionDispose();
+      this.selectionDispose = undefined;
     }
     const { currentSelection } = this;
     // TODO: 避免选中 Page 组件，默认选中第一个子节点；新增规则 或 判断 Live 模式
@@ -284,7 +294,7 @@ export class Designer implements IDesigner {
     }
     this.postEvent('selection.change', currentSelection);
     if (currentSelection) {
-      selectionDispose = currentSelection.onSelectionChange(() => {
+      this.selectionDispose = currentSelection.onSelectionChange(() => {
         this.postEvent('selection.change', currentSelection);
       });
     }
@@ -457,7 +467,7 @@ export class Designer implements IDesigner {
     if (components) {
       // 合并 assets
       let assets = this.editor.get('assets') || {};
-      let newAssets = megreAssets(assets, incrementalAssets);
+      let newAssets = mergeAssets(assets, incrementalAssets);
       // 对于 assets 存在需要二次网络下载的过程，必须 await 等待结束之后，再进行事件触发
       await this.editor.set('assets', newAssets);
     }

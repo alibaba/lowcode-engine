@@ -90,3 +90,7 @@ export * from './editor-view-config';
 export * from './hotkey-callback-config';
 export * from './hotkey-callbacks';
 export * from './scrollable';
+export * from './simulator-renderer';
+export * from './config-transducer';
+export * from './context-menu';
+export * from './command';

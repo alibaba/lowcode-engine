@@ -159,6 +159,9 @@ export interface IBaseNode<Schema extends IPublicTypeNodeSchema = IPublicTypeNod
   setProps(props?: IPublicTypePropsMap | IPublicTypePropsList | Props | null): void;
 
   mergeProps(props: IPublicTypePropsMap): void;
+
+  /** 是否可以选中 */
+  canSelect(): boolean;
 }
 
 /**
@@ -389,7 +392,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
 
     this.isInited = true;
     this.emitter = createModuleEventBus('Node');
-    const editor = this.document.designer.editor;
+    const { editor } = this.document.designer;
     this.onVisibleChange((visible: boolean) => {
       editor?.eventBus.emit(EDITOR_EVENT.NODE_VISIBLE_CHANGE, this, visible);
     });
@@ -437,23 +440,23 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   }
 
   private initialChildren(children: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined): IPublicTypeNodeData[] {
-    // FIXME! this is dirty code
+    const { initialChildren } = this.componentMeta.advanced;
+
     if (children == null) {
-      const { initialChildren } = this.componentMeta.advanced;
       if (initialChildren) {
         if (typeof initialChildren === 'function') {
           return initialChildren(this.internalToShellNode()!) || [];
         }
         return initialChildren;
       }
-    }
-    if (Array.isArray(children)) {
-      return children;
-    } else if (children) {
-      return [children];
-    } else {
       return [];
     }
+
+    if (Array.isArray(children)) {
+      return children;
+    }
+
+    return [children];
   }
 
   isContainer(): boolean {
@@ -642,6 +645,12 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
    */
   get isLocked(): boolean {
     return !!this.getExtraProp('isLocked')?.getValue();
+  }
+
+  canSelect(): boolean {
+    const onSelectHook = this.componentMeta?.advanced?.callbacks?.onSelectHook;
+    const canSelect = typeof onSelectHook === 'function' ? onSelectHook(this.internalToShellNode()!) : true;
+    return canSelect;
   }
 
   /**
@@ -1085,7 +1094,7 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   }
 
   /**
-   * 是否可执行某action
+   * 是否可执行某 action
    */
   canPerformAction(actionName: string): boolean {
     const availableActions =
@@ -1210,13 +1219,20 @@ export class Node<Schema extends IPublicTypeNodeSchema = IPublicTypeNodeSchema> 
   /**
    * 获取磁贴相关信息
    */
-  getRGL() {
+  getRGL(): {
+    isContainerNode: boolean;
+    isEmptyNode: boolean;
+    isRGLContainerNode: boolean;
+    isRGLNode: boolean;
+    isRGL: boolean;
+    rglNode: Node | null;
+  } {
     const isContainerNode = this.isContainer();
     const isEmptyNode = this.isEmpty();
     const isRGLContainerNode = this.isRGLContainer;
-    const isRGLNode = this.getParent()?.isRGLContainer;
+    const isRGLNode = (this.getParent()?.isRGLContainer) as boolean;
     const isRGL = isRGLContainerNode || (isRGLNode && (!isContainerNode || !isEmptyNode));
-    let rglNode = isRGLContainerNode ? this : isRGL ? this?.getParent() : {};
+    let rglNode = isRGLContainerNode ? this : isRGL ? this?.getParent() : null;
     return { isContainerNode, isEmptyNode, isRGLContainerNode, isRGLNode, isRGL, rglNode };
   }
 

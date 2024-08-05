@@ -4,7 +4,7 @@ import {
   IPublicModelNode,
   IPublicTypeDisposable,
 } from '@alilc/lowcode-types';
-import { isI18nData, isLocationChildrenDetail } from '@alilc/lowcode-utils';
+import { isI18nData, isLocationChildrenDetail, uniqueId } from '@alilc/lowcode-utils';
 import EventEmitter from 'events';
 import { Tree } from './tree';
 import { IOutlinePanelPluginContext } from './tree-master';
@@ -60,7 +60,9 @@ export default class TreeNode {
    */
   private _expanded = false;
 
-  get id(): string {
+  id = uniqueId('treeNode');
+
+  get nodeId(): string {
     return this.node.id;
   }
 
@@ -176,7 +178,9 @@ export default class TreeNode {
     this.node.lock(flag);
     this.event.emit(EVENT_NAMES.lockedChanged, flag);
   }
-
+  deleteNode(node: IPublicModelNode) {
+    node && node.remove();
+  }
   onFilterResultChanged(fn: () => void): IPublicTypeDisposable {
     this.event.on(EVENT_NAMES.filterResultChanged, fn);
     return () => {
@@ -256,7 +260,7 @@ export default class TreeNode {
       return false;
     }
     return (
-      isLocationChildrenDetail(loc.detail) && loc.detail.focus?.type === 'node' && loc.detail?.focus?.node.id === this.id
+      isLocationChildrenDetail(loc.detail) && loc.detail.focus?.type === 'node' && loc.detail?.focus?.node.id === this.nodeId
     );
   }
 
@@ -278,7 +282,7 @@ export default class TreeNode {
     if (!loc) {
       return false;
     }
-    return loc.target?.id === this.id;
+    return loc.target?.id === this.nodeId;
   }
 
   setTitleLabel(label: string) {

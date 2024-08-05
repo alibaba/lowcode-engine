@@ -77,6 +77,11 @@ export const matchTreeNode = (
       return matchTreeNode(childNode, keywords, filterOps);
     }).find(Boolean);
 
+  // 如果命中了子节点，需要将该节点展开
+  if (matchChild && treeNode.expandable) {
+    treeNode.setExpanded(true);
+  }
+
   treeNode.setFilterReult({
     filterWorking: true,
     matchChild,

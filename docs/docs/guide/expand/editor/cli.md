@@ -1,6 +1,6 @@
 ---
 title: 低代码生态脚手架 & 调试机制
-sidebar_position: 8
+sidebar_position: 10
 ---
 ## 脚手架简述
 

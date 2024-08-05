@@ -164,7 +164,7 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * @param stage
    * @returns
    */
-  exportSchema(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Render): any {
+  exportSchema(stage: IPublicEnumTransformStage = IPublicEnumTransformStage.Render): IPublicTypeRootSchema | undefined {
     return this[documentSymbol].export(stage);
   }
 
@@ -252,10 +252,11 @@ export class DocumentModel implements IPublicModelDocumentModel {
    * 当前 document 新增节点事件，此时节点已经挂载到 document 上
    */
   onMountNode(fn: (payload: { node: IPublicModelNode }) => void): IPublicTypeDisposable {
-    this[editorSymbol].eventBus.on('node.add', fn as any);
-    return () => {
-      this[editorSymbol].eventBus.off('node.add', fn as any);
-    };
+    return this[documentSymbol].onMountNode(({
+      node,
+    }) => {
+      fn({ node: ShellNode.create(node)! });
+    });
   }
 
   /**

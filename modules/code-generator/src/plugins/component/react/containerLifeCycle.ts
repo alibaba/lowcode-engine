@@ -16,13 +16,14 @@ import { isJSFunction, isJSExpression } from '@alilc/lowcode-types';
 import { isJSExpressionFn } from '../../../utils/common';
 
 export interface PluginConfig {
-  fileType: string;
-  exportNameMapping: Record<string, string>;
-  normalizeNameMapping: Record<string, string>;
+  fileType?: string;
+  exportNameMapping?: Record<string, string>;
+  normalizeNameMapping?: Record<string, string>;
+  exclude?: string[];
 }
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
-  const cfg: PluginConfig = {
+  const cfg = {
     fileType: FileType.JSX,
     exportNameMapping: {},
     normalizeNameMapping: {},
@@ -54,6 +55,10 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
           normalizeName = lifeCycleName;
         } else {
           normalizeName = cfg.normalizeNameMapping[lifeCycleName] || lifeCycleName;
+        }
+
+        if (cfg?.exclude?.includes(normalizeName)) {
+          return null;
         }
 
         const exportName = cfg.exportNameMapping[lifeCycleName] || lifeCycleName;
@@ -97,7 +102,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
           }),
           linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsMethod]],
         };
-      });
+      }).filter((i) => !!i);
 
       next.chunks.push(...chunks.filter((x): x is ICodeChunk => x !== null));
     }

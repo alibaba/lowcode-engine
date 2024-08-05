@@ -1,6 +1,6 @@
 ---
 title: simulatorHost - 模拟器 API
-sidebar_position: 3
+sidebar_position: 10
 ---
 > **@types** [IPublicApiSimulatorHost](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/api/simulator-host.ts)<br/>
 > **@since** v1.0.0
@@ -20,7 +20,7 @@ sidebar_position: 3
  */
 set(key: string, value: any): void;
 ```
-#### 示例
+**示例**
 设置若干用于画布渲染的变量，比如画布大小、locale 等。
 
 以设置画布大小为例：
@@ -50,11 +50,11 @@ get(key: string): any;
 ```
 
 ### rerender
-刷新渲染画布
+触发组件构建，并刷新渲染画布
 
 ```typescript
 /**
- * 刷新渲染画布
+ * 触发组件构建，并刷新渲染画布
  * make simulator render again
  */
 rerender(): void;

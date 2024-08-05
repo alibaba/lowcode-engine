@@ -1,6 +1,6 @@
 ---
 title: project - 模型 API
-sidebar_position: 3
+sidebar_position: 10
 ---
 ## 模块简介
 
@@ -182,19 +182,6 @@ importSchema(schema?: IPublicTypeProjectSchema): void;
 ```
 相关类型：[IPublicTypeProjectSchema](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/project-schema.ts)
 
-### getCurrentDocument
-获取当前的 document
-
-```typescript
-/**
- * 获取当前的 document
- * get current document
- * @returns
- */
-getCurrentDocument(): IPublicModelDocumentModel | null;
-```
-相关类型：[IPublicModelDocumentModel](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/model/document-model.ts)
-
 ### addPropsTransducer
 增加一个属性的管道处理函数
 
@@ -214,7 +201,7 @@ addPropsTransducer(
 - [IPublicTypePropsTransducer](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/props-transducer.ts)
 - [IPublicEnumTransformStage](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/enum/transform-stage.ts)
 
-#### 示例
+**示例**
 在保存的时候删除每一个组件的 props.hidden
 ```typescript
 import { project } from '@alilc/lowcode-engine';

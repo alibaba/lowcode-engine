@@ -289,8 +289,8 @@ codealike.json
       },
       "lifeCycles": {
         "componentDidMount": {
-          "type": "JSExpression",
-          "value": "function() { console.log('componentDidMount'); }"
+          "type": "JSFunction",
+          "value": "function componentDidMount() {\\n  console.log('componentDidMount');\\n}"
         }
       },
       "methodsModule": {
@@ -635,18 +635,20 @@ export default function createHelloWorldProjectBuilder() {
     template: CodeGen.solutionParts.icejs.template,
     plugins: {
       components: [
-        CodeGen.plugins.react.reactCommonDeps(),
-        CodeGen.plugins.common.esmodule({ fileType: 'jsx' }),
-        CodeGen.plugins.react.containerClass(),
-        CodeGen.plugins.react.containerInjectContext(),
-        CodeGen.plugins.react.containerInjectUtils(),
-        CodeGen.plugins.react.containerInjectDataSourceEngine(),
-        CodeGen.plugins.react.containerInjectI18n(),
-        CodeGen.plugins.react.containerInitState(),
-        CodeGen.plugins.react.containerLifeCycle(),
-        CodeGen.plugins.react.containerMethod(),
+        CodeGen.plugins.icejs.reactCommonDeps(),
+        CodeGen.plugins.common.esModule({ fileType: 'jsx' }),
+        CodeGen.plugins.common.styleImport(),
+        CodeGen.plugins.icejs.containerClass(),
+        CodeGen.plugins.icejs.containerInjectContext(),
+        CodeGen.plugins.icejs.containerInjectUtils(),
+        CodeGen.plugins.icejs.containerInjectDataSourceEngine(),
+        CodeGen.plugins.icejs.containerInjectI18n(),
+        CodeGen.plugins.icejs.containerInjectConstants(),
+        CodeGen.plugins.icejs.containerInitState(),
+        CodeGen.plugins.icejs.containerLifeCycle(),
+        CodeGen.plugins.icejs.containerMethod(),
         examplePlugin(),
-        CodeGen.plugins.react.jsx({
+        CodeGen.plugins.icejs.jsx({
           nodeTypeMapping: {
             Div: 'div',
             Component: 'div',
@@ -657,18 +659,20 @@ export default function createHelloWorldProjectBuilder() {
         CodeGen.plugins.style.css(),
       ],
       pages: [
-        CodeGen.plugins.react.reactCommonDeps(),
-        CodeGen.plugins.common.esmodule({ fileType: 'jsx' }),
-        CodeGen.plugins.react.containerClass(),
-        CodeGen.plugins.react.containerInjectContext(),
-        CodeGen.plugins.react.containerInjectUtils(),
-        CodeGen.plugins.react.containerInjectDataSourceEngine(),
-        CodeGen.plugins.react.containerInjectI18n(),
-        CodeGen.plugins.react.containerInitState(),
-        CodeGen.plugins.react.containerLifeCycle(),
-        CodeGen.plugins.react.containerMethod(),
+        CodeGen.plugins.icejs.reactCommonDeps(),
+        CodeGen.plugins.common.esModule({ fileType: 'jsx' }),
+        CodeGen.plugins.common.styleImport(),
+        CodeGen.plugins.icejs.containerClass(),
+        CodeGen.plugins.icejs.containerInjectContext(),
+        CodeGen.plugins.icejs.containerInjectUtils(),
+        CodeGen.plugins.icejs.containerInjectDataSourceEngine(),
+        CodeGen.plugins.icejs.containerInjectI18n(),
+        CodeGen.plugins.icejs.containerInjectConstants(),
+        CodeGen.plugins.icejs.containerInitState(),
+        CodeGen.plugins.icejs.containerLifeCycle(),
+        CodeGen.plugins.icejs.containerMethod(),
         examplePlugin(),
-        CodeGen.plugins.react.jsx({
+        CodeGen.plugins.icejs.jsx({
           nodeTypeMapping: {
             Div: 'div',
             Component: 'div',
@@ -679,13 +683,13 @@ export default function createHelloWorldProjectBuilder() {
         CodeGen.plugins.style.css(),
       ],
       router: [
-        CodeGen.plugins.common.esmodule(),
+        CodeGen.plugins.common.esModule(),
         CodeGen.solutionParts.icejs.plugins.router(),
       ],
       entry: [CodeGen.solutionParts.icejs.plugins.entry()],
       constants: [CodeGen.plugins.project.constants()],
       utils: [
-        CodeGen.plugins.common.esmodule(),
+        CodeGen.plugins.common.esModule(),
         CodeGen.plugins.project.utils('react'),
       ],
       i18n: [CodeGen.plugins.project.i18n()],

@@ -2,16 +2,15 @@ import { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { observer } from '@alilc/lowcode-editor-core';
 import { Area } from '../area';
-import { PanelConfig } from '../types';
 import { Panel } from '../widget/panel';
+import { IPublicTypePanelConfig } from '@alilc/lowcode-types';
 
 @observer
-export default class LeftFixedPane extends Component<{ area: Area<PanelConfig, Panel> }> {
+export default class LeftFixedPane extends Component<{ area: Area<IPublicTypePanelConfig, Panel> }> {
   componentDidUpdate() {
     // FIXME: dirty fix, need deep think
     this.props.area.skeleton.editor.get('designer')?.touchOffsetObserver();
   }
-
 
   render() {
     const { area } = this.props;
@@ -36,7 +35,7 @@ export default class LeftFixedPane extends Component<{ area: Area<PanelConfig, P
 }
 
 @observer
-class Contents extends Component<{ area: Area<PanelConfig, Panel> }> {
+class Contents extends Component<{ area: Area<IPublicTypePanelConfig, Panel> }> {
   render() {
     const { area } = this.props;
     return <Fragment>{area.container.items.map((panel) => panel.content)}</Fragment>;

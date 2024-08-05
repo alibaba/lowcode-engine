@@ -8,12 +8,12 @@ export default function isUseLoop(loop: null | any[] | IPublicTypeJSExpression, 
     return true;
   }
 
-  if (!Array.isArray(loop)) {
-    return false;
-  }
-
   if (!isDesignMode) {
     return true;
+  }
+
+  if (!Array.isArray(loop)) {
+    return false;
   }
 
   return loop.length > 0;

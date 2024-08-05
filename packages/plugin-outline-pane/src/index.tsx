@@ -18,7 +18,9 @@ export function OutlinePaneContext(props: {
   hideFilter?: boolean;
 }) {
   const treeMaster = props.treeMaster || new TreeMaster(props.pluginContext, props.options);
-  const [masterPaneController, setMasterPaneController] = useState(new PaneController(props.paneName || MasterPaneName, treeMaster));
+  const [masterPaneController, setMasterPaneController] = useState(
+    () => new PaneController(props.paneName || MasterPaneName, treeMaster),
+  );
   useEffect(() => {
     return treeMaster.onPluginContextChange(() => {
       setMasterPaneController(new PaneController(props.paneName || MasterPaneName, treeMaster));
@@ -40,7 +42,9 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
   const { skeleton, config, canvas, project } = ctx;
 
   let isInFloatArea = true;
-  const hasPreferenceForOutline = config.getPreference().contains('outline-pane-pinned-status-isFloat', 'skeleton');
+  const hasPreferenceForOutline = config
+    .getPreference()
+    .contains('outline-pane-pinned-status-isFloat', 'skeleton');
   if (hasPreferenceForOutline) {
     isInFloatArea = config.getPreference().get('outline-pane-pinned-status-isFloat', 'skeleton');
   }
@@ -88,6 +92,7 @@ export const OutlinePlugin = (ctx: IPublicModelPluginContext, options: any) => {
           paneName: BackupPaneName,
           treeMaster,
         },
+        index: 1,
       });
 
       // 处理 master pane 和 backup pane 切换

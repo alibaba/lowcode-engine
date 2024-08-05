@@ -460,7 +460,6 @@ import parse from '@alilc/lowcode-material-parser';
 {
   name: 'back',
   title: ' ',
-  virtual: () => true,
   display: 'plain',
   setter: BackwardSetter,
 }

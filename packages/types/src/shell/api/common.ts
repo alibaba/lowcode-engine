@@ -1,6 +1,6 @@
 
 import { Component, ReactNode } from 'react';
-import { IPublicTypeNodeSchema, IPublicTypeTitleContent } from '../type';
+import { IPublicTypeI18nData, IPublicTypeNodeSchema, IPublicTypeTitleContent } from '../type';
 import { IPublicEnumTransitionType } from '../enum';
 
 export interface IPublicApiCommonUtils {
@@ -69,6 +69,11 @@ export interface IPublicApiCommonUtils {
     getLocale(): string;
     setLocale(locale: string): void;
   };
+
+  /**
+   * i18n 转换方法
+   */
+  intl(data: IPublicTypeI18nData | string, params?: object): string;
 }
 export interface IPublicApiCommonSkeletonCabin {
 

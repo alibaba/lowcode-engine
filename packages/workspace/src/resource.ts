@@ -12,9 +12,11 @@ export interface IBaseResource<T> extends IBaseModelResource<T> {
 
   skeleton: ISkeleton;
 
+  description?: string;
+
   get editorViews(): IPublicTypeEditorView[];
 
-  get defaultViewType(): string;
+  get defaultViewName(): string | undefined;
 
   getEditorView(name: string): IPublicTypeEditorView | undefined;
 
@@ -39,7 +41,7 @@ export class Resource implements IResource {
   }
 
   get viewName() {
-    return this.resourceData.viewName || (this.resourceData as any).viewType || this.defaultViewType;
+    return this.resourceData.viewName || (this.resourceData as any).viewType || this.defaultViewName;
   }
 
   get description() {
@@ -56,6 +58,10 @@ export class Resource implements IResource {
 
   get title(): string | undefined {
     return this.resourceData.title || this.resourceTypeInstance.defaultTitle;
+  }
+
+  get id(): string | undefined {
+    return this.resourceData.id;
   }
 
   get options() {
@@ -114,8 +120,8 @@ export class Resource implements IResource {
     return this.resourceTypeInstance.editorViews;
   }
 
-  get defaultViewType() {
-    return this.resourceTypeInstance.defaultViewType;
+  get defaultViewName() {
+    return this.resourceTypeInstance.defaultViewName || this.resourceTypeInstance.defaultViewType;
   }
 
   getEditorView(name: string) {

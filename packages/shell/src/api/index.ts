@@ -11,3 +11,5 @@ export * from './skeleton';
 export * from './canvas';
 export * from './workspace';
 export * from './config';
+export * from './commonUI';
+export * from './command';

@@ -1,6 +1,6 @@
 ---
 title: workspace - 应用级 API
-sidebar_position: 12
+sidebar_position: 10
 ---
 
 > **[@experimental](./#experimental)**<br/>
@@ -36,6 +36,16 @@ get plugins(): IPublicApiPlugins
 ```
 
 关联模型 [IPublicApiPlugins](./plugins)
+
+### skeleton
+
+应用级别的面板管理
+
+```typescript
+get skeleton(): IPublicApiSkeleton
+```
+
+关联模型 [IPublicApiSkeleton](./skeleton)
 
 ### windows
 
@@ -77,14 +87,21 @@ registerResourceType(resourceTypeModel: IPublicTypeResourceType): void;
 setResourceList(resourceList: IPublicResourceList) {}
 ```
 
-相关类型：[IPublicResourceOptions](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/resource-options.ts)
+相关类型：[IPublicResourceData](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/resource-list.ts)
 
 ### openEditorWindow
 
 打开视图窗口
 
 ```typescript
-openEditorWindow(resourceName: string, title: string, options: Object, viewName?: string): void;
+/**
+ * 打开视图窗口
+ * @deprecated
+ */
+openEditorWindow(resourceName: string, id: string, extra: Object, viewName?: string, sleep?: boolean): Promise<void>;
+
+/** 打开视图窗口 */
+openEditorWindow(resource: Resource, sleep?: boolean): Promise<void>;
 ```
 
 ### openEditorWindowById
@@ -100,7 +117,16 @@ openEditorWindowById(id: string): void;
 移除视图窗口
 
 ```typescript
-removeEditorWindow(resourceName: string, title: string): void;
+/**
+ * 移除视图窗口
+ * @deprecated
+ */
+removeEditorWindow(resourceName: string, id: string): void;
+
+/**
+ * 移除视图窗口
+ */
+removeEditorWindow(resource: Resource): void;
 ```
 
 ### removeEditorWindowById

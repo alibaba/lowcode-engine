@@ -1,3 +1,4 @@
+import React from 'react';
 import { IPublicTypeEditorView } from './editor-view';
 
 export interface IPublicResourceTypeConfig {
@@ -6,10 +7,16 @@ export interface IPublicResourceTypeConfig {
   description?: string;
 
   /** 资源 icon 标识 */
-  icon?: React.ReactElement;
+  icon?: React.ReactElement | React.FunctionComponent | React.ComponentClass;
+
+  /**
+   * 默认视图类型
+   * @deprecated
+   */
+  defaultViewType?: string;
 
   /** 默认视图类型 */
-  defaultViewType: string;
+  defaultViewName: string;
 
   /** 资源视图 */
   editorViews: IPublicTypeEditorView[];

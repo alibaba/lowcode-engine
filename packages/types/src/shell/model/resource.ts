@@ -5,6 +5,8 @@ export interface IBaseModelResource<
 > {
   get title(): string | undefined;
 
+  get id(): string | undefined;
+
   get icon(): ReactElement | undefined;
 
   get options(): Record<string, any>;
@@ -19,8 +21,10 @@ export interface IBaseModelResource<
 
   get viewName(): string | undefined;
 
+  get description(): string | undefined;
+
   get config(): {
-    disableBehaviors?: ('copy' | 'remove')[];
+    [key: string]: any;
   } | undefined;
 }
 

@@ -139,10 +139,12 @@ importSchema(schema: IPublicTypeRootSchema): void;
  * @param stage
  * @returns
  */
-exportSchema(stage: IPublicEnumTransformStage): any;
+exportSchema(stage: IPublicEnumTransformStage): IPublicTypeRootSchema | undefined;
 ```
 
-相关类型：[IPublicEnumTransformStage](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/enum/transform-stage.ts)
+相关类型：
+- [IPublicEnumTransformStage](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/enum/transform-stage.ts)
+- [IPublicTypeRootSchema](https://github.com/alibaba/lowcode-engine/blob/main/packages/types/src/shell/type/root-schema.ts)
 
 ### insertNode
 

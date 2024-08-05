@@ -20,11 +20,13 @@
     "lint:fix": "f2elint fix -i ./packages/*/src",
     "lint:modules": "f2elint scan -q -i ./modules/*/src",
     "lint:modules:fix": "f2elint fix -i ./modules/*/src",
-    "pub": "npm run watchdog:build && lerna publish patch --force-publish --exact --no-changelog",
+    "pub": "npm run watchdog:build && lerna publish patch --yes --force-publish --exact --no-changelog",
+    "pub:minor": "npm run watchdog:build && lerna publish minor --yes --force-publish --exact --no-changelog",
+    "pub:major": "npm run watchdog:build && lerna publish major --yes --force-publish --exact --no-changelog",
     "pub:premajor": "npm run watchdog:build && lerna publish premajor --force-publish --exact --dist-tag beta --preid beta --no-changelog",
     "pub:preminor": "npm run watchdog:build && lerna publish preminor --force-publish --exact --dist-tag beta --preid beta --no-changelog",
     "pub:prepatch": "npm run watchdog:build && lerna publish prepatch --force-publish --exact --dist-tag beta --preid beta --no-changelog",
-    "pub:prerelease": "npm run watchdog:build && lerna publish prerelease --force-publish --exact --dist-tag beta --preid beta --no-changelog",
+    "pub:prerelease": "npm run watchdog:build && lerna publish prerelease --yes --force-publish --exact --dist-tag beta --preid beta --no-changelog",
     "setup": "node ./scripts/setup.js",
     "setup:test": "./scripts/setup-for-test.sh",
     "setup:skip-build": "./scripts/setup-skip-build.sh",
@@ -52,7 +54,7 @@
     "yarn": "^1.22.17",
     "rimraf": "^3.0.2",
     "@types/react-router": "5.1.18",
-    "@alilc/build-plugin-lce": "^0.0.3",
+    "@alilc/build-plugin-lce": "^0.0.5",
     "babel-jest": "^26.5.2",
     "@alilc/lowcode-test-mate": "^1.0.1"
   },
@@ -64,7 +66,8 @@
     "lockfile": "enable"
   },
   "resolutions": {
-    "typescript": "4.6.2"
+    "typescript": "4.6.2",
+    "react-error-overlay": "6.0.9"
   },
   "repository": "git@github.com:alibaba/lowcode-engine.git"
 }

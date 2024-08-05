@@ -1,14 +1,18 @@
 import { createDefer } from './create-defer';
+import { Logger } from './logger';
 
-export function evaluate(script: string) {
+const logger = new Logger({ level: 'warn', bizName: 'utils' });
+
+export function evaluate(script: string, scriptType?: string) {
   const scriptEl = document.createElement('script');
+  scriptType && (scriptEl.type = scriptType);
   scriptEl.text = script;
   document.head.appendChild(scriptEl);
   document.head.removeChild(scriptEl);
 }
 
-export function load(url: string) {
-  const node: any = document.createElement('script');
+export function load(url: string, scriptType?: string) {
+  const node = document.createElement('script');
 
   // node.setAttribute('crossorigin', 'anonymous');
 
@@ -34,6 +38,8 @@ export function load(url: string) {
   // `async=false` is required to make sure all js resources execute sequentially.
   node.async = false;
 
+  scriptType && (node.type = scriptType);
+
   document.head.appendChild(node);
 
   return i.promise();
@@ -50,7 +56,7 @@ export function newFunction(args: string, code: string) {
     // eslint-disable-next-line no-new-func
     return new Function(args, code);
   } catch (e) {
-    console.warn('Caught error, Cant init func');
+    logger.warn('Caught error, Cant init func');
     return null;
   }
 }

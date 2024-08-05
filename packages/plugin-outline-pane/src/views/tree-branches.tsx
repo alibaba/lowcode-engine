@@ -169,12 +169,12 @@ class TreeNodeChildren extends PureComponent<{
             children.push(insertion);
           }
         }
-        groupContents.push(<TreeNodeView key={child.id} treeNode={child} isModal={isModal} />);
+        groupContents.push(<TreeNodeView key={child.nodeId} treeNode={child} isModal={isModal} />);
       } else {
         if (index === dropIndex) {
           children.push(insertion);
         }
-        children.push(<TreeNodeView key={child.id} treeNode={child} isModal={isModal} />);
+        children.push(<TreeNodeView key={child.nodeId} treeNode={child} isModal={isModal} />);
       }
     });
     endGroup();
@@ -201,14 +201,14 @@ class TreeNodeSlots extends PureComponent<{
         className={classNames('tree-node-slots', {
           'insertion-at-slots': treeNode.dropDetail?.focus?.type === 'slots',
         })}
-        data-id={treeNode.id}
+        data-id={treeNode.nodeId}
       >
         <div className="tree-node-slots-title">
           {/* @ts-ignore */}
           <Title title={{ type: 'i18n', intl: this.props.treeNode.pluginContext.intlNode('Slots') }} />
         </div>
         {treeNode.slots.map(tnode => (
-          <TreeNodeView key={tnode.id} treeNode={tnode} />
+          <TreeNodeView key={tnode.nodeId} treeNode={tnode} />
         ))}
       </div>
     );

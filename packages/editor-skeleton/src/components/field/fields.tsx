@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unused-prop-types */
-import { Component, MouseEvent } from 'react';
+import { Component, ErrorInfo, MouseEvent } from 'react';
 import { isObject } from 'lodash';
 import classNames from 'classnames';
 import { Icon } from '@alifd/next';
@@ -9,6 +9,9 @@ import { PopupPipe, PopupContext } from '../popup';
 import './index.less';
 import InlineTip from './inlinetip';
 import { intl } from '../../locale';
+import { Logger } from '@alilc/lowcode-utils';
+
+const logger = new Logger({ level: 'warn', bizName: 'skeleton:field' });
 
 export interface FieldProps {
   className?: string;
@@ -31,6 +34,10 @@ export class Field extends Component<FieldProps> {
     hasError: false,
   };
 
+  private body: HTMLDivElement | null = null;
+
+  private dispose?: () => void;
+
   constructor(props: any) {
     super(props);
     this.handleClear = this.handleClear.bind(this);
@@ -46,10 +53,6 @@ export class Field extends Component<FieldProps> {
     });
     onExpandChange && onExpandChange(!collapsed);
   };
-
-  private body: HTMLDivElement | null = null;
-
-  private dispose?: () => void;
 
   private deployBlockTesting() {
     if (this.dispose) {
@@ -101,7 +104,13 @@ export class Field extends Component<FieldProps> {
   }
 
   static getDerivedStateFromError() {
-    return { hasError: true };
+    return {
+      hasError: true,
+    };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    logger.error(`${this.props.title} has error`, error, errorInfo);
   }
 
   getTipContent(propName: string, tip?: any): any {
@@ -194,39 +203,6 @@ export class Field extends Component<FieldProps> {
  */
 function createValueState(/* valueState?: number, onClear?: (e: React.MouseEvent) => void */) {
   return null;
-  /*
-  let tip: any = null;
-  let className = 'lc-valuestate';
-  let icon: any = null;
-  if (valueState) {
-    if (valueState < 0) {
-      // multiple value 橘黄色点： tip：多种值，点击清除
-      tip = intlNode('Multiple Value, Click to Clear');
-      className += ' valuestate-multiple';
-      icon = <IconClear size={6} />;
-    } else if (valueState === 10) {
-      // isset  orangered tip: 必填项
-      tip = intlNode('Required');
-      className += ' valuestate-required';
-      onClear = undefined;
-    } else if (valueState > 0) {
-      // isset  蓝点 tip: 已设置值，点击清除
-      tip = intlNode('Setted Value, Click to Clear');
-      className += ' valuestate-isset';
-      icon = <IconClear size={6} />;
-    }
-  } else {
-    onClear = undefined;
-    // unset 占位空间
-  }
-
-  return (
-    <i className={className} onClick={onClear}>
-      {icon}
-      {tip && <Tip>{tip}</Tip>}
-    </i>
-  );
-  */
 }
 
 export interface PopupFieldProps extends FieldProps {

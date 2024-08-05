@@ -504,6 +504,41 @@ describe('onChildrenChange', () => {
     DivNode.emitChildrenChange();
     makeSnapshot(component);
   });
+
+  it('children is 0', () => {
+    DivNode.schema.children = 0
+    DivNode.emitChildrenChange();
+    const componentInstance = component.root;
+    expect(componentInstance.findByType(components.Div).props.children).toEqual(0);
+  });
+
+  it('children is false', () => {
+    DivNode.schema.children = false
+    DivNode.emitChildrenChange();
+    const componentInstance = component.root;
+    expect(componentInstance.findByType(components.Div).props.children).toEqual(false);
+  });
+
+  it('children is []', () => {
+    DivNode.schema.children = []
+    DivNode.emitChildrenChange();
+    const componentInstance = component.root;
+    expect(componentInstance.findByType(components.Div).props.children).toEqual([]);
+  });
+
+  it('children is null', () => {
+    DivNode.schema.children = null
+    DivNode.emitChildrenChange();
+    const componentInstance = component.root;
+    expect(componentInstance.findByType(components.Div).props.children).toEqual(null);
+  });
+
+  it('children is undefined', () => {
+    DivNode.schema.children = undefined;
+    DivNode.emitChildrenChange();
+    const componentInstance = component.root;
+    expect(componentInstance.findByType(components.Div).props.children).toEqual(undefined);
+  });
 });
 
 describe('not render leaf', () => {

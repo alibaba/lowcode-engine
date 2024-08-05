@@ -28,6 +28,9 @@ export const defaultPanelRegistry = (editor: any) => {
             props: {
               ignoreRoot: true,
             },
+            panelProps: {
+              ...(config.get('defaultSettingPanelProps') || {}),
+            },
           });
         }
       },
@@ -38,6 +41,5 @@ export const defaultPanelRegistry = (editor: any) => {
 
   return fun;
 };
-
 
 export default defaultPanelRegistry;

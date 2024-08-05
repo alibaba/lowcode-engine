@@ -4,7 +4,6 @@ import {
   reaction,
   computed,
   getPublicPath,
-  focusTracker,
   engineConfig,
   globalLocale,
   IReactionPublic,
@@ -14,6 +13,7 @@ import {
   createModuleEventBus,
   IEventBus,
 } from '@alilc/lowcode-editor-core';
+
 import {
   ISimulatorHost,
   Component,
@@ -39,6 +39,7 @@ import {
   isDragAnyObject,
   isDragNodeObject,
   isLocationData,
+  Logger,
 } from '@alilc/lowcode-utils';
 import {
   isShaken,
@@ -71,6 +72,8 @@ import { IProject, Project } from '../project';
 import { IScroller } from '../designer/scroller';
 import { isElementNode, isDOMNodeVisible } from '../utils/misc';
 import { debounce } from 'lodash';
+
+const logger = new Logger({ level: 'warn', bizName: 'designer' });
 
 export type LibraryItem = IPublicTypePackage & {
   package: string;
@@ -122,21 +125,6 @@ const defaultSimulatorUrl = (() => {
   return urls;
 })();
 
-const defaultRaxSimulatorUrl = (() => {
-  const publicPath = getPublicPath();
-  let urls;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, prefix = '', dev] = /^(.+?)(\/js)?\/?$/.exec(publicPath) || [];
-  if (dev) {
-    urls = [`${prefix}/css/rax-simulator-renderer.css`, `${prefix}/js/rax-simulator-renderer.js`];
-  } else if (process.env.NODE_ENV === 'production') {
-    urls = [`${prefix}/rax-simulator-renderer.css`, `${prefix}/rax-simulator-renderer.js`];
-  } else {
-    urls = [`${prefix}/rax-simulator-renderer.css`, `${prefix}/rax-simulator-renderer.js`];
-  }
-  return urls;
-})();
-
 const defaultEnvironment = [
   // https://g.alicdn.com/mylib/??react/16.11.0/umd/react.production.min.js,react-dom/16.8.6/umd/react-dom.production.min.js,prop-types/15.7.2/prop-types.min.js
   assetItem(
@@ -144,17 +132,6 @@ const defaultEnvironment = [
     'window.React=parent.React;window.ReactDOM=parent.ReactDOM;window.__is_simulator_env__=true;',
     undefined,
     'react',
-  ),
-  assetItem(
-    AssetType.JSText,
-    'window.PropTypes=parent.PropTypes;React.PropTypes=parent.PropTypes; window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;',
-  ),
-];
-
-const defaultRaxEnvironment = [
-  assetItem(
-    AssetType.JSText,
-    'window.Rax=parent.Rax;window.React=parent.React;window.ReactDOM=parent.ReactDOM;window.VisualEngineUtils=parent.VisualEngineUtils;window.VisualEngine=parent.VisualEngine',
   ),
   assetItem(
     AssetType.JSText,
@@ -265,6 +242,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   @obx.ref private _contentDocument?: Document;
 
+  @obx.ref private _appHelper?: any;
+
   get contentDocument() {
     return this._contentDocument;
   }
@@ -310,11 +289,17 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.designer = designer;
     this.scroller = this.designer.createScroller(this.viewport);
     this.autoRender = !engineConfig.get('disableAutoRender', false);
+    this._appHelper = engineConfig.get('appHelper');
     this.componentsConsumer = new ResourceConsumer<Asset | undefined>(() => this.componentsAsset);
     this.injectionConsumer = new ResourceConsumer(() => {
       return {
-        appHelper: engineConfig.get('appHelper'),
+        appHelper: this._appHelper,
       };
+    });
+
+    engineConfig.onGot('appHelper', (data) => {
+      // appHelper被config.set修改后触发injectionConsumer.consume回调
+      this._appHelper = data;
     });
 
     this.i18nConsumer = new ResourceConsumer(() => this.project.i18n);
@@ -384,6 +369,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   purge(): void {
     // todo
+
   }
 
   mountViewport(viewport: HTMLElement | null) {
@@ -458,11 +444,15 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     const libraryAsset: AssetList = this.buildLibrary();
 
+    if (this.renderEnv === 'rax') {
+      logger.error('After LowcodeEngine v1.3.0, Rax is no longer supported.');
+    }
+
     const vendors = [
       // required & use once
       assetBundle(
         this.get('environment') ||
-          (this.renderEnv === 'rax' ? defaultRaxEnvironment : defaultEnvironment),
+        defaultEnvironment,
         AssetLevel.Environment,
       ),
       // required & use once
@@ -475,7 +465,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       // required & use once
       assetBundle(
         this.get('simulatorUrl') ||
-          (this.renderEnv === 'rax' ? defaultRaxSimulatorUrl : defaultSimulatorUrl),
+        defaultSimulatorUrl,
         AssetLevel.Runtime,
       ),
     ];
@@ -494,7 +484,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     if (Object.keys(this.asyncLibraryMap).length > 0) {
       // 加载异步 Library
       await renderer.loadAsyncLibrary(this.asyncLibraryMap);
-      Object.keys(this.asyncLibraryMap).forEach(key => {
+      Object.keys(this.asyncLibraryMap).forEach((key) => {
         delete this.asyncLibraryMap[key];
       });
     }
@@ -509,7 +499,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     // bind hotkey & clipboard
     const hotkey = this.designer.editor.get('innerHotkey');
     hotkey.mount(this._contentWindow);
-    focusTracker.mount(this._contentWindow);
+    const innerSkeleton = this.designer.editor.get('skeleton');
+    innerSkeleton.focusTracker.mount(this._contentWindow);
     clipboard.injectCopyPaster(this._contentDocument);
 
     // TODO: dispose the bindings
@@ -521,7 +512,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     if (Object.keys(this.asyncLibraryMap).length > 0) {
       // 加载异步 Library
       await this.renderer?.loadAsyncLibrary(this.asyncLibraryMap);
-      Object.keys(this.asyncLibraryMap).forEach(key => {
+      Object.keys(this.asyncLibraryMap).forEach((key) => {
         delete this.asyncLibraryMap[key];
       });
     }
@@ -680,7 +671,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         const x = new Event('click');
         x.initEvent('click', true);
         this._iframe?.dispatchEvent(x);
-        const target = e.target;
+        const { target } = e;
 
         const customizeIgnoreSelectors = engineConfig.get('customizeIgnoreSelectors');
         // TODO: need more elegant solution to ignore click events of components in designer
@@ -841,16 +832,22 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     doc.addEventListener('contextmenu', (e: MouseEvent) => {
       const targetElement = e.target as HTMLElement;
       const nodeInst = this.getNodeInstanceFromElement(targetElement);
+      const editor = this.designer?.editor;
       if (!nodeInst) {
+        editor?.eventBus.emit('designer.builtinSimulator.contextmenu', {
+          originalEvent: e,
+        });
         return;
       }
       const node = nodeInst.node || this.project.currentDocument?.focusNode;
       if (!node) {
+        editor?.eventBus.emit('designer.builtinSimulator.contextmenu', {
+          originalEvent: e,
+        });
         return;
       }
 
       // dirty code should refector
-      const editor = this.designer?.editor;
       const npm = node?.componentMeta?.npm;
       const selected =
         [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
@@ -1059,15 +1056,15 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       return null;
     }
 
-    const nodeIntance = this.getClosestNodeInstance(target);
-    if (!nodeIntance) {
+    const nodeInstance = this.getClosestNodeInstance(target);
+    if (!nodeInstance) {
       return null;
     }
-    const { docId } = nodeIntance;
+    const { docId } = nodeInstance;
     const doc = this.project.getDocument(docId)!;
-    const node = doc.getNode(nodeIntance.nodeId);
+    const node = doc.getNode(nodeInstance.nodeId);
     return {
-      ...nodeIntance,
+      ...nodeInstance,
       node,
     };
   }
@@ -1497,7 +1494,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   handleAccept({ container }: DropContainer, e: ILocateEvent): boolean {
     const { dragObject } = e;
     const document = this.currentDocument!;
-    const focusNode = document.focusNode;
+    const { focusNode } = document;
     if (isRootNode(container) || container.contains(focusNode)) {
       return document.checkNesting(focusNode!, dragObject as any);
     }

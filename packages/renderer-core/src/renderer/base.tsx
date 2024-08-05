@@ -4,7 +4,7 @@
 import classnames from 'classnames';
 import { create as createDataSourceEngine } from '@alilc/lowcode-datasource-engine/interpret';
 import { IPublicTypeNodeSchema, IPublicTypeNodeData, IPublicTypeJSONValue, IPublicTypeCompositeValue } from '@alilc/lowcode-types';
-import { isI18nData, isJSExpression, isJSFunction } from '@alilc/lowcode-utils';
+import { checkPropTypes, isI18nData, isJSExpression, isJSFunction } from '@alilc/lowcode-utils';
 import adapter from '../adapter';
 import divFactory from '../components/Div';
 import visualDomFactory from '../components/VisualDom';
@@ -21,9 +21,7 @@ import {
   isFileSchema,
   transformArrayToMap,
   transformStringToFunction,
-  checkPropTypes,
   getI18n,
-  canAcceptsRef,
   getFileCssName,
   capitalizeFirstLetter,
   DataHelper,
@@ -57,14 +55,14 @@ export function executeLifeCycleMethod(context: any, schema: IPublicTypeNodeSche
   }
 
   if (typeof fn !== 'function') {
-    console.error(`生命周期${method}类型不符`, fn);
+    logger.error(`生命周期${method}类型不符`, fn);
     return;
   }
 
   try {
     return fn.apply(context, args);
   } catch (e) {
-    console.error(`[${schema.componentName}]生命周期${method}出错`, e);
+    logger.error(`[${schema.componentName}]生命周期${method}出错`, e);
   }
 }
 
@@ -131,7 +129,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
     static contextType = AppContext;
 
-    appHelper?: IRendererAppHelper;
     i18n: any;
     getLocale: any;
     setLocale: any;
@@ -174,7 +171,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     __beforeInit(_props: IBaseRendererProps) { }
 
     __init(props: IBaseRendererProps) {
-      this.appHelper = props.__appHelper;
       this.__compScopes = {};
       this.__instanceMap = {};
       this.__bindCustomMethods(props);
@@ -185,7 +181,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     __afterInit(_props: IBaseRendererProps) { }
 
     static getDerivedStateFromProps(props: IBaseRendererProps, state: any) {
-      return executeLifeCycleMethod(this, props?.__schema, 'getDerivedStateFromProps', [props, state], props.thisRequiredInJSE);
+      const result = executeLifeCycleMethod(this, props?.__schema, 'getDerivedStateFromProps', [props, state], props.thisRequiredInJSE);
+      return result === undefined ? null : result;
     }
 
     async getSnapshotBeforeUpdate(...args: any[]) {
@@ -211,7 +208,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
     async componentDidCatch(...args: any[]) {
       this.__executeLifeCycleMethod('componentDidCatch', args);
-      console.warn(args);
+      logger.warn(args);
     }
 
     reloadDataSource = () => new Promise((resolve, reject) => {
@@ -281,7 +278,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           value = this.__parseExpression(value, this);
         }
         if (typeof value !== 'function') {
-          console.error(`custom method ${key} can not be parsed to a valid function`, value);
+          logger.error(`custom method ${key} can not be parsed to a valid function`, value);
           return;
         }
         this[key] = value.bind(this);
@@ -372,7 +369,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       this.setLocale = (loc: string) => {
         const setLocaleFn = this.appHelper?.utils?.i18n?.setLocale;
         if (!setLocaleFn || typeof setLocaleFn !== 'function') {
-          console.warn('initI18nAPIs Failed, i18n only works when appHelper.utils.i18n.setLocale() exists');
+          logger.warn('initI18nAPIs Failed, i18n only works when appHelper.utils.i18n.setLocale() exists');
           return undefined;
         }
         return setLocaleFn(loc);
@@ -431,7 +428,14 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
     __createDom = () => {
       const { __schema, __ctx, __components = {} } = this.props;
-      const scope: any = {};
+      // merge defaultProps
+      const scopeProps = {
+        ...__schema.defaultProps,
+        ...this.props,
+      };
+      const scope: any = {
+        props: scopeProps,
+      };
       scope.__proto__ = __ctx || this;
 
       const _children = getSchemaChildren(__schema);
@@ -455,7 +459,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
      * @param idx 为循环渲染的循环Index
      */
     __createVirtualDom = (originalSchema: IPublicTypeNodeData | IPublicTypeNodeData[] | undefined, originalScope: any, parentInfo: INodeInfo, idx: string | number = ''): any => {
-      if (!originalSchema) {
+      if (originalSchema === null || originalSchema === undefined) {
         return null;
       }
       let scope = originalScope;
@@ -530,7 +534,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           : {};
 
         if (!Comp) {
-          console.error(`${schema.componentName} component is not found in components list! component list is:`, components || this.props.__container?.components);
+          logger.error(`${schema.componentName} component is not found in components list! component list is:`, components || this.props.__container?.components);
           return engine.createElement(
             engine.getNotFoundComponent(),
             {
@@ -547,6 +551,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
         if (schema.loop != null) {
           const loop = this.__parseData(schema.loop, scope);
+          if (Array.isArray(loop) && loop.length === 0) return null;
           const useLoop = isUseLoop(loop, this.__designModeIsDesign);
           if (useLoop) {
             return this.__createLoopVirtualDom(
@@ -617,12 +622,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           });
         });
 
-        // 对于不可以接收到 ref 的组件需要做特殊处理
-        if (!canAcceptsRef(Comp)) {
-          Comp = compWrapper(Comp);
-          components[schema.componentName] = Comp;
-        }
-
         otherProps.ref = (ref: any) => {
           this.$(props.fieldId || props.ref, ref); // 收集ref
           const refProps = props.ref;
@@ -651,7 +650,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           props.key = props.__id;
         }
 
-        let child = this.__getSchemaChildrenVirtualDom(schema, scope, Comp);
+        let child = this.__getSchemaChildrenVirtualDom(schema, scope, Comp, condition);
         const renderComp = (innerProps: any) => engine.createElement(Comp, innerProps, child);
         // 设计模式下的特殊处理
         if (engine && [DESIGN_MODE.EXTEND, DESIGN_MODE.BORDER].includes(engine.props.designMode)) {
@@ -706,13 +705,13 @@ export default function baseRendererFactory(): IBaseRenderComponent {
      */
     get __componentHOCs(): IComponentConstruct[] {
       if (this.__designModeIsDesign) {
-        return [leafWrapper];
+        return [leafWrapper, compWrapper];
       }
-      return [];
+      return [compWrapper];
     }
 
-    __getSchemaChildrenVirtualDom = (schema: IPublicTypeNodeSchema | undefined, scope: any, Comp: any) => {
-      let children = getSchemaChildren(schema);
+    __getSchemaChildrenVirtualDom = (schema: IPublicTypeNodeSchema | undefined, scope: any, Comp: any, condition = true) => {
+      let children = condition ? getSchemaChildren(schema) : null;
 
       // @todo 补完这里的 Element 定义 @承虎
       let result: any = [];
@@ -757,7 +756,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
     __createLoopVirtualDom = (schema: IPublicTypeNodeSchema, scope: any, parentInfo: INodeInfo, idx: number | string) => {
       if (isFileSchema(schema)) {
-        console.warn('file type not support Loop');
+        logger.warn('file type not support Loop');
         return null;
       }
       if (!Array.isArray(schema.loop)) {
@@ -909,9 +908,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         });
         return checkProps(res);
       }
-      if (typeof props === 'string') {
-        return checkProps(props.trim());
-      }
       return checkProps(props);
     };
 
@@ -1018,6 +1014,10 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       const componentNames = [builtin, ...extraComponents];
       return !isSchema(schema) || !componentNames.includes(schema?.componentName ?? '');
     };
+
+    get appHelper(): IRendererAppHelper {
+      return this.props.__appHelper;
+    }
 
     get requestHandlersMap() {
       return this.appHelper?.requestHandlersMap;

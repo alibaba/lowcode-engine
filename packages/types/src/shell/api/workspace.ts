@@ -1,9 +1,11 @@
 import { IPublicModelWindow } from '../model';
-import { IPublicApiPlugins, IPublicModelResource, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType } from '@alilc/lowcode-types';
+import { IPublicApiPlugins, IPublicApiSkeleton, IPublicModelResource, IPublicResourceList, IPublicTypeDisposable, IPublicTypeResourceType } from '@alilc/lowcode-types';
 
 export interface IPublicApiWorkspace<
   Plugins = IPublicApiPlugins,
-  ModelWindow = IPublicModelWindow
+  Skeleton = IPublicApiSkeleton,
+  ModelWindow = IPublicModelWindow,
+  Resource = IPublicModelResource,
 > {
 
   /** 是否启用 workspace 模式 */
@@ -13,6 +15,8 @@ export interface IPublicApiWorkspace<
   window: ModelWindow | null;
 
   plugins: Plugins;
+
+  skeleton: Skeleton;
 
   /** 当前设计器的编辑窗口 */
   windows: ModelWindow[];
@@ -29,14 +33,28 @@ export interface IPublicApiWorkspace<
   /** 注册资源 */
   registerResourceType(resourceTypeModel: IPublicTypeResourceType): void;
 
+  /**
+   * 打开视图窗口
+   * @deprecated
+   */
+  openEditorWindow(resourceName: string, id: string, extra: Object, viewName?: string, sleep?: boolean): Promise<void>;
+
   /** 打开视图窗口 */
-  openEditorWindow(resourceName: string, title: string, extra: Object, viewName?: string, sleep?: boolean): Promise<void>;
+  openEditorWindow(resource: Resource, sleep?: boolean): Promise<void>;
 
   /** 通过视图 id 打开窗口 */
   openEditorWindowById(id: string): void;
 
-  /** 移除视图窗口 */
-  removeEditorWindow(resourceName: string, title: string): void;
+  /**
+   * 移除视图窗口
+   * @deprecated
+   */
+  removeEditorWindow(resourceName: string, id: string): void;
+
+  /**
+   * 移除视图窗口
+   */
+  removeEditorWindow(resource: Resource): void;
 
   /** 通过视图 id 移除窗口 */
   removeEditorWindowById(id: string): void;

@@ -79,15 +79,10 @@ describe('test src/adapter ', () => {
 
   });
 
-  it('setEnv/.env/isReact/isRax works', () => {
+  it('setEnv/.env/isReact works', () => {
     adapter.setEnv(Env.React);
     expect(adapter.env).toBe(Env.React);
     expect(adapter.isReact()).toBeTruthy();
-    expect(adapter.isRax()).toBeFalsy();
-    adapter.setEnv(Env.Rax);
-    expect(adapter.env).toBe(Env.Rax);
-    expect(adapter.isRax()).toBeTruthy();
-    expect(adapter.isReact()).toBeFalsy();
   });
 
   it('setRenderers/getRenderers works', () => {

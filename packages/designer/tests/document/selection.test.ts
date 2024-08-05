@@ -122,7 +122,7 @@ describe('选择区测试', () => {
     selectionChangeHandler.mockClear();
   });
 
-  it('dispose 方法', () => {
+  it('selectAll 包含不存在的 id', () => {
     const project = new Project(designer, {
       componentsTree: [
         formSchema,
@@ -135,14 +135,7 @@ describe('选择区测试', () => {
 
     selection.selectAll(['form', 'node_k1ow3cbj', 'form2']);
 
-    const selectionChangeHandler = jest.fn();
-    selection.onSelectionChange(selectionChangeHandler);
-    selection.dispose();
-
-    expect(selectionChangeHandler).toHaveBeenCalledTimes(1);
-    expect(selectionChangeHandler.mock.calls[0][0]).toEqual(['form', 'node_k1ow3cbj']);
     expect(selection.selected).toEqual(['form', 'node_k1ow3cbj']);
-    selectionChangeHandler.mockClear();
   });
 
   it('dispose 方法 - 选中的节点没有被删除的', () => {

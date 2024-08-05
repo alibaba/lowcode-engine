@@ -26,7 +26,7 @@ function transformStringToFunction(str: string) {
       try {
         return (${str}).apply(self, arguments);
       } catch(e) {
-        logger.warn('call function which parsed by lowcode failed: ', e);
+        console.warn('call function which parsed by lowcode failed: ', e);
         return e.message;
       }
     };

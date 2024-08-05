@@ -2,23 +2,54 @@ import { ComponentClass, Component, FunctionComponent, ComponentType, createElem
 import { cloneEnumerableProperty } from './clone-enumerable-property';
 
 const hasSymbol = typeof Symbol === 'function' && Symbol.for;
-const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
-const REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
+export const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
+export const REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
 
 export function isReactClass(obj: any): obj is ComponentClass<any> {
-  return obj && obj.prototype && (obj.prototype.isReactComponent || obj.prototype instanceof Component);
+  if (!obj) {
+    return false;
+  }
+  if (obj.prototype && (obj.prototype.isReactComponent || obj.prototype instanceof Component)) {
+    return true;
+  }
+  return false;
 }
 
 export function acceptsRef(obj: any): boolean {
-  return obj?.prototype?.isReactComponent || (obj.$$typeof && obj.$$typeof === REACT_FORWARD_REF_TYPE);
+  if (!obj) {
+    return false;
+  }
+  if (obj?.prototype?.isReactComponent || isForwardOrMemoForward(obj)) {
+    return true;
+  }
+
+  return false;
 }
 
-function isForwardRefType(obj: any): boolean {
-  return obj?.$$typeof && obj?.$$typeof === REACT_FORWARD_REF_TYPE;
+export function isForwardRefType(obj: any): boolean {
+  if (!obj || !obj?.$$typeof) {
+    return false;
+  }
+  return obj?.$$typeof === REACT_FORWARD_REF_TYPE;
 }
 
-function isMemoType(obj: any): boolean {
-  return obj?.$$typeof && obj.$$typeof === REACT_MEMO_TYPE;
+export function isMemoType(obj: any): boolean {
+  if (!obj || !obj?.$$typeof) {
+    return false;
+  }
+  return obj.$$typeof === REACT_MEMO_TYPE;
+}
+
+export function isForwardOrMemoForward(obj: any): boolean {
+  if (!obj || !obj?.$$typeof) {
+    return false;
+  }
+  return (
+    // React.forwardRef(..)
+    isForwardRefType(obj) ||
+    // React.memo(React.forwardRef(..))
+    (isMemoType(obj) && isForwardRefType(obj.type))
+  );
 }
 
 export function isReactComponent(obj: any): obj is ComponentType<any> {

@@ -10,6 +10,8 @@ export interface IViewContext extends IBasicContext {
   editorWindow: IEditorWindow;
 
   viewName: string;
+
+  viewType: 'editor' | 'webview';
 }
 
 export class Context extends BasicContext implements IViewContext {

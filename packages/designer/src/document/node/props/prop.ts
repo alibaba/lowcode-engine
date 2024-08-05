@@ -148,15 +148,13 @@ export class Prop implements IProp, IPropParent {
 
   @obx.shallow private _items: IProp[] | null = null;
 
-  @obx.shallow private _maps: Map<string | number, IProp> | null = null;
-
   /**
-   * 作为 _maps 的一层缓存机制，主要是复用部分已存在的 Prop，保持响应式关系，比如：
+   * 作为一层缓存机制，主要是复用部分已存在的 Prop，保持响应式关系，比如：
    * 当前 Prop#_value 值为 { a: 1 }，当调用 setValue({ a: 2 }) 时，所有原来的子 Prop 均被销毁，
    * 导致假如外部有 mobx reaction（常见于 observer），此时响应式链路会被打断，
    * 因为 reaction 监听的是原 Prop(a) 的 _value，而不是新 Prop(a) 的 _value。
    */
-  private _prevMaps: Map<string | number, IProp> | null = null;
+  @obx.shallow private _maps: Map<string | number, IProp> | null = null;
 
   /**
    * 构造 items 属性，同时构造 maps 属性
@@ -171,8 +169,8 @@ export class Prop implements IProp, IPropParent {
         data.forEach((item: any, idx: number) => {
           items = items || [];
           let prop;
-          if (this._prevMaps?.has(idx.toString())) {
-            prop = this._prevMaps.get(idx.toString())!;
+          if (this._maps?.has(idx.toString())) {
+            prop = this._maps.get(idx.toString())!;
             prop.setValue(item);
           } else {
             prop = new Prop(this, item, idx);
@@ -187,8 +185,8 @@ export class Prop implements IProp, IPropParent {
         const keys = Object.keys(data);
         for (const key of keys) {
           let prop: IProp;
-          if (this._prevMaps?.has(key)) {
-            prop = this._prevMaps.get(key)!;
+          if (this._maps?.has(key)) {
+            prop = this._maps.get(key)!;
             prop.setValue(data[key]);
           } else {
             prop = new Prop(this, data[key], key);
@@ -292,10 +290,6 @@ export class Prop implements IProp, IPropParent {
     }
 
     if (type === 'literal' || type === 'expression') {
-      // TODO 后端改造之后删除此逻辑
-      if (this._value === null && stage === IPublicEnumTransformStage.Save) {
-        return '';
-      }
       return this._value;
     }
 
@@ -359,7 +353,6 @@ export class Prop implements IProp, IPropParent {
   @action
   setValue(val: IPublicTypeCompositeValue) {
     if (val === this._value) return;
-    const editor = this.owner.document?.designer.editor;
     const oldValue = this._value;
     this._value = val;
     this._code = null;
@@ -392,21 +385,30 @@ export class Prop implements IProp, IPropParent {
     this.setupItems();
 
     if (oldValue !== this._value) {
-      const propsInfo = {
-        key: this.key,
-        prop: this,
-        oldValue,
-        newValue: this._value,
-      };
-
-      editor?.eventBus.emit(GlobalEvent.Node.Prop.InnerChange, {
-        node: this.owner as any,
-        ...propsInfo,
-      });
-
-      this.owner?.emitPropChange?.(propsInfo);
+      this.emitChange({ oldValue });
     }
   }
+
+  emitChange = ({
+    oldValue,
+  }: {
+    oldValue: IPublicTypeCompositeValue | UNSET;
+  }) => {
+    const editor = this.owner.document?.designer.editor;
+    const propsInfo = {
+      key: this.key,
+      prop: this,
+      oldValue,
+      newValue: this.type === 'unset' ? undefined : this._value,
+    };
+
+    editor?.eventBus.emit(GlobalEvent.Node.Prop.InnerChange, {
+      node: this.owner as any,
+      ...propsInfo,
+    });
+
+    this.owner?.emitPropChange?.(propsInfo);
+  };
 
   getValue(): IPublicTypeCompositeValue {
     return this.export(IPublicEnumTransformStage.Serilize);
@@ -419,8 +421,6 @@ export class Prop implements IProp, IPropParent {
       items.forEach((prop) => prop.purge());
     }
     this._items = null;
-    this._prevMaps = this._maps;
-    this._maps = null;
     if (this._type !== 'slot' && this._slotNode) {
       this._slotNode.remove();
       this._slotNode = undefined;
@@ -470,7 +470,12 @@ export class Prop implements IProp, IPropParent {
    */
   @action
   unset() {
-    this._type = 'unset';
+    if (this._type !== 'unset') {
+      this._type = 'unset';
+      this.emitChange({
+        oldValue: this._value,
+      });
+    }
   }
 
   /**
@@ -565,6 +570,7 @@ export class Prop implements IProp, IPropParent {
   @action
   remove() {
     this.parent.delete(this);
+    this.unset();
   }
 
   /**

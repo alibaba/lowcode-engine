@@ -111,8 +111,6 @@ export class ProjectBuilder implements IProjectBuilder {
     // Init
     const { schemaParser } = this;
 
-    const projectRoot = await this.template.generateTemplate();
-
     let schema: IPublicTypeProjectSchema =
       typeof originalSchema === 'string' ? JSON.parse(originalSchema) : originalSchema;
 
@@ -131,6 +129,9 @@ export class ProjectBuilder implements IProjectBuilder {
     // Collect Deps
     // Parse JSExpression
     const parseResult: IParseResult = schemaParser.parse(schema);
+
+    const projectRoot = await this.template.generateTemplate(parseResult);
+
     let buildResult: IModuleInfo[] = [];
 
     const builders = this.createModuleBuilders({

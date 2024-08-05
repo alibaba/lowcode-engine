@@ -8,7 +8,7 @@ import { IPublicModelWindow, IPublicTypeDisposable } from '@alilc/lowcode-types'
 interface IWindowCOnfig {
   title: string | undefined;
   options?: Object;
-  viewType?: string | undefined;
+  viewName?: string | undefined;
   sleep?: boolean;
 }
 
@@ -17,15 +17,31 @@ export interface IEditorWindow extends Omit<IPublicModelWindow<IResource>, 'chan
 
   editorViews: Map<string, IViewContext>;
 
-  editorView: IViewContext;
+  _editorView: IViewContext;
 
-  changeViewType: (name: string, ignoreEmit?: boolean) => void;
+  changeViewName: (name: string, ignoreEmit?: boolean) => void;
 
   initReady: boolean;
 
   sleep?: boolean;
 
   init(): void;
+
+  updateState(state: WINDOW_STATE): void;
+}
+
+export enum WINDOW_STATE {
+  // 睡眠
+  sleep = 'sleep',
+
+  // 激活
+  active = 'active',
+
+  // 未激活
+  inactive = 'inactive',
+
+  // 销毁
+  destroyed = 'destroyed'
 }
 
 export class EditorWindow implements IEditorWindow {
@@ -38,7 +54,7 @@ export class EditorWindow implements IEditorWindow {
 
   url: string | undefined;
 
-  @obx.ref editorView: Context;
+  @obx.ref _editorView: Context;
 
   @obx editorViews: Map<string, Context> = new Map<string, Context>();
 
@@ -46,11 +62,34 @@ export class EditorWindow implements IEditorWindow {
 
   sleep: boolean | undefined;
 
+  get editorView() {
+    if (!this._editorView) {
+      return this.editorViews.values().next().value;
+    }
+    return this._editorView;
+  }
+
   constructor(readonly resource: IResource, readonly workspace: IWorkspace, private config: IWindowCOnfig) {
     makeObservable(this);
     this.title = config.title;
     this.icon = resource.icon;
     this.sleep = config.sleep;
+    if (config.sleep) {
+      this.updateState(WINDOW_STATE.sleep);
+    }
+  }
+
+  updateState(state: WINDOW_STATE): void {
+    switch (state) {
+      case WINDOW_STATE.active:
+        this._editorView?.setActivate(true);
+        break;
+      case WINDOW_STATE.inactive:
+        this._editorView?.setActivate(false);
+        break;
+      case WINDOW_STATE.destroyed:
+        break;
+    }
   }
 
   async importSchema(schema: any) {
@@ -94,14 +133,16 @@ export class EditorWindow implements IEditorWindow {
   async init() {
     await this.initViewTypes();
     await this.execViewTypesInit();
-    Promise.all(Array.from(this.editorViews.values()).map((d) => d.onSimulatorRendererReady)).then(() => {
-      this.workspace.emitWindowRendererReady();
-    });
+    Promise.all(Array.from(this.editorViews.values()).map((d) => d.onSimulatorRendererReady()))
+      .then(() => {
+        this.workspace.emitWindowRendererReady();
+      });
     this.url = await this.resource.url();
-    this.setDefaultViewType();
+    this.setDefaultViewName();
     this.initReady = true;
     this.workspace.checkWindowQueue();
     this.sleep = false;
+    this.updateState(WINDOW_STATE.active);
   }
 
   initViewTypes = async () => {
@@ -112,8 +153,8 @@ export class EditorWindow implements IEditorWindow {
     for (let i = 0; i < editorViews.length; i++) {
       const name = editorViews[i].viewName;
       await this.initViewType(name);
-      if (!this.editorView) {
-        this.changeViewType(name);
+      if (!this._editorView) {
+        this.changeViewName(name);
       }
     }
   };
@@ -133,13 +174,13 @@ export class EditorWindow implements IEditorWindow {
     }
     for (let i = 0; i < editorViews.length; i++) {
       const name = editorViews[i].viewName;
-      this.changeViewType(name);
+      this.changeViewName(name);
       await this.editorViews.get(name)?.init();
     }
   };
 
-  setDefaultViewType = () => {
-    this.changeViewType(this.config.viewType ?? this.resource.defaultViewType);
+  setDefaultViewName = () => {
+    this.changeViewName(this.config.viewName ?? this.resource.defaultViewName!);
   };
 
   get resourceType() {
@@ -155,15 +196,15 @@ export class EditorWindow implements IEditorWindow {
     this.editorViews.set(name, editorView);
   };
 
-  changeViewType = (name: string, ignoreEmit: boolean = true) => {
-    this.editorView?.setActivate(false);
-    this.editorView = this.editorViews.get(name)!;
+  changeViewName = (name: string, ignoreEmit: boolean = true) => {
+    this._editorView?.setActivate(false);
+    this._editorView = this.editorViews.get(name)!;
 
-    if (!this.editorView) {
+    if (!this._editorView) {
       return;
     }
 
-    this.editorView.setActivate(true);
+    this._editorView.setActivate(true);
 
     if (!ignoreEmit) {
       this.emitter.emit('window.change.view.type', name);

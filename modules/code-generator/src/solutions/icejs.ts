@@ -45,6 +45,7 @@ export default function createIceJsProjectBuilder(
         containerInjectUtils(),
         containerInjectDataSourceEngine(),
         containerInjectI18n(),
+        containerInjectConstants(),
         containerInitState(),
         containerLifeCycle(),
         containerMethod(),
@@ -100,11 +101,12 @@ export default function createIceJsProjectBuilder(
 
 export const plugins = {
   containerClass,
-  containerInitState,
   containerInjectContext,
   containerInjectUtils,
-  containerInjectI18n,
   containerInjectDataSourceEngine,
+  containerInjectI18n,
+  containerInjectConstants,
+  containerInitState,
   containerLifeCycle,
   containerMethod,
   jsx,

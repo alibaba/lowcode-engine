@@ -40,7 +40,6 @@ ReactDOM.render((
 ), document.getElementById('root'));
 ```
 
-- rax-renderer：npm 包替换为 @alilc/lowcode-rax-renderer
 ####
 ### 项目使用示例
 > [设计器 demo](https://lowcode-engine.cn/demo/demo-general/index.html)

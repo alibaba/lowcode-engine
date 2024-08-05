@@ -4,7 +4,6 @@ import BuiltinDragGhostComponent from './drag-ghost';
 import { Designer, DesignerProps } from './designer';
 import { ProjectView } from '../project';
 import './designer.less';
-import { clipboard } from './clipboard';
 
 type IProps = DesignerProps & {
   designer?: Designer;
@@ -44,7 +43,6 @@ export class DesignerView extends Component<IProps> {
     if (onMount) {
       onMount(this.designer);
     }
-    clipboard.injectCopyPaster(document);
     this.designer.postEvent('mount', this.designer);
   }
 

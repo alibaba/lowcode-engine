@@ -1,5 +1,9 @@
 import { IPublicTypeLocationData } from '@alilc/lowcode-types';
+import { isObject } from '../is-object';
 
 export function isLocationData(obj: any): obj is IPublicTypeLocationData {
-  return obj && obj.target && obj.detail;
+  if (!isObject(obj)) {
+    return false;
+  }
+  return 'target' in obj && 'detail' in obj;
 }

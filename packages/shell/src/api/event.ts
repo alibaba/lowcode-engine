@@ -37,6 +37,20 @@ export class Event implements IPublicApiEvent {
   }
 
   /**
+   * 监听事件，会在其他回调函数之前执行
+   * @param event 事件名称
+   * @param listener 事件回调
+   */
+  prependListener(event: string, listener: (...args: any[]) => void): IPublicTypeDisposable {
+    if (isPluginEventName(event)) {
+      return this[eventBusSymbol].prependListener(event, listener);
+    } else {
+      logger.warn(`fail to prependListener event ${event}, event should have a prefix like 'somePrefix:eventName'`);
+      return () => {};
+    }
+  }
+
+  /**
    * 取消监听事件
    * @param event 事件名称
    * @param listener 事件回调

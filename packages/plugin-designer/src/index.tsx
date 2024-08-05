@@ -67,6 +67,16 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
           locale,
         });
       });
+      engineConfig.onGot('requestHandlersMap', (requestHandlersMap) => {
+        this.setState({
+          requestHandlersMap,
+        });
+      });
+      engineConfig.onGot('device', (device) => {
+        this.setState({
+          device,
+        });
+      });
       const { components, packages, extraEnvironment, utils } = assets;
       const state = {
         componentMetadatas: components || [],
