@@ -15,7 +15,7 @@ import {
   Disposable,
 } from '@alilc/lowcode-shared';
 import { type ICodeRuntime } from '../code-runtime';
-import { IWidget, Widget } from '../widget';
+import { IWidget, Widget } from './widget';
 
 export interface NormalizedComponentNode extends ComponentNode {
   loopArgs: [string, string];

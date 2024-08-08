@@ -1,12 +1,6 @@
 import { dispose, isDisposable } from '../disposable';
 import { Graph, CyclicDependencyError } from '../graph';
-import {
-  type BeanIdentifier,
-  BeanContainer,
-  type Constructor,
-  getBeanDependecies,
-  CtorDescriptor,
-} from './container';
+import { type BeanIdentifier, BeanContainer, type Constructor, getBeanDependecies, CtorDescriptor } from './container';
 import { createDecorator } from './decorators';
 
 export interface InstanceAccessor {
@@ -16,10 +10,7 @@ export interface InstanceAccessor {
 export interface IInstantiationService {
   createInstance<T extends Constructor>(Ctor: T, ...args: any[]): InstanceType<T>;
 
-  invokeFunction<R, Args extends any[] = []>(
-    fn: (accessor: InstanceAccessor, ...args: Args) => R,
-    ...args: Args
-  ): R;
+  invokeFunction<R, Args extends any[] = []>(fn: (accessor: InstanceAccessor, ...args: Args) => R, ...args: Args): R;
 
   createChild(container: BeanContainer): IInstantiationService;
 
@@ -77,10 +68,7 @@ export class InstantiationService implements IInstantiationService {
   /**
    * Calls a function with a service accessor.
    */
-  invokeFunction<R, TS extends any[] = []>(
-    fn: (accessor: InstanceAccessor, ...args: TS) => R,
-    ...args: TS
-  ): R {
+  invokeFunction<R, TS extends any[] = []>(fn: (accessor: InstanceAccessor, ...args: TS) => R, ...args: TS): R {
     this._throwIfDisposed();
 
     const accessor: InstanceAccessor = {
@@ -105,9 +93,9 @@ export class InstantiationService implements IInstantiationService {
     const beanArgs = [];
 
     for (const dependency of beanDependencies) {
-      const instance = this._getOrCreateInstance(dependency.id);
+      const instance = this._getOrCreateInstance(dependency.beanId);
       if (!instance) {
-        throw new Error(`[createInstance] ${Ctor.name} depends on UNKNOWN bean ${dependency.id}.`);
+        throw new Error(`[createInstance] ${Ctor.name} depends on UNKNOWN bean ${dependency.beanId}.`);
       }
 
       beanArgs.push(instance);
@@ -149,9 +137,7 @@ export class InstantiationService implements IInstantiationService {
   }
 
   private _createAndCacheServiceInstance<T>(id: BeanIdentifier<T>, desc: CtorDescriptor<T>): T {
-    const graph = new Graph<{ id: BeanIdentifier<T>; desc: CtorDescriptor<T> }>((data) =>
-      data.id.toString(),
-    );
+    const graph = new Graph<{ id: BeanIdentifier<T>; desc: CtorDescriptor<T> }>((data) => data.id.toString());
 
     let cycleCount = 0;
     const stack = [{ id, desc }];
@@ -174,16 +160,14 @@ export class InstantiationService implements IInstantiationService {
 
       // check all dependencies for existence and if they need to be created first
       for (const dependency of getBeanDependecies(item.desc.ctor)) {
-        const instanceOrDesc = this._container.get(dependency.id);
+        const instanceOrDesc = this._container.get(dependency.beanId);
         if (!instanceOrDesc) {
-          throw new Error(
-            `[createInstance] ${id} depends on ${dependency.id} which is NOT registered.`,
-          );
+          throw new Error(`[createInstance] ${id} depends on ${dependency.beanId} which is NOT registered.`);
         }
 
         if (instanceOrDesc instanceof CtorDescriptor) {
           const d = {
-            id: dependency.id,
+            id: dependency.beanId,
             desc: instanceOrDesc,
           };
           graph.insertEdge(item, d);
@@ -210,11 +194,7 @@ export class InstantiationService implements IInstantiationService {
           const instanceOrDesc = this._container.get(data.id);
           if (instanceOrDesc instanceof CtorDescriptor) {
             // create instance and overwrite the service collections
-            const instance = this._createServiceInstanceWithOwner(
-              data.id,
-              data.desc.ctor,
-              data.desc.staticArguments,
-            );
+            const instance = this._createServiceInstanceWithOwner(data.id, data.desc.ctor, data.desc.staticArguments);
             this._setCreatedServiceInstance(data.id, instance);
           }
           graph.removeNode(data);

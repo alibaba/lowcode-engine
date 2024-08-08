@@ -20,7 +20,7 @@ import {
   type ReactNode,
 } from 'react';
 import { ComponentsAccessor } from '../app';
-import { useReactiveStore } from './hooks/useReactiveStore';
+import { useReactiveStore } from './useReactiveStore';
 import { getOrCreateComponent, type ComponentOptions } from './createComponent';
 
 export type ReactComponent = ComponentType<any>;

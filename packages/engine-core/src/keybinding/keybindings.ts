@@ -1,4 +1,5 @@
-import { illegalArgument, KeyCode, OperatingSystem, ScanCode } from '@alilc/lowcode-shared';
+import { illegalArgument, OperatingSystem } from '@alilc/lowcode-shared';
+import { KeyCode, ScanCode } from '../common/keyCodes';
 
 /**
  * Binary encoding strategy:

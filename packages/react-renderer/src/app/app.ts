@@ -27,7 +27,7 @@ import {
   type ReactRendererBoostsApi,
 } from './boosts';
 import { createAppView } from './components/view';
-import { ComponentOptions } from '../runtime';
+import { type ComponentOptions } from '../runtime/createComponent';
 
 import type { Project, Package } from '@alilc/lowcode-shared';
 import type {
@@ -185,8 +185,6 @@ export class App extends Disposable implements IRendererApplication {
     await extensionHostService.registerPlugin(this.options.plugins ?? []);
 
     await packageManagementService.loadPackages(this.options.packages ?? []);
-
-    lifeCycleService.setPhase(LifecyclePhase.Ready);
   }
 
   private async _createRouter() {

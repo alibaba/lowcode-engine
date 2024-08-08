@@ -1,9 +1,9 @@
-import { type Event, type EventListener, Emitter } from '@alilc/lowcode-shared';
+import { Disposable, Events } from '@alilc/lowcode-shared';
 import { IWidget } from './widget';
 import { Extensions, Registry } from '../../extension/registry';
 
 export interface IWidgetRegistry<View> {
-  onDidRegister: Event<IWidget<View>[]>;
+  onDidRegister: Events.Event<IWidget<View>[]>;
 
   registerWidget(widget: IWidget<View>): string;
 
@@ -12,13 +12,15 @@ export interface IWidgetRegistry<View> {
   getWidgets(): IWidget<View>[];
 }
 
-export class WidgetRegistryImpl<View> implements IWidgetRegistry<View> {
+export class WidgetRegistryImpl<View> extends Disposable implements IWidgetRegistry<View> {
   private _widgets: Map<string, IWidget<View>> = new Map();
 
-  private emitter = new Emitter<IWidget<View>[]>();
+  private _onDidRegister = this._addDispose(new Events.Emitter<IWidget<View>[]>());
 
-  onDidRegister(fn: EventListener<IWidget<View>[]>) {
-    return this.emitter.on(fn);
+  onDidRegister = this._onDidRegister.event;
+
+  constructor() {
+    super();
   }
 
   getWidgets(): IWidget<View>[] {

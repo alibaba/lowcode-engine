@@ -52,8 +52,6 @@ export function mapDepsToBeanId(beanId: BeanIdentifier<any>, target: Constructor
   }
 }
 
-export function getBeanDependecies(
-  target: Constructor,
-): { id: BeanIdentifier<any>; index: number }[] {
+export function getBeanDependecies(target: Constructor): { beanId: BeanIdentifier<any>; index: number }[] {
   return (target as any)[DEPENDENCIES] || [];
 }

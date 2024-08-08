@@ -11,14 +11,18 @@ import {
 } from '@alilc/lowcode-shared';
 import { type ICodeScope, CodeScope } from './codeScope';
 import { mapValue } from './value';
-import { evaluate } from './evaluate';
+import { defaultSandbox } from './sandbox';
+
+export interface ISandbox {
+  eval(code: string, scope: any): any;
+}
 
 export interface CodeRuntimeOptions<T extends StringDictionary = StringDictionary> {
   initScopeValue?: Partial<T>;
 
   parentScope?: ICodeScope;
 
-  evalCodeFunction?: EvalCodeFunction;
+  sandbox?: ISandbox;
 }
 
 export interface ICodeRuntime<T extends StringDictionary = StringDictionary> extends IDisposable {
@@ -37,22 +41,20 @@ export interface ICodeRuntime<T extends StringDictionary = StringDictionary> ext
 
 export type NodeResolverHandler = (node: JSNode) => JSNode | false | undefined;
 
-export type EvalCodeFunction = (code: string, scope: any) => any;
-
 export class CodeRuntime<T extends StringDictionary = StringDictionary>
   extends Disposable
   implements ICodeRuntime<T>
 {
   private _codeScope: ICodeScope<T>;
 
-  private _evalCodeFunction: EvalCodeFunction = evaluate;
+  private _sandbox: ISandbox = defaultSandbox;
 
   private _resolveHandlers: NodeResolverHandler[] = [];
 
   constructor(options: CodeRuntimeOptions<T> = {}) {
     super();
 
-    if (options.evalCodeFunction) this._evalCodeFunction = options.evalCodeFunction;
+    if (options.sandbox) this._sandbox = options.sandbox;
     this._codeScope = this._addDispose(
       options.parentScope
         ? options.parentScope.createChild<T>(options.initScopeValue ?? {})

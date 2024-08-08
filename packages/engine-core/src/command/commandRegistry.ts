@@ -1,12 +1,12 @@
 import {
-  type Event,
-  type EventDisposable,
-  type EventListener,
-  Emitter,
+  Events,
   LinkedList,
   TypeConstraint,
   validateConstraints,
   Iterable,
+  IDisposable,
+  Disposable,
+  toDisposable,
 } from '@alilc/lowcode-shared';
 import { ICommand, ICommandHandler } from './command';
 import { Extensions, Registry } from '../extension/registry';
@@ -15,27 +15,24 @@ import { ICommandService } from './commandService';
 export type ICommandsMap = Map<string, ICommand>;
 
 export interface ICommandRegistry {
-  onDidRegisterCommand: Event<string>;
+  onDidRegisterCommand: Events.Event<string>;
 
-  registerCommand(id: string, command: ICommandHandler): EventDisposable;
-  registerCommand(command: ICommand): EventDisposable;
+  registerCommand(id: string, command: ICommandHandler): IDisposable;
+  registerCommand(command: ICommand): IDisposable;
 
-  registerCommandAlias(oldId: string, newId: string): EventDisposable;
+  registerCommandAlias(oldId: string, newId: string): IDisposable;
 
   getCommand(id: string): ICommand | undefined;
   getCommands(): ICommandsMap;
 }
 
-class CommandsRegistryImpl implements ICommandRegistry {
+class CommandsRegistryImpl extends Disposable implements ICommandRegistry {
   private readonly _commands = new Map<string, LinkedList<ICommand>>();
 
-  private readonly _didRegisterCommandEmitter = new Emitter<string>();
+  private readonly _onDidRegisterCommand = this._addDispose(new Events.Emitter<string>());
+  onDidRegisterCommand = this._onDidRegisterCommand.event;
 
-  onDidRegisterCommand(fn: EventListener<string>) {
-    return this._didRegisterCommandEmitter.on(fn);
-  }
-
-  registerCommand(idOrCommand: string | ICommand, handler?: ICommandHandler): EventDisposable {
+  registerCommand(idOrCommand: string | ICommand, handler?: ICommandHandler): IDisposable {
     if (!idOrCommand) {
       throw new Error(`invalid command`);
     }
@@ -71,21 +68,21 @@ class CommandsRegistryImpl implements ICommandRegistry {
 
     const removeFn = commands.unshift(idOrCommand);
 
-    const ret = () => {
+    const ret = toDisposable(() => {
       removeFn();
       const command = this._commands.get(id);
       if (command?.isEmpty()) {
         this._commands.delete(id);
       }
-    };
+    });
 
     // tell the world about this command
-    this._didRegisterCommandEmitter.emit(id);
+    this._onDidRegisterCommand.notify(id);
 
     return ret;
   }
 
-  registerCommandAlias(oldId: string, newId: string): EventDisposable {
+  registerCommandAlias(oldId: string, newId: string): IDisposable {
     return this.registerCommand(oldId, (accessor, ...args) =>
       accessor.get(ICommandService).executeCommand(newId, ...args),
     );

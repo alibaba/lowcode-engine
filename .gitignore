@@ -103,4 +103,5 @@ typings/
 codealike.json
 .node
 
-.must.config.js
+# docs
+.vitepress

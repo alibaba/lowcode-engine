@@ -12,3 +12,7 @@
 7. github workflows
 
 lodaes replace
+
+IDE 的引擎设计
+工作区的虚拟文件设计
+窗口、视图、编辑器、边栏、面板的设计

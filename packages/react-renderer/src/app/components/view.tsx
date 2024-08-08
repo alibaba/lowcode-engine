@@ -1,6 +1,7 @@
 import { AppContext } from '../context';
 import { type App } from '../app';
-import { getOrCreateComponent, reactiveStateFactory } from '../../runtime';
+import { reactiveStateFactory } from '../reactiveState';
+import { getOrCreateComponent } from '../../runtime/createComponent';
 import { RouterView } from './routerView';
 import { RouteOutlet } from './route';
 import { type WrapperComponent, type Outlet } from '../boosts';

@@ -1,4 +1,4 @@
-import { type StringDictionary, Emitter, type EventListener } from '@alilc/lowcode-shared';
+import { type StringDictionary, Disposable, Events } from '@alilc/lowcode-shared';
 import {
   ConfigurationModel,
   type IConfigurationModel,
@@ -8,7 +8,6 @@ import {
 import {
   ConfigurationRegistry,
   type IConfigurationPropertySchema,
-  type IConfigurationRegistry,
   type IRegisteredConfigurationPropertySchema,
 } from './configurationRegistry';
 import { isEqual, isNil, isPlainObject, get as lodasgGet } from 'lodash-es';
@@ -23,11 +22,14 @@ export interface IConfigurationOverrides {
   overrideIdentifier?: string | null;
 }
 
-export class DefaultConfiguration {
-  private emitter = new Emitter<{
-    defaults: ConfigurationModel;
-    properties: string[];
-  }>();
+export class DefaultConfiguration extends Disposable {
+  private _onDidChangeConfiguration = this._addDispose(
+    new Events.Emitter<{
+      defaults: ConfigurationModel;
+      properties: string[];
+    }>(),
+  );
+  onDidChangeConfiguration = this._onDidChangeConfiguration.event;
 
   private _configurationModel = ConfigurationModel.createEmptyModel();
 
@@ -49,15 +51,9 @@ export class DefaultConfiguration {
     return this.configurationModel;
   }
 
-  onDidChangeConfiguration(
-    listener: EventListener<[{ defaults: ConfigurationModel; properties: string[] }]>,
-  ) {
-    return this.emitter.on(listener);
-  }
-
   private onDidUpdateConfiguration(properties: string[]): void {
     this.updateConfigurationModel(properties, ConfigurationRegistry.getConfigurationProperties());
-    this.emitter.emit({ defaults: this.configurationModel, properties });
+    this._onDidChangeConfiguration.notify({ defaults: this.configurationModel, properties });
   }
 
   private resetConfigurationModel(): void {
@@ -238,7 +234,7 @@ export class UserConfiguration {
 
   async loadConfiguration(): Promise<ConfigurationModel> {
     try {
-      // const content = await this.fileService.readFile(this.userSettingsResource);
+      // 可能远程请求或者读取对应配置
       this.parser.parse({}, this.parseOptions);
       return this.parser.configurationModel;
     } catch (e) {

@@ -15,11 +15,9 @@
   "scripts": {
     "build:target": "vite build",
     "build:dts": "tsc -p tsconfig.declaration.json && node ../../scripts/rollup-dts.mjs",
-    "test": "vitest",
-    "test:cov": "build-scripts test --config build.test.json --jest-coverage"
+    "test": "vitest"
   },
   "dependencies": {
-    "@alilc/lowcode-designer": "workspace:*",
     "@alilc/lowcode-react-renderer": "workspace:*",
     "classnames": "^2.5.1",
     "react": "^18.2.0",

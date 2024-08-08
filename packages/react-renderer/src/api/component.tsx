@@ -1,12 +1,12 @@
 import { type StringDictionary, type ComponentTree } from '@alilc/lowcode-shared';
 import { CodeRuntime } from '@alilc/lowcode-renderer-core';
 import { FunctionComponent, ComponentType } from 'react';
+import { reactiveStateFactory } from '../app/reactiveState';
 import {
   type LowCodeComponentProps,
   createComponent as createSchemaComponent,
   type ComponentOptions as SchemaComponentOptions,
-  reactiveStateFactory,
-} from '../runtime';
+} from '../runtime/createComponent';
 import { type ComponentsAccessor } from '../app';
 
 export interface ComponentOptions extends SchemaComponentOptions {

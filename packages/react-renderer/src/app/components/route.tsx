@@ -4,7 +4,7 @@ import { useAppContext } from '../context';
 import { OutletProps } from '../boosts';
 import { useRouteLocation } from '../context';
 import { createComponent } from '../../runtime/createComponent';
-import { reactiveStateFactory } from '../../runtime/reactiveState';
+import { reactiveStateFactory } from '../reactiveState';
 
 export function RouteOutlet(props: OutletProps) {
   const app = useAppContext();

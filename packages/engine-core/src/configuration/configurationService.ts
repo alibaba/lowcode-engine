@@ -1,4 +1,4 @@
-import { createDecorator, Emitter, type Event, type EventListener } from '@alilc/lowcode-shared';
+import { createDecorator, Disposable, Events } from '@alilc/lowcode-shared';
 import {
   Configuration,
   DefaultConfiguration,
@@ -58,19 +58,24 @@ export interface IConfigurationService {
     memory?: string[];
   };
 
-  onDidChangeConfiguration: Event<IConfigurationChangeEvent>;
+  onDidChangeConfiguration: Events.Event<IConfigurationChangeEvent>;
 }
 
 export const IConfigurationService = createDecorator<IConfigurationService>('configurationService');
 
-export class ConfigurationService implements IConfigurationService {
+export class ConfigurationService extends Disposable implements IConfigurationService {
   private configuration: Configuration;
   private readonly defaultConfiguration: DefaultConfiguration;
   private readonly userConfiguration: UserConfiguration;
 
-  private readonly didChangeEmitter = new Emitter<IConfigurationChangeEvent>();
+  private readonly _onDidChangeConfiguration = this._addDispose(
+    new Events.Emitter<IConfigurationChangeEvent>(),
+  );
+  onDidChangeConfiguration = this._onDidChangeConfiguration.event;
 
   constructor() {
+    super();
+
     this.defaultConfiguration = new DefaultConfiguration();
     this.userConfiguration = new UserConfiguration({});
     this.configuration = new Configuration(
@@ -172,11 +177,7 @@ export class ConfigurationService implements IConfigurationService {
       { data: previous },
       this.configuration,
     );
-    this.didChangeEmitter.emit(event);
-  }
-
-  onDidChangeConfiguration(listener: EventListener<IConfigurationChangeEvent>) {
-    return this.didChangeEmitter.on(listener);
+    this._onDidChangeConfiguration.notify(event);
   }
 }
 

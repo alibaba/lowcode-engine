@@ -1,11 +1,11 @@
 import {
-  type Event,
-  Emitter,
+  Events,
   type StringDictionary,
   type JSONSchemaType,
   jsonTypes,
   IJSONSchema,
   types,
+  Disposable,
 } from '@alilc/lowcode-shared';
 import { isUndefined, isObject } from 'lodash-es';
 import { Extensions, Registry } from '../extension/registry';
@@ -44,7 +44,7 @@ export interface IConfigurationRegistry {
    * Event that fires whenever a configuration has been
    * registered.
    */
-  readonly onDidUpdateConfiguration: Event<{
+  readonly onDidUpdateConfiguration: Events.Event<{
     properties: ReadonlySet<string>;
     defaultsOverrides?: boolean;
   }>;
@@ -133,7 +133,15 @@ export const allSettings: {
   patternProperties: StringDictionary<IConfigurationPropertySchema>;
 } = { properties: {}, patternProperties: {} };
 
-export class ConfigurationRegistryImpl implements IConfigurationRegistry {
+export class ConfigurationRegistryImpl extends Disposable implements IConfigurationRegistry {
+  private _onDidUpdateConfiguration = this._addDispose(
+    new Events.Emitter<{
+      properties: ReadonlySet<string>;
+      defaultsOverrides?: boolean;
+    }>(),
+  );
+  onDidUpdateConfiguration = this._onDidUpdateConfiguration.event;
+
   private registeredConfigurationDefaults: IConfigurationDefaults[] = [];
   private readonly configurationDefaultsOverrides: Map<
     string,
@@ -147,12 +155,9 @@ export class ConfigurationRegistryImpl implements IConfigurationRegistry {
   private readonly excludedConfigurationProperties: StringDictionary<IRegisteredConfigurationPropertySchema>;
   private overrideIdentifiers = new Set<string>();
 
-  private propertiesChangeEmitter = new Emitter<{
-    properties: ReadonlySet<string>;
-    defaultsOverrides?: boolean;
-  }>();
-
   constructor() {
+    super();
+
     this.configurationDefaultsOverrides = new Map();
     this.configurationProperties = {};
     this.excludedConfigurationProperties = {};
@@ -169,7 +174,7 @@ export class ConfigurationRegistryImpl implements IConfigurationRegistry {
     const properties = new Set<string>();
 
     this.doRegisterConfigurations(configurations, validate, properties);
-    this.propertiesChangeEmitter.emit({ properties });
+    this._onDidUpdateConfiguration.notify({ properties });
 
     return properties;
   }
@@ -278,7 +283,7 @@ export class ConfigurationRegistryImpl implements IConfigurationRegistry {
   deregisterConfigurations(configurations: IConfigurationNode[]): void {
     const properties = new Set<string>();
     this.doDeregisterConfigurations(configurations, properties);
-    this.propertiesChangeEmitter.emit({ properties });
+    this._onDidUpdateConfiguration.notify({ properties });
   }
 
   private doDeregisterConfigurations(
@@ -305,7 +310,7 @@ export class ConfigurationRegistryImpl implements IConfigurationRegistry {
     const properties = new Set<string>();
 
     this.doRegisterDefaultConfigurations(configurationDefaults, properties);
-    this.propertiesChangeEmitter.emit({ properties, defaultsOverrides: true });
+    this._onDidUpdateConfiguration.notify({ properties, defaultsOverrides: true });
   }
 
   private doRegisterDefaultConfigurations(
@@ -476,7 +481,7 @@ export class ConfigurationRegistryImpl implements IConfigurationRegistry {
     const properties = new Set<string>();
     this.doDeregisterDefaultConfigurations(defaultConfigurations, properties);
 
-    this.propertiesChangeEmitter.emit({ properties, defaultsOverrides: true });
+    this._onDidUpdateConfiguration.notify({ properties, defaultsOverrides: true });
   }
 
   private doDeregisterDefaultConfigurations(
@@ -606,15 +611,6 @@ export class ConfigurationRegistryImpl implements IConfigurationRegistry {
       }
     }
     return configurationDefaultsOverrides;
-  }
-
-  onDidUpdateConfiguration(
-    fn: (change: {
-      properties: ReadonlySet<string>;
-      defaultsOverrides?: boolean | undefined;
-    }) => void,
-  ) {
-    return this.propertiesChangeEmitter.on(fn);
   }
 
   private registerJSONConfiguration(configuration: IConfigurationNode) {

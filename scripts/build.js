@@ -24,7 +24,7 @@ async function run() {
   });
 
   if (buildTypes) {
-    await execa('pnpm', ['--filter', finalName[0], 'build:dts'], {
+    await execa('pnpm', ['--filter', manifest.name, 'build:dts'], {
       stdio: 'inherit',
     });
   }

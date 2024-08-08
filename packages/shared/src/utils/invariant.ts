@@ -3,3 +3,11 @@ export function invariant(check: unknown, message: string, thing?: any): asserts
     throw new Error(`Invariant failed: ${message}${thing ? ` in '${thing}'` : ''}`);
   }
 }
+
+export function illegalArgument(name?: string): Error {
+  if (name) {
+    return new Error(`Illegal argument: ${name}`);
+  } else {
+    return new Error('Illegal argument');
+  }
+}
