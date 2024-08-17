@@ -1,10 +1,21 @@
 import * as path from 'path';
-import { writeFileSync, pathExistsSync, ensureDirSync, copySync } from 'fs-extra';
+import { writeFileSync, pathExistsSync } from 'fs-extra';
 import { loadFile } from '../../utils';
 
 import { debug } from '../../core';
 
 const log = debug.extend('parse:ts:generate_dts');
+
+function getTypeDir(workDir: string, dsl: string) {
+  const typePkgName = `@types/${dsl}`;
+  let typeDir = path.join(workDir, 'node_modules', typePkgName);
+
+  /** 适配 workspace 的情况，如果当前目录没有对应文件，从 workspace 依赖中寻找 */
+  if (!pathExistsSync(typeDir)) {
+    typeDir = path.join(workDir, '../../node_modules', typePkgName);
+  }
+  return typeDir;
+}
 
 /**
  * Generate alias dts file by removing some needless interfaces.
@@ -22,7 +33,7 @@ export default function generateDTS({
   originalTypePath: string;
   newTypePath: string;
 } {
-  const typeDir = path.join(workDir, 'node_modules', `@types/${dslType}`);
+  const typeDir = getTypeDir(workDir, dslType);
   const typePath = path.join(typeDir, 'index.d.ts');
   const fileContent = loadFile(typePath);
   // const materialParserTypeDir = path.join(workDir, `node_modules/material-parser-types/${type}`);
