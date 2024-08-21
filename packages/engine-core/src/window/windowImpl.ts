@@ -1,6 +1,9 @@
 import { Disposable, Events } from '@alilc/lowcode-shared';
 import { IWindowState, IEditWindow, IWindowConfiguration } from './window';
 import { IFileService } from '../file';
+import { Registry, Extensions } from '../extension/registry';
+import { IContentEditorRegistry } from '../contentEditor/contentEditorRegistry';
+import { IContentEditor } from '../contentEditor/contentEditor';
 
 export interface IWindowCreationOptions {
   readonly state: IWindowState;
@@ -76,17 +79,44 @@ export class EditWindow extends Disposable implements IEditWindow {
     }
   }
 
-  load(config: IWindowConfiguration): void {
+  async load(config: IWindowConfiguration): Promise<void> {
+    const { fileToOpenOrCreate, contentType } = config;
+    const { exists, fileUri } = fileToOpenOrCreate;
+
+    const contentEditor = Registry.as<IContentEditorRegistry>(Extensions.ContentEditor).getContentEditor(contentType);
+
+    if (!contentEditor) {
+      throw Error('content editor not found');
+    }
+
+    let content: string = '';
+
+    const fs = this.fileService.withProvider(fileToOpenOrCreate.fileUri)!;
+    if (!exists) {
+      await fs.writeFile(fileUri, content);
+    } else {
+      content = await fs.readFile(fileUri);
+    }
+
+    contentEditor.load(content);
+
     this._onWillLoad.notify();
 
     this._config = config;
+
+    this.setReady();
   }
 
-  reload(): void {}
+  async reload(): Promise<void> {
+    await this.destory();
+    return this.load(this._config!);
+  }
 
   focus(): void {}
 
   close(): void {}
+
+  async destory(): Promise<void> {}
 
   sendWhenReady(channel: string, ...args: any[]): void {
     if (this.isReady) {

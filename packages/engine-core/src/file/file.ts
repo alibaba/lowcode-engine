@@ -199,20 +199,20 @@ export enum FsContants {
 }
 
 export interface IFileSystemProvider {
-  watch(resource: URI, opts: IWatchOptions): IFileSystemWatcher;
+  watch(resource: URI, opts?: IWatchOptions): IFileSystemWatcher;
 
   chmod(resource: URI, mode: number): Promise<void>;
   access(resource: URI, mode?: number): Promise<void>;
   stat(resource: URI): Promise<IFileStat>;
-  mkdir(resource: URI, opts: IFileWriteOptions): Promise<void>;
+  mkdir(resource: URI, opts?: IFileWriteOptions): Promise<void>;
   readdir(resource: URI): Promise<[string, FileType][]>;
-  delete(resource: URI, opts: IFileDeleteOptions): Promise<void>;
+  delete(resource: URI, opts?: IFileDeleteOptions): Promise<void>;
 
-  rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<void>;
+  rename(from: URI, to: URI, opts?: IFileOverwriteOptions): Promise<void>;
   // copy(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<void>;
 
   readFile(resource: URI): Promise<string>;
-  writeFile(resource: URI, content: string, opts: IFileWriteOptions): Promise<void>;
+  writeFile(resource: URI, content: string, opts?: IFileWriteOptions): Promise<void>;
 }
 
 export enum FileSystemErrorCode {

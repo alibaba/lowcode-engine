@@ -1,15 +1,8 @@
-import {
-  Events,
-  type StringDictionary,
-  type JSONSchemaType,
-  jsonTypes,
-  IJSONSchema,
-  types,
-  Disposable,
-} from '@alilc/lowcode-shared';
+import { Events, type StringDictionary, jsonTypes, types, Disposable } from '@alilc/lowcode-shared';
 import { isUndefined, isObject } from 'lodash-es';
 import { Extensions, Registry } from '../extension/registry';
 import { OVERRIDE_PROPERTY_REGEX, overrideIdentifiersFromKey } from './configuration';
+import { type IJSONSchema, type JSONSchemaType } from '../schema';
 
 export interface IConfigurationRegistry {
   /**
@@ -20,10 +13,7 @@ export interface IConfigurationRegistry {
   /**
    * Register multiple configurations to the registry.
    */
-  registerConfigurations(
-    configurations: IConfigurationNode[],
-    validate?: boolean,
-  ): ReadonlySet<string>;
+  registerConfigurations(configurations: IConfigurationNode[], validate?: boolean): ReadonlySet<string>;
 
   /**
    * Deregister multiple configurations from the registry.
@@ -101,7 +91,6 @@ export interface IConfigurationPropertySchema extends IJSONSchema {
  */
 export interface IExtensionInfo {
   id: string;
-  displayName?: string;
   version?: string;
 }
 
@@ -167,10 +156,7 @@ export class ConfigurationRegistryImpl extends Disposable implements IConfigurat
     this.registerConfigurations([configuration], validate);
   }
 
-  registerConfigurations(
-    configurations: IConfigurationNode[],
-    validate: boolean = true,
-  ): ReadonlySet<string> {
+  registerConfigurations(configurations: IConfigurationNode[], validate: boolean = true): ReadonlySet<string> {
     const properties = new Set<string>();
 
     this.doRegisterConfigurations(configurations, validate, properties);
@@ -179,18 +165,9 @@ export class ConfigurationRegistryImpl extends Disposable implements IConfigurat
     return properties;
   }
 
-  private doRegisterConfigurations(
-    configurations: IConfigurationNode[],
-    validate: boolean,
-    bucket: Set<string>,
-  ): void {
+  private doRegisterConfigurations(configurations: IConfigurationNode[], validate: boolean, bucket: Set<string>): void {
     configurations.forEach((configuration) => {
-      this.validateAndRegisterProperties(
-        configuration,
-        validate,
-        configuration.extensionInfo,
-        bucket,
-      );
+      this.validateAndRegisterProperties(configuration, validate, configuration.extensionInfo, bucket);
 
       this.registerJSONConfiguration(configuration);
     });
@@ -250,10 +227,7 @@ export class ConfigurationRegistryImpl extends Disposable implements IConfigurat
     return null;
   }
 
-  private updatePropertyDefaultValue(
-    key: string,
-    property: IRegisteredConfigurationPropertySchema,
-  ): void {
+  private updatePropertyDefaultValue(key: string, property: IRegisteredConfigurationPropertySchema): void {
     let defaultValue = undefined;
     let defaultSource = undefined;
 
@@ -286,10 +260,7 @@ export class ConfigurationRegistryImpl extends Disposable implements IConfigurat
     this._onDidUpdateConfiguration.notify({ properties });
   }
 
-  private doDeregisterConfigurations(
-    configurations: IConfigurationNode[],
-    bucket: Set<string>,
-  ): void {
+  private doDeregisterConfigurations(configurations: IConfigurationNode[], bucket: Set<string>): void {
     const deregisterConfiguration = (configuration: IConfigurationNode) => {
       if (configuration.properties) {
         for (const key of Object.keys(configuration.properties)) {
@@ -313,10 +284,7 @@ export class ConfigurationRegistryImpl extends Disposable implements IConfigurat
     this._onDidUpdateConfiguration.notify({ properties, defaultsOverrides: true });
   }
 
-  private doRegisterDefaultConfigurations(
-    configurationDefaults: IConfigurationDefaults[],
-    bucket: Set<string>,
-  ) {
+  private doRegisterDefaultConfigurations(configurationDefaults: IConfigurationDefaults[], bucket: Set<string>) {
     this.registeredConfigurationDefaults.push(...configurationDefaults);
 
     const overrideIdentifiers: string[] = [];
@@ -327,9 +295,7 @@ export class ConfigurationRegistryImpl extends Disposable implements IConfigurat
 
         const configurationDefaultOverridesForKey =
           this.configurationDefaultsOverrides.get(key) ??
-          this.configurationDefaultsOverrides
-            .set(key, { configurationDefaultOverrides: [] })
-            .get(key)!;
+          this.configurationDefaultsOverrides.set(key, { configurationDefaultOverrides: [] }).get(key)!;
 
         const value = overrides[key];
         configurationDefaultOverridesForKey.configurationDefaultOverrides.push({ value, source });
@@ -346,8 +312,7 @@ export class ConfigurationRegistryImpl extends Disposable implements IConfigurat
             continue;
           }
 
-          configurationDefaultOverridesForKey.configurationDefaultOverrideValue =
-            newDefaultOverride;
+          configurationDefaultOverridesForKey.configurationDefaultOverrideValue = newDefaultOverride;
           this.updateDefaultOverrideProperty(key, newDefaultOverride, source);
           overrideIdentifiers.push(...overrideIdentifiersFromKey(key));
         }
@@ -364,8 +329,7 @@ export class ConfigurationRegistryImpl extends Disposable implements IConfigurat
             continue;
           }
 
-          configurationDefaultOverridesForKey.configurationDefaultOverrideValue =
-            newDefaultOverride;
+          configurationDefaultOverridesForKey.configurationDefaultOverrideValue = newDefaultOverride;
           const property = this.configurationProperties[key];
           if (property) {
             this.updatePropertyDefaultValue(key, property);
@@ -453,8 +417,7 @@ export class ConfigurationRegistryImpl extends Disposable implements IConfigurat
     const isObjectSetting =
       isObject(value) &&
       ((property !== undefined && property.type === 'object') ||
-        (property === undefined &&
-          (isUndefined(existingDefaultValue) || isObject(existingDefaultValue))));
+        (property === undefined && (isUndefined(existingDefaultValue) || isObject(existingDefaultValue))));
 
     // If the default value is an object, merge the objects and store the source of each keys
     if (isObjectSetting) {
@@ -522,21 +485,16 @@ export class ConfigurationRegistryImpl extends Disposable implements IConfigurat
 
           // configuration override defaults - merges defaults
           for (const configurationDefaultOverride of configurationDefaultOverridesForKey.configurationDefaultOverrides) {
-            configurationDefaultOverrideValue =
-              this.mergeDefaultConfigurationsForOverrideIdentifier(
-                key,
-                configurationDefaultOverride.value,
-                configurationDefaultOverride.source,
-                configurationDefaultOverrideValue,
-              );
+            configurationDefaultOverrideValue = this.mergeDefaultConfigurationsForOverrideIdentifier(
+              key,
+              configurationDefaultOverride.value,
+              configurationDefaultOverride.source,
+              configurationDefaultOverrideValue,
+            );
           }
 
-          if (
-            configurationDefaultOverrideValue &&
-            !types.isEmptyObject(configurationDefaultOverrideValue.value)
-          ) {
-            configurationDefaultOverridesForKey.configurationDefaultOverrideValue =
-              configurationDefaultOverrideValue;
+          if (configurationDefaultOverrideValue && !types.isEmptyObject(configurationDefaultOverrideValue.value)) {
+            configurationDefaultOverridesForKey.configurationDefaultOverrideValue = configurationDefaultOverrideValue;
             this.updateDefaultOverrideProperty(key, configurationDefaultOverrideValue, source);
           } else {
             this.configurationDefaultsOverrides.delete(key);
@@ -547,17 +505,15 @@ export class ConfigurationRegistryImpl extends Disposable implements IConfigurat
 
           // configuration override defaults - merges defaults
           for (const configurationDefaultOverride of configurationDefaultOverridesForKey.configurationDefaultOverrides) {
-            configurationDefaultOverrideValue =
-              this.mergeDefaultConfigurationsForConfigurationProperty(
-                key,
-                configurationDefaultOverride.value,
-                configurationDefaultOverride.source,
-                configurationDefaultOverrideValue,
-              );
+            configurationDefaultOverrideValue = this.mergeDefaultConfigurationsForConfigurationProperty(
+              key,
+              configurationDefaultOverride.value,
+              configurationDefaultOverride.source,
+              configurationDefaultOverrideValue,
+            );
           }
 
-          configurationDefaultOverridesForKey.configurationDefaultOverrideValue =
-            configurationDefaultOverrideValue;
+          configurationDefaultOverridesForKey.configurationDefaultOverrideValue = configurationDefaultOverrideValue;
 
           const property = this.configurationProperties[key];
           if (property) {

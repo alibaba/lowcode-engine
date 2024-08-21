@@ -11,6 +11,7 @@ export class CtorDescriptor<T> {
   constructor(
     readonly ctor: Constructor<T>,
     readonly staticArguments: any[] = [],
+    readonly supportsDelayedInstantiation: boolean = false,
   ) {}
 }
 

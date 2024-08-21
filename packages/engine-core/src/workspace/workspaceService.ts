@@ -1,22 +1,19 @@
 import { createDecorator, Disposable } from '@alilc/lowcode-shared';
 import { Workspace, type IWorkspaceIdentifier, isWorkspaceIdentifier } from './workspace';
-import { toWorkspaceFolder, IWorkspaceFolder } from './workspaceFolder';
-import { URI } from '../common';
+import { toWorkspaceFolder } from './workspaceFolder';
 
 export interface IWorkspaceService {
   initialize(): Promise<void>;
 
-  enterWorkspace(identifier: IWorkspaceIdentifier): Promise<void>;
+  enterWorkspace(identifier: IWorkspaceIdentifier): Promise<Workspace>;
 
-  getWorkspace(): Workspace;
-
-  getWorkspaceFolder(resource: URI): IWorkspaceFolder | null;
+  getWorkspace(id: string | IWorkspaceIdentifier): Workspace | undefined;
 }
 
 export const IWorkspaceService = createDecorator<IWorkspaceService>('workspaceService');
 
 export class WorkspaceService extends Disposable implements IWorkspaceService {
-  private _workspace: Workspace;
+  private _workspacesMap = new Map<string, Workspace>();
 
   constructor() {
     super();
@@ -24,19 +21,23 @@ export class WorkspaceService extends Disposable implements IWorkspaceService {
 
   async initialize() {}
 
-  async enterWorkspace(identifier: IWorkspaceIdentifier) {
+  async enterWorkspace(identifier: IWorkspaceIdentifier): Promise<Workspace> {
     if (!isWorkspaceIdentifier(identifier)) {
       throw new Error('Invalid workspace identifier');
     }
 
-    this._workspace = new Workspace(identifier.id, identifier.uri, [toWorkspaceFolder(identifier.uri)]);
+    const workspace = new Workspace(identifier.id, identifier.uri, [toWorkspaceFolder(identifier.uri)]);
+
+    this._workspacesMap.set(identifier.id, workspace);
+
+    return workspace;
   }
 
-  getWorkspace(): Workspace {
-    return this._workspace;
-  }
+  getWorkspace(identifier: string | IWorkspaceIdentifier): Workspace | undefined {
+    if (isWorkspaceIdentifier(identifier)) {
+      return this._workspacesMap.get(identifier.id);
+    }
 
-  getWorkspaceFolder(resource: URI) {
-    return this._workspace.getFolder(resource);
+    return this._workspacesMap.get(identifier);
   }
 }

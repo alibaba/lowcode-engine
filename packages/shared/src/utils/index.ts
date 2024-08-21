@@ -9,3 +9,4 @@ export * from './async';
 export * from './node';
 export * from './resource';
 export * from './functional';
+export * from './timer';

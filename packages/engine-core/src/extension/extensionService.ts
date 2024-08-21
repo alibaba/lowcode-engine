@@ -1,5 +1,5 @@
 import { createDecorator } from '@alilc/lowcode-shared';
-import { ExtensionManagement, type IExtensionRegisterOptions } from './extensionManagement';
+import { ExtensionManager, type IExtensionRegisterOptions } from './extensionManager';
 import { type IFunctionExtension } from './extension';
 import { ExtensionHost } from './extensionHost';
 
@@ -11,26 +11,32 @@ export interface IExtensionService {
   has(name: string): boolean;
 
   getExtensionHost(name: string): ExtensionHost | undefined;
+
+  dispose(): void;
 }
 
 export const IExtensionService = createDecorator<IExtensionService>('extensionService');
 
 export class ExtensionService implements IExtensionService {
-  private extensionManagement = new ExtensionManagement();
+  private _manager = new ExtensionManager();
+
+  dispose(): void {
+    this._manager.dispose();
+  }
 
   register(extension: IFunctionExtension, options?: IExtensionRegisterOptions): Promise<void> {
-    return this.extensionManagement.register(extension, options);
+    return this._manager.register(extension, options);
   }
 
   deregister(name: string): Promise<void> {
-    return this.extensionManagement.deregister(name);
+    return this._manager.deregister(name);
   }
 
   has(name: string): boolean {
-    return this.extensionManagement.has(name);
+    return this._manager.has(name);
   }
 
   getExtensionHost(name: string): ExtensionHost | undefined {
-    return this.extensionManagement.getExtensionHost(name);
+    return this._manager.getExtensionHost(name);
   }
 }

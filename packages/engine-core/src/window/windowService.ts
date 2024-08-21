@@ -1,8 +1,10 @@
 import { createDecorator, Disposable, Events, IInstantiationService } from '@alilc/lowcode-shared';
 import { defaultWindowState, IEditWindow, IWindowConfiguration } from './window';
-import { Schemas, URI } from '../common';
+import { Schemas, URI, extname } from '../common';
 import { EditWindow } from './windowImpl';
 import { IFileService } from '../file';
+import { Extensions, Registry } from '../extension/registry';
+import { IContentEditorRegistry } from '../contentEditor/contentEditorRegistry';
 
 export interface IOpenConfiguration {
   readonly urisToOpen: IWindowOpenable[];
@@ -30,9 +32,9 @@ export interface IWindowService {
 
   open(openConfig: IOpenConfiguration): Promise<IEditWindow[]>;
 
-  // sendToFocused(channel: string, ...args: any[]): void;
-  // sendToOpeningWindow(channel: string, ...args: any[]): void;
-  // sendToAll(channel: string, payload?: any, windowIdsToIgnore?: number[]): void;
+  sendToFocused(channel: string, ...args: any[]): void;
+  sendToOpeningWindow(channel: string, ...args: any[]): void;
+  sendToAll(channel: string, payload?: any, windowIdsToIgnore?: number[]): void;
 
   getWindows(): IEditWindow[];
   getWindowCount(): number;
@@ -103,16 +105,24 @@ export class WindowService extends Disposable implements IWindowService {
         if (openOnlyIfExists) continue;
       }
 
-      const config: IWindowConfiguration = {
-        fileToOpenOrCreate: {
-          fileUri: item.fileUri,
-          exists,
-          options: {},
-        },
-      };
-      const window = await this._openInEditWindow(config);
+      const fileExt = extname(item.fileUri.path);
+      const registeredContentType = Registry.as<IContentEditorRegistry>(Extensions.ContentEditor).getContentTypeByExt(
+        fileExt,
+      );
 
-      usedWindows.push(window);
+      if (registeredContentType) {
+        const config: IWindowConfiguration = {
+          fileToOpenOrCreate: {
+            fileUri: item.fileUri,
+            exists,
+            options: {},
+          },
+          contentType: registeredContentType,
+        };
+        const window = await this._openInEditWindow(config);
+
+        usedWindows.push(window);
+      }
     }
 
     return usedWindows;
@@ -128,6 +138,19 @@ export class WindowService extends Disposable implements IWindowService {
 
     newWindow.load(config);
 
+    newWindow.onDidDestroy(() => {
+      this.windows.delete(newWindow.id);
+    });
+
     return newWindow;
   }
+
+  sendToAll(channel: string, payload?: any, windowIdsToIgnore?: number[]): void {}
+
+  sendToFocused(channel: string, ...args: any[]): void {
+    const focusedWindow = this.getLastActiveWindow();
+    focusedWindow?.sendWhenReady(channel, ...args);
+  }
+
+  sendToOpeningWindow(channel: string, ...args: any[]): void {}
 }

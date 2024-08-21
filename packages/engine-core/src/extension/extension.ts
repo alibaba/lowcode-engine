@@ -1,14 +1,13 @@
 import { StringDictionary } from '@alilc/lowcode-shared';
 import { IConfigurationNode } from '../configuration';
 
-export type ExtensionInitializer = <Context = any>(ctx: Context) => IExtensionInstance;
+export type ExtensionStarter = <Context = any>(ctx: Context) => IExtensionInstance;
 
 /**
  * 函数声明插件
  */
-export interface IFunctionExtension extends ExtensionInitializer {
-  id: string;
-  displayName?: string;
+export interface IFunctionExtension extends ExtensionStarter {
+  id?: string;
   version: string;
   metadata?: IExtensionMetadata;
 }

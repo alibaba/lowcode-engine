@@ -35,9 +35,10 @@ export function platformToString(platform: PlatformEnum): PlatformName {
 export const enum OperatingSystem {
   Windows = 1,
   Macintosh = 2,
-  Linux = 3
+  Linux = 3,
 }
-export const OS = (isMacintosh || isIOS ? OperatingSystem.Macintosh : (isWindows ? OperatingSystem.Windows : OperatingSystem.Linux));
+export const OS =
+  isMacintosh || isIOS ? OperatingSystem.Macintosh : isWindows ? OperatingSystem.Windows : OperatingSystem.Linux;
 
 export let platform: PlatformEnum = PlatformEnum.Unknown;
 if (isMacintosh) {
@@ -48,8 +49,9 @@ if (isMacintosh) {
   platform = PlatformEnum.Linux;
 }
 
-export const isChrome = !!(userAgent && userAgent.indexOf('Chrome') >= 0);
-export const isFirefox = !!(userAgent && userAgent.indexOf('Firefox') >= 0);
-export const isSafari = !!(!isChrome && userAgent && userAgent.indexOf('Safari') >= 0);
-export const isEdge = !!(userAgent && userAgent.indexOf('Edg/') >= 0);
-export const isAndroid = !!(userAgent && userAgent.indexOf('Android') >= 0);
+export const isChrome = userAgent && userAgent.indexOf('Chrome') >= 0;
+export const isWebKit = userAgent.indexOf('AppleWebKit') >= 0;
+export const isFirefox = userAgent && userAgent.indexOf('Firefox') >= 0;
+export const isSafari = !isChrome && userAgent && userAgent.indexOf('Safari') >= 0;
+export const isEdge = userAgent && userAgent.indexOf('Edg/') >= 0;
+export const isAndroid = userAgent && userAgent.indexOf('Android') >= 0;

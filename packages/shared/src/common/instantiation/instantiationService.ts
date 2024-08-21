@@ -194,7 +194,12 @@ export class InstantiationService implements IInstantiationService {
           const instanceOrDesc = this._container.get(data.id);
           if (instanceOrDesc instanceof CtorDescriptor) {
             // create instance and overwrite the service collections
-            const instance = this._createServiceInstanceWithOwner(data.id, data.desc.ctor, data.desc.staticArguments);
+            const instance = this._createServiceInstanceWithOwner(
+              data.id,
+              data.desc.ctor,
+              data.desc.staticArguments,
+              data.desc.supportsDelayedInstantiation,
+            );
             this._setCreatedServiceInstance(data.id, instance);
           }
           graph.removeNode(data);
@@ -205,14 +210,23 @@ export class InstantiationService implements IInstantiationService {
     return this._container.get(id) as T;
   }
 
-  private _createServiceInstanceWithOwner<T>(id: BeanIdentifier<T>, ctor: any, args: any[]): T {
+  private _createServiceInstanceWithOwner<T>(
+    id: BeanIdentifier<T>,
+    ctor: any,
+    args: any[],
+    supportsDelayedInstantiation: boolean,
+  ): T {
     if (this._container.get(id) instanceof CtorDescriptor) {
+      if (supportsDelayedInstantiation) {
+        // todo
+      }
+
       const instance = this.createInstance(ctor, args);
       this._beansToMaybeDispose.add(instance);
 
       return instance;
     } else if (this._parent) {
-      return this._parent._createServiceInstanceWithOwner(id, ctor, args);
+      return this._parent._createServiceInstanceWithOwner(id, ctor, args, supportsDelayedInstantiation);
     } else {
       throw new Error(`illegalState - creating UNKNOWN service instance ${ctor.name}`);
     }

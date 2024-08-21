@@ -2,8 +2,13 @@
  * https://lowcode-engine.cn/site/docs/specs/lowcode-spec
  * 低代码引擎搭建协议规范
  */
-import { JSONObject, JSONValue } from '../json';
 import { Reference } from './material-spec';
+
+export type JSONValue = number | string | boolean | null;
+
+export interface JSONObject {
+  [key: string]: JSONValue | JSONObject | JSONObject[];
+}
 
 /**
  * https://lowcode-engine.cn/site/docs/specs/lowcode-spec#2-%E5%8D%8F%E8%AE%AE%E7%BB%93%E6%9E%84

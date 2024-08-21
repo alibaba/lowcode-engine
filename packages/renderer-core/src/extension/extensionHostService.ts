@@ -15,8 +15,7 @@ export interface IExtensionHostService {
   getPlugin(name: string): Plugin | undefined;
 }
 
-export const IExtensionHostService =
-  createDecorator<IExtensionHostService>('pluginManagementService');
+export const IExtensionHostService = createDecorator<IExtensionHostService>('pluginManagementService');
 
 export class ExtensionHostService extends Disposable implements IExtensionHostService {
   boostsManager: BoostsManager;
@@ -35,11 +34,7 @@ export class ExtensionHostService extends Disposable implements IExtensionHostSe
   ) {
     super();
 
-    this.boostsManager = new BoostsManager(
-      codeRuntimeService,
-      runtimeIntlService,
-      runtimeUtilService,
-    );
+    this.boostsManager = new BoostsManager(codeRuntimeService, runtimeIntlService, runtimeUtilService);
 
     this._pluginSetupContext = {
       globalState: new Map(),

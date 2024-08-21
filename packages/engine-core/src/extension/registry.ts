@@ -39,8 +39,10 @@ class RegistryImpl implements IRegistry {
 export const Registry: IRegistry = new RegistryImpl();
 
 export const Extensions = {
+  JSONContribution: 'base.contributions.jsonContribution',
   Configuration: 'base.contributions.configuration',
   Command: 'base.contributions.command',
   Keybinding: 'base.contributions.keybinding',
   Widget: 'base.contributions.widget',
+  ContentEditor: 'base.contributions.contentEditor',
 };

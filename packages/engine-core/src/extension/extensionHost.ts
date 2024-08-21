@@ -1,59 +1,59 @@
-import { ConfigurationRegistry, type IConfigurationNode } from '../configuration';
-import { type ExtensionInitializer, type IExtensionInstance } from './extension';
-import { invariant } from '@alilc/lowcode-shared';
+import { type ExtensionStarter, type IExtensionInstance } from './extension';
 
 export type ExtensionExportsAccessor = {
   [key: string]: any;
 };
 
 export class ExtensionHost {
-  private isInited = false;
+  private _isInited = false;
 
-  private instance: IExtensionInstance;
+  private _instance: IExtensionInstance;
 
-  private configurationProperties: ReadonlySet<string>;
+  private _exports: ExtensionExportsAccessor | undefined;
+  get exports(): ExtensionExportsAccessor | undefined {
+    if (!this._isInited) return;
+
+    if (!this._exports) {
+      const exports = this._instance.exports?.();
+
+      if (!exports) return;
+
+      this._exports = new Proxy(Object.create(null), {
+        get(target, prop, receiver) {
+          if (Reflect.has(exports, prop)) {
+            return exports?.[prop as string];
+          }
+          return Reflect.get(target, prop, receiver);
+        },
+      });
+    }
+
+    return this._exports;
+  }
 
   constructor(
-    public name: string,
-    initializer: ExtensionInitializer,
-    preferenceConfigurations: IConfigurationNode[],
+    public id: string,
+    starter: ExtensionStarter,
   ) {
-    this.configurationProperties =
-      ConfigurationRegistry.registerConfigurations(preferenceConfigurations);
+    // context will be provide in
+    this._instance = starter({});
+  }
 
-    this.instance = initializer({});
+  dispose(): void {
+    this.destroy();
   }
 
   async init(): Promise<void> {
-    if (this.isInited) return;
+    if (this._isInited) return;
 
-    await this.instance.init();
-
-    this.isInited = true;
+    await this._instance.init();
+    this._isInited = true;
   }
 
   async destroy(): Promise<void> {
-    if (!this.isInited) return;
+    if (!this._isInited) return;
 
-    await this.instance.destroy();
-
-    this.isInited = false;
-  }
-
-  toProxy(): ExtensionExportsAccessor | undefined {
-    invariant(this.isInited, 'Could not call toProxy before init');
-
-    const exports = this.instance.exports?.();
-
-    if (!exports) return;
-
-    return new Proxy(Object.create(null), {
-      get(target, prop, receiver) {
-        if (Reflect.has(exports, prop)) {
-          return exports?.[prop as string];
-        }
-        return Reflect.get(target, prop, receiver);
-      },
-    });
+    await this._instance.destroy();
+    this._isInited = false;
   }
 }

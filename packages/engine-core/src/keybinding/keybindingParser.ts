@@ -1,5 +1,5 @@
-import { KeyCodeUtils, ScanCodeUtils } from '@alilc/lowcode-shared';
-import { KeyCodeChord, ScanCodeChord, Keybinding, Chord } from './keybindings';
+import { KeyCodeUtils } from '../common';
+import { KeyCodeChord, Keybinding } from './keybindings';
 
 export class KeybindingParser {
   private static _readModifiers(input: string) {
@@ -67,17 +67,8 @@ export class KeybindingParser {
     };
   }
 
-  private static parseChord(input: string): [Chord, string] {
+  private static parseChord(input: string): [KeyCodeChord, string] {
     const mods = this._readModifiers(input);
-    const scanCodeMatch = mods.key.match(/^\[([^\]]+)\]$/);
-    if (scanCodeMatch) {
-      const strScanCode = scanCodeMatch[1];
-      const scanCode = ScanCodeUtils.lowerCaseToEnum(strScanCode);
-      return [
-        new ScanCodeChord(mods.ctrl, mods.shift, mods.alt, mods.meta, scanCode),
-        mods.remains,
-      ];
-    }
     const keyCode = KeyCodeUtils.fromUserSettings(mods.key);
     return [new KeyCodeChord(mods.ctrl, mods.shift, mods.alt, mods.meta, keyCode), mods.remains];
   }
@@ -87,8 +78,8 @@ export class KeybindingParser {
       return null;
     }
 
-    const chords: Chord[] = [];
-    let chord: Chord;
+    const chords: KeyCodeChord[] = [];
+    let chord: KeyCodeChord;
 
     while (input.length > 0) {
       [chord, input] = this.parseChord(input);

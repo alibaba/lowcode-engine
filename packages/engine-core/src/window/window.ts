@@ -40,7 +40,7 @@ export interface IPath<T = IEditOptions> {
    * file exists, if false it does not. with
    * `undefined` the state is unknown.
    */
-  readonly exists?: boolean;
+  readonly exists: boolean;
 
   /**
    * Optional editor options to apply in the file
@@ -52,6 +52,8 @@ export interface IWindowConfiguration {
   fileToOpenOrCreate: IPath;
 
   workspace?: IWorkspaceIdentifier;
+
+  contentType: string;
 }
 
 export interface IEditWindow extends IDisposable {
@@ -70,10 +72,11 @@ export interface IEditWindow extends IDisposable {
   readonly isReady: boolean;
   ready(): Promise<IEditWindow>;
 
-  load(config: IWindowConfiguration, options?: { isReload?: boolean }): void;
-  reload(): void;
+  load(config: IWindowConfiguration, options?: { isReload?: boolean }): Promise<void>;
+  reload(): Promise<void>;
 
   close(): void;
+  destory(): Promise<void>;
 
   sendWhenReady(channel: string, ...args: any[]): void;
 }

@@ -104,17 +104,17 @@ export class InMemoryFileSystemProvider implements IFileSystemProvider {
     };
   }
 
-  watch(resource: URI, opts: IWatchOptions): IFileSystemWatcher {
+  watch(resource: URI, opts?: IWatchOptions): IFileSystemWatcher {
     return { resource, opts } as any as IFileSystemWatcher;
   }
 
-  async mkdir(resource: URI, opts: IFileWriteOptions): Promise<void> {
+  async mkdir(resource: URI, opts?: IFileWriteOptions): Promise<void> {
     const base = basename(resource.path);
     const dir = dirname(resource.path);
     const parent = this._lookupAsDirectory(dir, true);
 
     if (parent) {
-      if (!opts.overwrite && parent.entries.has(base)) {
+      if (!opts?.overwrite && parent.entries.has(base)) {
         throw FileSystemError.create('directory exists', FileSystemErrorCode.FileExists);
       }
 
@@ -126,7 +126,7 @@ export class InMemoryFileSystemProvider implements IFileSystemProvider {
         { resource, type: FileChangeType.ADDED },
       );
     } else {
-      if (!opts.recursive) {
+      if (!opts?.recursive) {
         throw FileSystemError.create('parent directory not found', FileSystemErrorCode.FileNotFound);
       }
 
@@ -154,14 +154,14 @@ export class InMemoryFileSystemProvider implements IFileSystemProvider {
     return file.data;
   }
 
-  async writeFile(resource: URI, content: string, opts: IFileWriteOptions): Promise<void> {
+  async writeFile(resource: URI, content: string, opts?: IFileWriteOptions): Promise<void> {
     const base = basename(resource.path);
     const dir = dirname(resource.path);
     const dirUri = resource.with({ path: dir });
     let parent = this._lookupAsDirectory(dir, true);
 
     if (!parent) {
-      if (!opts.recursive) {
+      if (!opts?.recursive) {
         throw FileSystemError.create('file not found', FileSystemErrorCode.FileNotFound);
       }
       parent = await this._mkdirRecursive(dirUri);
@@ -174,7 +174,7 @@ export class InMemoryFileSystemProvider implements IFileSystemProvider {
     if (entry && entry.permission < FilePermission.Writable) {
       throw FileSystemError.create('Permission denied', FileSystemErrorCode.FileNotWritable);
     }
-    if (entry && !opts.overwrite) {
+    if (entry && !opts?.overwrite) {
       throw FileSystemError.create('file exists already', FileSystemErrorCode.FileExists);
     }
 
@@ -189,7 +189,7 @@ export class InMemoryFileSystemProvider implements IFileSystemProvider {
     this._fireSoon({ resource, type: FileChangeType.UPDATED });
   }
 
-  async delete(resource: URI, opts: IFileDeleteOptions): Promise<void> {
+  async delete(resource: URI, opts?: IFileDeleteOptions): Promise<void> {
     const dir = dirname(resource.path);
     const base = basename(resource.path);
     const parent = this._lookupAsDirectory(dir, false);
@@ -206,7 +206,7 @@ export class InMemoryFileSystemProvider implements IFileSystemProvider {
       }
 
       if (entry instanceof Directory) {
-        if (opts.recursive) {
+        if (opts?.recursive) {
           parent.entries.delete(base);
           parent.mtime = Date.now();
         } else {
@@ -224,7 +224,7 @@ export class InMemoryFileSystemProvider implements IFileSystemProvider {
     }
   }
 
-  async rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<void> {
+  async rename(from: URI, to: URI, opts?: IFileOverwriteOptions): Promise<void> {
     if (from.path === to.path) return;
 
     const entry = this._lookup(from.path, false);
@@ -232,7 +232,7 @@ export class InMemoryFileSystemProvider implements IFileSystemProvider {
     if (entry.permission < FilePermission.Writable) {
       throw FileSystemError.create('Permission denied', FileSystemErrorCode.FileNotWritable);
     }
-    if (!opts.overwrite) {
+    if (!opts?.overwrite) {
       throw FileSystemError.create('file exists already', FileSystemErrorCode.FileExists);
     }
 

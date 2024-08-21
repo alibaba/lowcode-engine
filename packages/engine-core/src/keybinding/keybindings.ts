@@ -1,5 +1,6 @@
 import { illegalArgument, OperatingSystem } from '@alilc/lowcode-shared';
-import { KeyCode, ScanCode } from '../common/keyCodes';
+import { KeyCode } from '../common/keyCodes';
+import { AriaLabelProvider, UILabelProvider, UserSettingsLabelProvider } from './keybingdingLabels';
 
 /**
  * Binary encoding strategy:
@@ -14,7 +15,7 @@ import { KeyCode, ScanCode } from '../common/keyCodes';
  *  K = bits 0-7 = key code
  * ```
  */
-const enum BinaryKeybindingsMask {
+export const enum BinaryKeybindingsMask {
   CtrlCmd = (1 << 11) >>> 0,
   Shift = (1 << 10) >>> 0,
   Alt = (1 << 9) >>> 0,
@@ -22,28 +23,27 @@ const enum BinaryKeybindingsMask {
   KeyCode = 0x000000ff,
 }
 
-export function decodeKeybinding(
-  keybinding: number | number[],
-  OS: OperatingSystem,
-): Keybinding | null {
+export function decodeKeybinding(keybinding: number | number[], OS: OperatingSystem): Keybinding | null {
   if (typeof keybinding === 'number') {
     if (keybinding === 0) {
       return null;
     }
+
     const firstChord = (keybinding & 0x0000ffff) >>> 0;
     const secondChord = (keybinding & 0xffff0000) >>> 16;
+
     if (secondChord !== 0) {
-      return new Keybinding([
-        createSimpleKeybinding(firstChord, OS),
-        createSimpleKeybinding(secondChord, OS),
-      ]);
+      return new Keybinding([createSimpleKeybinding(firstChord, OS), createSimpleKeybinding(secondChord, OS)]);
     }
+
     return new Keybinding([createSimpleKeybinding(firstChord, OS)]);
   } else {
     const chords = [];
+
     for (let i = 0; i < keybinding.length; i++) {
       chords.push(createSimpleKeybinding(keybinding[i], OS));
     }
+
     return new Keybinding(chords);
   }
 }
@@ -81,7 +81,7 @@ export class KeyCodeChord implements Modifiers {
     public readonly keyCode: KeyCode,
   ) {}
 
-  equals(other: Chord): boolean {
+  equals(other: KeyCodeChord): boolean {
     return (
       other instanceof KeyCodeChord &&
       this.ctrlKey === other.ctrlKey &&
@@ -128,63 +128,12 @@ export class KeyCodeChord implements Modifiers {
 }
 
 /**
- * Represents a chord which uses the `code` field of keyboard events.
- * A chord is a combination of keys pressed simultaneously.
- */
-export class ScanCodeChord implements Modifiers {
-  constructor(
-    public readonly ctrlKey: boolean,
-    public readonly shiftKey: boolean,
-    public readonly altKey: boolean,
-    public readonly metaKey: boolean,
-    public readonly scanCode: ScanCode,
-  ) {}
-
-  equals(other: Chord): boolean {
-    return (
-      other instanceof ScanCodeChord &&
-      this.ctrlKey === other.ctrlKey &&
-      this.shiftKey === other.shiftKey &&
-      this.altKey === other.altKey &&
-      this.metaKey === other.metaKey &&
-      this.scanCode === other.scanCode
-    );
-  }
-
-  getHashCode(): string {
-    const ctrl = this.ctrlKey ? '1' : '0';
-    const shift = this.shiftKey ? '1' : '0';
-    const alt = this.altKey ? '1' : '0';
-    const meta = this.metaKey ? '1' : '0';
-    return `S${ctrl}${shift}${alt}${meta}${this.scanCode}`;
-  }
-
-  /**
-   * Does this keybinding refer to the key code of a modifier and it also has the modifier flag?
-   */
-  isDuplicateModifierCase(): boolean {
-    return (
-      (this.ctrlKey &&
-        (this.scanCode === ScanCode.ControlLeft || this.scanCode === ScanCode.ControlRight)) ||
-      (this.shiftKey &&
-        (this.scanCode === ScanCode.ShiftLeft || this.scanCode === ScanCode.ShiftRight)) ||
-      (this.altKey &&
-        (this.scanCode === ScanCode.AltLeft || this.scanCode === ScanCode.AltRight)) ||
-      (this.metaKey &&
-        (this.scanCode === ScanCode.MetaLeft || this.scanCode === ScanCode.MetaRight))
-    );
-  }
-}
-
-export type Chord = KeyCodeChord | ScanCodeChord;
-
-/**
  * A keybinding is a sequence of chords.
  */
 export class Keybinding {
-  readonly chords: Chord[];
+  readonly chords: KeyCodeChord[];
 
-  constructor(chords: Chord[]) {
+  constructor(chords: KeyCodeChord[]) {
     if (chords.length === 0) {
       throw illegalArgument(`chords`);
     }
@@ -244,11 +193,6 @@ export abstract class ResolvedKeybinding {
    */
   public abstract getAriaLabel(): string | null;
   /**
-   * This prints the binding in a format suitable for electron's accelerators.
-   * See https://github.com/electron/electron/blob/master/docs/api/accelerator.md
-   */
-  public abstract getElectronAccelerator(): string | null;
-  /**
    * This prints the binding in a format suitable for user settings.
    */
   public abstract getUserSettingsLabel(): string | null;
@@ -278,4 +222,66 @@ export abstract class ResolvedKeybinding {
    * @example keybinding ("D" with shift == true") -> null
    */
   public abstract getSingleModifierDispatchChords(): (SingleModifierChord | null)[];
+}
+
+export abstract class BaseResolvedKeybinding extends ResolvedKeybinding {
+  protected readonly _chords: readonly KeyCodeChord[];
+
+  constructor(chords: readonly KeyCodeChord[]) {
+    super();
+    if (chords.length === 0) {
+      throw illegalArgument(`chords`);
+    }
+    this._chords = chords;
+  }
+
+  public getLabel(): string | null {
+    return UILabelProvider.toLabel(this._chords, (keybinding) => this._getLabel(keybinding));
+  }
+
+  public getAriaLabel(): string | null {
+    return AriaLabelProvider.toLabel(this._chords, (keybinding) => this._getAriaLabel(keybinding));
+  }
+
+  public getUserSettingsLabel(): string | null {
+    return UserSettingsLabelProvider.toLabel(this._chords, (keybinding) => this._getUserSettingsLabel(keybinding));
+  }
+
+  public isWYSIWYG(): boolean {
+    return this._chords.every((keybinding) => this._isWYSIWYG(keybinding));
+  }
+
+  public hasMultipleChords(): boolean {
+    return this._chords.length > 1;
+  }
+
+  public getChords(): ResolvedChord[] {
+    return this._chords.map((keybinding) => this._getChord(keybinding));
+  }
+
+  private _getChord(keybinding: KeyCodeChord): ResolvedChord {
+    return new ResolvedChord(
+      keybinding.ctrlKey,
+      keybinding.shiftKey,
+      keybinding.altKey,
+      keybinding.metaKey,
+      this._getLabel(keybinding),
+      this._getAriaLabel(keybinding),
+    );
+  }
+
+  public getDispatchChords(): (string | null)[] {
+    return this._chords.map((keybinding) => this._getChordDispatch(keybinding));
+  }
+
+  public getSingleModifierDispatchChords(): (SingleModifierChord | null)[] {
+    return this._chords.map((keybinding) => this._getSingleModifierChordDispatch(keybinding));
+  }
+
+  protected abstract _getLabel(keybinding: KeyCodeChord): string | null;
+  protected abstract _getAriaLabel(keybinding: KeyCodeChord): string | null;
+  protected abstract _getUserSettingsLabel(keybinding: KeyCodeChord): string | null;
+  protected abstract _isWYSIWYG(keybinding: KeyCodeChord): boolean;
+  protected abstract _getChordDispatch(keybinding: KeyCodeChord): string | null;
+  protected abstract _getSingleModifierChordDispatch(keybinding: KeyCodeChord): SingleModifierChord | null;
 }
