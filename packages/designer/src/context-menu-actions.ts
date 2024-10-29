@@ -201,6 +201,8 @@ export class ContextMenuActions implements IContextMenuActions {
         node: INode;
         originalEvent: MouseEvent;
       }) => {
+        // 页面为空时，右键会读取 node.id报错
+        if (!node) return;
         originalEvent.stopPropagation();
         originalEvent.preventDefault();
         // 如果右键的节点不在 当前选中的节点中，选中该节点
