@@ -220,5 +220,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     await this.destroy();
     this.plugins = [];
     this.pluginsMap.clear();
+    this.pluginContextMap.clear();
+    this.pluginPreference?.clear();
   }
 }
