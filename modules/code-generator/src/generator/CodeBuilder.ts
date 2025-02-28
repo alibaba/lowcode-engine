@@ -28,7 +28,6 @@ export class CodeBuilder implements ICodeBuilder {
     if (chunks.length <= 0) {
       return '';
     }
-
     const unprocessedChunks = chunks.map((chunk) => {
       return {
         name: chunk.name,
@@ -39,38 +38,35 @@ export class CodeBuilder implements ICodeBuilder {
     });
 
     const resultingString: string[] = [];
+    const processed = new Set<string>();
 
     while (unprocessedChunks.length > 0) {
-      let indexToRemove = 0;
-      for (let index = 0; index < unprocessedChunks.length; index++) {
-        if (unprocessedChunks[index].linkAfter.length <= 0) {
-          indexToRemove = index;
-          break;
+        let indexToRemove = -1;
+        for (let index = 0; index < unprocessedChunks.length; index++) {
+            if (unprocessedChunks[index].linkAfter.length === 0) {
+                indexToRemove = index;
+                break;
+            }
         }
-      }
 
-      if (unprocessedChunks[indexToRemove].linkAfter.length > 0) {
-        throw new CodeGeneratorError(
-          'Operation aborted. Reason: cyclic dependency between chunks.',
-        );
-      }
+        if (indexToRemove === -1) {
+            throw new CodeGeneratorError(
+                'Operation aborted. Reason: cyclic dependency between chunks.',
+            );
+        }
 
-      const { type, content, name } = unprocessedChunks[indexToRemove];
-      const compiledContent = this.generateByType(type, content);
-      if (compiledContent) {
-        resultingString.push(`${compiledContent}\n`);
-      }
+        const { type, content, name } = unprocessedChunks[indexToRemove];
+        const compiledContent = this.generateByType(type, content);
+        if (compiledContent) {
+            resultingString.push(`${compiledContent}\n`);
+        }
 
-      unprocessedChunks.splice(indexToRemove, 1);
-      if (!unprocessedChunks.some((ch) => ch.name === name)) {
-        unprocessedChunks.forEach(
-          // remove the processed chunk from all the linkAfter arrays from the remaining chunks
-          (ch) => {
-            // eslint-disable-next-line no-param-reassign
-            ch.linkAfter = ch.linkAfter.filter((after) => after !== name);
-          },
-        );
-      }
+        processed.add(name);
+        unprocessedChunks.splice(indexToRemove, 1);
+
+        unprocessedChunks.forEach((ch) => {
+            ch.linkAfter = ch.linkAfter.filter((after) => !processed.has(after));
+        });
     }
 
     return resultingString.join('\n');
