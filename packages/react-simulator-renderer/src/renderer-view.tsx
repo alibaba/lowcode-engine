@@ -208,7 +208,8 @@ class Renderer extends Component<{
           if (
             !viewProps.dataSource &&
             leaf?.isContainer() &&
-            (children == null || (Array.isArray(children) && !children.length)) &&
+            (
+              = null || (Array.isArray(children) && !children.length)) &&
             (!viewProps.style || Object.keys(viewProps.style).length === 0)
           ) {
             let defaultPlaceholder = intl('Drag and drop components or templates here');
@@ -219,7 +220,7 @@ class Renderer extends Component<{
               defaultPlaceholder = intl('Locked elements and child elements cannot be edited');
             }
             children = (
-              <div className={cn('lc-container-placeholder', { 'lc-container-locked': !!lockedNode })} style={viewProps.placeholderStyle}>
+              <div  key={`${__id}_placeholder`} className={cn('lc-container-placeholder', { 'lc-container-locked': !!lockedNode })} style={viewProps.placeholderStyle}>
                 {viewProps.placeholder || defaultPlaceholder}
               </div>
             );
