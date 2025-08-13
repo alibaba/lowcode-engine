@@ -294,9 +294,6 @@ export class ComponentMeta implements IComponentMeta {
       return current(prevMetadata);
     }, preprocessMetadata(metadta));
 
-    if (!result.configure) {
-      result.configure = {};
-    }
     if (result.experimental && !result.configure.advanced) {
       deprecate(result.experimental, '.experimental', '.configure.advanced');
       result.configure.advanced = result.experimental;

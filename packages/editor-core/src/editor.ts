@@ -167,7 +167,7 @@ export class Editor extends EventEmitter implements IEditor {
                       ...extraNpmInfo,
                     },
                     ...d,
-                  } || []);
+                  });
                 });
                 return;
               }
@@ -178,7 +178,7 @@ export class Editor extends EventEmitter implements IEditor {
                     ...extraNpmInfo,
                   },
                   ...component.components,
-                } || []);
+                });
               }
             }
             function setArrayAssets(value: any[], preExportName: string = '', preSubName: string = '') {
